@@ -74,12 +74,12 @@ async function openAurora(page: Page) {
 async function select(page: Page, id: string) {
   const at = await page.evaluate((node) => {
     const iframe = document.querySelector<HTMLIFrameElement>('.frame__page');
-    const el = iframe?.contentDocument?.querySelector(`[data-node="${node}"]`);
-    if (!iframe || !el) throw new Error(`the canvas does not draw ${node}`);
+    const doc = iframe?.contentDocument;
+    const el = doc?.querySelector(`[data-node="${node}"]`);
+    if (!iframe || !doc || !el) throw new Error(`the canvas does not draw ${node}`);
     const zoom = iframe.currentCSSZoom;
     const frame = iframe.getBoundingClientRect();
     const r = el.getBoundingClientRect();
-    const doc = iframe.contentDocument;
     const fractions = [0.5, 0.35, 0.65, 0.2, 0.8, 0.05, 0.95];
     const points = fractions.flatMap((fy) => fractions.map((fx) => ({ x: r.left + fx * r.width, y: r.top + fy * r.height })));
     const own = points.find((p) => doc.elementFromPoint(p.x, p.y)?.closest('[data-node]') === el) ?? { x: r.left + r.width / 2, y: r.top + r.height / 2 };
