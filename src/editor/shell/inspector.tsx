@@ -14,15 +14,13 @@
 //    field keeps the text with text.set), then the attribute fields that apply to the element's type, in their order;
 //    on the page root, the fields of the page's settings keep what is typed with page.setSetting; on a Link Block or a
 //    link, the Link address keeps it with element.setLink; the HTML tag field keeps a typed tag with element.setTag.
-import { Fragment, useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type ComponentType, type FormEvent, type ReactNode } from 'react';
-import type { AttributeId, CommandId, FeatureId, KeyContextId, MessageId, SectionId, StyleTargetId } from '../../generated/ids.ts';
+import { Fragment, useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type ComponentType, type ReactNode } from 'react';
+import type { CommandId, FeatureId, KeyContextId, MessageId, SectionId, StyleTargetId } from '../../generated/ids.ts';
 import { GENERATED_VALUES } from '../../generated/value-lists.ts';
 import { isFeatureBuilt } from '../../app/features.ts';
 import { componentHolders, instanceRootOf } from '../../core/design/components.ts';
 import { locate, type DocNode, type StoredValue } from '../../core/document/model.ts';
 import { structuredCss } from '../../core/render/output.ts';
-import { attributeApplies, formControls } from '../../core/elements/inputs.ts';
-import { partTypesOf, selectionInTable } from '../../core/elements/parts.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
 import { elementIcon, manifest, type DoorEntry } from '../../manifest/runtime.ts';
 import { DoorControl, Icon, useDoor } from '../doors/door.tsx';
@@ -34,15 +32,13 @@ import { groupOf, groupsOf, orderByGroup, pairRowOf, rowPrefixKey, titledGroups 
 import { MODEL_RULES, useEditorState, useStore, layeredRules } from '../store.ts';
 import { styleSource } from '../inspector/style-target.ts';
 import { FieldOrigin } from './field-origin.tsx';
-import { ATTRIBUTES, SETTINGS_SECTIONS, settingsSectionFor, tagTakes } from '../inspector/attributes.ts';
-import { useSettingsRefusal } from '../inspector/attribute-feedback.ts';
 import './settings.css';
 import { inspectorTab } from '../workspace/layout.ts';
 import { isPanelOpen, panelName } from '../workspace/panels.ts';
 import { useLocale, useT } from '../text.ts';
 import { activeBreakpoint } from '../view/breakpoints.ts';
 import { activeState } from '../view/style-state.ts';
-import { ID_REF, KeptTextField, KeywordButtons, NumberField, TextField, TextStyleField, keepAfterGesture, keptTextOf, presetsOf, useEffectiveText, useMixed, usePageValues, useSelectionContext, type FieldPart } from './field.tsx';
+import { KeywordButtons, NumberField, TextStyleField, keepAfterGesture, presetsOf, useEffectiveText, useMixed, usePageValues, useSelectionContext, type FieldPart } from './field.tsx';
 import { storedValue } from '../../core/style/set.ts';
 import { kindsOf, shownForContext, shownForKinds, type ElementContext } from '../../core/style/applies.ts';
 import { storedPlace } from '../../core/style/grid-item.ts';
@@ -50,6 +46,8 @@ import { tracksOf } from '../../core/style/tracks.ts';
 import { functionArgument, functionOfControl, translateAxis, translateWith } from '../../core/style/functions.ts';
 import { Slots } from './slots.tsx';
 import { InteractionsTab } from './interactions.tsx';
+import { SettingsTab } from './inspector-settings.tsx';
+import { Hints, useSingleNode } from '../inspector/selection.tsx';
 import { Affects, TargetChips, classBarControl } from './class-bar.tsx';
 import { GradientControl, isGradientControl } from './gradient.tsx';
 import { ShadowControl, isShadowControl } from './shadow.tsx';
@@ -1011,21 +1009,6 @@ function SelectedElement() {
   );
 }
 
-// With nothing selected, what the inspector suggests (spec inspector-panel, "Nothing selected"): add an element from
-// the Insert panel, select one, edit a text.
-function Hints() {
-  const t = useT();
-  return (
-    <ul className="inspector-hints">
-      <li>{t('inspector.hint.insert', { panel: { key: panelName('elements') } })}</li>
-      <li>{t('inspector.hint.select')}</li>
-      <li>{t('inspector.hint.editText')}</li>
-    </ul>
-  );
-}
-
-// the one selected element, or null with none or several selected
-const useSingleNode = () => useEditorState((s) => (s.selection.length === 1 && s.selection[0] !== undefined ? (locate(s.document, s.selection[0])?.node ?? null) : null));
 
 // The notice an element of an instance wears in the Style tab (the user's real-use audit, item A3.12): a style write
 // there reaches the component and every copy of it, and the person is told before anything is typed.
@@ -1078,303 +1061,6 @@ function StyleTab() {
         </div>
       </div>
     </>
-  );
-}
-
-// The attributes of elements.json by id, and the Settings tab's attribute fields in their order there.
-const SETTINGS_FIELDS = doorSlots('inspector-settings').filter((d) => d.door.kind === 'inspector-field' && d.door.attribute !== null);
-// the toggles of a table's parts (caption, head, foot; core/elements/parts.ts), drawn while the selection is in a table
-const TABLE_PART_DOORS = doorSlots('inspector-settings').filter((d) => d.door.kind === 'panel-control' && d.door.drawnAs === 'toggle');
-// the parts editor (core/elements/parts.ts): the buttons that add a part of a type (their door fixes the type), and the
-// buttons of each part that stand for it (their command takes the part as its target: move up, move down, remove)
-const ADD_PART_DOORS = doorSlots('inspector-settings').filter((d) => d.door.kind === 'panel-control' && d.door.drawnAs === 'button' && typeof d.door.args.type === 'string');
-const PART_DOORS = doorSlots('inspector-settings').filter((d) => d.door.kind === 'panel-control' && d.door.drawnAs === 'icon-button' && d.command.args.target?.type === 'node');
-// the person's own attributes (feature element-attributes-aria): the doors whose command takes an attribute's name
-// (and its value): in the manifest's order, the name field that adds one and the value field of each, both fields of the
-// command that sets a value; then the remove button
-const CUSTOM_DOORS = doorSlots('inspector-settings').filter((d) => d.door.kind === 'panel-control' && d.command.args.name?.type === 'string');
-const [CUSTOM_ADD, CUSTOM_VALUE] = CUSTOM_DOORS.filter((d) => d.door.kind === 'panel-control' && d.door.drawnAs === 'field' && 'value' in d.command.args);
-const CUSTOM_REMOVE = CUSTOM_DOORS.find((d) => d.door.kind === 'panel-control' && d.door.drawnAs === 'icon-button' && !('value' in d.command.args));
-
-// The command argument a boolean attribute's toggle fills: the argument of the attribute's own name that takes a
-// boolean (element.setLink's newTab), or null when the command takes none.
-function toggleArgOf(entry: DoorEntry, attribute: AttributeId): { readonly args: Readonly<Record<string, string>>; readonly filled: string } | null {
-  const args = Object.entries(entry.command.args);
-  const named = args.find(([, arg]) => arg.type === 'attribute')?.[0];
-  if (named !== undefined) {
-    const filled = args.find(([name]) => name !== named && name !== 'target')?.[0];
-    return filled === undefined ? null : { args: { [named]: attribute }, filled };
-  }
-  const own = args.find(([name, arg]) => name === attribute && arg.type === 'boolean');
-  return own === undefined ? null : { args: {}, filled: own[0] };
-}
-
-// A boolean attribute of the Settings tab (Open in a new tab, Required, Disabled…): a checkbox standing for its node,
-// checked while the node stores the attribute; a click runs the door's command with the other state, one undo step.
-function ToggleField({ entry, node, attribute, label }: { readonly entry: DoorEntry; readonly node: DocNode; readonly attribute: AttributeId; readonly label: string }) {
-  const store = useStore();
-  const toggle = toggleArgOf(entry, attribute);
-  const target = 'target' in entry.command.args ? node.id : undefined;
-  const json = JSON.stringify({ ...(toggle?.args ?? {}), ...(target === undefined ? {} : { target }) });
-  const args = useMemo(() => JSON.parse(json) as Readonly<Record<string, string>>, [json]);
-  const door = useDoor(entry, args, label, isFeatureBuilt(entry.door.feature as FeatureId));
-  const on = node.attributes[attribute] === true;
-  const flip = () => (store.dispatch as (id: CommandId, args: unknown) => DispatchResult)(entry.command.id, { ...args, [toggle?.filled ?? attribute]: !on });
-  return (
-    <div className={`field-row${door.available ? '' : ' is-unavailable'}`} data-door={entry.ref} data-args={JSON.stringify(args)} title={door.title}>
-      <span className="field-row__label">{label}</span>
-      <input type="checkbox" checked={on} disabled={!door.available} aria-label={label} onChange={flip} />
-    </div>
-  );
-}
-
-// The parts of the selected element (a select's options and groups, a picture's or a video's sources, a video's
-// tracks): each part by name with its move up, move down and remove buttons, then the buttons that add each type of
-// part the element takes. Drawn only for an element that takes parts.
-function PartsEditor({ node }: { readonly node: DocNode }) {
-  const takes = partTypesOf(MODEL_RULES, node);
-  const adds = ADD_PART_DOORS.filter((d) => takes(String(d.door.args.type)));
-  if (adds.length === 0) return null;
-  const parts = node.children.filter((child) => MODEL_RULES.contentModel.names(node.tag ?? '', child.tag ?? ''));
-  return (
-    <div className="parts-editor">
-      {parts.map((part) => (
-        <div key={part.id} className="field-row">
-          <span className="field-row__label">{part.name}</span>
-          {PART_DOORS.map((d) => (
-            <DoorControl key={d.ref} entry={d} args={{ target: part.id }} />
-          ))}
-        </div>
-      ))}
-      <div className="field-row">
-        {adds.map((d) => (
-          <DoorControl key={d.ref} entry={d} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// The person's own attributes of the selected element (aria-*, data-*, role…): each by name with its value field (kept
-// on Enter or on leaving it, one undo step) and its remove button; then a name field and the add button. The button
-// adds the typed name with an empty value or, with no name typed, puts the caret in the name field, where Enter adds it.
-// The name field's form is the add door's control: it stands for the empty value it adds and keeps the name typed.
-const ADDED = { value: '' } as const;
-const ADDED_VALUE = JSON.stringify(ADDED);
-function CustomAttributes({ node, add: addEntry }: { readonly node: DocNode; readonly add: DoorEntry }) {
-  const store = useStore();
-  const t = useT();
-  const addDoor = useDoor(addEntry, {}, undefined, isFeatureBuilt(addEntry.door.feature as FeatureId));
-  const refused = useSettingsRefusal(addEntry.command.id, undefined, node.id);
-  const typedName = useRef<HTMLInputElement>(null);
-  useEffect(() => { if (typedName.current !== null) typedName.current.value = ''; }, [node.id]);
-  const dispatch = store.dispatch as (id: CommandId, args: unknown) => DispatchResult;
-  const add = () => {
-    const field = typedName.current;
-    if (field === null) return;
-    if (field.value.trim() === '') {
-      field.focus();
-      return;
-    }
-    if (dispatch(addEntry.command.id, { name: field.value, ...ADDED }).status === 'done') field.value = '';
-  };
-  // Enter in the name field submits its form, which adds the name
-  const submit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    add();
-  };
-  return (
-    <div className="custom-attributes" aria-label={addDoor.label}>
-      {Object.entries(node.customAttributes ?? {}).map(([name, value]) => (
-        <CustomAttributeRow key={`${node.id}:${name}`} node={node} name={name} value={value} />
-      ))}
-      <form className={`field-row${addDoor.available ? '' : ' is-unavailable'}${refused.text !== null ? ' is-invalid' : ''}`} title={addDoor.title} onSubmit={submit} data-door={addEntry.ref} data-args={ADDED_VALUE}>
-        <input ref={typedName} className="input" disabled={!addDoor.available} aria-label={t('inspector.customAttribute.name')} aria-invalid={refused.text !== null} placeholder={t('inspector.customAttribute.name')} spellCheck={false} data-local="custom-attribute-name" onInput={refused.dismiss} />
-        <button type="button" className="door door--icon-button" disabled={!addDoor.available} aria-label={addDoor.label} onClick={add}>
-          {addEntry.door.icon !== null ? <Icon name={addEntry.door.icon} size="md" /> : null}
-        </button>
-        {refused.text !== null ? <span className="field-row__refusal" role="alert">{refused.text}</span> : null}
-      </form>
-    </div>
-  );
-}
-
-function CustomAttributeRow({ node, name, value }: { readonly node: DocNode; readonly name: string; readonly value: string }) {
-  const store = useStore();
-  const valueEntry = CUSTOM_VALUE as DoorEntry;
-  const removeEntry = CUSTOM_REMOVE as DoorEntry;
-  const args = useMemo(() => ({ name }), [name]);
-  const door = useDoor(valueEntry, args, name, isFeatureBuilt(valueEntry.door.feature as FeatureId));
-  const form = useRef<HTMLFormElement>(null);
-  const field = useRef<HTMLInputElement>(null);
-  const shown = useRef(value);
-  const said = useEditorState((s) => s.message);
-  useEffect(() => {
-    if (field.current === null) return;
-    field.current.value = value;
-    shown.current = value;
-  }, [value, said]);
-  useEffect(() => {
-    const row = form.current;
-    const element = field.current;
-    if (row === null || element === null) return;
-    const keep = () => {
-      if (element.value === shown.current) return;
-      shown.current = element.value;
-      const text = element.value;
-      keepAfterGesture(() => {
-        if (locate(store.getState().document, node.id) === null) return;
-        (store.dispatch as (id: CommandId, a: unknown) => DispatchResult)(valueEntry.command.id, { name, value: text });
-      });
-    };
-    const submit = (event: Event) => {
-      event.preventDefault();
-      keep();
-    };
-    row.addEventListener('submit', submit);
-    element.addEventListener('blur', keep);
-    return () => {
-      row.removeEventListener('submit', submit);
-      element.removeEventListener('blur', keep);
-      keep();
-    };
-  }, [store, valueEntry, name, node.id]);
-  return (
-    <form ref={form} className={`field-row field-row--action${door.available ? '' : ' is-unavailable'}`} data-door={valueEntry.ref} data-args={JSON.stringify(args)} title={door.title}>
-      <span className="field-row__label">{name}</span>
-      <input ref={field} className="input" disabled={!door.available} aria-label={name} spellCheck={false} />
-      <DoorControl entry={removeEntry} args={args} />
-    </form>
-  );
-}
-
-// A label's `for` (element.setLabelTarget): a field offering the form controls of the page by name; keeping a name
-// (Enter or leaving the field) points the label at that control, which is given an id when it has none. The field
-// shows the name of the control the label points at.
-function LabelTargetField({ entry, node, label }: { readonly entry: DoorEntry; readonly node: DocNode; readonly label: string }) {
-  const store = useStore();
-  const door = useDoor(entry, {}, label, isFeatureBuilt(entry.door.feature as FeatureId));
-  // the form controls of the document, read once per document (a selector returning a new list would never settle)
-  const document = useEditorState((s) => s.document);
-  const controls = useMemo(() => formControls(document), [document]);
-  // the reference is kept by the control's node id (A3.4): the field shows that control's name and its ID
-  const held = node.attributes.labelFor;
-  const current = typeof held === 'string' ? (controls.find((c) => c.id === held)?.name ?? '') : '';
-  const form = useRef<HTMLFormElement>(null);
-  const field = useRef<HTMLInputElement>(null);
-  const listId = useId();
-  const said = useEditorState((s) => s.message);
-  const arg = Object.entries(entry.command.args).find(([, a]) => a.type === 'node')?.[0] ?? '';
-  useEffect(() => {
-    if (field.current !== null) field.current.value = current;
-  }, [current, said]);
-  useEffect(() => {
-    const row = form.current;
-    const element = field.current;
-    if (row === null || element === null) return;
-    const keep = () => {
-      const typed = element.value.trim();
-      if (typed === current) return;
-      // a control is found by its name or by its ID attribute, as the field shows both (the audit A3.4)
-      const control = formControls(store.getState().document).find((c) => c.name === typed || (c.attributes.id !== undefined && String(c.attributes.id) === typed));
-      if (control === undefined) {
-        element.value = current;
-        return;
-      }
-      keepAfterGesture(() => (store.dispatch as (id: CommandId, a: unknown) => DispatchResult)(entry.command.id, { [arg]: control.id }));
-    };
-    const submit = (event: Event) => {
-      event.preventDefault();
-      keep();
-    };
-    row.addEventListener('submit', submit);
-    element.addEventListener('blur', keep);
-    return () => {
-      row.removeEventListener('submit', submit);
-      element.removeEventListener('blur', keep);
-    };
-  }, [store, entry, arg, current]);
-  return (
-    <form ref={form} className={`field-row${door.available ? '' : ' is-unavailable'}`} data-door={entry.ref} title={door.title}>
-      <span className="field-row__label">{label}</span>
-      <input ref={field} className="input" disabled={!door.available} aria-label={label} spellCheck={false} list={listId} />
-      <datalist id={listId}>
-        {controls.map((c) => (
-          <option key={c.id} value={c.name}>{c.attributes.id === undefined ? c.name : `${c.name} · ${String(c.attributes.id)}`}</option>
-        ))}
-      </datalist>
-    </form>
-  );
-}
-
-// An attribute field of the Settings tab whose command, or whose door's feature, arrives later (Open in a new tab
-// shares element.setLink with the Link address and comes with elements-text): drawn disabled, "not available yet".
-function AttributeField({ entry, label, toggle }: { readonly entry: DoorEntry; readonly label: string; readonly toggle: boolean }) {
-  const door = useDoor(entry, {}, label, isFeatureBuilt(entry.door.feature as FeatureId));
-  return (
-    <div className={`field-row${door.available ? '' : ' is-unavailable'}`} data-door={entry.ref} title={door.title}>
-      <span className="field-row__label">{label}</span>
-      {toggle ? <input type="checkbox" disabled={!door.available} aria-label={label} /> : <input className="input" disabled={!door.available} aria-label={label} />}
-    </div>
-  );
-}
-
-// The Settings tab: no selector bar (DESIGN.md), its region right under the header. With one element selected, the
-// fields of the attributes that apply to its type (elements.json), in their order, the text first.
-function SettingsTab() {
-  const t = useT();
-  const count = useEditorState((s) => s.selection.length);
-  const node = useSingleNode();
-  const inTable = useEditorState((s) => selectionInTable(s.document, s.selection));
-  const fields = node === null ? [] : SETTINGS_FIELDS.filter((entry) => {
-    const attribute = entry.door.kind === 'inspector-field' && entry.door.attribute !== null ? ATTRIBUTES.get(entry.door.attribute) : undefined;
-    return attribute !== undefined && (attribute.elements === 'all' || attribute.elements.includes(node.type)) && attributeApplies(node, attribute.id);
-  });
-  return (
-    <div className="inspector-scroll">
-      <div className="inspector-body" data-region="inspector-settings">
-        {count === 0 ? (
-          <>
-            <p className="inspector-empty">{t('inspector.nothingSelected')}</p>
-            <Hints />
-          </>
-        ) : node === null ? (
-          <p className="inspector-empty">{t('canvas.selectedCount', { count })}</p>
-        ) : SETTINGS_SECTIONS.map((section) => {
-          if (section.elements !== 'all' && !section.elements.includes(node.type)) return null;
-          // a field of an attribute the tag does not take is not drawn (A3.7: the fields follow the tag)
-          const owned = fields.filter((entry) => entry.door.kind === 'inspector-field' && entry.door.attribute !== null && settingsSectionFor(entry.door.attribute, node.type) === section.id && tagTakes(entry.door.attribute, node, MODEL_RULES.contentModel, MODEL_RULES));
-          if (owned.length === 0 && section.id !== 'attributes') return null;
-          return (
-            <section key={section.id} className="settings-section" data-settings-section={section.id} aria-label={t(section.labelKey as MessageId)}>
-              <div className="settings-section__header">
-                <h3>{t(section.labelKey as MessageId)}</h3>
-                <p>{t(section.descriptionKey as MessageId)}</p>
-              </div>
-              {owned.map((entry) => {
-                const attribute = entry.door.kind === 'inspector-field' && entry.door.attribute !== null ? ATTRIBUTES.get(entry.door.attribute) : undefined;
-                if (attribute === undefined) return null;
-                const label = t(attribute.labelKey as MessageId);
-                if (attribute.valueType === ID_REF) return <LabelTargetField key={`${entry.ref}@${node.id}`} entry={entry} node={node} label={label} />;
-                if ('content' in entry.command.args) return <TextField key={`${entry.ref}@${node.id}`} entry={entry} node={node} label={label} />;
-                const kept = keptTextOf(entry, attribute.id as AttributeId, attribute.valueType, node);
-                if (kept !== null) return <KeptTextField key={`${entry.ref}@${node.id}`} entry={entry} node={node} kept={kept} label={label} attribute={attribute.id} />;
-                if (attribute.valueType === 'boolean' && toggleArgOf(entry, attribute.id as AttributeId) !== null)
-                  return <ToggleField key={`${entry.ref}@${node.id}`} entry={entry} node={node} attribute={attribute.id as AttributeId} label={label} />;
-                return <AttributeField key={entry.ref} entry={entry} label={label} toggle={attribute.valueType === 'boolean'} />;
-              })}
-              {section.id === 'attributes' ? <PartsEditor node={node} /> : null}
-              {section.id === 'attributes' && CUSTOM_ADD !== undefined && CUSTOM_VALUE !== undefined && CUSTOM_REMOVE !== undefined ? <CustomAttributes node={node} add={CUSTOM_ADD} /> : null}
-              {section.id === 'attributes' && inTable ? (
-                <div className="field-row field-row--toggles">
-                  {TABLE_PART_DOORS.map((entry) => <DoorControl key={entry.ref} entry={entry} />)}
-                </div>
-              ) : null}
-            </section>
-          );
-        })}
-      </div>
-    </div>
   );
 }
 

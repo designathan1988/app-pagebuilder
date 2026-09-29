@@ -45,13 +45,14 @@
 // release commits the last value: one undo step. Escape (drag.cancel) cancels it back to the value before the press.
 import { isFeatureBuilt } from '../../app/features.ts';
 import { message, type Message } from '../../core/commands/registry.ts';
+import { reportError } from '../../core/incidents.ts';
 import { locate, type DocumentJson, type NodeId } from '../../core/document/model.ts';
 import type { DispatchResult, Gesture } from '../../core/store/store.ts';
 import { selectionRoots } from '../../core/structure/remove.ts';
 import type { CommandId, DoorId, FeatureId, KeyContextId } from '../../generated/ids.ts';
 import { manifest, numberConstant, pairConstant, type DoorEntry } from '../../manifest/runtime.ts';
 import { readUploadFile, type UploadedFile } from '../../core/files/files.ts';
-import { canvasFrame, computedValues, flowAxis, flowReversed, framePointOnScreen, geometryOf, laysOut, nodeAt, nodeBox, nodesUnder, pageLayout, resizeBasis, screenToPage, scrollPage, sideFlow, type Point } from '../canvas/coordinates.ts';
+import { canvasFrame, flowAxis, flowReversed, framePointOnScreen, geometryOf, laysOut, nodeAt, nodeBox, nodesUnder, pageLayout, resizeBasis, screenToPage, scrollPage, sideFlow, type Point } from '../canvas/coordinates.ts';
 import { snapMode, snapMove, snapResize, snapShown } from '../canvas/snapping.ts';
 import type { Box } from '../../core/geometry/snap.ts';
 import { resizedBox, type ResizeFrom } from '../../core/geometry/resize.ts';
@@ -75,151 +76,41 @@ import { TEXT_TOOLBAR, editArgs, editedNode, isTextElement } from '../canvas/tex
 import { isValueControl } from '../../core/elements/inputs.ts';
 import { offsetFromTrackX, playheadTimeFromTrackX, shownAnimation } from '../timeline/playhead.ts';
 import { pickingTarget } from '../inspector/pick-target.ts';
+// the gesture state machine lives in its own module (pointer/machine.ts); this owner keeps the installer and the state
+import { DRAG_HYSTERESIS, DRAG_THRESHOLD, IDLE, step, type Effect, type Machine, type Press } from './pointer/machine.ts';
+// which door a press runs lives in its own module too (pointer/press.ts): the facts it is judged by, the modifier held
+import { argsFor, clickDoor, editEndDoor, laysGrid, modifierOf, type Button, type PressFacts } from './pointer/press.ts';
+// what the pointer publishes for the canvas chrome and the panels (pointer/views.ts); the installer is their only writer
+import {
+  altHeld,
+  guideOverRuler,
+  measuring,
+  pointerPressing,
+  setBand,
+  setCanvasPointer,
+  setDrag,
+  setDropped,
+  setGhostReturn,
+  setGuideOnRuler,
+  setHovered,
+  setPanView,
+  setPressPoint,
+  setPressing,
+  setResizing,
+  type Inserting,
+  type Redirect,
+  type SideView,
+} from './pointer/views.ts';
 
-const threshold = manifest.interactions.constants.find((c) => c.id === 'drag.threshold')?.value;
-export const DRAG_THRESHOLD = typeof threshold === 'number' ? threshold : 4;
-const hysteresis = manifest.interactions.constants.find((c) => c.id === 'drag.hysteresis')?.value;
-if (typeof hysteresis !== 'number') throw new Error('interactions.json has no number drag.hysteresis');
-export const DRAG_HYSTERESIS = hysteresis;
-// the confirmed side drop's pill: where it is drawn from the pointer, and how near it the pointer keeps the offer
-export const PILL_OFFSET = pairConstant('wrap.pillOffset');
-const PILL_FREEZE = numberConstant('wrap.pillFreeze');
-// autoscroll (spec drag-layout, row 8): the band along the page's visible edges, and the most it scrolls a frame
-const AUTOSCROLL_ZONE = numberConstant('drop.autoscrollZone');
-const AUTOSCROLL_MAX = numberConstant('drop.autoscrollMaxStep');
+// the entries this module published before the machine moved out stay published here: consumers need not change
+export { DRAG_THRESHOLD, IDLE, step } from './pointer/machine.ts';
+export type { Effect, Machine, MachineEvent, Press } from './pointer/machine.ts';
+export { clickDoor, editEndDoor, modifierOf } from './pointer/press.ts';
+export type { Button, PressFacts } from './pointer/press.ts';
+export { band, canvasPointer, drag, ghostReturn, guideOverRuler, holdAlt, hover, lastDrop, measuring, panState, pointerPressing, pressPoint, resizingNow } from './pointer/views.ts';
+export type { Band, DragView, Dropped, GhostReturn, Inserting, PanView, Redirect, SideView } from './pointer/views.ts';
 
-// What a press lands on: a node of the page (an element, or the page root where no element is), or the stage
-// around the page.
-// A press on the canvas chrome's label of an element is a press on that element (`label`: never a marquee).
-// A press on a palette tile carries the tile's door and the arguments the tile stands for (its entry).
-// A press on a number field's label carries the scrub door, the arguments the label stands for (its field's property)
-// and the text the field holds at the press.
-export type Press =
-  | { readonly on: 'node'; readonly node: string; readonly root: boolean; readonly label?: boolean }
-  | { readonly on: 'stage' }
-  | { readonly on: 'tile'; readonly entry: DoorEntry; readonly args: Readonly<Record<string, unknown>> }
-  // a press on a Layers row: it selects on its click (sidebar.tsx) and arms the row's drag (spec layers-drag)
-  | { readonly on: 'row'; readonly node: string }
-  | { readonly on: 'scrub'; readonly entry: DoorEntry; readonly args: Readonly<Record<string, unknown>>; readonly value: string }
-  // a press on a stop of the gradient bar: the stop drag's door, the arguments the stop stands for, its index and the
-  // bar it moves along (spec gradient-editor)
-  | { readonly on: 'stop'; readonly entry: DoorEntry; readonly args: Readonly<Record<string, unknown>>; readonly index: number; readonly bar: { readonly left: number; readonly width: number } }
-  // a press on a shadow's light pad: the pad's drag door, the arguments the pad stands for (its property and layer) and
-  // the pad's centre (spec shadow-editor)
-  | { readonly on: 'pad'; readonly entry: DoorEntry; readonly args: Readonly<Record<string, unknown>>; readonly centre: Point; readonly element: HTMLElement }
-  // a press on the quick panel's grip: its drag door, the arguments the grip stands for (the element) and the offset the
-  // panel is drawn at now (spec quick-panel)
-  | { readonly on: 'grip'; readonly entry: DoorEntry; readonly args: Readonly<Record<string, unknown>>; readonly base: Point }
-  // a press on a splitter: its drag door and the splitter it stands for (spec panel-resize)
-  | { readonly on: 'splitter'; readonly entry: DoorEntry; readonly args: Readonly<Record<string, unknown>> }
-  // a press on a shadow editor's layer row (A3.34): its move door, the arguments the row stands for (the layer's
-  // index) and the rows' boxes as they were drawn, to work the target index out of the pointer's y
-  | { readonly on: 'layer'; readonly entry: DoorEntry; readonly args: Readonly<Record<string, unknown>>; readonly index: number; readonly rows: readonly { readonly top: number; readonly bottom: number }[] }
-  // a press on a row of the Explorer's file tree (spec explorer-file-system): its move door and the path the row
-  // stands for; the release moves it into the folder row the pointer is over
-  | { readonly on: 'explorer'; readonly entry: DoorEntry; readonly args: Readonly<Record<string, unknown>>; readonly path: string }
-  // a press on the timeline's ruler or on a keyframe of its track (specs timeline-preview, timeline-keyframes): the
-  // drag's door, the arguments the keyframe stands for (its animation and offset), and the track's box
-  | { readonly on: 'playhead'; readonly entry: DoorEntry; readonly args: Readonly<Record<string, unknown>>; readonly track: { readonly left: number; readonly width: number } }
-  | { readonly on: 'keyframe'; readonly entry: DoorEntry; readonly args: Readonly<Record<string, unknown>>; readonly track: { readonly left: number; readonly width: number } }
-  // a press on a panel's header (spec floating-panels): its drag door and the panel it moves; the release runs the
-  // door of the place the pointer is in (workspace/panel-drag.ts)
-  | { readonly on: 'panel'; readonly entry: DoorEntry; readonly args: Readonly<Record<string, unknown>>; readonly panel: Panel };
 
-// The gesture state machine. A press becomes a drag once the pointer has moved drag.threshold screen pixels from
-// where it went down; below that, the release ends a click.
-export type Machine =
-  | { readonly phase: 'idle' }
-  | { readonly phase: 'pressed' | 'dragging'; readonly pointer: number; readonly start: Point; readonly press: Press };
-
-export type MachineEvent =
-  | { readonly type: 'down'; readonly pointer: number; readonly at: Point; readonly press: Press }
-  | { readonly type: 'move'; readonly pointer: number; readonly at: Point }
-  | { readonly type: 'up'; readonly pointer: number }
-  | { readonly type: 'cancel' };
-
-// what the owner does on a transition: open the gesture's transaction and run the press's door, start the drag of
-// the press's source, commit the transaction, or cancel it
-export type Effect = 'press' | 'drag' | 'commit' | 'cancel' | null;
-
-export const IDLE: Machine = { phase: 'idle' };
-
-export function step(machine: Machine, event: MachineEvent, dragThreshold = DRAG_THRESHOLD): { readonly machine: Machine; readonly effect: Effect } {
-  if (event.type === 'cancel') return machine.phase === 'idle' ? { machine, effect: null } : { machine: IDLE, effect: 'cancel' };
-  if (machine.phase === 'idle') {
-    if (event.type !== 'down') return { machine, effect: null };
-    return { machine: { phase: 'pressed', pointer: event.pointer, start: event.at, press: event.press }, effect: 'press' };
-  }
-  // another pointer (a second finger, a pen) does not join the gesture
-  if (event.type === 'down' || event.pointer !== machine.pointer) return { machine, effect: null };
-  if (event.type === 'up') return { machine: IDLE, effect: 'commit' };
-  if (machine.phase === 'pressed' && Math.hypot(event.at.x - machine.start.x, event.at.y - machine.start.y) >= dragThreshold) {
-    return { machine: { ...machine, phase: 'dragging' }, effect: 'drag' };
-  }
-  return { machine, effect: null };
-}
-
-// What the canvas knows of a press beyond where it lands: whether its node is a text element, and the node whose text
-// is edited in place (text-edit.ts), if any.
-export interface PressFacts {
-  readonly textual: boolean;
-  // whether its node lays its children out as a grid (a double click opens the canvas grid editor on it)
-  readonly grid?: boolean;
-  readonly edited: string | null;
-  // whether its node is a form control whose value is edited in the inspector, never on the canvas (spec
-  // elements-form-inputs-rules, Problems in Pager 1)
-  readonly formControl?: boolean;
-}
-const NO_FACTS: PressFacts = { textual: false, edited: null };
-// The value predicate that says a node lays its children out as a grid, and the property it reads (the manifest's own
-// data): what a double click on the canvas asks before it opens the grid editor.
-const GRID_CONTAINER = 'gridContainer';
-const GRID_DISPLAY = MODEL_RULES.valuePredicates.get(GRID_CONTAINER)?.property ?? '';
-const laysGrid = (id: string): boolean => {
-  const values = GRID_DISPLAY === '' ? null : computedValues(id, [GRID_DISPLAY], new Map());
-  return (values?.[GRID_DISPLAY] ?? '').includes('grid');
-};
-
-// The canvas-click doors of the manifest, and whether one's target takes a press: "element-or-page" any node,
-// "element" a node that is not the page root, "stage-outside-page" the stage, "text-element" a text element,
-// "outside-edited-element" anywhere but the element whose text is edited (while one is). The other targets (an
-// interaction's target being picked, a form control) arrive with their features.
-const CLICKS = manifest.doors.filter((d) => d.door.kind === 'canvas-click');
-const OUTSIDE_EDIT = 'outside-edited-element';
-function takes(target: string, press: Press, facts: PressFacts, picking: number | null): boolean {
-  if (target === 'element-or-page') return press.on === 'node';
-  if (target === 'element') return press.on === 'node' && !press.root;
-  if (target === 'stage-outside-page') return press.on === 'stage';
-  if (target === 'text-element') return press.on === 'node' && !press.root && facts.textual;
-  if (target === 'form-control') return press.on === 'node' && !press.root && facts.formControl === true;
-  // an interaction's target being picked (spec events-actions): the press lands on the element it names
-  if (target === 'pick-target') return press.on === 'node' && picking !== null;
-  if (target === 'grid-container') return press.on === 'node' && !press.root && facts.grid === true;
-  // a press on a palette tile or on a field's label is no press on the canvas: it keeps no text
-  if (target === OUTSIDE_EDIT) return (press.on === 'node' || press.on === 'stage' || press.on === 'row') && facts.edited !== null && !(press.on === 'node' && press.node === facts.edited);
-  return false;
-}
-
-export type Button = 'primary' | 'secondary';
-const matches = (d: DoorEntry, button: Button, count: number, modifier: string | null) => d.door.kind === 'canvas-click' && d.door.button === button && d.door.count === count && d.door.modifier === modifier;
-// The door a press runs.
-export function clickDoor(press: Press, button: Button, count: number, modifier: string | null, facts: PressFacts = NO_FACTS, picking: number | null = null): DoorEntry | null {
-  return CLICKS.find((d) => matches(d, button, count, modifier) && d.door.kind === 'canvas-click' && d.door.target !== OUTSIDE_EDIT && takes(d.door.target, press, facts, picking)) ?? null;
-}
-// The door a press outside the edited text runs first, keeping the text (spec text-edit-inline: a click elsewhere
-// keeps it, and selects there): null when no text is edited or the press is on it.
-export function editEndDoor(press: Press, button: Button, count: number, modifier: string | null, facts: PressFacts): DoorEntry | null {
-  return CLICKS.find((d) => matches(d, button, count, modifier) && d.door.kind === 'canvas-click' && d.door.target === OUTSIDE_EDIT && takes(d.door.target, press, facts, null)) ?? null;
-}
-
-// A door's arguments for a press: its own, and the node it acts on when its adapter acts on the gesture's target. The
-// pick of an interaction's target carries the interaction being picked and the node the press landed on.
-function argsFor(entry: DoorEntry, press: Press, picking: number | null): Record<string, unknown> {
-  if (entry.door.kind === 'canvas-click' && entry.door.target === 'pick-target' && press.on === 'node') {
-    return picking === null ? { ...entry.door.args } : { ...entry.door.args, interaction: picking, changes: { target: press.node } };
-  }
-  return entry.door.adapter.selection === 'target' && press.on === 'node' ? { ...entry.door.args, target: press.node } : { ...entry.door.args };
-}
 
 // The marquee (spec marquee-select): the canvas-drag doors a press may start a band with, and whether it may. The
 // empty-area door (zone "page-or-container") takes a press on the page root or on a container's own area (not on a
@@ -256,110 +147,14 @@ function marqueeMode(entry: DoorEntry, press: Press, modifier: string | null, no
 // Whether the box being drawn takes the leaves (spec marquee-select, Problems in Pager 3): the key the marquee
 // gestures name for it is held now.
 const LEAVES_KEY = (manifest.interactions.gestures.find((g) => g.id === 'marquee')?.modifiers ?? []).find((m) => m.meaning === 'take-leaves')?.key ?? null;
-const leavesNow = (): boolean => LEAVES_KEY === 'Alt' && altDown;
-
-// The band of the marquee being drawn, in screen pixels, for the canvas chrome; null when no marquee is drawn.
-// Pointer state, like the hovered node: the selection it makes goes through the store.
-export interface Band {
-  readonly x: number;
-  readonly y: number;
-  readonly width: number;
-  readonly height: number;
-}
-let drawnBand: Band | null = null;
-const bandListeners = new Set<() => void>();
-export const band = {
-  get: (): Band | null => drawnBand,
-  subscribe(listener: () => void): () => void {
-    bandListeners.add(listener);
-    return () => bandListeners.delete(listener);
-  },
-};
-function setBand(next: Band | null) {
-  if (next === drawnBand) return;
-  drawnBand = next;
-  for (const listener of [...bandListeners]) listener();
-}
-
-// The node the pointer hovers on the canvas, for the canvas chrome: set by pointer moves over the page, null
-// elsewhere. Pointer state, not editor state: it changes no command.
-let hovered: string | null = null;
-const hoverListeners = new Set<() => void>();
-export const hover = {
-  get: (): string | null => hovered,
-  subscribe(listener: () => void): () => void {
-    hoverListeners.add(listener);
-    return () => hoverListeners.delete(listener);
-  },
-};
-function setHovered(node: string | null) {
-  if (node === hovered) return;
-  hovered = node;
-  for (const listener of [...hoverListeners]) listener();
-}
-
-// Whether Alt is held (spec hover-measure): while it is, the canvas draws the distances from the selection to the element
-// under the pointer. The keymap, the owner of keys, says when it goes down and up (holdAlt); nothing changes in the
-// document or the selection. Pointer state, for the canvas chrome.
-let altDown = false;
-const altListeners = new Set<() => void>();
-export const measuring = {
-  get: (): boolean => altDown,
-  subscribe(listener: () => void): () => void {
-    altListeners.add(listener);
-    return () => altListeners.delete(listener);
-  },
-};
-// The node whose box a resize is dragging, and the handle it is pulled by, for the canvas chrome (item 4.5: the
-// distances from the dragged edges to the neighbouring siblings are drawn while the drag goes on). Pointer state,
-// not editor state: it changes no command.
-let resizeNow: { readonly node: string; readonly handle: string } | null = null;
-const resizeListeners = new Set<() => void>();
-export const resizingNow = {
-  get: (): { readonly node: string; readonly handle: string } | null => resizeNow,
-  subscribe(listener: () => void): () => void {
-    resizeListeners.add(listener);
-    return () => resizeListeners.delete(listener);
-  },
-};
-function setResizing(next: { readonly node: string; readonly handle: string } | null) {
-  if (next?.node === resizeNow?.node && next?.handle === resizeNow?.handle) return;
-  resizeNow = next;
-  for (const listener of [...resizeListeners]) listener();
-}
+const leavesNow = (): boolean => LEAVES_KEY === 'Alt' && altHeld();
 
 // Whether the key that duplicates a drag is held, once the duplicate by dragging is built (spec drag-duplicate): the
 // drop label and the status bar say "Duplicate" then.
 export const duplicating = {
-  get: (): boolean => DUPLICATE_DRAG !== null && DUPLICATE_KEY === 'Alt' && altDown,
+  get: (): boolean => DUPLICATE_DRAG !== null && DUPLICATE_KEY === 'Alt' && altHeld(),
   subscribe: measuring.subscribe,
 };
-export function holdAlt(down: boolean): void {
-  if (down === altDown) return;
-  altDown = down;
-  for (const listener of [...altListeners]) listener();
-}
-
-// Where the pointer is while it is over the canvas's stage, for the rulers' marker (spec rulers); null elsewhere.
-let pointerOnStage: Point | null = null;
-const pointerListeners = new Set<() => void>();
-export const canvasPointer = {
-  get: (): Point | null => pointerOnStage,
-  subscribe(listener: () => void): () => void {
-    pointerListeners.add(listener);
-    return () => pointerListeners.delete(listener);
-  },
-};
-function setCanvasPointer(at: Point | null) {
-  if (at === pointerOnStage || (at !== null && pointerOnStage !== null && at.x === pointerOnStage.x && at.y === pointerOnStage.y)) return;
-  pointerOnStage = at;
-  for (const listener of [...pointerListeners]) listener();
-}
-
-// Where the last press went down on the screen, whatever it pressed (the canvas, a Layers row): the context menu opens
-// there (spec context-menu: "a menu at the pointer"). Pointer state: it changes no command.
-let lastPress: Point | null = null;
-export const pressPoint = (): Point | null => lastPress;
 
 // The browser's own menu never opens where the editor's opens (spec context-menu, Problems in Pager 5): on the canvas
 // (the overlay and the stage) and over the editor's context menu and its backdrop, which a secondary press on the
@@ -408,6 +203,12 @@ const layersDrag = (zone: string) => manifest.doors.find((d) => d.door.kind === 
 const ROW_DROP = layersDrag('row-zones');
 const ROW_DWELL = layersDrag('collapsed-row-dwell');
 // how long the pointer rests on a folded row before it unfolds (interactions.json layers.expandDwell)
+// the confirmed side drop's pill: where it is drawn from the pointer, and how near it the pointer keeps the offer
+const PILL_OFFSET = pairConstant('wrap.pillOffset');
+const PILL_FREEZE = numberConstant('wrap.pillFreeze');
+// autoscroll (spec drag-layout, row 8): the band along the page's visible edges, and the most it scrolls a frame
+const AUTOSCROLL_ZONE = numberConstant('drop.autoscrollZone');
+const AUTOSCROLL_MAX = numberConstant('drop.autoscrollMaxStep');
 const EXPAND_DWELL = numberConstant('layers.expandDwell');
 
 // The view's wheel and pan (spec zoom-wheel-pan): over the stage, the wheel runs its door by the modifier held (Ctrl
@@ -431,21 +232,6 @@ const guideDoor = (source: string, zone: string) => manifest.doors.find((d) => d
 const GUIDE_CREATES: Readonly<Record<string, DoorEntry | null>> = { horizontal: guideDoor('top-ruler', 'page'), vertical: guideDoor('left-ruler', 'page') };
 const GUIDE_MOVE = guideDoor('guide', 'page');
 const GUIDE_DELETE = guideDoor('guide', 'own-ruler');
-// the ruler a guide being dragged is over, its own (the chrome's delete hint), or null
-let guideOnRuler: string | null = null;
-const guideRulerListeners = new Set<() => void>();
-export const guideOverRuler = {
-  get: (): string | null => guideOnRuler,
-  subscribe(listener: () => void): () => void {
-    guideRulerListeners.add(listener);
-    return () => guideRulerListeners.delete(listener);
-  },
-};
-function setGuideOnRuler(axis: string | null): void {
-  if (axis === guideOnRuler) return;
-  guideOnRuler = axis;
-  for (const listener of [...guideRulerListeners]) listener();
-}
 // an angle as degrees: deg, rad, grad or turn, else none
 function degreesOf(value: string | undefined): number {
   const match = value === undefined ? null : /^(-?\d*\.?\d+)(deg|rad|grad|turn)$/.exec(value.trim());
@@ -532,29 +318,10 @@ const WHEEL_FACTOR = numberConstant('zoom.wheelFactor');
 const WHEEL_LINE = 16;
 const panDrag = (source: string): DoorEntry | null => PAN_DRAGS.find((d) => d.door.kind === 'canvas-drag' && d.door.source === source) ?? null;
 const onStage = (target: EventTarget | null): boolean => target instanceof Element && target.closest('[data-canvas-stage]') !== null;
-export type PanView = 'idle' | 'armed' | 'panning';
-let panView: PanView = 'idle';
 let spaceDown = false;
 let overStage = false;
 let panning: { pointer: number; last: Point; moved: Point; entry: DoorEntry } | null = null;
 let panDispatch: ((entry: DoorEntry, args: Readonly<Record<string, unknown>>) => void) | null = null;
-const panListeners = new Set<() => void>();
-function setPanView(view: PanView): void {
-  if (view === panView) return;
-  panView = view;
-  for (const listener of panListeners) listener();
-}
-export const panState = {
-  get: (): PanView => panView,
-  subscribe: (listener: () => void): (() => void) => {
-    panListeners.add(listener);
-    return () => panListeners.delete(listener);
-  },
-};
-// Whether a pointer button is down anywhere in the editor: the keymap asks it to tell a focus a click gave from one
-// the keyboard gave (Space on a focused control, keymap.ts)
-let pressing = false;
-export const pointerPressing = (): boolean => pressing;
 // Space went down or up (the keymap, which owns the keys): held over the stage it arms the pan; true when it did
 export function holdSpace(down: boolean): boolean {
   if (!down) {
@@ -648,67 +415,6 @@ export function pressedByPointer(entry: DoorEntry): boolean {
 // it). Pointer state, not editor state: nothing changes until the release.
 // What a creation drag inserts: the tile pressed, the arguments it stands for (a palette entry: {entry}; a component:
 // {component}) and the canvas-drag door that drops it where the proposal says.
-export interface Inserting {
-  readonly tile: DoorEntry;
-  readonly args: Readonly<Record<string, unknown>>;
-  readonly drop: DoorEntry;
-}
-
-// A refusal the drop met where the pointer is, and the element that refused: the proposal drawn is then the nearest
-// place that takes it (spec drag-layout, Problems in Pager 4).
-export interface Redirect {
-  readonly why: Message;
-  readonly from: NodeId;
-}
-export interface DragView {
-  readonly dragged: readonly NodeId[];
-  readonly inserting: Inserting | null;
-  readonly proposal: DropProposal | null;
-  readonly refusal: Message | null;
-  readonly redirect: Redirect | null;
-  readonly levels: number;
-  readonly at: Point;
-  // the side drop offered where the pointer is (spec drag-layout, row 5): confirmed once the pointer stayed
-  // wrap.sideDwell in its band (then its pill is drawn where it was confirmed, and a release wraps), else only offered
-  // (a release is the ordinary drop the proposal draws); with the refusal its wrap would meet
-  readonly side: SideView | null;
-}
-export interface SideView {
-  readonly offer: SideOffer;
-  readonly armed: boolean;
-  readonly pill: Point | null;
-  readonly refusal: Message | null;
-}
-// The elements a drop has just placed, for the canvas chrome, which flashes them (spec drag-layout, row 10); numbered,
-// so the same elements dropped again flash again.
-export interface Dropped {
-  readonly id: number;
-  readonly nodes: readonly NodeId[];
-}
-let dropped: Dropped | null = null;
-let drops = 0;
-const droppedListeners = new Set<() => void>();
-export const lastDrop = {
-  get: (): Dropped | null => dropped,
-  subscribe(listener: () => void): () => void {
-    droppedListeners.add(listener);
-    return () => droppedListeners.delete(listener);
-  },
-};
-function setDropped(nodes: readonly NodeId[]) {
-  drops += 1;
-  dropped = { id: drops, nodes };
-  for (const listener of [...droppedListeners]) listener();
-}
-let dragView: DragView | null = null;
-const dragListeners = new Set<() => void>();
-export const drag = {
-  get: (): DragView | null => dragView,
-  subscribe(listener: () => void): () => void {
-    dragListeners.add(listener);
-    return () => dragListeners.delete(listener);
-  },
-};
 // The store the canvas edits, kept when the pointer owner is installed: the module-level functions below (the OS file
 // drop's among them) read it.
 let editing: EditorStore | null = null;
@@ -734,38 +440,6 @@ export function showFileTarget(node: string): void {
 export function hideFileDrag(): void {
   setDrag(null);
   setHovered(null);
-}
-
-function setDrag(next: DragView | null) {
-  if (next === dragView) return;
-  dragView = next;
-  for (const listener of [...dragListeners]) listener();
-}
-
-// The ghost of a creation drag Escape cancelled, for the canvas chrome, which plays its way back (spec
-// drag-level-keys-escape, Problems in Pager 4): the palette entry, where the pointer was and where the press went down
-// on the tile, on the screen; each one numbered, so a new one plays anew. Pointer state: the next press takes it away.
-export interface GhostReturn {
-  readonly id: number;
-  readonly inserting: Inserting;
-  readonly from: Point;
-  readonly to: Point;
-}
-let returningGhost: GhostReturn | null = null;
-let ghostReturns = 0;
-const returnListeners = new Set<() => void>();
-export const ghostReturn = {
-  get: (): GhostReturn | null => returningGhost,
-  subscribe(listener: () => void): () => void {
-    returnListeners.add(listener);
-    return () => returnListeners.delete(listener);
-  },
-};
-function setGhostReturn(next: Omit<GhostReturn, 'id'> | null) {
-  if (next === null && returningGhost === null) return;
-  if (next !== null) ghostReturns += 1;
-  returningGhost = next === null ? null : { id: ghostReturns, ...next };
-  for (const listener of [...returnListeners]) listener();
 }
 
 // The proposal a pointer position makes now, measured on the page through the coordinates module.
@@ -892,19 +566,6 @@ export function registerSlider(element: HTMLInputElement, commit: (value: string
   return () => SLIDER_COMMITS.delete(element);
 }
 
-const MODIFIERS = [
-  ['shiftKey', 'Shift'],
-  ['ctrlKey', 'Ctrl'],
-  ['altKey', 'Alt'],
-  ['metaKey', 'Meta'],
-] as const;
-// the one modifier held, as the manifest names it; null for none (two held match no door). A panel control drawn
-// for several doors of one gesture told apart by their modifier (a Layers row: click, Shift+click, Ctrl+click) runs
-// the door of the modifier its click holds, read the same way.
-export function modifierOf(event: Readonly<Record<(typeof MODIFIERS)[number][0], boolean>>): string | null {
-  const held = MODIFIERS.filter(([key]) => event[key]).map(([, name]) => name);
-  return held.length === 1 ? (held[0] ?? null) : held.length === 0 ? null : 'several';
-}
 
 // The text toolbar over the canvas while a text is edited (text-toolbar.tsx): its controls run their own doors, so a
 // press there is no press on the page under it, and it leaves the focus in the edited text (spec
@@ -1014,7 +675,21 @@ function pressAt(event: MouseEvent, isRoot: (node: string) => boolean, under: Ev
 }
 
 // Installs the pointer owner on the editor's window; returns its removal.
+//
+// One editor per document, and this is where that is enforced: the transient state above (the band, the hovered node,
+// the drag, the press, the pan…) is per window, not per store, so a second editor installed over a live one would
+// share it. That cannot happen silently — the second installer is refused here, records an incident, and in
+// development and tests throws, so the defect shows instead of two editors writing each other's state. The first
+// installer keeps the pointer. A future feature that shows two editors side by side must first make this state
+// per store (the plan's T7); until one exists, no second instance can appear — this guard is the proof.
+let pointerOwner: EditorStore | null = null;
 export function installPointer(store: EditorStore, target: Window = window): () => void {
+  if (pointerOwner !== null && pointerOwner !== store) {
+    reportError('a second editor tried to take the pointer owner', 'the pointer owner is installed: one editor per document');
+    if (import.meta.env.DEV) throw new Error('the pointer owner is installed: one editor per document');
+    return () => undefined;
+  }
+  pointerOwner = store;
   editing = store;
   let machine: Machine = IDLE;
   let buttons: { button: Button; count: number; modifier: string | null } | null = null;
@@ -1757,8 +1432,8 @@ export function installPointer(store: EditorStore, target: Window = window): () 
   };
   const onDown = (event: PointerEvent) => {
     // a press or a gesture still open here lost its release: it ends before anything new begins
-    if (pressing || spacing !== null || guiding !== null || rotating !== null || resizing !== null || panning !== null || pickingColor !== null || sliding !== null) onCancel();
-    pressing = true;
+    if (pointerPressing() || spacing !== null || guiding !== null || rotating !== null || resizing !== null || panning !== null || pickingColor !== null || sliding !== null) onCancel();
+    setPressing(true);
     // a slider a field draws (A3.30): the pointer moves the thumb freely, and only the release writes
     const commit = event.button === 0 && event.target instanceof HTMLInputElement && event.target.type === 'range' ? (SLIDER_COMMITS.get(event.target) ?? null) : null;
     if (commit !== null && event.target instanceof HTMLInputElement) {
@@ -1873,7 +1548,7 @@ export function installPointer(store: EditorStore, target: Window = window): () 
       setPanView('panning');
       return;
     }
-    lastPress = { x: event.clientX, y: event.clientY };
+    setPressPoint({ x: event.clientX, y: event.clientY });
     keepFocus = false;
     setGhostReturn(null);
     const press = pressAt(event, isRoot);
@@ -2054,7 +1729,7 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     }
   };
   const onUp = (event: PointerEvent) => {
-    pressing = false;
+    setPressing(false);
     if (event.pointerId === captured) captured = null;
     // the key held at the release: the duplicate's (spec drag-duplicate)
     releaseModifier = modifierOf(event);
@@ -2087,7 +1762,7 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     if (guiding !== null) {
       if (event.pointerId !== guiding.pointer) return;
       const { gesture, kind, guide } = guiding;
-      const dropped = guideOnRuler !== null;
+      const dropped = guideOverRuler.get() !== null;
       guiding = null;
       setGuideOnRuler(null);
       if (gesture === null) return;
@@ -2150,7 +1825,7 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     run(next.effect);
   };
   const onCancel = () => {
-    pressing = false;
+    setPressing(false);
     captured = null;
     sliding = null;
     dropHandleGestures();
@@ -2163,7 +1838,7 @@ export function installPointer(store: EditorStore, target: Window = window): () 
   const onLostCapture = (event: PointerEvent) => {
     if (event.pointerId !== captured) return;
     captured = null;
-    if (pressing) onCancel();
+    if (pointerPressing()) onCancel();
   };
   // While a press on the canvas is held, the browser neither selects the editor's text nor starts its own drag and
   // drop of it: a native drag would take the pointer away (pointercancel) and end the gesture.
@@ -2326,6 +2001,8 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     sessionDispatch = null;
     onCancel();
     panDispatch = null;
+    // the document is free again: another editor (a new document, a test that unmounts and mounts) may take the pointer
+    if (pointerOwner === store) pointerOwner = null;
     target.removeEventListener('wheel', onWheel, { capture: true });
     target.removeEventListener('pointerdown', onDown, true);
     target.removeEventListener('dblclick', onDoubleClick, true);

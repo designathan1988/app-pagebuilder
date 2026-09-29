@@ -43,8 +43,15 @@ a concept that has an owner is a defect.
   the chain is a refusal with its reason.
 - **History** stores patches and their inverses with the selection before and after, never snapshots; commands
   declared as coalescing merge inside a manifest window.
-- **Idle work never lies**: an awaited door (a file, the clipboard) re-checks what it computed before it dispatches,
-  and says so when it cannot (`status.stale`).
+- **The async rule**: a door may await its *payload* (the files a person picked, the clipboard, an image's bytes) and
+  let the command compute its placement from the state at dispatch — the command reads the document when it runs, so a
+  payload cannot go stale. What may not happen is computing something **from the document or the layout** before an
+  await and applying it after: exactly one site does that (an image file dropped on the canvas, whose place and target
+  come from the measured page before the file is decoded), and it re-checks both against the document as it is —
+  a target that is gone, or a parent that is, refuses with `status.stale` and clamps the index. Deferred callbacks
+  (the side-drop dwell, the Layers row dwell, a field keeping its text one task later) each re-check the thing they
+  captured. The audit of every `.then`/`await` in `src/` stands behind this paragraph; a second site of the
+  compute-before-await kind must bring its own re-check.
 - Ports keep the core testable and honest: the clock, ids, the layout (the only measurer), the CSS support question,
   the clipboard, downloads.
 
@@ -123,8 +130,7 @@ npm run inventory         # regenerate docs/INVENTORY.md and docs/inventory.json
   - **The complete `npm run e2e` has not run on this tree** — it is the gate for the next stretch, together with the
     file splits by responsibility (`pointer.ts` 2,477 lines, `inspector.tsx` 1,458, `import.ts` 1,259, `field/`,
     `chrome.tsx`, `sidebar.tsx`) and the folds of the specs into the manifest.
-- Open findings: the selection label can rest on the text above it (`npm run ui -- insert` photographs it); the
-  complete suite's runtime is unmeasured on this tree; `docs/audits/` and `docs/history.md` are being folded here.
+- Open findings: the complete suite's runtime is unmeasured on this tree (it runs as the final gate).
 
 ## Rules that are never broken
 

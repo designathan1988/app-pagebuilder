@@ -5,8 +5,8 @@
     "commands": 256,
     "doors": 998,
     "scenarios": 1333,
-    "modules": 236,
-    "lines": 47217
+    "modules": 241,
+    "lines": 47339
   },
   "features": [
     {
@@ -3966,7 +3966,7 @@
     },
     {
       "path": "src/editor/canvas/chrome.tsx",
-      "lines": 1044,
+      "lines": 1037,
       "commands": [],
       "features": []
     },
@@ -4252,7 +4252,25 @@
     },
     {
       "path": "src/editor/input/pointer.ts",
-      "lines": 2477,
+      "lines": 2154,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/input/pointer/machine.ts",
+      "lines": 86,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/input/pointer/press.ts",
+      "lines": 85,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/input/pointer/views.ts",
+      "lines": 252,
       "commands": [],
       "features": []
     },
@@ -4356,6 +4374,12 @@
         "inspector-property-search",
         "workspace-persist-reset"
       ]
+    },
+    {
+      "path": "src/editor/inspector/selection.tsx",
+      "lines": 22,
+      "commands": [],
+      "features": []
     },
     {
       "path": "src/editor/inspector/shadow-view.ts",
@@ -4609,8 +4633,14 @@
       "features": []
     },
     {
+      "path": "src/editor/shell/inspector-settings.tsx",
+      "lines": 318,
+      "commands": [],
+      "features": []
+    },
+    {
       "path": "src/editor/shell/inspector.tsx",
-      "lines": 1458,
+      "lines": 1144,
       "commands": [],
       "features": []
     },
@@ -4983,7 +5013,7 @@
     },
     {
       "path": "src/manifest/check.ts",
-      "lines": 2237,
+      "lines": 2240,
       "commands": [],
       "features": []
     },
