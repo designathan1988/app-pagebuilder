@@ -17,8 +17,8 @@ never on another branch.
 - `docs/PROGRESS.md`: at most 60 lines: the current state, the user's pending decisions and the open findings. Everything past goes to `docs/history.md`.
 - `docs/testing/README.md`: the whole test cycle.
 
-The old application (the Pager) is read-only reference material at `reference/` (a folder of this tree, ignored
-by git), for behavior only, never for code. Never write inside it.
+The old application (the Pager) is read-only reference material at `../builder-5/reference/`, for behavior only,
+never for code. Never write inside it.
 
 ## How work happens
 

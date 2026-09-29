@@ -4,9 +4,9 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 
 ## State (2026-09-29: builder-6, the consolidated tree)
 
-- THIS root is `builder-6`, the consolidated tree; the Pager's read-only reference material moved into this tree (`reference/`, ignored by git); the old checkout
-  `../builder-5` holds nothing but its git history now. One tree, one copy of the application. Every
-  line that held finished work is merged here: the
+- THIS root is `builder-6`, the consolidated tree; the Pager's read-only reference material sits in the old
+  checkout (`../builder-5/reference/`), which otherwise holds only its git history. One tree, one copy of the
+  application. Every line that held finished work is merged here: the
   workspace line (the panels that leave their place, the shortcuts panel, the clipboard's cut and styles, the
   status bar, command-bar-set-property), the layout-tools line (the canvas grid editor 8.2, the layout actions
   8.1, the component names A3.12, the positioned moves A3.13, the responsive grid A1.4). The old parallel lines
