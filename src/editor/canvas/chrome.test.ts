@@ -33,7 +33,10 @@ describe('a resize handle with a neighbour at its edge', () => {
   it('moves inside the element when the neighbour begins at the edge: the neighbour keeps every press, the dot stays on the edge', () => {
     const below = box(0, 100, 100, 23);
     const south = handleHitBox('s', ELEMENT, 24, [below]);
-    expect(south.box).toEqual(box(38, 76, 24, 24));
+    // a layout unit short of the shared boundary (1/64 px): the browser rounds the drawn box and the neighbour's box
+    // through different paths, and one that ends exactly on the boundary is reported a fraction inside it (the audit of
+    // 2026-09-29: 2e-6 px, enough for the check to call it a cover)
+    expect(south.box).toEqual(box(38, 76 - 1 / 64, 24, 24));
     expect(overlaps(south.box, below), 'the hit area covers no part of the neighbour').toBe(false);
     expect(south.at, 'the dot sits on the element’s own bottom edge').toEqual({ x: 0.5, y: 1 });
   });
@@ -62,7 +65,7 @@ describe('a resize handle with a neighbour at its edge', () => {
   it('the west handle of an element with a neighbour against it mirrors the same rule', () => {
     const left = box(-40, 0, 40, 100);
     const west = handleHitBox('w', ELEMENT, 24, [left]);
-    expect(west.box).toEqual(box(0, 38, 24, 24));
+    expect(west.box).toEqual(box(1 / 64, 38, 24, 24));
     expect(overlaps(west.box, left)).toBe(false);
     expect(west.at).toEqual({ x: 0, y: 0.5 });
   });

@@ -100,34 +100,43 @@ export function handleHitBox(side: string, element: Box, size: number, neighbour
   // the box as the stylesheet draws it: wholly outside, centred on the edge point along the other axis
   let x = west ? edgeX - size : east ? edgeX : edgeX - size / 2;
   let y = north ? edgeY - size : south ? edgeY : edgeY - size / 2;
-  // how far the box may stand outside on one axis before a neighbour's box is entered: a neighbour beyond the edge
-  // sets the room up to its near edge, one straddling the edge leaves none, and one behind the edge is not in the way
-  const room = (axis: 'x' | 'y', box: Box, edge: number, direction: number): number => {
-    let limit = size;
+  // The far edge of the box on one axis, read from the neighbour's own near edge: where none is in the way it is the
+  // whole drawn box (the element's edge, the size); a neighbour beyond the edge sets it to its near edge; and one drawn
+  // over the edge leaves no room outside, the box keeping to the element's own edge (the audit of 2026-09-28). A
+  // neighbour that begins where the element ends (within a hair: the layout reports one boundary twice, a fractional
+  // zoom apart) keeps the box a layout unit short of it, so no rounding of the browser's can report the box inside it —
+  // the boundary the two share is a place a press meant for either must reach.
+  const NEAR = 0.5;
+  const CLEAR = 1 / 64;
+  const farEdge = (axis: 'x' | 'y', drawn: Box, edge: number, direction: number): number => {
+    let far = edge + direction * size;
     for (const n of neighbours) {
-      const crosses = axis === 'x' ? box.y < n.y + n.height && n.y < box.y + box.height : box.x < n.x + n.width && n.x < box.x + box.width;
+      const crosses = axis === 'x' ? drawn.y < n.y + n.height && n.y < drawn.y + drawn.height : drawn.x < n.x + n.width && n.x < drawn.x + drawn.width;
       if (!crosses) continue;
       const lo = axis === 'x' ? n.x : n.y;
       const hi = lo + (axis === 'x' ? n.width : n.height);
       if (direction > 0) {
         if (hi <= edge) continue;
-        limit = Math.min(limit, Math.max(0, lo - edge));
+        far = Math.min(far, Math.abs(lo - edge) <= NEAR ? lo - CLEAR : Math.max(lo, edge));
       } else {
         if (lo >= edge) continue;
-        limit = Math.min(limit, Math.max(0, edge - hi));
+        far = Math.max(far, Math.abs(hi - edge) <= NEAR ? hi + CLEAR : Math.min(hi, edge));
       }
     }
-    return limit;
+    return far;
   };
   if (west || east) {
-    const out = room('x', { x, y, width: size, height: size }, edgeX, east ? 1 : -1);
-    x = west ? edgeX - out : edgeX - size + out;
+    const far = farEdge('x', { x, y, width: size, height: size }, edgeX, east ? 1 : -1);
+    x = east ? far - size : far;
   }
   if (north || south) {
-    const out = room('y', { x, y, width: size, height: size }, edgeY, south ? 1 : -1);
-    y = north ? edgeY - out : edgeY - size + out;
+    const far = farEdge('y', { x, y, width: size, height: size }, edgeY, south ? 1 : -1);
+    y = south ? far - size : far;
   }
-  return { box: { x, y, width: size, height: size }, at: { x: (edgeX - x) / size, y: (edgeY - y) / size } };
+  // the dot is drawn at the edge point as a fraction of the box, kept inside the box: the clearance the box keeps from
+  // a neighbour at the same boundary leaves the fraction a hair past its end, where the dot would stand outside it
+  const fraction = (value: number): number => Math.min(1, Math.max(0, value));
+  return { box: { x, y, width: size, height: size }, at: { x: fraction((edgeX - x) / size), y: fraction((edgeY - y) / size) } };
 }
 
 // How many siblings on each side of the selected element are measured for the handles: the ones sharing a handle's
@@ -418,6 +427,16 @@ export function visibleCanvas(origin: { readonly left: number; readonly top: num
   return { x: left - origin.left, y: top - origin.top, width: Math.max(0, right - left), height: Math.max(0, bottom - top) };
 }
 
+// The chrome's own controls drawn over the page (the resize handles, the Edit on canvas bands and radius corners, the
+// rotation zones), in the chrome layer's pixels: what a label must never cover either, or the press a person aims at
+// the control lands on the label, which stands for the element and starts a move (the label rule; A3.16).
+export function controlBoxes(layer: HTMLElement, origin: { readonly x: number; readonly y: number }): Box[] {
+  return [...layer.querySelectorAll('[data-edit-handle], [data-resize-handle], [data-rotate-handle]')].map((element) => {
+    const box = element.getBoundingClientRect();
+    return { x: box.x - origin.x, y: box.y - origin.y, width: box.width, height: box.height };
+  });
+}
+
 // A label's box held inside an area: moved the least distance that puts it inside, its size kept.
 function heldInside(box: Box, area: Box): Box {
   return {
@@ -582,7 +601,7 @@ function DropIndicator({ view }: { readonly view: DropView }) {
           const line = target !== null && sideOffer !== null ? sideLine(target, sideOffer) : shown !== null ? dropLine(axis, box, shown.reference, shown.neighbour, shown.placement, across) : null;
           const size = label.current ? { width: label.current.offsetWidth, height: label.current.offsetHeight } : null;
           const gap = parseFloat(getComputedStyle(layer.current as HTMLDivElement).getPropertyValue('--space-2')) || 0;
-          const content = contentBoxes(iframe).map((b) => local(b) as Box);
+          const content = [...contentBoxes(iframe).map((b) => local(b) as Box), ...(layer.current === null ? [] : controlBoxes(layer.current, origin))];
           // the drag's ghost chip, drawn beside the pointer over the whole window: the label never lies under it
           const chip = layer.current?.ownerDocument.querySelector('[data-chrome="ghost"]')?.closest('.chrome-ghost-stack')?.getBoundingClientRect();
           const ghost = chip === undefined ? null : local({ x: chip.x, y: chip.y, width: chip.width, height: chip.height });
@@ -843,8 +862,12 @@ export function CanvasChrome() {
         const first = union ?? selected[0];
         const size = label.current ? { width: label.current.offsetWidth, height: label.current.offsetHeight } : null;
         const tools = editing && bar.current ? { width: bar.current.offsetWidth, height: bar.current.offsetHeight } : null;
-        // the label is placed again only when its element or its size moved: reading the page's content is the slow part
-        const key = JSON.stringify([first, size, tools]);
+        // the chrome's controls the label keeps clear of: they appear and move with the mode and the selection, so their
+        // boxes are part of the key the label is placed again on (rounded: a sub-pixel move changes nothing)
+        const controls = layer.current === null ? [] : controlBoxes(layer.current, { x: origin.x, y: origin.y });
+        // the label is placed again only when its element, its size or a control it must clear moved: reading the page's
+        // content is the slow part
+        const key = JSON.stringify([first, size, tools, mode, controls.map((b) => [Math.round(b.x), Math.round(b.y), Math.round(b.width), Math.round(b.height)])]);
         if (first === undefined || size === null) {
           placed = null;
           placedToolbar = null;
@@ -860,7 +883,7 @@ export function CanvasChrome() {
           // avoids): above while there is room, inside the element's top-left corner, or below, whichever covers least.
           // While a text is edited in place, its toolbar sits above its label and the two are placed as one.
           const whole = tools === null ? size : { width: Math.max(size.width, tools.width), height: tools.height + gap + size.height };
-          const content = contentBoxes(iframe).map((b) => local(b) as Box);
+          const content = [...contentBoxes(iframe).map((b) => local(b) as Box), ...controls];
           const spot = placeLabel(first, whole, gap + clear, content, visibleCanvas(origin));
           placed = tools === null ? spot : { placement: spot.placement, box: { x: spot.box.x, y: spot.box.y + tools.height + gap, ...size } };
           placedToolbar = tools === null ? null : { x: spot.box.x, y: spot.box.y };

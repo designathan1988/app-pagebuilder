@@ -351,8 +351,10 @@ export function EditHandles({ node, box }: { readonly node: NodeId; readonly box
       }
     }
   }
-  // the divider grips (item 8.1): on the boundary between each two columns of a flex row, over the gap band, a grip
-  // half a grip wide on each side; its drag writes the two children's share of the row (element.setDivider)
+  // the divider grips (item 8.1): on the boundary between each two columns of a flex row, a grip half a grip wide on
+  // each side of the boundary line; its drag writes the two children's share of the row (element.setDivider). The grip
+  // is a tab at the top of the line, not a strip down its whole length: the gap band between the same two columns is
+  // dragged by its middle (item 4.1), and a grip over it would take every press meant for the gap.
   const children = childrenOf(childrenText);
   const row = computed !== null && (computed[ROW_DISPLAY] ?? '').includes('flex') && (computed[ROW_DIRECTION] ?? 'row').startsWith('row');
   if (DIVIDER !== undefined && flow !== null && row && held !== null && held.children.length >= 2) {
@@ -367,9 +369,10 @@ export function EditHandles({ node, box }: { readonly node: NodeId; readonly box
         const index = children.indexOf(left.id);
         if (index < 0) continue;
         const at = (left.box.x + left.box.width + right.box.x) / 2;
+        const height = Math.min(DIVIDER_GRIP, Math.max(0, extent.to - extent.from));
         drawn.push({
           entry: DIVIDER,
-          box: { x: at - DIVIDER_GRIP / 2, y: extent.from, width: DIVIDER_GRIP, height: Math.max(0, extent.to - extent.from) },
+          box: { x: at - DIVIDER_GRIP / 2, y: extent.from, width: DIVIDER_GRIP, height },
           start: Math.round(left.box.width / zoom),
           normal: [1, 0],
           min: DIVIDER_MIN,

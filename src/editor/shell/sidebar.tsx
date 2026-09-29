@@ -247,12 +247,12 @@ function LayerPalette({ entry, node }: { readonly entry: DoorEntry; readonly nod
   return (
     <span className={open ? 'row__palette is-open' : 'row__palette'} style={chosen === undefined ? undefined : { '--row-colour': chosen } as CSSProperties}>
       <span onClick={() => setOpen((one) => !one)}>
-        <DoorControl entry={entry} args={{ target: node.id, color: chosen ?? '' }} />
+        <DoorControl entry={entry} args={{ target: node.id, color: chosen ?? '' }} tabbable={false} />
       </span>
       <span className="row__swatches" role="group" aria-label={t('layers.labelColour')}>
-        {chosen === undefined ? null : <span className="row__swatch row__swatch--none" onClick={() => setOpen(false)}><DoorControl entry={entry} args={{ target: node.id, color: '' }} /></span>}
+        {chosen === undefined ? null : <span className="row__swatch row__swatch--none" onClick={() => setOpen(false)}><DoorControl entry={entry} args={{ target: node.id, color: '' }} tabbable={false} /></span>}
         {LAYER_COLOURS.map((token) => (
-          <span key={token} className="row__swatch" style={{ background: value(token) }} onClick={() => setOpen(false)}><DoorControl entry={entry} args={{ target: node.id, color: token }} /></span>
+          <span key={token} className="row__swatch" style={{ background: value(token) }} onClick={() => setOpen(false)}><DoorControl entry={entry} args={{ target: node.id, color: token }} tabbable={false} /></span>
         ))}
       </span>
     </span>
@@ -385,7 +385,7 @@ function LayersRow({ node, depth, view }: { readonly node: DocNode; readonly dep
         onContextMenu={openMenu}
       >
         {branch ? (
-          <DoorControl entry={LAYERS_CARET} args={{ target: node.id }} expanded={open}>
+          <DoorControl entry={LAYERS_CARET} args={{ target: node.id }} expanded={open} tabbable={false}>
             {null}
           </DoorControl>
         ) : (
@@ -411,7 +411,7 @@ function LayersRow({ node, depth, view }: { readonly node: DocNode; readonly dep
         <span className="row__actions">
           {LAYERS_BUTTONS.map((b) =>
             b.ref !== LAYERS_COLOUR?.ref ? (
-              <DoorControl key={b.ref} entry={b} args={{ target: node.id }} />
+              <DoorControl key={b.ref} entry={b} args={{ target: node.id }} tabbable={false} />
             ) : (
               <LayerPalette key={b.ref} entry={b} node={node} />
             ),

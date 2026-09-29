@@ -5957,16 +5957,16 @@ None for resizing in Pager (the Size fields in the Inspector and quick panel are
 ### Our rule: the dragged edge follows the pointer, and the parent bounds the box (the user's real-use audit, items 4.2 and A3.16)
 
 - **A start-edge drag moves the edge, not the size.** A west or north handle moves the edge the pointer holds and keeps
-  the opposite one where it was: a block-level element in the flow compensates with its own margin (a Title 1344 px
-  wide shrunk to 1200 on its west handle gets `margin-left: 144px`, and its right edge does not move), a positioned
+  the opposite one where it was: a block-level element in the flow compensates with its own margin (a Title 1360 px
+  wide shrunk to 1200 on its west handle gets `margin-left: 160px`, and its right edge does not move), a positioned
   element with its left/top, and a shape of an SVG with its geometry attributes. The element keeps its own start edge
   only where the parent lays it out — a flex or a grid item, an inline-level element — and there the handles that carry
   a start edge (north, west, and the corners that include them) are drawn disabled, faint, with the reason on their
   tooltip (`canvas.resize.parentPlaces`, "the parent places this element"); a press on one is not a resize, so what
   lies under it (the element itself) takes the press.
 - **The width stops where the space its parent gives it ends** (A3.16): the parent's content box, or, for a grid item,
-  the cell its own box touches (the tracks the browser resolved). A card 200 px wide in a three-column grid of 448 px
-  tracks dragged east stops at 448 px, whatever the pointer asks. Only the width is bounded: a page grows downwards
+  the cell its own box touches (the tracks the browser resolved). A card 200 px wide in a three-column grid of 453 px
+  tracks dragged east stops at 453 px, whatever the pointer asks. Only the width is bounded: a page grows downwards
   with its content, so a height is never capped.
 - **A medium keeps its own ratio by default, and Shift releases it** (A3.16). The ratio is the element's intrinsic one
   where the page knows it (an image's own size), else its box's; a corner drag follows the side the pointer pulled

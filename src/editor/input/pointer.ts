@@ -296,15 +296,16 @@ const CHROME_CONTROLS = '[data-canvas-overlay] [data-edit-handle], [data-canvas-
 // own target when it is one, else the control whose drawn box covers the press where it went down on the stage. The
 // chrome clips its drawing to the canvas and an element at the page's edge reaches past it: the visible sliver of its
 // handle (2 px wide at 25 %) would be the whole target, and the stage would take a press just outside it and clear the
-// selection (the user's real-use audit). The interaction area is the handle's whole box, as large as its drawing; the
-// topmost control (the last drawn, handles over bands) wins, and a press anywhere but the stage keeps its own target,
-// so a panel, the quick panel and the text toolbar never lose one to a control hidden under them.
+// selection (the user's real-use audit). The interaction area is the handle's whole box, as large as its drawing, and
+// the topmost control (the last drawn, handles over bands) wins.
 function chromeControl(at: Point, selector: string, target: EventTarget | null): Element | null {
   const direct = target instanceof Element ? target.closest(selector) : null;
   if (direct !== null) return direct;
-  // only a press that lands outside the overlay (the stage itself) looks past its target: a press on the page keeps
-  // its own door (a marquee on a container's own area, a guide from a ruler, a control of a panel over the canvas)
-  if (!(target instanceof Element) || target.closest('[data-canvas-overlay]') !== null) return null;
+  // Only a press that lands on the stage looks past its own target: a press on the page keeps its own door (a marquee
+  // on a container's own area, a guide from a ruler), and a press on any editor surface over the canvas — a panel, the
+  // quick panel, the text toolbar, the command bar, a dialog — keeps it too, or a handle drawn underneath would take
+  // it and the control the person pressed would lose its press (a bar field whose click blurred it).
+  if (!(target instanceof Element) || target.closest('[data-canvas-stage]') === null) return null;
   const covering = [...document.querySelectorAll(CHROME_CONTROLS)].filter((el) => {
     const r = el.getBoundingClientRect();
     return at.x >= r.left && at.x <= r.right && at.y >= r.top && at.y <= r.bottom;
