@@ -1,4 +1,5 @@
 // The project's base style (spec base-style; the user's real-use audit, item 2.4): the rules every page starts from —
+// the heading ladder (h1 32 px down to h6 14 px, the browser's own top two steps and a step between each below them),
 // border-box sizing, so a height or a width the person sets is the size the element takes on screen, padding and
 // border included, and a hero at 100vh measures the screen. One owner: the editor's canvas writes it into the page's
 // document before every other rule (core/render/render.ts) and every exported stylesheet carries it at its head
@@ -14,12 +15,12 @@ export function baseCss(): string {
   return `*, *::before, *::after { box-sizing: border-box; }
 :where(body) { margin: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 16px; line-height: 1.5; }
 :where(h1, h2, h3, h4, h5, h6) { margin: 0 0 0.6em; font-weight: 700; line-height: 1.2; }
-:where(h1) { font-size: 2.5rem; }
-:where(h2) { font-size: 2rem; }
-:where(h3) { font-size: 1.5rem; }
-:where(h4) { font-size: 1.25rem; }
-:where(h5) { font-size: 1.125rem; }
-:where(h6) { font-size: 1rem; }
+:where(h1) { font-size: 2rem; }
+:where(h2) { font-size: 1.5rem; }
+:where(h3) { font-size: 1.25rem; }
+:where(h4) { font-size: 1.125rem; }
+:where(h5) { font-size: 1rem; }
+:where(h6) { font-size: 0.875rem; }
 :where(p, ul, ol, dl) { margin: 0 0 1rem; }
 :where(a) { color: #2563eb; text-decoration-thickness: 1px; text-underline-offset: 2px; }
 :where(blockquote) { margin: 0 0 1rem; padding: 0.75rem 1rem; border-inline-start: 3px solid #cbd5e1; background: #f8fafc; color: #475569; }

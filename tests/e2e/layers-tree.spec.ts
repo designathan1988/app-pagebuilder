@@ -100,6 +100,17 @@ test(
     // the second press unfolds it again: the tree is as tall as every node, its window drawing the rows around it
     await runDoor(page, 'layers.setExpanded#layers-caret', { args: { target: 'n-plans' } });
     await expect(row(page, 'n-plans')).toHaveAttribute('aria-expanded', 'true');
+    // the stack is dragged small, as a person drags it (spec panel-resize): the view then shows a part of the tree, and
+    // the window must draw fewer rows than it holds — a 440 px stack shows this 19-node tree whole, window and all
+    const splitter = page.locator('[data-door="workspace.resizeSplitter#panel-drag-splitter-workspace"]').first();
+    const grip = await splitter.boundingBox();
+    if (grip === null) throw new Error('the sidebar splitter is not laid out');
+    await page.mouse.move(grip.x + grip.width / 2, grip.y + grip.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(grip.x + grip.width / 2, grip.y + grip.height / 2 + 6, { steps: 3 });
+    await page.mouse.move(grip.x + grip.width / 2, grip.y + grip.height / 2 + 260, { steps: 12 });
+    await page.mouse.up();
+    await expect.poll(() => page.locator('[data-region="explorer-layers"]').evaluate((el) => el.getBoundingClientRect().height)).toBeLessThan(300);
     expect(await rows(page).count()).toBeLessThan(ORDER.length);
     const again = await positions();
     expect(again).toEqual([...again].sort((a, b) => a - b));
@@ -113,8 +124,9 @@ test('a selection made on the canvas marks its row and scrolls it into view', ru
   // a window low enough that the Layers rows overflow the view that scrolls them
   await page.setViewportSize({ width: 1440, height: 420 });
   await openAurora(page);
-  // the Layers section, in the sidebar's stack below the view (spec panel-resize): the region that scrolls its rows
-  const view = page.locator('[data-region="explorer-layers"]');
+  // the region that scrolls its rows: the tree itself, not the whole section (the section keeps its header above the
+  // tree, and a row scrolled under that header still lies inside the section's box)
+  const view = page.locator('[data-region="layers-tree"]');
   const title = row(page, 'n-title');
 
   // the wheel scrolls the section to its end: the Title row is no longer shown

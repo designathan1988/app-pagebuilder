@@ -68,7 +68,9 @@ async function openAurora(page: Page) {
   await expect(drawn(page, 'n-intro')).toHaveCount(1);
 }
 
-// a click on the centre of a node's element on the canvas, which selects it
+// A click on a point of a node's element on the canvas, which selects it: the middle where the element itself lies
+// under it, else a point of its box the element takes — a container whose middle a child covers (the Hero holds the
+// Title and the Intro at its middle) is clicked at a free part of its box, as the runner's own canvas point does
 async function select(page: Page, id: string) {
   const at = await page.evaluate((node) => {
     const iframe = document.querySelector<HTMLIFrameElement>('.frame__page');
@@ -77,7 +79,11 @@ async function select(page: Page, id: string) {
     const zoom = iframe.currentCSSZoom;
     const frame = iframe.getBoundingClientRect();
     const r = el.getBoundingClientRect();
-    return { x: frame.left + (r.left + r.width / 2) * zoom, y: frame.top + (r.top + r.height / 2) * zoom };
+    const doc = iframe.contentDocument;
+    const fractions = [0.5, 0.35, 0.65, 0.2, 0.8, 0.05, 0.95];
+    const points = fractions.flatMap((fy) => fractions.map((fx) => ({ x: r.left + fx * r.width, y: r.top + fy * r.height })));
+    const own = points.find((p) => doc.elementFromPoint(p.x, p.y)?.closest('[data-node]') === el) ?? { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+    return { x: frame.left + own.x * zoom, y: frame.top + own.y * zoom };
   }, id);
   await page.mouse.click(at.x, at.y);
   await expect.poll(async () => (await port(page)).selection).toEqual([id]);
@@ -173,8 +179,9 @@ test('leaving the field keeps the typed tag, with Tab or a click on the canvas, 
   await page.keyboard.press('Tab');
   await expect.poll(() => tagOf(page, 'n-title')).toBe('h4');
   await expect.poll(() => frameTag(page, 'n-title')).toBe('h4');
-  expect(await computed(page, 'n-title', 'font-size')).toBe('16px');
-  expect(h1Size).not.toBe('16px');
+  // the base style's h4 (spec base-style; the ladder the tag-switch scenario names too)
+  expect(await computed(page, 'n-title', 'font-size')).toBe('18px');
+  expect(h1Size).not.toBe('18px');
   expect((await nodeOf(page, 'n-title')).type).toBe('heading');
   await typeTag(page, 'h5');
   await select(page, 'n-intro');
@@ -211,14 +218,14 @@ test('a kept tag survives an immediate reload and the canvas draws it', runs(OPE
   await typeTag(page, 'pre');
   await page.keyboard.press('Enter');
   await expect.poll(() => frameTag(page, 'n-intro')).toBe('pre');
-  expect(await computed(page, 'n-intro', 'font-family')).toBe('monospace');
+  expect(await computed(page, 'n-intro', 'font-family')).toBe('ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace');
   await page.reload();
   await expect(page.locator('.workbench')).toBeVisible();
   await expect(drawn(page, 'n-intro')).toHaveCount(1);
   const intro = await nodeOf(page, 'n-intro');
   expect([intro.type, intro.tag]).toEqual(['paragraph', 'pre']);
   expect(await frameTag(page, 'n-intro')).toBe('pre');
-  expect(await computed(page, 'n-intro', 'font-family')).toBe('monospace');
+  expect(await computed(page, 'n-intro', 'font-family')).toBe('ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace');
 });
 
 // A3.7: a tag switch drops the attributes the new tag cannot hold, says so, and the Settings follows the new tag. The
