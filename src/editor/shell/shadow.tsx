@@ -21,6 +21,7 @@ import { shadowView } from '../inspector/shadow-view.ts';
 import { MODEL_RULES, useEditorState, useStore, layeredRules } from '../store.ts';
 import { useT } from '../text.ts';
 import { propertyWord, TextStyleField } from './field.tsx';
+import { useFieldAppearance } from './field-face.tsx';
 
 // the key context of the light pad (interactions.json)
 const PAD_CONTEXT = 'shadow-pad';
@@ -58,8 +59,9 @@ function EditButton({ entry, door, args, ready, pressed = null, onDone }: { read
   const store = useStore();
   const t = useT();
   const add = entry.door.kind === 'inspector-field' && entry.door.control === 'shadow-add';
+  const appearance = useFieldAppearance(typeof args.property === 'string' ? [args.property] : []);
   return (
-    <div className={`field-row${ready ? '' : ' is-unavailable'}`} data-door={entry.ref} data-args={JSON.stringify(args)} title={door.title}>
+    <div className={`field-row${ready ? '' : ' is-unavailable'}`} data-origin={appearance.kind} data-door={entry.ref} data-args={JSON.stringify(args)} title={door.title}>
       <span className="field-row__label">{add && typeof args.property === 'string' ? propertyWord(t, args.property) : pressed === null ? '' : door.label}</span>
       <button
         type="button"
@@ -141,6 +143,7 @@ function Pad({ property, layer, chosen, ready }: { readonly property: string; re
 }
 
 export function ShadowControl({ entry, door }: { readonly entry: DoorEntry; readonly door: DoorState }) {
+  const t = useT();
   const property = typeof entry.door.args.property === 'string' ? entry.door.args.property : '';
   const { layers, selected } = useLayers(property);
   useSyncExternalStore(shadowView.subscribe, shadowView.version);
@@ -165,7 +168,7 @@ export function ShadowControl({ entry, door }: { readonly entry: DoorEntry; read
     case 'shadow-css': {
       // every layer as CSS text (spec shadow-editor, Problems in Pager 4): what the rows show, typed back as one value
       const part = { show: () => (layers.length === 0 ? '' : shadowCss(layers, property, MODEL_RULES)), args: (typed: string) => ({ property, edit: { css: typed } }) };
-      return <TextStyleField entry={entry} door={{ ...door, available: door.available && selected }} property={property} longhands={null} label={door.label} part={part} />;
+      return <TextStyleField entry={entry} door={{ ...door, available: door.available && selected }} property={property} longhands={null} label={t('codePanel.pane.css')} part={part} />;
     }
     case 'shadow-remove':
       return <EditButton entry={entry} door={door} args={{ property, edit: { layer: chosen, remove: true } }} ready={editing} />;

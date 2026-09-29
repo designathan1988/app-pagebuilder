@@ -550,7 +550,7 @@
     "sidebar-stack": {
       "axis": "y",
       "grow": "up",
-      "size": 260,
+      "size": 440,
       "min": 96,
       "max": 620,
       "labelKey": "splitter.sidebarStack",

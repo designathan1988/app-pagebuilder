@@ -997,8 +997,11 @@ export const scenarioSchema = z.strictObject({
       .nullable(),
     export: z
       .strictObject({
+        // A file of the archive the action hands out: the text pieces it holds (present), the ones it must not
+        // (absent), and the patterns it must not match (absentPattern, a regular expression: an id selector, which a
+        // raw "#" cannot say — the exported base stylesheet carries hex colours)
         files: z
-          .array(z.strictObject({ path: z.string().min(1), present: z.array(z.string()), absent: z.array(z.string()) }))
+          .array(z.strictObject({ path: z.string().min(1), present: z.array(z.string()), absent: z.array(z.string()), absentPattern: z.array(z.string()).optional() }))
           .min(1),
       })
       .nullable(),

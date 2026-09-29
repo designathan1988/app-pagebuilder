@@ -699,8 +699,8 @@
 .inspector-tab--interactions {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
-  padding: var(--space-4);
+  gap: 0;
+  padding: 0;
   overflow: auto;
 }
 
@@ -708,46 +708,116 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-4);
+  gap: var(--space-2);
+  min-height: var(--space-10);
+  padding: var(--space-3) var(--space-6);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .interactions__element {
-  font: var(--fw-label) var(--fs-label) / var(--lh-label) var(--font-ui);
+  min-width: 0;
+  overflow: hidden;
+  font: var(--fw-label) var(--fs-caption) / var(--lh-caption) var(--font-ui);
   color: var(--color-text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.interactions__head > .door {
+  flex: none;
+  height: var(--size-control);
 }
 
 .interactions__none,
 .interactions__note {
   margin: 0;
+  padding: var(--space-5) var(--space-6);
   color: var(--color-text-subtle);
+  font-size: var(--fs-caption);
 }
 
 .interaction-card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
-  padding: var(--space-3);
+  gap: 0;
+  margin: var(--space-4) var(--space-6) 0;
+  padding: 0;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   background: var(--color-surface);
+}
+
+.interaction-card.is-expanded {
+  border-color: var(--color-accent);
+  outline: calc(var(--space-1) / 2) solid var(--color-accent);
 }
 
 .interaction-card__head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-4);
+  gap: var(--space-1);
+  min-height: var(--space-10);
+  padding: 0 var(--space-2) 0 var(--space-4);
+}
+
+.interaction-card.is-expanded .interaction-card__head {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.interaction-card__summary {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.interaction-card__summary .icon {
+  flex: none;
 }
 
 .interaction-card__name {
-  font: var(--fw-label) var(--fs-label) / var(--lh-label) var(--font-ui);
+  overflow: hidden;
+  font: var(--fw-label) var(--fs-caption) / var(--lh-caption) var(--font-ui);
   color: var(--color-text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.interaction-card__action {
+  overflow: hidden;
+  color: var(--color-text-muted);
+  font-size: var(--fs-caption);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.interaction-card__head > .door {
+  width: var(--size-target-min);
+  height: var(--size-target-min);
+  padding: 0;
+}
+
+.interaction-card__head > .door .door__label {
+  position: absolute;
+  width: var(--space-1);
+  height: var(--space-1);
+  overflow: hidden;
+  clip-path: inset(50%);
 }
 
 .interaction-card__fields {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-4) var(--space-4);
 }
 
 .interaction-card__pick {
@@ -757,7 +827,36 @@
 
 .interaction-card__note {
   margin: 0;
+  padding: 0 var(--space-4) var(--space-3) calc(var(--space-4) + var(--space-7));
   color: var(--color-text-subtle);
+  font-size: var(--fs-caption);
+}
+
+.interaction-card .panel-field,
+.interaction-card .interaction-card__target {
+  display: grid;
+  grid-template-columns: calc(var(--space-10) * 2 + var(--space-4)) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.interaction-card .panel-field__form,
+.interaction-card .panel-field__text,
+.interaction-card .interaction-card__target > .door {
+  min-width: 0;
+  width: 100%;
+}
+
+.interaction-card .panel-field__text,
+.interaction-card .interaction-card__target > .door {
+  height: var(--size-control);
+}
+
+.interaction-card .interaction-card__target > .door {
+  overflow: hidden;
+  justify-content: flex-start;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* a field of a panel: its label above the input (the timeline's settings, an interaction's card) */
@@ -820,4 +919,3 @@
 .chrome__band--grid-span:hover {
   opacity: 1;
 }
-

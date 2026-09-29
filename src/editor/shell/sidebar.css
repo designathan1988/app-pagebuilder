@@ -63,8 +63,10 @@
 /* the line at the top of the Insert view naming where a palette click inserts (the user's real-use audit, A3.19) */
 .insert__destination {
   flex: none;
-  padding: var(--space-1) var(--space-3) var(--space-1) var(--space-6);
+  padding: 0 var(--space-6);
   color: var(--color-text-muted);
+  font-size: var(--fs-micro);
+  line-height: var(--space-9);
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -398,17 +400,26 @@
 /* The label colour of a Layers row (spec layers-row-colours): the dot the row draws wears the element's colour and
    opens the palette under it while the pointer is on it or the keyboard reaches it */
 .row__palette {
+  --row-colour: var(--color-text-subtle);
   position: relative;
   display: inline-flex;
   align-items: center;
 }
 
-.row__palette > .door {
-  --row-colour: var(--color-text-subtle);
+.row__palette > span > .door {
+  width: var(--space-8);
+  height: var(--size-row);
+  opacity: 0;
 }
+.row:hover .row__palette > span > .door,
+.row__palette:focus-within > span > .door,
+.row--tree.is-coloured .row__palette > span > .door { opacity: 1; }
 
-.row__palette > .door .icon {
+.row__palette > span > .door .icon {
   color: var(--row-colour);
+  width: var(--space-3);
+  height: var(--space-3);
+  fill: currentColor;
 }
 
 .row__swatches {

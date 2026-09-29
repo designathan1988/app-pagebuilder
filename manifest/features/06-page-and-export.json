@@ -2503,8 +2503,10 @@
                     ".hero {"
                   ],
                   "absent": [
-                    "#",
                     "[data-"
+                  ],
+                  "absentPattern": [
+                    "#[A-Za-z][\\w-]*\\s*[{,]"
                   ]
                 }
               ]

@@ -26,3 +26,61 @@
   border-radius: var(--radius-sm);
   background: var(--color-surface);
 }
+
+/* Settings uses the same compact inspector rhythm as Style. Long content fields
+   remain full width, while ordinary attributes share a fixed label column. */
+[data-region='inspector-settings'] .settings-section {
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-4) var(--space-5) var(--space-6);
+}
+
+[data-region='inspector-settings'] .settings-section:first-child {
+  padding-top: var(--space-4);
+}
+
+.settings-section__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-bottom: var(--space-2);
+}
+
+[data-region='inspector-settings'] .settings-section__header h3 {
+  font: var(--fw-overline) var(--fs-overline) / var(--lh-overline) var(--font-ui);
+  letter-spacing: var(--ls-overline);
+  text-transform: uppercase;
+}
+
+[data-region='inspector-settings'] .settings-section__header p {
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-ui);
+}
+
+[data-region='inspector-settings'] .field-row {
+  grid-template-columns: minmax(0, calc(var(--space-10) * 2 + var(--space-8) + var(--space-4))) minmax(0, 1fr);
+  gap: var(--space-2);
+}
+
+[data-region='inspector-settings'] .field-row--wide {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+[data-region='inspector-settings'] .field-row--action {
+  grid-template-columns: minmax(0, calc(var(--space-10) * 2 + var(--space-4))) minmax(0, 1fr) auto;
+}
+
+[data-region='inspector-settings'] .field-row__label {
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+}
+
+[data-region='inspector-settings'] .input:not(.input--area) {
+  min-width: 0;
+  height: var(--size-control);
+}
+
+/* the person's own attributes: the row that adds one is the name field and its button; a row that holds one keeps the
+   action row's three cells — its label, its value and its remove button on one line (spec custom-attributes: the
+   remove button is centred on the field's line), which a two-cell rule here sent to a second row */
+[data-region='inspector-settings'] .custom-attributes > .field-row:not(.field-row--action) {
+  grid-template-columns: minmax(0, 1fr) auto;
+}

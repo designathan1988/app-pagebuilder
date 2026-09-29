@@ -56,6 +56,30 @@ const FUNCTION_CONTROLS = new Set(FUNCTION_DOORS.map((d) => (d.door.kind === 'in
 const FUNCTION_PROPERTIES = new Set(FUNCTION_DOORS.map((d) => (d.door.kind === 'inspector-field' ? d.door.property : null)));
 const CHIP = { width: 24, height: 24 };
 
+// The compact panel follows the visual groups of the final design. The manifest
+// still supplies each control and its order within a group.
+const QUICK_GROUPS = [
+  { name: 'inspector.section.size', first: 4, last: 5, extra: -1 },
+  // the align and distribute doors (6 to 13): where the element sits inside its parent, drawn under the name the
+  // manifest's own position commands carry
+  { name: 'inspector.section.position', first: 6, last: 13, extra: -1 },
+  { name: 'inspector.section.paint', first: 14, last: 17, extra: 37 },
+  { name: 'inspector.section.effects', first: 18, last: 19, extra: -1 },
+  { name: 'inspector.section.text', first: 20, last: 26, extra: -1 },
+  { name: 'inspector.group.transform', first: 27, last: 31, extra: -1 },
+  { name: 'inspector.section.layout', first: 32, last: 35, extra: -1 },
+  { name: 'inspector.tab.settings', first: 38, last: 100, extra: 36 },
+] as const;
+
+const quickOrder = (entry: DoorEntry): number => {
+  const place = entry.door.placement;
+  return entry.door.kind === 'quick-panel' && typeof place === 'object' ? place.order : -1;
+};
+const inQuickGroup = (entry: DoorEntry, group: typeof QUICK_GROUPS[number]): boolean => {
+  const order = quickOrder(entry);
+  return (order >= group.first && order <= group.last) || order === group.extra;
+};
+
 // What an Effects field typed means for style.setFilter's functions: none for nothing, every function typed set and
 // every one held but not typed taken away; a text that is no list of functions goes as it is, which the command
 // refuses — but a bare number is the field's guided form, a blur radius in px (`2` is blur(2px); the user's real-use
@@ -418,6 +442,12 @@ export function QuickPanel({ stage }: { readonly stage: RefObject<HTMLDivElement
     }
     return isTag(entry) || (appliesTo(entry.door.adapter.writes, node, MODEL_RULES) && shownForContext(entry.door.adapter.writes, context, MODEL_RULES));
   });
+  const tag = fields.find(isTag);
+  const grouped = QUICK_GROUPS.map((group) => ({
+    ...group,
+    fields: fields.filter((entry) => !isTag(entry) && inQuickGroup(entry, group)),
+  })).filter((group) => group.fields.length > 0);
+  const other = fields.filter((entry) => !isTag(entry) && !QUICK_GROUPS.some((group) => inQuickGroup(entry, group)));
   return (
     <div
       ref={panel}
@@ -430,9 +460,11 @@ export function QuickPanel({ stage }: { readonly stage: RefObject<HTMLDivElement
     >
       <div className="quick-panel__bar">
         {GRIP !== null ? <Grip entry={GRIP} node={node} offset={current === null ? null : offsetOf(current.box, current.element)} /> : null}
+        <strong className="quick-panel__name" title={node.name}>{node.name}</strong>
         {/* the context the writes land in (A3.8): the class target, the state and the breakpoint, when they differ from
             the plain element at Base */}
         {contextLabel === '' ? null : <span className="quick-panel__context" title={contextLabel}>{contextLabel}</span>}
+        {tag === undefined ? null : <span className="quick-panel__tag"><QuickField entry={tag} node={node} context={context} /></span>}
         <div className="quick-panel__actions">
           {actions.map((entry) => (
             <QuickField key={entry.ref} entry={entry} node={node} context={context} />
@@ -441,9 +473,20 @@ export function QuickPanel({ stage }: { readonly stage: RefObject<HTMLDivElement
         {CHIP_DOOR === null ? null : <Chip entry={CHIP_DOOR} open={true} measuring={measuring} buttonRef={chip} />}
       </div>
       <div className="quick-panel__fields">
-        {fields.map((entry) => (
-          <QuickField key={entry.ref} entry={entry} node={node} context={context} />
+        {grouped.map((group) => (
+          <section className="quick-panel__group" data-quick-group={group.name} key={group.name}>
+            <h3>{t(group.name as MessageId)}</h3>
+            <div className="quick-panel__group-fields">
+              {group.fields.map((entry) => <QuickField key={entry.ref} entry={entry} node={node} context={context} />)}
+            </div>
+          </section>
         ))}
+        {other.length > 0 ? <section className="quick-panel__group" data-quick-group="inspector.group.more">
+          <h3>{t('inspector.group.more')}</h3>
+          <div className="quick-panel__group-fields">
+            {other.map((entry) => <QuickField key={entry.ref} entry={entry} node={node} context={context} />)}
+          </div>
+        </section> : null}
       </div>
     </div>
   );

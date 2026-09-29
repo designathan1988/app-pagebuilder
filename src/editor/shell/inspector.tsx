@@ -28,7 +28,7 @@ import { MenuButton } from '../doors/menu.tsx';
 import { GLYPHS, doorSlots, drawnAsOf, partOf, slotsIn } from '../doors/placement.ts';
 import { setActiveOption } from '../focus/focus.ts';
 import { authoredProperties, editedProperties, editedPropertiesByDoor, inspectorMode, inspectorSearchOf, isColourValue, isEssential, searchMatches, sectionClosed, sectionProperties, summaryOf, summaryProperties } from '../inspector/sections.ts';
-import { orderByGroup, pairRowOf, rowPrefixKey } from '../inspector/rows.ts';
+import { PAIR_ROWS, orderByGroup, pairRowOf, rowPrefixKey, type PairRow } from '../inspector/rows.ts';
 import { valueOrigin } from '../inspector/origin.ts';
 import { MODEL_RULES, useEditorState, useStore, layeredRules } from '../store.ts';
 import { styleSource } from '../inspector/style-target.ts';
@@ -265,6 +265,7 @@ function GridItemField({ entry, half }: { readonly entry: DoorEntry; readonly ha
   const store = useStore();
   const t = useT();
   const property = typeof entry.door.args.property === 'string' ? entry.door.args.property : '';
+  const appearance = useFieldAppearance([property]);
   const place = (s: Parameters<typeof styleSource>[0]) => {
     const node = styleSource(s);
     return node ? storedPlace(node, property, layeredRules(s.ui)) : null;
@@ -292,6 +293,7 @@ function GridItemField({ entry, half }: { readonly entry: DoorEntry; readonly ha
   return (
     <form
       className="field-row"
+      data-origin={appearance.kind}
       data-door={entry.ref}
       data-args={JSON.stringify({ property })}
       title={door.title}
@@ -326,6 +328,7 @@ function GridTracks({ entry }: { readonly entry: DoorEntry }) {
   const locale = useLocale();
   // the axis the door edits (its own argument: a panel control carries no property of its own)
   const property = typeof entry.door.args.property === 'string' ? entry.door.args.property : '';
+  const appearance = useFieldAppearance([property]);
   const value = useEditorState((s) => {
     const node = styleSource(s);
     return node ? storedValue(node, property, layeredRules(s.ui)) : undefined;
@@ -339,7 +342,7 @@ function GridTracks({ entry }: { readonly entry: DoorEntry }) {
   const primary = useEditorState((s) => s.selection[0] ?? null);
   return (
     <div className="grid-tracks" data-door={entry.ref} data-args={JSON.stringify({ property })}>
-      <div className="field-row">
+      <div className="field-row" data-origin={appearance.kind}>
         <span className="field-row__label">{t(`inspector.grid.trackCount.${pluralForm(locale, tracks.length)}`, { count: tracks.length })}</span>
       </div>
       {tracks.map((track, index) => (
@@ -357,6 +360,7 @@ function GridTracks({ entry }: { readonly entry: DoorEntry }) {
 function GridTrackField({ entry, property, index, track, available }: { readonly entry: DoorEntry | undefined; readonly property: string; readonly index: number; readonly track: string; readonly available: boolean }) {
   const store = useStore();
   const t = useT();
+  const appearance = useFieldAppearance([property]);
   const door = useDoor(entry ?? (manifest.doors[0] as DoorEntry), {}, t('inspector.grid.track'), entry !== undefined && available);
   const input = useRef<HTMLInputElement>(null);
   const draft = useRef(false);
@@ -374,6 +378,7 @@ function GridTrackField({ entry, property, index, track, available }: { readonly
   return (
     <form
       className="field-row"
+      data-origin={appearance.kind}
       data-door={entry.ref}
       data-args={JSON.stringify({ property, track: index })}
       title={door.title}
@@ -394,6 +399,28 @@ function GridTrackField({ entry, property, index, track, available }: { readonly
         onInput={() => { draft.current = true; }}
         onBlur={keep}
       />
+    </form>
+  );
+}
+
+// The shorthand of a paired property edits both cells at once. It is a compact
+// third control on their shared line, so the property label appears only once.
+function PairShorthand({ entry }: { readonly entry: DoorEntry }) {
+  const store = useStore();
+  const t = useT();
+  const [value, setValue] = useState('');
+  const door = useDoor(entry, {}, t(fieldLabelKey(entry)), isFeatureBuilt(entry.door.feature as FeatureId));
+  const property = entry.door.kind === 'inspector-field' ? entry.door.composite : null;
+  if (property === null) return null;
+  const keep = () => {
+    const typed = value.trim();
+    if (!door.available || typed === '') return;
+    (store.dispatch as (id: CommandId, args: unknown) => DispatchResult)(entry.command.id, { ...entry.door.args, property, value: typed });
+    setValue('');
+  };
+  return (
+    <form className="input-wrap" data-door={entry.ref} data-args={JSON.stringify({ property })} title={door.title} onSubmit={(event) => { event.preventDefault(); keep(); }}>
+      <input className="input" aria-label={t(fieldLabelKey(entry))} disabled={!door.available} value={value} onChange={(event) => setValue(event.target.value)} onBlur={keep} spellCheck={false} />
     </form>
   );
 }
@@ -577,13 +604,12 @@ const SECTION_DOORS = (() => {
 const STYLE_SECTIONS = SECTIONS.filter((s) => (SECTION_DOORS.get(s.id) ?? []).length > 0);
 
 // The section header's origin dot (DESIGN.md "Inspector", the value-origin legend; the mockup's .has mark): where the
-// values the section holds come from — the edited layer (here), a larger breakpoint, or the base state — read by the
-// one rule of inspector/origin.ts over the section's own fields. Nothing for a section that holds no value, nor for
-// one whose values come from a class or an ancestor: the fields say so, and the dot colours are the legend's three.
+// values the section holds come from, read by inspector/origin.ts over every
+// field in that section. Its marks stay visible when the section is closed.
 function SectionOrigin({ section }: { readonly section: SectionId }) {
   const kinds = useEditorState((s) => {
     const found = new Set(sectionProperties(section).map((property) => valueOrigin(s, [property], layeredRules(s.ui))?.kind));
-    return ['here', 'breakpoint', 'state'].filter((kind) => found.has(kind as 'here' | 'breakpoint' | 'state')).join(' ');
+    return ['here', 'breakpoint', 'state', 'class', 'inherited'].filter((kind) => found.has(kind as 'here' | 'breakpoint' | 'state' | 'class' | 'inherited')).join(' ');
   });
   return <>{kinds.split(' ').filter(Boolean).map((kind) => <span key={kind} className="inspector-section__origin" data-origin={kind} aria-hidden="true" />)}</>;
 }
@@ -629,6 +655,17 @@ function StyleSections() {
         // the fields of a section are drawn group by group (rows.ts): the section's groups in the order properties.json
         // declares them, the manifest's placement order inside each group
         const doors = orderByGroup(s.id, shownDoors(s.id));
+        // A shorthand with the same name and longhands as a complete pair row
+        // edits both values together. Keep its command as a compact control on
+        // the pair instead of drawing a second property row (for example Gap).
+        const shorthand = new Set(doors.filter((door) => {
+          const composite = door.door.kind === 'inspector-field' ? door.door.composite : null;
+          if (composite === null) return false;
+          return PAIR_ROWS.some((row) => row.section === s.id && row.labelKey === fieldLabelKey(door)
+            && row.fields.length === door.door.adapter.writes.length
+            && row.fields.every((field) => door.door.adapter.writes.includes(field.target)
+              && doors.some((other) => other !== door && editedTarget(other) === field.target)));
+        }).map((door) => door.ref));
         // a section with no match is not drawn while searching
         if (searching && doors.length === 0) return null;
         const set = sectionProperties(section).filter((p) => held.has(p)).length;
@@ -639,6 +676,24 @@ function StyleSections() {
         // The manifest orders the fields by group; the design draws the fields without subgroup headings.
         const units: ReactNode[] = [];
         const rowDrawn = new Set<string>();
+        const shorthandDrawn = new Set<string>();
+        // the fields of a pair row this section draws, in the row's own order; a row with one field left keeps a field
+        const pairMembers = (row: PairRow): readonly DoorEntry[] => row.fields.map((f) => doors.find((x) => editedTarget(x) === f.target)).filter((x): x is DoorEntry => x !== undefined);
+        // the shorthand a row draws at its end: a door of this section whose command writes exactly the row's targets
+        const bulkOf = (row: PairRow): DoorEntry | undefined => doors.find((candidate) => shorthand.has(candidate.ref)
+          && candidate.door.adapter.writes.length === row.fields.length
+          && row.fields.every((field) => candidate.door.adapter.writes.includes(field.target)));
+        // Every shorthand a pair row will draw is claimed before the loop: the manifest's order decides which comes
+        // first, and a shorthand door drawn on its own here would draw a second time inside the row it belongs to
+        // (the pair's shorthand, the user's real-use audit, item 5.1). Only the shorthand is claimed here — the loop
+        // still draws each row where its first member stands.
+        for (const d of doors) {
+          const target = editedTarget(d);
+          const row = target === null ? null : pairRowOf(target);
+          if (row === null || pairMembers(row).length < 2) continue;
+          const bulk = bulkOf(row);
+          if (bulk !== undefined) shorthandDrawn.add(bulk.ref);
+        }
         const drawer = (d: DoorEntry): ReactNode => {
           if (targetOf(d)?.control === 'box-model') return boxDoors[0] === d ? <BoxModel key={d.ref} doors={boxDoors} /> : null;
           if (d.door.kind === 'panel-control' && d.door.drawnAs === 'field' && cssTextArg(d) !== null && node !== null) return <DeclarationsField key={`${d.ref}@${node.id}`} entry={d} node={node} />;
@@ -663,6 +718,10 @@ function StyleSections() {
           );
         };
         for (const d of doors) {
+          if (shorthand.has(d.ref)) {
+            if (!shorthandDrawn.has(d.ref)) units.push(<Fragment key={d.ref}>{drawer(d)}</Fragment>);
+            continue;
+          }
           const target = editedTarget(d);
           const row = searching || target === null ? null : pairRowOf(target);
           if (row === null || rowDrawn.has(d.ref)) {
@@ -670,21 +729,25 @@ function StyleSections() {
             continue;
           }
           // the fields of the row this section draws, in the row's own order; a row with one field left keeps a row
-          const members = row.fields.map((f) => doors.find((x) => editedTarget(x) === f.target)).filter((x): x is DoorEntry => x !== undefined);
+          const members = pairMembers(row);
           if (members.length < 2) {
             units.push(<Fragment key={d.ref}>{drawer(d)}</Fragment>);
             continue;
           }
           for (const m of members) rowDrawn.add(m.ref);
+          const bulk = bulkOf(row);
           const rowSet = members.some((m) => { const t2 = editedTarget(m); return t2 !== null && editedProperties(t2).some((p) => held.has(p)); });
           units.push(
             <Fragment key={row.id}>
               {/* The first column names the concept; compact prefixes distinguish the second value. */}
-              <div className={`field-row field-row--pair${rowSet ? ' is-set' : ''}`} data-pair={row.id} data-number-field={rowSet || members.some((m) => targetOf(m)?.control === 'length-field') ? true : undefined}>
-                {members.map((m, index) => {
-                  const prefixKey = rowPrefixKey(row, editedTarget(m) ?? '');
-                  return <Field key={m.ref} entry={m} bare labelled={index === 0} rowLabel={index === 0 ? row.labelKey : null} prefix={prefixKey === null ? null : t(prefixKey)} measurement={row.fields.find((field) => field.target === editedTarget(m))?.measurement} />;
-                })}
+              <div className={bulk === undefined ? undefined : 'field-row-pair-wrap'}>
+                <div className={`field-row field-row--pair${rowSet ? ' is-set' : ''}`} data-pair={row.id} data-number-field={rowSet || members.some((m) => targetOf(m)?.control === 'length-field') ? true : undefined}>
+                  {members.map((m, index) => {
+                    const prefixKey = rowPrefixKey(row, editedTarget(m) ?? '');
+                    return <Field key={m.ref} entry={m} bare labelled={index === 0} rowLabel={index === 0 ? row.labelKey : null} prefix={prefixKey === null ? null : t(prefixKey)} measurement={row.fields.find((field) => field.target === editedTarget(m))?.measurement} />;
+                  })}
+                </div>
+                {bulk === undefined ? null : <div className="field-row__shorthand"><PairShorthand entry={bulk} /></div>}
               </div>
               {members.map((m) => <FieldOrigin key={`${m.ref}-origin`} entry={m} target={editedTarget(m)} />)}
             </Fragment>,
@@ -695,7 +758,7 @@ function StyleSections() {
             {SECTION_HEADER ? (
               <DoorControl entry={SECTION_HEADER} args={{ section }} expanded={!closed} className="inspector-section__header">
                 <span className="door__label">{t(s.labelKey as MessageId)}</span>
-                {closed ? null : <SectionOrigin section={section} />}
+                <SectionOrigin section={section} />
                 {summary !== null ? <span className="inspector-section__summary">{summary}</span> : null}
                 {set > 0 ? <span className="inspector-section__count">{t('inspector.valuesSet', { count: set })}</span> : null}
               </DoorControl>
@@ -784,6 +847,9 @@ function shownForSelection(entry: DoorEntry, kinds: readonly string[], context: 
   // entries whose doors list it, so the same rules read it
   const properties = target !== null ? editedProperties(target) : editedPropertiesByDoor(entry.ref);
   if (properties === null) return true;
+  // with nothing selected the section is a map of what the panel holds, drawn collapsed (item 5.1): a field of a kind
+  // is not filtered out for want of an element of that kind, which would leave the section's header undrawn
+  if (kinds.length === 0) return shownForContext(properties, context, MODEL_RULES);
   return shownForKinds(properties, kinds, MODEL_RULES) && shownForContext(properties, context, MODEL_RULES);
 }
 
@@ -834,14 +900,25 @@ function AddProperty() {
   }, [open, query, mode, revealed, node, kindsKey]);
   const door = useDoor(REVEAL ?? (manifest.doors[0] as DoorEntry), {}, t('inspector.addProperty'), REVEAL !== undefined && isFeatureBuilt(REVEAL.door.feature as FeatureId));
   if (REVEAL === undefined) return null;
+  // the properties the panel hides in essentials mode, listed in the catalogue's own order (properties.json): the
+  // doors' placement order is the order the panel draws them, not the order a person reads a list of properties in
+  // (spec add-property-focus reads the list's first two entries, font-style and font-stretch, as the catalogue has them)
+  const hiddenTargets = new Set(
+    SECTIONS.flatMap((s) => SECTION_DOORS.get(s.id) ?? [])
+      .filter((d) => shownForSelection(d, kinds, context) && !shownInEssentials(d, held, revealed))
+      .flatMap((d) => editedTarget(d) ?? []),
+  );
   const hidden =
     mode === 'all'
       ? []
-      : [...new Set([...SECTION_DOORS.values()].flat().filter((d) => shownForSelection(d, kinds, context) && !shownInEssentials(d, held, revealed)).flatMap((d) => editedTarget(d) ?? []))].filter((target) => {
-          const label = TARGETS.get(target)?.labelKey;
-          const words = `${label === undefined ? '' : t(label as MessageId)} ${target}`.toLowerCase();
-          return words.includes(query.trim().toLowerCase());
-        });
+      : manifest.properties.properties
+          .map((property) => property.id)
+          .filter((target) => {
+            if (!hiddenTargets.has(target)) return false;
+            const label = TARGETS.get(target)?.labelKey;
+            const words = `${label === undefined ? '' : t(label as MessageId)} ${target}`.toLowerCase();
+            return words.includes(query.trim().toLowerCase());
+          });
   return (
     <div className="add-property">
       <button ref={button} type="button" className={`door door--icon-button${door.available ? '' : ' is-unavailable'}`} data-door={REVEAL.ref} data-args="{}" aria-haspopup="dialog" aria-expanded={open} aria-label={door.label} title={door.title} aria-disabled={door.available ? undefined : true} onClick={() => (door.available ? setOpen(!open) : undefined)}>
@@ -1048,6 +1125,16 @@ function StyleTab() {
       <SelectorBar />
       <div className="inspector-style" data-region="inspector-style">
         <div className="inspector-body inspector-body--empty"><Hints /></div>
+        {/* the sections a person can open while nothing is selected: the panel is a map of what it holds, each
+            section drawn collapsed, its own header reached by the pointer (item 5.1; spec box-model reads the Space
+            section's header here) */}
+        <div className="inspector-scroll">
+          <div className="inspector-body">
+            <div className="inspector-sections">
+              <StyleSections />
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );

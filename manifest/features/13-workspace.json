@@ -704,7 +704,7 @@
                   "region": "explorer-layers",
                   "measure": "height",
                   "relation": "equals",
-                  "value": 260,
+                  "value": 440,
                   "reference": null
                 }
               ],
@@ -782,7 +782,7 @@
                   "region": "explorer-layers",
                   "measure": "height",
                   "relation": "equals",
-                  "value": 260,
+                  "value": 440,
                   "reference": null
                 }
               ],
@@ -10136,7 +10136,7 @@
                   "region": "explorer-layers",
                   "measure": "height",
                   "relation": "equals",
-                  "value": 260,
+                  "value": 440,
                   "reference": null
                 }
               ],
@@ -11938,7 +11938,7 @@
                   "region": "explorer-layers",
                   "measure": "height",
                   "relation": "equals",
-                  "value": 340,
+                  "value": 520,
                   "reference": null
                 }
               ],
@@ -12000,7 +12000,7 @@
                   "region": "explorer-layers",
                   "measure": "height",
                   "relation": "equals",
-                  "value": 280,
+                  "value": 460,
                   "reference": null
                 }
               ],
@@ -12058,7 +12058,7 @@
                   "region": "explorer-layers",
                   "measure": "height",
                   "relation": "equals",
-                  "value": 240,
+                  "value": 420,
                   "reference": null
                 }
               ],
@@ -12117,7 +12117,7 @@
                   "region": "explorer-layers",
                   "measure": "height",
                   "relation": "equals",
-                  "value": 260,
+                  "value": 440,
                   "reference": null
                 }
               ],

@@ -66,7 +66,7 @@ interface Scenario {
     editor: { regions: { region: string; measure: Measure; relation: Relation; value: number; reference: string | null }[]; computed: { region: string; property: string; value: string }[] } | null;
     persistence: { document: 'same' | null; preferences: 'same' | null; selection?: 'same' | null } | null;
     // the files inside the archive the action step handed out: each holds every `present` text and no `absent` one
-    export: { files: { path: string; present: string[]; absent: string[] }[] } | null;
+    export: { files: { path: string; present: string[]; absent: string[]; absentPattern?: string[] }[] } | null;
   };
   readonly refusals: { key: string }[];
 }
@@ -1858,6 +1858,7 @@ export function registerScenarioTests(): void {
               const text = (data as Buffer).toString('utf8');
               for (const p of f.present) expect(text, `${f.path} holds ${p}`).toContain(p);
               for (const a of f.absent) expect(text, `${f.path} does not hold ${a}`).not.toContain(a);
+              for (const pattern of f.absentPattern ?? []) expect(text, `${f.path} holds no ${pattern}`).not.toMatch(new RegExp(pattern));
             }
           }
 

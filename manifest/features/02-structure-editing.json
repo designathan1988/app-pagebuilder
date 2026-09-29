@@ -1105,7 +1105,7 @@
                   "region": "explorer-layers",
                   "measure": "height",
                   "relation": "equals",
-                  "value": 260,
+                  "value": 440,
                   "reference": null
                 }
               ],
@@ -1252,7 +1252,7 @@
                   "region": "explorer-layers",
                   "measure": "height",
                   "relation": "equals",
-                  "value": 260,
+                  "value": 440,
                   "reference": null
                 }
               ],
@@ -4433,7 +4433,7 @@
                 {
                   "node": "/Page/Plans/Section",
                   "measure": "y",
-                  "relation": "less-than",
+                  "relation": "greater-than",
                   "value": 0,
                   "reference": "/Page/Plans/Perks"
                 }
@@ -5984,7 +5984,7 @@
                   "region": "explorer-layers",
                   "measure": "height",
                   "relation": "equals",
-                  "value": 260,
+                  "value": 440,
                   "reference": null
                 }
               ],

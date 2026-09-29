@@ -22,16 +22,21 @@
 
 .inspector-header__tabs {
   display: flex;
-  gap: var(--space-1);
+  flex: 1;
+  min-width: 0;
+  gap: 0;
 }
 
 .inspector-header__tabs .door {
   position: relative;
+  min-width: 0;
   height: var(--size-control-lg);
-  padding: 0 var(--space-4);
+  padding: 0 var(--space-2);
   border: 0;
   border-radius: 0;
   color: var(--color-text-muted);
+  font-size: var(--fs-caption);
+  white-space: nowrap;
 }
 
 .inspector-header__tabs .door.is-current {
@@ -55,11 +60,13 @@
 .inspector-header__actions .menu-button {
   width: var(--size-target-min);
   height: var(--size-target-min);
-  min-width: 0;
+  min-width: var(--size-target-min);
 }
 
 .inspector-header__actions {
   display: inline-flex;
+  gap: var(--space-1);
+  flex: none;
   margin-left: auto;
 }
 
@@ -241,12 +248,32 @@
   color: var(--color-origin-inherited);
 }
 
+.field-origin[data-origin='class'] {
+  color: var(--color-origin-inherited);
+}
+
 /* the Styles view's project classes and their use counts */
+.style-classes {
+  margin: 0;
+  padding: 0 0 var(--space-2);
+  list-style: none;
+}
+
 .style-classes__row {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-1) var(--space-4);
+  gap: var(--space-1);
+  min-height: var(--size-row);
+  padding: 0 var(--space-2) 0 var(--space-6);
+}
+
+.style-classes__row::before {
+  content: '';
+  flex: none;
+  width: var(--space-2);
+  height: var(--space-4);
+  border-radius: var(--radius-xs);
+  background: var(--color-text-subtle);
 }
 
 .style-classes__field {
@@ -255,7 +282,18 @@
 }
 
 .style-classes__field .input {
+  width: 100%;
+  height: var(--size-row);
+  padding: 0 var(--space-1);
+  border-color: transparent;
+  background: transparent;
   font-family: var(--font-mono);
+  font-size: var(--fs-caption);
+}
+
+.style-classes__field .input:focus {
+  border-color: var(--color-focus);
+  background: var(--color-surface-sunken);
 }
 
 .style-classes__name {
@@ -264,8 +302,21 @@
 
 .style-classes__count {
   color: var(--color-text-muted);
-  font-size: var(--fs-caption);
+  font-size: var(--fs-micro);
   white-space: nowrap;
+}
+
+.style-classes__row > .door {
+  flex: none;
+  width: var(--size-target-min);
+  height: var(--size-target-min);
+  padding: 0;
+  opacity: 0;
+}
+
+.style-classes__row:hover > .door,
+.style-classes__row:focus-within > .door {
+  opacity: 1;
 }
 
 .state-picker .menu-button {
@@ -514,6 +565,14 @@
   background: var(--color-origin-state);
 }
 
+.inspector-section__origin[data-origin='class'] {
+  background: var(--color-origin-inherited);
+}
+
+.inspector-section__origin[data-origin='inherited'] {
+  background: var(--color-origin-inherited);
+}
+
 /* a collapsed section's summary, on its header's row, in the code face (CSS values) */
 .inspector-section__summary {
   overflow: hidden;
@@ -577,7 +636,73 @@
 
 /* design/final .prop.two: the same 100 px label column as a single row, then two compact value cells. */
 .field-row--pair {
-  grid-template-columns: calc(var(--space-10) * 3 + var(--space-2)) minmax(0, 1fr) minmax(0, 1fr);
+  /* the label column takes the label's own width (Width, Height: a short word), so both cells keep the room a whole
+     field needs — its prefix, its value, its unit button and its reset. The fixed column this replaces left each cell
+     ~78 px and the input inside it ~30, and an input that narrow takes no caret: it refuses what is typed into it */
+  grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr);
+}
+
+/* A shorthand that writes both cells of a pair is a small linked edit control,
+   placed on that line. Focusing it opens its full CSS value for typing. */
+[data-region='inspector-style'] .field-row-pair-wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--size-target-min);
+  align-items: center;
+  gap: var(--space-1);
+}
+
+[data-region='inspector-style'] .field-row-pair-wrap > .field-row {
+  min-width: 0;
+}
+
+[data-region='inspector-style'] .field-row__shorthand {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: var(--size-control);
+}
+
+[data-region='inspector-style'] .field-row__shorthand .input-wrap {
+  width: 100%;
+  height: var(--size-control);
+  min-height: 0;
+  border: 0;
+  background: var(--color-surface);
+}
+
+[data-region='inspector-style'] .field-row__shorthand .input-wrap::before {
+  content: '↕↔';
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--color-text-muted);
+  font-size: var(--fs-micro);
+  pointer-events: none;
+}
+
+[data-region='inspector-style'] .field-row__shorthand .input {
+  width: 100%;
+  height: var(--size-control);
+  padding: 0;
+  color: transparent;
+  font-size: var(--fs-caption);
+  cursor: text;
+}
+
+[data-region='inspector-style'] .field-row__shorthand:focus-within .input-wrap {
+  width: 100%;
+  border: 1px solid var(--color-focus);
+  background: var(--color-surface-raised);
+}
+
+[data-region='inspector-style'] .field-row__shorthand:focus-within .input-wrap::before {
+  content: none;
+}
+
+[data-region='inspector-style'] .field-row__shorthand:focus-within .input {
+  padding: 0 var(--space-2);
+  color: var(--color-text);
 }
 
 /* the cell of a field standing in a pair row: the field's door, its value, and a refusal said under it (wrapped, so a
@@ -785,13 +910,37 @@
   color: var(--color-origin-inherited);
   background: var(--color-origin-inherited-soft);
 }
+[data-region='inspector-style'] .input-wrap[data-origin='class'] {
+  color: var(--color-origin-inherited);
+  background: var(--color-origin-inherited-soft);
+  font-weight: var(--weight-semibold);
+}
 [data-region='inspector-style'] .input-wrap[data-origin='mixed'] { font-style: italic; }
 [data-region='inspector-style'] .field-row__label[data-origin='here'],
 [data-region='inspector-style'] .field-row[data-origin='here'] > .field-row__label {
   color: var(--color-origin-here);
   font-weight: var(--weight-semibold);
 }
-[data-region='inspector-style'] .field-row__label[data-origin='breakpoint'] { color: var(--color-origin-breakpoint); }
+[data-region='inspector-style'] .field-row__label[data-origin='breakpoint'],
+[data-region='inspector-style'] .field-row[data-origin='breakpoint'] > .field-row__label {
+  color: var(--color-origin-breakpoint);
+  font-weight: var(--weight-semibold);
+}
+[data-region='inspector-style'] .field-row__label[data-origin='state'],
+[data-region='inspector-style'] .field-row[data-origin='state'] > .field-row__label {
+  color: var(--color-origin-state);
+  font-weight: var(--weight-semibold);
+}
+[data-region='inspector-style'] .field-row__label[data-origin='inherited'],
+[data-region='inspector-style'] .field-row[data-origin='inherited'] > .field-row__label {
+  color: var(--color-origin-inherited);
+  font-weight: var(--weight-semibold);
+}
+[data-region='inspector-style'] .field-row__label[data-origin='class'],
+[data-region='inspector-style'] .field-row[data-origin='class'] > .field-row__label {
+  color: var(--color-origin-inherited);
+  font-weight: var(--weight-semibold);
+}
 
 /* Editing affordances float beside the active field; they never take width away from its resting value. */
 [data-region='inspector-style'] .field__actions {

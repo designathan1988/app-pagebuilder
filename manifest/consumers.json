@@ -1425,6 +1425,10 @@
       "reader": "tools/runner/scenarios.ts"
     },
     {
+      "field": "features:features[].scenarios[].expect.export.files[].absentPattern",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
       "field": "features:features[].scenarios[].refusals",
       "reader": "tools/runner/scenarios.ts"
     },

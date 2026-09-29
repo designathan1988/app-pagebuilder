@@ -6,7 +6,7 @@
 import fs from 'node:fs';
 import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
-import { control, runDoor, runs } from './door.ts';
+import { control, runDoor, runs, setSectionOpen } from './door.ts';
 
 const FIXTURE = 'manifest/features/fixtures/aurora.json';
 const OPEN = 'project.open#menu-file';
@@ -109,6 +109,9 @@ test('the picker names the property and the element it edits', runs(OPEN, ROW, S
 
 test('a colour that is a part of a larger value is shown as a sample', runs(OPEN, ROW), async ({ page }) => {
   await control(page, ROW, { args: { target: 'n-actions' } }).click();
+  // the Border section is drawn collapsed while the element holds no border (item 5.1): the person opens it to see
+  // the field, and this test is about the field's sample, not about which sections start open
+  await setSectionOpen(page, 'border', true);
   const sample = page.locator('[data-door="style.setBorder#inspector-border-color-border-editor"] .field__sample');
   await expect(sample).toHaveCount(1);
   const type = page.locator('[data-door="style.setBorder#inspector-border-color-border-editor"] input');

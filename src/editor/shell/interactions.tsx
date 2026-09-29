@@ -6,6 +6,7 @@
 // data-local) and the next press on the canvas or on a Layers row gives it. The editing canvas never runs an
 // interaction: the note under the cards says so (interactions.canvasNote).
 import { isFeatureBuilt } from '../../app/features.ts';
+import { useState } from 'react';
 import { locate, type DocNode, type Interaction } from '../../core/document/model.ts';
 import { actionLabel, applicableActions, applicableTriggers, interactionsOf, needsAddress, needsAnimation, needsClassName, needsTarget, primaryNodeOf, triggerLabel } from '../../core/events/interactions.ts';
 import { animationsOf } from '../../core/animation/animation.ts';
@@ -57,13 +58,21 @@ function Card({ node, interaction, index }: { readonly node: DocNode; readonly i
   const target = interaction.target === undefined ? null : (locate(store.getState().document, interaction.target)?.node ?? null);
   const animations = animationsOf(node).map((animation) => animation.name);
   const classes = [...node.classes];
+  const [expanded, setExpanded] = useState(index === 0);
   return (
-    <article className="interaction-card">
+    <article className={`interaction-card${expanded ? ' is-expanded' : ''}`}>
       <header className="interaction-card__head">
-        <span className="interaction-card__name">{label(`trigger:${interaction.trigger}`)}</span>
+        <button className="interaction-card__summary" type="button" aria-expanded={expanded} onClick={() => setExpanded((was) => !was)}>
+          <Icon name="sparkles" size="sm" />
+          <span className="interaction-card__name">{label(`trigger:${interaction.trigger}`)}</span>
+          <span className="interaction-card__action">→ {label(`action:${interaction.action}`)}</span>
+        </button>
         {REMOVE !== null ? <PanelButton entry={REMOVE} args={{ interaction: index }} label={t('command.interactions.remove')} icon={<Icon name="trash" size="sm" />} /> : null}
       </header>
-      <div className="interaction-card__fields">
+      {expanded ? <div className="interaction-card__fields">
+        {SCOPE_FIELD !== null ? (
+          <PanelField entry={SCOPE_FIELD} args={{ interaction: index }} value={interaction.scope ?? ''} label={t('inspector.interactionScope')} offered={['', ...classes]} />
+        ) : null}
         {TRIGGER_FIELD !== null ? (
           <PanelField entry={TRIGGER_FIELD} args={{ interaction: index }} value={interaction.trigger} label={t('interactions.field.trigger')} offered={applicableTriggers(node)} />
         ) : null}
@@ -98,14 +107,11 @@ function Card({ node, interaction, index }: { readonly node: DocNode; readonly i
             />
           </div>
         ) : null}
-        {SCOPE_FIELD !== null ? (
-          <PanelField entry={SCOPE_FIELD} args={{ interaction: index }} value={interaction.scope ?? ''} label={t('inspector.interactionScope')} offered={['', ...classes]} />
-        ) : null}
-      </div>
-      <p className="interaction-card__note">
+      </div> : null}
+      {!expanded ? <p className="interaction-card__note">
         {interaction.scope === undefined ? t('interactions.scope.element') : t('interactions.scope.classCount', { class: interaction.scope, count: countWithClass(store.getState().document, interaction.scope) })}
         {needsTarget(interaction.action) && interaction.target === undefined ? ` · ${t('interactions.target.none')}` : ''}
-      </p>
+      </p> : null}
     </article>
   );
 }

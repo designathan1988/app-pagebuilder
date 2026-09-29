@@ -20,6 +20,7 @@ import { gradientView } from '../inspector/gradient-view.ts';
 import { layeredRules, useEditorState, useStore } from '../store.ts';
 import { useT } from '../text.ts';
 import { propertyWord, TextStyleField } from './field.tsx';
+import { useFieldAppearance } from './field-face.tsx';
 
 const TYPES: readonly GradientType[] = ['linear', 'radial', 'conic'];
 // the stop drag's door: each stop under the bar is drawn by it
@@ -49,9 +50,10 @@ function EditButton({ entry, door, property, edit, ready }: { readonly entry: Do
   const store = useStore();
   const t = useT();
   const named = entry.door.kind === 'inspector-field' && entry.door.control === 'gradient-add' ? entry.door.composite : null;
+  const appearance = useFieldAppearance([property]);
   const args = { ...entry.door.args, property, edit };
   return (
-    <div className={`field-row${ready ? '' : ' is-unavailable'}`} data-door={entry.ref} data-args={JSON.stringify(args)} title={door.title}>
+    <div className={`field-row${ready ? '' : ' is-unavailable'}`} data-origin={appearance.kind} data-door={entry.ref} data-args={JSON.stringify(args)} title={door.title}>
       <span className="field-row__label">{named === null ? '' : propertyWord(t, named)}</span>
       <button
         type="button"
@@ -69,9 +71,10 @@ function EditButton({ entry, door, property, edit, ready }: { readonly entry: Do
 function TypeButtons({ entry, door, property, gradient, ready }: { readonly entry: DoorEntry; readonly door: DoorState; readonly property: string; readonly gradient: Gradient | null; readonly ready: boolean }) {
   const t = useT();
   const store = useStore();
+  const appearance = useFieldAppearance([property]);
   useSyncExternalStore(gradientView.subscribe, gradientView.stop);
   return (
-    <div className={`field-row${ready ? '' : ' is-unavailable'}`} title={door.title}>
+    <div className={`field-row${ready ? '' : ' is-unavailable'}`} data-origin={appearance.kind} title={door.title}>
       <span className="field-row__label">{door.label}</span>
       <span className="segmented segmented--wide" role="group" aria-label={door.label}>
         {TYPES.map((type) => {

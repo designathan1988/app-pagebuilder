@@ -6,7 +6,7 @@
     "doors": 998,
     "scenarios": 1333,
     "modules": 246,
-    "lines": 47648
+    "lines": 47800
   },
   "features": [
     {
@@ -4062,7 +4062,7 @@
     },
     {
       "path": "src/editor/canvas/quick-panel.tsx",
-      "lines": 451,
+      "lines": 494,
       "commands": [],
       "features": []
     },
@@ -4646,7 +4646,7 @@
     },
     {
       "path": "src/editor/shell/gradient.tsx",
-      "lines": 192,
+      "lines": 195,
       "commands": [],
       "features": []
     },
@@ -4664,13 +4664,13 @@
     },
     {
       "path": "src/editor/shell/inspector.tsx",
-      "lines": 1156,
+      "lines": 1252,
       "commands": [],
       "features": []
     },
     {
       "path": "src/editor/shell/interactions.tsx",
-      "lines": 169,
+      "lines": 175,
       "commands": [],
       "features": []
     },
@@ -4712,7 +4712,7 @@
     },
     {
       "path": "src/editor/shell/shadow.tsx",
-      "lines": 196,
+      "lines": 199,
       "commands": [],
       "features": []
     },
@@ -4730,7 +4730,7 @@
     },
     {
       "path": "src/editor/shell/sidebar.tsx",
-      "lines": 1036,
+      "lines": 1034,
       "commands": [],
       "features": []
     },
@@ -5079,7 +5079,7 @@
     },
     {
       "path": "src/manifest/schema.ts",
-      "lines": 1259,
+      "lines": 1262,
       "commands": [],
       "features": []
     }
