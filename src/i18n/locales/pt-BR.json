@@ -1810,6 +1810,7 @@
   "status.selection.count": "{count} elementos selecionados.",
   "status.selection.skipped": "{count} elementos selecionados, {skipped} bloqueados ou ocultos deixados de fora.",
   "status.shadow.none": "{name} não tem sombra para editar.",
+  "status.stale": "A página mudou enquanto isso era lido: nada foi feito. Tente de novo.",
   "status.sidebar.hidden": "Barra lateral oculta.",
   "status.sidebar.shown": "Barra lateral exibida.",
   "status.snap.distanceRange": "A distância de encaixe precisa ficar entre 0 e 64 px.",

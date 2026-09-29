@@ -12,7 +12,7 @@ import { normaliseChord } from '../../manifest/chord.ts';
 import { keyContextChain, manifest, numberConstant, type DoorEntry } from '../../manifest/runtime.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
 import { COMMANDS } from '../../app/commands.ts';
-import { isBuilt } from '../../core/commands/registry.ts';
+import { isBuilt, message } from '../../core/commands/registry.ts';
 import { aimArgs, heldHand } from '../../core/structure/hand.ts';
 import { isFeatureBuilt } from '../../app/features.ts';
 import { TEXT_EDITING, editArgs } from '../canvas/text-edit.ts';
@@ -362,7 +362,18 @@ export function installKeymap(store: EditorStore, target: Window = window): () =
     // clipboard is read (src/editor/clipboard.ts); a key held during a gesture never waits for it
     const clipboard = Object.entries(binding.command.args).find(([name, arg]) => arg.type === 'clipboard' && !(name in args))?.[0];
     if (clipboard === undefined) dispatch(binding.command.id, args);
-    else if (gesture === null) void readClipboard().then((content) => dispatch(binding.command.id, { ...args, [clipboard]: content }));
+    else if (gesture === null) {
+      // the clipboard is read asynchronously: a paste computed for a page the person has since changed is refused
+      // with a word instead of landing blind (plan T3)
+      const at = store.currentRevision();
+      void readClipboard().then((content) => {
+        if (store.currentRevision() !== at) {
+          store.notice(message('status.stale'));
+          return;
+        }
+        dispatch(binding.command.id, { ...args, [clipboard]: content });
+      });
+    }
   };
   const onKeyUp = (event: KeyboardEvent) => {
     if (event.code === 'Space') holdSpace(false);

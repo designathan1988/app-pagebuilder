@@ -407,6 +407,26 @@ describe('the store', () => {
     insertInto(s);
     expect(calls).toBe(1);
   });
+
+  it('counts a revision that grows with the document and stays for words alone (plan T3)', () => {
+    const s = testStore();
+    const start = s.store.currentRevision();
+    // a notice writes the status bar alone: the revision does not move, so a pending read stays current
+    s.store.notice(message('status.stale'));
+    expect(s.store.getState().message).toEqual(message('status.stale'));
+    expect(s.store.currentRevision()).toBe(start);
+    // a document change grows it once, and a selection change alone does not
+    insertInto(s);
+    const inserted = s.store.currentRevision();
+    expect(inserted).toBe(start + 1);
+    s.store.dispatch('selection.select', { target: s.root });
+    expect(s.store.currentRevision()).toBe(inserted);
+    insertInto(s);
+    expect(s.store.currentRevision()).toBe(inserted + 1);
+    // undo restores the document: the revision grows again, because the document is a different one
+    s.store.dispatch('history.undo', {});
+    expect(s.store.currentRevision()).toBe(inserted + 2);
+  });
 });
 
 // ---- property: any sequence of commands, undos and redos

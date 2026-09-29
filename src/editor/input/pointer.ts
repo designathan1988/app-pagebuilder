@@ -44,7 +44,7 @@
 // key held now (the gesture number-scrub: Shift, Alt), so the field and the canvas follow the pointer live and the
 // release commits the last value: one undo step. Escape (drag.cancel) cancels it back to the value before the press.
 import { isFeatureBuilt } from '../../app/features.ts';
-import type { Message } from '../../core/commands/registry.ts';
+import { message, type Message } from '../../core/commands/registry.ts';
 import { locate, type DocumentJson, type NodeId } from '../../core/document/model.ts';
 import type { DispatchResult, Gesture } from '../../core/store/store.ts';
 import { selectionRoots } from '../../core/structure/remove.ts';
@@ -2387,8 +2387,15 @@ function installFolderDrop(win: Window): () => void {
     event.preventDefault();
     const dropped = [...(event.dataTransfer?.files ?? [])];
     if (dropped.length === 0) return;
+    // the files are read asynchronously: the document must still be the one the drop was made on (plan T3)
+    const at = (editing as EditorStore).currentRevision();
     void Promise.all(dropped.map((one) => readUploadFile(one))).then((stored) => {
-      (editing as EditorStore).dispatch(door.command.id, { ...door.door.args, files: stored } as never);
+      const store = editing as EditorStore;
+      if (store.currentRevision() !== at) {
+        store.notice(message('status.stale'));
+        return;
+      }
+      store.dispatch(door.command.id, { ...door.door.args, files: stored } as never);
     });
   };
   win.addEventListener('dragover', over as EventListener);
@@ -2437,11 +2444,18 @@ export function installOsFileDrop(win: Window, inside: boolean): () => void {
     const target = imageUnder(at);
     const place = target === null ? fileDropProposal(at) : null;
     if (target === null && place === null) return;
+    // the image is decoded asynchronously: the place computed above is only good while the document is (plan T3)
+    const atRevision = (editing as EditorStore).currentRevision();
     void readUploadFile(file).then((payload: UploadedFile) => {
+      const store = editing as EditorStore;
+      if (store.currentRevision() !== atRevision) {
+        store.notice(message('status.stale'));
+        return;
+      }
       const args = target === null
         ? { ...door.door.args, file: payload, parent: place?.parent, index: place?.index }
         : { ...door.door.args, file: payload, parent: locate(editing?.getState().document ?? ({} as DocumentJson), target as NodeId)?.parent?.id, index: 0, replace: target };
-      (editing as EditorStore).dispatch(door.command.id, args as never);
+      store.dispatch(door.command.id, args as never);
     });
   };
   const listeners: readonly [string, EventListener][] = [

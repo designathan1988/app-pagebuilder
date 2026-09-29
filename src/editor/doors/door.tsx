@@ -5,7 +5,7 @@
 import { useContext, type MouseEvent, type ReactNode } from 'react';
 import { COMMANDS, PREDICATES } from '../../app/commands.ts';
 import { isFeatureBuilt } from '../../app/features.ts';
-import { isBuilt, type Message, type PredicateTable } from '../../core/commands/registry.ts';
+import { isBuilt, message, type Message, type PredicateTable } from '../../core/commands/registry.ts';
 import { projectFileText } from '../../core/project/archive.ts';
 import { readUploadFile } from '../../core/files/files.ts';
 import type { FolderFile } from '../../core/import/folder.ts';
@@ -90,13 +90,24 @@ export function useDoor(entry: DoorEntry, args: Readonly<Record<string, unknown>
     if (!built || !available) return;
     const dispatch = store.dispatch as (id: CommandId, args: unknown) => DispatchResult;
     const given = { ...entry.door.args, ...args };
+    // A door that read something (a file, the clipboard, a folder) dispatches only while the document is the one it
+    // was asked for: the revision is read before the await and compared after it, so an import or a paste computed
+    // for a page the person has since changed is refused with a word, instead of landing blind (plan T3).
+    const guarded = (at: number, id: CommandId, ready: unknown) => {
+      if (store.currentRevision() !== at) {
+        store.notice(message('status.stale'));
+        return;
+      }
+      dispatch(id, ready);
+    };
     // a command that reads several files (File › Import HTML) asks the browser for them, reads them — a ZIP stands for
     // its entries — and runs with what they hold (core/import/import.ts readPickedFiles)
     const files = Object.entries(entry.command.args).find(([name, arg]) => arg.type === 'files' && !arg.optional && !(name in given))?.[0];
     if (files !== undefined) {
+      const at = store.currentRevision();
       void chooseFiles().then(async (chosen) => {
         if (chosen.length === 0) return;
-        dispatch(entry.command.id, { ...given, [files]: await readPickedFiles(chosen) });
+        guarded(at, entry.command.id, { ...given, [files]: await readPickedFiles(chosen) });
       });
       return;
     }
@@ -105,24 +116,27 @@ export function useDoor(entry: DoorEntry, args: Readonly<Record<string, unknown>
     // a command that takes what the system clipboard holds (clipboard.paste) runs once the clipboard is read
     const clipboard = Object.entries(entry.command.args).find(([name, arg]) => arg.type === 'clipboard' && !(name in given))?.[0];
     if (clipboard !== undefined) {
-      void readClipboard().then((content) => dispatch(entry.command.id, { ...given, [clipboard]: content }));
+      const at = store.currentRevision();
+      void readClipboard().then((content) => guarded(at, entry.command.id, { ...given, [clipboard]: content }));
       return;
     }
     // a command that stores the files themselves (Upload files, an image file dropped on the canvas) reads them as an
     // asset: the bytes and, for an image, its intrinsic size (spec explorer-assets)
     if (file !== undefined && entry.door.adapter.fileReading === 'upload') {
+      const at = store.currentRevision();
       void chooseFiles().then(async (chosen) => {
         if (chosen.length === 0) return;
         const records = await Promise.all(chosen.map((one) => readUploadFile(one)));
-        dispatch(entry.command.id, { ...given, [file]: records });
+        guarded(at, entry.command.id, { ...given, [file]: records });
       });
       return;
     }
     // a command that takes a whole folder (File › Open folder): the browser's directory picker, and the files with
     // the paths they hold inside the chosen folder
     if (file !== undefined && entry.door.adapter.fileReading === 'folder') {
+      const at = store.currentRevision();
       void chooseFolder().then((chosen) => {
-        if (chosen !== null) dispatch(entry.command.id, { ...given, [file]: chosen });
+        if (chosen !== null) guarded(at, entry.command.id, { ...given, [file]: chosen });
       });
       return;
     }
@@ -132,8 +146,9 @@ export function useDoor(entry: DoorEntry, args: Readonly<Record<string, unknown>
     }
     // the file's text as the project reader takes it (archive.ts): a project archive's project.json, or the file's own
     // text (File › Open is the one command that takes a file)
+    const at = store.currentRevision();
     void chooseFile().then(async (bytes) => {
-      if (bytes !== null) dispatch(entry.command.id, { ...given, [file]: await projectFileText(bytes) });
+      if (bytes !== null) guarded(at, entry.command.id, { ...given, [file]: await projectFileText(bytes) });
     });
   };
   return { label, face, title, built, available, current, chord, reason, run };

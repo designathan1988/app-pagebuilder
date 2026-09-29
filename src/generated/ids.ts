@@ -4260,6 +4260,7 @@ export const MESSAGE_IDS = [
   "status.shadow.none",
   "status.sidebar.hidden",
   "status.sidebar.shown",
+  "status.stale",
   "status.snap.distanceRange",
   "status.snap.off",
   "status.snap.on",

@@ -104,6 +104,13 @@ export interface Store<Ui> {
   // runs again, told it is confirmed; cancelled, nothing changes and the status bar says so. Nothing happens when no
   // confirmation is waiting.
   answer(confirmed: boolean): DispatchResult;
+  // The document's revision: compared before and after an await, so an action computed for a document that has since
+  // changed is refused instead of landing blind (see the field's comment).
+  currentRevision(): number;
+  // The one way to say something without running a command: a guard that dropped an awaited action has no command of
+  // its own to say it through (a file drop, a paste). It only writes the status bar's message; the document, the
+  // selection and the history are untouched.
+  notice(message: Message): void;
   subscribe(listener: () => void): () => void;
   // every change of the document, with its patches, before the state's subscribers hear of it
   subscribeDocument(listener: (change: DocumentChange) => void): () => void;
@@ -193,6 +200,10 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
     { document: options.initial.document, selection: options.initial.selection ?? [], history: EMPTY_HISTORY, message: options.initial.message ?? null, ui: options.initial.ui },
     'the initial state',
   );
+  // The document's revision (the field of `currentRevision`): it grows whenever a published state carries a different
+  // document and stays otherwise (a message or a ui change alone keeps it). It is a reader's tool, not app state, so
+  // it lives beside the state rather than inside it.
+  let revision = 0;
   let open: OpenGesture | null = null;
   // the coalescing key of the last dispatch when it recorded an entry that may merge; any other dispatch clears it,
   // so a burst merges only when no other command came in between (spec absolute-nudge)
@@ -210,6 +221,7 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
   const publish = (committed: StoreState<Ui>, patches: readonly Patch[] = []) => {
     const before = state;
     const next = followSelection(before, committed);
+    if (next.document !== before.document) revision += 1;
     state = next;
     if (next.document !== before.document) {
       const change: DocumentChange = { before: before.document, after: next.document, patches };
@@ -381,6 +393,11 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
       }
       publish(commit({ ...state, confirmation: null, message: message('status.confirmation.cancelled') }, waiting.command));
       return { status: 'done', changed: false };
+    },
+    currentRevision: () => revision,
+    notice: (text) => {
+      // the document, the selection, the history and the refusal are untouched: only what the status bar reads
+      publish(commit({ ...state, message: text, refused: false }, 'a notice'));
     },
     gesture: () => {
       if (open) throw new Error('a gesture is already open');

@@ -1812,6 +1812,7 @@
   "status.shadow.none": "{name} has no shadow to edit.",
   "status.sidebar.hidden": "Sidebar hidden.",
   "status.sidebar.shown": "Sidebar shown.",
+  "status.stale": "The page changed while that was being read: nothing was done. Try again.",
   "status.snap.distanceRange": "The snap distance must be between 0 and 64 px.",
   "status.snap.off": "Snap off.",
   "status.snap.on": "Snap on.",
