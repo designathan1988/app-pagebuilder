@@ -6,7 +6,7 @@
     "doors": 998,
     "scenarios": 1333,
     "modules": 242,
-    "lines": 47519
+    "lines": 47549
   },
   "features": [
     {
@@ -4664,7 +4664,7 @@
     },
     {
       "path": "src/editor/shell/link-picker.tsx",
-      "lines": 114,
+      "lines": 119,
       "commands": [],
       "features": []
     },
@@ -4694,7 +4694,7 @@
     },
     {
       "path": "src/editor/shell/shell.tsx",
-      "lines": 146,
+      "lines": 171,
       "commands": [],
       "features": []
     },

@@ -1,7 +1,7 @@
 // The shell regions (ARCHITECTURE.md): the window grid of DESIGN.md "The window", with the top bar, the activity
 // bar and the sidebar, the centre column, the inspector, the dock and the status bar. The sidebar, the inspector and
 // the dock are shown or hidden by the workspace state; the theme and the language follow the preferences.
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type RefObject } from 'react';
 import { ContextMenu } from '../doors/menu.tsx';
 import { CommandBar } from './command-bar.tsx';
 import { Confirmation } from './confirmation.tsx';
@@ -75,6 +75,28 @@ function useProjectFontsOnDocument(): void {
   }, [files]);
 }
 
+// Preview over the editor (spec preview-mode; the interface audit, finding F04): the covered editor is inert — no
+// pointer, no focus, no assistive technology reaches it — and the focus moves into the preview, as the colour picker's
+// own modal does. Leaving the preview puts the focus back where it was.
+function usePreviewModal(open: boolean): RefObject<HTMLDivElement | null> {
+  const root = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    const container = root.current;
+    const preview = container?.querySelector<HTMLElement>('.preview') ?? null;
+    if (!open || container === null || preview === null) return;
+    const others = [...container.children].filter((el): el is HTMLElement => el !== preview && el instanceof HTMLElement && !el.inert);
+    const wasFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    for (const el of others) el.inert = true;
+    const first = preview.querySelector<HTMLElement>('button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    (first ?? preview).focus();
+    return () => {
+      for (const el of others) el.inert = false;
+      wasFocused?.focus();
+    };
+  }, [open]);
+  return root;
+}
+
 export function Shell() {
   const store = useStore();
   const t = useT();
@@ -95,12 +117,15 @@ export function Shell() {
   // while previewing, the preview bar and the exported page over the editor (spec preview-mode): the editor stays as it
   // is underneath, its canvas included, and the status bar below says so
   const inPreview = useEditorState((s) => previewing(s.ui));
+  // the editor the preview covers takes no pointer, no focus and no assistive technology while it is open, and the
+  // focus moves into the preview and comes back to where it was (the interface audit, finding F04)
+  const root = usePreviewModal(inPreview);
   return (
     <PanelBodyTable.Provider value={ALL_BODIES}>
     <PanelBodies.Provider value={drawsBody}>
       <FitZoom.Provider value={zoom}>
         <ReportFitZoom.Provider value={setZoom}>
-          <div className={classes} aria-label={t('editor.label')} data-key-context="global">
+          <div ref={root} className={classes} aria-label={t('editor.label')} data-key-context="global">
             <TopBar />
             <ActivityBar />
             {sidebar ? <Sidebar /> : null}
@@ -131,7 +156,7 @@ export function Shell() {
             <RecoveryDialog />
             <TabGuardNotice />
             {inPreview ? (
-              <div className="preview" data-key-context="preview">
+              <div className="preview" data-key-context="preview" tabIndex={-1}>
                 <PreviewBar />
                 <PreviewPage />
               </div>

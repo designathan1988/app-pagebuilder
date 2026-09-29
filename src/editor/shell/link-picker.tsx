@@ -9,6 +9,7 @@
 //  - the close button, a click on the shield and Escape (the picker's own key context in keymap.ts).
 import { useEffect, useRef } from 'react';
 import { locate, walk, type DocumentJson } from '../../core/document/model.ts';
+import { openedPage } from '../../core/project/pages.ts';
 import { canvasValue } from '../../core/files/values.ts';
 import { DoorControl } from '../doors/door.tsx';
 import { doorSlots } from '../doors/placement.ts';
@@ -26,14 +27,16 @@ const PICKER_CONTEXT = 'link-picker';
 // the input type each kind types with (an address, an email, a phone number)
 const INPUT_TYPES: Readonly<Record<string, string>> = { url: 'text', email: 'email', phone: 'tel' };
 
-// the elements of the page that carry an id: what a link may point at as a fragment
-function idElements(document: DocumentJson): readonly { readonly id: string; readonly name: string; readonly value: string }[] {
+// The elements of the OPEN page that carry an id: what a link may point at as a fragment. An anchor is a fragment of
+// one page — `#id` reaches nothing on another — so the list holds the open page's own elements (the interface audit,
+// finding F31; the picker's own reader reads them the same way).
+function idElements(document: DocumentJson, page: number): readonly { readonly id: string; readonly name: string; readonly value: string }[] {
+  const tree = document.pages[page]?.tree;
+  if (tree === undefined) return [];
   const found: { readonly id: string; readonly name: string; readonly value: string }[] = [];
-  for (const page of document.pages) {
-    for (const node of walk(page.tree)) {
-      if (node.attributes.id === undefined || String(node.attributes.id) === '') continue;
-      found.push({ id: node.id, name: node.name, value: `#${String(node.attributes.id)}` });
-    }
+  for (const node of walk(tree)) {
+    if (node.attributes.id === undefined || String(node.attributes.id) === '') continue;
+    found.push({ id: node.id, name: node.name, value: `#${String(node.attributes.id)}` });
   }
   return found;
 }
@@ -43,6 +46,8 @@ export function LinkPicker() {
   const store = useStore();
   const open = useEditorState((s) => s.ui.linkPicker);
   const document = useEditorState((s) => s.document);
+  // the page whose anchors are offered: the one the editor has open (finding F31)
+  const page = useEditorState((s) => openedPage(s));
   const panel = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (open !== null) panel.current?.focus();
@@ -96,11 +101,11 @@ export function LinkPicker() {
           ? document.pages.map((page) => <DoorControl key={page.id} entry={PAGE_ITEM} args={{ target: node.node.id, page: page.file }} label={`${page.name} · ${page.file}`} current={stored === page.file} />)
           : null}
         {kind === 'anchor' && ANCHOR_ITEM !== null
-          ? idElements(document).map((element) => (
+          ? idElements(document, page).map((element) => (
               <DoorControl key={element.id} entry={ANCHOR_ITEM} args={{ target: node.node.id, anchor: element.id }} label={`${element.name} · ${element.value}`} current={stored === element.id} />
             ))
           : null}
-        {kind === 'anchor' && idElements(document).length === 0 ? <p className="picker__warning" role="note">{t('linkPicker.noAnchors')}</p> : null}
+        {kind === 'anchor' && idElements(document, page).length === 0 ? <p className="picker__warning" role="note">{t('linkPicker.noAnchors')}</p> : null}
         <div className="picker__actions">{CLOSE === null ? null : <DoorControl entry={CLOSE} />}</div>
       </div>
     </div>
