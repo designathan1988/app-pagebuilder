@@ -30,16 +30,17 @@ export interface OutputModel {
 
 const SVG_TAG = 'svg';
 const VIEW_BOX = 'viewBox';
-// a media part (a <source> or a <track> the person added): HTML writes it only with an address (the audit's A3.6)
-const MEDIA_PART_TAGS = new Set(['source', 'track']);
+// a media part (a <source> or a <track> the person added), and an image: HTML writes them only with an address
+const ADDRESS_REQUIRED_TAGS = new Set(['source', 'track', 'img']);
 const ADDRESSES = ['src', 'srcset'];
 
-// Whether an element of the page's HTML is written at all, on the canvas and in the export alike: a media part with no
-// address is a draft (a Source or Track the person added and did not fill yet) — it stays in the document and in its
-// parts editor, and nothing of it reaches the page (the user's real-use audit, A3.6).
+// Whether an element reaches the page's HTML at all (the export here; the canvas draws its own placeholder for a draft):
+// a media part or an image with no address is a draft — a Source or Track or Image the person added and did not fill yet
+// — and it stays in the document and in its own editor while nothing of it is written. An <img> without a src draws a
+// broken image where a browser meets it (the user's real-use audit, A3.6; the dogfooding pass caught it in the preview).
 export function writesNode(node: DocNode, model: OutputModel): boolean {
   const tag = node.tag ?? '';
-  if (!MEDIA_PART_TAGS.has(tag)) return true;
+  if (!ADDRESS_REQUIRED_TAGS.has(tag)) return true;
   return Object.entries(node.attributes).some(([id, value]) => {
     const name = model.attributes.get(id);
     return name !== null && name !== undefined && ADDRESSES.includes(name) && String(value ?? '') !== '';

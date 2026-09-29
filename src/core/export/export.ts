@@ -27,7 +27,7 @@ import { zip } from '../project/zip.ts';
 import { baseCss } from '../render/base.ts';
 import { classesCss, elementAttributes, fileUrlsIn, nodeCss, writesNode } from '../render/output.ts';
 import { svgMarkupOf } from '../elements/svg.ts';
-import { fileAt, fileBytes, filesOf, objectUrl, relativePath, resolvedSource } from '../files/files.ts';
+import { dataUrl, fileAt, fileBytes, filesOf, relativePath } from '../files/files.ts';
 import { fontFaceCss, fontFiles } from '../files/fonts.ts';
 import { exportValue } from '../files/values.ts';
 import { rootCss } from '../design/tokens.ts';
@@ -335,12 +335,11 @@ export function siteFiles(
 // A page as the preview shows it (spec preview-mode): the exported page itself, its stylesheet written in its head in
 // place of the link (the preview has no files to load), and links and forms opening in a new tab, never in the editor.
 export function previewPage(document: DocumentJson, rules: ModelRules, pageIndex = 0): string {
-  // the preview writes the paths as the document holds them, then draws each through its object URL
+  // the preview writes the paths as the document holds them, then draws each through its data URL: its frame has an
+  // opaque origin, where a blob: URL of the editor's origin does not load (files.ts dataUrl)
   const site = siteFiles(document, rules, false);
   let html = site.pages[pageIndex]?.html ?? '';
-  // the preview has no files to load, so a source that names a project file draws as its object URL (as the canvas
-  // does; the export keeps the path)
-  for (const file of filesOf(document)) html = html.replaceAll(`"${file.path}"`, `"${objectUrl(file)}"`);
+  for (const file of filesOf(document)) html = html.replaceAll(`"${file.path}"`, `"${dataUrl(file)}"`);
   // A linked script of the project runs from its own text: the preview's frame has an opaque origin, and a blob: URL
   // of the editor's origin does not load there (spec code-panel-edit-js: "Preview runs the linked scripts"). A script
   // whose address is no project file keeps its address, as the export writes it.
@@ -350,16 +349,19 @@ export function previewPage(document: DocumentJson, rules: ModelRules, pageIndex
     const file = fileAt(document, path);
     if (file === null) continue;
     const text = new TextDecoder().decode(fileBytes(file));
-    html = html.replace(`  <script src="${objectUrl(file)}"></script>`, `  <script>\n${text}\n  </script>`);
+    html = html.replace(`  <script src="${dataUrl(file)}"></script>`, `  <script>\n${text}\n  </script>`);
   }
-  // a font of the project draws in the preview from its object URL too, as the page's own sources do (the preview has
+  // a font of the project draws in the preview from its own bytes too, as the page's own sources do (the preview has
   // no folder to serve css/styles.css's relative paths from)
   let css = site.css;
-  for (const file of fontFiles(document)) css = css.replaceAll(`"${relativePath(STYLESHEET, file.path)}"`, `"${objectUrl(file)}"`);
-  // A declaration's address that names a project file draws from the stored bytes, the way the canvas draws it
-  // (resolvedSource): the preview has no folder to serve the paths the stylesheet keeps, so a background image of the
-  // project reaches it here — the same rule the page's own sources take above.
-  css = fileUrlsIn(css, (address) => resolvedSource(document, address) ?? address);
+  for (const file of fontFiles(document)) css = css.replaceAll(`"${relativePath(STYLESHEET, file.path)}"`, `"${dataUrl(file)}"`);
+  // A declaration's address that names a project file draws from the stored bytes, the way the canvas draws it: the
+  // preview has no folder to serve the paths the stylesheet keeps, so a background image of the project reaches it —
+  // the same rule the page's own sources take above.
+  css = fileUrlsIn(css, (address) => {
+    const file = fileAt(document, address);
+    return file === null ? address : dataUrl(file);
+  });
   // The interactions script runs in the preview exactly as the exported page runs it (spec export-events-js): the file
   // has no address the preview could load, so its text is written in, and it waits for the page as its `defer` does —
   // an inline script is never deferred.

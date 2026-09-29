@@ -62,7 +62,7 @@ describe('the export (specs export-zip, export-bem-css)', () => {
 describe('a declaration address that names a project file (spec explorer-assets-use)', () => {
   const WITH_IMAGES: DocumentJson = {
     ...page([
-      node('hero', 'Hero', 'section', 'section', { styles: styled({ 'background-image': 'url("img/hero.png")' }), children: [node('shot', 'Shot', 'image', 'img', { attributes: { src: 'img/hero.png' } })] }),
+      node('hero', 'Hero', 'section', 'section', { styles: styled({ 'background-image': 'url("img/hero.png")' }), children: [node('shot', 'Shot', 'image', 'img', { attributes: { src: 'img/hero.png' } }), node('draft', 'Draft', 'image', 'img', { attributes: { alt: 'A cup' } })] }),
       node('wide', 'Wide', 'div', 'div', { styles: styled({ 'background-image': 'url(https://example.com/remote.png)' }) }),
       node('inline', 'Inline', 'div', 'div', { styles: styled({ 'background-image': 'url("data:image/png;base64,AAAA")' }) }),
     ]),
@@ -82,16 +82,21 @@ describe('a declaration address that names a project file (spec explorer-assets-
     expect(siteFiles(WITH_IMAGES, RULES).pages[0]?.html).toContain('src="img/hero.png"');
   });
 
+  it('leaves an image with no address out of the page: a draft draws a broken image in a browser', () => {
+    const html = siteFiles(WITH_IMAGES, RULES).pages[0]?.html ?? '';
+    expect(html).not.toContain('A cup');
+    expect(html).not.toContain('src=""');
+    expect(previewPage(WITH_IMAGES, RULES)).not.toContain('A cup');
+  });
+
   it('draws from the stored bytes in the preview, which has no folder to serve it from', () => {
-    const created = URL.createObjectURL;
-    URL.createObjectURL = () => 'blob:preview/0';
-    try {
-      const html = previewPage(WITH_IMAGES, RULES);
-      expect(html).toContain('url("blob:preview/0")');
-      expect(html).not.toContain('url("img/hero.png")');
-      expect(html).toContain('url(https://example.com/remote.png)');
-    } finally {
-      URL.createObjectURL = created;
-    }
+    const html = previewPage(WITH_IMAGES, RULES);
+    // the frame's origin is opaque: a blob: URL of the editor's origin does not load there, a data: URL does
+    expect(html).toContain('url("data:image/png;base64,AAAA")');
+    expect(html).not.toContain('blob:');
+    expect(html).not.toContain('url("img/hero.png")');
+    expect(html).toContain('url(https://example.com/remote.png)');
+    // the page's own sources take the same URL
+    expect(html).toContain('src="data:image/png;base64,AAAA"');
   });
 });

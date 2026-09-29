@@ -6,7 +6,7 @@
     "doors": 998,
     "scenarios": 1333,
     "modules": 249,
-    "lines": 47913
+    "lines": 47923
   },
   "features": [
     {
@@ -3097,7 +3097,7 @@
     },
     {
       "path": "src/core/export/export.ts",
-      "lines": 387,
+      "lines": 389,
       "commands": [
         "project.export"
       ],
@@ -3130,7 +3130,7 @@
     },
     {
       "path": "src/core/files/files.ts",
-      "lines": 474,
+      "lines": 480,
       "commands": [
         "files.upload",
         "files.createFolder",
@@ -3158,7 +3158,7 @@
     },
     {
       "path": "src/core/files/values.ts",
-      "lines": 32,
+      "lines": 33,
       "commands": [],
       "features": []
     },
@@ -3502,7 +3502,7 @@
     },
     {
       "path": "src/core/render/output.ts",
-      "lines": 211,
+      "lines": 212,
       "commands": [],
       "features": []
     },

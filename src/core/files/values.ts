@@ -4,8 +4,9 @@
 // element (a label's `for`, a link's `#anchor`) and a source that names a file of the project. A reference is written
 // the same way wherever it goes — the target's id attribute as it stands — but the two readers want different things
 // from a project file: the canvas draws it through its object URL, while the export writes the path it carries in the
-// archive (spec explorer-assets), and the preview turns those paths into object URLs itself (src/core/export/export.ts,
-// previewPage). So there is one writer per reader here, and no third rule anywhere.
+// archive (spec explorer-assets), and the preview turns those paths into data URLs itself (src/core/export/export.ts,
+// previewPage: its frame has an opaque origin, where a blob: URL of the editor's origin does not load). So there is one
+// writer per reader here, and no third rule anywhere.
 import type { DocumentJson } from '../document/model.ts';
 import { resolvedReference } from '../elements/references.ts';
 import { fileAt, pageAtPath, relativePath, resolvedSource } from './files.ts';

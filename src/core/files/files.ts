@@ -91,6 +91,12 @@ export function objectUrl(file: ProjectFile): string {
   urls.set(file.path, { bytes: file.bytes, url });
   return url;
 }
+// The data URL the preview draws a project file with: its frame has an opaque origin, where a blob: URL of the editor's
+// origin does not load (spec code-panel-edit-js; the console says "Not allowed to load local resource"). The bytes are
+// already base64, so the URL is the file itself and loads anywhere.
+export function dataUrl(file: ProjectFile): string {
+  return `data:${file.type};base64,${file.bytes}`;
+}
 // The address an element's attribute writes: the object URL of a project file, the address itself for anything else.
 export function resolvedSource(document: DocumentJson, source: unknown): string | null {
   if (typeof source !== 'string' || source === '') return null;
