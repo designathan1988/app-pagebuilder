@@ -1,6 +1,19 @@
 /* The editor shell (DESIGN.md). Every colour, type style, spacing, size, radius and shadow is a token of
    src/ui/tokens.css (lint rule builder-css/use-tokens). */
 
+@import './window.css';
+@import './doors.css';
+@import './menus.css';
+@import './top-bar.css';
+@import './sidebar.css';
+@import './canvas.css';
+@import './inspector.css';
+@import './panels.css';
+@import './dock.css';
+@import './status-bar.css';
+@import './panel-editors.css';
+@import './canvas-editing.css';
+@import './window-overlays.css';
 *,
 *::before,
 *::after {
@@ -89,16 +102,3 @@ kbd {
 }
 
 
-@import './window.css';
-@import './doors.css';
-@import './menus.css';
-@import './top-bar.css';
-@import './sidebar.css';
-@import './canvas.css';
-@import './inspector.css';
-@import './panels.css';
-@import './dock.css';
-@import './status-bar.css';
-@import './panel-editors.css';
-@import './canvas-editing.css';
-@import './window-overlays.css';

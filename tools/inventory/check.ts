@@ -27,7 +27,6 @@ for (const feature of expected.features) {
   if (registering.length === 0) problems.push(`feature "${feature.id}" is built but no module registers its commands (${feature.commands.slice(0, 3).join(', ')}${feature.commands.length > 3 ? ', …' : ''})`);
 }
 // a module registering a command of a feature that is not built: an implementation the app cannot reach
-const builtOf = new Map(expected.features.map((feature) => [feature.id, feature.built]));
 for (const feature of expected.features) {
   if (feature.built) continue;
   for (const module of expected.modules) {
@@ -36,7 +35,6 @@ for (const feature of expected.features) {
     }
   }
 }
-for (const [id, built] of builtOf) if (builtOf.get(id) === undefined) problems.push(`feature "${id}" is unknown`);
 
 if (problems.length === 0) {
   console.log(`inventory:check: ${expected.totals.features} features, ${expected.totals.commands} commands, ${expected.totals.modules} modules — the files match and every built feature has its code.`);
