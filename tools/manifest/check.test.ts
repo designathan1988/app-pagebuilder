@@ -376,7 +376,9 @@ describe('manifest:check', () => {
     expect([...new Set(checkManifest(input).problems.map((p) => p.rule))]).toEqual(['tooth-proof']);
   });
 
-  it('lets a scenario start at a zoom level once zoom-keyboard-buttons is built, and at "fit" before', () => {
+  // every case runs the whole manifest check: four runs of ~1 s each, over the default 5 s when the suite runs beside
+  // the browser checks (a larger manifest and a busy machine both push it over)
+  it('lets a scenario start at a zoom level once zoom-keyboard-buttons is built, and at "fit" before', { timeout: 30_000 }, () => {
     // built as the real manifest now is; before it, its commands made unbuilt (unbuildZoom)
     const at = (zoom: unknown, built: boolean) =>
       valid((m) => {
@@ -392,7 +394,8 @@ describe('manifest:check', () => {
     expect(at(75, true)).toEqual(['unknown-reference']);
   });
 
-  it('never changes the real manifest when planting', () => {
+  // every plant runs the whole check: the list is long enough to pass the default 5 s on a busy machine
+  it('never changes the real manifest when planting', { timeout: 30_000 }, () => {
     for (const plant of PLANTS) planted(loaded.input, plant);
     expect(checkManifest(loaded.input).problems).toEqual([]);
   });
