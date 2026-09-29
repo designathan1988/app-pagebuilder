@@ -388,6 +388,12 @@ const DUPLICATE_KEY = DUPLICATE_GESTURE?.modifiers.find((m) => m.meaning === 'he
 const DUPLICATE_DRAG = ELEMENT_DRAGS.find((d) => d.door.kind === 'canvas-drag' && d.door.gesture === DUPLICATE_GESTURE?.id && isFeatureBuilt(d.door.feature as FeatureId)) ?? null;
 // the keys a drag press may hold: its gestures' own (the duplicate's Alt)
 const DRAG_MODIFIERS = new Set(manifest.interactions.gestures.filter((g) => ELEMENT_DRAGS.some((d) => d.door.kind === 'canvas-drag' && d.door.gesture === g.id && (d === DUPLICATE_DRAG || d === REORDER))).flatMap((g) => g.modifiers.map((m) => m.key)));
+// The drag keys that are no click's, alone: a key the click gesture also names (Shift adds to the selection, Ctrl
+// toggles it) belongs to the click too, so it must reach the click's door — Shift still means wrap-vertical on a drop,
+// which the drag branch reads for itself. Without this, a drag gesture that claims Shift (the side drop's wrap) made
+// every Shift+click a plain select: the person's selection was replaced instead of added to.
+const CLICK_KEYS = new Set((manifest.interactions.gestures.find((g) => g.id === 'canvas-click')?.modifiers ?? []).map((m) => m.key));
+const DRAG_ONLY_MODIFIERS = new Set([...DRAG_MODIFIERS].filter((key) => !CLICK_KEYS.has(key)));
 
 // The creation drags of tiles (specs palette-drag-insert, reusable-components): the canvas-drag doors of the
 // palette-drag gesture that drop on a proposal, one per command (a palette tile's element.insert, a component tile's
@@ -1276,8 +1282,8 @@ export function installPointer(store: EditorStore, target: Window = window): () 
       open = store.gesture();
       pressed = press;
       cancelsAtOpen = store.getState().ui.drag.cancels;
-      // a key a drag gesture holds (the duplicate's Alt) is no click's: the press selects as a plain one does
-      const clickModifier = buttons.modifier !== null && DRAG_MODIFIERS.has(buttons.modifier as never) ? null : buttons.modifier;
+      // a key only a drag gesture holds (the duplicate's Alt) is no click's: the press selects as a plain one does
+      const clickModifier = buttons.modifier !== null && DRAG_ONLY_MODIFIERS.has(buttons.modifier as never) ? null : buttons.modifier;
       const picking = pickingTarget(store.getState().ui);
       const entry = clickDoor(press, buttons.button, buttons.count, clickModifier, factsOf(press), picking);
       const selected = store.getState().selection;
