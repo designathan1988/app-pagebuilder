@@ -284,6 +284,20 @@
   padding: var(--space-4) var(--space-6) var(--space-10);
 }
 
+/* The legend, the mode switch and Find a property, held at the top of the scroller while the sections pass under them
+   (the interface audit, finding F18): the panel never hides which layer it edits, nor the way to search it. */
+.inspector-controls {
+  position: sticky;
+  top: calc(var(--space-4) * -1);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin: 0 calc(var(--space-6) * -1);
+  padding: var(--space-4) var(--space-6);
+  background: var(--color-surface);
+}
+
 .settings-section {
   display: flex;
   flex-direction: column;

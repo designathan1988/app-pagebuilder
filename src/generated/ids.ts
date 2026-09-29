@@ -3382,6 +3382,8 @@ export const MESSAGE_IDS = [
   "inspector.grid.rowSpan",
   "inspector.grid.rowStart",
   "inspector.grid.track",
+  "inspector.grid.trackCount.one",
+  "inspector.grid.trackCount.other",
   "inspector.grid.trackCount",
   "inspector.group.advanced",
   "inspector.group.anchors",

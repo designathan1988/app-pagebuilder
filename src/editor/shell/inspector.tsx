@@ -36,6 +36,7 @@ import { FieldOrigin } from './field-origin.tsx';
 import './settings.css';
 import { inspectorTab } from '../workspace/layout.ts';
 import { isPanelOpen, panelName } from '../workspace/panels.ts';
+import { pluralForm } from '../../i18n/index.ts';
 import { useLocale, useT } from '../text.ts';
 import { activeBreakpoint } from '../view/breakpoints.ts';
 import { usePrimarySize } from '../view/selection-size.ts';
@@ -327,6 +328,7 @@ function GridItemField({ entry, half }: { readonly entry: DoorEntry; readonly ha
 // beside the editor.
 function GridTracks({ entry }: { readonly entry: DoorEntry }) {
   const t = useT();
+  const locale = useLocale();
   // the axis the door edits (its own argument: a panel control carries no property of its own)
   const property = typeof entry.door.args.property === 'string' ? entry.door.args.property : '';
   const value = useEditorState((s) => {
@@ -343,7 +345,7 @@ function GridTracks({ entry }: { readonly entry: DoorEntry }) {
   return (
     <div className="grid-tracks" data-door={entry.ref} data-args={JSON.stringify({ property })}>
       <div className="field-row">
-        <span className="field-row__label">{t('inspector.grid.trackCount', { count: tracks.length })}</span>
+        <span className="field-row__label">{t(`inspector.grid.trackCount.${pluralForm(locale, tracks.length)}`, { count: tracks.length })}</span>
       </div>
       {tracks.map((track, index) => (
         <GridTrackField key={index} entry={field} property={property} index={index} track={track} available={primary !== null} />
@@ -1072,20 +1074,24 @@ function StyleTab() {
         <div className="inspector-body" data-region="inspector-style">
           {none ? <Hints /> : null}
           <ComponentNotice />
-          <ul className="legend">
-            {ORIGINS.map((o) => (
-              <li key={o.origin} className={`legend__item legend__item--${o.origin}`}>
-                {t(o.key)}
-              </li>
-            ))}
-          </ul>
-          <div className="inspector-mode">
-            <div className="segmented segmented--wide" role="group">
-              <Slots region="inspector-style" render={(slot) => (slot.kind === 'door' && slot.entry.door.kind === 'panel-control' && slot.entry.door.drawnAs === 'segment' ? undefined : null)} />
+          {/* The legend, the mode switch and Find a property stay on screen while the sections scroll under them (the
+              interface audit, finding F18; the design keeps them above the scrolling body) */}
+          <div className="inspector-controls">
+            <ul className="legend">
+              {ORIGINS.map((o) => (
+                <li key={o.origin} className={`legend__item legend__item--${o.origin}`}>
+                  {t(o.key)}
+                </li>
+              ))}
+            </ul>
+            <div className="inspector-mode">
+              <div className="segmented segmented--wide" role="group">
+                <Slots region="inspector-style" render={(slot) => (slot.kind === 'door' && slot.entry.door.kind === 'panel-control' && slot.entry.door.drawnAs === 'segment' ? undefined : null)} />
+              </div>
+              <AddProperty />
             </div>
-            <AddProperty />
+            <PropertySearch />
           </div>
-          <PropertySearch />
           <div className="inspector-sections">
             <StyleSections />
           </div>
