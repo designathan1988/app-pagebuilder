@@ -1,4 +1,4 @@
-// text-inline-formatting beyond its scenarios (spec/behavior/text-inline-formatting.md): a mark toggled over part of a
+// text-inline-formatting beyond its scenarios (spec/BEHAVIOUR.md#text-inline-formatting): a mark toggled over part of a
 // word applies to that part only, and toggled again over part of a bold run takes it off that part only (Problems in
 // Pager 2); the text toolbar's Italic and Bold act on the selected text and keep the focus in it, the marks nest and
 // survive a reload; Ctrl+K links the selected word, starts from the address of the link the caret is in, and an empty

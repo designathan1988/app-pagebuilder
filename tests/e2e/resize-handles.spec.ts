@@ -1,4 +1,4 @@
-// resize-handles beyond its scenarios (spec/behavior/resize-handles.md): the gesture's modifiers, read on every move
+// resize-handles beyond its scenarios (spec/BEHAVIOUR.md#resize-handles): the gesture's modifiers, read on every move
 // (Shift keeps the aspect ratio of a corner drag, Alt resizes from the centre, so a flow element's width changes by
 // twice the travel), whole CSS px, and the handles drawn only where a resize can happen (one selected element, not
 // the page, not locked, not several). The document is read through the read-only test port; the handles are the

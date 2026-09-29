@@ -1,4 +1,4 @@
-// color-picker-oklch beyond its scenarios (spec/behavior/color-picker-oklch.md): a colour outside sRGB is kept and the
+// color-picker-oklch beyond its scenarios (spec/BEHAVIOUR.md#color-picker-oklch): a colour outside sRGB is kept and the
 // picker says it shows the nearest sRGB colour (Problems in Pager 4), a colour inside says nothing; a named colour and
 // an oklch() colour typed in the text field show their channels in RGB and OKLCH from the same colour (Problems in
 // Pager 5). The scenarios cannot say what the picker shows: this test reads its fields in Chrome.

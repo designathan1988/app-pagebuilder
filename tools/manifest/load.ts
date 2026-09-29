@@ -7,7 +7,8 @@ import type { ManifestInput, Problem, ReferenceKind } from '../../src/manifest/c
 export const REPO_ROOT = fileURLToPath(new URL('../../', import.meta.url));
 export const CATALOGUE_DIR = 'src/i18n/locales';
 export const GLOSSARY_FILE = 'src/i18n/glossary.json';
-export const ARCHITECTURE_FILE = 'docs/ARCHITECTURE.md';
+// the behaviour document the manifest's spec references point into (spec/BEHAVIOUR.md#<id>)
+export const BEHAVIOUR_FILE = 'spec/BEHAVIOUR.md';
 
 export interface LoadedManifest {
   input: ManifestInput;
@@ -86,10 +87,16 @@ export function loadManifest(root: string = REPO_ROOT): LoadedManifest {
   }
   const glossaryPath = path.join(root, GLOSSARY_FILE);
   const glossary = fs.existsSync(glossaryPath) ? read(glossaryPath, GLOSSARY_FILE) : undefined;
-  const architecturePath = path.join(root, ARCHITECTURE_FILE);
-  const architecture = fs.existsSync(architecturePath) ? fs.readFileSync(architecturePath, 'utf8') : null;
   return {
-    input: { files, catalogues, glossary, fileExists: (repoPath) => fs.existsSync(path.join(root, repoPath)), registered: registeredIds(root), architecture },
+    input: {
+      files,
+      catalogues,
+      glossary,
+      fileExists: (repoPath) => fs.existsSync(path.join(root, repoPath)),
+      registered: registeredIds(root),
+      // the documents a reference may point into: read so their sections can be checked
+      documents: Object.fromEntries([BEHAVIOUR_FILE].map((file) => [file, fs.existsSync(path.join(root, file)) ? fs.readFileSync(path.join(root, file), 'utf8') : ''])),
+    },
     problems,
   };
 }

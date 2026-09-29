@@ -1,4 +1,4 @@
-// drag-level-keys-escape beyond its scenarios (spec/behavior/drag-level-keys-escape.md, Problems in Pager 1 to 3): a
+// drag-level-keys-escape beyond its scenarios (spec/BEHAVIOUR.md#drag-level-keys-escape, Problems in Pager 1 to 3): a
 // level key redraws the drop line and label at once, without a pointer move (src/editor/input/pointer.ts), and the
 // label counts the levels actually climbed (src/editor/canvas/chrome.tsx); ArrowUp at the top is refused and the level
 // stays, so one ArrowDown goes one level down from what is drawn (src/editor/drag/drag-session.ts); Escape takes every

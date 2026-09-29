@@ -1,4 +1,4 @@
-// hover-measure (spec/behavior/hover-measure.md): hovering an element shows its size in CSS px next to its hover
+// hover-measure (spec/BEHAVIOUR.md#hover-measure): hovering an element shows its size in CSS px next to its hover
 // outline; with a selection and Alt held, the distances from the selection to the hovered element (to a sibling: between
 // the nearest edges; to an ancestor: to its inner edges), each labelled in CSS px; the same values at 50 %; measuring
 // never changes the selection or the document. The feature has no command, so no scenario can run it: this test moves

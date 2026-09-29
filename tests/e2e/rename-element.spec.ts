@@ -1,4 +1,4 @@
-// rename-element beyond its scenarios (spec/behavior/rename-element.md): F2, a double-click on a Layers row's name,
+// rename-element beyond its scenarios (spec/BEHAVIOUR.md#rename-element): F2, a double-click on a Layers row's name,
 // Arrange › Rename and the context menu's Rename all start the one rename in place (Problems in Pager 1 and 2: no
 // dialog). The row's name becomes a field holding the name, selected, with the focus, so typing replaces it; Enter or
 // leaving the field keeps it in the document JSON, the row and the canvas label show it, the focus is back on the

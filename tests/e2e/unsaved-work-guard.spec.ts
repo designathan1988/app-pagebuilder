@@ -1,4 +1,4 @@
-// unsaved-work-guard beyond its scenario (spec/behavior/unsaved-work-guard.md): while IndexedDB refuses the writes
+// unsaved-work-guard beyond its scenario (spec/BEHAVIOUR.md#unsaved-work-guard): while IndexedDB refuses the writes
 // (the browser's storage made to refuse them, as a full quota does: the environment, not the app's code), the status
 // bar reads Not saved with the browser's reason, and leaving the tab asks the browser's leave-page confirmation; once
 // the storage takes writes again, autosave writes the work on its own (Problems in Pager 3), reads Saved, and leaving

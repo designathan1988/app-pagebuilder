@@ -1,4 +1,4 @@
-// workbench-panel beyond its scenarios (spec/behavior/workbench-panel.md, Problems in Pager 2): View › Developer tools
+// workbench-panel beyond its scenarios (spec/BEHAVIOUR.md#workbench-panel, Problems in Pager 2): View › Developer tools
 // gives the dock a Document tab showing the document as it is now, as JSON, read-only, drawn again after every command;
 // the choice is a preference, so the tab is there again after a reload, and turning it off takes the tab out. The
 // document is read through the read-only test port.

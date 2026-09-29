@@ -14,7 +14,7 @@
         "workspace.setActiveTab"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/inspector-panel.md",
+      "spec": "spec/BEHAVIOUR.md#inspector-panel",
       "intent": {
         "title": "Inspector shows the selection's identity and collapsible property sections",
         "steps": [
@@ -1622,7 +1622,7 @@
       "dependsOn": [
         "inspector-panel"
       ],
-      "spec": "spec/behavior/inspector-number-fields.md",
+      "spec": "spec/BEHAVIOUR.md#inspector-number-fields",
       "intent": {
         "title": "Numeric property fields, built with the Size section's Width and Height: typing, units, steppers and scrubbing",
         "steps": [
@@ -3450,7 +3450,7 @@
         "style.set"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/props-display.md",
+      "spec": "spec/BEHAVIOUR.md#props-display",
       "intent": {
         "title": "Edit display with every keyword",
         "steps": [
@@ -4279,7 +4279,7 @@
         "style.setAlignment"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/props-flex-container.md",
+      "spec": "spec/BEHAVIOUR.md#props-flex-container",
       "intent": {
         "title": "Flex container controls: direction, wrap, alignment matrix and gap",
         "steps": [
@@ -6220,7 +6220,7 @@
         "style.setGridItem"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/props-grid-container.md",
+      "spec": "spec/BEHAVIOUR.md#props-grid-container",
       "intent": {
         "title": "Grid container controls: column and row tracks, gap and auto flow",
         "steps": [
@@ -8464,7 +8464,7 @@
         "style.set"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/props-layout-item.md",
+      "spec": "spec/BEHAVIOUR.md#props-layout-item",
       "intent": {
         "title": "Child-of-flex and child-of-grid controls (In parent)",
         "steps": [
@@ -9523,7 +9523,7 @@
       "dependsOn": [
         "inspector-number-fields"
       ],
-      "spec": "spec/behavior/props-spacing.md",
+      "spec": "spec/BEHAVIOUR.md#props-spacing",
       "intent": {
         "title": "Margin and padding with the box model editor",
         "steps": [
@@ -10858,7 +10858,7 @@
       "dependsOn": [
         "inspector-number-fields"
       ],
-      "spec": "spec/behavior/props-size-overflow.md",
+      "spec": "spec/BEHAVIOUR.md#props-size-overflow",
       "intent": {
         "title": "Size, min/max, box sizing, aspect ratio and overflow",
         "steps": [
@@ -11959,7 +11959,7 @@
         "position.setMode"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/props-position.md",
+      "spec": "spec/BEHAVIOUR.md#props-position",
       "intent": {
         "title": "Position mode, offsets, z-index, float and clear",
         "steps": [
@@ -13253,7 +13253,7 @@
         "drag.cancel"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/color-picker.md",
+      "spec": "spec/BEHAVIOUR.md#color-picker",
       "intent": {
         "title": "Colour picker: area, sliders, HSB/RGB/Hex fields, preview, Apply and Cancel",
         "steps": [
@@ -15426,7 +15426,7 @@
       "dependsOn": [
         "color-picker"
       ],
-      "spec": "spec/behavior/color-picker-oklch.md",
+      "spec": "spec/BEHAVIOUR.md#color-picker-oklch",
       "intent": {
         "title": "Colour picker: OKLCH and OKLab formats and CSS colour text",
         "steps": [
@@ -15964,7 +15964,7 @@
       "dependsOn": [
         "color-picker"
       ],
-      "spec": "spec/behavior/color-swatches-eyedropper.md",
+      "spec": "spec/BEHAVIOUR.md#color-swatches-eyedropper",
       "intent": {
         "title": "Saved and recent colours and the eyedropper",
         "steps": [
@@ -16598,7 +16598,7 @@
         "props-display",
         "props-size-overflow"
       ],
-      "spec": "spec/behavior/props-typography.md",
+      "spec": "spec/BEHAVIOUR.md#props-typography",
       "intent": {
         "title": "Text properties: font, size, weight, style, spacing, alignment, colour and decoration",
         "steps": [
@@ -18456,7 +18456,7 @@
         "style.set"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/props-typography-advanced.md",
+      "spec": "spec/BEHAVIOUR.md#props-typography-advanced",
       "intent": {
         "title": "Advanced text properties",
         "steps": [
@@ -19665,7 +19665,7 @@
         "style.setBackgroundImage"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/props-background.md",
+      "spec": "spec/BEHAVIOUR.md#props-background",
       "intent": {
         "title": "Background colour, image, size, position, repeat and more",
         "steps": [
@@ -20906,7 +20906,7 @@
         "props-background",
         "color-picker"
       ],
-      "spec": "spec/behavior/gradient-editor.md",
+      "spec": "spec/BEHAVIOUR.md#gradient-editor",
       "intent": {
         "title": "Gradient editor: linear, radial and conic gradients with stops",
         "steps": [
@@ -23007,7 +23007,7 @@
         "style.setRadius"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/props-border-outline.md",
+      "spec": "spec/BEHAVIOUR.md#props-border-outline",
       "intent": {
         "title": "Borders per side, radius per corner and outline",
         "steps": [
@@ -25083,7 +25083,7 @@
         "style.set"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/props-effects-basic.md",
+      "spec": "spec/BEHAVIOUR.md#props-effects-basic",
       "intent": {
         "title": "Opacity, visibility, cursor, pointer events, selection and blend mode",
         "steps": [
@@ -25770,7 +25770,7 @@
       "dependsOn": [
         "color-picker"
       ],
-      "spec": "spec/behavior/shadow-editor.md",
+      "spec": "spec/BEHAVIOUR.md#shadow-editor",
       "intent": {
         "title": "Box shadow and text shadow editor",
         "steps": [
@@ -29360,7 +29360,7 @@
         "style.setFilter"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/props-filters-clip.md",
+      "spec": "spec/BEHAVIOUR.md#props-filters-clip",
       "intent": {
         "title": "Filters, backdrop filter, clip path and mask",
         "steps": [
@@ -30593,7 +30593,7 @@
         "style.setTransform"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/props-transforms.md",
+      "spec": "spec/BEHAVIOUR.md#props-transforms",
       "intent": {
         "title": "Move, rotate, scale, skew, origin and 3D transform properties",
         "steps": [
@@ -31749,7 +31749,7 @@
         "style.set"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/props-transition.md",
+      "spec": "spec/BEHAVIOUR.md#props-transition",
       "intent": {
         "title": "Transition and will-change",
         "steps": [
@@ -32297,7 +32297,7 @@
         "style.set"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/props-more.md",
+      "spec": "spec/BEHAVIOUR.md#props-more",
       "intent": {
         "title": "Remaining advanced properties",
         "steps": [
@@ -35353,7 +35353,7 @@
         "style.resetAll"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/inspector-provenance-reset.md",
+      "spec": "spec/BEHAVIOUR.md#inspector-provenance-reset",
       "intent": {
         "title": "Mark set values and reset one property or all of them",
         "steps": [
@@ -35739,7 +35739,7 @@
         "inspector.search"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/inspector-property-search.md",
+      "spec": "spec/BEHAVIOUR.md#inspector-property-search",
       "intent": {
         "title": "Search the inspector for a property",
         "steps": [
@@ -35947,7 +35947,7 @@
         "inspector.setMode"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/inspector-advanced-mode.md",
+      "spec": "spec/BEHAVIOUR.md#inspector-advanced-mode",
       "intent": {
         "title": "Switch the inspector between all properties and essentials only",
         "steps": [
@@ -36173,7 +36173,7 @@
         "inspector.reveal"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/inspector-add-property.md",
+      "spec": "spec/BEHAVIOUR.md#inspector-add-property",
       "intent": {
         "title": "Add a property that is not shown yet",
         "steps": [
@@ -36293,7 +36293,7 @@
       "dependsOn": [
         "inspector-panel"
       ],
-      "spec": "spec/behavior/semantic-tag-switch.md",
+      "spec": "spec/BEHAVIOUR.md#semantic-tag-switch",
       "intent": {
         "title": "Switch an element between equivalent semantic tags",
         "steps": [
@@ -37367,7 +37367,7 @@
       "dependsOn": [
         "inspector-panel"
       ],
-      "spec": "spec/behavior/quick-panel.md",
+      "spec": "spec/BEHAVIOUR.md#quick-panel",
       "intent": {
         "title": "Floating quick panel over the selection",
         "steps": [
@@ -40366,7 +40366,7 @@
         "multi-select-click",
         "quick-panel"
       ],
-      "spec": "spec/behavior/multi-select-edit.md",
+      "spec": "spec/BEHAVIOUR.md#multi-select-edit",
       "intent": {
         "title": "Edit a property on several selected elements at once",
         "steps": [

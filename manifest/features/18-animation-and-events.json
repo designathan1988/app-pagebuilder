@@ -428,7 +428,7 @@
       "dependsOn": [
         "timeline-animations"
       ],
-      "spec": "spec/behavior/timeline-keyframes.md",
+      "spec": "spec/BEHAVIOUR.md#timeline-keyframes",
       "intent": {
         "title": "Add, edit, move and delete keyframes on the timeline",
         "steps": [
@@ -1387,7 +1387,7 @@
       "dependsOn": [
         "timeline-keyframes"
       ],
-      "spec": "spec/behavior/timeline-preview.md",
+      "spec": "spec/BEHAVIOUR.md#timeline-preview",
       "intent": {
         "title": "Preview animations by playing and scrubbing the timeline",
         "steps": [
@@ -2296,7 +2296,7 @@
         "workspace.setActiveTab"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/events-actions.md",
+      "spec": "spec/BEHAVIOUR.md#events-actions",
       "intent": {
         "title": "Events and actions per element",
         "steps": [

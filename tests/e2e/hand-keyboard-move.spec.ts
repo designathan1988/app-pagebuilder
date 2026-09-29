@@ -1,4 +1,4 @@
-// hand-keyboard-move beyond its scenarios (spec/behavior/hand-keyboard-move.md): what the canvas draws while the
+// hand-keyboard-move beyond its scenarios (spec/BEHAVIOUR.md#hand-keyboard-move): what the canvas draws while the
 // keyboard's hand holds an element (the drop indicator a mouse drag draws, at the aim: the insertion line across the
 // receiver, the receiver's outline, the drop label, the held element dashed and unlabelled; nothing once the hand
 // drops); what the status bar says after every key (the receiver, the position and the level) and Enter into a

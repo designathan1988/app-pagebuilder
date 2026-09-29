@@ -1,4 +1,4 @@
-// marquee-select beyond its scenarios (spec/behavior/marquee-select.md): the band the canvas chrome draws while the
+// marquee-select beyond its scenarios (spec/BEHAVIOUR.md#marquee-select): the band the canvas chrome draws while the
 // pointer drags (src/editor/canvas/chrome.tsx), the selection following the band live (src/editor/input/pointer.ts),
 // and what selection.marquee takes (src/core/selection/selection.ts): the direct children of the container the band
 // was pressed in, each one it touches; with Alt held, the leaves instead (a leaf when touched, a container only when

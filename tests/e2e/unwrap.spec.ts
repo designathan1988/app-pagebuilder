@@ -1,4 +1,4 @@
-// unwrap beyond its scenario (spec/behavior/unwrap.md): Arrange › Remove wrapper, a door of the command a user can reach
+// unwrap beyond its scenario (spec/BEHAVIOUR.md#unwrap): Arrange › Remove wrapper, a door of the command a user can reach
 // once it is built, lifts the children in place as the context menu's item does, in one undo step (spec, Problems 1);
 // with an element that has no children, or the page root, the item stays in the menu, disabled, and says why (spec,
 // Problems 2), and pressing it changes nothing. The document, the selection and the history are read through the

@@ -14,7 +14,7 @@
       "dependsOn": [
         "state-styles"
       ],
-      "spec": "spec/behavior/preview-mode.md",
+      "spec": "spec/BEHAVIOUR.md#preview-mode",
       "intent": {
         "title": "Preview the page without editor chrome",
         "steps": [
@@ -1138,7 +1138,7 @@
         "preferences.setTheme"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/theme-switch.md",
+      "spec": "spec/BEHAVIOUR.md#theme-switch",
       "intent": {
         "title": "Light, dark and system theme",
         "steps": [

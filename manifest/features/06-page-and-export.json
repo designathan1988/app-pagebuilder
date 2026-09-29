@@ -12,7 +12,7 @@
       "dependsOn": [
         "inspector-panel"
       ],
-      "spec": "spec/behavior/page-properties.md",
+      "spec": "spec/BEHAVIOUR.md#page-properties",
       "intent": {
         "title": "Page properties: title, language, direction and page styles",
         "steps": [
@@ -497,7 +497,7 @@
       "dependsOn": [
         "editor-shell"
       ],
-      "spec": "spec/behavior/base-style.md",
+      "spec": "spec/BEHAVIOUR.md#base-style",
       "intent": {
         "title": "The project's base style",
         "steps": [
@@ -662,7 +662,7 @@
       "dependsOn": [
         "page-properties"
       ],
-      "spec": "spec/behavior/export-zip.md",
+      "spec": "spec/BEHAVIOUR.md#export-zip",
       "intent": {
         "title": "Export the page as a ZIP with HTML and a separate CSS file",
         "steps": [
@@ -1211,7 +1211,7 @@
       "dependsOn": [
         "color-picker"
       ],
-      "spec": "spec/behavior/css-variables-tokens.md",
+      "spec": "spec/BEHAVIOUR.md#css-variables-tokens",
       "intent": {
         "title": "Design tokens as CSS variables",
         "steps": [
@@ -2396,7 +2396,7 @@
       "dependsOn": [
         "export-zip"
       ],
-      "spec": "spec/behavior/export-bem-css.md",
+      "spec": "spec/BEHAVIOUR.md#export-bem-css",
       "intent": {
         "title": "Exported CSS uses readable BEM classes and is deterministic",
         "steps": [

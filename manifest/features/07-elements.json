@@ -10,7 +10,7 @@
         "element.setLink"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/elements-structure.md",
+      "spec": "spec/BEHAVIOUR.md#elements-structure",
       "intent": {
         "title": "Structure elements: Container, Header, Navigation, Main, Section, Article, Aside, Footer, Link Block",
         "steps": [
@@ -1923,7 +1923,7 @@
         "element.duplicate"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/elements-lists.md",
+      "spec": "spec/BEHAVIOUR.md#elements-lists",
       "intent": {
         "title": "List elements: Unordered, Ordered and Definition lists with their items",
         "steps": [
@@ -3665,7 +3665,7 @@
         "clipboard.paste"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/nesting-grammar.md",
+      "spec": "spec/BEHAVIOUR.md#nesting-grammar",
       "intent": {
         "title": "HTML nesting rules for inserting, dragging and pasting",
         "steps": [
@@ -4012,7 +4012,7 @@
       "dependsOn": [
         "nesting-grammar"
       ],
-      "spec": "spec/behavior/nesting-grammar-structure.md",
+      "spec": "spec/BEHAVIOUR.md#nesting-grammar-structure",
       "intent": {
         "title": "HTML nesting rules for wrap, unwrap, promote, tag switch and hand",
         "steps": [
@@ -5628,7 +5628,7 @@
       "dependsOn": [
         "elements-tables"
       ],
-      "spec": "spec/behavior/table-commands.md",
+      "spec": "spec/BEHAVIOUR.md#table-commands",
       "intent": {
         "title": "Add and remove table rows and columns",
         "steps": [
@@ -9193,7 +9193,7 @@
         "inspector.setStyleTarget"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/shared-style-classes.md",
+      "spec": "spec/BEHAVIOUR.md#shared-style-classes",
       "intent": {
         "title": "Reusable style classes",
         "steps": [
@@ -12987,7 +12987,7 @@
       "dependsOn": [
         "elements-form-inputs"
       ],
-      "spec": "spec/behavior/elements-form-inputs-rules.md",
+      "spec": "spec/BEHAVIOUR.md#elements-form-inputs-rules",
       "intent": {
         "title": "Per-type input attributes, type switching, label targets and canvas focus",
         "steps": [
@@ -15038,7 +15038,7 @@
         "parts.add"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/media-embed-rules.md",
+      "spec": "spec/BEHAVIOUR.md#media-embed-rules",
       "intent": {
         "title": "Image, Picture, Source, Figure and Caption",
         "steps": [
@@ -16219,7 +16219,7 @@
         "parts.add"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/media-embed-rules.md",
+      "spec": "spec/BEHAVIOUR.md#media-embed-rules",
       "intent": {
         "title": "Video, Audio, Track, Embedded frame and Canvas",
         "steps": [
@@ -17915,7 +17915,7 @@
         "parts.add"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/elements-svg-shapes.md",
+      "spec": "spec/BEHAVIOUR.md#elements-svg-shapes",
       "intent": {
         "title": "SVG/Icon, Rectangle, Ellipse and Line",
         "steps": [
@@ -21027,7 +21027,7 @@
         "elements-lists",
         "elements-tables"
       ],
-      "spec": "spec/behavior/natural-child-command.md",
+      "spec": "spec/BEHAVIOUR.md#natural-child-command",
       "intent": {
         "title": "Create the natural child inside a container",
         "steps": [
@@ -21872,7 +21872,7 @@
         "style.set"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/props-element-specific.md",
+      "spec": "spec/BEHAVIOUR.md#props-element-specific",
       "intent": {
         "title": "List, table, form and media properties shown only where they apply",
         "steps": [
@@ -22907,7 +22907,7 @@
         "element-attributes-aria",
         "shared-style-classes"
       ],
-      "spec": "spec/behavior/settings-class-management.md",
+      "spec": "spec/BEHAVIOUR.md#settings-class-management",
       "intent": {
         "title": "Reserved custom attributes and one class registry",
         "steps": [
@@ -23594,7 +23594,7 @@
         "shared-style-classes",
         "text-inline-formatting"
       ],
-      "spec": "spec/behavior/settings-audit.md",
+      "spec": "spec/BEHAVIOUR.md#settings-audit",
       "intent": {
         "title": "Organised Settings and type-safe element attributes",
         "steps": [

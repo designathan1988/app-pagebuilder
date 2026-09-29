@@ -1,4 +1,4 @@
-// props-element-specific beyond its scenarios (spec/behavior/props-element-specific.md): a field of a kind of element
+// props-element-specific beyond its scenarios (spec/BEHAVIOUR.md#props-element-specific): a field of a kind of element
 // (a list's, a table's, a form control's, a medium's) is drawn only while every selected element is of that kind, and
 // Add a property does not offer it for an element it does not apply to. The scenarios cannot say a field is not drawn:
 // this test does, on the Style tab of the inspector in Chrome.

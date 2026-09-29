@@ -1,4 +1,4 @@
-// An empty container on the canvas (manifest constant canvas.emptyContainerMinHeight, spec/behavior/drag-drop-inside.md
+// An empty container on the canvas (manifest constant canvas.emptyContainerMinHeight, spec/BEHAVIOUR.md#drag-drop-inside
 // and palette-click-insert.md): the canvas gives it a visible minimum height, editor-only, so it can be seen and
 // clicked; a container with children, and the page root, keep their own height. Nothing of it enters the document
 // JSON nor the node's own markup (no inline style, no class): the renderer marks it in the frame only.

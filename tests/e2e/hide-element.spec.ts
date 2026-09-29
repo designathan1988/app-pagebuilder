@@ -1,4 +1,4 @@
-// hide-element beyond its scenarios (spec/behavior/hide-element.md): the Layers eye hides the element of its own row
+// hide-element beyond its scenarios (spec/BEHAVIOUR.md#hide-element): the Layers eye hides the element of its own row
 // and leaves the selection as it is; the hidden flag is in the document JSON, the element and its whole subtree are
 // not drawn and the next sibling takes their place; a second click shows it again exactly where it was; each is one
 // undo step. A hidden element is still selected from Layers and shown again from the context menu; the page root is

@@ -1,4 +1,4 @@
-// inspector-property-search beyond its scenarios (spec/behavior/inspector-property-search.md; the user's real-use
+// inspector-property-search beyond its scenarios (spec/BEHAVIOUR.md#inspector-property-search; the user's real-use
 // audit, item 1.2): what the Style tab draws while Find a property holds a query. Typing a label or a CSS name keeps
 // only the matching fields, a section with none not drawn; no match says so; emptying the field brings every section
 // back, a collapsed one collapsed again. The fields are read in Chrome.

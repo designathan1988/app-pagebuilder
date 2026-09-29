@@ -12,7 +12,7 @@
         "workspace.collapseDocks"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/dock-toggles.md",
+      "spec": "spec/BEHAVIOUR.md#dock-toggles",
       "intent": {
         "title": "Show and hide the docks and panels",
         "steps": [
@@ -913,7 +913,7 @@
         "components.startCreate"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/command-bar.md",
+      "spec": "spec/BEHAVIOUR.md#command-bar",
       "intent": {
         "title": "Command bar with Ctrl+K",
         "steps": [
@@ -10232,7 +10232,7 @@
       "dependsOn": [
         "command-bar"
       ],
-      "spec": "spec/behavior/command-bar-set-property.md",
+      "spec": "spec/BEHAVIOUR.md#command-bar-set-property",
       "intent": {
         "title": "Set a property or jump to it from the command bar",
         "steps": [
@@ -10979,7 +10979,7 @@
       "dependsOn": [
         "app-menu"
       ],
-      "spec": "spec/behavior/shortcuts-panel.md",
+      "spec": "spec/BEHAVIOUR.md#shortcuts-panel",
       "intent": {
         "title": "Keyboard shortcuts panel generated from the keymap",
         "steps": [
@@ -11077,7 +11077,7 @@
         "workspace.setActiveTab"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/workbench-panel.md",
+      "spec": "spec/BEHAVIOUR.md#workbench-panel",
       "intent": {
         "title": "Bottom workbench: tabs, collapse, maximise and developer tools",
         "steps": [
@@ -11874,7 +11874,7 @@
         "workspace.resizeSplitter"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/panel-resize.md",
+      "spec": "spec/BEHAVIOUR.md#panel-resize",
       "intent": {
         "title": "Resize docks and panels with splitters",
         "steps": [
@@ -12139,7 +12139,7 @@
       "dependsOn": [
         "panel-resize"
       ],
-      "spec": "spec/behavior/floating-panels.md",
+      "spec": "spec/BEHAVIOUR.md#floating-panels",
       "intent": {
         "title": "Float a panel as a window and dock it again",
         "steps": [
@@ -12451,7 +12451,7 @@
       "dependsOn": [
         "floating-panels"
       ],
-      "spec": "spec/behavior/panel-combine-tabs.md",
+      "spec": "spec/BEHAVIOUR.md#panel-combine-tabs",
       "intent": {
         "title": "Combine panels as tabs or stack them",
         "steps": [
@@ -12844,7 +12844,7 @@
         "view.setStyleState"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/status-bar.md",
+      "spec": "spec/BEHAVIOUR.md#status-bar",
       "intent": {
         "title": "Status bar: messages, breadcrumb, size, context, count, zoom and save state",
         "steps": [

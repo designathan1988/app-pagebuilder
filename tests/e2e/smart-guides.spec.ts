@@ -1,4 +1,4 @@
-// smart-guides beyond its scenarios (spec/behavior/smart-guides.md), read in Chrome while a free drag is held:
+// smart-guides beyond its scenarios (spec/BEHAVIOUR.md#smart-guides), read in Chrome while a free drag is held:
 //  - Problems in Pager 2: a box pulled to an equal gap has both gaps marked with their value;
 //  - Problems in Pager 3: with snap off, an alignment with a sibling's edge is drawn, and the box is not moved;
 //  - Problems in Pager 1: with smart guides off, a snapping drag draws no line, and snap still moves the box.

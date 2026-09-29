@@ -1,4 +1,4 @@
-// props-flex-container beyond its scenarios (spec/behavior/props-flex-container.md): the gap is the distance the page
+// props-flex-container beyond its scenarios (spec/BEHAVIOUR.md#props-flex-container): the gap is the distance the page
 // measures between two neighbouring children; the alignment matrix acts on a flex or grid container only (on a block
 // element a click writes nothing); its cells are buttons the keyboard reaches and presses. The document is read through
 // the read-only test port, the layout inside the frame.

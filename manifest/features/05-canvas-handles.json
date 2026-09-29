@@ -9,7 +9,7 @@
         "geometry.resize"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/resize-handles.md",
+      "spec": "spec/BEHAVIOUR.md#resize-handles",
       "intent": {
         "title": "Resize an element with its eight handles",
         "steps": [
@@ -1567,7 +1567,7 @@
         "quick-panel",
         "props-spacing"
       ],
-      "spec": "spec/behavior/spacing-handles.md",
+      "spec": "spec/BEHAVIOUR.md#spacing-handles",
       "intent": {
         "title": "Edit padding and margin by dragging on the canvas",
         "steps": [
@@ -2796,7 +2796,7 @@
         "spacing-handles",
         "props-border-outline"
       ],
-      "spec": "spec/behavior/radius-border-gap-handles.md",
+      "spec": "spec/BEHAVIOUR.md#radius-border-gap-handles",
       "intent": {
         "title": "Edit radius, border width and gaps by dragging on the canvas",
         "steps": [
@@ -3893,7 +3893,7 @@
         "spacing-handles",
         "shadow-editor"
       ],
-      "spec": "spec/behavior/shadow-handles.md",
+      "spec": "spec/BEHAVIOUR.md#shadow-handles",
       "intent": {
         "title": "Edit shadow offset and blur by dragging on the canvas",
         "steps": [

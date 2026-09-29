@@ -14,7 +14,7 @@
         "element.setDivider"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/layout-actions.md",
+      "spec": "spec/BEHAVIOUR.md#layout-actions",
       "intent": {
         "title": "The layout quick actions: a container, a grid, the swapped direction, the phone stack, the organized children and the column divider",
         "steps": [
@@ -2040,7 +2040,7 @@
         "style.setGridTracks"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/canvas-grid-editor.md",
+      "spec": "spec/BEHAVIOUR.md#canvas-grid-editor",
       "intent": {
         "title": "Edit a grid on the canvas: its tracks, its cells and the items in them",
         "steps": [

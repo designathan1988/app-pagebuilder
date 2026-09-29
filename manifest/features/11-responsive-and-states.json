@@ -11,7 +11,7 @@
         "page.setSetting"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/breakpoints-switch.md",
+      "spec": "spec/BEHAVIOUR.md#breakpoints-switch",
       "intent": {
         "title": "Switch between Desktop, Laptop, Tablet and Phone breakpoints",
         "steps": [
@@ -819,7 +819,7 @@
       "dependsOn": [
         "breakpoints-switch"
       ],
-      "spec": "spec/behavior/breakpoint-overrides.md",
+      "spec": "spec/BEHAVIOUR.md#breakpoint-overrides",
       "intent": {
         "title": "Style overrides per breakpoint, desktop first",
         "steps": [
@@ -1215,7 +1215,7 @@
       "dependsOn": [
         "breakpoint-overrides"
       ],
-      "spec": "spec/behavior/state-styles.md",
+      "spec": "spec/BEHAVIOUR.md#state-styles",
       "intent": {
         "title": "Style states: hover, focus, active, disabled, invalid and placeholder shown",
         "steps": [

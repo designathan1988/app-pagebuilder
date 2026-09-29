@@ -1,4 +1,4 @@
-// Beyond the scenarios of item 2.3 and A3.22 (spec/behavior/breakpoints-switch.md, "Our rule"): the fold lines the
+// Beyond the scenarios of item 2.3 and A3.22 (spec/BEHAVIOUR.md#breakpoints-switch, "Our rule"): the fold lines the
 // canvas draws at each whole screen, the Height field's Screen height preset, and the canvas laying the page out at the
 // width a real browser gives it — the acceptance of A3.22: the Section on the canvas measures what the exported page
 // measures in a 1440 px window, at the Fit zoom and at 25 %.

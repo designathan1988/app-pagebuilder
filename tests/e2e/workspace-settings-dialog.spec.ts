@@ -1,4 +1,4 @@
-// workspace-settings-dialog beyond its scenarios (spec/behavior/workspace-settings-dialog.md): the dialog takes the
+// workspace-settings-dialog beyond its scenarios (spec/BEHAVIOUR.md#workspace-settings-dialog): the dialog takes the
 // focus, keeps Tab inside it (a modal, Problems in Pager 2) and, closed with Escape, gives the focus back to the menu
 // it was opened from; its switches hide the page's guides on the canvas and the rulers, the stage then taking the
 // rulers' place, and both stay hidden after a reload while the document keeps its guide.

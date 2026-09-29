@@ -11,7 +11,9 @@ const commandId = z.string().regex(/^[a-z][a-zA-Z0-9]*(\.[a-z][a-zA-Z0-9]*)+$/, 
 const doorId = z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, 'a kebab-case door id');
 const doorRef = z.string().regex(/^[a-z][a-zA-Z0-9.]*#[a-z0-9-]+$/, 'a door reference "<command>#<door>"');
 const i18nKey = z.string().regex(/^[a-z][a-zA-Z0-9]*(\.[a-zA-Z0-9]+)+$/, 'a dotted i18n key');
-const specPath = z.string().regex(/^spec\/behavior\/[a-z0-9-]+\.md$/, 'a path under spec/behavior/');
+// A reference into the one behaviour file: the section's id is the anchor (spec/BEHAVIOUR.md#<id>), so one document
+// holds every spec and a manifest entry points at its section of it.
+const specPath = z.string().regex(/^spec\/BEHAVIOUR\.md#[a-z0-9-]+$/, 'a section of spec/BEHAVIOUR.md (spec/BEHAVIOUR.md#<id>)');
 const camelId = z.string().regex(/^[a-z][a-zA-Z0-9]*$/, 'a camelCase id');
 const kebabId = z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, 'a kebab-case id');
 const constantId = z.string().regex(/^[a-z][a-zA-Z0-9]*(\.[a-zA-Z0-9]+)+$/, 'a dotted constant id');

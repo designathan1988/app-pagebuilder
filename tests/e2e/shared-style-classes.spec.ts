@@ -1,4 +1,4 @@
-// shared-style-classes beyond its scenarios (spec/behavior/shared-style-classes.md): the selector bar says how far a
+// shared-style-classes beyond its scenarios (spec/BEHAVIOUR.md#shared-style-classes): the selector bar says how far a
 // class target reaches; with the Element target, a field whose value comes from a class names the class, until the
 // element holds a value of its own; the Styles view lists the classes with how many elements have each; a new selection
 // returns the target to Element. The scenarios cannot say what the inspector and the Styles view show: this test reads

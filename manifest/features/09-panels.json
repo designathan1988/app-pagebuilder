@@ -346,7 +346,7 @@
         "layers.expandAll"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/layers-expand-collapse-all.md",
+      "spec": "spec/BEHAVIOUR.md#layers-expand-collapse-all",
       "intent": {
         "title": "Collapse and expand every branch in Layers",
         "steps": [

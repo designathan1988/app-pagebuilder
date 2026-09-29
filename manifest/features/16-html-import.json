@@ -2251,7 +2251,7 @@
       "dependsOn": [
         "html-import-cleaning"
       ],
-      "spec": "spec/behavior/clipboard-paste-external.md",
+      "spec": "spec/BEHAVIOUR.md#clipboard-paste-external",
       "intent": {
         "title": "Paste HTML and text copied from outside the app",
         "steps": [

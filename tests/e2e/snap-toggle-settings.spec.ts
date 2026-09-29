@@ -1,4 +1,4 @@
-// snap-toggle-settings beyond its scenarios (spec/behavior/snap-toggle-settings.md), read in the storage after an
+// snap-toggle-settings beyond its scenarios (spec/BEHAVIOUR.md#snap-toggle-settings), read in the storage after an
 // immediate reload: the Snap button switches snap with one click (Problems in Pager 1); Apply keeps the targets and the
 // distance as preferences and leaves snap off (Problems in Pager 2 and 3), and the reopened dialog shows them; Cancel
 // (the close button) drops what was ticked and typed.

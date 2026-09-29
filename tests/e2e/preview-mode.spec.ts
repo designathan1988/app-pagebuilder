@@ -1,4 +1,4 @@
-// preview-mode beyond its scenarios (spec/behavior/preview-mode.md): the preview is the exported page run as a browser
+// preview-mode beyond its scenarios (spec/BEHAVIOUR.md#preview-mode): the preview is the exported page run as a browser
 // runs it: a hover value applies when the pointer is over the element, links open in a new tab (never the editor),
 // no editor chrome is left over it, and the preview changes nothing in the document.
 import fs from 'node:fs';

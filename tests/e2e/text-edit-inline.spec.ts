@@ -1,4 +1,4 @@
-// text-edit-inline beyond its scenarios (spec/behavior/text-edit-inline.md): what the page shows while and after a
+// text-edit-inline beyond its scenarios (spec/BEHAVIOUR.md#text-edit-inline): what the page shows while and after a
 // text is edited in place (the edited element's marks come and go, a kept line break is drawn as <br>, Escape draws the
 // text the document holds again), where the focus is (a click on the edited text keeps it there; after the edit the
 // canvas keys work again), the keys of the edit that never reach the tree, the frame no longer aria-hidden while it

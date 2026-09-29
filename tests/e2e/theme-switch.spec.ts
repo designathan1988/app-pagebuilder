@@ -1,4 +1,4 @@
-// theme-switch beyond its scenarios (spec/behavior/theme-switch.md): with System chosen, the editor follows the
+// theme-switch beyond its scenarios (spec/BEHAVIOUR.md#theme-switch): with System chosen, the editor follows the
 // browser's colour scheme live (no reload), and the page inside the frame keeps its own colours whatever the theme.
 import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';

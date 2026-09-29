@@ -1,4 +1,4 @@
-// inspector-provenance-reset beyond its scenarios (spec/behavior/inspector-provenance-reset.md, Problems in Pager 1): a
+// inspector-provenance-reset beyond its scenarios (spec/BEHAVIOUR.md#inspector-provenance-reset, Problems in Pager 1): a
 // section's header counts the values the element holds in it, beside its summary, and the count follows a reset.
 import fs from 'node:fs';
 import { expect, test, type Page } from '../support/test.ts';

@@ -1,4 +1,4 @@
-// wrap-row-column beyond its scenarios (spec/behavior/wrap-row-column.md; src/core/structure/wrap.ts): the Arrange
+// wrap-row-column beyond its scenarios (spec/BEHAVIOUR.md#wrap-row-column; src/core/structure/wrap.ts): the Arrange
 // menu's two items wrap as R and C do, each one undo step; C wraps an element its only child covers on the canvas,
 // reached with ArrowUp from that child (spec select-click, "Nested elements"); R wraps several selected siblings in
 // their order and refuses elements of different parents; a parent that accepts no <div> refuses the wrapper. The

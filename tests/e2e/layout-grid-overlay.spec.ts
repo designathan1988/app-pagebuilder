@@ -1,4 +1,4 @@
-// layout-grid-overlay (spec/behavior/layout-grid-overlay.md) and the user's real-use audit: the column grid is drawn
+// layout-grid-overlay (spec/BEHAVIOUR.md#layout-grid-overlay) and the user's real-use audit: the column grid is drawn
 // per breakpoint (A1.6: Desktop 12, Tablet 8, Phone 4, the Phone's margin 16) and covers the frame's whole height
 // (A3.17: it used to stop at the body's content box). The scenario runner reads the document; this test counts the
 // bands the chrome draws and measures them in the frame.

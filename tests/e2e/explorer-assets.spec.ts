@@ -1,4 +1,4 @@
-// explorer-assets / explorer-assets-use / export-assets beyond their scenarios (spec/behavior/explorer-assets.md and
+// explorer-assets / explorer-assets-use / export-assets beyond their scenarios (spec/BEHAVIOUR.md#explorer-assets and
 // explorer-assets-use.md; the user's real-use audit, item 7.3): the Explorer uploads a file (its Upload button, and an
 // image file dropped on the folder), the Source field of an image picks one from the project (the choose button's
 // picker, and the field's own suggestions), an image file dropped on the canvas replaces the source of the image under

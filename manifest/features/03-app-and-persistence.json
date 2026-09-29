@@ -26,7 +26,7 @@
         "workspace.setPanelOpen"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/app-menu.md",
+      "spec": "spec/BEHAVIOUR.md#app-menu",
       "intent": {
         "title": "Application menu: File, Edit, Arrange, View, Help, Theme and Language",
         "steps": [
@@ -2187,7 +2187,7 @@
         "preferences.setLanguage"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/ui-language.md",
+      "spec": "spec/BEHAVIOUR.md#ui-language",
       "intent": {
         "title": "UI language: English by default, Brazilian Portuguese available",
         "steps": [
@@ -2348,7 +2348,7 @@
       "titleKey": "feature.autosaveRestore",
       "commands": [],
       "dependsOn": [],
-      "spec": "spec/behavior/autosave-restore.md",
+      "spec": "spec/BEHAVIOUR.md#autosave-restore",
       "toothProof": "src/editor/persistence/autosave.ts",
       "intent": {
         "title": "Autosave to IndexedDB and restore the work after a reload",
@@ -2668,7 +2668,7 @@
       "dependsOn": [
         "autosave-restore"
       ],
-      "spec": "spec/behavior/unsaved-work-guard.md",
+      "spec": "spec/BEHAVIOUR.md#unsaved-work-guard",
       "toothProof": "src/editor/persistence/autosave.ts",
       "intent": {
         "title": "Never lose an edit that is not yet saved",
@@ -2778,7 +2778,7 @@
       "dependsOn": [
         "autosave-restore"
       ],
-      "spec": "spec/behavior/autosave-crash-recovery.md",
+      "spec": "spec/BEHAVIOUR.md#autosave-crash-recovery",
       "toothProof": "src/editor/persistence/autosave.ts",
       "intent": {
         "title": "Keep saved versions and restore the work after a crash",
@@ -2869,7 +2869,7 @@
         "project.newBlankPage"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/new-blank-page.md",
+      "spec": "spec/BEHAVIOUR.md#new-blank-page",
       "intent": {
         "title": "Start over with a new blank page",
         "steps": [
@@ -3093,7 +3093,7 @@
       "dependsOn": [
         "autosave-crash-recovery"
       ],
-      "spec": "spec/behavior/autosave-corruption-recovery.md",
+      "spec": "spec/BEHAVIOUR.md#autosave-corruption-recovery",
       "intent": {
         "title": "Recover from a corrupted saved project",
         "steps": [
@@ -3388,7 +3388,7 @@
       "dependsOn": [
         "autosave-restore"
       ],
-      "spec": "spec/behavior/multi-tab-guard.md",
+      "spec": "spec/BEHAVIOUR.md#multi-tab-guard",
       "intent": {
         "title": "Only one tab edits the project at a time",
         "steps": [
@@ -3487,7 +3487,7 @@
         "project.save"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/project-save-json.md",
+      "spec": "spec/BEHAVIOUR.md#project-save-json",
       "intent": {
         "title": "Save the project as one archive file",
         "steps": [
@@ -3672,7 +3672,7 @@
       "dependsOn": [
         "project-save-json"
       ],
-      "spec": "spec/behavior/project-open-json.md",
+      "spec": "spec/BEHAVIOUR.md#project-open-json",
       "intent": {
         "title": "Open a project archive",
         "steps": [

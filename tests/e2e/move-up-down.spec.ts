@@ -1,4 +1,4 @@
-// move-up-down beyond its scenarios (spec/behavior/move-up-down.md): the Arrange menu's Move up and Move down, doors of
+// move-up-down beyond its scenarios (spec/BEHAVIOUR.md#move-up-down): the Arrange menu's Move up and Move down, doors of
 // the commands a user can reach once they are built, run the same command as the keys (spec, Problems 2); several
 // selected roots of one parent move together in one undo step and the status bar counts them (spec, Problems 1); roots
 // of different parents are refused. The document, the selection and the history are read through the read-only test

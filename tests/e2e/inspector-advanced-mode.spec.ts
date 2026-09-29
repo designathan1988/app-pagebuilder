@@ -1,4 +1,4 @@
-// inspector-advanced-mode beyond its scenarios (spec/behavior/inspector-advanced-mode.md): Essentials only leaves out the
+// inspector-advanced-mode beyond its scenarios (spec/BEHAVIOUR.md#inspector-advanced-mode): Essentials only leaves out the
 // fields of the properties that are no essentials, keeps a field whose property the element holds a value of, and All
 // properties draws every field again; the mode stays after a reload (Problems in Pager 1). The scenarios cannot say a
 // field is not drawn: this test does, on the Style tab of the inspector in Chrome.

@@ -198,147 +198,147 @@
       "id": "drag.threshold",
       "value": 4,
       "unit": "screen-px",
-      "source": "spec/behavior/drag-reorder-canvas.md",
+      "source": "spec/BEHAVIOUR.md#drag-reorder-canvas",
       "note": "Euclidean pointer movement that turns a press into a drag; below it a release is a click. Shared by canvas, palette and Layers drags, the marquee, resize, spacing and property handles, guides and panel drags. Independent of the zoom."
     },
     {
       "id": "splitter.step",
       "value": 20,
       "unit": "css-px",
-      "source": "spec/behavior/panel-resize.md",
+      "source": "spec/BEHAVIOUR.md#panel-resize",
       "note": "What an arrow key resizes its splitter's panel by (Problems in Pager 1: one step for every splitter)."
     },
     {
       "id": "drag.hysteresis",
       "value": 4,
       "unit": "screen-px",
-      "source": "spec/behavior/drag-reorder-canvas.md",
+      "source": "spec/BEHAVIOUR.md#drag-reorder-canvas",
       "note": "A new drop decision replaces the drawn one only after the pointer has moved this far from where the drawn one was taken."
     },
     {
       "id": "drop.leafSplit",
       "value": 0.5,
       "unit": "fraction",
-      "source": "spec/behavior/drag-reorder-canvas.md",
+      "source": "spec/BEHAVIOUR.md#drag-reorder-canvas",
       "note": "On a leaf, the first half along the parent flow axis means before it and the second half after it. A leaf is never a receiver."
     },
     {
       "id": "drop.emptyEdgeMax",
       "value": 8,
       "unit": "screen-px",
-      "source": "spec/behavior/drag-drop-inside.md",
+      "source": "spec/BEHAVIOUR.md#drag-drop-inside",
       "note": "Edge band of an empty container: min(8, 0.25 × extent) at both ends means before/after; the rest is inside."
     },
     {
       "id": "drop.emptyEdgeFraction",
       "value": 0.25,
       "unit": "fraction",
-      "source": "spec/behavior/drag-drop-inside.md",
+      "source": "spec/BEHAVIOUR.md#drag-drop-inside",
       "note": "Fraction of the extent in the edge band of an empty container: min(8, 0.25 × extent)."
     },
     {
       "id": "drop.edgeFraction",
       "value": 0.25,
       "unit": "fraction",
-      "source": "spec/behavior/drag-reorder-canvas.md",
+      "source": "spec/BEHAVIOUR.md#drag-reorder-canvas",
       "note": "Edge band of a container with children: min(clamp(0.25 × extent, 8, 32), 0.4 × extent)."
     },
     {
       "id": "drop.edgeMin",
       "value": 8,
       "unit": "screen-px",
-      "source": "spec/behavior/drag-reorder-canvas.md",
+      "source": "spec/BEHAVIOUR.md#drag-reorder-canvas",
       "note": "Lower clamp of the edge band of a container with children."
     },
     {
       "id": "drop.edgeMax",
       "value": 32,
       "unit": "screen-px",
-      "source": "spec/behavior/drag-reorder-canvas.md",
+      "source": "spec/BEHAVIOUR.md#drag-reorder-canvas",
       "note": "Upper clamp of the edge band of a container with children."
     },
     {
       "id": "drop.edgeCapFraction",
       "value": 0.4,
       "unit": "fraction",
-      "source": "spec/behavior/drag-reorder-canvas.md",
+      "source": "spec/BEHAVIOUR.md#drag-reorder-canvas",
       "note": "The edge band of a container with children never exceeds 0.4 × its extent."
     },
     {
       "id": "drop.escapeBandMax",
       "value": 12,
       "unit": "screen-px",
-      "source": "spec/behavior/drag-reorder-canvas.md",
+      "source": "spec/BEHAVIOUR.md#drag-reorder-canvas",
       "note": "Escape ladder band from an ancestor real edge: min(12, extent / 2 − 8), plus the slop."
     },
     {
       "id": "drop.escapeBandInset",
       "value": 8,
       "unit": "screen-px",
-      "source": "spec/behavior/drag-reorder-canvas.md",
+      "source": "spec/BEHAVIOUR.md#drag-reorder-canvas",
       "note": "Subtracted from half the extent in the escape ladder band: min(12, extent / 2 − 8)."
     },
     {
       "id": "drop.escapeBandSlop",
       "value": 2,
       "unit": "screen-px",
-      "source": "spec/behavior/drag-reorder-canvas.md",
+      "source": "spec/BEHAVIOUR.md#drag-reorder-canvas",
       "note": "Slop added to the escape ladder band."
     },
     {
       "id": "drop.escapeBandFloor",
       "value": 6,
       "unit": "screen-px",
-      "source": "spec/behavior/drag-reorder-canvas.md",
+      "source": "spec/BEHAVIOUR.md#drag-reorder-canvas",
       "note": "The escape ladder band is never narrower than this on a container at least drop.escapeBandFloorExtent long (Problems in Pager 4), before the slop."
     },
     {
       "id": "drop.escapeBandFloorExtent",
       "value": 12,
       "unit": "css-px",
-      "source": "spec/behavior/drag-reorder-canvas.md",
+      "source": "spec/BEHAVIOUR.md#drag-reorder-canvas",
       "note": "The height (or width, along its parent's flow) of the page element, in its own CSS pixels, from which the escape ladder band keeps at least drop.escapeBandFloor screen pixels."
     },
     {
       "id": "drop.emptyAimMin",
       "value": 40,
       "unit": "screen-px",
-      "source": "spec/behavior/drag-drop-inside.md",
+      "source": "spec/BEHAVIOUR.md#drag-drop-inside",
       "note": "The aim area of an empty container is widened to at least 40 × 40 screen px, centred and shared with its neighbours."
     },
     {
       "id": "canvas.emptyContainerMinHeight",
       "value": 40,
       "unit": "css-px",
-      "source": "spec/behavior/drag-drop-inside.md",
+      "source": "spec/BEHAVIOUR.md#drag-drop-inside",
       "note": "Editor-only minimum height of an empty container on the canvas; never exported."
     },
     {
       "id": "canvas.emptyTextMinHeight",
       "value": 24,
       "unit": "css-px",
-      "source": "spec/behavior/text-edit-inline.md",
+      "source": "spec/BEHAVIOUR.md#text-edit-inline",
       "note": "Editor-only minimum height of a text element whose text is empty (a heading cleared), so it can be seen and pointed at (the audit's A3.38); never exported."
     },
     {
       "id": "drop.autoscrollZone",
       "value": 56,
       "unit": "screen-px",
-      "source": "spec/behavior/drag-autoscroll.md",
+      "source": "spec/BEHAVIOUR.md#drag-autoscroll",
       "note": "Autoscroll starts within this distance of a scroll container edge, only after the pointer has once been further inside the stage."
     },
     {
       "id": "drop.autoscrollMaxStep",
       "value": 22,
       "unit": "screen-px",
-      "source": "spec/behavior/drag-autoscroll.md",
+      "source": "spec/BEHAVIOUR.md#drag-autoscroll",
       "note": "Largest autoscroll step per animation frame."
     },
     {
       "id": "drop.outsideStageTolerance",
       "value": 8,
       "unit": "screen-px",
-      "source": "spec/behavior/drag-reorder-canvas.md",
+      "source": "spec/BEHAVIOUR.md#drag-reorder-canvas",
       "note": "A proposal whose line lies outside the visible stage by more than this is drawn as a warning and refused on release."
     },
     {
@@ -348,56 +348,56 @@
         16
       ],
       "unit": "screen-px",
-      "source": "spec/behavior/drag-reorder-canvas.md",
+      "source": "spec/BEHAVIOUR.md#drag-reorder-canvas",
       "note": "Offset (x, y) of the ghost chip from the pointer."
     },
     {
       "id": "drag.labelOffset",
       "value": 20,
       "unit": "screen-px",
-      "source": "spec/behavior/drag-reorder-canvas.md",
+      "source": "spec/BEHAVIOUR.md#drag-reorder-canvas",
       "note": "The label chip sits this far above the receiver box top-left corner, clamped inside the stage."
     },
     {
       "id": "resize.handleRoom",
       "value": 36,
       "unit": "screen-px",
-      "source": "spec/behavior/resize-handles.md",
+      "source": "spec/BEHAVIOUR.md#resize-handles",
       "note": "A resize handle is drawn only where the element is at least this long on the screen across it (top and bottom handles: its height; sides: its width; a corner: both), so the handles never cover a small element and a press on it drags it (the user's real use, 2026-09-27)."
     },
     {
       "id": "drop.flashDuration",
       "value": 900,
       "unit": "ms",
-      "source": "spec/behavior/drag-reorder-canvas.md",
+      "source": "spec/BEHAVIOUR.md#drag-reorder-canvas",
       "note": "The dropped or inserted element flashes for this long."
     },
     {
       "id": "drag.cancelReturnMin",
       "value": 150,
       "unit": "ms",
-      "source": "spec/behavior/drag-level-keys-escape.md",
+      "source": "spec/BEHAVIOUR.md#drag-level-keys-escape",
       "note": "On Escape the ghost returns to the source element over 150 to 250 ms (the motion token); lower bound."
     },
     {
       "id": "drag.cancelReturnMax",
       "value": 250,
       "unit": "ms",
-      "source": "spec/behavior/drag-level-keys-escape.md",
+      "source": "spec/BEHAVIOUR.md#drag-level-keys-escape",
       "note": "Upper bound of the ghost return on Escape."
     },
     {
       "id": "layers.rowHeight",
       "value": 28,
       "unit": "screen-px",
-      "source": "spec/behavior/layers-tree.md",
+      "source": "spec/BEHAVIOUR.md#layers-tree",
       "note": "Height of a Layers row."
     },
     {
       "id": "layers.indentPerLevel",
       "value": 12,
       "unit": "screen-px",
-      "source": "spec/behavior/layers-tree.md",
+      "source": "spec/BEHAVIOUR.md#layers-tree",
       "note": "Indentation of a Layers row per tree level."
     },
     {
@@ -407,98 +407,98 @@
         28
       ],
       "unit": "screen-px",
-      "source": "spec/behavior/layers-tree.md",
+      "source": "spec/BEHAVIOUR.md#layers-tree",
       "note": "Width and height of the lock and eye buttons at the right end of a row."
     },
     {
       "id": "layers.dropBefore",
       "value": 0.25,
       "unit": "fraction",
-      "source": "spec/behavior/layers-drag.md",
+      "source": "spec/BEHAVIOUR.md#layers-drag",
       "note": "On a container row, a pointer above this fraction of the row height means before the node."
     },
     {
       "id": "layers.dropAfter",
       "value": 0.75,
       "unit": "fraction",
-      "source": "spec/behavior/layers-drag.md",
+      "source": "spec/BEHAVIOUR.md#layers-drag",
       "note": "On a container row, a pointer below this fraction of the row height means after the node; between the two it means inside."
     },
     {
       "id": "layers.dropLeafSplit",
       "value": 0.5,
       "unit": "fraction",
-      "source": "spec/behavior/layers-drag.md",
+      "source": "spec/BEHAVIOUR.md#layers-drag",
       "note": "On a leaf row, the upper half means before and the lower half after."
     },
     {
       "id": "layers.expandDwell",
       "value": 600,
       "unit": "ms",
-      "source": "spec/behavior/layers-drag.md",
+      "source": "spec/BEHAVIOUR.md#layers-drag",
       "note": "Hovering a collapsed container row during a drag expands it after this long; leaving earlier cancels the timer."
     },
     {
       "id": "wrap.sideBandMax",
       "value": 40,
       "unit": "screen-px",
-      "source": "spec/behavior/drag-layout.md",
+      "source": "spec/BEHAVIOUR.md#drag-layout",
       "note": "Side strip of the side drop: min(40, 0.12 × width) from the left or right edge of the element under the pointer (top or bottom in a row flex), screen pixels; everywhere else the drop positions the element."
     },
     {
       "id": "wrap.sideBandFraction",
       "value": 0.12,
       "unit": "fraction",
-      "source": "spec/behavior/drag-layout.md",
+      "source": "spec/BEHAVIOUR.md#drag-layout",
       "note": "Fraction of the element in each side strip: min(40, 0.12 × width)."
     },
     {
       "id": "wrap.sideTargetMin",
       "value": 72,
       "unit": "screen-px",
-      "source": "spec/behavior/wrap-row-column.md",
+      "source": "spec/BEHAVIOUR.md#wrap-row-column",
       "note": "A side-drop target must be at least this wide (or tall in a row flex), unless it is self-sized."
     },
     {
       "id": "wrap.sideFill",
       "value": 0.5,
       "unit": "fraction",
-      "source": "spec/behavior/drag-layout.md",
+      "source": "spec/BEHAVIOUR.md#drag-layout",
       "note": "A side-drop target must fill at least this fraction of its parent content box on the cross axis."
     },
     {
       "id": "wrap.sideEdgeExclusion",
       "value": 8,
       "unit": "screen-px",
-      "source": "spec/behavior/wrap-row-column.md",
+      "source": "spec/BEHAVIOUR.md#wrap-row-column",
       "note": "No side-drop band within this distance of the target top and bottom (left and right in a row flex)."
     },
     {
       "id": "wrap.sideTargetMinCross",
       "value": 16,
       "unit": "screen-px",
-      "source": "spec/behavior/drag-layout.md",
+      "source": "spec/BEHAVIOUR.md#drag-layout",
       "note": "No side drop on an element shorter than this across its side bands (a line of text or a button at a small zoom): there a drop is the ordinary one (the user's real-use audit, A3.37)."
     },
     {
       "id": "wrap.sideBandMin",
       "value": 12,
       "unit": "screen-px",
-      "source": "spec/behavior/drag-layout.md",
+      "source": "spec/BEHAVIOUR.md#drag-layout",
       "note": "The least width of a side band, in screen pixels (the user's real-use audit, A3.37)."
     },
     {
       "id": "wrap.sideDwell",
       "value": 0,
       "unit": "ms",
-      "source": "spec/behavior/drag-layout.md",
+      "source": "spec/BEHAVIOUR.md#drag-layout",
       "note": "Dwell in a side zone before the side drop is confirmed: none, the zone confirms it at once and the indicator shows it."
     },
     {
       "id": "wrap.pillFreeze",
       "value": 22,
       "unit": "screen-px",
-      "source": "spec/behavior/wrap-row-column.md",
+      "source": "spec/BEHAVIOUR.md#wrap-row-column",
       "note": "While the pointer is within this distance of the pill the proposal is frozen."
     },
     {
@@ -508,182 +508,182 @@
         26
       ],
       "unit": "screen-px",
-      "source": "spec/behavior/wrap-row-column.md",
+      "source": "spec/BEHAVIOUR.md#wrap-row-column",
       "note": "Offset (x, y) of the side-drop pill from the pointer."
     },
     {
       "id": "history.depth",
       "value": 80,
       "unit": "count",
-      "source": "spec/behavior/undo-redo.md",
+      "source": "spec/BEHAVIOUR.md#undo-redo",
       "note": "At most this many undo entries are kept; the oldest is dropped."
     },
     {
       "id": "history.nudgeBurstWindow",
       "value": 1000,
       "unit": "ms",
-      "source": "spec/behavior/absolute-nudge.md",
+      "source": "spec/BEHAVIOUR.md#absolute-nudge",
       "note": "Arrow nudges on the same selection with no other command in between, each within this time of the previous one, are one undo step. The spec requires the named constant without a value; 1000 ms is chosen here."
     },
     {
       "id": "nudge.step",
       "value": 1,
       "unit": "css-px",
-      "source": "spec/behavior/absolute-nudge.md",
+      "source": "spec/BEHAVIOUR.md#absolute-nudge",
       "note": "Arrow nudge of a positioned selection, independent of the zoom."
     },
     {
       "id": "nudge.shiftStep",
       "value": 10,
       "unit": "css-px",
-      "source": "spec/behavior/absolute-nudge.md",
+      "source": "spec/BEHAVIOUR.md#absolute-nudge",
       "note": "Shift+arrow nudge of a positioned selection."
     },
     {
       "id": "textEdit.twoClickWindow",
       "value": 450,
       "unit": "ms",
-      "source": "spec/behavior/text-edit-inline.md",
+      "source": "spec/BEHAVIOUR.md#text-edit-inline",
       "note": "Two single clicks on the same selected text element within this window start editing, like a double-click."
     },
     {
       "id": "textEdit.insertBurstGuard",
       "value": 250,
       "unit": "ms",
-      "source": "spec/behavior/text-edit-inline.md",
+      "source": "spec/BEHAVIOUR.md#text-edit-inline",
       "note": "A multi-character insert repeated within this window is ignored (IME and autofill guard)."
     },
     {
       "id": "numberField.step",
       "value": 1,
       "unit": "count",
-      "source": "spec/behavior/inspector-number-fields.md",
+      "source": "spec/BEHAVIOUR.md#inspector-number-fields",
       "note": "Default step of ArrowUp/ArrowDown and the step buttons in a number field."
     },
     {
       "id": "numberField.shiftFactor",
       "value": 10,
       "unit": "factor",
-      "source": "spec/behavior/inspector-number-fields.md",
+      "source": "spec/BEHAVIOUR.md#inspector-number-fields",
       "note": "Shift multiplies a number field step or scrub by this."
     },
     {
       "id": "numberField.altFactor",
       "value": 0.1,
       "unit": "factor",
-      "source": "spec/behavior/inspector-number-fields.md",
+      "source": "spec/BEHAVIOUR.md#inspector-number-fields",
       "note": "Alt multiplies a number field step or scrub by this."
     },
     {
       "id": "numberField.pageStep",
       "value": 10,
       "unit": "count",
-      "source": "spec/behavior/inspector-number-fields.md",
+      "source": "spec/BEHAVIOUR.md#inspector-number-fields",
       "note": "PageUp/PageDown step in a number field."
     },
     {
       "id": "numberField.scrubPixelsPerStep",
       "value": 2,
       "unit": "screen-px",
-      "source": "spec/behavior/inspector-number-fields.md",
+      "source": "spec/BEHAVIOUR.md#inspector-number-fields",
       "note": "Dragging a field label scrubs one step per this many pixels: round(dx / 2) × step."
     },
     {
       "id": "numberField.scrubDeadZone",
       "value": 0,
       "unit": "screen-px",
-      "source": "spec/behavior/inspector-number-fields.md",
+      "source": "spec/BEHAVIOUR.md#inspector-number-fields",
       "note": "A scrub starts on the press, with no dead zone."
     },
     {
       "id": "numberField.fineStep",
       "value": 0.1,
       "unit": "count",
-      "source": "spec/behavior/inspector-number-fields.md",
+      "source": "spec/BEHAVIOUR.md#inspector-number-fields",
       "note": "A step or a scrub step of a font-relative unit (em, rem, ex, ch, lh): one of them is a large jump (the audit's A3.32)."
     },
     {
       "id": "numberField.stepBurstWindow",
       "value": 1000,
       "unit": "ms",
-      "source": "spec/behavior/inspector-number-fields.md",
+      "source": "spec/BEHAVIOUR.md#inspector-number-fields",
       "note": "Arrow presses on the same field and property, each within this time of the previous one, are one undo step (the audit's A3.32; the same window as history.nudgeBurstWindow)."
     },
     {
       "id": "colorPicker.sliderStep",
       "value": 1,
       "unit": "percent",
-      "source": "spec/behavior/color-picker.md",
+      "source": "spec/BEHAVIOUR.md#color-picker",
       "note": "Arrow key step on the colour area and sliders."
     },
     {
       "id": "colorPicker.sliderShiftStep",
       "value": 10,
       "unit": "percent",
-      "source": "spec/behavior/color-picker.md",
+      "source": "spec/BEHAVIOUR.md#color-picker",
       "note": "Shift+arrow step on the colour area and sliders."
     },
     {
       "id": "colorPicker.savedMax",
       "value": 48,
       "unit": "count",
-      "source": "spec/behavior/color-picker.md",
+      "source": "spec/BEHAVIOUR.md#color-picker",
       "note": "Most saved colours kept."
     },
     {
       "id": "colorPicker.recentMax",
       "value": 10,
       "unit": "count",
-      "source": "spec/behavior/color-picker.md",
+      "source": "spec/BEHAVIOUR.md#color-picker",
       "note": "Recent colours listed: the last 10 applied colours (the capability requires 10; Pager kept 12)."
     },
     {
       "id": "gradient.stopRemovalDistance",
       "value": 46,
       "unit": "screen-px",
-      "source": "spec/behavior/gradient-editor.md",
+      "source": "spec/BEHAVIOUR.md#gradient-editor",
       "note": "A stop released farther than this from the bar centre line is removed; beyond it the stop is drawn detached with a \"Release to remove\" hint."
     },
     {
       "id": "gradient.minStops",
       "value": 2,
       "unit": "count",
-      "source": "spec/behavior/gradient-editor.md",
+      "source": "spec/BEHAVIOUR.md#gradient-editor",
       "note": "A gradient keeps at least two stops."
     },
     {
       "id": "gradient.stopStep",
       "value": 1,
       "unit": "percent",
-      "source": "spec/behavior/gradient-editor.md",
+      "source": "spec/BEHAVIOUR.md#gradient-editor",
       "note": "ArrowLeft/ArrowRight on a focused stop."
     },
     {
       "id": "gradient.stopShiftStep",
       "value": 10,
       "unit": "percent",
-      "source": "spec/behavior/gradient-editor.md",
+      "source": "spec/BEHAVIOUR.md#gradient-editor",
       "note": "Shift+ArrowLeft/ArrowRight on a focused stop."
     },
     {
       "id": "gradient.addStopAt",
       "value": 50,
       "unit": "percent",
-      "source": "spec/behavior/gradient-editor.md",
+      "source": "spec/BEHAVIOUR.md#gradient-editor",
       "note": "Position of a stop added with the Add a stop button."
     },
     {
       "id": "shadow.padStep",
       "value": 1,
       "unit": "css-px",
-      "source": "spec/behavior/shadow-editor.md",
+      "source": "spec/BEHAVIOUR.md#shadow-editor",
       "note": "Arrow key step of the focused light pad handle."
     },
     {
       "id": "shadow.padShiftStep",
       "value": 10,
       "unit": "css-px",
-      "source": "spec/behavior/shadow-editor.md",
+      "source": "spec/BEHAVIOUR.md#shadow-editor",
       "note": "Shift+arrow step of the focused light pad handle."
     },
     {
@@ -693,161 +693,161 @@
         34
       ],
       "unit": "screen-px",
-      "source": "spec/behavior/shadow-editor.md",
+      "source": "spec/BEHAVIOUR.md#shadow-editor",
       "note": "The light pad handle is drawn at most this far from the centre (x, y); the values keep growing past it."
     },
     {
       "id": "quickPanel.stageInset",
       "value": 20,
       "unit": "screen-px",
-      "source": "spec/behavior/quick-panel.md",
+      "source": "spec/BEHAVIOUR.md#quick-panel",
       "note": "The quick panel is placed inside the stage minus this inset."
     },
     {
       "id": "quickPanel.gap",
       "value": 12,
       "unit": "screen-px",
-      "source": "spec/behavior/quick-panel.md",
+      "source": "spec/BEHAVIOUR.md#quick-panel",
       "note": "Gap between the quick panel and the element, plus the chip allowance when above."
     },
     {
       "id": "quickPanel.chipAllowance",
       "value": 20,
       "unit": "screen-px",
-      "source": "spec/behavior/quick-panel.md",
+      "source": "spec/BEHAVIOUR.md#quick-panel",
       "note": "Room kept for the element chip when the quick panel sits above the element."
     },
     {
       "id": "quickPanel.minStage",
       "value": 40,
       "unit": "screen-px",
-      "source": "spec/behavior/quick-panel.md",
+      "source": "spec/BEHAVIOUR.md#quick-panel",
       "note": "The quick panel appears only when the stage is at least 40 × 40 screen px."
     },
     {
       "id": "quickPanel.widthMargin",
       "value": 40,
       "unit": "screen-px",
-      "source": "spec/behavior/quick-panel.md",
+      "source": "spec/BEHAVIOUR.md#quick-panel",
       "note": "The quick panel is at most the stage width minus this."
     },
     {
       "id": "resize.minBox",
       "value": 8,
       "unit": "css-px",
-      "source": "spec/behavior/resize-handles.md",
+      "source": "spec/BEHAVIOUR.md#resize-handles",
       "note": "Smallest box a resize can produce on each axis."
     },
     {
       "id": "resize.compactBelow",
       "value": 48,
       "unit": "screen-px",
-      "source": "spec/behavior/resize-handles.md",
+      "source": "spec/BEHAVIOUR.md#resize-handles",
       "note": "Below this size on either axis the selection uses compact handles."
     },
     {
       "id": "spacing.minBand",
       "value": 6,
       "unit": "screen-px",
-      "source": "spec/behavior/spacing-handles.md",
+      "source": "spec/BEHAVIOUR.md#spacing-handles",
       "note": "A padding or margin band is never thinner than this, however small the value."
     },
     {
       "id": "spacing.keyStep",
       "value": 1,
       "unit": "css-px",
-      "source": "spec/behavior/spacing-handles.md",
+      "source": "spec/BEHAVIOUR.md#spacing-handles",
       "note": "ArrowUp/ArrowDown step in the typed field of a band."
     },
     {
       "id": "spacing.keyShiftStep",
       "value": 10,
       "unit": "css-px",
-      "source": "spec/behavior/spacing-handles.md",
+      "source": "spec/BEHAVIOUR.md#spacing-handles",
       "note": "Shift+ArrowUp/ArrowDown step in the typed field of a band."
     },
     {
       "id": "handle.directSize",
       "value": 16,
       "unit": "screen-px",
-      "source": "spec/behavior/radius-border-gap-handles.md",
+      "source": "spec/BEHAVIOUR.md#radius-border-gap-handles",
       "note": "Size of a radius, border, gap or shadow handle; kept at any zoom."
     },
     {
       "id": "duplicate.offset",
       "value": 10,
       "unit": "css-px",
-      "source": "spec/behavior/duplicate.md",
+      "source": "spec/BEHAVIOUR.md#duplicate",
       "note": "How far a copy of a positioned element stands off its original on each axis (the user's real-use audit, item A3.13: a duplicate no longer lands exactly over the original)."
     },
     {
       "id": "divider.grip",
       "value": 10,
       "unit": "screen-px",
-      "source": "spec/behavior/layout-actions.md",
+      "source": "spec/BEHAVIOUR.md#layout-actions",
       "note": "Width of the divider grip drawn between each two columns of a flex row (the user's real-use audit, item 8.1); kept at any zoom."
     },
     {
       "id": "divider.minWidth",
       "value": 24,
       "unit": "css-px",
-      "source": "spec/behavior/layout-actions.md",
+      "source": "spec/BEHAVIOUR.md#layout-actions",
       "note": "Least a column of a row may measure, and the least room the divider grip leaves each of the two children it stands between (item 8.1)."
     },
     {
       "id": "handle.keyStep",
       "value": 1,
       "unit": "css-px",
-      "source": "spec/behavior/radius-border-gap-handles.md",
+      "source": "spec/BEHAVIOUR.md#radius-border-gap-handles",
       "note": "Arrow key step on a focused canvas handle, committed at once."
     },
     {
       "id": "handle.keyShiftStep",
       "value": 10,
       "unit": "css-px",
-      "source": "spec/behavior/radius-border-gap-handles.md",
+      "source": "spec/BEHAVIOUR.md#radius-border-gap-handles",
       "note": "Shift+arrow step on a focused canvas handle."
     },
     {
       "id": "gap.minBand",
       "value": 6,
       "unit": "screen-px",
-      "source": "spec/behavior/radius-border-gap-handles.md",
+      "source": "spec/BEHAVIOUR.md#radius-border-gap-handles",
       "note": "A gap band between children is never thinner than this."
     },
     {
       "id": "rotate.snapStep",
       "value": 15,
       "unit": "deg",
-      "source": "spec/behavior/rotation-handle.md",
+      "source": "spec/BEHAVIOUR.md#rotation-handle",
       "note": "Shift snaps the rotation angle to multiples of this."
     },
     {
       "id": "anchors.tabSize",
       "value": 14,
       "unit": "screen-px",
-      "source": "spec/behavior/absolute-anchors.md",
+      "source": "spec/BEHAVIOUR.md#absolute-anchors",
       "note": "Anchor tabs just outside the middle of each edge of a positioned selection."
     },
     {
       "id": "zoom.step",
       "value": 10,
       "unit": "zoom-percent",
-      "source": "spec/behavior/zoom-keyboard-buttons.md",
+      "source": "spec/BEHAVIOUR.md#zoom-keyboard-buttons",
       "note": "Ctrl+= and Ctrl+- change the zoom by this many points."
     },
     {
       "id": "zoom.min",
       "value": 10,
       "unit": "zoom-percent",
-      "source": "spec/behavior/zoom-keyboard-buttons.md",
+      "source": "spec/BEHAVIOUR.md#zoom-keyboard-buttons",
       "note": "Lowest zoom, for every zoom door."
     },
     {
       "id": "zoom.max",
       "value": 800,
       "unit": "zoom-percent",
-      "source": "spec/behavior/zoom-keyboard-buttons.md",
+      "source": "spec/BEHAVIOUR.md#zoom-keyboard-buttons",
       "note": "Highest zoom, for every zoom door."
     },
     {
@@ -860,49 +860,49 @@
         400
       ],
       "unit": "zoom-percent",
-      "source": "spec/behavior/zoom-keyboard-buttons.md",
+      "source": "spec/BEHAVIOUR.md#zoom-keyboard-buttons",
       "note": "Zoom levels offered by the zoom percentage menu, before Fit."
     },
     {
       "id": "zoom.fitMargin",
       "value": 8,
       "unit": "screen-px",
-      "source": "spec/behavior/zoom-keyboard-buttons.md",
+      "source": "spec/BEHAVIOUR.md#zoom-keyboard-buttons",
       "note": "Fit leaves this margin on each side of the page: zoom = (canvas width − 2 × 8) ÷ page width (the audit's A3.18: 8 px in Fit)."
     },
     {
       "id": "zoom.wheelFactor",
       "value": 0.002,
       "unit": "factor",
-      "source": "spec/behavior/zoom-wheel-pan.md",
+      "source": "spec/BEHAVIOUR.md#zoom-wheel-pan",
       "note": "Ctrl+wheel multiplies the zoom by exp(−deltaY × 0.002) per event, around the pointer."
     },
     {
       "id": "wheel.lineHeight",
       "value": 16,
       "unit": "screen-px",
-      "source": "spec/behavior/zoom-wheel-pan.md",
+      "source": "spec/BEHAVIOUR.md#zoom-wheel-pan",
       "note": "A line-mode wheel delta counts this many pixels per line."
     },
     {
       "id": "rulers.band",
       "value": 20,
       "unit": "screen-px",
-      "source": "spec/behavior/rulers.md",
+      "source": "spec/BEHAVIOUR.md#rulers",
       "note": "Rulers fill bands this wide along the top and left of the canvas."
     },
     {
       "id": "rulers.minTick",
       "value": 6,
       "unit": "screen-px",
-      "source": "spec/behavior/rulers.md",
+      "source": "spec/BEHAVIOUR.md#rulers",
       "note": "The tick step is the smallest round step whose screen size is at least this."
     },
     {
       "id": "rulers.minLabelSpacing",
       "value": 40,
       "unit": "screen-px",
-      "source": "spec/behavior/rulers.md",
+      "source": "spec/BEHAVIOUR.md#rulers",
       "note": "Neighbouring ruler labels are at least this far apart at any zoom."
     },
     {
@@ -920,70 +920,70 @@
         1000
       ],
       "unit": "css-px",
-      "source": "spec/behavior/rulers.md",
+      "source": "spec/BEHAVIOUR.md#rulers",
       "note": "Round values that ruler ticks and labels sit on."
     },
     {
       "id": "guides.keyStep",
       "value": 1,
       "unit": "css-px",
-      "source": "spec/behavior/guides-manual.md",
+      "source": "spec/BEHAVIOUR.md#guides-manual",
       "note": "Arrow key move of a focused guide."
     },
     {
       "id": "guides.keyShiftStep",
       "value": 10,
       "unit": "css-px",
-      "source": "spec/behavior/guides-manual.md",
+      "source": "spec/BEHAVIOUR.md#guides-manual",
       "note": "Shift+arrow move of a focused guide."
     },
     {
       "id": "grid.columns",
       "value": 12,
       "unit": "count",
-      "source": "spec/behavior/layout-grid-overlay.md",
+      "source": "spec/BEHAVIOUR.md#layout-grid-overlay",
       "note": "Default number of columns of the column grid."
     },
     {
       "id": "grid.width",
       "value": 1280,
       "unit": "css-px",
-      "source": "spec/behavior/layout-grid-overlay.md",
+      "source": "spec/BEHAVIOUR.md#layout-grid-overlay",
       "note": "Default width of the column grid."
     },
     {
       "id": "grid.gutter",
       "value": 24,
       "unit": "css-px",
-      "source": "spec/behavior/layout-grid-overlay.md",
+      "source": "spec/BEHAVIOUR.md#layout-grid-overlay",
       "note": "Default gutter of the column grid."
     },
     {
       "id": "grid.margin",
       "value": 80,
       "unit": "css-px",
-      "source": "spec/behavior/layout-grid-overlay.md",
+      "source": "spec/BEHAVIOUR.md#layout-grid-overlay",
       "note": "Default margin of the column grid: inset = max(margin, (page width − grid width) ÷ 2)."
     },
     {
       "id": "grid.rowHeight",
       "value": 80,
       "unit": "css-px",
-      "source": "spec/behavior/layout-grid-overlay.md",
+      "source": "spec/BEHAVIOUR.md#layout-grid-overlay",
       "note": "Default row height of the row grid."
     },
     {
       "id": "grid.rowGutter",
       "value": 24,
       "unit": "css-px",
-      "source": "spec/behavior/layout-grid-overlay.md",
+      "source": "spec/BEHAVIOUR.md#layout-grid-overlay",
       "note": "Default gutter of the row grid."
     },
     {
       "id": "grid.dotSpacing",
       "value": 24,
       "unit": "css-px",
-      "source": "spec/behavior/layout-grid-overlay.md",
+      "source": "spec/BEHAVIOUR.md#layout-grid-overlay",
       "note": "Default spacing of the dot grid."
     },
     {
@@ -993,7 +993,7 @@
         96
       ],
       "unit": "count",
-      "source": "spec/behavior/workspace-settings-dialog.md",
+      "source": "spec/BEHAVIOUR.md#workspace-settings-dialog",
       "note": "Lowest and highest number of columns Guides & Grids accepts; outside them it is refused."
     },
     {
@@ -1003,7 +1003,7 @@
         20000
       ],
       "unit": "css-px",
-      "source": "spec/behavior/workspace-settings-dialog.md",
+      "source": "spec/BEHAVIOUR.md#workspace-settings-dialog",
       "note": "Lowest and highest column grid width Guides & Grids accepts; outside them it is refused."
     },
     {
@@ -1013,7 +1013,7 @@
         400
       ],
       "unit": "css-px",
-      "source": "spec/behavior/workspace-settings-dialog.md",
+      "source": "spec/BEHAVIOUR.md#workspace-settings-dialog",
       "note": "Lowest and highest column gutter Guides & Grids accepts; outside them it is refused."
     },
     {
@@ -1023,7 +1023,7 @@
         2000
       ],
       "unit": "css-px",
-      "source": "spec/behavior/workspace-settings-dialog.md",
+      "source": "spec/BEHAVIOUR.md#workspace-settings-dialog",
       "note": "Lowest and highest column grid margin Guides & Grids accepts; outside them it is refused."
     },
     {
@@ -1033,7 +1033,7 @@
         4000
       ],
       "unit": "css-px",
-      "source": "spec/behavior/workspace-settings-dialog.md",
+      "source": "spec/BEHAVIOUR.md#workspace-settings-dialog",
       "note": "Lowest and highest row height Guides & Grids accepts; outside them it is refused."
     },
     {
@@ -1043,7 +1043,7 @@
         400
       ],
       "unit": "css-px",
-      "source": "spec/behavior/workspace-settings-dialog.md",
+      "source": "spec/BEHAVIOUR.md#workspace-settings-dialog",
       "note": "Lowest and highest row gutter Guides & Grids accepts; outside them it is refused."
     },
     {
@@ -1053,84 +1053,84 @@
         400
       ],
       "unit": "css-px",
-      "source": "spec/behavior/workspace-settings-dialog.md",
+      "source": "spec/BEHAVIOUR.md#workspace-settings-dialog",
       "note": "Lowest and highest dot spacing Guides & Grids accepts; outside them it is refused."
     },
     {
       "id": "snap.distance",
       "value": 6,
       "unit": "css-px",
-      "source": "spec/behavior/snap-toggle-settings.md",
+      "source": "spec/BEHAVIOUR.md#snap-toggle-settings",
       "note": "Default snap distance; compared with screen positions multiplied by the zoom. One setting for snapping and smart guides."
     },
     {
       "id": "snap.distanceMin",
       "value": 0,
       "unit": "css-px",
-      "source": "spec/behavior/snap-toggle-settings.md",
+      "source": "spec/BEHAVIOUR.md#snap-toggle-settings",
       "note": "Lowest snap distance accepted in Snap settings."
     },
     {
       "id": "snap.distanceMax",
       "value": 64,
       "unit": "css-px",
-      "source": "spec/behavior/snap-toggle-settings.md",
+      "source": "spec/BEHAVIOUR.md#snap-toggle-settings",
       "note": "Highest snap distance accepted in Snap settings."
     },
     {
       "id": "snap.equalSpacingRadius",
       "value": 1.5,
       "unit": "factor",
-      "source": "spec/behavior/smart-guides.md",
+      "source": "spec/BEHAVIOUR.md#smart-guides",
       "note": "Equal spacing pulls the box within 1.5 × the snap distance, only on an axis where no edge snapped."
     },
     {
       "id": "snap.equalSpacingOverlap",
       "value": 0.25,
       "unit": "fraction",
-      "source": "spec/behavior/smart-guides.md",
+      "source": "spec/BEHAVIOUR.md#smart-guides",
       "note": "Two siblings form an equal-spacing candidate when they overlap by at least this on the other axis."
     },
     {
       "id": "menu.windowMargin",
       "value": 8,
       "unit": "screen-px",
-      "source": "spec/behavior/context-menu.md",
+      "source": "spec/BEHAVIOUR.md#context-menu",
       "note": "A menu opened at the pointer is shifted to stay this far inside the window."
     },
     {
       "id": "preview.zoom",
       "value": 100,
       "unit": "zoom-percent",
-      "source": "spec/behavior/preview-mode.md",
+      "source": "spec/BEHAVIOUR.md#preview-mode",
       "note": "Preview always shows the page at 100 %; the editing zoom comes back on exit."
     },
     {
       "id": "splitter.keyStep",
       "value": 20,
       "unit": "screen-px",
-      "source": "spec/behavior/panel-resize.md",
+      "source": "spec/BEHAVIOUR.md#panel-resize",
       "note": "Arrow key step of a focused splitter, for every splitter."
     },
     {
       "id": "splitter.minTarget",
       "value": 6,
       "unit": "screen-px",
-      "source": "spec/behavior/panel-resize.md",
+      "source": "spec/BEHAVIOUR.md#panel-resize",
       "note": "Every splitter has a pointer target at least this wide, with the visible line centred on it."
     },
     {
       "id": "dock.minWidth",
       "value": 200,
       "unit": "screen-px",
-      "source": "spec/behavior/panel-resize.md",
+      "source": "spec/BEHAVIOUR.md#panel-resize",
       "note": "Smallest width of a side dock."
     },
     {
       "id": "panels.minStackedHeight",
       "value": 72,
       "unit": "screen-px",
-      "source": "spec/behavior/panel-resize.md",
+      "source": "spec/BEHAVIOUR.md#panel-resize",
       "note": "Smallest height of a stacked panel."
     },
     {
@@ -1140,35 +1140,35 @@
         180
       ],
       "unit": "screen-px",
-      "source": "spec/behavior/panel-resize.md",
+      "source": "spec/BEHAVIOUR.md#panel-resize",
       "note": "Smallest width and height of a floating panel."
     },
     {
       "id": "inspector.minWidth",
       "value": 320,
       "unit": "screen-px",
-      "source": "spec/behavior/panel-resize.md",
+      "source": "spec/BEHAVIOUR.md#panel-resize",
       "note": "Smallest inspector width; the default respects it."
     },
     {
       "id": "inspector.maxWidth",
       "value": 520,
       "unit": "screen-px",
-      "source": "spec/behavior/panel-resize.md",
+      "source": "spec/BEHAVIOUR.md#panel-resize",
       "note": "Largest inspector width, or less when the room left is smaller."
     },
     {
       "id": "workbench.maxFraction",
       "value": 0.6,
       "unit": "fraction",
-      "source": "spec/behavior/panel-resize.md",
+      "source": "spec/BEHAVIOUR.md#panel-resize",
       "note": "The workbench is at most this fraction of the window height."
     },
     {
       "id": "workbench.collapsedHeight",
       "value": 40,
       "unit": "screen-px",
-      "source": "spec/behavior/workbench-panel.md",
+      "source": "spec/BEHAVIOUR.md#workbench-panel",
       "note": "Height of the collapsed workbench (its tab strip)."
     },
     {
@@ -1178,7 +1178,7 @@
         280
       ],
       "unit": "screen-px",
-      "source": "spec/behavior/floating-panels.md",
+      "source": "spec/BEHAVIOUR.md#floating-panels",
       "note": "Width range of a floating panel window."
     },
     {
@@ -1188,42 +1188,42 @@
         520
       ],
       "unit": "screen-px",
-      "source": "spec/behavior/floating-panels.md",
+      "source": "spec/BEHAVIOUR.md#floating-panels",
       "note": "Height range of a floating panel window."
     },
     {
       "id": "floating.minTop",
       "value": 44,
       "unit": "screen-px",
-      "source": "spec/behavior/floating-panels.md",
+      "source": "spec/BEHAVIOUR.md#floating-panels",
       "note": "A floating panel never goes above this."
     },
     {
       "id": "panels.dockEdgeZone",
       "value": 80,
       "unit": "screen-px",
-      "source": "spec/behavior/floating-panels.md",
+      "source": "spec/BEHAVIOUR.md#floating-panels",
       "note": "Near the left or right window edge a dragged panel offers Dock left / Dock right. One rule for every panel (Pager used 12 px for Elements and Layers and 80 px for the others)."
     },
     {
       "id": "panels.combineTabsFraction",
       "value": 0.45,
       "unit": "fraction",
-      "source": "spec/behavior/panel-combine-tabs.md",
+      "source": "spec/BEHAVIOUR.md#panel-combine-tabs",
       "note": "Over the upper part of a panel (this fraction of its height) a dragged panel combines as tabs; over the rest it stacks. One rule for every panel."
     },
     {
       "id": "commandBar.maxResults",
       "value": 12,
       "unit": "count",
-      "source": "spec/behavior/command-bar.md",
+      "source": "spec/BEHAVIOUR.md#command-bar",
       "note": "Most results listed by the command bar."
     },
     {
       "id": "commandBar.recentCount",
       "value": 5,
       "unit": "count",
-      "source": "spec/behavior/command-bar.md",
+      "source": "spec/BEHAVIOUR.md#command-bar",
       "note": "Recently run commands listed first when the query is empty."
     },
     {
@@ -1233,91 +1233,91 @@
         100
       ],
       "unit": "percent",
-      "source": "spec/behavior/timeline-keyframes.md",
+      "source": "spec/BEHAVIOUR.md#timeline-keyframes",
       "note": "A dragged keyframe offset follows the pointer as a percentage of the track width, clamped to this range."
     },
     {
       "id": "timeline.trackWidth",
       "value": 400,
       "unit": "css-px",
-      "source": "spec/behavior/timeline-keyframes.md",
+      "source": "spec/BEHAVIOUR.md#timeline-keyframes",
       "note": "Width of the timeline's track and ruler: a keyframe's offset and the playhead's time are this many pixels wide of percentage, whatever the panel's own width (the panel scrolls when it is narrower)."
     },
     {
       "id": "timeline.snapPercent",
       "value": 2,
       "unit": "percent",
-      "source": "spec/behavior/timeline-preview.md",
+      "source": "spec/BEHAVIOUR.md#timeline-preview",
       "note": "The playhead moved from the ruler lands on the keyframe it is nearest within this many percent of it."
     },
     {
       "id": "timeline.playheadStep",
       "value": 1,
       "unit": "percent",
-      "source": "spec/behavior/timeline-preview.md",
+      "source": "spec/BEHAVIOUR.md#timeline-preview",
       "note": "Else a playhead moved from the ruler rounds to this step of whole percent."
     },
     {
       "id": "timeline.playheadTick",
       "value": 100,
       "unit": "ms",
-      "source": "spec/behavior/timeline-preview.md",
+      "source": "spec/BEHAVIOUR.md#timeline-preview",
       "note": "While an animation plays, the playhead marker follows it this often."
     },
     {
       "id": "autosave.retryDelay",
       "value": 2000,
       "unit": "ms",
-      "source": "spec/behavior/unsaved-work-guard.md",
+      "source": "spec/BEHAVIOUR.md#unsaved-work-guard",
       "note": "After a write the browser refused, how long autosave waits before it writes again on its own."
     },
     {
       "id": "autosave.versions",
       "value": 10,
       "unit": "count",
-      "source": "spec/behavior/autosave-crash-recovery.md",
+      "source": "spec/BEHAVIOUR.md#autosave-crash-recovery",
       "note": "How many saved versions IndexedDB keeps, the oldest dropped first."
     },
     {
       "id": "grid.columns.tablet",
       "value": 8,
       "unit": "count",
-      "source": "spec/behavior/layout-grid-overlay.md",
+      "source": "spec/BEHAVIOUR.md#layout-grid-overlay",
       "note": "The column grid of the Tablet breakpoint (the user real-use audit, A1.6: one setting for every breakpoint left the Phone and the Tablet with no grid to see)."
     },
     {
       "id": "grid.columns.phone",
       "value": 4,
       "unit": "count",
-      "source": "spec/behavior/layout-grid-overlay.md",
+      "source": "spec/BEHAVIOUR.md#layout-grid-overlay",
       "note": "The column grid of the Phone breakpoint (A1.6)."
     },
     {
       "id": "layout.gridTracks.tablet",
       "value": 2,
       "unit": "count",
-      "source": "spec/behavior/templates-layout.md",
+      "source": "spec/BEHAVIOUR.md#templates-layout",
       "note": "The tracks a grid that lays one equal track per child writes at the Tablet breakpoint while it holds more than this many (the user's real-use audit, A1.4)."
     },
     {
       "id": "layout.gridTracks.phone",
       "value": 1,
       "unit": "count",
-      "source": "spec/behavior/templates-layout.md",
+      "source": "spec/BEHAVIOUR.md#templates-layout",
       "note": "The tracks a grid that lays one equal track per child writes at the Phone breakpoint (A1.4): one column."
     },
     {
       "id": "grid.margin.phone",
       "value": 16,
       "unit": "css-px",
-      "source": "spec/behavior/layout-grid-overlay.md",
+      "source": "spec/BEHAVIOUR.md#layout-grid-overlay",
       "note": "The column grid margin of the Phone breakpoint (A1.6: a phone has no 80 px margin)."
     }
   ],
   "gestures": [
     {
       "id": "canvas-click",
-      "source": "spec/behavior/multi-select-click.md",
+      "source": "spec/BEHAVIOUR.md#multi-select-click",
       "modifiers": [
         {
           "key": "Shift",
@@ -1331,7 +1331,7 @@
     },
     {
       "id": "layers-row-click",
-      "source": "spec/behavior/multi-select-click.md",
+      "source": "spec/BEHAVIOUR.md#multi-select-click",
       "modifiers": [
         {
           "key": "Shift",
@@ -1345,7 +1345,7 @@
     },
     {
       "id": "marquee",
-      "source": "spec/behavior/marquee-select.md",
+      "source": "spec/BEHAVIOUR.md#marquee-select",
       "modifiers": [
         {
           "key": "Shift",
@@ -1363,7 +1363,7 @@
     },
     {
       "id": "element-drag",
-      "source": "spec/behavior/drag-reorder-canvas.md",
+      "source": "spec/BEHAVIOUR.md#drag-reorder-canvas",
       "modifiers": [
         {
           "key": "Shift",
@@ -1373,7 +1373,7 @@
     },
     {
       "id": "element-duplicate-drag",
-      "source": "spec/behavior/drag-duplicate.md",
+      "source": "spec/BEHAVIOUR.md#drag-duplicate",
       "modifiers": [
         {
           "key": "Alt",
@@ -1383,7 +1383,7 @@
     },
     {
       "id": "palette-drag",
-      "source": "spec/behavior/palette-drag-insert.md",
+      "source": "spec/BEHAVIOUR.md#palette-drag-insert",
       "modifiers": [
         {
           "key": "Shift",
@@ -1393,17 +1393,17 @@
     },
     {
       "id": "layers-drag",
-      "source": "spec/behavior/layers-drag.md",
+      "source": "spec/BEHAVIOUR.md#layers-drag",
       "modifiers": []
     },
     {
       "id": "file-drag",
-      "source": "spec/behavior/explorer-assets-use.md",
+      "source": "spec/BEHAVIOUR.md#explorer-assets-use",
       "modifiers": []
     },
     {
       "id": "free-drag",
-      "source": "spec/behavior/absolute-free-drag.md",
+      "source": "spec/BEHAVIOUR.md#absolute-free-drag",
       "modifiers": [
         {
           "key": "Ctrl",
@@ -1413,7 +1413,7 @@
     },
     {
       "id": "resize",
-      "source": "spec/behavior/resize-handles.md",
+      "source": "spec/BEHAVIOUR.md#resize-handles",
       "modifiers": [
         {
           "key": "Shift",
@@ -1431,7 +1431,7 @@
     },
     {
       "id": "spacing-band",
-      "source": "spec/behavior/spacing-handles.md",
+      "source": "spec/BEHAVIOUR.md#spacing-handles",
       "modifiers": [
         {
           "key": "Shift",
@@ -1449,7 +1449,7 @@
     },
     {
       "id": "property-handle",
-      "source": "spec/behavior/radius-border-gap-handles.md",
+      "source": "spec/BEHAVIOUR.md#radius-border-gap-handles",
       "modifiers": [
         {
           "key": "Ctrl",
@@ -1459,7 +1459,7 @@
     },
     {
       "id": "shadow-handle",
-      "source": "spec/behavior/shadow-handles.md",
+      "source": "spec/BEHAVIOUR.md#shadow-handles",
       "modifiers": [
         {
           "key": "Ctrl",
@@ -1469,7 +1469,7 @@
     },
     {
       "id": "rotate",
-      "source": "spec/behavior/rotation-handle.md",
+      "source": "spec/BEHAVIOUR.md#rotation-handle",
       "modifiers": [
         {
           "key": "Shift",
@@ -1479,12 +1479,12 @@
     },
     {
       "id": "anchor-tab",
-      "source": "spec/behavior/absolute-anchors.md",
+      "source": "spec/BEHAVIOUR.md#absolute-anchors",
       "modifiers": []
     },
     {
       "id": "guide-drag",
-      "source": "spec/behavior/guides-manual.md",
+      "source": "spec/BEHAVIOUR.md#guides-manual",
       "modifiers": [
         {
           "key": "Ctrl",
@@ -1494,7 +1494,7 @@
     },
     {
       "id": "handle-keys",
-      "source": "spec/behavior/radius-border-gap-handles.md",
+      "source": "spec/BEHAVIOUR.md#radius-border-gap-handles",
       "modifiers": [
         {
           "key": "Shift",
@@ -1504,7 +1504,7 @@
     },
     {
       "id": "guide-keys",
-      "source": "spec/behavior/guides-manual.md",
+      "source": "spec/BEHAVIOUR.md#guides-manual",
       "modifiers": [
         {
           "key": "Shift",
@@ -1514,7 +1514,7 @@
     },
     {
       "id": "nudge-keys",
-      "source": "spec/behavior/absolute-nudge.md",
+      "source": "spec/BEHAVIOUR.md#absolute-nudge",
       "modifiers": [
         {
           "key": "Shift",
@@ -1524,7 +1524,7 @@
     },
     {
       "id": "number-field-keys",
-      "source": "spec/behavior/inspector-number-fields.md",
+      "source": "spec/BEHAVIOUR.md#inspector-number-fields",
       "modifiers": [
         {
           "key": "Shift",
@@ -1538,7 +1538,7 @@
     },
     {
       "id": "number-scrub",
-      "source": "spec/behavior/inspector-number-fields.md",
+      "source": "spec/BEHAVIOUR.md#inspector-number-fields",
       "modifiers": [
         {
           "key": "Shift",
@@ -1552,7 +1552,7 @@
     },
     {
       "id": "gradient-stop-keys",
-      "source": "spec/behavior/gradient-editor.md",
+      "source": "spec/BEHAVIOUR.md#gradient-editor",
       "modifiers": [
         {
           "key": "Shift",
@@ -1562,17 +1562,17 @@
     },
     {
       "id": "gradient-stop-drag",
-      "source": "spec/behavior/gradient-editor.md",
+      "source": "spec/BEHAVIOUR.md#gradient-editor",
       "modifiers": []
     },
     {
       "id": "shadow-layer-drag",
-      "source": "spec/behavior/shadow-editor.md",
+      "source": "spec/BEHAVIOUR.md#shadow-editor",
       "modifiers": []
     },
     {
       "id": "shadow-pad-keys",
-      "source": "spec/behavior/shadow-editor.md",
+      "source": "spec/BEHAVIOUR.md#shadow-editor",
       "modifiers": [
         {
           "key": "Shift",
@@ -1582,12 +1582,12 @@
     },
     {
       "id": "shadow-pad-drag",
-      "source": "spec/behavior/shadow-editor.md",
+      "source": "spec/BEHAVIOUR.md#shadow-editor",
       "modifiers": []
     },
     {
       "id": "color-slider-keys",
-      "source": "spec/behavior/color-picker.md",
+      "source": "spec/BEHAVIOUR.md#color-picker",
       "modifiers": [
         {
           "key": "Shift",
@@ -1597,7 +1597,7 @@
     },
     {
       "id": "hover-measure",
-      "source": "spec/behavior/hover-measure.md",
+      "source": "spec/BEHAVIOUR.md#hover-measure",
       "modifiers": [
         {
           "key": "Alt",
@@ -1607,7 +1607,7 @@
     },
     {
       "id": "wheel",
-      "source": "spec/behavior/zoom-wheel-pan.md",
+      "source": "spec/BEHAVIOUR.md#zoom-wheel-pan",
       "modifiers": [
         {
           "key": "Ctrl",
@@ -1621,7 +1621,7 @@
     },
     {
       "id": "space-pan",
-      "source": "spec/behavior/zoom-wheel-pan.md",
+      "source": "spec/BEHAVIOUR.md#zoom-wheel-pan",
       "modifiers": [
         {
           "key": "Space",
@@ -1631,37 +1631,37 @@
     },
     {
       "id": "splitter-drag",
-      "source": "spec/behavior/panel-resize.md",
+      "source": "spec/BEHAVIOUR.md#panel-resize",
       "modifiers": []
     },
     {
       "id": "panel-drag",
-      "source": "spec/behavior/floating-panels.md",
+      "source": "spec/BEHAVIOUR.md#floating-panels",
       "modifiers": []
     },
     {
       "id": "keyframe-drag",
-      "source": "spec/behavior/timeline-keyframes.md",
+      "source": "spec/BEHAVIOUR.md#timeline-keyframes",
       "modifiers": []
     },
     {
       "id": "playhead-drag",
-      "source": "spec/behavior/timeline-preview.md",
+      "source": "spec/BEHAVIOUR.md#timeline-preview",
       "modifiers": []
     },
     {
       "id": "quick-panel-grip",
-      "source": "spec/behavior/quick-panel.md",
+      "source": "spec/BEHAVIOUR.md#quick-panel",
       "modifiers": []
     },
     {
       "id": "explorer-drag",
-      "source": "spec/behavior/explorer-file-system.md",
+      "source": "spec/BEHAVIOUR.md#explorer-file-system",
       "modifiers": []
     },
     {
       "id": "pick-target",
-      "source": "spec/behavior/events-actions.md",
+      "source": "spec/BEHAVIOUR.md#events-actions",
       "modifiers": []
     }
   ],

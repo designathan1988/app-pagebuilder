@@ -9,7 +9,7 @@
       "dependsOn": [
         "shortcuts-panel"
       ],
-      "spec": "spec/behavior/shortcuts-e2e-sweep.md",
+      "spec": "spec/BEHAVIOUR.md#shortcuts-e2e-sweep",
       "intent": {
         "title": "Every listed shortcut works in its context",
         "steps": [

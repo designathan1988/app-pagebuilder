@@ -1,4 +1,4 @@
-// multi-select-edit beyond its scenarios (spec/behavior/multi-select-edit.md): with several elements selected, a field
+// multi-select-edit beyond its scenarios (spec/BEHAVIOUR.md#multi-select-edit): with several elements selected, a field
 // whose values differ between them shows no value and "Mixed", the colour fields as every other (Problems in Pager 1);
 // a field whose values are the same shows the value; once a value is written to all of them, the field shows it. The
 // scenarios cannot say what a field shows: this test reads the inspector's inputs in Chrome.

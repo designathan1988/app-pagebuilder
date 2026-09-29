@@ -1,4 +1,4 @@
-// layers-tree beyond its scenarios (spec/behavior/layers-tree.md): the rows follow the document (one per node, in
+// layers-tree beyond its scenarios (spec/BEHAVIOUR.md#layers-tree): the rows follow the document (one per node, in
 // document order, indented by depth), the header counts every node whatever is folded (Problems in Pager 3), and a
 // selection made on the canvas scrolls its row into view (Problems in Pager 1). The selection is read through the
 // read-only test port; what Layers shows is read from its rows and measured against the view that scrolls them.

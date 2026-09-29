@@ -1,4 +1,4 @@
-// inspector-panel beyond its scenarios (spec/behavior/inspector-panel.md): the hints with nothing selected and Page
+// inspector-panel beyond its scenarios (spec/BEHAVIOUR.md#inspector-panel): the hints with nothing selected and Page
 // properties as the feature table says, the selector bar's icon, name and tag, the eight sections in their order, the
 // summaries of collapsed sections read from the page, the section header's keys, the collapsed sections kept for
 // another element and after a reload, the Settings and Style tabs, the text field (its Enter and Escape doors, the text

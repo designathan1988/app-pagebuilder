@@ -1,4 +1,4 @@
-// select-click beyond its scenarios (spec/behavior/select-click.md): what the canvas draws for the selection and the
+// select-click beyond its scenarios (spec/BEHAVIOUR.md#select-click): what the canvas draws for the selection and the
 // hover (src/editor/canvas/chrome.tsx), and the drawn doors of selection.select and selection.clear a user can reach
 // once they are built (a Layers row, Edit › Clear selection). The selection is read through the read-only test port;
 // the outlines are measured against the element's box inside the frame, mapped to the screen through the frame's CSS

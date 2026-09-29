@@ -1,4 +1,4 @@
-// layers-drag beyond its scenarios (spec/behavior/layers-drag.md): a drag held over a folded row unfolds it after the
+// layers-drag beyond its scenarios (spec/BEHAVIOUR.md#layers-drag): a drag held over a folded row unfolds it after the
 // dwell (interactions.json layers.expandDwell), so the dragged element can be dropped among its children. The
 // scenario of this behaviour folds the row with the caret, whose command (layers.setExpanded) is the one the dwell
 // runs, so switching that command off also removes its precondition; here the row is folded with ArrowLeft in Layers

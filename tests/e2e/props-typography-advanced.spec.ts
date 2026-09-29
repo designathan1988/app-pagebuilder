@@ -1,4 +1,4 @@
-// props-typography-advanced beyond its scenarios (spec/behavior/props-typography-advanced.md, Problems in Pager 1): the
+// props-typography-advanced beyond its scenarios (spec/BEHAVIOUR.md#props-typography-advanced, Problems in Pager 1): the
 // line clamp is drawn through its whole recipe, so the text is cut at the lines asked: its prefixed declarations reach
 // the page (the scenarios cannot name them) and the paragraph is as tall as two of its lines. The document is read
 // through the read-only test port, the layout inside the frame.

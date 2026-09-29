@@ -1,4 +1,4 @@
-// Group 11 beyond its scenarios (spec/behavior/breakpoints-switch.md, breakpoint-overrides.md, state-styles.md):
+// Group 11 beyond its scenarios (spec/BEHAVIOUR.md#breakpoints-switch, breakpoint-overrides.md, state-styles.md):
 //  - the breakpoint shown is kept after a reload, the page drawn at its width;
 //  - at Tablet a field whose value is set there says so, and one it inherits names Desktop;
 //  - while Hover is edited the canvas badge reads "Editing Hover"; in the exported page, hovering the element changes

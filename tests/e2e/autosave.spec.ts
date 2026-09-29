@@ -1,4 +1,4 @@
-// autosave-restore beyond its scenarios (spec/behavior/autosave-restore.md, Problems in Pager 1): a change survives
+// autosave-restore beyond its scenarios (spec/BEHAVIOUR.md#autosave-restore, Problems in Pager 1): a change survives
 // a reload made at once, even while IndexedDB is slow to take the write. The test keeps IndexedDB's store busy (a
 // read-write transaction it holds open), deletes an element through its door and reloads at once: the app's own
 // IndexedDB write is still waiting when the page unloads, so only a write finished before the unload (the journal)

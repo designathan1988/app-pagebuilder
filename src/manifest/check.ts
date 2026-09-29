@@ -97,7 +97,6 @@ export const RULES = [
   'placement',
   'state-placement',
   'label-term',
-  'owner',
   'icon-name',
   'icon-required',
   'panel',
@@ -132,8 +131,8 @@ export interface ManifestInput {
   fileExists: (repoPath: string) => boolean;
   // ids that code under src/ registers, by kind (registerHandler, registerPredicate, ...)
   registered: Readonly<Record<ReferenceKind, readonly string[]>>;
-  // the text of ARCHITECTURE.md, whose table "Command owners" names the owner module of every command; null when missing
-  architecture: string | null;
+  // the text of the documents the manifest's spec references point into (spec/BEHAVIOUR.md), by path
+  documents: Readonly<Record<string, string>>;
 }
 
 export interface ManifestSummary {
@@ -368,21 +367,6 @@ function parseFiles(input: ManifestInput): { parsed: Parsed | null; problems: Pr
 
 // The rows of the table under "## Command owners": a module path in backticks, then the command ids it owns in
 // backticks. null when the section is missing.
-export function architectureOwners(text: string): { module: string; commands: string[]; line: number }[] | null {
-  const lines = text.split(/\r?\n/);
-  const start = lines.findIndex((l) => /^##\s+Command owners\s*$/.test(l));
-  if (start < 0) return null;
-  const rows: { module: string; commands: string[]; line: number }[] = [];
-  for (let i = start + 1; i < lines.length && !/^##\s/.test(lines[i] ?? ''); i++) {
-    const cells = (lines[i] ?? '').split('|').map((c) => c.trim());
-    if (cells.length < 4) continue;
-    const module = /^`([^`]+)`$/.exec(cells[1] ?? '')?.[1];
-    if (module === undefined) continue;
-    rows.push({ module, commands: [...(cells[2] ?? '').matchAll(/`([^`]+)`/g)].map((m) => m[1] ?? ''), line: i + 1 });
-  }
-  return rows;
-}
-
 // ---------------------------------------------------------------- HTML content model
 
 type HtmlMeta = GeneratedHtml['elements'][string];
@@ -883,16 +867,25 @@ export function checkManifest(input: ManifestInput): CheckResult {
     }
   }
 
-  // ---- spec-missing
-  for (const f of features) {
-    if (f.feature.spec !== null && !input.fileExists(f.feature.spec)) report('spec-missing', f.file, `${f.path}.spec`, `spec file ${f.feature.spec} does not exist`);
-  }
-  for (const [i, c] of p.interactions.constants.entries()) {
-    if (!input.fileExists(c.source)) report('spec-missing', 'interactions.json', `constants[${i}].source`, `spec file ${c.source} does not exist`);
-  }
-  for (const [i, g] of p.interactions.gestures.entries()) {
-    if (!input.fileExists(g.source)) report('spec-missing', 'interactions.json', `gestures[${i}].source`, `spec file ${g.source} does not exist`);
-  }
+  // ---- spec-missing: a reference names a file that exists and a section of it that exists
+  const sectionsOf = (file: string): readonly string[] =>
+    String(input.documents[file] ?? '')
+      .split('\n')
+      .filter((line) => /^## /.test(line))
+      .map((line) => line.slice(3).trim());
+  const checkSpecRef = (ref: string, file: string, path: string) => {
+    const [target = '', anchor = ''] = ref.split('#');
+    if (!input.fileExists(target)) {
+      report('spec-missing', file, path, `spec file ${target} does not exist`);
+      return;
+    }
+    // a file that is not read as a manifest file (a document) cannot be searched for its sections here
+    const sections = sectionsOf(target);
+    if (sections.length > 0 && !sections.includes(anchor)) report('spec-missing', file, path, `${target} has no section #${anchor}`);
+  };
+  for (const f of features) if (f.feature.spec !== null) checkSpecRef(f.feature.spec, f.file, `${f.path}.spec`);
+  for (const [i, c] of p.interactions.constants.entries()) checkSpecRef(c.source, 'interactions.json', `constants[${i}].source`);
+  for (const [i, g] of p.interactions.gestures.entries()) checkSpecRef(g.source, 'interactions.json', `gestures[${i}].source`);
 
   // ---- i18n-missing
   const keyUses = new Map<string, string>();
@@ -1882,26 +1875,8 @@ export function checkManifest(input: ManifestInput): CheckResult {
     }
   }
 
-  // ---- owner: the owner of every command is the module ARCHITECTURE.md names for it, and the other way round
-  const ownerRows = input.architecture === null ? null : architectureOwners(input.architecture);
-  if (ownerRows === null) {
-    report('owner', 'ARCHITECTURE.md', '', input.architecture === null ? 'ARCHITECTURE.md is missing: it names the owner module of every command' : 'ARCHITECTURE.md has no table under "## Command owners"');
-  } else {
-    const declared = new Map<string, { module: string; line: number }>();
-    for (const row of ownerRows) {
-      for (const id of row.commands) {
-        const first = declared.get(id);
-        if (first !== undefined) report('owner', 'ARCHITECTURE.md', `line ${row.line}`, `${id} is owned by ${row.module} and, on line ${first.line}, by ${first.module}: one owner per command`);
-        else declared.set(id, { module: row.module, line: row.line });
-        if (!commandById.has(id)) report('owner', 'ARCHITECTURE.md', `line ${row.line}`, `${row.module} owns ${id}, which is not a command of the manifest`);
-      }
-    }
-    for (const c of commands) {
-      const row = declared.get(c.command.id);
-      if (!row) report('owner', c.file, `${c.path}.owner`, `${c.command.id} is owned by ${c.command.owner}, but ARCHITECTURE.md names no owner for it`);
-      else if (row.module !== c.command.owner) report('owner', c.file, `${c.path}.owner`, `${c.command.id} is owned by ${c.command.owner} in the manifest but by ${row.module} in ARCHITECTURE.md (line ${row.line})`);
-    }
-  }
+  // ---- owner: the module a command names is the module that registers it (tools/inventory/check.ts, which reads the
+  // source: a table written by hand could not be trusted to stay true, and the inventory derives the answer instead)
 
   // ---- icon-name: every icon the manifest names is an icon of the editor's one library (Lucide,
   // manifest/generated/icons.json): door icons, menu buttons, the layout's glyphs, element icons, keyword icons
@@ -2101,7 +2076,6 @@ export function checkManifest(input: ManifestInput): CheckResult {
           return null;
       }
     };
-    const architectureModules = new Set([...(input.architecture ?? '').matchAll(/`((?:src|tools)\/[^`\s]+\.tsx?)`/g)].map((m) => m[1] ?? ''));
 
     for (const f of features) {
       const scenarios = f.feature.scenarios;
@@ -2207,8 +2181,8 @@ export function checkManifest(input: ManifestInput): CheckResult {
       const tooth = f.feature.toothProof;
       if (tooth !== undefined) {
         if (f.feature.commands.length > 0) report('tooth-proof', f.file, `${f.path}.toothProof`, `${f.feature.id} has commands: its tooth proof disables their handlers, so it names no module`);
-        // without ARCHITECTURE.md rule owner reports the missing file; the module cannot be confirmed either way
-        else if (input.architecture !== null && !architectureModules.has(tooth)) report('tooth-proof', f.file, `${f.path}.toothProof`, `${tooth} is not a module of ARCHITECTURE.md`);
+        // the module must exist: a tooth proof that names a file nobody has proves nothing
+        else if (!input.fileExists(tooth)) report('tooth-proof', f.file, `${f.path}.toothProof`, `${tooth} is not a module of this project`);
       } else if (scenarios.length > 0 && f.feature.commands.length === 0) {
         report('tooth-proof', f.file, `${f.path}`, `${f.feature.id} has scenarios and no commands: name the module its tooth proof replaces with a no-op (toothProof)`);
       }

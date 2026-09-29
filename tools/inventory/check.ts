@@ -5,7 +5,7 @@
 //   - a module registering commands of a feature that is not built (code for a feature the app does not offer yet).
 import fs from 'node:fs';
 import path from 'node:path';
-import { REPO_ROOT } from '../manifest/load.ts';
+import { loadManifest, REPO_ROOT } from '../manifest/load.ts';
 import { generate, inventoryJson, inventoryMarkdown, INVENTORY_JSON, INVENTORY_MD } from './generate.ts';
 
 const expected = generate();
@@ -34,6 +34,20 @@ for (const feature of expected.features) {
       problems.push(`module "${module.path}" registers commands of "${feature.id}", which is not built`);
     }
   }
+}
+// The owner a command names is the module that registers it: the manifest says where a command belongs and the source
+// says where it is. (This replaces the rule that compared the manifest with a table written by hand in a document: the
+// answer is in the code, so it is read there.)
+const moduleOf = new Map<string, string>();
+for (const module of expected.modules) for (const id of module.commands) if (!moduleOf.has(id)) moduleOf.set(id, module.path);
+const loaded = loadManifest();
+const declaredOwners = Object.entries(loaded.input.files)
+  .filter(([file]) => file.startsWith('commands/'))
+  .flatMap(([, data]) => (Array.isArray((data as { commands?: unknown }).commands) ? ((data as { commands: { id: string; owner: string }[] }).commands) : []));
+for (const command of declaredOwners) {
+  const actual = moduleOf.get(command.id);
+  if (actual === undefined) continue; // not registered yet: the reference check owns that
+  if (command.owner !== actual) problems.push(`${command.id} says it belongs to ${command.owner}, but ${actual} registers it`);
 }
 
 if (problems.length === 0) {

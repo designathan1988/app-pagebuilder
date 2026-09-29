@@ -1,4 +1,4 @@
-// spacing-handles beyond its scenarios (spec/behavior/spacing-handles.md): in Padding mode the four sides are drawn as
+// spacing-handles beyond its scenarios (spec/BEHAVIOUR.md#spacing-handles): in Padding mode the four sides are drawn as
 // tinted bands labelled with their values (Problems in Pager 1), as thick on the screen as the padding times the zoom;
 // Margin mode draws the margin's bands in another colour; Escape on the canvas leaves the mode (the selection stays)
 // and the bands go. The scenarios cannot say what the canvas draws: this test reads the bands in Chrome.

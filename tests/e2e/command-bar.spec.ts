@@ -1,4 +1,4 @@
-// command-bar beyond its scenarios (spec/behavior/command-bar.md): the bar offers only the commands that apply to the
+// command-bar beyond its scenarios (spec/BEHAVIOUR.md#command-bar): the bar offers only the commands that apply to the
 // selection (Problems in Pager 2), the recently run entry first on an empty query, a query's words in any order
 // (Problems in Pager 3), a press on the backdrop closes it, and while a text is edited Ctrl+K keeps its link meaning
 // and opens no bar. The document and the selection are read through the read-only test port.

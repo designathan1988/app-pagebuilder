@@ -1,4 +1,4 @@
-// absolute-anchors beyond its scenarios (spec/behavior/absolute-anchors.md, Problems in Pager 3): the anchor tabs are
+// absolute-anchors beyond its scenarios (spec/BEHAVIOUR.md#absolute-anchors, Problems in Pager 3): the anchor tabs are
 // never covered by other canvas chrome. A narrow positioned element's top tab, just above the middle of its top edge,
 // would meet the selection's label, which sits above the element from its left edge: the tab moves past it. The
 // scenarios cannot say where chrome is drawn: this test reads the boxes in Chrome.

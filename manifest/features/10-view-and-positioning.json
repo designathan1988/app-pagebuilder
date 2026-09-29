@@ -13,7 +13,7 @@
         "view.zoomFit"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/zoom-keyboard-buttons.md",
+      "spec": "spec/BEHAVIOUR.md#zoom-keyboard-buttons",
       "intent": {
         "title": "Zoom with the keyboard, the status bar buttons and Fit",
         "steps": [
@@ -1080,7 +1080,7 @@
         "style.set"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/rotation-handle.md",
+      "spec": "spec/BEHAVIOUR.md#rotation-handle",
       "intent": {
         "title": "Rotate an element with a handle on the canvas",
         "steps": [
@@ -1343,7 +1343,7 @@
         "view.pan"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/zoom-wheel-pan.md",
+      "spec": "spec/BEHAVIOUR.md#zoom-wheel-pan",
       "intent": {
         "title": "Ctrl+wheel zoom, wheel scroll and Space-drag pan",
         "steps": [
@@ -1796,7 +1796,7 @@
       "titleKey": "feature.rulers",
       "commands": [],
       "dependsOn": [],
-      "spec": "spec/behavior/rulers.md",
+      "spec": "spec/BEHAVIOUR.md#rulers",
       "toothProof": "src/editor/canvas/rulers.ts",
       "intent": {
         "title": "Rulers along the canvas",
@@ -1989,7 +1989,7 @@
       "dependsOn": [
         "rulers"
       ],
-      "spec": "spec/behavior/guides-manual.md",
+      "spec": "spec/BEHAVIOUR.md#guides-manual",
       "intent": {
         "title": "Create, move and delete guides from the rulers",
         "steps": [
@@ -2856,7 +2856,7 @@
         "workspace.setPanelOpen"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/canvas-outlines-zones.md",
+      "spec": "spec/BEHAVIOUR.md#canvas-outlines-zones",
       "intent": {
         "title": "Show element outlines and drop zones on the canvas",
         "steps": [
@@ -3089,7 +3089,7 @@
         "page.setSetting"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/layout-grid-overlay.md",
+      "spec": "spec/BEHAVIOUR.md#layout-grid-overlay",
       "intent": {
         "title": "Column grid, row grid and dot grid overlays",
         "steps": [
@@ -3694,7 +3694,7 @@
         "guides-manual",
         "layout-grid-overlay"
       ],
-      "spec": "spec/behavior/workspace-settings-dialog.md",
+      "spec": "spec/BEHAVIOUR.md#workspace-settings-dialog",
       "intent": {
         "title": "Guides & Grids settings dialog",
         "steps": [
@@ -4678,7 +4678,7 @@
         "position.move"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/absolute-free-drag.md",
+      "spec": "spec/BEHAVIOUR.md#absolute-free-drag",
       "intent": {
         "title": "Free positioning of absolute children by dragging",
         "steps": [
@@ -5141,7 +5141,7 @@
       "dependsOn": [
         "absolute-free-drag"
       ],
-      "spec": "spec/behavior/absolute-nudge.md",
+      "spec": "spec/BEHAVIOUR.md#absolute-nudge",
       "intent": {
         "title": "Nudge positioned elements with the arrow keys",
         "steps": [
@@ -5785,7 +5785,7 @@
       "dependsOn": [
         "absolute-free-drag"
       ],
-      "spec": "spec/behavior/absolute-anchors.md",
+      "spec": "spec/BEHAVIOUR.md#absolute-anchors",
       "intent": {
         "title": "Anchor positioned elements to edges and centres",
         "steps": [
@@ -7647,7 +7647,7 @@
       "dependsOn": [
         "absolute-free-drag"
       ],
-      "spec": "spec/behavior/align-distribute.md",
+      "spec": "spec/BEHAVIOUR.md#align-distribute",
       "intent": {
         "title": "Align and distribute positioned elements",
         "steps": [
@@ -11418,7 +11418,7 @@
         "workspace.openDialog"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/snap-toggle-settings.md",
+      "spec": "spec/BEHAVIOUR.md#snap-toggle-settings",
       "intent": {
         "title": "Snap on/off and snap settings",
         "steps": [
@@ -12043,7 +12043,7 @@
         "guides-manual",
         "resize-handles"
       ],
-      "spec": "spec/behavior/snap-while-moving.md",
+      "spec": "spec/BEHAVIOUR.md#snap-while-moving",
       "intent": {
         "title": "Snapping while resizing and moving positioned elements",
         "steps": [
@@ -12894,7 +12894,7 @@
         "snap-while-moving",
         "workspace-settings-dialog"
       ],
-      "spec": "spec/behavior/smart-guides.md",
+      "spec": "spec/BEHAVIOUR.md#smart-guides",
       "intent": {
         "title": "Smart alignment and equal spacing guides",
         "steps": [
@@ -13871,7 +13871,7 @@
       "titleKey": "feature.hoverMeasure",
       "commands": [],
       "dependsOn": [],
-      "spec": "spec/behavior/hover-measure.md",
+      "spec": "spec/BEHAVIOUR.md#hover-measure",
       "intent": {
         "title": "Measure sizes and distances on the canvas",
         "steps": [

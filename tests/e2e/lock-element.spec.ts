@@ -1,4 +1,4 @@
-// lock-element beyond its scenarios (spec/behavior/lock-element.md): the Layers row's lock locks the element of its own
+// lock-element beyond its scenarios (spec/BEHAVIOUR.md#lock-element): the Layers row's lock locks the element of its own
 // row and leaves the selection as it is; the flag is in the document JSON; the row keeps its lock shown and pressed; a
 // second click unlocks; each is one undo step. A locked element can still be selected, but every built command that
 // would change it refuses it and the status bar says what to unlock (spec, Problems in Pager 1 and 3): Delete, the

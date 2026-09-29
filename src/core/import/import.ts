@@ -1,5 +1,5 @@
 // project.importHtml (ARCHITECTURE.md, Command owners; the manifest's html-import-* and clipboard-paste-external; the
-// spec spec/behavior/html-import.md): the one owner of reading HTML — from files the person picked, from a ZIP they
+// spec spec/BEHAVIOUR.md#html-import): the one owner of reading HTML — from files the person picked, from a ZIP they
 // hold, or from the code pane's markup — into nodes of the model, with the cleaning, the repair and the report the
 // manifest's features ask for. The rules are the ones the editor already holds: an element type is the one whose tags
 // elements.json names (its own tag is kept, so an h3 stays an h3), an attribute is the one elements.json declares for

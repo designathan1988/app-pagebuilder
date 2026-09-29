@@ -1,4 +1,4 @@
-// autosave-crash-recovery beyond its scenario (spec/behavior/autosave-crash-recovery.md), read in the browser's storage:
+// autosave-crash-recovery beyond its scenario (spec/BEHAVIOUR.md#autosave-crash-recovery), read in the browser's storage:
 //  - IndexedDB keeps the last 10 saved versions, each with its time, the newest the current record's;
 //  - a session whose last change never reached IndexedDB (its writes refused, as a browser that dies before they run:
 //    the storage made to refuse them, not the app's code) comes back from the journal at the next start, the status bar

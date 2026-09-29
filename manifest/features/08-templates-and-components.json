@@ -9,7 +9,7 @@
         "element.insert"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/templates-layout.md",
+      "spec": "spec/BEHAVIOUR.md#templates-layout",
       "intent": {
         "title": "Layout templates: Container, Row, Column, Grid",
         "steps": [
@@ -2694,7 +2694,7 @@
       "dependsOn": [
         "templates-sections"
       ],
-      "spec": "spec/behavior/reusable-components.md",
+      "spec": "spec/BEHAVIOUR.md#reusable-components",
       "intent": {
         "title": "Reusable components with instances",
         "steps": [

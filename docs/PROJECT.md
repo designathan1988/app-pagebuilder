@@ -1,0 +1,135 @@
+# Builder
+
+A desktop pagebuilder that runs in recent Chrome only, for professionals who build websites. The edited page renders
+inside an iframe scaled with CSS `zoom`; the document JSON is the source of truth, never the DOM.
+
+This is the one project document. What the application is made of — every feature, command, door, scenario and
+module, and which module owns which command — is not written here by hand: it is generated (`npm run inventory`) into
+[docs/INVENTORY.md](INVENTORY.md), and `npm run inventory:check` fails while the two are out of step.
+
+## The layers
+
+| Layer | Where | Rule |
+|---|---|---|
+| The contract | `manifest/` | The single declaration: elements, properties, commands with their doors (entry points), interactions, layout, features with their scenarios. `npm run manifest:check` validates it; nothing is re-listed in code. |
+| The document core | `src/core/` | Plain TypeScript, no React, no DOM (its ports are injected): the model, its validation, the structure, styles, the importer, the renderer, the export. |
+| The editor | `src/editor/` | React, and only drawing and input: panels, canvas, drag, the keymap, the pointer owner. |
+| The wiring | `src/app/` | The one command table and the one feature table; a missing or extra entry is a type error. |
+| The manifest at runtime | `src/manifest/` | Loading, checking and looking up the contract. |
+| Generated files | `src/generated/`, `src/ui/tokens.css`, `src/ui/icons.svg`, `manifest/generated/` | Written by `npm run gen` alone; `gen:check` fails on a hand edit. |
+| Tools | `tools/` | `gen`, `manifest`, `lint`, `runner`, `inventory`, `ui` — what the app is built, checked and driven with. Node only. |
+
+The owner of a concept is the module that registers its commands; the inventory names it. A second implementation of
+a concept that has an owner is a defect.
+
+## The document and its rules
+
+- A project is one JSON document: `pages` (each a tree of nodes), `classes`, `components`, `tokens`, `swatches`,
+  `files`, `animations`, `interactions`. A node holds `id`, `type` (from elements.json), `name`, `tag`, `attributes`,
+  `classes`, `styles` (by breakpoint and state), `text` or `children`, and the flags `hidden` and `locked`.
+- The tree is nested `children` only: a parent is computed by walking, never stored twice.
+- **One applier.** Every change goes through `dispatch(command)`; a handler is pure and returns JSON patches, which
+  `applyPatches` applies in `src/core/store/store.ts`. A gesture opens one transaction at the press and commits it at
+  the release, so a drag is one undo step. State is deep-frozen in development, so an out-of-dispatch mutation throws.
+- **The tree kernel** (`src/core/document/tree.ts`) owns the structure's own invariants: inserting, removing,
+  releasing the references to what leaves (in both shapes — a patch for a node that stays, a value rewrite for a node
+  a command writes back), and the single test for a move into its own subtree. Predictable invalid operations are
+  refused **before** any patch exists.
+- **A refused commit is a bug, not a refusal.** If a command's patches are valid but the whole document fails
+  `validateDocument`, nothing is published: the previous state stays, the incident feed records it, and development
+  and tests throw.
+- **The model's versions** (`src/core/document/migrations.ts`) are read at the only two boundaries (File › Open and
+  the restored autosave): an older file is carried forward step by step, a newer one is refused by name, and a hole in
+  the chain is a refusal with its reason.
+- **History** stores patches and their inverses with the selection before and after, never snapshots; commands
+  declared as coalescing merge inside a manifest window.
+- **Idle work never lies**: an awaited door (a file, the clipboard) re-checks what it computed before it dispatches,
+  and says so when it cannot (`status.stale`).
+- Ports keep the core testable and honest: the clock, ids, the layout (the only measurer), the CSS support question,
+  the clipboard, downloads.
+
+## The interface
+
+- **Everything is a door.** Every button, menu item, field, handle, tile and shortcut is generated from a door in
+  `manifest/commands/*.json`; there is no other keymap or button list. A door whose feature is not registered is
+  drawn disabled with "not available yet" (proven by `src/editor/doors/door.test.tsx`); the context menu draws only
+  what applies to the selection.
+- Regions are declared in `manifest/layout.json` (top bar, sidebar views, canvas, inspector, dock, status bar, the
+  overlays: palette, quick panel, colour picker, dialogs, rulers, chrome). The shell draws each region from its own
+  file under `src/editor/shell/`.
+- **The panel** (Style/Settings/Interactions) reads properties.json: sections, groups, pair rows, essential
+  properties, applicability (`applies.ts`), the field's origin (`origin.ts`), the controls (`field/`). A field shows
+  the document's value (empty with a muted placeholder when it has none), never a computed one, and nothing it shows
+  depends on the canvas zoom.
+- **The canvas** draws labels, handles and overlays over a page that never takes pointer events: the outline and
+  label of the selection, drop indicators, gap and spacing bands, rulers, grids and fold lines. Labels never cover
+  page text (the boxes come from `contentBoxes`); the label rule and the rest of the canvas contract are in the
+  chrome's own header comments.
+- **Colours, spacing, type, radii and shadows come only from the tokens** (`src/ui/tokens.css`, generated from
+  `design/final/tokens.json`); the lint rules refuse a literal value in a stylesheet or a style object. UI text comes
+  only from the i18n catalogues (en is the source, pt-BR ships), one term per concept.
+- The shell stylesheet is split by region (`shell.css` imports `window.css`, `doors.css`, … `window-overlays.css` in
+  that order; the imports come first).
+
+## The development loop
+
+```
+npm run check:fast        # the static gate: gen:check, manifest:check, inventory:check, typecheck, lint, unit (~1 min)
+npm run ui -- <flow>      # drive the real app in Chrome with real gestures, a photo per step, failing on any error
+npm run e2e -- <spec>     # the tests of what the block built, at the end of a block
+npm run e2e               # the complete suite, once, when the application is ready
+npm run e2e:diagnose      # the failed tests again, with their trace
+npm run e2e:tooth         # the tooth proof: a feature's handlers made no-ops must fail its tests
+npm run inventory         # regenerate docs/INVENTORY.md and docs/inventory.json
+```
+
+- A screen is not done until a photo shows it working: `npm run ui -- <flow>` (Playwright on the installed Chrome,
+  never the editor's own preview pane) drives it with real gestures and writes one screenshot per step to
+  `.cache/logs/ui-<flow>-<time>/`. It fails when the page logged a console error, when the incident feed holds
+  anything, or when an expectation the flow states is not met.
+- **Nothing stays hidden**: the incident feed (`src/core/incidents.ts`) records a validator breach, a window error, an
+  unhandled rejection and a render React could not do; the status bar shows the count, and the read-only test port
+  (`__builderTestPort`) carries the list, the document, the selection, the history and the explain surface.
+- Tests enter through doors with the real mouse and keyboard, and assert end artifacts: the document JSON diff,
+  computed style or geometry inside the frame, storage after an immediate reload, the files inside the exported ZIP.
+  Never a proxy such as "it appeared on screen", and never only that something exists.
+- Time budgets, measured: the static gate ~1 minute; one flow ≤ 30 seconds; the complete suite ≤ 10 minutes at four
+  workers. The census (`tests/e2e/census.spec.ts`) is static: 256 built commands, 998 doors, every door of a built
+  command run by a test — 6 seconds.
+
+### Adding a feature
+
+1. Write its scenario in `manifest/features/<group>.json` (setup, doors, expected document diff, selection, history,
+   an end terminal, the refusals) and, when the behaviour needs words, its spec section. A behaviour change starts
+   here, in the same commit as the code.
+2. Declare its commands and doors in `manifest/commands/<domain>.json` — the door's adapter data (values, selection,
+   properties) is data, never code.
+3. Implement the handler in `src/core/` (pure, returning patches; a refusal for anything predictable), register it in
+   `src/app/commands.ts`, and register the feature in `src/app/features.ts`.
+4. Add its basic test (`src/**/*.test.ts`) and, when a screen is touched, a flow in `tools/ui/flows.ts`.
+5. Prove the tooth: with the handler made a no-op the tests must fail; with it back they must pass.
+6. `npm run check:fast`, then `npm run ui` (photos), then the block's specs, then commit.
+
+## The state of the application (2026-09-29)
+
+- Every command of the manifest is built; the two features left unregistered (`hover-measure`, `shortcuts-e2e-sweep`)
+  bring no command and no door. The inventory counts 187 features (185 built), 256 commands, 998 doors, 1,333
+  scenarios, 236 modules.
+- Green at this commit: `gen:check`, `manifest:check`, `inventory:check`, both typechecks, lint, 683 unit tests, the
+  build, the seven `npm run ui` flows, and the browser tests of the features touched by the architecture pass.
+- The architecture pass (its plan: T1–T7, the inventory, the UI driver, the error feed) is done except:
+  - **T7 deferred with its reason**: the pointer's module-level singletons only matter when two editors share a page,
+    and no flow opens two; it waits for the first feature that does.
+  - **The complete `npm run e2e` has not run on this tree** — it is the gate for the next stretch, together with the
+    file splits by responsibility (`pointer.ts` 2,477 lines, `inspector.tsx` 1,458, `import.ts` 1,259, `field/`,
+    `chrome.tsx`, `sidebar.tsx`) and the folds of the specs into the manifest.
+- Open findings: the selection label can rest on the text above it (`npm run ui -- insert` photographs it); the
+  complete suite's runtime is unmeasured on this tree; `docs/audits/` and `docs/history.md` are being folded here.
+
+## Rules that are never broken
+
+- Never edit, skip or loosen a test or a scenario to make it pass; if one looks wrong, stop and say why.
+- Never report something as working without the raw output or the screen that proves it.
+- Never run two suites at once; the complete suite only when the whole application is ready.
+- Code, file names, commits and documents in English; UI text only through the i18n catalogues.
+- The product name appears only in `src/config/product.ts`.

@@ -1,4 +1,4 @@
-// autosave-corruption-recovery beyond its scenario (spec/behavior/autosave-corruption-recovery.md): after a start on a
+// autosave-corruption-recovery beyond its scenario (spec/BEHAVIOUR.md#autosave-corruption-recovery): after a start on a
 // saved record the reader refuses, the status bar reads Recovery required, and an edit writes nothing: the corrupted
 // record stays in storage as it was, closing the dialog included; File › New blank page (another project replacing the
 // document) lets autosave write again.

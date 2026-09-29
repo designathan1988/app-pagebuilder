@@ -751,7 +751,7 @@
       "dependsOn": [
         "explorer-pages"
       ],
-      "spec": "spec/behavior/explorer-file-system.md",
+      "spec": "spec/BEHAVIOUR.md#explorer-file-system",
       "intent": {
         "title": "File explorer with a virtual file system",
         "steps": [
@@ -1794,7 +1794,7 @@
       "dependsOn": [
         "explorer-pages"
       ],
-      "spec": "spec/behavior/media-embed-rules.md",
+      "spec": "spec/BEHAVIOUR.md#media-embed-rules",
       "intent": {
         "title": "Link to pages, anchors, email and phone",
         "steps": [
@@ -2570,7 +2570,7 @@
       "dependsOn": [
         "explorer-file-system"
       ],
-      "spec": "spec/behavior/explorer-assets.md",
+      "spec": "spec/BEHAVIOUR.md#explorer-assets",
       "intent": {
         "title": "Upload and manage image and font files",
         "steps": [
@@ -2776,7 +2776,7 @@
       "dependsOn": [
         "explorer-assets"
       ],
-      "spec": "spec/behavior/explorer-assets-use.md",
+      "spec": "spec/BEHAVIOUR.md#explorer-assets-use",
       "intent": {
         "title": "Use assets in Image elements and drop images onto the canvas",
         "steps": [
@@ -3678,7 +3678,7 @@
         "page-properties",
         "explorer-assets"
       ],
-      "spec": "spec/behavior/page-seo-meta.md",
+      "spec": "spec/BEHAVIOUR.md#page-seo-meta",
       "intent": {
         "title": "Page metadata for search and sharing",
         "steps": [

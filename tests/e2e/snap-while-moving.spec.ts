@@ -1,4 +1,4 @@
-// snap-while-moving beyond its scenarios (spec/behavior/snap-while-moving.md, Problems in Pager 4): while a free drag
+// snap-while-moving beyond its scenarios (spec/BEHAVIOUR.md#snap-while-moving, Problems in Pager 4): while a free drag
 // snaps, the line it snapped to is drawn at the target's place, from the moving element to the target, and the target
 // is outlined; the release takes both away. The scenarios read the document after the release: this test holds the
 // drag and reads the chrome and the page in Chrome.

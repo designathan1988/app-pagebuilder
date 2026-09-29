@@ -378,7 +378,7 @@
       "dependsOn": [
         "code-panel-view"
       ],
-      "spec": "spec/behavior/code-panel-selection-sync.md",
+      "spec": "spec/BEHAVIOUR.md#code-panel-selection-sync",
       "intent": {
         "title": "Code panel follows the selection",
         "steps": [

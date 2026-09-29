@@ -12,7 +12,7 @@
         "clipboard-copy-paste",
         "export-bem-css"
       ],
-      "spec": "spec/behavior/clipboard-cut-system.md",
+      "spec": "spec/BEHAVIOUR.md#clipboard-cut-system",
       "intent": {
         "title": "Cut, and copy elements as HTML for other applications",
         "steps": [
@@ -352,7 +352,7 @@
       "dependsOn": [
         "clipboard-copy-paste"
       ],
-      "spec": "spec/behavior/copy-paste-styles.md",
+      "spec": "spec/BEHAVIOUR.md#copy-paste-styles",
       "intent": {
         "title": "Copy and paste styles between elements",
         "steps": [

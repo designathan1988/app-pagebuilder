@@ -1,4 +1,4 @@
-// app-menu beyond its scenarios (spec/behavior/app-menu.md): a menu opened from its button takes the focus on its
+// app-menu beyond its scenarios (spec/BEHAVIOUR.md#app-menu): a menu opened from its button takes the focus on its
 // first item, the arrows move the focus, and Escape closes the menu and gives the focus back to its button (Enter on
 // the button is keyboard-panel-navigation's, finding 48); with nothing selected, Arrange's items that need a
 // selection are disabled and say why (Problems in Pager 4), and a click on one changes nothing.

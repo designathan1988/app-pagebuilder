@@ -1,4 +1,4 @@
-// duplicate beyond its scenarios (spec/behavior/duplicate.md): Ctrl+D and the Edit menu's Duplicate, the doors of
+// duplicate beyond its scenarios (spec/BEHAVIOUR.md#duplicate): Ctrl+D and the Edit menu's Duplicate, the doors of
 // element.duplicate a user can reach before the context menu exists. A copy of every selected root goes right after
 // its original with its whole subtree, texts and classes; every node of a copy gets a fresh id and a new unique name
 // (spec, Problems 1); the copies become the selection; one undo step takes them away and redo brings back the same

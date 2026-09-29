@@ -1,4 +1,4 @@
-// select-container-children beyond its scenarios (spec/behavior/select-container-children.md): Edit › Select all, a
+// select-container-children beyond its scenarios (spec/BEHAVIOUR.md#select-container-children): Edit › Select all, a
 // door of the command a user can reach once it is built, selects the element and its siblings as Ctrl+A does; a
 // hidden sibling is left out and the status bar counts it (spec, Problems in Pager 2). The selection is read through
 // the read-only test port.

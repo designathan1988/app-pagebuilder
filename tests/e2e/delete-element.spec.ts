@@ -1,4 +1,4 @@
-// delete-element beyond its scenarios (spec/behavior/delete-element.md): the Edit menu's Delete, a door of the command
+// delete-element beyond its scenarios (spec/BEHAVIOUR.md#delete-element): the Edit menu's Delete, a door of the command
 // a user can reach once it is built, and the toast that follows a delete (spec, Problems 2): at most one is shown, a
 // new delete replaces it, its Undo undoes the most recent delete only, and the next message takes it away. The
 // document, the selection and the history are read through the read-only test port; the page through the frame.

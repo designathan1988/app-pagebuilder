@@ -1,4 +1,4 @@
-// project-save-json beyond its scenarios (spec/behavior/project-save-json.md, Problems in Pager 2): the same document
+// project-save-json beyond its scenarios (spec/BEHAVIOUR.md#project-save-json, Problems in Pager 2): the same document
 // saved twice gives byte-identical archives apart from the saved timestamp, which only the entries' modification
 // time carries; project.json is exactly the document the test port reads. The archives are the browser's downloads,
 // read by the runner's own unzip (tools/runner/unzip.ts).

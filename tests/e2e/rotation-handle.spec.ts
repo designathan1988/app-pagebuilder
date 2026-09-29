@@ -1,4 +1,4 @@
-// rotation-handle beyond its scenarios (spec/behavior/rotation-handle.md, Problems in Pager 1): with Shift held, the
+// rotation-handle beyond its scenarios (spec/BEHAVIOUR.md#rotation-handle, Problems in Pager 1): with Shift held, the
 // angle snaps to rotate.snapStep (15°). style.set takes no modifier, so no scenario step can hold Shift: this test drags
 // the handle with the real mouse and Shift down, and reads the document.
 import fs from 'node:fs';

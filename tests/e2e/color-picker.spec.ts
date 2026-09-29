@@ -1,4 +1,4 @@
-// color-picker beyond its scenarios (spec/behavior/color-picker.md): the area and the hue slider are sliders the
+// color-picker beyond its scenarios (spec/BEHAVIOUR.md#color-picker): the area and the hue slider are sliders the
 // keyboard moves, one step with an arrow and ten with Shift (Problems in Pager 4); the picker's live colour is a gesture,
 // so a reload before Apply keeps the colour from before it (autosave keeps committed work only); Previous writes back
 // the colour the picker opened with, the page's when the element held none of its own. The document is read through

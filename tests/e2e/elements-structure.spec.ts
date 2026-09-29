@@ -1,4 +1,4 @@
-// elements-structure beyond its scenarios (spec/behavior/elements-structure.md). The Structure tiles insert their
+// elements-structure beyond its scenarios (spec/BEHAVIOUR.md#elements-structure). The Structure tiles insert their
 // elements, drawn as their tags, an empty one kept visible by the canvas alone (Problems in Pager 3 and 6). An
 // interactive element never goes into a Link Block nor into an element inside one, through every door that places it:
 // Enter and Space on a focused tile, a tile dragged over it, an element dragged into it (Problems in Pager 5). The

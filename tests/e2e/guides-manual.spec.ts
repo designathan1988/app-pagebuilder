@@ -1,4 +1,4 @@
-// guides-manual beyond its scenarios (spec/behavior/guides-manual.md): a press and release on a ruler with no movement
+// guides-manual beyond its scenarios (spec/BEHAVIOUR.md#guides-manual): a press and release on a ruler with no movement
 // makes no guide (Problems in Pager 2); while a guide is dragged over its own ruler, the ruler says a release deletes it
 // (Problems in Pager 1), and the release does. The scenarios cannot hold a drag halfway: this test does, with the real
 // mouse, and reads the document.

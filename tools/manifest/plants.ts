@@ -10,7 +10,7 @@ interface MutableInput {
   glossary: unknown;
   fileExists: ManifestInput['fileExists'];
   registered: ManifestInput['registered'];
-  architecture: string | null;
+  documents: ManifestInput['documents'];
 }
 
 export interface Plant {
@@ -598,9 +598,9 @@ export const PLANTS: Plant[] = [
   {
     id: 'spec-missing',
     rule: 'spec-missing',
-    description: 'delete-element points to spec/behavior/delete-elements.md, which does not exist',
+    description: 'delete-element points to spec/BEHAVIOUR.md#delete-elements, which does not exist',
     apply: (m) => {
-      feature(m, 'delete-element').spec = 'spec/behavior/delete-elements.md';
+      feature(m, 'delete-element').spec = 'spec/BEHAVIOUR.md#delete-elements';
     },
   },
   {
@@ -875,14 +875,6 @@ PLANTS.push(
     },
   },
   {
-    id: 'owner-differs-from-architecture',
-    rule: 'owner',
-    description: 'history.undo is owned by src/core/history/undo.ts in the manifest, but ARCHITECTURE.md names src/core/history/history.ts',
-    apply: (m) => {
-      command(m, 'history.undo').owner = 'src/core/history/undo.ts';
-    },
-  },
-  {
     id: 'icon-not-in-library',
     rule: 'icon-name',
     description: 'the top bar Undo button names the icon "undo-3", which Lucide does not have',
@@ -1031,7 +1023,7 @@ export function planted(input: ManifestInput, plant: Plant): ManifestInput {
     glossary: structuredClone(input.glossary),
     fileExists: input.fileExists,
     registered: input.registered,
-    architecture: input.architecture,
+    documents: { ...input.documents },
   };
   plant.apply(copy);
   return copy;

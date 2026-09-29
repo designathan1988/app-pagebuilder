@@ -1,4 +1,4 @@
-// multi-tab-guard beyond its scenario (spec/behavior/multi-tab-guard.md), with two tabs of the editor on one profile:
+// multi-tab-guard beyond its scenario (spec/BEHAVIOUR.md#multi-tab-guard), with two tabs of the editor on one profile:
 // the second tab reads the project, says so, refuses a document command (the status bar saying why) and writes
 // nothing; once it takes over, the first tab becomes read-only at once, says another tab took over, and refuses too.
 import { expect, test, type Page } from '../support/test.ts';

@@ -12,7 +12,7 @@
       "dependsOn": [
         "canvas-page-iframe"
       ],
-      "spec": "spec/behavior/palette-click-insert.md",
+      "spec": "spec/BEHAVIOUR.md#palette-click-insert",
       "intent": {
         "title": "Insert Section, Container, Heading and Paragraph by clicking the Elements panel",
         "steps": [
@@ -609,7 +609,7 @@
       "dependsOn": [
         "palette-click-insert"
       ],
-      "spec": "spec/behavior/select-click.md",
+      "spec": "spec/BEHAVIOUR.md#select-click",
       "intent": {
         "title": "Select an element by clicking it on the canvas",
         "steps": [
@@ -917,7 +917,7 @@
       "dependsOn": [
         "select-click"
       ],
-      "spec": "spec/behavior/layers-tree.md",
+      "spec": "spec/BEHAVIOUR.md#layers-tree",
       "intent": {
         "title": "Layers panel shows the document tree and selects in sync with the canvas",
         "steps": [
@@ -1275,7 +1275,7 @@
       "dependsOn": [
         "palette-click-insert"
       ],
-      "spec": "spec/behavior/undo-redo.md",
+      "spec": "spec/BEHAVIOUR.md#undo-redo",
       "intent": {
         "title": "Undo and redo every document change",
         "steps": [
@@ -1823,7 +1823,7 @@
         "element.delete"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/delete-element.md",
+      "spec": "spec/BEHAVIOUR.md#delete-element",
       "intent": {
         "title": "Delete the selected element with Delete or Backspace",
         "steps": [
@@ -2239,7 +2239,7 @@
         "element.moveTo"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/drag-reorder-canvas.md",
+      "spec": "spec/BEHAVIOUR.md#drag-reorder-canvas",
       "intent": {
         "title": "Drag an element before or after a sibling on the canvas",
         "steps": [
@@ -2817,7 +2817,7 @@
       "dependsOn": [
         "drag-reorder-canvas"
       ],
-      "spec": "spec/behavior/drag-drop-inside.md",
+      "spec": "spec/BEHAVIOUR.md#drag-drop-inside",
       "intent": {
         "title": "Drop an element inside a container and move it across parents",
         "steps": [
@@ -3146,7 +3146,7 @@
       "dependsOn": [
         "drag-reorder-canvas"
       ],
-      "spec": "spec/behavior/drag-level-keys-escape.md",
+      "spec": "spec/BEHAVIOUR.md#drag-level-keys-escape",
       "intent": {
         "title": "Change the drop level with arrow keys and cancel a drag with Escape",
         "steps": [
@@ -3982,7 +3982,7 @@
       "dependsOn": [
         "drag-reorder-canvas"
       ],
-      "spec": "spec/behavior/palette-drag-insert.md",
+      "spec": "spec/BEHAVIOUR.md#palette-drag-insert",
       "intent": {
         "title": "Drag an element type from the Elements panel to a position on the canvas",
         "steps": [
@@ -5670,7 +5670,7 @@
         "layers-tree",
         "drag-reorder-canvas"
       ],
-      "spec": "spec/behavior/layers-drag.md",
+      "spec": "spec/BEHAVIOUR.md#layers-drag",
       "intent": {
         "title": "Reorder and nest by dragging rows in the Layers panel",
         "steps": [
@@ -6005,7 +6005,7 @@
         "element.moveDown"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/move-up-down.md",
+      "spec": "spec/BEHAVIOUR.md#move-up-down",
       "intent": {
         "title": "Move the selection up or down among its siblings with Alt+ArrowUp and Alt+ArrowDown",
         "steps": [
@@ -6361,7 +6361,7 @@
         "element.wrapColumn"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/wrap-row-column.md",
+      "spec": "spec/BEHAVIOUR.md#wrap-row-column",
       "intent": {
         "title": "Wrap the selection in a Row or a Column with R and C",
         "steps": [
@@ -6794,7 +6794,7 @@
         "wrap-row-column",
         "palette-drag-insert"
       ],
-      "spec": "spec/behavior/drag-layout.md",
+      "spec": "spec/BEHAVIOUR.md#drag-layout",
       "intent": {
         "title": "Drop beside an element to put both side by side in a new Row or Column",
         "steps": [
@@ -7289,7 +7289,7 @@
         "element.delete"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/context-menu.md",
+      "spec": "spec/BEHAVIOUR.md#context-menu",
       "intent": {
         "title": "Right-click context menu on the canvas and in Layers",
         "steps": [
@@ -8094,7 +8094,7 @@
         "element.nestIntoPrevious"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/nest-into-previous.md",
+      "spec": "spec/BEHAVIOUR.md#nest-into-previous",
       "intent": {
         "title": "Nest the selection into its previous sibling",
         "steps": [
@@ -8823,7 +8823,7 @@
         "element.promote"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/promote-out.md",
+      "spec": "spec/BEHAVIOUR.md#promote-out",
       "intent": {
         "title": "Move the selection out of its parent with P",
         "steps": [
@@ -9326,7 +9326,7 @@
         "element.duplicate"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/duplicate.md",
+      "spec": "spec/BEHAVIOUR.md#duplicate",
       "intent": {
         "title": "Duplicate the selection with Ctrl+D",
         "steps": [
@@ -9859,7 +9859,7 @@
         "drag-reorder-canvas",
         "duplicate"
       ],
-      "spec": "spec/behavior/drag-duplicate.md",
+      "spec": "spec/BEHAVIOUR.md#drag-duplicate",
       "intent": {
         "title": "Alt at the release drops a copy and leaves the original",
         "steps": [
@@ -9991,7 +9991,7 @@
         "clipboard.paste"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/clipboard-copy-paste.md",
+      "spec": "spec/BEHAVIOUR.md#clipboard-copy-paste",
       "intent": {
         "title": "Copy and paste elements through the system clipboard with Ctrl+C and Ctrl+V",
         "steps": [
@@ -10594,7 +10594,7 @@
         "selection.walkFirstChild"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/keyboard-tree-walk.md",
+      "spec": "spec/BEHAVIOUR.md#keyboard-tree-walk",
       "intent": {
         "title": "Walk the tree with the arrow keys",
         "steps": [
@@ -11147,7 +11147,7 @@
         "hand.drop"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/hand-keyboard-move.md",
+      "spec": "spec/BEHAVIOUR.md#hand-keyboard-move",
       "intent": {
         "title": "Take the selection into the hand with M and place it with the keyboard",
         "steps": [
@@ -12255,7 +12255,7 @@
         "text.insertLineBreak"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/text-edit-inline.md",
+      "spec": "spec/BEHAVIOUR.md#text-edit-inline",
       "intent": {
         "title": "Edit text in place with double-click or Enter",
         "steps": [
@@ -12714,7 +12714,7 @@
         "text.paste"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/text-inline-formatting.md",
+      "spec": "spec/BEHAVIOUR.md#text-inline-formatting",
       "intent": {
         "title": "Bold, italic and links inside text with Ctrl+B, Ctrl+I and Ctrl+K",
         "steps": [
@@ -13152,7 +13152,7 @@
         "element.rename"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/rename-element.md",
+      "spec": "spec/BEHAVIOUR.md#rename-element",
       "intent": {
         "title": "Rename an element with F2 or inline in Layers",
         "steps": [
@@ -13412,7 +13412,7 @@
         "selection.toggle"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/multi-select-click.md",
+      "spec": "spec/BEHAVIOUR.md#multi-select-click",
       "intent": {
         "title": "Select several elements with Shift+click and Ctrl+click",
         "steps": [
@@ -13680,7 +13680,7 @@
         "element.unwrap"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/unwrap.md",
+      "spec": "spec/BEHAVIOUR.md#unwrap",
       "intent": {
         "title": "Remove a wrapper and lift its children into its place",
         "steps": [
@@ -13898,7 +13898,7 @@
         "selection.marquee"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/marquee-select.md",
+      "spec": "spec/BEHAVIOUR.md#marquee-select",
       "intent": {
         "title": "Select elements by dragging a marquee on the page",
         "steps": [
@@ -14724,7 +14724,7 @@
         "text.startEdit"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/multi-select-actions.md",
+      "spec": "spec/BEHAVIOUR.md#multi-select-actions",
       "intent": {
         "title": "Delete, move and duplicate several selected elements at once",
         "steps": [
@@ -15473,7 +15473,7 @@
         "text.selectAll"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/select-container-children.md",
+      "spec": "spec/BEHAVIOUR.md#select-container-children",
       "intent": {
         "title": "Select every element in the current container with Ctrl+A",
         "steps": [
@@ -15696,7 +15696,7 @@
         "element.toggleLock"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/lock-element.md",
+      "spec": "spec/BEHAVIOUR.md#lock-element",
       "intent": {
         "title": "Lock an element so it cannot be moved, edited or deleted",
         "steps": [
@@ -16109,7 +16109,7 @@
         "element.toggleHidden"
       ],
       "dependsOn": [],
-      "spec": "spec/behavior/hide-element.md",
+      "spec": "spec/BEHAVIOUR.md#hide-element",
       "intent": {
         "title": "Hide and show an element",
         "steps": [
@@ -16364,7 +16364,7 @@
         "drag-reorder-canvas",
         "palette-drag-insert"
       ],
-      "spec": "spec/behavior/drag-autoscroll.md",
+      "spec": "spec/BEHAVIOUR.md#drag-autoscroll",
       "toothProof": "src/editor/input/pointer.ts",
       "intent": {
         "title": "A drag at the edge keeps scrolling the page and the Layers",

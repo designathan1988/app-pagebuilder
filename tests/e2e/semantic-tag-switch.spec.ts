@@ -1,4 +1,4 @@
-// semantic-tag-switch beyond its scenarios (spec/behavior/semantic-tag-switch.md): the Settings tab's HTML tag field
+// semantic-tag-switch beyond its scenarios (spec/BEHAVIOUR.md#semantic-tag-switch): the Settings tab's HTML tag field
 // shows the element's tag and suggests its equivalent tags (elements.json), and an element with no equivalent tag has
 // no such field; a tag kept with Enter changes only the node's tag and the canvas draws the new element around the same
 // children, undo and redo giving back each tag and the selection; leaving the field (Tab, a click on the canvas) keeps

@@ -1,4 +1,4 @@
-// inspector-number-fields beyond its scenarios (spec/behavior/inspector-number-fields.md): the multipliers of the
+// inspector-number-fields beyond its scenarios (spec/BEHAVIOUR.md#inspector-number-fields): the multipliers of the
 // arrows and of the step buttons in one run, PageUp/PageDown, the scrub following the pointer live and being one undo
 // step, Escape during a scrub, Escape in the field then leaving it, leaving the field with Tab, the keys a field keeps
 // (Delete, Backspace, letters, Ctrl+Z never reach the canvas nor the history), the unit menu's list, and a length field

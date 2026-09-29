@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { RULES, architectureOwners, checkManifest, generatedOffer, generatedUnits, htmlRefusal, supportedKeywords, type RuleId } from '../../src/manifest/check.ts';
+import { RULES, checkManifest, generatedOffer, generatedUnits, htmlRefusal, supportedKeywords, type RuleId } from '../../src/manifest/check.ts';
 import { normaliseChord } from '../../src/manifest/chord.ts';
 import { createCssMatcher } from '../../src/manifest/css.ts';
 import { generatedCompatSchema, generatedCssSchema, generatedHtmlSchema, propertiesFileSchema } from '../../src/manifest/schema.ts';
@@ -114,7 +114,6 @@ describe('manifest:check', () => {
       'label-names-two-properties': rules.get('label-names-two-properties'),
       'inspector-subset-in-all-properties': rules.get('inspector-subset-in-all-properties'),
       'essentials-value-missing-from-all-properties': rules.get('essentials-value-missing-from-all-properties'),
-      'owner-differs-from-architecture': rules.get('owner-differs-from-architecture'),
       'icon-not-in-library': rules.get('icon-not-in-library'),
       'toolbar-door-without-icon': rules.get('toolbar-door-without-icon'),
       'panel-button-without-icon': rules.get('panel-button-without-icon'),
@@ -124,7 +123,6 @@ describe('manifest:check', () => {
       'label-names-two-properties': 'label-term',
       'inspector-subset-in-all-properties': 'all-properties',
       'essentials-value-missing-from-all-properties': 'all-properties',
-      'owner-differs-from-architecture': 'owner',
       'icon-not-in-library': 'icon-name',
       'toolbar-door-without-icon': 'icon-required',
       'panel-button-without-icon': 'icon-required',
@@ -284,20 +282,6 @@ describe('manifest:check', () => {
     expect(compat.properties).toBe(shared.properties);
   });
 
-  it('reads the owner of every command from ARCHITECTURE.md, both ways', () => {
-    const table = ['# A', '', '## Command owners', '', '| Module | Commands | Status |', '|---|---|---|', '| `src/a.ts` | `x.one`, `x.two` | planned |', '', '## Next', '| `src/b.ts` | `y.one` | planned |'].join('\n');
-    expect(architectureOwners(table)).toEqual([{ module: 'src/a.ts', commands: ['x.one', 'x.two'], line: 7 }]);
-    expect(architectureOwners('# A\n')).toBeNull();
-    const missing = mutated((m) => {
-      m.architecture = null;
-    });
-    expect([...missing]).toEqual(['owner']);
-    // a command ARCHITECTURE.md gives to a second module, and a row for a command the manifest does not have
-    const twice = mutated((m) => {
-      m.architecture = `${m.architecture ?? ''}| \`src/core/history/redo.ts\` | \`history.redo\`, \`history.rewind\` | planned |\n`;
-    });
-    expect([...twice]).toEqual(['owner']);
-  });
 
   it('reads a registration with or without type arguments, and nothing that only names the function', () => {
     const code = [
@@ -380,17 +364,16 @@ describe('manifest:check', () => {
     }
   });
 
-  it('leaves a missing ARCHITECTURE.md to rule owner, also when a feature names its tooth-proof module', () => {
+  it('refuses a tooth-proof module that does not exist', () => {
     const input = planted(loaded.input, {
-      id: 'no-architecture',
-      rule: 'owner',
+      id: 'tooth-module-missing',
+      rule: 'tooth-proof',
       description: '',
       apply: (m) => {
-        plantRenderScenario(m).toothProof = 'src/core/render/render.ts';
-        m.architecture = null;
+        plantRenderScenario(m).toothProof = 'src/core/render/nothing.ts';
       },
     });
-    expect([...new Set(checkManifest(input).problems.map((p) => p.rule))]).toEqual(['owner']);
+    expect([...new Set(checkManifest(input).problems.map((p) => p.rule))]).toEqual(['tooth-proof']);
   });
 
   it('lets a scenario start at a zoom level once zoom-keyboard-buttons is built, and at "fit" before', () => {

@@ -1,4 +1,4 @@
-// page-properties beyond its scenarios (spec/behavior/page-properties.md): Page properties from any selection and the
+// page-properties beyond its scenarios (spec/BEHAVIOUR.md#page-properties): Page properties from any selection and the
 // fields of the page's settings in their order, those of features still to come not available yet; a setting kept
 // with Enter never renames the page root and undo gives back its value and the selection; an emptied field removes the
 // setting from the page root and from the canvas's <html>, also after a reload (Problems in Pager 5); leaving a field

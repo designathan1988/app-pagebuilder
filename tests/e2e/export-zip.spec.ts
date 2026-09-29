@@ -1,4 +1,4 @@
-// export-zip beyond its scenarios (spec/behavior/export-zip.md, Problems in Pager 8): the exported page looks like the
+// export-zip beyond its scenarios (spec/BEHAVIOUR.md#export-zip, Problems in Pager 8): the exported page looks like the
 // canvas. The aurora project is opened and exported through the top bar's Export; the archive's index.html and
 // css/styles.css are served to a new page of the same browser at the base breakpoint's width, and every element of
 // the exported page has the same computed styles as its element on the canvas (the page's own elements in document
