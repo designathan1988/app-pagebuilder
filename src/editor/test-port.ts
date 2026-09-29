@@ -2,7 +2,21 @@
 // selection, the history and the export, each as a copy taken now. It has no other member: it never writes, loads,
 // creates or selects anything, so a test can change the editor only through its doors. It is installed in every
 // build (the e2e suite tests the packaged app, playwright.config.ts), frozen on window.
-import type { EditorStore } from './store.ts';
+import type { CommandArgs } from '../generated/commands.ts';
+import type { CommandId } from '../generated/ids.ts';
+import { aboutNode, saidOf, whyNotAccepted, type Explanation } from '../core/explain.ts';
+import type { NodeId } from '../core/document/model.ts';
+import { MODEL_RULES, type EditorStore } from './store.ts';
+import { manifest } from '../manifest/runtime.ts';
+
+// The engineering answers (the plan's T5), read-only: why a command would not run now, why these nodes cannot go into
+// that parent, and what the document says about one node. Each is another owner's answer (store.refusal, the content
+// model and the flags, the checks), gathered in one place so a check or a tool asks once.
+export interface Explanations {
+  readonly command: (id: CommandId, args: CommandArgs[CommandId]) => string;
+  readonly into: (parent: NodeId, nodes: readonly NodeId[]) => string;
+  readonly node: (id: NodeId) => Explanation;
+}
 
 export interface TestPort {
   readonly document: () => unknown;
@@ -11,17 +25,27 @@ export interface TestPort {
   readonly history: () => { readonly undoSteps: number; readonly redoSteps: number };
   // the exported files; null until the export is built (project-export)
   readonly export: () => null;
+  readonly explain: Explanations;
 }
 
 export const TEST_PORT_KEY = '__builderTestPort';
 
 export function createTestPort(store: EditorStore): TestPort {
   const copy = <T>(value: T): T => structuredClone(value);
+  const document = () => store.getState().document;
   return Object.freeze({
-    document: () => copy(store.getState().document),
+    document: () => copy(document()),
     selection: () => copy(store.getState().selection),
     history: () => ({ undoSteps: store.getState().history.past.length, redoSteps: store.getState().history.future.length }),
     export: () => null,
+    explain: Object.freeze({
+      command: (id: CommandId, args: CommandArgs[CommandId]) => saidOf(store.refusal(id, args)),
+      into: (parent: NodeId, nodes: readonly NodeId[]) => {
+        const asked = whyNotAccepted(document(), MODEL_RULES, parent, nodes);
+        return `${asked.asked}: ${saidOf(asked.refusal)}`;
+      },
+      node: (id: NodeId) => aboutNode(document(), MODEL_RULES, id, manifest.interactions.checks),
+    }),
   });
 }
 

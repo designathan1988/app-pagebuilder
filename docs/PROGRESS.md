@@ -23,6 +23,28 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
   measurement harness, no checkpoints. `tools/` holds what the app is built and tested with: `gen`, `lint`,
   `manifest`, `runner`.
 
+## The architecture pass (2026-09-29; the plan the user approved)
+
+- **A** — T3: an awaited door re-checks what it computed before it dispatches, and `store.notice` says when it cannot
+  (the first shape compared a document revision and refused benign changes; the block's specs proved it wrong and it
+  was corrected). T2: a commit the validator refuses is an incident, not a refusal — the previous state stays, the
+  feed records it, development and tests throw. T1+T6: the tree kernel (`src/core/document/tree.ts`: insert, remove,
+  release the references to what leaves, the value-level release for a node a command writes back, the single
+  into-itself test) with the two commands that dropped references it now releases, and `orphanReferences` asking the
+  document (is that some node's `id` attribute?) instead of a value's shape.
+- **B** — T4: `src/core/document/migrations.ts`; the project reader carries an older file forward step by step,
+  refuses a newer version naming it, and refuses a hole in the chain.
+- **C** — T5: `src/core/explain.ts` and the test port's `explain`: why a command would not run now, why these nodes
+  cannot go into that parent, what the document says about a node.
+- **Deferred, with the reason:** T7 (the pointer's module-level singletons) removes a *latent* problem only — two
+  editors sharing one page — and no flow today creates one (the preview renders the export; each browser check opens
+  one editor). It would rewrite the hottest file (pointer.ts, 2,500 lines) for a case that does not occur; it is kept
+  in the plan for the first feature that offers two editors side by side.
+- **Three defects the block's browser tests found, fixed:** Shift+click ran a plain select (a drag key swallowed the
+  click's own), `unwrap` and the code pane's HTML apply dropped references (a thrown invalid state instead of a
+  refusal), and three specs carried numbers the merged base styles had moved (their points and values now come from
+  the page itself).
+
 ## What is left (the user's goal in force: the whole application working end to end)
 
 1. The properties panel (5.1): its data first (property icons — 2 of 181 today; sliders — one property; the
