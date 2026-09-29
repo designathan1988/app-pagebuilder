@@ -2387,15 +2387,8 @@ function installFolderDrop(win: Window): () => void {
     event.preventDefault();
     const dropped = [...(event.dataTransfer?.files ?? [])];
     if (dropped.length === 0) return;
-    // the files are read asynchronously: the document must still be the one the drop was made on (plan T3)
-    const at = (editing as EditorStore).currentRevision();
     void Promise.all(dropped.map((one) => readUploadFile(one))).then((stored) => {
-      const store = editing as EditorStore;
-      if (store.currentRevision() !== at) {
-        store.notice(message('status.stale'));
-        return;
-      }
-      store.dispatch(door.command.id, { ...door.door.args, files: stored } as never);
+      (editing as EditorStore).dispatch(door.command.id, { ...door.door.args, files: stored } as never);
     });
   };
   win.addEventListener('dragover', over as EventListener);
@@ -2444,17 +2437,22 @@ export function installOsFileDrop(win: Window, inside: boolean): () => void {
     const target = imageUnder(at);
     const place = target === null ? fileDropProposal(at) : null;
     if (target === null && place === null) return;
-    // the image is decoded asynchronously: the place computed above is only good while the document is (plan T3)
-    const atRevision = (editing as EditorStore).currentRevision();
+    // The image is decoded asynchronously, and the place and the target were computed before the wait: they are
+    // re-checked against the document as it is now, so a target that is gone — or a parent that is — refuses the drop
+    // with a word instead of landing where the person never saw it (plan T3; a plain revision comparison would refuse
+    // on any other command that landed meanwhile, which is not the same thing).
     void readUploadFile(file).then((payload: UploadedFile) => {
       const store = editing as EditorStore;
-      if (store.currentRevision() !== atRevision) {
+      const document = store.getState().document;
+      const parent = target === null && place !== null ? locate(document, place.parent as NodeId) : null;
+      const stillThere = target !== null ? locate(document, target as NodeId) !== null : parent !== null;
+      if (!stillThere) {
         store.notice(message('status.stale'));
         return;
       }
       const args = target === null
-        ? { ...door.door.args, file: payload, parent: place?.parent, index: place?.index }
-        : { ...door.door.args, file: payload, parent: locate(editing?.getState().document ?? ({} as DocumentJson), target as NodeId)?.parent?.id, index: 0, replace: target };
+        ? { ...door.door.args, file: payload, parent: place?.parent, index: Math.min(place?.index ?? 0, parent?.node.children.length ?? 0) }
+        : { ...door.door.args, file: payload, parent: locate(document, target as NodeId)?.parent?.id, index: 0, replace: target };
       store.dispatch(door.command.id, args as never);
     });
   };
