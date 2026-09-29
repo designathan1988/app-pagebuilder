@@ -1156,7 +1156,7 @@ function StyleTab() {
         <div className="inspector-scroll">
         <div className="inspector-body">
           <ComponentNotice />
-          <div className="inspector-sections">
+          <div className="inspector-sections" data-region="inspector-sections">
             <StyleSections />
           </div>
         </div>

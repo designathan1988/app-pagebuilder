@@ -390,40 +390,7 @@
             {
               "door": "inspector.toggleSection#inspector-section-header",
               "args": {
-                "section": "layout"
-              },
-              "target": null,
-              "drop": null,
-              "action": false,
-              "hold": false,
-              "type": null
-            },
-            {
-              "door": "inspector.toggleSection#inspector-section-header",
-              "args": {
                 "section": "space"
-              },
-              "target": null,
-              "drop": null,
-              "action": false,
-              "hold": false,
-              "type": null
-            },
-            {
-              "door": "inspector.toggleSection#inspector-section-header",
-              "args": {
-                "section": "space"
-              },
-              "target": null,
-              "drop": null,
-              "action": false,
-              "hold": false,
-              "type": null
-            },
-            {
-              "door": "inspector.toggleSection#inspector-section-header",
-              "args": {
-                "section": "size"
               },
               "target": null,
               "drop": null,
@@ -456,17 +423,6 @@
             {
               "door": "inspector.toggleSection#inspector-section-header",
               "args": {
-                "section": "position"
-              },
-              "target": null,
-              "drop": null,
-              "action": false,
-              "hold": false,
-              "type": null
-            },
-            {
-              "door": "inspector.toggleSection#inspector-section-header",
-              "args": {
                 "section": "paint"
               },
               "target": null,
@@ -478,62 +434,7 @@
             {
               "door": "inspector.toggleSection#inspector-section-header",
               "args": {
-                "section": "paint"
-              },
-              "target": null,
-              "drop": null,
-              "action": false,
-              "hold": false,
-              "type": null
-            },
-            {
-              "door": "inspector.toggleSection#inspector-section-header",
-              "args": {
-                "section": "border"
-              },
-              "target": null,
-              "drop": null,
-              "action": false,
-              "hold": false,
-              "type": null
-            },
-            {
-              "door": "inspector.toggleSection#inspector-section-header",
-              "args": {
-                "section": "border"
-              },
-              "target": null,
-              "drop": null,
-              "action": false,
-              "hold": false,
-              "type": null
-            },
-            {
-              "door": "inspector.toggleSection#inspector-section-header",
-              "args": {
                 "section": "text"
-              },
-              "target": null,
-              "drop": null,
-              "action": false,
-              "hold": false,
-              "type": null
-            },
-            {
-              "door": "inspector.toggleSection#inspector-section-header",
-              "args": {
-                "section": "text"
-              },
-              "target": null,
-              "drop": null,
-              "action": false,
-              "hold": false,
-              "type": null
-            },
-            {
-              "door": "inspector.toggleSection#inspector-section-header",
-              "args": {
-                "section": "effects"
               },
               "target": null,
               "drop": null,
@@ -581,7 +482,7 @@
             "editor": {
               "regions": [
                 {
-                  "region": "inspector-style",
+                  "region": "inspector-sections",
                   "measure": "height",
                   "relation": "less-than",
                   "value": 600,
@@ -628,40 +529,7 @@
             {
               "door": "inspector.toggleSection#inspector-section-header",
               "args": {
-                "section": "layout"
-              },
-              "target": null,
-              "drop": null,
-              "action": false,
-              "hold": false,
-              "type": null
-            },
-            {
-              "door": "inspector.toggleSection#inspector-section-header",
-              "args": {
                 "section": "space"
-              },
-              "target": null,
-              "drop": null,
-              "action": false,
-              "hold": false,
-              "type": null
-            },
-            {
-              "door": "inspector.toggleSection#inspector-section-header",
-              "args": {
-                "section": "space"
-              },
-              "target": null,
-              "drop": null,
-              "action": false,
-              "hold": false,
-              "type": null
-            },
-            {
-              "door": "inspector.toggleSection#inspector-section-header",
-              "args": {
-                "section": "size"
               },
               "target": null,
               "drop": null,
@@ -694,62 +562,7 @@
             {
               "door": "inspector.toggleSection#inspector-section-header",
               "args": {
-                "section": "position"
-              },
-              "target": null,
-              "drop": null,
-              "action": false,
-              "hold": false,
-              "type": null
-            },
-            {
-              "door": "inspector.toggleSection#inspector-section-header",
-              "args": {
                 "section": "paint"
-              },
-              "target": null,
-              "drop": null,
-              "action": false,
-              "hold": false,
-              "type": null
-            },
-            {
-              "door": "inspector.toggleSection#inspector-section-header",
-              "args": {
-                "section": "paint"
-              },
-              "target": null,
-              "drop": null,
-              "action": false,
-              "hold": false,
-              "type": null
-            },
-            {
-              "door": "inspector.toggleSection#inspector-section-header",
-              "args": {
-                "section": "border"
-              },
-              "target": null,
-              "drop": null,
-              "action": false,
-              "hold": false,
-              "type": null
-            },
-            {
-              "door": "inspector.toggleSection#inspector-section-header",
-              "args": {
-                "section": "border"
-              },
-              "target": null,
-              "drop": null,
-              "action": false,
-              "hold": false,
-              "type": null
-            },
-            {
-              "door": "inspector.toggleSection#inspector-section-header",
-              "args": {
-                "section": "text"
               },
               "target": null,
               "drop": null,
@@ -782,22 +595,11 @@
             {
               "door": "inspector.toggleSection#inspector-section-header",
               "args": {
-                "section": "effects"
+                "section": "text"
               },
               "target": null,
               "drop": null,
               "action": true,
-              "hold": false,
-              "type": null
-            },
-            {
-              "door": "inspector.toggleSection#inspector-section-header",
-              "args": {
-                "section": "text"
-              },
-              "target": null,
-              "drop": null,
-              "action": false,
               "hold": false,
               "type": null
             }
@@ -819,14 +621,14 @@
             "editor": {
               "regions": [
                 {
-                  "region": "inspector-style",
+                  "region": "inspector-sections",
                   "measure": "height",
                   "relation": "greater-than",
-                  "value": 800,
+                  "value": 600,
                   "reference": null
                 },
                 {
-                  "region": "inspector-style",
+                  "region": "inspector-sections",
                   "measure": "height",
                   "relation": "less-than",
                   "value": 2400,
