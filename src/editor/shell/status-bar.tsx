@@ -8,6 +8,7 @@ import { useEffect, useState, useSyncExternalStore } from 'react';
 import type { MessageId } from '../../generated/ids.ts';
 import type { NodeId } from '../../generated/commands.ts';
 import { saveState, type SaveState } from '../persistence/autosave.ts';
+import { incidents, onIncident } from '../../core/incidents.ts';
 import { allNodes, locate, type DocNode } from '../../core/document/model.ts';
 import type { Message } from '../../core/commands/registry.ts';
 import { pluralForm } from '../../i18n/index.ts';
@@ -71,6 +72,7 @@ export function StatusBar() {
               <span key="count" className="status-bar__item">
                 {t(`status.elementCount.${pluralForm(locale, count)}`, { count })}
               </span>,
+              <IncidentCount key="incidents" />,
             ];
           }
           // the dock's panels as icons while the dock is closed (the audit's A3.18: the strip's 28 px go back to the
@@ -97,6 +99,24 @@ export function StatusBar() {
       />
       <SaveStateLabel />
     </footer>
+  );
+}
+
+// What the incident feed holds (the plan's T2: nothing hidden): a badge with the count and, in its title, what each
+// incident says — an invariant a command broke, an error the page threw. It draws nothing at all while the feed is
+// empty, which is the normal state; the browser checks and the development tools read the same feed through the test
+// port, so an incident that no person notices still fails a check.
+function IncidentCount() {
+  const t = useT();
+  const locale = useLocale();
+  const feed = useSyncExternalStore(onIncident, incidents, incidents);
+  if (feed.length === 0) return null;
+  const detail = feed.map((one) => `${one.what}\n${one.detail}`).join('\n\n');
+  return (
+    <span className="status-bar__item status-bar__incidents" data-local="incident-count" role="status" title={detail}>
+      <Icon name="triangle-alert" size="sm" />
+      {t(`status.incidents.${pluralForm(locale, feed.length)}`, { count: feed.length })}
+    </span>
   );
 }
 

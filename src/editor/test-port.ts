@@ -5,6 +5,7 @@
 import type { CommandArgs } from '../generated/commands.ts';
 import type { CommandId } from '../generated/ids.ts';
 import { aboutNode, saidOf, whyNotAccepted, type Explanation } from '../core/explain.ts';
+import { incidents, type Incident } from '../core/incidents.ts';
 import type { NodeId } from '../core/document/model.ts';
 import { MODEL_RULES, type EditorStore } from './store.ts';
 import { manifest } from '../manifest/runtime.ts';
@@ -25,6 +26,9 @@ export interface TestPort {
   readonly history: () => { readonly undoSteps: number; readonly redoSteps: number };
   // the exported files; null until the export is built (project-export)
   readonly export: () => null;
+  // what the incident feed holds (the plan's T2): an invariant a command broke, an error the page threw. A check that
+  // reads this after its steps fails when the app did something it should not have, without anyone watching a console.
+  readonly incidents: () => readonly Incident[];
   readonly explain: Explanations;
 }
 
@@ -38,6 +42,7 @@ export function createTestPort(store: EditorStore): TestPort {
     selection: () => copy(store.getState().selection),
     history: () => ({ undoSteps: store.getState().history.past.length, redoSteps: store.getState().history.future.length }),
     export: () => null,
+    incidents: () => copy(incidents()),
     explain: Object.freeze({
       command: (id: CommandId, args: CommandArgs[CommandId]) => saidOf(store.refusal(id, args)),
       into: (parent: NodeId, nodes: readonly NodeId[]) => {

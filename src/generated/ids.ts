@@ -4119,6 +4119,8 @@ export const MESSAGE_IDS = [
   "status.html.applied",
   "status.html.invalidAt",
   "status.html.oneElement",
+  "status.incidents.one",
+  "status.incidents.other",
   "status.id.duplicate",
   "status.id.invalid",
   "status.import.approximated",

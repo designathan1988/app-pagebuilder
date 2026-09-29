@@ -1671,6 +1671,8 @@
   "status.html.applied": "HTML de {name} aplicado.",
   "status.html.invalidAt": "HTML inválido na linha {line}: {reason}",
   "status.html.oneElement": "a marcação de um elemento é um elemento (não tem nenhum, ou tem vários)",
+  "status.incidents.one": "1 incidente — veja na dica o que ele diz",
+  "status.incidents.other": "{count} incidentes — veja na dica o que eles dizem",
   "status.id.duplicate": "O ID \"{id}\" já é usado por {name}.",
   "status.id.invalid": "\"{id}\" não é um ID válido.",
   "status.import.approximated": "{file}: regras mapeadas para o breakpoint mais próximo (linhas {lines}).",

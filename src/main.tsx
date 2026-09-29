@@ -21,6 +21,8 @@ import { readSavedWork, readVersions, restoredWork, startAutosave } from './edit
 import { claimEditing, isEditing } from './editor/persistence/tab-guard.ts';
 import { MODEL_RULES, createEditorStore } from './editor/store.ts';
 import { installTestPort } from './editor/test-port.ts';
+import { installErrorFeed } from './editor/errors.ts';
+import { reportError } from './core/incidents.ts';
 
 const container = document.getElementById('root');
 if (!container) {
@@ -47,7 +49,13 @@ startAutosave(store, saved, restored !== null, isEditing);
 // what the end-to-end tests read, in every build (src/editor/test-port.ts)
 installTestPort(store);
 
-createRoot(container).render(
+// what the page throws, into the incident feed: the status bar draws the count, the test port carries the list
+// (src/editor/errors.ts, the plan's T2)
+installErrorFeed();
+createRoot(container, {
+  // a render error is an incident too: React would otherwise unmount silently
+  onUncaughtError: (error: unknown) => reportError('React could not render', error instanceof Error ? (error.stack ?? error.message) : String(error)),
+}).render(
   <StrictMode>
     <App store={store} />
   </StrictMode>,

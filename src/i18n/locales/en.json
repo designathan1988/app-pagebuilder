@@ -1671,6 +1671,8 @@
   "status.html.applied": "Applied the HTML of {name}.",
   "status.html.invalidAt": "Invalid HTML on line {line}: {reason}",
   "status.html.oneElement": "the markup of an element is one element (it holds none, or several)",
+  "status.incidents.one": "1 incident — open the tooltip for what it says",
+  "status.incidents.other": "{count} incidents — open the tooltip for what they say",
   "status.id.duplicate": "The ID \"{id}\" is already used by {name}.",
   "status.id.invalid": "\"{id}\" is not a valid ID.",
   "status.import.approximated": "{file}: rules mapped to the nearest breakpoint (lines {lines}).",
