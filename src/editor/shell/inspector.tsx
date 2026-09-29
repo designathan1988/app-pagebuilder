@@ -28,7 +28,7 @@ import { MenuButton } from '../doors/menu.tsx';
 import { GLYPHS, doorSlots, drawnAsOf, partOf, slotsIn } from '../doors/placement.ts';
 import { setActiveOption } from '../focus/focus.ts';
 import { authoredProperties, editedProperties, editedPropertiesByDoor, inspectorMode, inspectorSearchOf, isColourValue, isEssential, searchMatches, sectionClosed, sectionProperties, summaryOf, summaryProperties } from '../inspector/sections.ts';
-import { groupOf, groupsOf, orderByGroup, pairRowOf, rowPrefixKey, titledGroups } from '../inspector/rows.ts';
+import { orderByGroup, pairRowOf, rowPrefixKey } from '../inspector/rows.ts';
 import { valueOrigin } from '../inspector/origin.ts';
 import { MODEL_RULES, useEditorState, useStore, layeredRules } from '../store.ts';
 import { styleSource } from '../inspector/style-target.ts';
@@ -108,13 +108,6 @@ const sectionOf = (entry: DoorEntry): string | null => {
   return first === undefined ? null : (TARGETS.get(first)?.section ?? null);
 };
 
-// The editor a door belongs to, when it is one of its own (a shadow's, A3.34): the target whose control draws a whole
-// editor, so its controls are titled once with the property's label.
-const editorTargetOf = (entry: DoorEntry | undefined): string | null => {
-  const target = entry === undefined ? null : targetOf(entry);
-  return target !== null && target.control === 'shadow-editor' ? target.id : null;
-};
-
 // The values a field offers in All properties: the generated list of its property and its presets.
 function offered(entry: DoorEntry): readonly string[] {
   const offers = entry.door.adapter.offers;
@@ -175,13 +168,14 @@ function fieldLabelKey(entry: DoorEntry): MessageId {
   return (named?.labelKey ?? entry.door.labelKey) as MessageId;
 }
 
-function Field({ entry, bare = false, labelled = false, prefix = null }: { readonly entry: DoorEntry; readonly bare?: boolean; readonly labelled?: boolean; readonly prefix?: string | null }) {
+function Field({ entry, bare = false, labelled = false, prefix = null, rowLabel = null }: { readonly entry: DoorEntry; readonly bare?: boolean; readonly labelled?: boolean; readonly prefix?: string | null; readonly rowLabel?: MessageId | null }) {
   const t = useT();
   const target = targetOf(entry);
-  // labelled as fieldLabelKey says. A field is usable only once its own feature is registered as built (DESIGN.md
-  // "Build order"): style.set runs Width and Height long before Display or Color.
+  // labelled as fieldLabelKey says, or by the row's own label when it has one (a pair row of the gap reads "Gap"). A
+  // field is usable only once its own feature is registered as built (DESIGN.md "Build order"): style.set runs Width
+  // and Height long before Display or Color.
   const own = entry.door.labelKey !== entry.command.labelKey;
-  const door = useDoor(entry, {}, target && !own ? t(fieldLabelKey(entry)) : undefined, isFeatureBuilt(entry.door.feature as FeatureId));
+  const door = useDoor(entry, {}, rowLabel !== null ? t(rowLabel) : target && !own ? t(fieldLabelKey(entry)) : undefined, isFeatureBuilt(entry.door.feature as FeatureId));
   if (!target) return null;
   const cssName = entry.door.kind === 'inspector-field' ? (entry.door.property ?? target.id) : target.id;
   // a composite of lengths (gap: row-gap and column-gap) is a text field of its longhands, one or two lengths
@@ -633,25 +627,18 @@ function StyleSections() {
         const doors = orderByGroup(s.id, shownDoors(s.id));
         // a section with no match is not drawn while searching
         if (searching && doors.length === 0) return null;
-        const set = sectionProperties(section).filter((p) => held.has(p)).length;
         // a collapsed section with a match is drawn open for the search; its collapsed state is kept
         const closed = !searching && collapsed.includes(section);
         const summary = closed ? summaryOf(section, values, t, locale) : null;
         const boxDoors = doors.filter((d) => targetOf(d)?.control === 'box-model');
-        // What the section draws, in order (DESIGN.md "Inspector"): the group titles of properties.json, and the pair
-        // rows — two fields read together under the first one's label (rows.ts). While searching, the matches are drawn
-        // plain: a result is a field, not the row it lives in.
-        const groups = groupsOf(s.id);
-        const titled = titledGroups(s.id);
+        // What the section draws, in order (DESIGN.md "Inspector"): the pair rows — two fields read together under the
+        // row's label (rows.ts) — and its fields. The groups of properties.json order the fields (rows.ts orderByGroup,
+        // already applied above) and draw no title of their own: the design's panel runs Display, Direction, Alignment,
+        // Gap without a heading between them. While searching, the matches are drawn plain: a result is a field, not
+        // the row it lives in.
         const rowDrawn = new Set<string>();
         const units: ReactNode[] = [];
-        let at: string | null = null;
-        const drawer = (d: DoorEntry, i: number): ReactNode => {
-          // an editor of its own (a shadow's, A3.34) is titled with the property it edits, once, before its
-          // first control: two editors one after the other (Box shadow, Text shadow) read as two
-          const editor = editorTargetOf(d);
-          const previous = editorTargetOf(i === 0 ? undefined : doors[i - 1]);
-          const title = editor !== null && editor !== previous ? <h3 className="inspector-editor__title">{t(targetOf(d)?.labelKey as MessageId)}</h3> : null;
+        const drawer = (d: DoorEntry): ReactNode => {
           if (targetOf(d)?.control === 'box-model') return boxDoors[0] === d ? <BoxModel key={d.ref} doors={boxDoors} /> : null;
           if (d.door.kind === 'panel-control' && d.door.drawnAs === 'field' && cssTextArg(d) !== null && node !== null) return <DeclarationsField key={`${d.ref}@${node.id}`} entry={d} node={node} />;
           if (d === SPACING_LINK) return null;
@@ -669,7 +656,6 @@ function StyleSections() {
           if (d.door.kind === 'panel-control') return <Fragment key={d.ref}>{d.door.drawnAs === 'icon-button' ? <DoorControl entry={d} /> : <PanelField entry={d} />}</Fragment>;
           return (
             <Fragment key={d.ref}>
-              {title}
               <Field entry={d} />
               <FieldOrigin entry={d} target={editedTarget(d)} />
             </Fragment>
@@ -677,24 +663,16 @@ function StyleSections() {
         };
         for (const [i, d] of doors.entries()) {
           const target = editedTarget(d);
-          const own = target === null ? null : groupOf(target);
-          // a group's title precedes the first field drawn in it (a control that edits no property of its own stays in
-          // the group of the field before it)
-          if (titled && !searching && own !== null && own !== at) {
-            at = own;
-            const label = groups.find((g) => g.id === own)?.labelKey;
-            if (label !== undefined) units.push(<h3 key={`group-${own}`} className="inspector-group" data-group={own}>{t(label)}</h3>);
-          }
           const row = searching || target === null ? null : pairRowOf(target);
           // the second field of a row was drawn with its row
           if (row === null || rowDrawn.has(d.ref)) {
-            if (row === null) units.push(<Fragment key={d.ref}>{drawer(d, i)}</Fragment>);
+            if (row === null) units.push(<Fragment key={d.ref}>{drawer(d)}</Fragment>);
             continue;
           }
           // the fields of the row this section draws, in the row's own order; a row with one field left keeps a row
           const members = row.fields.map((f) => doors.find((x) => editedTarget(x) === f.target)).filter((x): x is DoorEntry => x !== undefined);
           if (members.length < 2) {
-            units.push(<Fragment key={d.ref}>{drawer(d, i)}</Fragment>);
+            units.push(<Fragment key={d.ref}>{drawer(d)}</Fragment>);
             continue;
           }
           for (const m of members) rowDrawn.add(m.ref);
@@ -708,7 +686,7 @@ function StyleSections() {
                     others identify themselves by the short prefix the row gives them */}
                 {members.map((m, index) => {
                   const prefixKey = rowPrefixKey(row, editedTarget(m) ?? '');
-                  return <Field key={m.ref} entry={m} bare labelled={index === 0} prefix={prefixKey === null ? null : t(prefixKey)} />;
+                  return <Field key={m.ref} entry={m} bare labelled={index === 0} rowLabel={index === 0 ? row.labelKey : null} prefix={prefixKey === null ? null : t(prefixKey)} />;
                 })}
               </div>
               {members.map((m) => <FieldOrigin key={`${m.ref}-origin`} entry={m} target={editedTarget(m)} />)}
@@ -722,7 +700,6 @@ function StyleSections() {
                 <span className="door__label">{t(s.labelKey as MessageId)}</span>
                 <SectionOrigin section={section} />
                 {summary !== null ? <span className="inspector-section__summary">{summary}</span> : null}
-                {set > 0 ? <span className="inspector-section__count">{t('inspector.valuesSet', { count: set })}</span> : null}
               </DoorControl>
             ) : null}
             {closed ? null : units}

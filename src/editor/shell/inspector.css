@@ -508,8 +508,12 @@
   container-type: inline-size;
 }
 
+/* A pair row gives its two fields the width a whole row has: the label column is narrower than a single field's
+   (its label is short: Width, Gap), and the cells take the rest, so neither field clips (the design's 100|1fr|1fr is
+   too tight for the unit menu and the value list the real fields carry). */
 .field-row--pair {
-  grid-template-columns: calc(var(--space-10) * 3 + var(--space-2)) minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: calc(var(--space-10) * 2 + var(--space-9)) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0 var(--space-2);
 }
 
 /* the cell of a field standing in a pair row: the field's door, its value, and a refusal said under it (wrapped, so a
@@ -522,16 +526,6 @@
   min-width: 0;
 }
 
-@container (max-width: 420px) {
-  .field-row--pair {
-    grid-template-columns: calc(var(--space-10) * 3 + var(--space-2)) minmax(0, 1fr);
-  }
-
-  /* the pair's second field takes the second line, in the value column */
-  .field-row--pair > :last-child:not(.field-row__label):not(.field-row__refusal) {
-    grid-column: 2;
-  }
-}
 
 /* the short mark a pair row puts before a value whose property the row's label does not name (the height's H, ↕ ↔) */
 .field__prefix {
@@ -542,20 +536,46 @@
 
 /* the title of a group of properties inside a section (properties.json sections[].groups): a caption above its
    fields, indented to the value column so the fields still read as one list */
-.inspector-group {
-  margin: var(--space-2) 0 var(--space-1);
-  padding-left: calc(var(--space-10) * 3 + var(--space-2));
-  color: var(--color-text-subtle);
-  font: var(--fw-overline) var(--fs-overline) / var(--lh-overline) var(--font-ui);
-  letter-spacing: var(--ls-overline);
-  text-transform: uppercase;
-}
 
+/* Every field is one box (the design's field): the value, its unit menu, its value list and its steppers all live
+   inside the same border, so a row reads as one control and a pair of fields fits on one line. */
 .input-wrap {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-1);
   min-width: 0;
+  width: 100%;
+  height: var(--size-control);
+  padding: 0 var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-sunken);
+}
+
+.input-wrap:hover {
+  border-color: var(--color-border-strong);
+}
+
+.input-wrap:focus-within {
+  border-color: var(--color-focus);
+}
+
+/* the input inside the box draws no border of its own: the box is the field, its value in the code face at the
+   caption size, so a pair of them fits the column (the design's field) */
+.input-wrap .input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: var(--fw-body) var(--fs-caption) / var(--lh-caption) var(--font-mono);
+}
+
+/* a field of a form of its own (the spacing sides, the radius): the form takes no box of its own, so the input stays
+   the box's child */
+.input-wrap > .input-wrap__form {
+  display: contents;
 }
 
 /* the slider a field's door declares (A3.30): beside the value, its number written on release */
@@ -689,12 +709,12 @@
    nobody can see is a control that does not exist). They keep their 24 x 24 target and take the row's dim colour
    until the row is hovered or holds the focus, where they read at full strength. */
 .field__step {
-  opacity: 0.55;
+  display: none;
 }
 
 .field-row:hover .field__step,
 .field-row:focus-within .field__step {
-  opacity: 1;
+  display: inline-flex;
 }
 
 .swatch {

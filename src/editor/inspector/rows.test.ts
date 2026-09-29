@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import manifestFile from '../../../manifest/properties.json';
 import en from '../../i18n/locales/en.json';
-import { PAIR_ROWS, groupOf, groupOfDoor, groupsOf, orderByGroup, pairRowOf, rowPrefixKey, titledGroups } from './rows.ts';
+import { PAIR_ROWS, groupOf, groupOfDoor, groupsOf, orderByGroup, pairRowOf, rowPrefixKey } from './rows.ts';
 
 const MANIFEST = manifestFile as {
   rows: { id: string; section: string; fields: { target: string; prefixKey: string | null }[] }[];
@@ -55,12 +55,6 @@ describe('the groups of a section (inspector/rows.ts)', () => {
     expect(groupOfDoor('style.set#inspector-display')).toBe('display');
   });
 
-  it('titles the groups of a section that declares more than one', () => {
-    expect(titledGroups('layout')).toBe(true);
-    expect(titledGroups('space')).toBe(false);
-    // position declares one group since the group nothing drew went: its title would repeat the section's own name
-    expect(titledGroups('position')).toBe(false);
-  });
 
   it('orders a section group by group, keeping the order inside a group and attaching a control to the field before it', () => {
     const entries = [

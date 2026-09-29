@@ -5,8 +5,8 @@
     "commands": 256,
     "doors": 998,
     "scenarios": 1333,
-    "modules": 243,
-    "lines": 47577
+    "modules": 244,
+    "lines": 47587
   },
   "features": [
     {
@@ -3272,7 +3272,7 @@
     },
     {
       "path": "src/core/import/import.ts",
-      "lines": 1259,
+      "lines": 1187,
       "commands": [
         "project.importHtml"
       ],
@@ -3284,6 +3284,12 @@
         "html-import-structure",
         "html-import-styles"
       ]
+    },
+    {
+      "path": "src/core/import/markup.ts",
+      "lines": 81,
+      "commands": [],
+      "features": []
     },
     {
       "path": "src/core/import/selectors.ts",
@@ -4364,7 +4370,7 @@
     },
     {
       "path": "src/editor/inspector/sections.ts",
-      "lines": 303,
+      "lines": 304,
       "commands": [
         "inspector.toggleSection",
         "inspector.setMode",

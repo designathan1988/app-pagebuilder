@@ -422,16 +422,19 @@ export const propertiesFileSchema = z.strictObject({
   // element, own, and those of its parent. The inspector reads them on the canvas and never names a property by hand.
   context: z.strictObject({ own: z.array(cssName).min(1), parent: z.array(cssName).min(1) }),
   // The pair rows of the Style tab (DESIGN.md "Inspector"): two properties or composites drawn side by side on one
-  // row, under the first field's label. A row is where the fields are read together (width and height, the four gap
-  // axes, a shorthand and its colour); every other field keeps a row of its own. A row may carry a short prefix for
-  // the fields whose value would otherwise be ambiguous (the height's H, the gap axes).
+  // row, under the row's own label — the first field's own name, or the concept both fields serve when the design
+  // names it (the gap's two axes read "Gap", not "Row gap"). A row is where the fields are read together (width and
+  // height, the two gap axes); every other field keeps a row of its own. A row may carry a short prefix for the fields
+  // whose value would otherwise be ambiguous (the height's H, the gap axes' arrows).
   rows: z
     .array(
       z.strictObject({
         id: kebabId,
         // the section both fields live in (properties.json sections)
         section: kebabId,
-        // the fields, in the order they are drawn; the first names the row by its label
+        // the row's own label; null: the first field's label names the row
+        labelKey: i18nKey.nullable(),
+        // the fields, in the order they are drawn
         fields: z.array(z.strictObject({ target: z.union([cssName, kebabId]), prefixKey: i18nKey.nullable() })).min(2).max(2),
       }),
     ),

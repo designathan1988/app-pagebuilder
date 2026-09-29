@@ -15,7 +15,8 @@ export interface PairField {
   readonly prefixKey: MessageId | null;
 }
 
-// a pair row: the two fields, in the order they are drawn, and the label the row carries (the first field's own)
+// a pair row: the two fields, in the order they are drawn, and the label the row carries — its own when the design
+// names the concept both fields serve (the gap's two axes read "Gap"), else the first field's own
 export interface PairRow {
   readonly id: string;
   readonly section: string;
@@ -35,7 +36,7 @@ export const PAIR_ROWS: readonly PairRow[] = manifest.properties.rows.map((row) 
   return {
     id: row.id,
     section: row.section,
-    labelKey: first,
+    labelKey: (row.labelKey ?? first) as MessageId,
     fields: row.fields.map((field) => ({ target: field.target, prefixKey: (field.prefixKey ?? null) as MessageId | null })),
   };
 });
@@ -73,10 +74,6 @@ for (const entry of [...manifest.properties.properties, ...manifest.properties.c
   for (const ref of entry.doors) if (!BY_DOOR.has(ref)) BY_DOOR.set(ref, entry.group);
 }
 export const groupOfDoor = (ref: string): string | null => BY_DOOR.get(ref) ?? null;
-
-// Whether a section's fields are titled with their groups: a section that declares one group names every field of it
-// the same way, so its title would only repeat the section's own name.
-export const titledGroups = (section: string): boolean => groupsOf(section).length > 1;
 
 // The order a section draws its fields in (DESIGN.md "Inspector"): its groups as the section declares them, and
 // inside a group the order the manifest places the doors in. A control that edits no property name of its own takes

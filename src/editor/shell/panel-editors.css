@@ -380,14 +380,6 @@ button.picker__swatch {
   color: var(--color-text-muted);
 }
 
-.inspector-section__count {
-  margin-left: var(--space-3);
-  padding: 0 var(--space-2);
-  border-radius: var(--radius-pill);
-  background: var(--color-accent-soft);
-  color: var(--color-accent);
-  font: var(--fw-micro) var(--fs-micro) / var(--lh-micro) var(--font-ui);
-}
 
 /* the mode's segments and, beside them, Add a property with its list (spec inspector-add-property) */
 /* The mode row (Essentials only / All properties, and Add a property). A translated label is longer than the English

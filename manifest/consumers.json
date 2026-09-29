@@ -2125,6 +2125,10 @@
       "reader": "src/editor/inspector/rows.ts"
     },
     {
+      "field": "properties:rows[].labelKey",
+      "reader": "src/editor/inspector/rows.ts"
+    },
+    {
       "field": "properties:rows[].fields",
       "reader": "src/editor/inspector/rows.ts"
     },

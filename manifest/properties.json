@@ -5078,6 +5078,7 @@
     {
       "id": "gap-axes",
       "section": "layout",
+      "labelKey": "property.gap",
       "fields": [
         {
           "target": "row-gap",
@@ -5092,6 +5093,7 @@
     {
       "id": "size-width-height",
       "section": "size",
+      "labelKey": null,
       "fields": [
         {
           "target": "width",
@@ -5106,6 +5108,7 @@
     {
       "id": "size-min-max-width",
       "section": "size",
+      "labelKey": null,
       "fields": [
         {
           "target": "min-width",
@@ -5120,6 +5123,7 @@
     {
       "id": "size-min-max-height",
       "section": "size",
+      "labelKey": null,
       "fields": [
         {
           "target": "min-height",
@@ -5134,6 +5138,7 @@
     {
       "id": "text-size-weight",
       "section": "text",
+      "labelKey": null,
       "fields": [
         {
           "target": "font-size",
@@ -5148,6 +5153,7 @@
     {
       "id": "text-line-height-letter-spacing",
       "section": "text",
+      "labelKey": null,
       "fields": [
         {
           "target": "line-height",
@@ -5162,6 +5168,7 @@
     {
       "id": "border-and-colour",
       "section": "border",
+      "labelKey": null,
       "fields": [
         {
           "target": "border",
