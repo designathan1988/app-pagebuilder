@@ -1,0 +1,25 @@
+/* ---------------------------------------------------------------- the window */
+
+.shell {
+  display: grid;
+  grid-template-columns: var(--size-activity-bar) var(--size-sidebar) minmax(0, 1fr) var(--size-inspector);
+  grid-template-rows: var(--size-top-bar) minmax(0, 1fr) var(--size-status-bar);
+  grid-template-areas:
+    'top top top top'
+    'activity sidebar centre inspector'
+    'status status status status';
+  height: 100vh;
+}
+
+.shell--no-sidebar {
+  grid-template-columns: var(--size-activity-bar) 0 minmax(0, 1fr) var(--size-inspector);
+}
+
+.shell--no-inspector {
+  grid-template-columns: var(--size-activity-bar) var(--size-sidebar) minmax(0, 1fr) 0;
+}
+
+.shell--no-sidebar.shell--no-inspector {
+  grid-template-columns: var(--size-activity-bar) 0 minmax(0, 1fr) 0;
+}
+

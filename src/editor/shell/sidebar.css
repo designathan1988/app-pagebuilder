@@ -1,0 +1,556 @@
+/* ---------------------------------------------------------------- activity bar and sidebar */
+
+.activity-bar {
+  grid-area: activity;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) 0;
+  background: var(--color-bg-app);
+  border-right: 1px solid var(--color-border);
+}
+
+.activity-bar .door {
+  position: relative;
+  width: var(--size-activity-bar);
+  height: var(--size-activity-bar);
+  border: 0;
+  color: var(--color-text-subtle);
+}
+
+.activity-bar .door .icon {
+  width: var(--space-8);
+  height: var(--space-8);
+}
+
+.activity-bar .door.is-current {
+  background: none;
+  color: var(--color-text);
+}
+
+.activity-bar .door.is-current::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: var(--space-4);
+  bottom: var(--space-4);
+  width: var(--space-1);
+  border-radius: var(--radius-xs);
+  background: var(--color-accent);
+}
+
+.sidebar {
+  grid-area: sidebar;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+}
+
+.view {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+/* the line at the top of the Insert view naming where a palette click inserts (the user's real-use audit, A3.19) */
+.insert__destination {
+  flex: none;
+  padding: var(--space-1) var(--space-3) var(--space-1) var(--space-6);
+  color: var(--color-text-muted);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* the dashed line in the Layers at the row a palette click would insert at (the user's real-use audit, A3.19) */
+.row__insert {
+  flex: none;
+  height: 0;
+  margin-left: calc(var(--space-2) + min(var(--depth), 8) * var(--space-5));
+  border-top: 2px dashed var(--color-accent);
+}
+
+/* the sidebar's view above its stack (spec panel-resize): it takes what the stack leaves */
+.sidebar__view {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* a stacked section (the Layers, spec panel-resize): its height is the size its splitter holds, set inline */
+.sidebar__stack {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* the Layers tree scrolls its own rows, so a page of any size draws only the rows in the view (A3.28) */
+.view--section {
+  overflow: hidden;
+}
+
+/* the rows region is as tall as the search and the tree it holds, never taller than the panel (A3.28) */
+.view--section [data-region='layers-row'] {
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* the tree is as tall as its rows while they fit the panel, and as tall as the panel while they do not (A3.28: the
+   rows beyond it are drawn as the scroll reaches them) */
+.layers-tree {
+  position: relative;
+  flex: 0 1 auto;
+  min-height: 0;
+  max-height: 100%;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.layers-tree__board {
+  position: relative;
+}
+
+.layers-tree__slot {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+/* a splitter (spec panel-resize, Problems in Pager 4): a 6 px pointer target with the visible line centred on it */
+.splitter {
+  position: relative;
+  flex: none;
+  z-index: 1;
+  user-select: none;
+}
+.splitter--y {
+  height: var(--space-3);
+  border-top: 1px solid var(--color-border);
+  cursor: row-resize;
+}
+.splitter--x {
+  width: var(--space-3);
+  border-left: 1px solid var(--color-border);
+  cursor: col-resize;
+}
+.splitter:hover,
+.splitter:focus-visible {
+  background: color-mix(in srgb, var(--color-accent) 35%, transparent);
+  outline: none;
+}
+
+.view__title {
+  display: flex;
+  align-items: center;
+  flex: none;
+  height: var(--space-10);
+  padding: 0 var(--space-2) 0 var(--space-6);
+  font: var(--fw-overline) var(--fs-overline) / var(--lh-overline) var(--font-ui);
+  letter-spacing: var(--ls-overline);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.view__name {
+  flex: 1;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  flex: none;
+  gap: var(--space-1);
+  height: var(--size-row);
+  padding: 0 var(--space-2) 0 var(--space-6);
+  font: var(--fw-overline) var(--fs-overline) / var(--lh-overline) var(--font-ui);
+  letter-spacing: var(--ls-overline);
+  text-transform: uppercase;
+  color: var(--color-text);
+  border-top: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.section-title__toggle {
+  margin-left: calc(var(--space-4) * -1);
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+}
+
+.section-title__actions {
+  display: inline-flex;
+  margin-left: auto;
+}
+
+.section-title__count {
+  padding: 0 var(--space-2);
+  font: var(--fw-micro) var(--fs-micro) / var(--lh-micro) var(--font-ui);
+  letter-spacing: var(--ls-micro);
+  color: var(--color-text-subtle);
+  background: var(--color-surface-hover);
+  border-radius: var(--radius-pill);
+}
+
+.section-title__actions .door--icon-button {
+  width: var(--size-target-min);
+  height: var(--size-target-min);
+  color: var(--color-text-subtle);
+}
+
+/* a drag's drop on a Layers row (spec layers-drag): a line in the drop colour on the row's top or bottom edge,
+   starting at the indentation of the level it inserts into (Problems in Pager 5); inside a row, its outline; refused,
+   the danger colour; the receiving parent's row tinted in the target colour */
+.row--tree[data-drop-position='before']::after,
+.row--tree[data-drop-position='after']::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  left: calc(var(--space-2) + min(var(--depth), 8) * var(--space-5));
+  height: 0;
+  outline: 1.5px solid var(--color-canvas-drop);
+  pointer-events: none;
+}
+
+.row--tree[data-drop-position='before']::after {
+  top: 0;
+}
+
+.row--tree[data-drop-position='after']::after {
+  bottom: 0;
+}
+
+.row--tree[data-drop-position='inside'] {
+  outline: 2px solid var(--color-canvas-drop);
+  outline-offset: -2px;
+}
+
+.row--tree[data-drop-position='refused'] {
+  outline: 2px solid var(--color-danger);
+  outline-offset: -2px;
+}
+
+/* a row that matches the Layers search (spec layers-search): its name in the accent colour */
+.row--tree.is-match .row__name {
+  color: var(--color-accent);
+  font-weight: var(--weight-semibold);
+}
+
+.layers__search {
+  padding: var(--space-2) var(--space-4);
+}
+
+.layers__search .search {
+  width: 100%;
+}
+
+.row--tree.is-receiving {
+  background: color-mix(in srgb, var(--color-canvas-target) 12%, transparent);
+}
+
+.row {
+  --depth: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  height: var(--size-row);
+  padding: 0 var(--space-3) 0 calc(var(--space-2) + min(var(--depth), 8) * var(--space-5));
+  min-width: 0;
+  white-space: nowrap;
+  color: var(--color-text);
+}
+
+.row:hover {
+  background: var(--color-surface-hover);
+}
+
+.row:has(> .door.is-current) {
+  background: var(--color-surface-selected);
+  box-shadow: inset var(--space-1) 0 0 var(--color-accent);
+}
+
+.row.is-selected {
+  background: var(--color-surface-selected);
+}
+
+.row__main {
+  flex: 1;
+  justify-content: flex-start;
+  height: var(--size-row);
+  padding: 0 var(--space-4);
+  gap: var(--space-3);
+  border: 0;
+  color: var(--color-text);
+}
+
+.row .door:hover {
+  background: none;
+}
+
+.row__name {
+  flex: none;
+}
+
+/* a row's name while its node is renamed (spec rename-element): a field in the name's place, as wide as the row lets it */
+.row__rename {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+
+/* the Explorer's page row: the row's door, then the page's name field, then its actions */
+.row__page-name {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+
+.row__name-field {
+  flex: 1;
+  min-width: 0;
+  height: calc(var(--size-row) - var(--space-2));
+  padding: 0 var(--space-2);
+  border: 1px solid var(--color-focus);
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-sunken);
+  color: var(--color-text);
+}
+
+.row__meta {
+  margin-left: auto;
+  padding-left: var(--space-3);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-mono);
+  color: var(--color-text-subtle);
+}
+
+/* Hide and Lock appear on the row under the pointer (DESIGN.md "Component regions", layers-row 8 and 9), so a selected
+   row keeps its whole name. Until then they are transparent, never out of the layout: the pointer that comes to press
+   one shows it, and the keyboard reaches it, which shows it too. */
+
+/* The label colour of a Layers row (spec layers-row-colours): the dot the row draws wears the element's colour and
+   opens the palette under it while the pointer is on it or the keyboard reaches it */
+.row__palette {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.row__palette > .door {
+  --row-colour: var(--color-text-subtle);
+}
+
+.row__palette > .door .icon {
+  color: var(--row-colour);
+}
+
+.row__swatches {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--space-1);
+  /* the palette hangs under the row's dot, never over the row's own name or the row below's middle */
+  position: absolute;
+  z-index: 2;
+  top: 100%;
+  right: 0;
+  width: max-content;
+  padding: var(--space-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-2);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* the palette opens on the dot's own press, and a pointer on the dot reveals it without one */
+.row__palette.is-open .row__swatches,
+.row__palette:hover .row__swatches,
+.row__palette:focus-within .row__swatches {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.row__swatch {
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: var(--space-8);
+  height: var(--space-8);
+  border-radius: var(--radius-pill);
+}
+
+.row__swatch > .door {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-pill);
+}
+
+.row__swatch--none {
+  border: 1px dashed var(--color-border-strong);
+}
+
+/* the row wears the colour it holds: a line on its left, never a filled background, so the name stays readable */
+.row--tree.is-coloured {
+  /* the line is a border, not a shadow: it follows the row's colour without a length literal */
+  border-left: var(--space-1) solid var(--row-colour);
+}
+
+.row__actions {
+  display: inline-flex;
+  position: absolute;
+  right: var(--space-1);
+  top: 0;
+  /* the strip is only its buttons: a press that lands between them is the row's own (the name, the selection) */
+  pointer-events: none;
+}
+
+.row__actions > * {
+  pointer-events: auto;
+}
+
+.row__actions > .door {
+  opacity: 0;
+}
+
+.row:hover .row__actions {
+  background: var(--color-surface-hover);
+}
+
+.row:hover .row__actions > .door,
+.row__actions > .door:focus-visible {
+  opacity: 1;
+}
+
+.row:hover .row__meta {
+  visibility: hidden;
+}
+
+/* a hidden node's row (spec hide-element): dimmed, its Hide pressed and shown in place of the tag */
+.row--hidden > .icon,
+.row--hidden > .row__name {
+  color: var(--color-text-subtle);
+}
+
+/* a locked node's row (spec lock-element): its Lock pressed and shown in place of the tag */
+.row--hidden .row__meta,
+.row--locked .row__meta {
+  visibility: hidden;
+}
+
+.row--hidden .row__actions > .door[aria-pressed='true'],
+.row--locked .row__actions > .door[aria-pressed='true'] {
+  opacity: 1;
+}
+
+.row__actions .door--icon-button,
+.row .door--disclosure {
+  width: var(--size-target-min);
+  height: var(--size-target-min);
+  padding: 0;
+  justify-content: center;
+}
+
+.row__caret-space {
+  width: var(--size-target-min);
+  flex: none;
+}
+
+.insert {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: 0 var(--space-5) var(--space-4);
+}
+
+.palette-group__header {
+  width: 100%;
+  margin-top: var(--space-2);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-muted);
+}
+
+.palette-group__count {
+  margin-left: auto;
+  font-weight: var(--weight-regular);
+  color: var(--color-text-subtle);
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.tile {
+  flex-direction: column;
+  gap: var(--space-1);
+  height: calc(var(--size-target-min) * 2);
+  padding: 0 var(--space-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+}
+
+.tile .icon {
+  color: var(--color-text-muted);
+}
+
+/* the Elements panel's densities (palette.setDensity): a list of rows with the tag, two or three columns of tiles,
+   or a grid of icons whose label is the tooltip */
+.insert--list .tiles {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.insert--list .tile {
+  flex-direction: row;
+  justify-content: flex-start;
+  height: var(--size-target-min);
+  padding: 0 var(--space-2);
+}
+
+.tile__tag {
+  margin-left: auto;
+  color: var(--color-text-subtle);
+  font-family: var(--font-mono);
+}
+
+.insert--three-columns .tiles {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.insert--icons .tiles {
+  grid-template-columns: repeat(auto-fill, minmax(var(--size-target-min), 1fr));
+}
+
+.insert--icons .tile {
+  height: var(--size-target-min);
+}
+
+.insert--icons .tile__label {
+  display: none;
+}
+
+.insert__matches {
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-subtle);
+  font-size: var(--fs-caption);
+}
+

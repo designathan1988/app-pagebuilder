@@ -12,6 +12,9 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
   8.1, the component names A3.12, the positioned moves A3.13, the responsive grid A1.4). The old parallel lines
   are deleted; `origin/codex` (two days old, the abandoned parallel attempt, its Settings items since built here)
   is not merged.
+- The shell stylesheet is split by region (window, doors, menus, top bar, sidebar, canvas, inspector, panels,
+  dock, status bar, the panel editors, canvas editing, the window overlays), imported in the original order from
+  main.tsx; the rules and their cascade order are proven identical to the single file it came from.
 - **Every command of the manifest is built** (`src/app/commands.ts` holds no NOT_AVAILABLE_YET). Two features are
   still unregistered as built: `hover-measure` and `shortcuts-e2e-sweep`.
 - The static checks are green on this tree: `gen:check`, `manifest:check` (1333 scenarios), `typecheck` (both

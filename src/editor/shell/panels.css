@@ -1,0 +1,135 @@
+/* ---------------------------------------------------------------- panels that left their place (specs floating-panels, panel-combine-tabs) */
+
+/* the row of the centre column: the canvas, and the right dock beside it */
+.workbench__row {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* the right dock: the panels docked to the right edge (spec floating-panels) */
+.right-dock {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  width: var(--size-right-dock);
+  min-width: 0;
+  overflow: auto;
+  background: var(--color-bg-app);
+  border-left: 1px solid var(--color-border);
+}
+
+.panel-shell,
+.panel-area {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* a panel's header away from its dock: the drag source, its name and its close button */
+.panel-area__header {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-2);
+  height: var(--size-frame-tabs);
+  padding: 0 var(--space-2) 0 var(--space-4);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  cursor: grab;
+}
+
+/* the drag grip of a panel's header (spec floating-panels): one control per place a release can land in, side by side
+   across the room left between the header's own controls; the bands take the press, the place it ends in decides */
+.panel-grip {
+  display: flex;
+  flex: 1;
+  align-self: stretch;
+  min-width: var(--size-target-min);
+}
+
+.panel-grip__band {
+  flex: 1;
+}
+
+.panel-area__name {
+  flex: 1;
+  overflow: hidden;
+  font-weight: var(--fw-label);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* the tabs of a combined area (panel-combine-tabs): one tab per panel */
+.panel-area__tabs {
+  display: flex;
+  flex: none;
+  align-items: stretch;
+  height: var(--size-frame-tabs);
+  overflow-x: auto;
+  background: var(--color-bg-app);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* the body fills its area and its own panel scrolls inside it (the Layers tree, the Explorer's lists): the panel's box
+   is the area's, never taller than it */
+.panel-area__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.panel-area__body > * {
+  flex: 1;
+  min-height: 0;
+}
+
+/* a panel stacked under another keeps its own header and its body */
+.panel-area--stacked {
+  flex: none;
+  min-height: var(--size-panel-stacked);
+  border-top: 1px solid var(--color-border);
+}
+
+/* a floating window: a panel over the editor, at the point it was dropped (spec floating-panels) */
+.panel-window {
+  position: fixed;
+  z-index: 44;
+  display: flex;
+  flex-direction: column;
+  width: var(--size-panel-window-width);
+  max-height: var(--size-panel-window-height);
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-2);
+}
+
+/* the hint drawn while a panel is dragged: the strip of the edge it would dock to, or the cover of the panel it would
+   combine with, with the words of the door the release would run */
+.panel-hint {
+  position: fixed;
+  z-index: 46;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--space-4);
+  pointer-events: none;
+  background: color-mix(in srgb, var(--color-accent) 16%, transparent);
+  border: 2px solid var(--color-accent);
+}
+
+.panel-hint__label {
+  padding: var(--space-1) var(--space-4);
+  font: var(--fw-label) var(--fs-caption) / var(--lh-caption) var(--font-ui);
+  color: var(--color-on-accent);
+  background: var(--color-accent);
+  border-radius: var(--radius-sm);
+}
+

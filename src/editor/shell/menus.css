@@ -1,0 +1,126 @@
+/* ---------------------------------------------------------------- menus */
+
+.menu-anchor {
+  position: relative;
+  display: inline-flex;
+}
+
+.menu-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: var(--size-control-lg);
+  min-width: var(--size-target-min);
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.menu-button:hover,
+.menu-button.is-open {
+  background: var(--color-surface-hover);
+}
+
+.menu-button--icon-button {
+  width: var(--size-control-lg);
+  padding: 0;
+  justify-content: center;
+  color: var(--color-text-muted);
+}
+
+.menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  min-width: var(--size-inspector);
+  padding: var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-2);
+}
+
+.menu__item {
+  display: grid;
+  grid-template-columns: var(--space-7) minmax(max-content, 1fr) auto auto;
+  align-items: center;
+  gap: var(--space-4);
+  height: var(--size-control-lg);
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--color-text);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.menu__item:not(.is-unavailable):hover,
+.menu__item:focus-visible {
+  background: var(--color-surface-hover);
+}
+
+.menu__item.is-unavailable {
+  color: var(--color-text-subtle);
+  cursor: not-allowed;
+}
+
+.menu__reason {
+  font-size: var(--fs-caption);
+  color: var(--color-text-subtle);
+}
+
+.menu__chord {
+  border: 0;
+  background: none;
+}
+
+.menu__sub {
+  position: relative;
+}
+
+/* the backdrop under an open menu (ui.dismiss#overlay-backdrop): the whole window, transparent, under the menu */
+.overlay-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 49;
+  min-width: 0;
+  height: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.overlay-backdrop:not(.is-unavailable):hover {
+  background: transparent;
+}
+
+/* the context menu: at the pointer in the window (its left and top come from the drawing), over its backdrop; the
+   wrapper takes no place in the shell's grid */
+.context-menu {
+  display: contents;
+}
+
+.context-menu > .menu {
+  position: fixed;
+}
+
+/* a submenu shows while the pointer is over its item or the focus is in it, or once its item is clicked */
+.menu__sub > .menu {
+  top: 0;
+  left: 100%;
+  display: none;
+}
+
+.menu__sub:hover > .menu,
+.menu__sub:focus-within > .menu,
+.menu__sub.is-open > .menu {
+  display: flex;
+}
+

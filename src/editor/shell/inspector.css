@@ -1,0 +1,802 @@
+/* ---------------------------------------------------------------- inspector */
+
+.inspector {
+  grid-area: inspector;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--color-surface);
+  border-left: 1px solid var(--color-border);
+}
+
+.inspector-header {
+  display: flex;
+  align-items: center;
+  flex: none;
+  height: var(--size-top-bar);
+  padding: 0 var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.inspector-header__tabs {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.inspector-header__tabs .door {
+  height: var(--size-top-bar);
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: 0;
+  color: var(--color-text-muted);
+}
+
+.inspector-header__tabs .door.is-current {
+  color: var(--color-text);
+  font-weight: var(--weight-semibold);
+  box-shadow: inset 0 calc(var(--space-1) * -1) 0 var(--color-accent);
+}
+
+.inspector-header__actions {
+  display: inline-flex;
+  margin-left: auto;
+}
+
+.selector-bar {
+  display: flex;
+  flex-direction: column;
+  flex: none;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.selector-bar__element {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  font: var(--fw-title) var(--fs-title) / var(--lh-title) var(--font-ui);
+  color: var(--color-text-muted);
+}
+
+/* the selected element's name reads as text, its tag in the code face */
+.selector-bar__name {
+  overflow: hidden;
+  color: var(--color-text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.selector-bar__tag {
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-body) var(--font-mono);
+}
+
+.selector-bar__targets,
+.selector-bar__state {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.selector-bar__targets {
+  flex-wrap: wrap;
+}
+
+/* the target chips (src/editor/shell/class-bar.tsx): Element, then each class with its ×; the target pressed; + Class
+   dashed */
+.target-chip-group {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-sunken);
+}
+
+.target-chip {
+  display: inline-flex;
+  align-items: center;
+  height: var(--size-target-min);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-sunken);
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.target-chip--class {
+  border: 0;
+  font-family: var(--font-mono);
+}
+
+.target-chip.is-current,
+.target-chip-group:has(.target-chip.is-current) {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-weight: var(--weight-semibold);
+}
+
+.target-chip-group:has(.target-chip.is-current) .target-chip__remove {
+  color: var(--color-on-accent);
+}
+
+.target-chip__remove {
+  display: inline-grid;
+  place-items: center;
+  width: var(--size-target-min);
+  height: var(--size-target-min);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: none;
+  color: var(--color-text-subtle);
+}
+
+.target-chip--add {
+  border-style: dashed;
+  background: none;
+  color: var(--color-text-muted);
+}
+
+/* the list and the name field + Class and Save the styles as a class open */
+.class-popup {
+  position: relative;
+}
+
+.class-popup__panel {
+  position: absolute;
+  z-index: 6;
+  top: 100%;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: calc(var(--space-10) * 5);
+  padding: var(--space-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-2);
+}
+
+.class-popup__item {
+  padding: var(--space-2) var(--space-4);
+  border: 0;
+  background: none;
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  text-align: start;
+  cursor: pointer;
+}
+
+.class-popup__form {
+  padding: var(--space-1);
+}
+
+.affects {
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  color: var(--color-text-subtle);
+}
+
+/* The notice an element of an instance wears in the Style tab (the user's real-use audit, item A3.12): a style write
+   there reaches the component and every copy of it, said before anything is typed. */
+.inspector-notice {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-warning);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-warning) 12%, transparent);
+  color: var(--color-text);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+}
+
+/* where a field's value comes from, in its origin's legend colour (field-origin.tsx; spec inspector-provenance-reset,
+   Problems in Pager 6); a class's value, which the legend does not name, stays muted like the placeholder beside it */
+.field-origin,
+.field-writes {
+  padding: 0 var(--space-2);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-mono);
+  color: var(--color-text-muted);
+}
+
+.field-origin[data-origin='here'],
+.field-writes {
+  color: var(--color-origin-here);
+}
+
+.field-origin[data-origin='breakpoint'] {
+  color: var(--color-origin-breakpoint);
+}
+
+.field-origin[data-origin='state'] {
+  color: var(--color-origin-state);
+}
+
+.field-origin[data-origin='inherited'] {
+  color: var(--color-origin-inherited);
+}
+
+/* the Styles view's project classes and their use counts */
+.style-classes__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-4);
+}
+
+.style-classes__field {
+  flex: 1;
+  min-width: 0;
+}
+
+.style-classes__field .input {
+  font-family: var(--font-mono);
+}
+
+.style-classes__name {
+  font-family: var(--font-mono);
+}
+
+.style-classes__count {
+  color: var(--color-text-muted);
+  font-size: var(--fs-caption);
+  white-space: nowrap;
+}
+
+.state-picker .menu-button {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-sunken);
+}
+
+.state-picker__key {
+  color: var(--color-text-muted);
+}
+
+.state-picker__value {
+  font-weight: var(--weight-semibold);
+}
+
+.active-breakpoint {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-text-muted);
+}
+
+/* the column below the header (and the Style tab's selector bar) scrolls the tab's region, which is as tall as what
+   it shows */
+.inspector-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.inspector-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-6) var(--space-10);
+}
+
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.settings-section:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.settings-section__header h3,
+.settings-section__header p {
+  margin: 0;
+}
+
+.settings-section__header h3 {
+  font: var(--fw-title) var(--fs-title) / var(--lh-title) var(--font-ui);
+}
+
+.settings-section__header p {
+  color: var(--color-text-muted);
+  font-size: var(--fs-body);
+}
+
+.inspector-empty {
+  margin: 0;
+  font: var(--fw-title) var(--fs-title) / var(--lh-title) var(--font-ui);
+  color: var(--color-text-muted);
+}
+
+.inspector-hints {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0 0 0 var(--space-7);
+  color: var(--color-text-muted);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--fs-caption);
+  color: var(--color-text-muted);
+}
+
+.legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.legend__item::before {
+  content: '';
+  width: var(--space-4);
+  height: var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--origin);
+}
+
+.legend__item--here {
+  --origin: var(--color-origin-here);
+}
+
+.legend__item--breakpoint {
+  --origin: var(--color-origin-breakpoint);
+}
+
+.legend__item--state {
+  --origin: var(--color-origin-state);
+}
+
+.legend__item--inherited {
+  --origin: var(--color-origin-inherited);
+}
+
+.legend__item--default {
+  --origin: var(--color-origin-default);
+}
+
+.segmented--wide {
+  display: flex;
+}
+
+.segmented--wide .door {
+  flex: 1;
+}
+
+/* a group too narrow for its names (the Insert densities): each segment shows its icon; its name is its tooltip and
+   accessible name */
+.segmented--icons .door {
+  justify-content: center;
+  min-width: 0;
+}
+
+.segmented--icons .door__label {
+  display: none;
+}
+
+.inspector-sections {
+  display: flex;
+  flex-direction: column;
+}
+
+.inspector-section {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: var(--space-2);
+  border-top: 1px solid var(--color-border);
+}
+
+.inspector-section__header {
+  align-self: stretch;
+  height: var(--size-row);
+  margin-left: calc(var(--space-2) * -1);
+  font: var(--fw-overline) var(--fs-overline) / var(--lh-overline) var(--font-ui);
+  letter-spacing: var(--ls-overline);
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+
+/* a collapsed section's summary, on its header's row, in the code face (CSS values) */
+.inspector-section__summary {
+  overflow: hidden;
+  margin-left: var(--space-3);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-body) var(--font-mono);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--color-text-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* a field whose control takes the row's whole width under its label (the text of an element) */
+.field-row--wide {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2);
+}
+
+/* a field with its own action after it (a custom attribute's value and its remove button) */
+.field-row.field-row--action {
+  grid-template-columns: calc(var(--space-10) * 3 + var(--space-2)) minmax(0, 1fr) auto;
+}
+
+.input--area {
+  height: auto;
+  min-height: calc(var(--size-control) * 3);
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-ui);
+  line-height: var(--lh-body);
+  white-space: pre-wrap;
+  resize: vertical;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: calc(var(--space-10) * 3 + var(--space-2)) minmax(0, 1fr);
+  align-items: center;
+  gap: 0 var(--space-3);
+  min-height: var(--size-row);
+}
+
+/* A label that does not fit its column wraps to a second line instead of being cut (the user's real-use audit:
+   every field says what it is), and a tooltip in the markup carries the whole word for the longest ones */
+.field-row__label {
+  overflow: hidden;
+  color: var(--color-text-muted);
+  text-overflow: ellipsis;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: var(--lh-label);
+}
+
+/* A pair row (properties.json rows, DESIGN.md "Inspector"): two fields read together, under the first one's label —
+   width with height, the gap's two axes, a shorthand with its colour. Each field keeps its whole cell: its door, its
+   value, its unit menu, its step buttons and its reset.
+   Two such cells and a label do not fit the inspector's default width (288 px), where a cramped field would clip the
+   value it shows; so the pair stands on one line while the panel has the room for both cells (the panel is resizable,
+   DESIGN.md "The window") and one field per line, under the row's shared label, when it does not. What a field is, on
+   the second line, its own short prefix says (the height's H, the gap's axis mark). */
+.inspector-sections {
+  container-type: inline-size;
+}
+
+.field-row--pair {
+  grid-template-columns: calc(var(--space-10) * 3 + var(--space-2)) minmax(0, 1fr) minmax(0, 1fr);
+}
+
+/* the cell of a field standing in a pair row: the field's door, its value, and a refusal said under it (wrapped, so a
+   refusal never widens the row) */
+.field-cell {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--space-2);
+  min-width: 0;
+}
+
+@container (max-width: 420px) {
+  .field-row--pair {
+    grid-template-columns: calc(var(--space-10) * 3 + var(--space-2)) minmax(0, 1fr);
+  }
+
+  /* the pair's second field takes the second line, in the value column */
+  .field-row--pair > :last-child:not(.field-row__label):not(.field-row__refusal) {
+    grid-column: 2;
+  }
+}
+
+/* the short mark a pair row puts before a value whose property the row's label does not name (the height's H, ↕ ↔) */
+.field__prefix {
+  flex: 0 0 auto;
+  color: var(--color-text-subtle);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-ui);
+}
+
+/* the title of a group of properties inside a section (properties.json sections[].groups): a caption above its
+   fields, indented to the value column so the fields still read as one list */
+.inspector-group {
+  margin: var(--space-2) 0 var(--space-1);
+  padding-left: calc(var(--space-10) * 3 + var(--space-2));
+  color: var(--color-text-subtle);
+  font: var(--fw-overline) var(--fs-overline) / var(--lh-overline) var(--font-ui);
+  letter-spacing: var(--ls-overline);
+  text-transform: uppercase;
+}
+
+.input-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+/* the slider a field's door declares (A3.30): beside the value, its number written on release */
+.field__slider {
+  flex: 0 0 45%;
+  min-width: 0;
+  height: var(--size-control);
+  margin: 0;
+  accent-color: var(--color-accent);
+}
+
+.field__slider:disabled {
+  opacity: 0.4;
+}
+
+.input,
+.select {
+  width: 100%;
+  min-width: 0;
+  height: var(--size-control);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-sunken);
+  color: var(--color-text);
+  font-family: var(--font-mono);
+}
+
+/* a text field says its hover and its focus on its own border, not only by the page's ring (A3.43) */
+.input:hover:not(:disabled),
+.select:hover {
+  border-color: var(--color-border-strong);
+}
+
+.input:focus:not(:disabled),
+.select:focus:not(:disabled) {
+  border-color: var(--color-focus);
+}
+
+.input:disabled {
+  cursor: not-allowed;
+}
+
+/* code, file names, class names, tags and CSS values are set in the code font (DESIGN.md "Density and tokens") */
+.segmented--values .door__label,
+.box__side {
+  font-family: var(--font-mono);
+}
+
+.select {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: not-allowed;
+}
+
+/* the field component (DESIGN.md "Component regions": field): the input, the unit menu, the step buttons (shown while
+   the field is hovered or holds the focus), the reset; its label is the scrub handle */
+.input-wrap--number {
+  gap: var(--space-1);
+}
+
+.field-row__label--scrub {
+  cursor: ew-resize;
+  user-select: none;
+}
+
+.field__unit-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  height: var(--size-control);
+  padding: 0 var(--space-2);
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: none;
+  color: var(--color-text-muted);
+}
+
+.field__unit-button:not([aria-disabled="true"]):hover {
+  background: var(--color-surface-hover);
+}
+
+.field__unit-value {
+  font-family: var(--font-mono);
+}
+
+/* the button of a fixed-list field (Display, Font, Font weight): it opens every value at once, so a typed one never
+   hides the others (the user's real-use audit, item A3.33) */
+.field__values-button {
+  display: inline-flex;
+  align-items: center;
+  height: var(--size-control);
+  padding: 0 var(--space-1);
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: none;
+  color: var(--color-text-muted);
+}
+
+.field__values-button:not([aria-disabled='true']):hover {
+  background: var(--color-surface-hover);
+}
+
+.field__menu {
+  right: 0;
+  left: auto;
+  min-width: 0;
+  max-height: calc(var(--size-row) * 12);
+  overflow-y: auto;
+}
+
+/* A project font's item of the font menu draws in its own face (the manifest's custom-fonts): the family comes from
+   the item itself, the fallback from the interface's own font (the tokens) */
+.field__menu {
+  --font-face: var(--font-ui);
+}
+
+.menu__label--face {
+  font-family: var(--font-face);
+}
+
+.input-wrap--number .door--icon-button {
+  width: var(--size-control);
+  min-width: 0;
+  height: var(--size-control);
+  flex: none;
+}
+
+/* The step buttons of a number field stand on the row at rest (the user's order: "não tem steppers" — a control
+   nobody can see is a control that does not exist). They keep their 24 x 24 target and take the row's dim colour
+   until the row is hovered or holds the focus, where they read at full strength. */
+.field__step {
+  opacity: 0.55;
+}
+
+.field-row:hover .field__step,
+.field-row:focus-within .field__step {
+  opacity: 1;
+}
+
+.swatch {
+  width: calc(var(--space-7) - var(--space-1));
+  height: calc(var(--space-7) - var(--space-1));
+  flex: none;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-xs);
+}
+
+.segmented--values {
+  flex-wrap: wrap;
+  justify-self: start;
+}
+
+.segmented--values .door {
+  min-width: var(--size-target-min);
+  padding: 0 var(--space-2);
+}
+
+.matrix {
+  display: grid;
+  grid-template-columns: repeat(3, var(--size-target-min));
+  grid-auto-rows: var(--size-target-min);
+  width: fit-content;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-sunken);
+}
+
+.matrix__cell {
+  display: grid;
+  place-items: center;
+}
+
+.matrix__cell::before {
+  content: '';
+  width: var(--space-2);
+  height: var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--color-border-strong);
+}
+
+.box {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--space-10) minmax(0, 1fr) var(--space-10);
+  grid-template-rows: var(--size-control) minmax(0, 1fr) var(--size-control);
+  align-items: center;
+  justify-items: center;
+  padding: var(--space-2);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-sm);
+}
+
+.box--margin {
+  background: var(--color-origin-breakpoint-soft);
+}
+
+.box--padding {
+  grid-column: 2;
+  grid-row: 2;
+  width: 100%;
+  border-style: solid;
+  background: var(--color-origin-here-soft);
+}
+
+.box__label {
+  position: absolute;
+  top: var(--space-1);
+  left: var(--space-3);
+  font-size: var(--fs-micro);
+  color: var(--color-text-muted);
+}
+
+/* the box's link (all four sides as one value), in its top-right corner */
+.box__link {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.box__side {
+  width: var(--space-10);
+  height: var(--size-control);
+  border: 0;
+  background: none;
+  text-align: center;
+}
+
+/* the sides of a box, named as CSS Logical Properties name them in a horizontal, top-to-bottom writing mode */
+.box__side--block-start {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.box__side--block-end {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.box__side--inline-start {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.box__side--inline-end {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+/* a linked box's one field for its four sides, where its top side was */
+.box__side--all {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+/* a side's input fills its place in the box */
+.box__input {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text);
+  font: inherit;
+  text-align: center;
+}
+
+.box__core {
+  grid-column: 2;
+  grid-row: 2;
+  width: 100%;
+  height: var(--size-control);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xs);
+  background: var(--color-surface);
+}
+

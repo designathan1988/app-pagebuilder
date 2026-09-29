@@ -1,0 +1,188 @@
+/* ---------------------------------------------------------------- dock */
+
+.dock {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+}
+
+.dock--max {
+  flex: 1;
+}
+
+.dock-strip {
+  display: flex;
+  align-items: center;
+  flex: none;
+  gap: var(--space-1);
+  height: var(--size-dock-strip);
+  padding: 0 var(--space-3);
+}
+
+.dock-strip__tabs {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.dock-strip__tabs .door {
+  height: var(--size-target-min);
+  border: 0;
+}
+
+.dock-strip__tabs .door.is-current {
+  background: var(--color-surface-selected);
+  color: var(--color-text);
+  font-weight: var(--weight-semibold);
+}
+
+.dock-strip__actions {
+  display: inline-flex;
+  margin-left: auto;
+}
+
+.dock-strip__actions .door--icon-button {
+  width: var(--size-target-min);
+  height: var(--size-target-min);
+}
+
+.dock-body {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: var(--space-2);
+  height: var(--size-dock-body);
+  padding: var(--space-4) var(--space-6);
+  overflow: auto;
+  border-top: 1px solid var(--color-border);
+}
+
+.dock--max .dock-body {
+  flex: 1;
+  height: auto;
+}
+
+.dock-body--empty {
+  color: var(--color-text-subtle);
+}
+
+/* the Keyboard shortcuts tab (spec shortcuts-panel): the keymap's bindings by context, the body's whole width */
+.shortcuts {
+  flex: 1 0 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: var(--space-6);
+}
+
+.shortcuts__group {
+  flex: 1 1 var(--size-sidebar);
+  min-width: var(--size-sidebar);
+}
+
+.shortcuts__title {
+  margin: 0 0 var(--space-2);
+  font: var(--fw-overline) var(--fs-micro) / var(--lh-micro) var(--font-ui);
+  color: var(--color-text-subtle);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-micro);
+}
+
+.shortcuts__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.shortcuts__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.shortcuts__row.is-unavailable {
+  color: var(--color-text-subtle);
+}
+
+.shortcuts__keys {
+  flex: none;
+  min-width: var(--size-target-min);
+  text-align: center;
+}
+
+.shortcuts__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.shortcuts__reason {
+  margin-left: auto;
+  font-size: var(--fs-caption);
+  color: var(--color-text-subtle);
+}
+
+/* the Document tab: the live document JSON, read-only, the body's whole width */
+.dock-document {
+  flex: 1 0 100%;
+  margin: 0;
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-body) var(--font-mono);
+  color: var(--color-text);
+  white-space: pre;
+}
+
+/* a dock tab drawn from a region of the manifest: its doors in a row that wraps, the body's whole width */
+.dock-region {
+  display: flex;
+  flex: 1 0 100%;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: var(--space-2);
+}
+
+
+/* the Checks panel: one row per issue, the rule it breaks, the element it is about and the fix it suggests */
+.dock-checks__list {
+  display: flex;
+  flex: 1 0 100%;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dock-checks__row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  width: 100%;
+  text-align: left;
+}
+
+.dock-checks__where {
+  color: var(--color-text-muted);
+  font: var(--fw-label) var(--fs-label) / var(--lh-label) var(--font-mono);
+}
+
+.dock-checks__fix {
+  color: var(--color-text-subtle);
+}
+
+.dock-checks__none {
+  margin: 0;
+  color: var(--color-text-subtle);
+}
+
+/* a sidebar view the editor draws no body for says so under its title */
+.view__empty {
+  margin: 0;
+  padding: var(--space-3) var(--space-6);
+  color: var(--color-text-subtle);
+}
+

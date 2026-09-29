@@ -1,0 +1,104 @@
+/* ---------------------------------------------------------------- status bar */
+
+/* the one coloured bar of the window (direction C): its own tokens, legible at 4.5:1 (tools/gen/tokens.ts) */
+.status-bar {
+  grid-area: status;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-4);
+  background: var(--color-status-bar);
+  font-size: var(--fs-caption);
+  color: var(--color-on-status-bar);
+  white-space: nowrap;
+}
+
+/* a message longer than its room is cut with an ellipsis; its tooltip holds it whole (DESIGN.md "Dock and status bar") */
+.status-bar__message {
+  flex: 0 1 auto;
+  min-width: var(--size-sidebar);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* the bar's other items keep their size: only the message and the breadcrumb yield room to a long message */
+.status-bar > :not(.status-bar__message, .status-bar__breadcrumb) {
+  flex-shrink: 0;
+}
+
+.status-bar .door,
+.status-bar .door.is-unavailable:not(.door--primary),
+.status-bar .menu-button {
+  border-color: transparent;
+  background: none;
+  color: inherit;
+}
+
+.status-bar .door:not(.is-unavailable):hover,
+.status-bar .menu-button:hover {
+  background: color-mix(in srgb, var(--color-on-status-bar) 14%, transparent);
+  color: inherit;
+}
+
+.status-bar .menu {
+  color: var(--color-text);
+}
+
+.status-bar__breadcrumb {
+  flex: 1;
+}
+
+/* the breadcrumb: one button per ancestor from the page root down (spec status-bar) */
+.status-bar__breadcrumb .status-bar__crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  max-width: var(--size-breadcrumb-crumb);
+  padding: 0 var(--space-2);
+}
+
+.status-bar__breadcrumb .status-bar__crumb .door__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.status-bar__breadcrumb .status-bar__crumb + .status-bar__crumb::before {
+  content: '›';
+  padding-right: var(--space-1);
+  color: color-mix(in srgb, var(--color-on-status-bar) 60%, transparent);
+}
+
+.status-bar__breadcrumb .status-bar__crumb.is-current {
+  font-weight: var(--fw-label);
+}
+
+.status-bar__item {
+  padding: 0 var(--space-4);
+  border-left: 1px solid color-mix(in srgb, var(--color-on-status-bar) 35%, transparent);
+}
+
+.status-bar .door,
+.status-bar .menu-button {
+  height: var(--size-status-bar);
+  font-size: var(--fs-caption);
+}
+
+.status-bar .door--icon-button {
+  width: var(--size-target-min);
+}
+
+.status-bar .menu {
+  top: auto;
+  bottom: 100%;
+  left: auto;
+  right: 0;
+}
+
+.inspector .menu,
+.canvas-toolbar__zoom .menu {
+  left: auto;
+  right: 0;
+}
+

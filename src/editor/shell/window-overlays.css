@@ -1,0 +1,823 @@
+/* the project's variables in the Styles view (src/editor/shell/variables.tsx) */
+.variables__new {
+  position: relative;
+}
+
+.variables__kinds {
+  position: absolute;
+  z-index: 6;
+  top: 100%;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: calc(var(--space-10) * 4);
+  padding: var(--space-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-2);
+}
+
+.variables__group-title {
+  padding: var(--space-2) var(--space-4) var(--space-1);
+  color: var(--color-text-muted);
+  font-size: var(--fs-caption);
+}
+
+.variables__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-4);
+}
+
+.variables__kind {
+  padding: var(--space-2) var(--space-4);
+  border: 0;
+  background: none;
+  color: var(--color-text);
+  text-align: start;
+  cursor: pointer;
+}
+
+/* a dialog (DESIGN.md "Regions": guides-grids-dialog): a modal centred over a scrim that takes every click outside it */
+.dialog-shield {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-scrim);
+}
+
+.dialog {
+  display: flex;
+  flex-direction: column;
+  width: calc(var(--size-inspector) * 1.6);
+  max-height: calc(100vh - var(--space-10) * 2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-3);
+  color: var(--color-text);
+  font: var(--fw-body) var(--fs-body) / var(--lh-body) var(--font-ui);
+}
+
+.dialog:focus-visible {
+  outline: 2px solid var(--color-focus);
+}
+
+.dialog__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.dialog__title {
+  margin: 0;
+  font: var(--fw-dialog) var(--fs-dialog) / var(--lh-dialog) var(--font-ui);
+}
+
+.dialog__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-6);
+  overflow: auto;
+}
+
+/* Guides & Grids: its sections, switches, guides and grid fields */
+.guides-grids__title {
+  margin: 0 0 var(--space-3);
+  color: var(--color-text-muted);
+  font: var(--fw-overline) var(--fs-overline) / var(--lh-overline) var(--font-ui);
+  letter-spacing: var(--ls-overline);
+  text-transform: uppercase;
+  cursor: help;
+}
+
+.guides-grids__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.guides-grids__add {
+  position: relative;
+  display: inline-flex;
+  gap: var(--space-2);
+}
+
+.guides-grids__place .input {
+  width: calc(var(--space-10) * 2);
+}
+
+.guides-grids__guides {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.guides-grids__guide {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.guides-grids__at {
+  margin-left: auto;
+  font: var(--fw-code) var(--fs-code) / var(--lh-code) var(--font-mono);
+}
+
+.guides-grids__none {
+  width: 100%;
+  margin: 0;
+  color: var(--color-text-subtle);
+}
+
+.guides-grids__fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.guides-grids__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.guides-grids__label {
+  color: var(--color-text-muted);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-ui);
+}
+
+.dialog__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
+/* Snap settings: the targets in two columns, then the distance */
+.snap-settings__targets {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.snap-settings__targets legend {
+  grid-column: 1 / -1;
+  padding: 0;
+}
+
+.snap-settings__target {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* A snap line (src/editor/canvas/snap-lines.tsx, spec snap-while-moving; item 4.5): snap.lineWidth wide, in its own
+   colour of the canvas snap token, from the moving element to the target it snapped to, the target outlined, with the
+   distance it stands from it */
+.snap-line {
+  position: absolute;
+  pointer-events: none;
+  border: 0 solid var(--color-canvas-snap);
+}
+
+.snap-line--x {
+  border-left-width: var(--size-snap-line);
+}
+
+.snap-line--y {
+  border-top-width: var(--size-snap-line);
+}
+
+/* the distance of a snap line (the gap to an element target, the place for a guide or a grid) */
+.snap-line__value {
+  position: absolute;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--color-canvas-snap);
+  color: var(--color-canvas-handle);
+  font-size: var(--fs-caption);
+  white-space: nowrap;
+}
+
+.snap-line--x .snap-line__value {
+  top: var(--space-2);
+  left: var(--space-2);
+}
+
+.snap-line--y .snap-line__value {
+  top: var(--space-2);
+  left: var(--space-2);
+}
+
+.snap-target {
+  position: absolute;
+  pointer-events: none;
+  outline: 1px dashed var(--color-canvas-target);
+}
+
+/* an equal gap (spec smart-guides): a solid mark across the gap with its value in page px */
+.equal-gap {
+  position: absolute;
+  pointer-events: none;
+  border: 0 solid var(--color-canvas-measure);
+}
+
+.equal-gap--x {
+  border-top-width: 1px;
+}
+
+.equal-gap--y {
+  border-left-width: 1px;
+}
+
+.equal-gap__value {
+  position: absolute;
+  top: calc(var(--space-6) * -1);
+  left: 50%;
+  translate: -50% 0;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-xs);
+  background: var(--color-canvas-measure);
+  color: var(--color-on-canvas-band);
+  font: var(--fw-micro) var(--fs-micro) / var(--lh-micro) var(--font-ui);
+}
+
+/* a command's confirmation (confirmation.tsx): a modal box in the middle of the window over the scrim */
+.confirmation {
+  position: fixed;
+  inset: 0;
+  z-index: 85;
+  display: grid;
+  place-items: center;
+}
+
+.confirmation__scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--color-scrim);
+}
+
+.confirmation__box {
+  position: relative;
+  display: grid;
+  gap: var(--space-4);
+  max-width: calc(var(--size-inspector) * 1.3);
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-3);
+}
+
+.confirmation__message {
+  margin: 0;
+  color: var(--color-text);
+  font: var(--fw-dialog) var(--fs-dialog) / var(--lh-dialog) var(--font-ui);
+}
+
+.confirmation__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
+/* the recovery dialog (recovery.tsx): its hint above the versions */
+.recovery__hint {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+/* the tab guard (tab-guard.tsx): a bar across the top of the window while this tab only reads the project */
+.tab-guard {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-5);
+  border: 1px solid var(--color-warning);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-2);
+  color: var(--color-text);
+  translate: -50% 0;
+}
+
+/* the state edited (canvas.tsx StateBadge, spec state-styles): a badge at the right of the frame's tab row */
+.canvas-state-badge {
+  position: absolute;
+  top: var(--space-1);
+  right: var(--space-2);
+  z-index: 2;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--color-mode-state);
+  color: var(--color-on-mode-state);
+  font: var(--fw-label) var(--fs-label) / var(--lh-label) var(--font-ui);
+}
+
+/* the preview (preview.tsx, spec preview-mode): the preview bar over the exported page, which keeps its width at 100 %,
+   laid over the editor down to the status bar */
+.preview {
+  position: fixed;
+  inset: 0 0 var(--size-status-bar) 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-canvas);
+}
+
+.preview-bar {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-3);
+  height: var(--size-top-bar);
+  padding: 0 var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.preview-stage {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.preview__page {
+  display: block;
+  height: 100%;
+  margin: 0 auto;
+  border: 0;
+  background: var(--color-surface-raised);
+}
+
+/* the command bar (DESIGN.md "Regions": command-palette): a search field over its entries, near the top of the window,
+   over a scrim whose press closes it (the backdrop door) */
+.command-bar {
+  position: fixed;
+  inset: 0;
+  z-index: 85;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: calc(var(--space-10) * 3);
+}
+
+.command-bar__backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: var(--color-scrim);
+}
+
+.command-bar__panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: calc(var(--size-inspector) * 2);
+  max-height: calc(100vh - var(--space-10) * 6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-3);
+  color: var(--color-text);
+  font: var(--fw-body) var(--fs-body) / var(--lh-body) var(--font-ui);
+}
+
+.command-bar__field {
+  margin: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.command-bar__field:focus-visible {
+  outline: 2px solid var(--color-focus);
+}
+
+.command-bar__list {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: 0 var(--space-2) var(--space-2);
+  overflow-y: auto;
+  list-style: none;
+}
+
+.command-bar__entry {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+  height: var(--size-row);
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  text-align: left;
+}
+
+.command-bar__option[aria-selected='true'] .command-bar__entry,
+.command-bar__entry:hover {
+  background: var(--color-accent-soft);
+}
+
+.command-bar__label {
+  flex: 1;
+}
+
+.command-bar__no-icon {
+  width: var(--space-6);
+}
+
+.command-bar__chord,
+.command-bar__hints kbd {
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-mono);
+  color: var(--color-text-muted);
+}
+
+.command-bar__hints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-6);
+  margin: 0;
+  padding: var(--space-3) var(--space-6);
+  border-top: 1px solid var(--color-border);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-ui);
+  color: var(--color-text-muted);
+}
+
+/* Find a property with no match (spec inspector-property-search): what the sections would show says so */
+.inspector-search__none {
+  margin: 0;
+  padding: var(--space-6);
+  color: var(--color-text-muted);
+  font: var(--fw-body) var(--fs-body) / var(--lh-body) var(--font-ui);
+}
+
+/* a value the field's command refused (spec inspector-number-fields, Problems in Pager 3): the field in the error
+   outline, and the refusal said under it, across the row — a field of a pair row wears the same states on its cell */
+.field-row.is-invalid .input,
+.field-cell.is-invalid .input {
+  outline: 1px solid var(--color-danger);
+}
+
+/* several selected elements with different values, beside a control that has no placeholder to say it (A3.35) */
+.field-row__mixed {
+  color: var(--color-text-subtle);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-body) var(--font-ui);
+  font-style: italic;
+  white-space: nowrap;
+}
+
+.field-row__refusal {
+  grid-column: 1 / -1;
+  color: var(--color-danger);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-ui);
+}
+
+/* The files tree (spec explorer-file-system): the two create fields over the rows, a folder's row, its drop targets */
+.row--maker {
+  gap: var(--space-4);
+  height: auto;
+  min-height: var(--size-row);
+  padding-bottom: var(--space-1);
+}
+
+.row__maker {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  min-width: 0;
+}
+
+.row__maker-field {
+  width: 100%;
+  min-width: 0;
+}
+
+.row--folder .row__name {
+  color: var(--color-text);
+}
+
+.row__open {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+}
+
+.row__thumb {
+  flex: none;
+  width: var(--space-6);
+  height: var(--space-6);
+  object-fit: cover;
+  border-radius: var(--radius-xs);
+}
+
+/* the folders a row may move into (its Move to… door, one entry per folder) */
+.row__targets {
+  position: absolute;
+  z-index: 2;
+  top: 100%;
+  left: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  min-width: calc(var(--space-10) * 4);
+  padding: var(--space-1);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-2);
+}
+
+.row__target {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.row.is-dragging {
+  opacity: 0.5;
+}
+
+.row--folder.is-over {
+  background: var(--color-surface-selected);
+  outline: 1px solid var(--color-accent);
+  outline-offset: -1px;
+}
+
+/* The Timeline panel (group 18): the animations of the selected element on the left, the track with its ruler,
+   playhead and keyframes on the right (src/editor/timeline/panel.tsx) */
+.timeline {
+  display: flex;
+  flex: 1 0 100%;
+  gap: var(--space-7);
+  align-items: flex-start;
+}
+
+.timeline__side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: calc(var(--size-sidebar) - var(--space-10));
+}
+
+.timeline__title {
+  margin: 0;
+  font: var(--fw-overline) var(--fs-overline) / var(--lh-overline) var(--font-ui);
+  letter-spacing: var(--ls-overline);
+  text-transform: uppercase;
+  color: var(--color-text-subtle);
+}
+
+.timeline__none,
+.timeline__hint {
+  margin: 0;
+  color: var(--color-text-subtle);
+}
+
+.timeline__rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline__rows .door {
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.timeline__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.timeline__settings {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2) var(--space-4);
+}
+
+.timeline__track-area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.timeline__controls {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.timeline__track {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-2) 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-sunken);
+}
+
+.timeline__ruler {
+  position: relative;
+  height: var(--size-control);
+  margin: 0 var(--space-2);
+  cursor: pointer;
+  background: repeating-linear-gradient(to right, var(--color-border) 0, var(--color-border) 1px, transparent 1px, transparent 10%);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.timeline__playhead {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--space-1);
+  background: var(--color-canvas-selection);
+}
+
+.timeline__lane {
+  position: relative;
+  height: var(--size-control);
+  margin: 0 var(--space-2);
+}
+
+.timeline__keyframe {
+  position: absolute;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-control);
+  height: var(--size-control);
+  margin-left: calc(var(--size-control) / -2);
+  color: var(--color-canvas-target);
+  cursor: grab;
+}
+
+.timeline__keyframe.is-current {
+  color: var(--color-canvas-selection);
+}
+
+/* The inspector's Interactions tab (group 18): one card per interaction of the selected element */
+.inspector-tab--interactions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  overflow: auto;
+}
+
+.interactions__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.interactions__element {
+  font: var(--fw-label) var(--fs-label) / var(--lh-label) var(--font-ui);
+  color: var(--color-text);
+}
+
+.interactions__none,
+.interactions__note {
+  margin: 0;
+  color: var(--color-text-subtle);
+}
+
+.interaction-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+}
+
+.interaction-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.interaction-card__name {
+  font: var(--fw-label) var(--fs-label) / var(--lh-label) var(--font-ui);
+  color: var(--color-text);
+}
+
+.interaction-card__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.interaction-card__pick {
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.interaction-card__note {
+  margin: 0;
+  color: var(--color-text-subtle);
+}
+
+/* a field of a panel: its label above the input (the timeline's settings, an interaction's card) */
+.panel-field {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-1);
+}
+
+.panel-field .field-row__label {
+  color: var(--color-text-muted);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-ui);
+}
+
+.panel-field__text {
+  width: 100%;
+  padding: 0 var(--space-2);
+  height: var(--size-control);
+  font: var(--fw-input) var(--fs-input) / var(--lh-input) var(--font-ui);
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xs);
+}
+
+/* The canvas grid editor (grid-editor.tsx; the user real-use audit, item 8.2): the column numbers at their starts,
+   a grip on every track boundary and the selected item corner grip. Drawn in the chrome, never in the page. */
+.chrome__grid-edit {
+  position: absolute;
+  pointer-events: none;
+}
+
+.chrome__grid-line-number {
+  position: absolute;
+  transform: translateY(-100%);
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-canvas-selection) 18%, var(--color-surface));
+  color: var(--color-text);
+  font: var(--fw-caption) var(--fs-micro) / var(--lh-body) var(--font-mono);
+}
+
+.chrome__band--grid-track {
+  background: var(--color-canvas-selection);
+  opacity: 0.5;
+  cursor: col-resize;
+}
+
+.chrome__band--grid-track:hover {
+  opacity: 0.85;
+}
+
+.chrome__band--grid-span {
+  background: var(--color-canvas-drop);
+  opacity: 0.7;
+  border-radius: var(--radius-sm);
+  cursor: nwse-resize;
+}
+
+.chrome__band--grid-span:hover {
+  opacity: 1;
+}
+

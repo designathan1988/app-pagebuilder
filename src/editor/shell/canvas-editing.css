@@ -1,0 +1,313 @@
+/* the quick panel over the stage (src/editor/canvas/quick-panel.tsx): a chip beside the selection, which opens the
+   panel of its fields in two columns */
+.quick-panel-chip,
+.quick-panel {
+  position: absolute;
+  z-index: 5;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-2);
+}
+
+/* the anchor tabs of a positioned selection (src/editor/canvas/anchor-tabs.tsx): round, hollow while the edge is free,
+   filled once anchored */
+/* The anchor tabs stand over the resize handles (item 4.2 raised the handles to 6 for the quick panel s chip): a
+   tab marks an edge the anchor pins, and the handle there would take its press. */
+.anchor-tab-place {
+  position: absolute;
+  z-index: 7;
+  display: block;
+}
+
+.anchor-tab {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 2px solid var(--color-canvas-selection);
+  border-radius: var(--radius-pill);
+  background: var(--color-canvas-handle);
+  cursor: pointer;
+}
+
+.anchor-tab.is-current {
+  background: var(--color-canvas-selection);
+}
+
+.anchor-tab__dot {
+  display: none;
+}
+
+/* the inspector's anchor control: per axis, the start edge, the centre, the end edge and both edges */
+.anchor-control__rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.anchor-control__item {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.quick-panel-chip {
+  display: grid;
+  place-items: center;
+  width: var(--space-9);
+  height: var(--space-9);
+  padding: 0;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.quick-panel-chip:hover,
+.quick-panel__close:hover {
+  color: var(--color-text);
+}
+
+.quick-panel-chip.is-measuring,
+.quick-panel.is-measuring {
+  visibility: hidden;
+}
+
+.quick-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: calc(var(--size-inspector) * 2);
+  padding: var(--space-2) var(--space-4) var(--space-4);
+}
+
+.quick-panel__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.quick-panel__grip {
+  display: grid;
+  place-items: center;
+  width: var(--space-9);
+  height: var(--space-9);
+  color: var(--color-text-muted);
+  cursor: grab;
+}
+
+.quick-panel__grip.is-unavailable {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.quick-panel__close {
+  display: grid;
+  place-items: center;
+  width: var(--space-9);
+  height: var(--space-9);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.quick-panel__fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-1) var(--space-6);
+}
+
+.quick-panel__fields .field-row {
+  grid-template-columns: calc(var(--space-10) * 2) minmax(0, 1fr);
+}
+
+.quick-panel__action {
+  justify-content: flex-start;
+}
+
+.quick-panel__actions {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.quick-panel__actions .door {
+  height: var(--space-9);
+  padding: 0 var(--space-2);
+}
+
+/* a button of the bar that shows an icon keeps its words for assistive technology only */
+.quick-panel__actions .door:has(.icon) .door__label {
+  position: absolute;
+  width: var(--space-0);
+  height: var(--space-0);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* the colour picker's note that the colour lies outside sRGB (color-picker-oklch) */
+.picker__warning {
+  margin: 0;
+  color: var(--color-warning);
+  font-size: var(--fs-caption);
+}
+
+/* the colour picker's saved and recent colours and the eyedropper (color-swatches-eyedropper) */
+.picker__library {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.picker__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+
+/* the bands of Edit on canvas's Padding and Margin modes (src/editor/canvas/edit-handles.tsx): tinted, dragged */
+.chrome__band {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  background: var(--color-canvas-selection);
+  opacity: 0.35;
+  pointer-events: auto;
+  cursor: ns-resize;
+}
+
+.chrome__band:hover {
+  opacity: 0.55;
+}
+
+.chrome__band--padding {
+  background: var(--color-canvas-padding);
+}
+
+.chrome__band--margin {
+  background: var(--color-canvas-margin);
+}
+
+/* The divider between two columns of a flex row (item 8.1): a grip in its own colour, held over the gap band, dragged
+   across the row to change the two children's share of it. */
+.chrome__band--divider {
+  background: var(--color-canvas-drop);
+  opacity: 0.5;
+  cursor: col-resize;
+}
+
+.chrome__band--divider:hover {
+  opacity: 0.85;
+}
+
+/* A resize handle the parent's layout does not let the element move (item 4.2: a flex or grid item's north or west
+   edge, an inline element's): drawn disabled, faint, with the reason on its tooltip, and it takes no press. */
+.chrome__handle.is-unavailable,
+.chrome__band.is-unavailable,
+.chrome__direct.is-unavailable {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* A band the mode pins is drawn; any other waits, faint, and comes out when the pointer is on it (item 4.1: hovering
+   beside an edge shows the padding band inside the border and the margin band outside it, no mode needed). */
+.chrome__band--auto {
+  opacity: 0.06;
+}
+
+.chrome__band--auto:hover {
+  opacity: 0.55;
+}
+
+.chrome__handle-value {
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+  font-size: var(--fs-caption);
+  pointer-events: none;
+}
+
+.chrome__band-field {
+  position: absolute;
+  width: calc(var(--space-10) * 2);
+  pointer-events: auto;
+}
+
+/* the quick panel's Edit on canvas menu */
+.quick-panel__menu {
+  position: relative;
+}
+
+.quick-panel__options {
+  position: absolute;
+  z-index: 6;
+  top: 100%;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: calc(var(--space-10) * 4);
+  padding: var(--space-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-2);
+}
+
+.quick-panel__option {
+  padding: var(--space-2) var(--space-4);
+  border: 0;
+  background: none;
+  color: var(--color-text);
+  text-align: start;
+  cursor: pointer;
+}
+
+.quick-panel__option.is-current {
+  font-weight: var(--weight-semibold);
+}
+
+.quick-panel__option.is-unavailable {
+  color: var(--color-text-muted);
+  cursor: default;
+}
+
+.chrome__band[data-normal$=",0"] {
+  cursor: ew-resize;
+}
+
+/* a direct handle of Edit on canvas (radius, border): a round handle, labelled with its value beside it */
+.chrome__direct {
+  position: absolute;
+  border-radius: var(--radius-pill);
+  background: var(--color-canvas-handle);
+  outline: 1.5px solid var(--color-canvas-selection);
+  pointer-events: auto;
+  cursor: grab;
+}
+
+.chrome__direct .chrome__handle-value {
+  position: absolute;
+  top: 100%;
+  left: 100%;
+  white-space: nowrap;
+}
+
+.chrome__band:focus-visible,
+.chrome__direct:focus-visible {
+  outline: 2px solid var(--color-focus);
+  opacity: 1;
+}
+

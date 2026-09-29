@@ -1,0 +1,1156 @@
+/* ---------------------------------------------------------------- centre: file tabs, canvas toolbar, stage */
+
+.workbench {
+  grid-area: centre;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.centre {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* the maximised workbench covers the canvas area: the row that holds the canvas and the right dock goes too */
+.shell--dock-max .centre,
+.shell--dock-max .workbench__row {
+  display: none;
+}
+
+.file-tabs {
+  display: flex;
+  align-items: stretch;
+  flex: none;
+  height: var(--size-file-tabs);
+  overflow: hidden;
+  background: var(--color-bg-app);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.file-tab {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 var(--space-2) 0 var(--space-1);
+  border-right: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+}
+
+.file-tab:has(> .door.is-current) {
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: inset 0 var(--space-1) 0 var(--color-accent);
+}
+
+.file-tab__main {
+  gap: var(--space-3);
+  border: 0;
+  color: inherit;
+}
+
+.file-tab__file {
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-mono);
+  color: var(--color-text-subtle);
+}
+
+.file-tab .door--icon-button {
+  width: var(--size-target-min);
+  height: var(--size-target-min);
+}
+
+.canvas-toolbar {
+  display: flex;
+  align-items: center;
+  flex: none;
+  gap: var(--space-1);
+  height: var(--size-canvas-toolbar);
+  padding: 0 var(--space-4);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+/* the keys of a drag, while one goes on (the user's real-use audit, item 3.3) */
+.canvas-toolbar__hint {
+  margin-inline-start: auto;
+  color: var(--color-text-muted);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-body) var(--font-ui);
+  white-space: nowrap;
+}
+
+.canvas-toolbar__zoom {
+  margin-left: auto;
+}
+
+.stage-wrap {
+  position: relative;
+  display: grid;
+  flex: 1;
+  grid-template-columns: var(--size-ruler) minmax(0, 1fr);
+  grid-template-rows: var(--size-ruler) minmax(0, 1fr);
+  min-height: 0;
+  overflow: hidden;
+  background: var(--color-canvas);
+}
+
+/* The centre column's work area: the canvas column (its toolbar and the stage) and, in Split, the code pane beside
+   it (view/editor-view.ts). The toolbar belongs to the canvas column, so the breakpoints are not cut at the pane. */
+.centre__work {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+}
+
+.centre__column {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+}
+
+/* The code pane (shell/code-pane.tsx): the tabs, the file and its two buttons, the lines, then the note and Apply */
+.code-pane {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  width: var(--size-code-pane);
+  min-height: 0;
+  border-left: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.centre--code .code-pane {
+  flex: 1;
+  width: auto;
+  border-left: none;
+}
+
+.code-pane__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0 var(--space-3);
+  min-height: var(--size-row);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.code-pane__tabs {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-1);
+}
+
+.code-pane__file {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-2);
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.code-pane__name {
+  font-family: var(--font-mono);
+  font-size: var(--fs-caption);
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.code-pane__badge {
+  font-size: var(--fs-micro);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xs);
+  padding: 0 var(--space-1);
+}
+
+.code-pane__body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: var(--space-2) 0;
+}
+
+.code-pane__body:focus-visible {
+  outline: 1px solid var(--color-focus);
+  outline-offset: -1px;
+}
+
+/* The rule editor of the CSS pane (code-panel-edit-css): the selected element's declarations, typed over */
+.code-pane__editor {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  resize: none;
+  border: none;
+  outline: none;
+  padding: 0 var(--space-3);
+  background: transparent;
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-code);
+  line-height: var(--lh-code);
+  tab-size: 2;
+}
+
+.code-pane__empty {
+  flex: 1;
+  padding: var(--space-4);
+  color: var(--color-text-muted);
+  font-size: var(--fs-body);
+}
+
+.code-pane__code {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-code);
+  line-height: var(--lh-code);
+}
+
+.code-row {
+  display: flex;
+  align-items: baseline;
+}
+
+.code-row__number {
+  flex: none;
+  width: calc(var(--space-8) + var(--space-5));
+  padding-right: var(--space-3);
+  text-align: right;
+  color: var(--color-text-subtle);
+  user-select: none;
+}
+
+.code-line {
+  display: block;
+  flex: 1;
+  min-width: 0;
+  white-space: pre;
+  color: var(--color-text);
+  text-align: left;
+}
+
+.code-line.is-selected {
+  background: var(--color-accent-soft);
+}
+
+.tok--tag { color: var(--color-syntax-tag); }
+.tok--attr { color: var(--color-syntax-attr); }
+.tok--string { color: var(--color-syntax-string); }
+.tok--comment { color: var(--color-syntax-comment); }
+.tok--property { color: var(--color-syntax-property); }
+.tok--selector { color: var(--color-syntax-selector); }
+.tok--value { color: var(--color-text); }
+.tok--keyword { color: var(--color-syntax-selector); }
+
+.code-pane__foot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-top: 1px solid var(--color-border);
+}
+
+.code-pane__note {
+  flex: 1;
+  color: var(--color-text-muted);
+  font-size: var(--fs-caption);
+}
+
+.ruler {
+  --zoom: 1;
+  position: relative;
+  overflow: hidden;
+  background: var(--color-surface);
+  color: var(--color-text-subtle);
+  font: var(--fw-caption) var(--fs-micro) / var(--lh-micro) var(--font-ui);
+}
+
+/* the rulers hidden (view.toggleRulers): their tracks close, the stage takes the whole area */
+.ruler[hidden] {
+  display: none;
+}
+
+.stage-wrap--no-rulers {
+  grid-template-columns: 0 minmax(0, 1fr);
+  grid-template-rows: 0 minmax(0, 1fr);
+}
+
+.ruler--corner {
+  border-right: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.ruler--x {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.ruler--y {
+  grid-row: 2;
+  border-right: 1px solid var(--color-border);
+}
+
+/* a tick: short, a labelled one longer (spec rulers) */
+.ruler__tick {
+  position: absolute;
+  bottom: 0;
+  width: 0;
+  height: var(--space-2);
+  border-left: 1px solid var(--color-border-strong);
+}
+
+.ruler__tick.is-major {
+  height: var(--space-4);
+}
+
+.ruler--y .ruler__tick {
+  right: 0;
+  bottom: auto;
+  width: var(--space-2);
+  height: 0;
+  border-top: 1px solid var(--color-border-strong);
+  border-left: 0;
+}
+
+.ruler--y .ruler__tick.is-major {
+  width: var(--space-4);
+}
+
+/* the primary selected element's extent, and the pointer's place */
+.ruler__selection {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: color-mix(in srgb, var(--color-canvas-selection) 24%, transparent);
+  pointer-events: none;
+}
+
+.ruler--y .ruler__selection {
+  right: 0;
+  left: 0;
+  bottom: auto;
+}
+
+.ruler__pointer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 1px solid var(--color-canvas-selection);
+  pointer-events: none;
+}
+
+.ruler--y .ruler__pointer {
+  right: 0;
+  left: 0;
+  bottom: auto;
+  width: auto;
+  height: 0;
+  border-top: 1px solid var(--color-canvas-selection);
+  border-left: 0;
+}
+
+.ruler__mark {
+  position: absolute;
+  top: var(--space-1);
+  translate: var(--space-1) 0;
+}
+
+.ruler--y .ruler__mark {
+  left: 0;
+  writing-mode: vertical-rl;
+  rotate: 180deg;
+  translate: 0 calc(-100% - var(--space-1));
+}
+
+.stage {
+  position: relative;
+  grid-area: 2 / 2;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Space held over the stage arms the pan; a pan in progress grabs (spec zoom-wheel-pan) */
+.stage--armed,
+.stage--armed * {
+  cursor: grab;
+}
+
+.stage--panning,
+.stage--panning * {
+  cursor: grabbing;
+}
+
+.frame {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--space-9);
+  display: flex;
+  flex-direction: column;
+}
+
+/* The breakpoints in the canvas toolbar (the audit's A3.18): a compact group with a width of its own, so its tabs
+   stay legible and clickable at any zoom (over the frame they took its width and overlapped) */
+.frame-tabs {
+  display: flex;
+  align-items: center;
+  flex: none;
+  margin-left: auto;
+  gap: var(--space-1);
+}
+
+.frame-tab {
+  height: var(--size-row);
+  padding: 0 var(--space-2);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  background: var(--color-surface-sunken);
+  color: var(--color-text-muted);
+}
+
+.frame-tab.is-current {
+  background: var(--color-surface);
+  border-color: var(--color-border-strong);
+  color: var(--color-text);
+  font-weight: var(--weight-semibold);
+}
+
+.frame-tab__width {
+  font-size: var(--fs-caption);
+  color: var(--color-text-subtle);
+  font-weight: var(--weight-regular);
+}
+
+.frame-tab__base {
+  padding: 0 var(--space-2);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-sunken);
+  color: var(--color-text-muted);
+  font: var(--fw-micro) var(--fs-micro) / var(--lh-micro) var(--font-ui);
+}
+
+.frame__view {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--color-surface);
+  outline: 1px solid var(--color-border-strong);
+  box-shadow: var(--shadow-2);
+}
+
+/* the page renders here and takes no pointer event: the overlay above it receives them all */
+.frame__page {
+  display: block;
+  border: 0;
+  pointer-events: none;
+}
+
+.frame__overlay {
+  position: absolute;
+  inset: 0;
+}
+
+/* the canvas chrome (src/editor/canvas/chrome.tsx): outlines and labels over the page, never a pointer target */
+.chrome {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  /* the label colour of the selection (spec layers-row-colours): the element's own when it has one, the selection
+     token otherwise; the canvas chrome sets it per element */
+  --color-layer-label: var(--color-canvas-selection);
+}
+
+.chrome__selection,
+.chrome__hover {
+  position: absolute;
+}
+
+/* a resize handle (spec resize-handles, Problems in Pager 5): a hit area beside the selection's corner or edge
+   centre, outside the element (so a press on the element itself, or on its label, never starts a resize), with the
+   dot drawn on the corner or edge centre (--handle-x, --handle-y: the anchor inside the hit area) in the handle colour
+   with the selection colour's ring; the dot grows under the pointer */
+.chrome__handle {
+  --handle-x: 50%;
+  --handle-y: 50%;
+  position: absolute;
+  z-index: 6;
+  width: var(--space-6);
+  height: var(--space-6);
+  pointer-events: auto;
+}
+
+.chrome__handle::after {
+  content: '';
+  position: absolute;
+  top: var(--handle-y);
+  left: var(--handle-x);
+  width: var(--space-4);
+  height: var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--color-canvas-handle);
+  outline: 1.5px solid var(--color-canvas-selection);
+  translate: -50% -50%;
+  /* the dot overhangs the element across its edge: only the hit area, outside the element, takes a press, or a short
+     element's middle would be its handles' */
+  pointer-events: none;
+}
+
+.chrome__handle:hover::after {
+  scale: 1.25;
+}
+
+/* the rotation handle (spec rotation-handle): a round handle outside the selection's top-right corner, at a fixed
+   screen distance, whose cursor says it turns the element; drawn over the selection's label, which a narrow element's
+   label reaches */
+.chrome__rotate {
+  position: absolute;
+  z-index: 6;
+  width: var(--space-6);
+  height: var(--space-6);
+  border: 1.5px solid var(--color-canvas-selection);
+  border-radius: var(--radius-pill);
+  background: var(--color-canvas-handle);
+  cursor: grab;
+  pointer-events: auto;
+}
+
+.chrome__rotate:active {
+  cursor: grabbing;
+}
+
+.chrome__handle[data-resize-handle$='-n'] {
+  --handle-x: 50%;
+  --handle-y: 100%;
+  translate: -50% -100%;
+}
+
+.chrome__handle[data-resize-handle$='-s'] {
+  --handle-x: 50%;
+  --handle-y: 0%;
+  translate: -50% 0;
+}
+
+.chrome__handle[data-resize-handle$='-e'] {
+  --handle-x: 0%;
+  --handle-y: 50%;
+  translate: 0 -50%;
+}
+
+.chrome__handle[data-resize-handle$='-w'] {
+  --handle-x: 100%;
+  --handle-y: 50%;
+  translate: -100% -50%;
+}
+
+.chrome__handle[data-resize-handle$='-nw'] {
+  --handle-x: 100%;
+  --handle-y: 100%;
+  translate: -100% -100%;
+}
+
+.chrome__handle[data-resize-handle$='-ne'] {
+  --handle-x: 0%;
+  --handle-y: 100%;
+  translate: 0 -100%;
+}
+
+.chrome__handle[data-resize-handle$='-sw'] {
+  --handle-x: 100%;
+  --handle-y: 0%;
+  translate: -100% 0;
+}
+
+.chrome__handle[data-resize-handle$='-se'] {
+  --handle-x: 0%;
+  --handle-y: 0%;
+  translate: 0 0;
+}
+
+.chrome__handle[data-resize-handle$='-n'],
+.chrome__handle[data-resize-handle$='-s'] {
+  cursor: ns-resize;
+}
+
+.chrome__handle[data-resize-handle$='-e'],
+.chrome__handle[data-resize-handle$='-w'] {
+  cursor: ew-resize;
+}
+
+.chrome__handle[data-resize-handle$='-nw'],
+.chrome__handle[data-resize-handle$='-se'] {
+  cursor: nwse-resize;
+}
+
+.chrome__handle[data-resize-handle$='-ne'],
+.chrome__handle[data-resize-handle$='-sw'] {
+  cursor: nesw-resize;
+}
+
+/* the layout grids (spec layout-grid-overlay): translucent bands and dots over the page, never hiding it */
+.chrome__grids {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* the layout grids (item 4.5: a soft transparency, so the page reads through them) */
+.chrome__grid-column,
+.chrome__grid-row {
+  position: absolute;
+  background: color-mix(in srgb, var(--color-canvas-measure) 6%, transparent);
+}
+
+.chrome__grid-row {
+  background: color-mix(in srgb, var(--color-canvas-gap) 6%, transparent);
+}
+
+/* The fold lines (the user's real-use audit, item 2.3): where each screen ends across the page, drawn in the canvas
+   chrome, with the fold's name and its distance from the top at the left end. */
+.chrome__fold {
+  position: absolute;
+  height: 0;
+  border-top: 1px dashed color-mix(in srgb, var(--color-canvas-measure) 70%, transparent);
+  pointer-events: none;
+}
+
+.chrome__fold-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translateY(-100%);
+  padding: 0 var(--space-1);
+  background: color-mix(in srgb, var(--color-canvas-measure) 14%, var(--color-surface));
+  color: var(--color-text);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-body) var(--font-ui);
+  white-space: nowrap;
+}
+
+.chrome__grid-dots {
+  /* the dots' spacing on the screen, set by the canvas from grid.dotSpacing at the zoom */
+  --grid-dot: var(--space-9);
+  position: absolute;
+  background-image: radial-gradient(circle, color-mix(in srgb, var(--color-text-subtle) 60%, transparent) 1px, transparent 1.5px);
+  background-size: var(--grid-dot) var(--grid-dot);
+}
+
+/* the view switches (spec canvas-outlines-zones): a dashed box around every element; a container's padding tinted in
+   the padding colour and an empty container's content marked as a drop area */
+.chrome__view {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.chrome__outline {
+  position: absolute;
+  outline: 1px dashed var(--color-border-strong);
+  outline-offset: -1px;
+}
+
+.chrome__zone {
+  position: absolute;
+  background: color-mix(in srgb, var(--color-canvas-padding) 22%, transparent);
+}
+
+.chrome__zone--empty {
+  background: repeating-linear-gradient(45deg, color-mix(in srgb, var(--color-canvas-drop) 28%, transparent) 0 var(--space-1), transparent var(--space-1) var(--space-3));
+  outline: 1px dashed var(--color-canvas-drop);
+  outline-offset: -1px;
+}
+
+.chrome__selection {
+  /* the element's own label colour when it has one (spec layers-row-colours), the selection token otherwise */
+  outline: 2px solid var(--color-layer-label);
+}
+
+/* several selected: the box around them all, dashed, apart from each element's own outline */
+.chrome__union {
+  position: absolute;
+  outline: 1px dashed var(--color-canvas-selection);
+}
+
+/* thinner than the selection's */
+.chrome__hover {
+  outline: 1px solid var(--color-canvas-hover);
+}
+
+/* a manual guide (src/editor/canvas/guides.tsx, spec guides-manual): a 1 px line in the guide colour across the page,
+   with a wider band to press, its value at the ruler's end; a locked guide is dashed */
+.guide {
+  position: absolute;
+  pointer-events: auto;
+  outline: none;
+}
+
+.guide::before {
+  content: '';
+  position: absolute;
+  border: 0 solid var(--color-accent);
+}
+
+.guide--horizontal {
+  left: 0;
+  right: 0;
+  height: var(--space-3);
+  translate: 0 -50%;
+  cursor: row-resize;
+}
+
+.guide--horizontal::before {
+  left: 0;
+  right: 0;
+  top: 50%;
+  border-top-width: 1px;
+}
+
+.guide--vertical {
+  top: 0;
+  bottom: 0;
+  width: var(--space-3);
+  translate: -50% 0;
+  cursor: col-resize;
+}
+
+.guide--vertical::before {
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  border-left-width: 1px;
+}
+
+.guide.is-locked::before {
+  border-style: dashed;
+  opacity: 0.5;
+}
+
+.guide:focus-visible::before {
+  border-color: var(--color-focus);
+  outline: 1px solid var(--color-focus);
+}
+
+.guide__value {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-sm);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-body) var(--font-mono);
+}
+
+/* the ruler's hint while a guide dragged over it would be deleted */
+.ruler__hint {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--color-danger);
+  color: var(--color-on-accent);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-body) var(--font-ui);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* the hovered element's size in CSS px, below its hover outline (spec hover-measure) */
+.chrome__size {
+  position: absolute;
+  margin-top: var(--space-1);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--color-canvas-hover);
+  color: var(--color-on-canvas-hover);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-body) var(--font-mono);
+  white-space: nowrap;
+}
+
+/* a distance Alt measures from the selection (spec hover-measure): a line in the measure colour and its length */
+.chrome__distance {
+  position: absolute;
+  display: grid;
+  place-items: center;
+}
+
+.chrome__distance--across {
+  border-top: 1px dashed var(--color-canvas-measure);
+}
+
+.chrome__distance--down {
+  border-left: 1px dashed var(--color-canvas-measure);
+}
+
+.chrome__distance-label {
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-sm);
+  background: var(--color-canvas-measure);
+  color: var(--color-on-canvas-hover);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-body) var(--font-mono);
+  white-space: nowrap;
+}
+
+/* the marquee's band (spec marquee-select): a 1 px accent border and a 16 % accent fill */
+.chrome__band {
+  position: absolute;
+  box-sizing: border-box;
+  border: 1px solid var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 16%, transparent);
+}
+
+.chrome__label {
+  position: absolute;
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font: var(--fw-label) var(--fs-caption) / var(--lh-body) var(--font-ui);
+  white-space: nowrap;
+}
+
+/* drawn out of sight until it is placed: its size decides where it goes */
+.chrome__label.is-measuring {
+  visibility: hidden;
+}
+
+.chrome__tag {
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-body) var(--font-mono);
+}
+
+/* the class the style target names and the breakpoint in view (A3.8): dimmer than the tag, beside the state */
+.chrome__target,
+.chrome__state,
+.chrome__breakpoint {
+  margin-left: var(--space-1);
+  color: var(--color-text-subtle);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-ui);
+}
+
+/* the panel says where its writes land (A3.8) */
+.quick-panel__context {
+  overflow: hidden;
+  max-width: calc(var(--space-10) * 4);
+  color: var(--color-text-subtle);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-mono);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* while a drag goes on: the selection of the dragged element is off (the user's real-use audit, item 3.1); only a thin
+   and its label hides: no outline stays on it, the ghost chip beside the pointer says what is dragged (the user's
+   correction of 2026-09-27: a dashed outline only got in the way) */
+.chrome__selection.is-source {
+  outline: none;
+}
+
+.chrome__label.is-hidden {
+  visibility: hidden;
+}
+
+/* a text edited in place: its outline and label in the text editing mode colour, never the selection's
+   (text-edit-inline, Problems in Pager 2) */
+.chrome__selection.is-editing {
+  outline-color: var(--color-mode-text);
+}
+
+.chrome__label.is-editing {
+  background: var(--color-mode-text);
+  color: var(--color-on-mode-text);
+}
+
+/* the text toolbar while a text is edited in place (text-toolbar.tsx): Bold, Italic and Link in a floating bar above
+   the edit's label; its controls take presses of their own (pointer.ts leaves the focus in the text) */
+.text-toolbar {
+  position: absolute;
+  display: flex;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-2);
+  pointer-events: auto;
+}
+
+.text-toolbar.is-measuring {
+  visibility: hidden;
+}
+
+.text-toolbar .door--icon-button {
+  width: var(--size-target-min);
+  min-width: var(--size-target-min);
+  height: var(--size-target-min);
+}
+
+/* the link prompt under the text toolbar, over its backdrop, over every region of the window */
+.link-prompt {
+  display: contents;
+}
+
+.link-prompt__panel {
+  position: fixed;
+  z-index: 50;
+  display: grid;
+  gap: var(--space-2);
+  width: calc(var(--size-inspector) - var(--space-8));
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-2);
+  color: var(--color-text);
+  font: var(--fw-body) var(--fs-body) / var(--lh-body) var(--font-ui);
+}
+
+.link-prompt__panel.is-measuring {
+  visibility: hidden;
+}
+
+.link-prompt__label {
+  font: var(--fw-label) var(--fs-label) / var(--lh-label) var(--font-ui);
+}
+
+.link-prompt__field {
+  height: var(--size-control-lg);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-sunken);
+  color: var(--color-text);
+}
+
+.link-prompt__field[aria-invalid='true'] {
+  border-color: var(--color-danger);
+}
+
+.link-prompt__field::placeholder {
+  color: var(--color-text-subtle);
+}
+
+.link-prompt__hint {
+  margin: 0;
+  color: var(--color-text-muted);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-ui);
+}
+
+.link-prompt__hint.is-refused {
+  color: var(--color-danger);
+}
+
+/* the label of the one selected element is a hit target of the canvas (select-click, drag-reorder-canvas): a press on
+   it selects that element and arms its drag (pointer.ts); the rest of the chrome takes no pointer event */
+.chrome__label.is-target:not(.is-measuring, .is-hidden) {
+  pointer-events: auto;
+  cursor: grab;
+}
+
+/* the drop indicator: the receiving parent's outline, and the insertion line across it at the gap */
+.chrome__drop {
+  position: absolute;
+  inset: 0;
+}
+
+.chrome__receiver,
+.chrome__drop-line {
+  position: absolute;
+}
+
+/* the receiving parent (spec drag-layout, row 3): outlined in the target colour, with a soft fill of it, so the
+   parent and the position (the line, in the drop colour) never look alike */
+.chrome__receiver {
+  outline: 2px solid var(--color-canvas-target);
+  background: color-mix(in srgb, var(--color-canvas-target) 7%, transparent);
+}
+
+/* into a container with no other child: no line; the container itself filled and outlined solid in the drop colour,
+   so where the element lands is plain (the user's correction of 2026-09-27: nothing dashed) */
+.chrome__receiver.is-into {
+  outline: 3px solid var(--color-canvas-drop);
+  background: color-mix(in srgb, var(--color-canvas-drop) 22%, transparent);
+}
+
+/* a confirmed side drop (drag-layout, row 5): the element the new wrapper takes, outlined and tinted in the drop colour */
+.chrome__receiver.is-side {
+  outline: 2px solid var(--color-canvas-drop);
+  background: color-mix(in srgb, var(--color-canvas-drop) 10%, transparent);
+}
+
+/* over the dragged element's own subtree: refused, in the danger colour (drag-drop-inside, Problems in Pager 1) */
+.chrome__receiver.is-refused {
+  outline: 1.5px solid var(--color-danger);
+}
+
+.chrome__label.is-refused {
+  background: var(--color-surface-raised);
+  color: var(--color-danger);
+  outline: 1px solid var(--color-danger);
+}
+
+/* the insertion line (the user's real-use audit, item 3.1): a bar --size-drop-line thick centred on the gap, in the
+   drop colour (never the selection's), with a round mark at each end, across the gap (along a vertical flow) or down
+   it (along a row) */
+.chrome__drop-line {
+  border-radius: var(--radius-pill);
+  background: var(--color-canvas-drop);
+}
+
+.chrome__drop-line.is-across {
+  height: var(--size-drop-line);
+  translate: 0 calc(var(--size-drop-line) / -2);
+}
+
+.chrome__drop-line.is-down {
+  width: var(--size-drop-line);
+  translate: calc(var(--size-drop-line) / -2) 0;
+}
+
+.chrome__drop-line::before,
+.chrome__drop-line::after {
+  content: '';
+  position: absolute;
+  width: var(--space-5);
+  height: var(--space-5);
+  border: 2px solid var(--color-canvas-drop);
+  border-radius: var(--radius-pill);
+  background: var(--color-canvas-handle);
+}
+
+.chrome__drop-line.is-across::before {
+  top: calc((var(--size-drop-line) - var(--space-5)) / 2);
+  left: calc(var(--space-5) / -2);
+}
+
+.chrome__drop-line.is-across::after {
+  top: calc((var(--size-drop-line) - var(--space-5)) / 2);
+  right: calc(var(--space-5) / -2);
+}
+
+.chrome__drop-line.is-down::before {
+  top: calc(var(--space-5) / -2);
+  left: calc((var(--size-drop-line) - var(--space-5)) / 2);
+}
+
+.chrome__drop-line.is-down::after {
+  bottom: calc(var(--space-5) / -2);
+  left: calc((var(--size-drop-line) - var(--space-5)) / 2);
+}
+
+.chrome__drop-line.is-refused {
+  background: var(--color-danger);
+}
+
+.chrome__drop-line.is-refused::before,
+.chrome__drop-line.is-refused::after {
+  border-color: var(--color-danger);
+}
+
+/* the side drop's hint beside the pointer, and the pill of a confirmed side drop (drag-layout, row 5) */
+.chrome__hint,
+.chrome__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-ui);
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: var(--shadow-2);
+}
+
+.chrome__hint {
+  background: var(--color-surface-raised);
+  color: var(--color-text-muted);
+  outline: 1px solid var(--color-border);
+}
+
+.chrome__pill {
+  background: var(--color-canvas-drop);
+  color: var(--color-on-canvas-band);
+}
+
+.chrome__pill.is-refused {
+  background: var(--color-danger);
+}
+
+/* the elements a drop placed flash (drag-layout, row 10) */
+.chrome__flashes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.chrome__flash {
+  position: absolute;
+  outline: 2px solid var(--color-canvas-drop);
+  background: color-mix(in srgb, var(--color-canvas-drop) 18%, transparent);
+  animation-name: chrome-flash;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+
+@keyframes chrome-flash {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chrome__flash {
+    display: none;
+  }
+}
+
+/* the ghost of a palette tile's creation drag (palette-drag-insert, Problems in Pager 4): the element's icon and name
+   beside the pointer, over every region of the window, never a pointer target */
+/* the ghost and, under it, what it says about a side drop, together beside the pointer */
+.chrome-ghost-stack {
+  position: fixed;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+  pointer-events: none;
+}
+
+.chrome-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--color-canvas-drop);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-1);
+  color: var(--color-text);
+  font: var(--fw-label) var(--fs-caption) / var(--lh-body) var(--font-ui);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* off the page, or over a parent that refuses the element: the refusal's colour */
+.chrome-ghost.is-refused {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
