@@ -6,7 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
-import { openMenu, runDoor, runs, runsUnavailable } from './door.ts';
+import { openMenu, runDoor, runs } from './door.ts';
 
 // the doors the manifest places in a region
 function placedIn(region: string): string[] {
