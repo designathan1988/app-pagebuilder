@@ -15,11 +15,11 @@ import { MIN_STOPS, gradientLayer, parseGradient, writeGradient, type Gradient, 
 import { storedValue } from '../../core/style/set.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
 import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
-import type { DoorState } from '../doors/door.tsx';
+import { Icon, type DoorState } from '../doors/door.tsx';
 import { gradientView } from '../inspector/gradient-view.ts';
 import { layeredRules, useEditorState, useStore } from '../store.ts';
 import { useT } from '../text.ts';
-import { TextStyleField } from './field.tsx';
+import { propertyWord, TextStyleField } from './field.tsx';
 
 const TYPES: readonly GradientType[] = ['linear', 'radial', 'conic'];
 // the stop drag's door: each stop under the bar is drawn by it
@@ -47,16 +47,19 @@ const useChosenStop = (): number => useSyncExternalStore(gradientView.subscribe,
 // a button of the editor: its row stands for the edit it runs (the door's own, or the one it computes)
 function EditButton({ entry, door, property, edit, ready }: { readonly entry: DoorEntry; readonly door: DoorState; readonly property: string; readonly edit: Record<string, unknown>; readonly ready: boolean }) {
   const store = useStore();
+  const t = useT();
+  const named = entry.door.kind === 'inspector-field' && entry.door.control === 'gradient-add' ? entry.door.composite : null;
   const args = { ...entry.door.args, property, edit };
   return (
     <div className={`field-row${ready ? '' : ' is-unavailable'}`} data-door={entry.ref} data-args={JSON.stringify(args)} title={door.title}>
-      <span className="field-row__label" />
+      <span className="field-row__label">{named === null ? '' : propertyWord(t, named)}</span>
       <button
         type="button"
         className={`door door--button${ready ? '' : ' is-unavailable'}`}
         aria-disabled={ready ? undefined : true}
         onClick={() => (ready ? (store.dispatch as (id: CommandId, a: unknown) => DispatchResult)(entry.command.id as CommandId, args) : undefined)}
       >
+        {entry.door.icon !== null ? <Icon name={entry.door.icon} size="sm" /> : null}
         <span className="door__label">{door.face}</span>
       </button>
     </div>

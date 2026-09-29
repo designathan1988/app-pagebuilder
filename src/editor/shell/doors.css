@@ -128,6 +128,13 @@
 }
 
 /* a field with no value of its own shows the effective value as its placeholder, in the Default origin colour */
+/* A field draws its border only while it is hovered or holds the focus (the design's field): its own box is what a
+   person sees, so a column of fields reads as a list and not as a grid of boxes. */
+.input:not(:hover):not(:focus),
+.box__input:not(:hover):not(:focus) {
+  border-color: transparent;
+}
+
 .input::placeholder,
 .box__input::placeholder {
   color: var(--color-origin-default);

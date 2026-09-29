@@ -54,6 +54,7 @@ import { Hints, useSingleNode } from '../inspector/selection.tsx';
 import { Affects, TargetChips, classBarControl } from './class-bar.tsx';
 import { GradientControl, isGradientControl } from './gradient.tsx';
 import { ShadowControl, isShadowControl } from './shadow.tsx';
+import { compactFieldValue, useFieldAppearance } from './field-face.tsx';
 
 interface Target {
   readonly id: string;
@@ -168,7 +169,7 @@ function fieldLabelKey(entry: DoorEntry): MessageId {
   return (named?.labelKey ?? entry.door.labelKey) as MessageId;
 }
 
-function Field({ entry, bare = false, labelled = false, prefix = null, rowLabel = null }: { readonly entry: DoorEntry; readonly bare?: boolean; readonly labelled?: boolean; readonly prefix?: string | null; readonly rowLabel?: MessageId | null }) {
+function Field({ entry, bare = false, labelled = false, prefix = null, rowLabel = null, measurement }: { readonly entry: DoorEntry; readonly bare?: boolean; readonly labelled?: boolean; readonly prefix?: string | null; readonly rowLabel?: MessageId | null; readonly measurement?: 'width' | 'height' | undefined }) {
   const t = useT();
   const target = targetOf(entry);
   // labelled as fieldLabelKey says, or by the row's own label when it has one (a pair row of the gap reads "Gap"). A
@@ -205,7 +206,7 @@ function Field({ entry, bare = false, labelled = false, prefix = null, rowLabel 
     );
   }
   // a length field is the field component: typing, units, steps and the scrub (spec inspector-number-fields)
-  if (target.control === 'length-field' && entry.door.kind === 'inspector-field' && entry.door.property !== null) return <NumberField entry={entry} door={door} property={entry.door.property} label={door.label} bare={bare} labelled={labelled} prefix={prefix} />;
+  if (target.control === 'length-field' && entry.door.kind === 'inspector-field' && entry.door.property !== null) return <NumberField entry={entry} door={door} property={entry.door.property} label={door.label} bare={bare} labelled={labelled} prefix={prefix} measurement={measurement} />;
   // keyword buttons: one button per value the property offers (field.tsx)
   if (target.control === 'keyword-buttons' && entry.door.kind === 'inspector-field' && entry.door.control === 'field' && entry.door.property !== null && 'property' in entry.command.args) {
     return <KeywordButtons entry={entry} door={door} property={entry.door.property} values={offered(entry)} icons={target.icons} label={door.label} />;
@@ -427,6 +428,7 @@ function SpacingField({ entry, box, sides, properties, where, label }: { readonl
   const effective = new Set(effectiveSides.split(' ')).size === 1 ? effectiveSides : '';
   // several elements with different values, or four sides that differ: said Mixed, as every field says it (A3.35)
   const mixed = useMixed(properties) || stored === '';
+  const appearance = useFieldAppearance(properties, mixed);
   const t = useT();
   const shown = mixed ? '' : (stored ?? '');
   const said = useEditorState((st) => st.message);
@@ -451,6 +453,7 @@ function SpacingField({ entry, box, sides, properties, where, label }: { readonl
   return (
     <form
       className={`box__side box__side--${where}`}
+      data-origin={appearance.kind}
       data-door={entry.ref}
       data-args={JSON.stringify({ box, sides, property: box })}
       title={door.title}
@@ -472,6 +475,7 @@ function SpacingField({ entry, box, sides, properties, where, label }: { readonl
         onBlur={keep}
         data-key-context={SPACING_KEYS}
       />
+      <span className="box__rest-value" aria-hidden="true">{mixed ? t('inspector.mixedValue') : compactFieldValue(shown || effective, true).value}</span>
     </form>
   );
 }
@@ -577,11 +581,11 @@ const STYLE_SECTIONS = SECTIONS.filter((s) => (SECTION_DOORS.get(s.id) ?? []).le
 // one rule of inspector/origin.ts over the section's own fields. Nothing for a section that holds no value, nor for
 // one whose values come from a class or an ancestor: the fields say so, and the dot colours are the legend's three.
 function SectionOrigin({ section }: { readonly section: SectionId }) {
-  const kind = useEditorState((s) => {
-    const origin = valueOrigin(s, sectionProperties(section), layeredRules(s.ui));
-    return origin !== null && (origin.kind === 'here' || origin.kind === 'breakpoint' || origin.kind === 'state') ? origin.kind : null;
+  const kinds = useEditorState((s) => {
+    const found = new Set(sectionProperties(section).map((property) => valueOrigin(s, [property], layeredRules(s.ui))?.kind));
+    return ['here', 'breakpoint', 'state'].filter((kind) => found.has(kind as 'here' | 'breakpoint' | 'state')).join(' ');
   });
-  return kind === null ? null : <span className="inspector-section__origin" data-origin={kind} aria-hidden="true" />;
+  return <>{kinds.split(' ').filter(Boolean).map((kind) => <span key={kind} className="inspector-section__origin" data-origin={kind} aria-hidden="true" />)}</>;
 }
 
 function StyleSections() {
@@ -627,17 +631,14 @@ function StyleSections() {
         const doors = orderByGroup(s.id, shownDoors(s.id));
         // a section with no match is not drawn while searching
         if (searching && doors.length === 0) return null;
+        const set = sectionProperties(section).filter((p) => held.has(p)).length;
         // a collapsed section with a match is drawn open for the search; its collapsed state is kept
         const closed = !searching && collapsed.includes(section);
         const summary = closed ? summaryOf(section, values, t, locale) : null;
         const boxDoors = doors.filter((d) => targetOf(d)?.control === 'box-model');
-        // What the section draws, in order (DESIGN.md "Inspector"): the pair rows — two fields read together under the
-        // row's label (rows.ts) — and its fields. The groups of properties.json order the fields (rows.ts orderByGroup,
-        // already applied above) and draw no title of their own: the design's panel runs Display, Direction, Alignment,
-        // Gap without a heading between them. While searching, the matches are drawn plain: a result is a field, not
-        // the row it lives in.
-        const rowDrawn = new Set<string>();
+        // The manifest orders the fields by group; the design draws the fields without subgroup headings.
         const units: ReactNode[] = [];
+        const rowDrawn = new Set<string>();
         const drawer = (d: DoorEntry): ReactNode => {
           if (targetOf(d)?.control === 'box-model') return boxDoors[0] === d ? <BoxModel key={d.ref} doors={boxDoors} /> : null;
           if (d.door.kind === 'panel-control' && d.door.drawnAs === 'field' && cssTextArg(d) !== null && node !== null) return <DeclarationsField key={`${d.ref}@${node.id}`} entry={d} node={node} />;
@@ -661,10 +662,9 @@ function StyleSections() {
             </Fragment>
           );
         };
-        for (const [i, d] of doors.entries()) {
+        for (const d of doors) {
           const target = editedTarget(d);
           const row = searching || target === null ? null : pairRowOf(target);
-          // the second field of a row was drawn with its row
           if (row === null || rowDrawn.has(d.ref)) {
             if (row === null) units.push(<Fragment key={d.ref}>{drawer(d)}</Fragment>);
             continue;
@@ -679,14 +679,11 @@ function StyleSections() {
           const rowSet = members.some((m) => { const t2 = editedTarget(m); return t2 !== null && editedProperties(t2).some((p) => held.has(p)); });
           units.push(
             <Fragment key={row.id}>
-              {/* data-number-field: the row's label is the scrub handle of its first field, and the pointer owner reads
-                  the field it scrubs as the nearest one marked so (src/editor/input/pointer.ts) */}
+              {/* The first column names the concept; compact prefixes distinguish the second value. */}
               <div className={`field-row field-row--pair${rowSet ? ' is-set' : ''}`} data-pair={row.id} data-number-field={rowSet || members.some((m) => targetOf(m)?.control === 'length-field') ? true : undefined}>
-                {/* the row's first field draws the row's label — the label is its own, and its scrub handle; the
-                    others identify themselves by the short prefix the row gives them */}
                 {members.map((m, index) => {
                   const prefixKey = rowPrefixKey(row, editedTarget(m) ?? '');
-                  return <Field key={m.ref} entry={m} bare labelled={index === 0} rowLabel={index === 0 ? row.labelKey : null} prefix={prefixKey === null ? null : t(prefixKey)} />;
+                  return <Field key={m.ref} entry={m} bare labelled={index === 0} rowLabel={index === 0 ? row.labelKey : null} prefix={prefixKey === null ? null : t(prefixKey)} measurement={row.fields.find((field) => field.target === editedTarget(m))?.measurement} />;
                 })}
               </div>
               {members.map((m) => <FieldOrigin key={`${m.ref}-origin`} entry={m} target={editedTarget(m)} />)}
@@ -698,8 +695,9 @@ function StyleSections() {
             {SECTION_HEADER ? (
               <DoorControl entry={SECTION_HEADER} args={{ section }} expanded={!closed} className="inspector-section__header">
                 <span className="door__label">{t(s.labelKey as MessageId)}</span>
-                <SectionOrigin section={section} />
+                {closed ? null : <SectionOrigin section={section} />}
                 {summary !== null ? <span className="inspector-section__summary">{summary}</span> : null}
+                {set > 0 ? <span className="inspector-section__count">{t('inspector.valuesSet', { count: set })}</span> : null}
               </DoorControl>
             ) : null}
             {closed ? null : units}
@@ -721,6 +719,7 @@ function PropertySearch() {
   };
   return (
     <form className="inspector-search" data-door={PROPERTY_SEARCH.ref} data-args="{}" onSubmit={(event) => event.preventDefault()}>
+      {PROPERTY_SEARCH.door.icon !== null ? <Icon name={PROPERTY_SEARCH.door.icon} size="sm" /> : null}
       <input className="search" type="search" placeholder={door.label} aria-label={door.label} title={door.title} disabled={!door.built} spellCheck={false} autoComplete="off" value={query} onChange={(event) => change(event.currentTarget.value)} />
     </form>
   );
@@ -1047,12 +1046,7 @@ function StyleTab() {
   return (
     <>
       <SelectorBar />
-      <div className="inspector-scroll">
-        <div className="inspector-body" data-region="inspector-style">
-          {none ? <Hints /> : null}
-          <ComponentNotice />
-          {/* The legend, the mode switch and Find a property stay on screen while the sections scroll under them (the
-              interface audit, finding F18; the design keeps them above the scrolling body) */}
+      <div className="inspector-style" data-region="inspector-style">
           <div className="inspector-controls">
             <ul className="legend">
               {ORIGINS.map((o) => (
@@ -1065,13 +1059,17 @@ function StyleTab() {
               <div className="segmented segmented--wide" role="group">
                 <Slots region="inspector-style" render={(slot) => (slot.kind === 'door' && slot.entry.door.kind === 'panel-control' && slot.entry.door.drawnAs === 'segment' ? undefined : null)} />
               </div>
-              <AddProperty />
             </div>
-            <PropertySearch />
+            <div className="inspector-searchline"><PropertySearch /><AddProperty /></div>
           </div>
+        <div className="inspector-scroll">
+        <div className="inspector-body">
+          {none ? <Hints /> : null}
+          <ComponentNotice />
           <div className="inspector-sections">
             <StyleSections />
           </div>
+        </div>
         </div>
       </div>
     </>
@@ -1134,7 +1132,7 @@ function SelectorBar() {
         />
       </div>
       <Affects />
-      <div className="selector-bar__state">
+      <div className="selector-bar__state" data-edited-state={state.id === MODEL_RULES.baseLayer.state ? 'base' : 'variant'}>
         <Slots
           region="inspector-selector-bar"
           render={(slot) =>
@@ -1146,7 +1144,7 @@ function SelectorBar() {
             ) : null
           }
         />
-        <span className="active-breakpoint" title={t('inspector.activeBreakpoint')}>
+        <span className="active-breakpoint" data-variant={breakpoint.id !== MODEL_RULES.baseLayer.breakpoint ? 'true' : undefined} title={t('inspector.activeBreakpoint')}>
           {breakpointIcon !== null ? <Icon name={breakpointIcon} size="sm" /> : null}
           <span>{t(breakpoint.labelKey as MessageId)}</span>
           <span className="active-breakpoint__width">{breakpoint.width}</span>

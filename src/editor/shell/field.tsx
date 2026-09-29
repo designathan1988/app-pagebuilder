@@ -46,6 +46,8 @@ import { MODEL_RULES, useEditorState, useStore, type EditorStore, layeredRules }
 import { styleClassOf, styleSource } from '../inspector/style-target.ts';
 import { useT, useValueLabel } from '../text.ts';
 import { createToken, tokenKindOf, tokensOf } from '../../core/design/tokens.ts';
+import { compactFieldValue, FieldOriginBadge, FieldValueSlot, useFieldAppearance } from './field-face.tsx';
+import { usePrimarySize } from '../view/selection-size.ts';
 
 // the key context a number field's input names (interactions.json)
 const NUMBER_FIELD_CONTEXT: KeyContextId = 'number-field';
@@ -393,11 +395,13 @@ export interface NumberFieldProps {
   readonly bare?: boolean;
   readonly labelled?: boolean;
   readonly prefix?: string | null;
+  readonly measurement?: 'width' | 'height' | undefined;
 }
 
-export function NumberField({ entry, door, property, label, bare = false, labelled = false, prefix = null }: NumberFieldProps) {
+export function NumberField({ entry, door, property, label, bare = false, labelled = false, prefix = null, measurement }: NumberFieldProps) {
   const store = useStore();
   const primary = useEditorState((s) => s.selection[0] ?? null);
+  const measured = usePrimarySize(measurement === undefined ? null : primary);
   const stored = useEditorState((s) => {
     const node = styleSource(s);
     return node ? storedValue(node, property, layeredRules(s.ui)) : undefined;
@@ -406,6 +410,7 @@ export function NumberField({ entry, door, property, label, bare = false, labell
   const effective = useEffectiveText(property, properties, stored !== undefined);
   // several elements with different values: no value, and Mixed as the field's placeholder (spec multi-select-edit)
   const mixed = useMixed(properties);
+  const appearance = useFieldAppearance(properties, mixed);
   const anyStored = useAnyStored(properties);
   // the document's value, else nothing: the effective value is the placeholder (spec inspector-provenance-reset, P4)
   const shown = mixed ? '' : (stored ?? '');
@@ -456,13 +461,15 @@ export function NumberField({ entry, door, property, label, bare = false, labell
     };
   }, [store, command, property]);
   useRevealed(property, input);
-  const scrub = SCRUB === null ? null : <ScrubLabel entry={SCRUB} property={property} shown={base} label={label} ready={available} />;
+  const scrub = SCRUB === null ? null : <ScrubLabel entry={SCRUB} property={property} shown={base} label={label} ready={available} origin={appearance.kind} />;
   const refused = useFieldRefusal(command, property);
   const state = `${available ? '' : ' is-unavailable'}${stored !== undefined ? ' is-set' : ''}${refused.text !== null ? ' is-invalid' : ''}`;
   const cell = (
-    <span className="input-wrap input-wrap--number">
+    <span className="input-wrap input-wrap--number" data-face="" data-origin={appearance.kind}>
       {prefix !== null ? <span className="field__prefix">{prefix}</span> : null}
+      <FieldValueSlot value={mixed ? t('inspector.mixedValue') : compactFieldValue(base, true).value}>
         <input ref={input} className="input" role="spinbutton" disabled={!available} aria-label={label} inputMode="decimal" spellCheck={false} data-key-context={NUMBER_FIELD_CONTEXT} placeholder={mixed ? t('inspector.mixedValue') : effective || undefined} list={tokens.length > 0 ? listId : undefined} aria-invalid={refused.text !== null ? true : undefined} onInput={refused.dismiss} />
+      </FieldValueSlot>
         {tokens.length > 0 ? (
           <datalist id={listId}>
             {tokens.map((value) => (
@@ -470,8 +477,10 @@ export function NumberField({ entry, door, property, label, bare = false, labell
             ))}
           </datalist>
         ) : null}
-        {PARTS.map((part) => {
-          if (part.door.kind === 'panel-control' && part.door.control === 'unit-menu') return <UnitMenu key={part.ref} entry={part} property={property} shown={base} input={input} ready={available} />;
+        {PARTS.filter((part) => part.door.kind === 'panel-control' && part.door.control === 'unit-menu').map((part) => <UnitMenu key={part.ref} entry={part} property={property} shown={base} input={input} ready={available} />)}
+        {bare ? null : <FieldOriginBadge label={appearance.label} />}
+        {measurement !== undefined && measured !== null && base === 'auto' ? <span className="field__measurement" aria-hidden="true">{measured[measurement]}</span> : null}
+        <span className="field__actions">{PARTS.filter((part) => !(part.door.kind === 'panel-control' && part.door.control === 'unit-menu')).map((part) => {
           if ('value' in part.command.args) return <StepButton key={part.ref} entry={part} property={property} shown={base} input={input} ready={available} />;
           // Reset this value: drawn only while the element holds a value of its own (spec inspector-provenance-reset,
           // Problems in Pager 5): with nothing to reset there is no control
@@ -479,7 +488,7 @@ export function NumberField({ entry, door, property, label, bare = false, labell
           // the reset names what it resets (A3.24): what a screen reader reads
           const named = part === RESET ? { label: t('field.reset.of', { property: propertyWord(t, property) }) } : {};
           return <DoorControl key={part.ref} entry={part} args={{ property }} ready={available} {...named} />;
-        })}
+        })}</span>
     </span>
   );
   const refusedText = refused.text !== null ? <span className="field-row__refusal" role="alert">{refused.text}</span> : null;
@@ -490,7 +499,7 @@ export function NumberField({ entry, door, property, label, bare = false, labell
     return (
       <>
         {labelled ? (scrub ?? <span className="field-row__label">{label}</span>) : null}
-        <span className={`field-cell${state}`} data-door={entry.ref} data-args={JSON.stringify({ property })} data-number-field title={door.title}>
+        <span className={`field-cell${state}`} data-origin={appearance.kind} data-door={entry.ref} data-args={JSON.stringify({ property })} data-number-field title={door.title}>
           {cell}
           {refusedText}
         </span>
@@ -498,7 +507,7 @@ export function NumberField({ entry, door, property, label, bare = false, labell
     );
   }
   return (
-    <div className={`field-row${state}`} data-door={entry.ref} data-args={JSON.stringify({ property })} data-number-field title={door.title}>
+    <div className={`field-row${state}`} data-origin={appearance.kind} data-door={entry.ref} data-args={JSON.stringify({ property })} data-number-field title={door.title}>
       {scrub ?? <span className="field-row__label">{label}</span>}
       {cell}
       {refusedText}
@@ -584,6 +593,7 @@ export function TextStyleField({
   });
   // several elements with different values: no value, and Mixed as the field's placeholder (spec multi-select-edit)
   const mixed = useMixed(parts);
+  const appearance = useFieldAppearance(parts, mixed);
   const t = useT();
   // the document's value, else nothing: the effective value is the placeholder (spec inspector-provenance-reset, P4)
   const shown = mixed ? '' : part !== null ? part.show(held) : (storedText ?? '');
@@ -701,22 +711,28 @@ export function TextStyleField({
     keepText.current(element.value);
   };
   const state = `${available ? '' : ' is-unavailable'}${set ? ' is-set' : ''}${refused.text !== null ? ' is-invalid' : ''}`;
+  const visible = mixed ? t('inspector.mixedValue') : shown || placeholder || '';
+  const percent = sliderRange?.min === 0 && sliderRange.max === 1 && visible.trim() !== '' && Number.isFinite(Number(visible));
+  const face = percent ? { value: String(Math.round(Number(visible) * 100)), unit: '%' } : compactFieldValue(visible, sliderRange !== undefined, colour);
   const cell = (
-    <span className="input-wrap">
+    <span className="input-wrap" data-face="" data-origin={appearance.kind}>
         {prefix !== null ? <span className="field__prefix">{prefix}</span> : null}
+        {!colour && !sample && entry.door.kind === 'inspector-field' && entry.door.icon !== null ? <Icon name={entry.door.icon} size="sm" /> : null}
         {sample ? <span className="field__sample swatch" style={{ '--swatch-colour': shown || effective } as CSSProperties} title={shown || effective} /> : null}
         {colour && COLOR_SWATCH !== undefined ? (
           <DoorControl entry={COLOR_SWATCH} args={{ property }} ready={door.built && primary !== null} className="field__swatch">
-            <span className="swatch" style={{ '--swatch-colour': shown || effective } as CSSProperties} />
+            <span className="field__sample swatch" style={{ '--swatch-colour': shown || effective } as CSSProperties} />
           </DoorControl>
         ) : null}
-        {own ? (
+        <FieldValueSlot value={face.value}>{own ? (
           <form key="input-form" className="input-wrap__form" onSubmit={submit}>
             <input ref={input} className="input" disabled={!available} aria-label={label} spellCheck={false} placeholder={placeholder} aria-invalid={refused.text !== null ? true : undefined} onInput={refused.dismiss} />
           </form>
         ) : (
           <input key="input" ref={input} className="input" disabled={!available} aria-label={label} spellCheck={false} list={suggestions.length > 0 ? listId : undefined} data-key-context={NUMBER_FIELD_CONTEXT} placeholder={placeholder} aria-invalid={refused.text !== null ? true : undefined} onInput={refused.dismiss} />
-        )}
+        )}</FieldValueSlot>
+        {face.unit ? <span className="field__suffix" aria-hidden="true">{face.unit}</span> : null}
+        {bare ? null : <FieldOriginBadge label={appearance.label} />}
         {suggestions.length > 0 ? (
           <datalist key="suggestions" id={listId}>
             {suggestions.map((value) => (
@@ -780,7 +796,7 @@ export function TextStyleField({
             onBlur={keepSlide}
           />
         ) : null}
-        {RESET !== undefined && (set || anyStored) ? <DoorControl key="reset" entry={RESET} args={{ property }} ready={available} label={t('field.reset.of', { property: propertyWord(t, property) })} /> : null}
+        {RESET !== undefined && (set || anyStored) ? <span className="field__actions"><DoorControl key="reset" entry={RESET} args={{ property }} ready={available} label={t('field.reset.of', { property: propertyWord(t, property) })} /></span> : null}
     </span>
   );
   const refusedText = refused.text !== null ? <span className="field-row__refusal" role="alert">{refused.text}</span> : null;
@@ -791,11 +807,11 @@ export function TextStyleField({
     return (
       <>
         {labelled ? (
-          <span className="field-row__label" title={property}>
+          <span className="field-row__label" data-origin={appearance.kind} title={property}>
             {label}
           </span>
         ) : null}
-        <span className={`field-cell${state}`} data-door={entry.ref} data-args={JSON.stringify({ property })} title={door.title}>
+        <span className={`field-cell${state}`} data-origin={appearance.kind} data-door={entry.ref} data-args={JSON.stringify({ property })} title={door.title}>
           {cell}
           {refusedText}
         </span>
@@ -803,8 +819,8 @@ export function TextStyleField({
     );
   }
   return (
-    <div className={`field-row${state}`} data-door={entry.ref} data-args={JSON.stringify({ property })} title={door.title}>
-      <span className="field-row__label" title={property}>
+    <div className={`field-row${state}`} data-origin={appearance.kind} data-door={entry.ref} data-args={JSON.stringify({ property })} title={door.title}>
+      <span className="field-row__label" data-origin={appearance.kind} title={property}>
         {label}
       </span>
       {cell}
@@ -825,6 +841,7 @@ export function KeywordButtons({ entry, door, property, values, icons, label }: 
   const effective = useEffectiveText(property, properties, stored !== undefined);
   // several elements with different values: no button pressed (spec multi-select-edit)
   const mixed = useMixed(properties);
+  const appearance = useFieldAppearance(properties, mixed);
   const anyStored = useAnyStored(properties);
   const t = useT();
   // pressed: the document's value; the effective one, while the element holds none, is marked muted (spec
@@ -836,10 +853,11 @@ export function KeywordButtons({ entry, door, property, values, icons, label }: 
   // the argument the value goes in: style.set's value, position.setMode's mode
   const valueArg = Object.keys(entry.command.args).find((name) => name !== 'property') ?? 'value';
   return (
-    <div className={`field-row${available ? '' : ' is-unavailable'}`} title={door.title}>
-      <span className="field-row__label" title={property}>
+    <div className={`field-row${available ? '' : ' is-unavailable'}`} data-origin={appearance.kind} title={door.title}>
+      <span className="field-row__label" data-origin={appearance.kind} title={property}>
         {label}
       </span>
+      <span className="field-choice">
       <span className={`segmented segmented--values${mixed ? ' is-mixed' : ''}`} role="group" aria-label={label} data-mixed={mixed ? '' : undefined}>
         {values.map((value) => {
           const icon = icons[value];
@@ -864,20 +882,22 @@ export function KeywordButtons({ entry, door, property, values, icons, label }: 
           );
         })}
       </span>
+      {RESET !== undefined && anyStored ? <span className="field__actions"><DoorControl entry={RESET} args={{ property }} ready={available} label={t('field.reset.of', { property: propertyWord(t, property) })} /></span> : null}
+      </span>
       {/* several elements with different values: said as every field says it (A3.35) */}
       {mixed ? <span className="field-row__mixed">{t('inspector.mixedValue')}</span> : null}
-      {RESET !== undefined && anyStored ? <DoorControl entry={RESET} args={{ property }} ready={available} label={t('field.reset.of', { property: propertyWord(t, property) })} /> : null}
     </div>
   );
 }
 
 // The field's label, the handle its scrub is pressed on (the pointer owner runs the drag); its tooltip is the CSS
 // property name (DESIGN.md "Inspector").
-function ScrubLabel({ entry, property, shown, label, ready }: { readonly entry: DoorEntry; readonly property: string; readonly shown: string; readonly label: string; readonly ready: boolean }) {
+function ScrubLabel({ entry, property, shown, label, ready, origin }: { readonly entry: DoorEntry; readonly property: string; readonly shown: string; readonly label: string; readonly ready: boolean; readonly origin?: string }) {
   const door = useDoor(entry, { property }, undefined, ready);
   return (
     <span
       className={`field-row__label${door.available ? ' field-row__label--scrub' : ''}`}
+      data-origin={origin}
       data-door={entry.ref}
       data-args={JSON.stringify({ property, value: shown })}
       aria-disabled={door.available ? undefined : true}

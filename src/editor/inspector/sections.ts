@@ -133,13 +133,12 @@ export const toggleSection = registerHandler<'inspector.toggleSection', EditorUi
   };
 });
 
-// inspector.setMode (spec inspector-advanced-mode): the Style tab shows its essentials (the properties properties.json
-// marks essential, a composite when one of its longhands is; a field whose property the element holds a value for, or
-// the one just revealed, shows in both) or every property that applies (All properties). The compact view is the one
-// a person meets at first — it is the panel the design draws, a handful of rows per section — and All properties is
-// one click away for the long tail. An editor preference, kept after a reload; nothing in the document changes.
+// inspector.setMode (spec inspector-advanced-mode): the Style tab shows every property that applies (All properties,
+// the default) or its essentials only (the properties properties.json marks essential, a composite when one of its
+// longhands is; a field whose property the element holds a value for, or the one just revealed, shows in both). An
+// editor preference, kept after a reload; nothing in the document changes.
 export type InspectorMode = CommandArgs['inspector.setMode']['mode'];
-export const inspectorMode = (ui: EditorUi): InspectorMode => ui.preferences.inspectorMode ?? 'essentials';
+export const inspectorMode = (ui: EditorUi): InspectorMode => ui.preferences.inspectorMode ?? 'all';
 
 export const setMode: RegisteredHandler<'inspector.setMode', EditorUi> = registerHandler(
   'inspector.setMode',

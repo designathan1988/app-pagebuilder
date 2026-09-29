@@ -5,8 +5,8 @@
     "commands": 256,
     "doors": 998,
     "scenarios": 1333,
-    "modules": 244,
-    "lines": 47587
+    "modules": 246,
+    "lines": 47648
   },
   "features": [
     {
@@ -3495,6 +3495,12 @@
       "features": []
     },
     {
+      "path": "src/core/render/inline.ts",
+      "lines": 61,
+      "commands": [],
+      "features": []
+    },
+    {
       "path": "src/core/render/output.ts",
       "lines": 199,
       "commands": [],
@@ -3502,7 +3508,7 @@
     },
     {
       "path": "src/core/render/render.ts",
-      "lines": 832,
+      "lines": 780,
       "commands": [],
       "features": []
     },
@@ -4364,13 +4370,13 @@
     },
     {
       "path": "src/editor/inspector/rows.ts",
-      "lines": 94,
+      "lines": 92,
       "commands": [],
       "features": []
     },
     {
       "path": "src/editor/inspector/sections.ts",
-      "lines": 304,
+      "lines": 303,
       "commands": [
         "inspector.toggleSection",
         "inspector.setMode",
@@ -4621,6 +4627,12 @@
       "features": []
     },
     {
+      "path": "src/editor/shell/field-face.tsx",
+      "lines": 44,
+      "commands": [],
+      "features": []
+    },
+    {
       "path": "src/editor/shell/field-origin.tsx",
       "lines": 93,
       "commands": [],
@@ -4628,13 +4640,13 @@
     },
     {
       "path": "src/editor/shell/field.tsx",
-      "lines": 1194,
+      "lines": 1214,
       "commands": [],
       "features": []
     },
     {
       "path": "src/editor/shell/gradient.tsx",
-      "lines": 189,
+      "lines": 192,
       "commands": [],
       "features": []
     },
@@ -4652,7 +4664,7 @@
     },
     {
       "path": "src/editor/shell/inspector.tsx",
-      "lines": 1171,
+      "lines": 1156,
       "commands": [],
       "features": []
     },
@@ -4700,7 +4712,7 @@
     },
     {
       "path": "src/editor/shell/shadow.tsx",
-      "lines": 193,
+      "lines": 196,
       "commands": [],
       "features": []
     },

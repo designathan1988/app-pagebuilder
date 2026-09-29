@@ -5097,11 +5097,13 @@
       "fields": [
         {
           "target": "width",
-          "prefixKey": null
+          "prefixKey": null,
+          "measurement": "width"
         },
         {
           "target": "height",
-          "prefixKey": "quickPanel.height"
+          "prefixKey": "quickPanel.height",
+          "measurement": "height"
         }
       ]
     },

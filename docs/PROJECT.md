@@ -75,6 +75,11 @@ a concept that has an owner is a defect.
 - **Colours, spacing, type, radii and shadows come only from the tokens** (`src/ui/tokens.css`, generated from
   `design/final/tokens.json`); the lint rules refuse a literal value in a stylesheet or a style object. UI text comes
   only from the i18n catalogues (en is the source, pt-BR ships), one term per concept.
+- **Style presentation** follows the interactive states in `design/final/index.html`. `inspector.css` owns the
+  compact label/value grid, paired cells, icon groups and box model. `field-face.tsx` formats the resting value and
+  its origin; the real input retains its complete CSS text and existing commands. Pair membership, short prefixes
+  and optional measured width/height hints are data in `properties.json` `rows`. Change those entries to rearrange
+  a pair; change the shared CSS primitives to adjust density. Compare real Chrome captures after each visual change.
 - The shell stylesheet is split by region (`shell.css` imports `window.css`, `doors.css`, … `window-overlays.css` in
   that order; the imports come first).
 

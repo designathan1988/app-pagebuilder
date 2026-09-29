@@ -1,6 +1,5 @@
 // The Style tab's layout data (DESIGN.md "Inspector"; spec inspector-advanced-mode): the pair rows — two properties
-// or composites read together, drawn side by side under the first one's label — and the groups a section's fields are
-// titled with.
+// or composites read together, drawn side by side under the first one's label — and the order of fields in a section.
 //
 // Both are declared in properties.json (its `rows` and a section's `groups`) and read here, never named in the panel:
 // the panel asks this module which field shares its line, under which label and with which short prefix, and which
@@ -13,6 +12,7 @@ import { manifest } from '../../manifest/runtime.ts';
 export interface PairField {
   readonly target: string;
   readonly prefixKey: MessageId | null;
+  readonly measurement?: 'width' | 'height' | undefined;
 }
 
 // a pair row: the two fields, in the order they are drawn, and the label the row carries — its own when the design
@@ -37,21 +37,19 @@ export const PAIR_ROWS: readonly PairRow[] = manifest.properties.rows.map((row) 
     id: row.id,
     section: row.section,
     labelKey: (row.labelKey ?? first) as MessageId,
-    fields: row.fields.map((field) => ({ target: field.target, prefixKey: (field.prefixKey ?? null) as MessageId | null })),
+    fields: row.fields.map((field) => ({ target: field.target, prefixKey: (field.prefixKey ?? null) as MessageId | null, measurement: field.measurement })),
   };
 });
 
 // the row a target stands in, or null when it keeps a line of its own
 export const pairRowOf = (target: string): PairRow | null => PAIR_ROWS.find((row) => row.fields.some((f) => f.target === target)) ?? null;
-
 // the label and the prefix a row's field carries: the row's own label for the first field, and the field's prefix for
 // any of them (a prefix marks the value whose property the row's label does not name)
 export const rowPrefixKey = (row: PairRow, target: string): MessageId | null => row.fields.find((f) => f.target === target)?.prefixKey ?? null;
 
 // ---------------------------------------------------------------- groups
 
-// The groups of a section, in the order properties.json declares them, each with its label: the panel titles the
-// fields of a group with it (a section that declares one group is drawn plain, with no title to repeat its name).
+// The groups order the fields; design/final does not draw extra headings between those fields.
 const GROUPS = new Map<string, readonly { readonly id: string; readonly labelKey: MessageId }[]>(
   manifest.properties.sections.map((s) => [s.id, s.groups.map((g) => ({ id: g.id, labelKey: g.labelKey as MessageId }))] as const),
 );

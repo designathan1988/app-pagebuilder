@@ -2139,6 +2139,10 @@
     {
       "field": "properties:rows[].fields[].prefixKey",
       "reader": "src/editor/inspector/rows.ts"
+    },
+    {
+      "field": "properties:rows[].fields[].measurement",
+      "reader": "src/editor/inspector/rows.ts"
     }
   ]
 }

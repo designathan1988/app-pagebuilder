@@ -70,7 +70,10 @@ test('two fields read together share one row, under the first one’s label, eac
   await expect(height).toHaveCount(1);
   const first = await box(page, `[data-pair="${pair?.id ?? ''}"] [data-door="${WIDTH}"]`);
   const second = await box(page, `[data-pair="${pair?.id ?? ''}"] [data-door="${HEIGHT}"]`);
-  expect(Math.round(first.x), 'both fields in the same column').toBe(Math.round(second.x));
+  // the two fields share one line, side by side in their own columns (the design's pair row: the panel never stacks a
+  // pair, which is what it did while the fields carried steppers and a unit menu of their own at every width)
+  expect(Math.round(first.y), 'both fields on one line').toBe(Math.round(second.y));
+  expect(first.x, 'the height field in its own column, after the width').toBeLessThan(second.x);
   // the row carries one label, the first property's, and the second field says which it is by its own prefix
   const labels = await row.locator('.field-row__label').evaluateAll((els) => els.map((el) => (el.textContent ?? '').trim()));
   expect(labels).toEqual([EN['property.width']]);
@@ -87,28 +90,23 @@ test('two fields read together share one row, under the first one’s label, eac
   await expect.poll(async () => (await stylesOf(page, 'n-card-a'))['height'] ?? null).toBe('80px');
 });
 
-test('the fields of a section are drawn group by group, each group titled from properties.json', runs(OPEN, ROW, SECTION), async ({ page }) => {
+test('a section orders its fields by the groups properties.json declares, and draws no title of its own', runs(OPEN, ROW, SECTION), async ({ page }) => {
   await control(page, ROW, { args: { target: 'n-card-a' } }).click();
   await openEverySection(page);
-  const drawn = await panel(page).locator('.inspector-group').evaluateAll((els) => els.map((el) => el.getAttribute('data-group') ?? ''));
-  expect(drawn.length, 'the panel titles its groups').toBeGreaterThan(10);
-  // a section that declares one group draws no title: it would only repeat the section's own name (Space's box)
-  expect(drawn, 'no group of a one-group section is titled').not.toContain('box');
-  // each title once, in the order its section declares: the titles drawn inside a section are its declared groups, in
-  // order, each drawn once
-  for (const section of PROPERTIES.sections) {
-    const declared = section.groups.map((g) => g.id);
-    const here = await page.locator(`.inspector-section[data-section="${section.id}"] .inspector-group`).evaluateAll((els) => els.map((el) => el.getAttribute('data-group') ?? ''));
-    expect(here, `the titles of the ${section.id} section, in the order it declares them`).toEqual([...new Set(here)]);
-    expect(here.filter((g) => !declared.includes(g)), `every title of ${section.id} is one of its groups`).toEqual([]);
-  }
-  // the layout of a card in block: its display group first, and no title for a group whose fields the page does not
-  // apply to it (the flex container's controls are not drawn for a block)
-  const layout = panel(page).locator('.inspector-section[data-section="layout"]');
-  const titles = await layout.locator('.inspector-group').evaluateAll((els) => els.map((el) => el.getAttribute('data-group')));
-  expect(titles[0]).toBe('display');
-  expect(titles, 'no flex controls on a block').not.toContain('flex');
-  expect(titles, 'the columns fields of a card are drawn').toContain('columns');
+  // the panel draws no group title: the design runs Display, Direction, Alignment, Gap without a heading between them,
+  // and the groups are the order the fields are drawn in (inspector/rows.ts orderByGroup)
+  await expect(panel(page).locator('.inspector-group')).toHaveCount(0);
+  const doorsOf = (section: string) =>
+    panel(page)
+      .locator(`.inspector-section[data-section="${section}"] .field-row, .inspector-section[data-section="${section}"] [data-pair]`)
+      .evaluateAll((els) => els.map((el) => el.getAttribute('data-door') ?? el.querySelector('[data-door]')?.getAttribute('data-door') ?? el.getAttribute('data-pair') ?? ''));
+  // the layout of a card in block: its display group's field first, its columns group's later, and no flex control
+  // (the page computes no flex layout for it)
+  const layout = await doorsOf('layout');
+  const index = (ref: string) => layout.findIndex((door) => door === ref);
+  expect(index('style.set#inspector-display'), 'the display field is drawn first').toBe(0);
+  expect(index('style.set#inspector-column-span'), 'the columns fields follow it').toBeGreaterThan(0);
+  expect(layout.join(' '), 'no flex control on a block').not.toContain('flex-direction');
 });
 
 test('a section with no essential and no value is drawn collapsed, a value set in it opens it again', runs(OPEN, ROW, SECTION, LETTER_SPACING), async ({ page }) => {

@@ -15,7 +15,7 @@
   display: flex;
   align-items: center;
   flex: none;
-  height: var(--size-top-bar);
+  height: var(--size-canvas-toolbar);
   padding: 0 var(--space-3);
   border-bottom: 1px solid var(--color-border);
 }
@@ -26,8 +26,9 @@
 }
 
 .inspector-header__tabs .door {
-  height: var(--size-top-bar);
-  padding: 0 var(--space-3);
+  position: relative;
+  height: var(--size-control-lg);
+  padding: 0 var(--space-4);
   border: 0;
   border-radius: 0;
   color: var(--color-text-muted);
@@ -36,7 +37,25 @@
 .inspector-header__tabs .door.is-current {
   color: var(--color-text);
   font-weight: var(--weight-semibold);
-  box-shadow: inset 0 calc(var(--space-1) * -1) 0 var(--color-accent);
+  box-shadow: none;
+}
+
+.inspector-header__tabs .door.is-current::after {
+  content: '';
+  position: absolute;
+  left: var(--space-4);
+  right: var(--space-4);
+  bottom: calc(var(--space-2) * -1);
+  height: var(--space-1);
+  background: var(--color-accent);
+  border-radius: var(--radius-xs);
+}
+
+.inspector-header__actions .door--icon-button,
+.inspector-header__actions .menu-button {
+  width: var(--size-target-min);
+  height: var(--size-target-min);
+  min-width: 0;
 }
 
 .inspector-header__actions {
@@ -98,7 +117,7 @@
 .target-chip {
   display: inline-flex;
   align-items: center;
-  height: var(--size-target-min);
+  height: calc(var(--size-target-min) + var(--space-1));
   padding: 0 var(--space-4);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
@@ -109,7 +128,7 @@
 
 .target-chip--class {
   border: 0;
-  font-family: var(--font-mono);
+  font-family: var(--font-ui);
 }
 
 .target-chip.is-current,
@@ -177,6 +196,7 @@
 }
 
 .affects {
+  margin: 0;
   font-size: var(--fs-caption);
   line-height: var(--lh-caption);
   color: var(--color-text-subtle);
@@ -261,11 +281,27 @@
   font-weight: var(--weight-semibold);
 }
 
+.selector-bar__state[data-edited-state='variant'] .state-picker .menu-button {
+  background: var(--color-mode-state);
+  border-color: var(--color-mode-state);
+  color: var(--color-on-mode-state);
+}
+.selector-bar__state[data-edited-state='variant'] .state-picker__key { color: inherit; }
+.active-breakpoint[data-variant='true'] { color: var(--color-origin-breakpoint); font-weight: var(--weight-semibold); }
+
 .active-breakpoint {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
   color: var(--color-text-muted);
+  font-size: var(--fs-caption);
+}
+
+.inspector-style {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
 }
 
 /* the column below the header (and the Style tab's selector bar) scrolls the tab's region, which is as tall as what
@@ -277,26 +313,54 @@
   scrollbar-width: thin;
 }
 
+/* the panel's own controls: the legend, the mode switch, Find a property (their own stack, so the sections below them
+   keep the body's own gap) */
+.inspector-controls {
+  display: flex;
+  flex-direction: column;
+  flex: none;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.inspector-searchline { position: relative; }
+.inspector-search { position: relative; }
+.inspector-search > .icon {
+  position: absolute;
+  left: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-subtle);
+  pointer-events: none;
+}
+.inspector-search .search {
+  height: var(--size-control);
+  padding-left: var(--space-9);
+  padding-right: var(--space-9);
+  font-size: var(--fs-caption);
+  background: var(--color-surface);
+}
+.inspector-searchline > .add-property {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.inspector-searchline > .add-property > .door {
+  width: var(--size-control);
+  height: var(--size-control);
+  opacity: 0;
+}
+.inspector-searchline:hover > .add-property > .door,
+.inspector-searchline:focus-within > .add-property > .door { opacity: 1; }
+
 .inspector-body {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
-  padding: var(--space-4) var(--space-6) var(--space-10);
+  gap: 0;
+  padding: 0;
 }
 
-/* The legend, the mode switch and Find a property, held at the top of the scroller while the sections pass under them
-   (the interface audit, finding F18): the panel never hides which layer it edits, nor the way to search it. */
-.inspector-controls {
-  position: sticky;
-  top: calc(var(--space-4) * -1);
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  margin: 0 calc(var(--space-6) * -1);
-  padding: var(--space-4) var(--space-6);
-  background: var(--color-surface);
-}
 
 .settings-section {
   display: flex;
@@ -361,7 +425,7 @@
   content: '';
   width: var(--space-4);
   height: var(--space-4);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-xs);
   background: var(--origin);
 }
 
@@ -412,9 +476,13 @@
 .inspector-section {
   display: flex;
   flex-direction: column;
-  padding-bottom: var(--space-2);
-  border-top: 1px solid var(--color-border);
+  gap: 0;
+  padding: 0 var(--space-4) var(--space-2) var(--space-6);
+  border-bottom: 1px solid var(--color-border);
 }
+
+.inspector-section:has(.inspector-section__header[aria-expanded='false']) { padding-bottom: 0; }
+.inspector-section__count { display: none; }
 
 .inspector-section__header {
   align-self: stretch;
@@ -486,6 +554,9 @@
   min-height: var(--size-row);
 }
 
+[data-region='inspector-style'] .field-row > .door--button { justify-self: start; }
+[data-region='inspector-style'] .field__swatch.door { min-width: 0; width: calc(var(--space-7) - var(--space-1)); height: calc(var(--space-7) - var(--space-1)); }
+
 /* A label that does not fit its column wraps to a second line instead of being cut (the user's real-use audit:
    every field says what it is), and a tooltip in the markup carries the whole word for the longest ones */
 .field-row__label {
@@ -497,23 +568,15 @@
   line-height: var(--lh-label);
 }
 
-/* A pair row (properties.json rows, DESIGN.md "Inspector"): two fields read together, under the first one's label —
-   width with height, the gap's two axes, a shorthand with its colour. Each field keeps its whole cell: its door, its
-   value, its unit menu, its step buttons and its reset.
-   Two such cells and a label do not fit the inspector's default width (288 px), where a cramped field would clip the
-   value it shows; so the pair stands on one line while the panel has the room for both cells (the panel is resizable,
-   DESIGN.md "The window") and one field per line, under the row's shared label, when it does not. What a field is, on
-   the second line, its own short prefix says (the height's H, the gap's axis mark). */
+/* A pair is one label and two compact cells. Prefixes and measurement hints come from the manifest. Editing actions
+   live outside the value's layout so neither value is squeezed when the field is focused. */
 .inspector-sections {
   container-type: inline-size;
 }
 
-/* A pair row gives its two fields the width a whole row has: the label column is narrower than a single field's
-   (its label is short: Width, Gap), and the cells take the rest, so neither field clips (the design's 100|1fr|1fr is
-   too tight for the unit menu and the value list the real fields carry). */
+/* design/final .prop.two: the same 100 px label column as a single row, then two compact value cells. */
 .field-row--pair {
-  grid-template-columns: calc(var(--space-10) * 2 + var(--space-9)) minmax(0, 1fr) minmax(0, 1fr);
-  gap: 0 var(--space-2);
+  grid-template-columns: calc(var(--space-10) * 3 + var(--space-2)) minmax(0, 1fr) minmax(0, 1fr);
 }
 
 /* the cell of a field standing in a pair row: the field's door, its value, and a refusal said under it (wrapped, so a
@@ -537,46 +600,6 @@
 /* the title of a group of properties inside a section (properties.json sections[].groups): a caption above its
    fields, indented to the value column so the fields still read as one list */
 
-/* Every field is one box (the design's field): the value, its unit menu, its value list and its steppers all live
-   inside the same border, so a row reads as one control and a pair of fields fits on one line. */
-.input-wrap {
-  display: flex;
-  align-items: center;
-  gap: var(--space-1);
-  min-width: 0;
-  width: 100%;
-  height: var(--size-control);
-  padding: 0 var(--space-2);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xs);
-  background: var(--color-surface-sunken);
-}
-
-.input-wrap:hover {
-  border-color: var(--color-border-strong);
-}
-
-.input-wrap:focus-within {
-  border-color: var(--color-focus);
-}
-
-/* the input inside the box draws no border of its own: the box is the field, its value in the code face at the
-   caption size, so a pair of them fits the column (the design's field) */
-.input-wrap .input {
-  flex: 1;
-  min-width: 0;
-  height: 100%;
-  padding: 0;
-  border: 0;
-  background: none;
-  font: var(--fw-body) var(--fs-caption) / var(--lh-caption) var(--font-mono);
-}
-
-/* a field of a form of its own (the spacing sides, the radius): the form takes no box of its own, so the input stays
-   the box's child */
-.input-wrap > .input-wrap__form {
-  display: contents;
-}
 
 /* the slider a field's door declares (A3.30): beside the value, its number written on release */
 .field__slider {
@@ -634,6 +657,192 @@
 
 /* the field component (DESIGN.md "Component regions": field): the input, the unit menu, the step buttons (shown while
    the field is hovered or holds the focus), the reset; its label is the scrub handle */
+/* The field is one box (the design's field): the value, its prefix, its unit menu and its value list live inside the
+   same border, so a row reads as one control and a pair of them fits one line. */
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+  width: 100%;
+  height: var(--size-control);
+  padding: 0 var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-sunken);
+}
+
+.input-wrap:hover {
+  border-color: var(--color-border-strong);
+}
+
+.input-wrap:focus-within {
+  border-color: var(--color-focus);
+}
+
+/* the input inside the box draws no border of its own: the box is the field, its value in the code face at the
+   caption size so a pair of them fits the column */
+.input-wrap .input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: var(--fw-body) var(--fs-caption) / var(--lh-caption) var(--font-mono);
+}
+
+/* The input of a field shares its row with the field's own affordances (the unit menu, the value list): the input
+   takes what is left instead of the whole cell, so nothing wraps to a second line (the design's field). */
+.input-wrap .input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* a field of a form of its own: the form takes no box, so the input stays the wrap's child */
+.input-wrap > .input-wrap__form {
+  display: contents;
+}
+
+/* One value slot is shared by number, colour, text and composite editors. The real input is always present. */
+.field__value-slot {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  align-items: center;
+}
+.field__value-slot .input-wrap__form { display: contents; }
+.field__rest-value, .field__origin-badge, .field__suffix, .field__measurement { display: none; }
+.field__actions { display: contents; }
+
+[data-region='inspector-style'] .field__rest-value {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  pointer-events: none;
+  font: inherit;
+  line-height: calc(var(--size-control) - var(--space-1));
+  text-overflow: ellipsis;
+}
+[data-region='inspector-style'] .input-wrap[data-face] {
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  border-color: transparent;
+  color: var(--color-origin-default);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-mono);
+}
+[data-region='inspector-style'] .input-wrap[data-face]:not(:focus-within) .field__value-slot .input,
+[data-region='inspector-style'] .input-wrap[data-face]:not(:focus-within) .field__value-slot .input::placeholder {
+  color: transparent;
+}
+[data-region='inspector-style'] .input-wrap:focus-within .field__rest-value,
+[data-region='inspector-style'] .input-wrap:focus-within .field__origin-badge,
+[data-region='inspector-style'] .input-wrap:focus-within .field__suffix { visibility: hidden; }
+[data-region='inspector-style'] .input-wrap:focus-within .field__origin-badge,
+[data-region='inspector-style'] .input-wrap:focus-within .field__suffix { display: none; }
+[data-region='inspector-style'] .input-wrap[data-face]:hover { border-color: var(--color-border-strong); }
+[data-region='inspector-style'] .input-wrap[data-face]:focus-within { border-color: var(--color-focus); }
+[data-region='inspector-style'] .input-wrap:focus-within .field__value-slot .input { color: var(--color-text); }
+[data-region='inspector-style'] .field__origin-badge,
+[data-region='inspector-style'] .field__suffix,
+[data-region='inspector-style'] .field__measurement {
+  display: inline;
+  flex: none;
+  color: var(--color-text-subtle);
+  font-size: var(--fs-caption);
+  white-space: nowrap;
+}
+[data-region='inspector-style'] .field__origin-badge { margin-left: auto; }
+[data-region='inspector-style'] .input-wrap:has(.field__measurement) .field__unit {
+  position: absolute;
+  right: var(--space-2);
+  opacity: 0;
+}
+[data-region='inspector-style'] .input-wrap:has(.field__measurement):hover .field__unit,
+[data-region='inspector-style'] .input-wrap:has(.field__measurement):focus-within .field__unit { opacity: 1; }
+[data-region='inspector-style'] .input-wrap:has(.field__measurement):hover .field__measurement,
+[data-region='inspector-style'] .input-wrap:focus-within .field__measurement { visibility: hidden; }
+[data-region='inspector-style'] .input-wrap[data-origin='here'] {
+  color: var(--color-origin-here);
+  background: var(--color-origin-here-soft);
+  font-weight: var(--weight-semibold);
+}
+[data-region='inspector-style'] .input-wrap[data-origin='breakpoint'] {
+  color: var(--color-origin-breakpoint);
+  background: var(--color-origin-breakpoint-soft);
+}
+[data-region='inspector-style'] .input-wrap[data-origin='state'] {
+  color: var(--color-origin-state);
+  background: var(--color-origin-state-soft);
+}
+[data-region='inspector-style'] .input-wrap[data-origin='inherited'] {
+  color: var(--color-origin-inherited);
+  background: var(--color-origin-inherited-soft);
+}
+[data-region='inspector-style'] .input-wrap[data-origin='mixed'] { font-style: italic; }
+[data-region='inspector-style'] .field-row__label[data-origin='here'],
+[data-region='inspector-style'] .field-row[data-origin='here'] > .field-row__label {
+  color: var(--color-origin-here);
+  font-weight: var(--weight-semibold);
+}
+[data-region='inspector-style'] .field-row__label[data-origin='breakpoint'] { color: var(--color-origin-breakpoint); }
+
+/* Editing affordances float beside the active field; they never take width away from its resting value. */
+[data-region='inspector-style'] .field__actions {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 5;
+  display: none;
+  align-items: center;
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-1);
+}
+[data-region='inspector-style'] .input-wrap:hover .field__actions:not(:empty),
+[data-region='inspector-style'] .input-wrap:focus-within .field__actions:not(:empty),
+[data-region='inspector-style'] .field-choice:hover .field__actions:not(:empty),
+[data-region='inspector-style'] .field-choice:focus-within .field__actions:not(:empty) { display: flex; }
+[data-region='inspector-style'] .field__actions .field__step { display: inline-flex; }
+[data-region='inspector-style'] .field__unit-button .field__unit-value:not(:empty) + .icon { display: none; }
+[data-region='inspector-style'] .field__unit-button,
+[data-region='inspector-style'] .field__values-button { padding: 0; }
+[data-region='inspector-style'] .input-wrap--number:focus-within .field__unit-value { display: none; }
+[data-region='inspector-style'] .input-wrap--number:focus-within .field__unit-button .icon { display: block; }
+[data-region='inspector-style'] .input-wrap--number:not(:hover):not(:focus-within) .field__unit-value:empty + .icon { visibility: hidden; }
+[data-region='inspector-style'] .input-wrap--number .field__unit:has(.field__unit-value:empty) {
+  position: absolute;
+  right: var(--space-2);
+  opacity: 0;
+}
+[data-region='inspector-style'] .input-wrap--number:hover .field__unit:has(.field__unit-value:empty),
+[data-region='inspector-style'] .input-wrap--number:focus-within .field__unit:has(.field__unit-value:empty) { opacity: 1; }
+[data-region='inspector-style'] .field-origin:not(.is-focused) {
+  position: absolute;
+  width: var(--space-1);
+  height: var(--space-1);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+[data-region='inspector-style'] .field__slider {
+  position: absolute;
+  left: var(--space-3);
+  right: var(--space-3);
+  bottom: 0;
+  width: calc(100% - var(--space-3) * 2);
+  height: var(--space-4);
+  opacity: 0;
+}
+[data-region='inspector-style'] .input-wrap:hover .field__slider,
+[data-region='inspector-style'] .input-wrap:focus-within .field__slider { opacity: 1; }
+
 .input-wrap--number {
   gap: var(--space-1);
 }
@@ -705,11 +914,17 @@
   flex: none;
 }
 
-/* The step buttons of a number field stand on the row at rest (the user's order: "não tem steppers" — a control
-   nobody can see is a control that does not exist). They keep their 24 x 24 target and take the row's dim colour
-   until the row is hovered or holds the focus, where they read at full strength. */
+/* Step controls are exposed by the active field's action strip and retain their original command targets. */
 .field__step {
   display: none;
+}
+
+.field__values { display: none; }
+[data-region='inspector-style'] .field__values { display: inline-flex; }
+
+.field-row:hover .field__values,
+.field-row:focus-within .field__values {
+  display: inline-flex;
 }
 
 .field-row:hover .field__step,
@@ -733,6 +948,29 @@
 .segmented--values .door {
   min-width: var(--size-target-min);
   padding: 0 var(--space-2);
+}
+
+.field-choice { position: relative; display: inline-flex; justify-self: start; min-width: 0; }
+[data-region='inspector-style'] .field-choice .segmented--values {
+  border: 0;
+  gap: 0;
+  padding: 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-sunken);
+}
+[data-region='inspector-style'] .field-choice .door {
+  width: var(--size-control);
+  height: var(--size-control);
+  padding: 0 var(--space-1);
+  font-size: var(--fs-caption);
+}
+[data-region='inspector-style'] .field-choice .door:has(.door__label) { width: auto; padding: 0 var(--space-2); }
+[data-region='inspector-style'] .field-choice .door.is-current,
+[data-region='inspector-style'] .field-choice .door.is-default {
+  outline: none;
+  background: var(--color-surface);
+  color: var(--color-origin-here);
+  box-shadow: var(--shadow-1);
 }
 
 .matrix {
@@ -764,13 +1002,14 @@
   grid-template-rows: var(--size-control) minmax(0, 1fr) var(--size-control);
   align-items: center;
   justify-items: center;
-  padding: var(--space-2);
+  padding: 0;
+  margin: var(--space-2) 0 var(--space-3);
   border: 1px dashed var(--color-border-strong);
   border-radius: var(--radius-sm);
 }
 
 .box--margin {
-  background: var(--color-origin-breakpoint-soft);
+  background: color-mix(in srgb, var(--color-canvas-margin) 6%, transparent);
 }
 
 .box--padding {
@@ -778,7 +1017,8 @@
   grid-row: 2;
   width: 100%;
   border-style: solid;
-  background: var(--color-origin-here-soft);
+  margin: 0;
+  background: color-mix(in srgb, var(--color-canvas-padding) 8%, transparent);
 }
 
 .box__label {
@@ -786,7 +1026,7 @@
   top: var(--space-1);
   left: var(--space-3);
   font-size: var(--fs-micro);
-  color: var(--color-text-muted);
+  color: var(--color-text-subtle);
 }
 
 /* the box's link (all four sides as one value), in its top-right corner */
@@ -797,12 +1037,35 @@
 }
 
 .box__side {
+  position: relative;
   width: var(--space-10);
   height: var(--size-control);
   border: 0;
   background: none;
   text-align: center;
 }
+
+.box__rest-value {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  color: var(--color-origin-default);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-mono);
+}
+.box__side[data-origin='here'] .box__rest-value {
+  color: var(--color-origin-here);
+  background: var(--color-origin-here-soft);
+  font-weight: var(--weight-semibold);
+}
+.box__side[data-origin='breakpoint'] .box__rest-value { color: var(--color-origin-breakpoint); background: var(--color-origin-breakpoint-soft); }
+.box__side[data-origin='state'] .box__rest-value { color: var(--color-origin-state); background: var(--color-origin-state-soft); }
+.box__side:not(:focus-within) .box__input,
+.box__side:not(:focus-within) .box__input::placeholder { color: transparent; }
+.box__side:focus-within .box__rest-value { visibility: hidden; }
+.box__link.door { width: var(--size-target-min); height: var(--size-target-min); }
+.box__link .icon { width: var(--space-6); height: var(--space-6); }
 
 /* the sides of a box, named as CSS Logical Properties name them in a horizontal, top-to-bottom writing mode */
 .box__side--block-start {
@@ -859,4 +1122,3 @@
   color: var(--color-text-muted);
   white-space: nowrap;
 }
-

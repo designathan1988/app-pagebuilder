@@ -1,5 +1,5 @@
-// A Style field's origin note (spec inspector-provenance-reset, Problems in Pager 6; DESIGN.md "Inspector", the
-// value-origin legend): under the field, in its origin's legend colour, where the value it shows comes from, the one
+// A Style field's detailed origin note (spec inspector-provenance-reset, Problems in Pager 6): shown under the focused
+// field, while field-face.tsx carries the compact badge at rest. The note's legend colour and source come from the one
 // rule of inspector/origin.ts: set at the edited breakpoint (away from the base layer), from a larger breakpoint or the
 // base state, from a class, inherited from an ancestor (named). Nothing for a value of the target's own at the base layer
 // nor for the default, whose placeholder already wears the Default colour. While the field holds the focus and its value
@@ -78,7 +78,7 @@ export function FieldOrigin({ entry, target }: { readonly entry: DoorEntry; read
   return (
     <>
       {note !== null ? (
-        <div className="field-origin" data-origin={kind} data-field={entry.ref}>
+        <div className={`field-origin${focused ? ' is-focused' : ''}`} data-origin={kind} data-field={entry.ref}>
           {note}
         </div>
       ) : null}

@@ -2640,7 +2640,7 @@
           "gesture": null,
           "labelKey": "inspector.searchProperty",
           "faceLabelKey": null,
-          "icon": null,
+          "icon": "search",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-style",

@@ -16,11 +16,11 @@ import { shadowCss } from '../../core/style/shadows.ts';
 import { storedLayers } from '../../core/style/set.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
 import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
-import type { DoorState } from '../doors/door.tsx';
+import { Icon, type DoorState } from '../doors/door.tsx';
 import { shadowView } from '../inspector/shadow-view.ts';
 import { MODEL_RULES, useEditorState, useStore, layeredRules } from '../store.ts';
 import { useT } from '../text.ts';
-import { TextStyleField } from './field.tsx';
+import { propertyWord, TextStyleField } from './field.tsx';
 
 // the key context of the light pad (interactions.json)
 const PAD_CONTEXT = 'shadow-pad';
@@ -56,9 +56,11 @@ function run(store: ReturnType<typeof useStore>, entry: DoorEntry, args: Record<
 // a button of the editor: its row stands for the edit it runs
 function EditButton({ entry, door, args, ready, pressed = null, onDone }: { readonly entry: DoorEntry; readonly door: DoorState; readonly args: Record<string, unknown>; readonly ready: boolean; readonly pressed?: boolean | null; readonly onDone?: () => void }) {
   const store = useStore();
+  const t = useT();
+  const add = entry.door.kind === 'inspector-field' && entry.door.control === 'shadow-add';
   return (
     <div className={`field-row${ready ? '' : ' is-unavailable'}`} data-door={entry.ref} data-args={JSON.stringify(args)} title={door.title}>
-      <span className="field-row__label">{pressed === null ? '' : door.label}</span>
+      <span className="field-row__label">{add && typeof args.property === 'string' ? propertyWord(t, args.property) : pressed === null ? '' : door.label}</span>
       <button
         type="button"
         className={`door ${pressed === null ? 'door--button' : 'door--toggle'}${ready ? '' : ' is-unavailable'}${pressed === true ? ' is-current' : ''}`}
@@ -69,6 +71,7 @@ function EditButton({ entry, door, args, ready, pressed = null, onDone }: { read
           if (run(store, entry, args).status === 'done') onDone?.();
         }}
       >
+        {entry.door.icon !== null ? <Icon name={entry.door.icon} size="sm" /> : null}
         <span className="door__label">{door.face}</span>
       </button>
     </div>

@@ -365,14 +365,7 @@ button.picker__swatch {
 /* where a value comes from (spec inspector-provenance-reset): a field whose element holds a value of its own has a dot
    before its label; the others show the value inherited or the default, muted; a section's header counts its values */
 [data-region='inspector-style'] .field-row.is-set > .field-row__label::before {
-  content: '';
-  display: inline-block;
-  width: var(--space-2);
-  height: var(--space-2);
-  margin-right: var(--space-2);
-  border-radius: var(--radius-pill);
-  background: var(--color-accent);
-  vertical-align: middle;
+  content: none;
 }
 
 [data-region='inspector-style'] .field-row:not(.is-set) .input,
@@ -450,4 +443,3 @@ button.picker__swatch {
 [aria-selected='true'] > .add-property__item.door {
   background: var(--color-accent-soft);
 }
-
