@@ -1,0 +1,5027 @@
+{
+  "totals": {
+    "features": 187,
+    "built": 185,
+    "commands": 256,
+    "doors": 998,
+    "scenarios": 1333,
+    "modules": 236,
+    "lines": 47244
+  },
+  "features": [
+    {
+      "id": "editor-shell",
+      "built": true,
+      "commands": [
+        "workspace.setPanelOpen"
+      ],
+      "doors": 19,
+      "scenarios": 3,
+      "modules": [
+        "src/editor/workspace/panels.ts"
+      ]
+    },
+    {
+      "id": "canvas-page-iframe",
+      "built": true,
+      "commands": [],
+      "doors": 0,
+      "scenarios": 2,
+      "modules": []
+    },
+    {
+      "id": "palette-click-insert",
+      "built": true,
+      "commands": [
+        "element.insert",
+        "workspace.setPanelOpen"
+      ],
+      "doors": 24,
+      "scenarios": 5,
+      "modules": [
+        "src/core/structure/insert.ts",
+        "src/editor/workspace/panels.ts"
+      ]
+    },
+    {
+      "id": "select-click",
+      "built": true,
+      "commands": [
+        "selection.select",
+        "selection.clear"
+      ],
+      "doors": 10,
+      "scenarios": 5,
+      "modules": [
+        "src/core/selection/selection.ts"
+      ]
+    },
+    {
+      "id": "layers-tree",
+      "built": true,
+      "commands": [
+        "selection.select",
+        "layers.setExpanded",
+        "workspace.setPanelOpen"
+      ],
+      "doors": 27,
+      "scenarios": 5,
+      "modules": [
+        "src/core/selection/selection.ts",
+        "src/editor/layers/tree.ts",
+        "src/editor/workspace/panels.ts"
+      ]
+    },
+    {
+      "id": "undo-redo",
+      "built": true,
+      "commands": [
+        "history.undo",
+        "history.redo"
+      ],
+      "doors": 10,
+      "scenarios": 5,
+      "modules": [
+        "src/core/history/history.ts"
+      ]
+    },
+    {
+      "id": "delete-element",
+      "built": true,
+      "commands": [
+        "history.undo",
+        "element.delete"
+      ],
+      "doors": 12,
+      "scenarios": 6,
+      "modules": [
+        "src/core/history/history.ts",
+        "src/core/structure/remove.ts"
+      ]
+    },
+    {
+      "id": "drag-reorder-canvas",
+      "built": true,
+      "commands": [
+        "element.moveTo"
+      ],
+      "doors": 4,
+      "scenarios": 4,
+      "modules": [
+        "src/core/structure/move.ts"
+      ]
+    },
+    {
+      "id": "drag-drop-inside",
+      "built": true,
+      "commands": [
+        "element.moveTo"
+      ],
+      "doors": 4,
+      "scenarios": 3,
+      "modules": [
+        "src/core/structure/move.ts"
+      ]
+    },
+    {
+      "id": "drag-level-keys-escape",
+      "built": true,
+      "commands": [
+        "drag.levelUp",
+        "drag.levelDown",
+        "drag.cancel"
+      ],
+      "doors": 4,
+      "scenarios": 4,
+      "modules": [
+        "src/editor/drag/drag-session.ts"
+      ]
+    },
+    {
+      "id": "palette-drag-insert",
+      "built": true,
+      "commands": [
+        "element.insert"
+      ],
+      "doors": 5,
+      "scenarios": 10,
+      "modules": [
+        "src/core/structure/insert.ts"
+      ]
+    },
+    {
+      "id": "layers-drag",
+      "built": true,
+      "commands": [
+        "element.moveTo",
+        "layers.setExpanded"
+      ],
+      "doors": 6,
+      "scenarios": 3,
+      "modules": [
+        "src/core/structure/move.ts",
+        "src/editor/layers/tree.ts"
+      ]
+    },
+    {
+      "id": "move-up-down",
+      "built": true,
+      "commands": [
+        "element.moveUp",
+        "element.moveDown"
+      ],
+      "doors": 10,
+      "scenarios": 4,
+      "modules": [
+        "src/core/structure/move.ts"
+      ]
+    },
+    {
+      "id": "wrap-row-column",
+      "built": true,
+      "commands": [
+        "element.wrapRow",
+        "element.wrapColumn"
+      ],
+      "doors": 8,
+      "scenarios": 4,
+      "modules": [
+        "src/core/structure/wrap.ts"
+      ]
+    },
+    {
+      "id": "drag-side-wrap",
+      "built": true,
+      "commands": [
+        "element.wrapBeside"
+      ],
+      "doors": 2,
+      "scenarios": 3,
+      "modules": [
+        "src/core/structure/wrap.ts"
+      ]
+    },
+    {
+      "id": "context-menu",
+      "built": true,
+      "commands": [
+        "contextMenu.open",
+        "focus.next",
+        "focus.previous",
+        "focus.first",
+        "focus.last",
+        "focus.activate",
+        "ui.dismiss",
+        "element.moveUp",
+        "element.moveDown",
+        "element.wrapRow",
+        "element.wrapColumn",
+        "element.delete"
+      ],
+      "doors": 67,
+      "scenarios": 7,
+      "modules": [
+        "src/core/structure/move.ts",
+        "src/core/structure/remove.ts",
+        "src/core/structure/wrap.ts",
+        "src/editor/focus/focus.ts",
+        "src/editor/menus/context-menu.ts",
+        "src/editor/menus/overlays.ts"
+      ]
+    },
+    {
+      "id": "nest-into-previous",
+      "built": true,
+      "commands": [
+        "element.nestIntoPrevious"
+      ],
+      "doors": 4,
+      "scenarios": 4,
+      "modules": [
+        "src/core/structure/move.ts"
+      ]
+    },
+    {
+      "id": "promote-out",
+      "built": true,
+      "commands": [
+        "element.promote"
+      ],
+      "doors": 4,
+      "scenarios": 3,
+      "modules": [
+        "src/core/structure/move.ts"
+      ]
+    },
+    {
+      "id": "duplicate",
+      "built": true,
+      "commands": [
+        "element.duplicate"
+      ],
+      "doors": 5,
+      "scenarios": 4,
+      "modules": [
+        "src/core/structure/duplicate.ts"
+      ]
+    },
+    {
+      "id": "drag-duplicate",
+      "built": true,
+      "commands": [
+        "element.duplicate",
+        "element.moveTo"
+      ],
+      "doors": 9,
+      "scenarios": 1,
+      "modules": [
+        "src/core/structure/duplicate.ts",
+        "src/core/structure/move.ts"
+      ]
+    },
+    {
+      "id": "clipboard-copy-paste",
+      "built": true,
+      "commands": [
+        "clipboard.copy",
+        "clipboard.paste"
+      ],
+      "doors": 8,
+      "scenarios": 6,
+      "modules": [
+        "src/core/clipboard/clipboard.ts"
+      ]
+    },
+    {
+      "id": "keyboard-tree-walk",
+      "built": true,
+      "commands": [
+        "selection.walkNextSibling",
+        "selection.walkPreviousSibling",
+        "selection.walkParent",
+        "selection.walkFirstChild"
+      ],
+      "doors": 4,
+      "scenarios": 9,
+      "modules": [
+        "src/core/selection/selection.ts"
+      ]
+    },
+    {
+      "id": "hand-keyboard-move",
+      "built": true,
+      "commands": [
+        "element.moveTo",
+        "hand.take",
+        "hand.aimNext",
+        "hand.aimPrevious",
+        "hand.climb",
+        "hand.descend",
+        "hand.drop"
+      ],
+      "doors": 15,
+      "scenarios": 8,
+      "modules": [
+        "src/core/structure/hand.ts",
+        "src/core/structure/move.ts"
+      ]
+    },
+    {
+      "id": "text-edit-inline",
+      "built": true,
+      "commands": [
+        "text.startEdit",
+        "text.set",
+        "text.cancelEdit",
+        "text.insertLineBreak"
+      ],
+      "doors": 11,
+      "scenarios": 6,
+      "modules": [
+        "src/core/text/text.ts",
+        "src/editor/canvas/text-edit.ts"
+      ]
+    },
+    {
+      "id": "text-inline-formatting",
+      "built": true,
+      "commands": [
+        "text.toggleBold",
+        "text.toggleItalic",
+        "text.editLink",
+        "text.paste"
+      ],
+      "doors": 7,
+      "scenarios": 5,
+      "modules": [
+        "src/editor/canvas/text-edit.ts"
+      ]
+    },
+    {
+      "id": "rename-element",
+      "built": true,
+      "commands": [
+        "layers.startRename",
+        "element.rename"
+      ],
+      "doors": 7,
+      "scenarios": 3,
+      "modules": [
+        "src/core/nodes/names.ts",
+        "src/editor/layers/rename.ts"
+      ]
+    },
+    {
+      "id": "multi-select-click",
+      "built": true,
+      "commands": [
+        "selection.add",
+        "selection.toggle"
+      ],
+      "doors": 4,
+      "scenarios": 4,
+      "modules": [
+        "src/core/selection/selection.ts"
+      ]
+    },
+    {
+      "id": "unwrap",
+      "built": true,
+      "commands": [
+        "element.unwrap"
+      ],
+      "doors": 3,
+      "scenarios": 1,
+      "modules": [
+        "src/core/structure/wrap.ts"
+      ]
+    },
+    {
+      "id": "marquee-select",
+      "built": true,
+      "commands": [
+        "selection.marquee"
+      ],
+      "doors": 2,
+      "scenarios": 6,
+      "modules": [
+        "src/core/selection/selection.ts"
+      ]
+    },
+    {
+      "id": "multi-select-actions",
+      "built": true,
+      "commands": [
+        "element.moveUp",
+        "element.wrapRow",
+        "element.wrapColumn",
+        "element.promote",
+        "element.duplicate",
+        "element.delete",
+        "hand.take",
+        "layers.startRename",
+        "text.startEdit"
+      ],
+      "doors": 42,
+      "scenarios": 8,
+      "modules": [
+        "src/core/structure/duplicate.ts",
+        "src/core/structure/hand.ts",
+        "src/core/structure/move.ts",
+        "src/core/structure/remove.ts",
+        "src/core/structure/wrap.ts",
+        "src/editor/canvas/text-edit.ts",
+        "src/editor/layers/rename.ts"
+      ]
+    },
+    {
+      "id": "select-container-children",
+      "built": true,
+      "commands": [
+        "selection.selectAllInContainer",
+        "text.selectAll"
+      ],
+      "doors": 4,
+      "scenarios": 3,
+      "modules": [
+        "src/core/selection/selection.ts",
+        "src/editor/canvas/text-edit.ts"
+      ]
+    },
+    {
+      "id": "lock-element",
+      "built": true,
+      "commands": [
+        "element.toggleLock"
+      ],
+      "doors": 4,
+      "scenarios": 5,
+      "modules": [
+        "src/core/nodes/flags.ts"
+      ]
+    },
+    {
+      "id": "hide-element",
+      "built": true,
+      "commands": [
+        "element.toggleHidden"
+      ],
+      "doors": 4,
+      "scenarios": 3,
+      "modules": [
+        "src/core/nodes/flags.ts"
+      ]
+    },
+    {
+      "id": "drag-autoscroll",
+      "built": true,
+      "commands": [],
+      "doors": 0,
+      "scenarios": 1,
+      "modules": []
+    },
+    {
+      "id": "app-menu",
+      "built": true,
+      "commands": [
+        "history.undo",
+        "history.redo",
+        "selection.clear",
+        "selection.selectAllInContainer",
+        "element.moveUp",
+        "element.moveDown",
+        "element.wrapRow",
+        "element.wrapColumn",
+        "element.nestIntoPrevious",
+        "element.promote",
+        "element.duplicate",
+        "element.delete",
+        "element.unwrap",
+        "hand.take",
+        "clipboard.copy",
+        "clipboard.paste",
+        "layers.startRename",
+        "workspace.setPanelOpen"
+      ],
+      "doors": 95,
+      "scenarios": 20,
+      "modules": [
+        "src/core/clipboard/clipboard.ts",
+        "src/core/history/history.ts",
+        "src/core/selection/selection.ts",
+        "src/core/structure/duplicate.ts",
+        "src/core/structure/hand.ts",
+        "src/core/structure/move.ts",
+        "src/core/structure/remove.ts",
+        "src/core/structure/wrap.ts",
+        "src/editor/layers/rename.ts",
+        "src/editor/workspace/panels.ts"
+      ]
+    },
+    {
+      "id": "ui-language",
+      "built": true,
+      "commands": [
+        "preferences.setLanguage"
+      ],
+      "doors": 2,
+      "scenarios": 2,
+      "modules": [
+        "src/editor/preferences/preferences.ts"
+      ]
+    },
+    {
+      "id": "autosave-restore",
+      "built": true,
+      "commands": [],
+      "doors": 0,
+      "scenarios": 4,
+      "modules": []
+    },
+    {
+      "id": "unsaved-work-guard",
+      "built": true,
+      "commands": [],
+      "doors": 0,
+      "scenarios": 1,
+      "modules": []
+    },
+    {
+      "id": "autosave-crash-recovery",
+      "built": true,
+      "commands": [],
+      "doors": 0,
+      "scenarios": 1,
+      "modules": []
+    },
+    {
+      "id": "new-blank-page",
+      "built": true,
+      "commands": [
+        "project.newBlankPage"
+      ],
+      "doors": 2,
+      "scenarios": 3,
+      "modules": [
+        "src/core/project/project.ts"
+      ]
+    },
+    {
+      "id": "autosave-corruption-recovery",
+      "built": true,
+      "commands": [
+        "project.restoreVersion"
+      ],
+      "doors": 1,
+      "scenarios": 1,
+      "modules": [
+        "src/core/project/recovery.ts"
+      ]
+    },
+    {
+      "id": "multi-tab-guard",
+      "built": true,
+      "commands": [
+        "project.takeOverEditing"
+      ],
+      "doors": 1,
+      "scenarios": 1,
+      "modules": [
+        "src/core/project/tab-guard.ts"
+      ]
+    },
+    {
+      "id": "project-save-json",
+      "built": true,
+      "commands": [
+        "project.save"
+      ],
+      "doors": 2,
+      "scenarios": 2,
+      "modules": [
+        "src/core/project/archive.ts"
+      ]
+    },
+    {
+      "id": "project-open-json",
+      "built": true,
+      "commands": [
+        "project.open"
+      ],
+      "doors": 2,
+      "scenarios": 5,
+      "modules": [
+        "src/core/project/archive.ts"
+      ]
+    },
+    {
+      "id": "inspector-panel",
+      "built": true,
+      "commands": [
+        "element.toggleLock",
+        "element.toggleHidden",
+        "text.set",
+        "text.cancelEdit",
+        "inspector.toggleSection",
+        "workspace.setActiveTab"
+      ],
+      "doors": 21,
+      "scenarios": 15,
+      "modules": [
+        "src/core/nodes/flags.ts",
+        "src/core/text/text.ts",
+        "src/editor/canvas/text-edit.ts",
+        "src/editor/inspector/sections.ts",
+        "src/editor/workspace/layout.ts"
+      ]
+    },
+    {
+      "id": "inspector-number-fields",
+      "built": true,
+      "commands": [
+        "style.set",
+        "field.step",
+        "field.scrub",
+        "field.setUnit",
+        "field.cancel"
+      ],
+      "doors": 178,
+      "scenarios": 21,
+      "modules": [
+        "src/core/style/set.ts",
+        "src/editor/inspector/number-field.ts"
+      ]
+    },
+    {
+      "id": "props-display",
+      "built": true,
+      "commands": [
+        "style.set"
+      ],
+      "doors": 168,
+      "scenarios": 11,
+      "modules": [
+        "src/core/style/set.ts"
+      ]
+    },
+    {
+      "id": "props-flex-container",
+      "built": true,
+      "commands": [
+        "style.set",
+        "style.setAlignment"
+      ],
+      "doors": 169,
+      "scenarios": 20,
+      "modules": [
+        "src/core/style/alignment.ts",
+        "src/core/style/set.ts"
+      ]
+    },
+    {
+      "id": "props-grid-container",
+      "built": true,
+      "commands": [
+        "style.set",
+        "style.setGridTracks",
+        "style.setGridItem"
+      ],
+      "doors": 179,
+      "scenarios": 21,
+      "modules": [
+        "src/core/style/grid-item.ts",
+        "src/core/style/set.ts",
+        "src/core/style/tracks.ts"
+      ]
+    },
+    {
+      "id": "props-layout-item",
+      "built": true,
+      "commands": [
+        "style.set"
+      ],
+      "doors": 168,
+      "scenarios": 10,
+      "modules": [
+        "src/core/style/set.ts"
+      ]
+    },
+    {
+      "id": "props-spacing",
+      "built": true,
+      "commands": [
+        "style.setSpacing",
+        "inspector.toggleSpacingLink",
+        "field.cancel"
+      ],
+      "doors": 22,
+      "scenarios": 16,
+      "modules": [
+        "src/core/style/spacing.ts",
+        "src/editor/inspector/number-field.ts",
+        "src/editor/inspector/spacing.ts"
+      ]
+    },
+    {
+      "id": "props-size-overflow",
+      "built": true,
+      "commands": [
+        "style.set"
+      ],
+      "doors": 168,
+      "scenarios": 13,
+      "modules": [
+        "src/core/style/set.ts"
+      ]
+    },
+    {
+      "id": "props-position",
+      "built": true,
+      "commands": [
+        "style.set",
+        "position.setMode"
+      ],
+      "doors": 170,
+      "scenarios": 15,
+      "modules": [
+        "src/core/geometry/position.ts",
+        "src/core/style/set.ts"
+      ]
+    },
+    {
+      "id": "color-picker",
+      "built": true,
+      "commands": [
+        "style.set",
+        "colorPicker.open",
+        "colorPicker.setFormat",
+        "colorPicker.setChannel",
+        "colorPicker.apply",
+        "colorPicker.cancel",
+        "drag.cancel"
+      ],
+      "doors": 179,
+      "scenarios": 21,
+      "modules": [
+        "src/core/style/set.ts",
+        "src/editor/drag/drag-session.ts",
+        "src/editor/inspector/color-picker.ts"
+      ]
+    },
+    {
+      "id": "color-picker-oklch",
+      "built": true,
+      "commands": [
+        "colorPicker.setFormat",
+        "colorPicker.setChannel"
+      ],
+      "doors": 6,
+      "scenarios": 5,
+      "modules": [
+        "src/editor/inspector/color-picker.ts"
+      ]
+    },
+    {
+      "id": "color-swatches-eyedropper",
+      "built": true,
+      "commands": [
+        "colors.saveSwatch",
+        "colors.removeSwatch",
+        "style.set"
+      ],
+      "doors": 170,
+      "scenarios": 5,
+      "modules": [
+        "src/core/design/colors.ts",
+        "src/core/style/set.ts"
+      ]
+    },
+    {
+      "id": "props-typography",
+      "built": true,
+      "commands": [
+        "style.set"
+      ],
+      "doors": 168,
+      "scenarios": 23,
+      "modules": [
+        "src/core/style/set.ts"
+      ]
+    },
+    {
+      "id": "props-typography-advanced",
+      "built": true,
+      "commands": [
+        "style.set"
+      ],
+      "doors": 168,
+      "scenarios": 15,
+      "modules": [
+        "src/core/style/set.ts"
+      ]
+    },
+    {
+      "id": "props-background",
+      "built": true,
+      "commands": [
+        "style.set",
+        "style.setBackgroundImage"
+      ],
+      "doors": 187,
+      "scenarios": 16,
+      "modules": [
+        "src/core/style/background-image.ts",
+        "src/core/style/set.ts"
+      ]
+    },
+    {
+      "id": "gradient-editor",
+      "built": true,
+      "commands": [
+        "style.setBackgroundImage"
+      ],
+      "doors": 19,
+      "scenarios": 23,
+      "modules": [
+        "src/core/style/background-image.ts"
+      ]
+    },
+    {
+      "id": "props-border-outline",
+      "built": true,
+      "commands": [
+        "style.set",
+        "style.setBorder",
+        "style.setRadius"
+      ],
+      "doors": 193,
+      "scenarios": 24,
+      "modules": [
+        "src/core/style/border.ts",
+        "src/core/style/set.ts"
+      ]
+    },
+    {
+      "id": "props-effects-basic",
+      "built": true,
+      "commands": [
+        "style.set"
+      ],
+      "doors": 168,
+      "scenarios": 9,
+      "modules": [
+        "src/core/style/set.ts"
+      ]
+    },
+    {
+      "id": "shadow-editor",
+      "built": true,
+      "commands": [
+        "style.setShadows"
+      ],
+      "doors": 30,
+      "scenarios": 35,
+      "modules": [
+        "src/core/style/shadows.ts"
+      ]
+    },
+    {
+      "id": "props-filters-clip",
+      "built": true,
+      "commands": [
+        "style.set",
+        "style.setFilter"
+      ],
+      "doors": 179,
+      "scenarios": 16,
+      "modules": [
+        "src/core/style/filter.ts",
+        "src/core/style/set.ts"
+      ]
+    },
+    {
+      "id": "props-transforms",
+      "built": true,
+      "commands": [
+        "style.set",
+        "style.setTransform"
+      ],
+      "doors": 173,
+      "scenarios": 15,
+      "modules": [
+        "src/core/style/set.ts",
+        "src/core/style/transform.ts"
+      ]
+    },
+    {
+      "id": "props-transition",
+      "built": true,
+      "commands": [
+        "style.set"
+      ],
+      "doors": 168,
+      "scenarios": 6,
+      "modules": [
+        "src/core/style/set.ts"
+      ]
+    },
+    {
+      "id": "props-more",
+      "built": true,
+      "commands": [
+        "style.set"
+      ],
+      "doors": 168,
+      "scenarios": 20,
+      "modules": [
+        "src/core/style/set.ts"
+      ]
+    },
+    {
+      "id": "props-attributes",
+      "built": true,
+      "commands": [
+        "style.setCustomDeclarations",
+        "element.setAttribute",
+        "element.setId",
+        "element.setClasses"
+      ],
+      "doors": 59,
+      "scenarios": 11,
+      "modules": [
+        "src/core/elements/attributes.ts",
+        "src/core/style/custom.ts"
+      ]
+    },
+    {
+      "id": "inspector-provenance-reset",
+      "built": true,
+      "commands": [
+        "style.reset",
+        "style.resetAll"
+      ],
+      "doors": 3,
+      "scenarios": 4,
+      "modules": [
+        "src/core/style/reset.ts"
+      ]
+    },
+    {
+      "id": "inspector-property-search",
+      "built": true,
+      "commands": [
+        "inspector.search"
+      ],
+      "doors": 1,
+      "scenarios": 3,
+      "modules": [
+        "src/editor/inspector/sections.ts"
+      ]
+    },
+    {
+      "id": "inspector-advanced-mode",
+      "built": true,
+      "commands": [
+        "inspector.setMode"
+      ],
+      "doors": 2,
+      "scenarios": 2,
+      "modules": [
+        "src/editor/inspector/sections.ts"
+      ]
+    },
+    {
+      "id": "inspector-add-property",
+      "built": true,
+      "commands": [
+        "inspector.reveal"
+      ],
+      "doors": 3,
+      "scenarios": 1,
+      "modules": [
+        "src/editor/inspector/sections.ts"
+      ]
+    },
+    {
+      "id": "semantic-tag-switch",
+      "built": true,
+      "commands": [
+        "element.setTag"
+      ],
+      "doors": 2,
+      "scenarios": 12,
+      "modules": [
+        "src/core/elements/tag.ts"
+      ]
+    },
+    {
+      "id": "quick-panel",
+      "built": true,
+      "commands": [
+        "contextMenu.open",
+        "style.set",
+        "style.setBorder",
+        "style.setBackgroundImage",
+        "style.setFilter",
+        "element.setTag",
+        "quickPanel.setOffset",
+        "style.setTransform",
+        "quickPanel.setOpen"
+      ],
+      "doors": 231,
+      "scenarios": 34,
+      "modules": [
+        "src/core/elements/tag.ts",
+        "src/core/style/background-image.ts",
+        "src/core/style/border.ts",
+        "src/core/style/filter.ts",
+        "src/core/style/set.ts",
+        "src/core/style/transform.ts",
+        "src/editor/menus/context-menu.ts",
+        "src/editor/quick-panel/quick-panel.ts"
+      ]
+    },
+    {
+      "id": "multi-select-edit",
+      "built": true,
+      "commands": [
+        "style.set"
+      ],
+      "doors": 168,
+      "scenarios": 3,
+      "modules": [
+        "src/core/style/set.ts"
+      ]
+    },
+    {
+      "id": "resize-handles",
+      "built": true,
+      "commands": [
+        "geometry.resize"
+      ],
+      "doors": 8,
+      "scenarios": 11,
+      "modules": [
+        "src/core/geometry/resize.ts"
+      ]
+    },
+    {
+      "id": "spacing-handles",
+      "built": true,
+      "commands": [
+        "style.setSpacing",
+        "canvas.setEditMode"
+      ],
+      "doors": 21,
+      "scenarios": 15,
+      "modules": [
+        "src/core/style/spacing.ts",
+        "src/editor/canvas/edit-mode.ts"
+      ]
+    },
+    {
+      "id": "radius-border-gap-handles",
+      "built": true,
+      "commands": [
+        "style.set",
+        "style.setBorder",
+        "style.setRadius",
+        "handle.step"
+      ],
+      "doors": 197,
+      "scenarios": 11,
+      "modules": [
+        "src/core/style/border.ts",
+        "src/core/style/set.ts",
+        "src/editor/canvas/handles.ts"
+      ]
+    },
+    {
+      "id": "shadow-handles",
+      "built": true,
+      "commands": [
+        "style.setShadows"
+      ],
+      "doors": 30,
+      "scenarios": 4,
+      "modules": [
+        "src/core/style/shadows.ts"
+      ]
+    },
+    {
+      "id": "page-properties",
+      "built": true,
+      "commands": [
+        "page.openProperties",
+        "page.setSetting"
+      ],
+      "doors": 11,
+      "scenarios": 6,
+      "modules": [
+        "src/core/page/settings.ts",
+        "src/editor/inspector/page-properties.ts"
+      ]
+    },
+    {
+      "id": "base-style",
+      "built": true,
+      "commands": [],
+      "doors": 0,
+      "scenarios": 2,
+      "modules": []
+    },
+    {
+      "id": "export-zip",
+      "built": true,
+      "commands": [
+        "page.setSetting",
+        "project.export"
+      ],
+      "doors": 13,
+      "scenarios": 5,
+      "modules": [
+        "src/core/export/export.ts",
+        "src/core/page/settings.ts"
+      ]
+    },
+    {
+      "id": "css-variables-tokens",
+      "built": true,
+      "commands": [
+        "tokens.create",
+        "tokens.update",
+        "tokens.rename",
+        "tokens.delete",
+        "workspace.setPanelOpen"
+      ],
+      "doors": 23,
+      "scenarios": 11,
+      "modules": [
+        "src/core/design/tokens.ts",
+        "src/editor/workspace/panels.ts"
+      ]
+    },
+    {
+      "id": "export-bem-css",
+      "built": true,
+      "commands": [
+        "element.setClasses",
+        "project.export"
+      ],
+      "doors": 5,
+      "scenarios": 3,
+      "modules": [
+        "src/core/elements/attributes.ts",
+        "src/core/export/export.ts"
+      ]
+    },
+    {
+      "id": "elements-structure",
+      "built": true,
+      "commands": [
+        "element.insert",
+        "element.setLink"
+      ],
+      "doors": 11,
+      "scenarios": 12,
+      "modules": [
+        "src/core/elements/link.ts",
+        "src/core/structure/insert.ts"
+      ]
+    },
+    {
+      "id": "elements-text",
+      "built": true,
+      "commands": [
+        "element.insert",
+        "element.setTag",
+        "element.setLink"
+      ],
+      "doors": 13,
+      "scenarios": 6,
+      "modules": [
+        "src/core/elements/link.ts",
+        "src/core/elements/tag.ts",
+        "src/core/structure/insert.ts"
+      ]
+    },
+    {
+      "id": "elements-lists",
+      "built": true,
+      "commands": [
+        "element.insert",
+        "element.duplicate"
+      ],
+      "doors": 10,
+      "scenarios": 11,
+      "modules": [
+        "src/core/structure/duplicate.ts",
+        "src/core/structure/insert.ts"
+      ]
+    },
+    {
+      "id": "nesting-grammar",
+      "built": true,
+      "commands": [
+        "element.insert",
+        "element.moveTo",
+        "clipboard.paste"
+      ],
+      "doors": 13,
+      "scenarios": 2,
+      "modules": [
+        "src/core/clipboard/clipboard.ts",
+        "src/core/structure/insert.ts",
+        "src/core/structure/move.ts"
+      ]
+    },
+    {
+      "id": "nesting-grammar-structure",
+      "built": true,
+      "commands": [
+        "element.moveTo",
+        "element.wrapRow",
+        "element.wrapColumn",
+        "element.promote",
+        "element.unwrap",
+        "hand.take",
+        "element.setTag"
+      ],
+      "doors": 25,
+      "scenarios": 4,
+      "modules": [
+        "src/core/elements/tag.ts",
+        "src/core/structure/hand.ts",
+        "src/core/structure/move.ts",
+        "src/core/structure/wrap.ts"
+      ]
+    },
+    {
+      "id": "elements-tables",
+      "built": true,
+      "commands": [
+        "element.insert",
+        "parts.toggle"
+      ],
+      "doors": 8,
+      "scenarios": 4,
+      "modules": [
+        "src/core/elements/parts.ts",
+        "src/core/structure/insert.ts"
+      ]
+    },
+    {
+      "id": "table-commands",
+      "built": true,
+      "commands": [
+        "table.addColumnAfter",
+        "table.addColumnEnd",
+        "table.removeColumn",
+        "table.addRowAfter",
+        "table.removeRow"
+      ],
+      "doors": 10,
+      "scenarios": 5,
+      "modules": [
+        "src/core/elements/table.ts"
+      ]
+    },
+    {
+      "id": "elements-form-structure",
+      "built": true,
+      "commands": [
+        "element.insert",
+        "element.setTag",
+        "element.setAttribute"
+      ],
+      "doors": 63,
+      "scenarios": 10,
+      "modules": [
+        "src/core/elements/attributes.ts",
+        "src/core/elements/tag.ts",
+        "src/core/structure/insert.ts"
+      ]
+    },
+    {
+      "id": "element-attributes-aria",
+      "built": true,
+      "commands": [
+        "element.setCustomAttribute",
+        "element.removeCustomAttribute",
+        "element.setAttribute"
+      ],
+      "doors": 59,
+      "scenarios": 8,
+      "modules": [
+        "src/core/elements/attributes.ts"
+      ]
+    },
+    {
+      "id": "shared-style-classes",
+      "built": true,
+      "commands": [
+        "classes.create",
+        "classes.apply",
+        "classes.detach",
+        "inspector.setStyleTarget"
+      ],
+      "doors": 4,
+      "scenarios": 10,
+      "modules": [
+        "src/core/design/classes.ts",
+        "src/editor/inspector/style-target.ts"
+      ]
+    },
+    {
+      "id": "elements-form-inputs",
+      "built": true,
+      "commands": [
+        "element.insert",
+        "element.setAttribute"
+      ],
+      "doors": 61,
+      "scenarios": 26,
+      "modules": [
+        "src/core/elements/attributes.ts",
+        "src/core/structure/insert.ts"
+      ]
+    },
+    {
+      "id": "elements-form-inputs-rules",
+      "built": true,
+      "commands": [
+        "element.setInputType",
+        "element.setLabelTarget",
+        "inspector.reveal"
+      ],
+      "doors": 5,
+      "scenarios": 3,
+      "modules": [
+        "src/core/elements/inputs.ts",
+        "src/editor/inspector/sections.ts"
+      ]
+    },
+    {
+      "id": "elements-form-controls",
+      "built": true,
+      "commands": [
+        "element.insert",
+        "element.setAttribute",
+        "parts.add",
+        "parts.move",
+        "parts.remove"
+      ],
+      "doors": 72,
+      "scenarios": 13,
+      "modules": [
+        "src/core/elements/attributes.ts",
+        "src/core/elements/parts.ts",
+        "src/core/structure/insert.ts"
+      ]
+    },
+    {
+      "id": "elements-media-images",
+      "built": true,
+      "commands": [
+        "element.insert",
+        "element.setAttribute",
+        "parts.add"
+      ],
+      "doors": 69,
+      "scenarios": 9,
+      "modules": [
+        "src/core/elements/attributes.ts",
+        "src/core/elements/parts.ts",
+        "src/core/structure/insert.ts"
+      ]
+    },
+    {
+      "id": "elements-media-embeds",
+      "built": true,
+      "commands": [
+        "element.insert",
+        "element.setAttribute",
+        "parts.add"
+      ],
+      "doors": 69,
+      "scenarios": 14,
+      "modules": [
+        "src/core/elements/attributes.ts",
+        "src/core/elements/parts.ts",
+        "src/core/structure/insert.ts"
+      ]
+    },
+    {
+      "id": "elements-svg-shapes",
+      "built": true,
+      "commands": [
+        "element.insert",
+        "style.set",
+        "geometry.resize",
+        "element.setSvgMarkup",
+        "parts.add"
+      ],
+      "doors": 190,
+      "scenarios": 14,
+      "modules": [
+        "src/core/elements/parts.ts",
+        "src/core/elements/svg.ts",
+        "src/core/geometry/resize.ts",
+        "src/core/structure/insert.ts",
+        "src/core/style/set.ts"
+      ]
+    },
+    {
+      "id": "elements-interactive",
+      "built": true,
+      "commands": [
+        "element.insert",
+        "element.setAttribute"
+      ],
+      "doors": 61,
+      "scenarios": 4,
+      "modules": [
+        "src/core/elements/attributes.ts",
+        "src/core/structure/insert.ts"
+      ]
+    },
+    {
+      "id": "natural-child-command",
+      "built": true,
+      "commands": [
+        "element.createNaturalChild"
+      ],
+      "doors": 2,
+      "scenarios": 4,
+      "modules": [
+        "src/core/structure/insert.ts"
+      ]
+    },
+    {
+      "id": "props-element-specific",
+      "built": true,
+      "commands": [
+        "style.set"
+      ],
+      "doors": 168,
+      "scenarios": 10,
+      "modules": [
+        "src/core/style/set.ts"
+      ]
+    },
+    {
+      "id": "settings-class-management",
+      "built": true,
+      "commands": [
+        "element.setClasses",
+        "element.setCustomAttribute",
+        "inspector.setStyleTarget",
+        "classes.rename",
+        "classes.delete"
+      ],
+      "doors": 6,
+      "scenarios": 6,
+      "modules": [
+        "src/core/design/classes.ts",
+        "src/core/elements/attributes.ts",
+        "src/editor/inspector/style-target.ts"
+      ]
+    },
+    {
+      "id": "settings-audit",
+      "built": true,
+      "commands": [
+        "element.setAttribute",
+        "element.setInputType",
+        "element.setClasses",
+        "element.setCustomAttribute",
+        "element.setTag",
+        "text.toggleBold",
+        "text.toggleItalic",
+        "classes.rename",
+        "classes.delete"
+      ],
+      "doors": 68,
+      "scenarios": 26,
+      "modules": [
+        "src/core/design/classes.ts",
+        "src/core/elements/attributes.ts",
+        "src/core/elements/inputs.ts",
+        "src/core/elements/tag.ts",
+        "src/editor/canvas/text-edit.ts"
+      ]
+    },
+    {
+      "id": "templates-layout",
+      "built": true,
+      "commands": [
+        "element.insert"
+      ],
+      "doors": 5,
+      "scenarios": 4,
+      "modules": [
+        "src/core/structure/insert.ts"
+      ]
+    },
+    {
+      "id": "templates-content",
+      "built": true,
+      "commands": [
+        "element.insert"
+      ],
+      "doors": 5,
+      "scenarios": 7,
+      "modules": [
+        "src/core/structure/insert.ts"
+      ]
+    },
+    {
+      "id": "templates-sections",
+      "built": true,
+      "commands": [
+        "element.insert"
+      ],
+      "doors": 5,
+      "scenarios": 5,
+      "modules": [
+        "src/core/structure/insert.ts"
+      ]
+    },
+    {
+      "id": "reusable-components",
+      "built": true,
+      "commands": [
+        "components.create",
+        "components.insertInstance",
+        "components.detach",
+        "components.startCreate",
+        "components.closePrompt"
+      ],
+      "doors": 8,
+      "scenarios": 10,
+      "modules": [
+        "src/core/design/components.ts",
+        "src/editor/shell/component-prompt.ts"
+      ]
+    },
+    {
+      "id": "templates-components",
+      "built": true,
+      "commands": [
+        "element.insert"
+      ],
+      "doors": 5,
+      "scenarios": 5,
+      "modules": [
+        "src/core/structure/insert.ts"
+      ]
+    },
+    {
+      "id": "palette-search-groups",
+      "built": true,
+      "commands": [
+        "element.insert",
+        "palette.toggleGroup"
+      ],
+      "doors": 6,
+      "scenarios": 1,
+      "modules": [
+        "src/core/structure/insert.ts",
+        "src/editor/palette/palette.ts"
+      ]
+    },
+    {
+      "id": "palette-density",
+      "built": true,
+      "commands": [
+        "palette.setDensity"
+      ],
+      "doors": 4,
+      "scenarios": 3,
+      "modules": [
+        "src/editor/palette/palette.ts"
+      ]
+    },
+    {
+      "id": "layers-expand-collapse-all",
+      "built": true,
+      "commands": [
+        "layers.collapseAll",
+        "layers.expandAll"
+      ],
+      "doors": 2,
+      "scenarios": 3,
+      "modules": [
+        "src/editor/layers/tree.ts"
+      ]
+    },
+    {
+      "id": "layers-search",
+      "built": true,
+      "commands": [
+        "layers.search",
+        "selection.select"
+      ],
+      "doors": 7,
+      "scenarios": 4,
+      "modules": [
+        "src/core/selection/selection.ts",
+        "src/editor/layers/tree.ts"
+      ]
+    },
+    {
+      "id": "layers-row-columns",
+      "built": true,
+      "commands": [
+        "layers.setRowDetails"
+      ],
+      "doors": 4,
+      "scenarios": 3,
+      "modules": [
+        "src/editor/layers/tree.ts"
+      ]
+    },
+    {
+      "id": "layers-row-colours",
+      "built": true,
+      "commands": [
+        "element.setLayerColor"
+      ],
+      "doors": 1,
+      "scenarios": 1,
+      "modules": [
+        "src/core/nodes/flags.ts"
+      ]
+    },
+    {
+      "id": "zoom-keyboard-buttons",
+      "built": true,
+      "commands": [
+        "view.zoomIn",
+        "view.zoomOut",
+        "view.zoomReset",
+        "view.zoomTo",
+        "view.zoomFit"
+      ],
+      "doors": 20,
+      "scenarios": 15,
+      "modules": [
+        "src/editor/view/camera.ts"
+      ]
+    },
+    {
+      "id": "rotation-handle",
+      "built": true,
+      "commands": [
+        "style.set"
+      ],
+      "doors": 168,
+      "scenarios": 3,
+      "modules": [
+        "src/core/style/set.ts"
+      ]
+    },
+    {
+      "id": "zoom-wheel-pan",
+      "built": true,
+      "commands": [
+        "view.zoomAt",
+        "view.pan"
+      ],
+      "doors": 5,
+      "scenarios": 6,
+      "modules": [
+        "src/editor/view/camera.ts"
+      ]
+    },
+    {
+      "id": "rulers",
+      "built": true,
+      "commands": [],
+      "doors": 0,
+      "scenarios": 2,
+      "modules": []
+    },
+    {
+      "id": "guides-manual",
+      "built": true,
+      "commands": [
+        "guides.create",
+        "guides.move",
+        "guides.delete",
+        "guides.toggleLock"
+      ],
+      "doors": 13,
+      "scenarios": 10,
+      "modules": [
+        "src/core/page/guides.ts"
+      ]
+    },
+    {
+      "id": "canvas-outlines-zones",
+      "built": true,
+      "commands": [
+        "view.toggleOutlines",
+        "view.toggleZones",
+        "workspace.setPanelOpen"
+      ],
+      "doors": 21,
+      "scenarios": 3,
+      "modules": [
+        "src/editor/view/overlays.ts",
+        "src/editor/workspace/panels.ts"
+      ]
+    },
+    {
+      "id": "layout-grid-overlay",
+      "built": true,
+      "commands": [
+        "grid.toggleColumns",
+        "grid.toggleRows",
+        "grid.toggleDots",
+        "page.setSetting"
+      ],
+      "doors": 16,
+      "scenarios": 7,
+      "modules": [
+        "src/core/page/grid.ts",
+        "src/core/page/settings.ts"
+      ]
+    },
+    {
+      "id": "workspace-settings-dialog",
+      "built": true,
+      "commands": [
+        "ui.dismiss",
+        "view.toggleRulers",
+        "grid.toggleColumns",
+        "grid.toggleRows",
+        "grid.toggleDots",
+        "grid.setSettings",
+        "guides.create",
+        "guides.delete",
+        "guides.toggleVisible",
+        "workspace.openDialog",
+        "grid.toggleFolds"
+      ],
+      "doors": 27,
+      "scenarios": 11,
+      "modules": [
+        "src/core/page/grid.ts",
+        "src/core/page/guides.ts",
+        "src/editor/menus/overlays.ts",
+        "src/editor/view/overlays.ts",
+        "src/editor/workspace/dialogs.ts"
+      ]
+    },
+    {
+      "id": "absolute-free-drag",
+      "built": true,
+      "commands": [
+        "position.move"
+      ],
+      "doors": 5,
+      "scenarios": 4,
+      "modules": [
+        "src/core/geometry/position.ts"
+      ]
+    },
+    {
+      "id": "absolute-nudge",
+      "built": true,
+      "commands": [
+        "position.move"
+      ],
+      "doors": 5,
+      "scenarios": 5,
+      "modules": [
+        "src/core/geometry/position.ts"
+      ]
+    },
+    {
+      "id": "absolute-anchors",
+      "built": true,
+      "commands": [
+        "position.setAnchors"
+      ],
+      "doors": 9,
+      "scenarios": 10,
+      "modules": [
+        "src/core/geometry/anchors.ts"
+      ]
+    },
+    {
+      "id": "align-distribute",
+      "built": true,
+      "commands": [
+        "position.align",
+        "position.distribute"
+      ],
+      "doors": 24,
+      "scenarios": 9,
+      "modules": [
+        "src/core/geometry/align.ts"
+      ]
+    },
+    {
+      "id": "snap-toggle-settings",
+      "built": true,
+      "commands": [
+        "snap.setEnabled",
+        "snap.setSettings",
+        "workspace.openDialog"
+      ],
+      "doors": 6,
+      "scenarios": 9,
+      "modules": [
+        "src/editor/view/snap.ts",
+        "src/editor/workspace/dialogs.ts"
+      ]
+    },
+    {
+      "id": "snap-while-moving",
+      "built": true,
+      "commands": [
+        "geometry.resize",
+        "position.move",
+        "guides.create",
+        "snap.setEnabled"
+      ],
+      "doors": 19,
+      "scenarios": 6,
+      "modules": [
+        "src/core/geometry/position.ts",
+        "src/core/geometry/resize.ts",
+        "src/core/page/guides.ts",
+        "src/editor/view/snap.ts"
+      ]
+    },
+    {
+      "id": "smart-guides",
+      "built": true,
+      "commands": [
+        "position.move",
+        "view.toggleSmartGuides",
+        "view.toggleEqualSpacing"
+      ],
+      "doors": 7,
+      "scenarios": 3,
+      "modules": [
+        "src/core/geometry/position.ts",
+        "src/editor/view/overlays.ts"
+      ]
+    },
+    {
+      "id": "hover-measure",
+      "built": false,
+      "commands": [],
+      "doors": 0,
+      "scenarios": 0,
+      "modules": []
+    },
+    {
+      "id": "breakpoints-switch",
+      "built": true,
+      "commands": [
+        "view.setBreakpoint",
+        "grid.toggleFolds",
+        "page.setSetting"
+      ],
+      "doors": 18,
+      "scenarios": 10,
+      "modules": [
+        "src/core/page/grid.ts",
+        "src/core/page/settings.ts",
+        "src/editor/view/breakpoints.ts"
+      ]
+    },
+    {
+      "id": "breakpoint-overrides",
+      "built": true,
+      "commands": [
+        "style.set",
+        "style.reset",
+        "view.setBreakpoint"
+      ],
+      "doors": 177,
+      "scenarios": 5,
+      "modules": [
+        "src/core/style/reset.ts",
+        "src/core/style/set.ts",
+        "src/editor/view/breakpoints.ts"
+      ]
+    },
+    {
+      "id": "state-styles",
+      "built": true,
+      "commands": [
+        "style.set",
+        "view.setBreakpoint",
+        "view.setStyleState"
+      ],
+      "doors": 189,
+      "scenarios": 14,
+      "modules": [
+        "src/core/style/set.ts",
+        "src/editor/view/breakpoints.ts",
+        "src/editor/view/style-state.ts"
+      ]
+    },
+    {
+      "id": "preview-mode",
+      "built": true,
+      "commands": [
+        "view.setBreakpoint",
+        "view.enterPreview",
+        "view.exitPreview",
+        "project.export"
+      ],
+      "doors": 19,
+      "scenarios": 11,
+      "modules": [
+        "src/core/export/export.ts",
+        "src/editor/view/breakpoints.ts",
+        "src/editor/view/preview.ts"
+      ]
+    },
+    {
+      "id": "embed-html",
+      "built": true,
+      "commands": [
+        "element.setEmbedMarkup"
+      ],
+      "doors": 1,
+      "scenarios": 2,
+      "modules": [
+        "src/core/elements/embed.ts"
+      ]
+    },
+    {
+      "id": "theme-switch",
+      "built": true,
+      "commands": [
+        "preferences.setTheme"
+      ],
+      "doors": 3,
+      "scenarios": 3,
+      "modules": [
+        "src/editor/preferences/preferences.ts"
+      ]
+    },
+    {
+      "id": "dock-toggles",
+      "built": true,
+      "commands": [
+        "workspace.setPanelOpen",
+        "workspace.toggleLeftDock",
+        "workspace.toggleInspector",
+        "workspace.collapseDocks"
+      ],
+      "doors": 25,
+      "scenarios": 11,
+      "modules": [
+        "src/editor/workspace/panels.ts"
+      ]
+    },
+    {
+      "id": "command-bar",
+      "built": true,
+      "commands": [
+        "history.undo",
+        "history.redo",
+        "selection.clear",
+        "selection.selectAllInContainer",
+        "focus.next",
+        "focus.previous",
+        "focus.activate",
+        "ui.dismiss",
+        "element.insert",
+        "element.moveUp",
+        "element.moveDown",
+        "element.wrapRow",
+        "element.wrapColumn",
+        "element.nestIntoPrevious",
+        "element.promote",
+        "element.duplicate",
+        "element.delete",
+        "element.unwrap",
+        "element.createNaturalChild",
+        "hand.take",
+        "clipboard.copy",
+        "clipboard.paste",
+        "layers.startRename",
+        "element.toggleLock",
+        "element.toggleHidden",
+        "text.startEdit",
+        "style.resetAll",
+        "position.align",
+        "position.distribute",
+        "table.addColumnAfter",
+        "table.addColumnEnd",
+        "table.removeColumn",
+        "table.addRowAfter",
+        "table.removeRow",
+        "components.create",
+        "components.detach",
+        "page.openProperties",
+        "view.zoomIn",
+        "view.zoomOut",
+        "view.zoomReset",
+        "view.zoomFit",
+        "view.enterPreview",
+        "project.newBlankPage",
+        "project.save",
+        "project.open",
+        "project.export",
+        "workspace.setPanelOpen",
+        "commandBar.open",
+        "components.startCreate"
+      ],
+      "doors": 217,
+      "scenarios": 56,
+      "modules": [
+        "src/core/clipboard/clipboard.ts",
+        "src/core/design/components.ts",
+        "src/core/elements/table.ts",
+        "src/core/export/export.ts",
+        "src/core/geometry/align.ts",
+        "src/core/history/history.ts",
+        "src/core/nodes/flags.ts",
+        "src/core/project/archive.ts",
+        "src/core/project/project.ts",
+        "src/core/selection/selection.ts",
+        "src/core/structure/duplicate.ts",
+        "src/core/structure/hand.ts",
+        "src/core/structure/insert.ts",
+        "src/core/structure/move.ts",
+        "src/core/structure/remove.ts",
+        "src/core/structure/wrap.ts",
+        "src/core/style/reset.ts",
+        "src/editor/canvas/text-edit.ts",
+        "src/editor/command-bar/command-bar.ts",
+        "src/editor/focus/focus.ts",
+        "src/editor/inspector/page-properties.ts",
+        "src/editor/layers/rename.ts",
+        "src/editor/menus/overlays.ts",
+        "src/editor/shell/component-prompt.ts",
+        "src/editor/view/camera.ts",
+        "src/editor/view/preview.ts",
+        "src/editor/workspace/panels.ts"
+      ]
+    },
+    {
+      "id": "command-bar-set-property",
+      "built": true,
+      "commands": [
+        "style.set",
+        "style.setSpacing",
+        "style.setBorder",
+        "style.setRadius",
+        "style.setBackgroundImage",
+        "style.setShadows",
+        "style.setFilter",
+        "style.setTransform",
+        "position.setMode",
+        "inspector.reveal"
+      ],
+      "doors": 282,
+      "scenarios": 10,
+      "modules": [
+        "src/core/geometry/position.ts",
+        "src/core/style/background-image.ts",
+        "src/core/style/border.ts",
+        "src/core/style/filter.ts",
+        "src/core/style/set.ts",
+        "src/core/style/shadows.ts",
+        "src/core/style/spacing.ts",
+        "src/core/style/transform.ts",
+        "src/editor/inspector/sections.ts"
+      ]
+    },
+    {
+      "id": "shortcuts-panel",
+      "built": true,
+      "commands": [
+        "workspace.setPanelOpen"
+      ],
+      "doors": 19,
+      "scenarios": 1,
+      "modules": [
+        "src/editor/workspace/panels.ts"
+      ]
+    },
+    {
+      "id": "workbench-panel",
+      "built": true,
+      "commands": [
+        "workspace.setPanelOpen",
+        "workspace.toggleDeveloperTools",
+        "workspace.setWorkbenchState",
+        "workspace.setActiveTab"
+      ],
+      "doors": 27,
+      "scenarios": 10,
+      "modules": [
+        "src/editor/workspace/layout.ts",
+        "src/editor/workspace/panels.ts"
+      ]
+    },
+    {
+      "id": "panel-resize",
+      "built": true,
+      "commands": [
+        "workspace.resizeSplitter"
+      ],
+      "doors": 5,
+      "scenarios": 4,
+      "modules": [
+        "src/editor/workspace/layout.ts"
+      ]
+    },
+    {
+      "id": "floating-panels",
+      "built": true,
+      "commands": [
+        "workspace.movePanel"
+      ],
+      "doors": 6,
+      "scenarios": 4,
+      "modules": [
+        "src/editor/workspace/layout.ts"
+      ]
+    },
+    {
+      "id": "panel-combine-tabs",
+      "built": true,
+      "commands": [
+        "workspace.movePanel",
+        "workspace.setActiveTab"
+      ],
+      "doors": 11,
+      "scenarios": 3,
+      "modules": [
+        "src/editor/workspace/layout.ts"
+      ]
+    },
+    {
+      "id": "workspace-persist-reset",
+      "built": true,
+      "commands": [
+        "workspace.toggleInspector",
+        "workspace.reset",
+        "workspace.resizeSplitter",
+        "workspace.movePanel",
+        "inspector.toggleSection"
+      ],
+      "doors": 16,
+      "scenarios": 1,
+      "modules": [
+        "src/editor/inspector/sections.ts",
+        "src/editor/workspace/layout.ts",
+        "src/editor/workspace/panels.ts"
+      ]
+    },
+    {
+      "id": "status-bar",
+      "built": true,
+      "commands": [
+        "selection.select",
+        "view.setBreakpoint",
+        "view.setStyleState"
+      ],
+      "doors": 27,
+      "scenarios": 2,
+      "modules": [
+        "src/core/selection/selection.ts",
+        "src/editor/view/breakpoints.ts",
+        "src/editor/view/style-state.ts"
+      ]
+    },
+    {
+      "id": "accessibility-checks",
+      "built": true,
+      "commands": [
+        "selection.select",
+        "workspace.setPanelOpen"
+      ],
+      "doors": 25,
+      "scenarios": 1,
+      "modules": [
+        "src/core/selection/selection.ts",
+        "src/editor/workspace/panels.ts"
+      ]
+    },
+    {
+      "id": "keyboard-panel-navigation",
+      "built": true,
+      "commands": [
+        "focus.next",
+        "focus.previous",
+        "focus.first",
+        "focus.last",
+        "focus.activate",
+        "focus.nextRegion",
+        "focus.previousRegion",
+        "focus.canvas"
+      ],
+      "doors": 43,
+      "scenarios": 8,
+      "modules": [
+        "src/editor/focus/focus.ts"
+      ]
+    },
+    {
+      "id": "layers-keyboard-navigation",
+      "built": true,
+      "commands": [
+        "selection.select",
+        "focus.next",
+        "focus.previous",
+        "focus.first",
+        "focus.last",
+        "element.moveUp",
+        "element.moveDown",
+        "element.delete",
+        "layers.startRename",
+        "layers.expandOrFocusChild",
+        "layers.collapseOrFocusParent"
+      ],
+      "doors": 59,
+      "scenarios": 7,
+      "modules": [
+        "src/core/selection/selection.ts",
+        "src/core/structure/move.ts",
+        "src/core/structure/remove.ts",
+        "src/editor/focus/focus.ts",
+        "src/editor/layers/rename.ts",
+        "src/editor/layers/tree.ts"
+      ]
+    },
+    {
+      "id": "clipboard-cut-system",
+      "built": true,
+      "commands": [
+        "clipboard.cut"
+      ],
+      "doors": 4,
+      "scenarios": 4,
+      "modules": [
+        "src/core/clipboard/clipboard.ts"
+      ]
+    },
+    {
+      "id": "copy-paste-styles",
+      "built": true,
+      "commands": [
+        "clipboard.copyStyle",
+        "clipboard.pasteStyle"
+      ],
+      "doors": 8,
+      "scenarios": 5,
+      "modules": [
+        "src/core/clipboard/clipboard.ts"
+      ]
+    },
+    {
+      "id": "html-import-structure",
+      "built": true,
+      "commands": [
+        "project.importHtml"
+      ],
+      "doors": 2,
+      "scenarios": 3,
+      "modules": [
+        "src/core/import/import.ts"
+      ]
+    },
+    {
+      "id": "html-import-cleaning",
+      "built": true,
+      "commands": [
+        "project.importHtml"
+      ],
+      "doors": 2,
+      "scenarios": 2,
+      "modules": [
+        "src/core/import/import.ts"
+      ]
+    },
+    {
+      "id": "html-import-styles",
+      "built": true,
+      "commands": [
+        "project.importHtml"
+      ],
+      "doors": 2,
+      "scenarios": 2,
+      "modules": [
+        "src/core/import/import.ts"
+      ]
+    },
+    {
+      "id": "html-import-media-queries",
+      "built": true,
+      "commands": [
+        "project.importHtml"
+      ],
+      "doors": 2,
+      "scenarios": 2,
+      "modules": [
+        "src/core/import/import.ts"
+      ]
+    },
+    {
+      "id": "html-import-states",
+      "built": true,
+      "commands": [
+        "view.enterPreview",
+        "project.importHtml"
+      ],
+      "doors": 6,
+      "scenarios": 1,
+      "modules": [
+        "src/core/import/import.ts",
+        "src/editor/view/preview.ts"
+      ]
+    },
+    {
+      "id": "html-import-roundtrip",
+      "built": true,
+      "commands": [
+        "project.importHtml",
+        "project.export"
+      ],
+      "doors": 6,
+      "scenarios": 1,
+      "modules": [
+        "src/core/export/export.ts",
+        "src/core/import/import.ts"
+      ]
+    },
+    {
+      "id": "clipboard-paste-external",
+      "built": true,
+      "commands": [
+        "clipboard.paste"
+      ],
+      "doors": 4,
+      "scenarios": 2,
+      "modules": [
+        "src/core/clipboard/clipboard.ts"
+      ]
+    },
+    {
+      "id": "code-panel-view",
+      "built": true,
+      "commands": [
+        "workspace.setPanelOpen",
+        "view.setEditorView",
+        "codePanel.setPane"
+      ],
+      "doors": 26,
+      "scenarios": 5,
+      "modules": [
+        "src/editor/code-panel/code-panel.ts",
+        "src/editor/view/editor-view.ts",
+        "src/editor/workspace/panels.ts"
+      ]
+    },
+    {
+      "id": "code-panel-selection-sync",
+      "built": true,
+      "commands": [
+        "selection.select"
+      ],
+      "doors": 6,
+      "scenarios": 1,
+      "modules": [
+        "src/core/selection/selection.ts"
+      ]
+    },
+    {
+      "id": "code-panel-copy-download",
+      "built": true,
+      "commands": [
+        "codePanel.copyPane",
+        "codePanel.downloadPane"
+      ],
+      "doors": 2,
+      "scenarios": 2,
+      "modules": [
+        "src/editor/code-panel/code-panel.ts"
+      ]
+    },
+    {
+      "id": "code-panel-edit-css",
+      "built": true,
+      "commands": [
+        "style.applyCssRule"
+      ],
+      "doors": 1,
+      "scenarios": 1,
+      "modules": [
+        "src/core/style/css-rule.ts"
+      ]
+    },
+    {
+      "id": "code-panel-edit-html",
+      "built": true,
+      "commands": [
+        "element.applyHtml"
+      ],
+      "doors": 1,
+      "scenarios": 1,
+      "modules": [
+        "src/core/import/apply-html.ts"
+      ]
+    },
+    {
+      "id": "timeline-animations",
+      "built": true,
+      "commands": [
+        "workspace.setPanelOpen",
+        "animation.create",
+        "animation.rename",
+        "animation.delete",
+        "timeline.show"
+      ],
+      "doors": 23,
+      "scenarios": 3,
+      "modules": [
+        "src/core/animation/animation.ts",
+        "src/editor/timeline/playhead.ts",
+        "src/editor/workspace/panels.ts"
+      ]
+    },
+    {
+      "id": "timeline-keyframes",
+      "built": true,
+      "commands": [
+        "animation.addKeyframe",
+        "animation.moveKeyframe",
+        "animation.setKeyframeEasing",
+        "animation.deleteKeyframe",
+        "timeline.setPlayhead"
+      ],
+      "doors": 6,
+      "scenarios": 4,
+      "modules": [
+        "src/core/animation/animation.ts",
+        "src/editor/timeline/playhead.ts"
+      ]
+    },
+    {
+      "id": "timeline-animation-settings",
+      "built": true,
+      "commands": [
+        "animation.setSettings"
+      ],
+      "doors": 7,
+      "scenarios": 2,
+      "modules": [
+        "src/core/animation/animation.ts"
+      ]
+    },
+    {
+      "id": "timeline-preview",
+      "built": true,
+      "commands": [
+        "timeline.play",
+        "timeline.pause",
+        "timeline.stop",
+        "timeline.toggleLoop"
+      ],
+      "doors": 4,
+      "scenarios": 5,
+      "modules": [
+        "src/editor/timeline/preview.ts"
+      ]
+    },
+    {
+      "id": "export-keyframes",
+      "built": true,
+      "commands": [
+        "project.export"
+      ],
+      "doors": 4,
+      "scenarios": 1,
+      "modules": [
+        "src/core/export/export.ts"
+      ]
+    },
+    {
+      "id": "events-actions",
+      "built": true,
+      "commands": [
+        "interactions.add",
+        "interactions.update",
+        "interactions.remove",
+        "workspace.setActiveTab"
+      ],
+      "doors": 15,
+      "scenarios": 7,
+      "modules": [
+        "src/core/events/interactions.ts",
+        "src/editor/workspace/layout.ts"
+      ]
+    },
+    {
+      "id": "export-events-js",
+      "built": true,
+      "commands": [
+        "view.enterPreview",
+        "project.export"
+      ],
+      "doors": 8,
+      "scenarios": 2,
+      "modules": [
+        "src/core/export/export.ts",
+        "src/editor/view/preview.ts"
+      ]
+    },
+    {
+      "id": "explorer-pages",
+      "built": true,
+      "commands": [
+        "pages.add",
+        "pages.rename",
+        "pages.duplicate",
+        "pages.delete",
+        "pages.switch",
+        "workspace.setPanelOpen"
+      ],
+      "doors": 26,
+      "scenarios": 7,
+      "modules": [
+        "src/core/project/pages.ts",
+        "src/editor/workspace/panels.ts"
+      ]
+    },
+    {
+      "id": "explorer-file-system",
+      "built": true,
+      "commands": [
+        "files.createFolder",
+        "files.createFile",
+        "files.rename",
+        "files.move",
+        "files.delete",
+        "files.open",
+        "files.closeTab",
+        "files.startRename"
+      ],
+      "doors": 11,
+      "scenarios": 12,
+      "modules": [
+        "src/core/files/files.ts",
+        "src/editor/explorer/explorer.ts",
+        "src/editor/explorer/file-tabs.ts"
+      ]
+    },
+    {
+      "id": "link-picker",
+      "built": true,
+      "commands": [
+        "element.setLink",
+        "linkPicker.open",
+        "linkPicker.setKind",
+        "linkPicker.close"
+      ],
+      "doors": 14,
+      "scenarios": 2,
+      "modules": [
+        "src/core/elements/link.ts",
+        "src/editor/shell/link-picker.ts"
+      ]
+    },
+    {
+      "id": "export-multi-page",
+      "built": true,
+      "commands": [
+        "element.setLink",
+        "project.export",
+        "pages.add",
+        "files.move"
+      ],
+      "doors": 14,
+      "scenarios": 1,
+      "modules": [
+        "src/core/elements/link.ts",
+        "src/core/export/export.ts",
+        "src/core/files/files.ts",
+        "src/core/project/pages.ts"
+      ]
+    },
+    {
+      "id": "explorer-assets",
+      "built": true,
+      "commands": [
+        "files.upload"
+      ],
+      "doors": 2,
+      "scenarios": 2,
+      "modules": [
+        "src/core/files/files.ts"
+      ]
+    },
+    {
+      "id": "explorer-assets-use",
+      "built": true,
+      "commands": [
+        "element.setAttribute",
+        "assets.insertImageFile",
+        "assetPicker.open",
+        "assetPicker.close"
+      ],
+      "doors": 60,
+      "scenarios": 3,
+      "modules": [
+        "src/core/elements/attributes.ts",
+        "src/core/files/assets.ts",
+        "src/editor/shell/asset-picker.ts"
+      ]
+    },
+    {
+      "id": "export-file-tree",
+      "built": true,
+      "commands": [
+        "project.export",
+        "files.createFolder"
+      ],
+      "doors": 5,
+      "scenarios": 1,
+      "modules": [
+        "src/core/export/export.ts",
+        "src/core/files/files.ts"
+      ]
+    },
+    {
+      "id": "export-assets",
+      "built": true,
+      "commands": [
+        "project.export",
+        "files.upload"
+      ],
+      "doors": 6,
+      "scenarios": 1,
+      "modules": [
+        "src/core/export/export.ts",
+        "src/core/files/files.ts"
+      ]
+    },
+    {
+      "id": "page-seo-meta",
+      "built": true,
+      "commands": [
+        "page.setSetting",
+        "project.export"
+      ],
+      "doors": 13,
+      "scenarios": 1,
+      "modules": [
+        "src/core/export/export.ts",
+        "src/core/page/settings.ts"
+      ]
+    },
+    {
+      "id": "custom-fonts",
+      "built": true,
+      "commands": [
+        "style.set",
+        "project.export",
+        "files.upload"
+      ],
+      "doors": 174,
+      "scenarios": 1,
+      "modules": [
+        "src/core/export/export.ts",
+        "src/core/files/files.ts",
+        "src/core/style/set.ts"
+      ]
+    },
+    {
+      "id": "explorer-open-folder",
+      "built": true,
+      "commands": [
+        "project.openFolder",
+        "project.export"
+      ],
+      "doors": 6,
+      "scenarios": 4,
+      "modules": [
+        "src/core/export/export.ts",
+        "src/core/import/folder.ts"
+      ]
+    },
+    {
+      "id": "code-panel-edit-js",
+      "built": true,
+      "commands": [
+        "page.setSetting",
+        "view.enterPreview",
+        "project.export",
+        "files.createFile",
+        "files.saveContent"
+      ],
+      "doors": 21,
+      "scenarios": 3,
+      "modules": [
+        "src/core/export/export.ts",
+        "src/core/files/files.ts",
+        "src/core/page/settings.ts",
+        "src/editor/view/preview.ts"
+      ]
+    },
+    {
+      "id": "shortcuts-e2e-sweep",
+      "built": false,
+      "commands": [],
+      "doors": 0,
+      "scenarios": 0,
+      "modules": []
+    },
+    {
+      "id": "layout-actions",
+      "built": true,
+      "commands": [
+        "element.wrapContainer",
+        "element.wrapGrid",
+        "element.swapDirection",
+        "element.stackOnPhone",
+        "element.organize",
+        "element.setDivider"
+      ],
+      "doors": 21,
+      "scenarios": 14,
+      "modules": [
+        "src/core/structure/wrap.ts",
+        "src/core/style/direction.ts",
+        "src/core/style/divider.ts",
+        "src/core/style/organize.ts"
+      ]
+    },
+    {
+      "id": "canvas-grid-editor",
+      "built": true,
+      "commands": [
+        "grid.enterEdit",
+        "grid.exitEdit",
+        "grid.addTrack",
+        "grid.removeTrack",
+        "grid.spanItem",
+        "grid.mergeCells",
+        "grid.splitCells",
+        "style.setGridTracks"
+      ],
+      "doors": 15,
+      "scenarios": 6,
+      "modules": [
+        "src/core/style/tracks.ts",
+        "src/editor/canvas/grid-edit.ts"
+      ]
+    }
+  ],
+  "modules": [
+    {
+      "path": "src/app/commands.ts",
+      "lines": 388,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/app/commands.typecheck.ts",
+      "lines": 22,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/app/features.ts",
+      "lines": 225,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/config/product.ts",
+      "lines": 6,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/a11y/checks.ts",
+      "lines": 111,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/animation/animation.ts",
+      "lines": 349,
+      "commands": [
+        "animation.create",
+        "animation.rename",
+        "animation.delete",
+        "animation.addKeyframe",
+        "animation.moveKeyframe",
+        "animation.setKeyframeEasing",
+        "animation.deleteKeyframe",
+        "animation.setSettings"
+      ],
+      "features": [
+        "timeline-animation-settings",
+        "timeline-animations",
+        "timeline-keyframes"
+      ]
+    },
+    {
+      "path": "src/core/clipboard/clipboard.ts",
+      "lines": 294,
+      "commands": [
+        "clipboard.copy",
+        "clipboard.cut",
+        "clipboard.paste",
+        "clipboard.copyStyle",
+        "clipboard.pasteStyle"
+      ],
+      "features": [
+        "app-menu",
+        "clipboard-copy-paste",
+        "clipboard-cut-system",
+        "clipboard-paste-external",
+        "command-bar",
+        "copy-paste-styles",
+        "nesting-grammar"
+      ]
+    },
+    {
+      "path": "src/core/commands/registry.ts",
+      "lines": 194,
+      "commands": [
+        "<id>"
+      ],
+      "features": []
+    },
+    {
+      "path": "src/core/design/classes.ts",
+      "lines": 150,
+      "commands": [
+        "classes.create",
+        "classes.apply",
+        "classes.detach",
+        "classes.rename",
+        "classes.delete"
+      ],
+      "features": [
+        "settings-audit",
+        "settings-class-management",
+        "shared-style-classes"
+      ]
+    },
+    {
+      "path": "src/core/design/colors.ts",
+      "lines": 28,
+      "commands": [
+        "colors.saveSwatch",
+        "colors.removeSwatch"
+      ],
+      "features": [
+        "color-swatches-eyedropper"
+      ]
+    },
+    {
+      "path": "src/core/design/components.ts",
+      "lines": 167,
+      "commands": [
+        "components.create",
+        "components.insertInstance",
+        "components.detach"
+      ],
+      "features": [
+        "command-bar",
+        "reusable-components"
+      ]
+    },
+    {
+      "path": "src/core/design/tokens.ts",
+      "lines": 159,
+      "commands": [
+        "tokens.create",
+        "tokens.update",
+        "tokens.rename",
+        "tokens.delete"
+      ],
+      "features": [
+        "css-variables-tokens"
+      ]
+    },
+    {
+      "path": "src/core/document/migrations.ts",
+      "lines": 46,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/document/model.ts",
+      "lines": 259,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/document/tree.ts",
+      "lines": 74,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/document/validate.ts",
+      "lines": 567,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/elements/address.ts",
+      "lines": 64,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/elements/attributes.ts",
+      "lines": 274,
+      "commands": [
+        "element.setId",
+        "element.setClasses",
+        "element.setAttribute",
+        "element.setCustomAttribute",
+        "element.removeCustomAttribute"
+      ],
+      "features": [
+        "element-attributes-aria",
+        "elements-form-controls",
+        "elements-form-inputs",
+        "elements-form-structure",
+        "elements-interactive",
+        "elements-media-embeds",
+        "elements-media-images",
+        "explorer-assets-use",
+        "export-bem-css",
+        "props-attributes",
+        "settings-audit",
+        "settings-class-management"
+      ]
+    },
+    {
+      "path": "src/core/elements/content-model.ts",
+      "lines": 314,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/elements/embed.ts",
+      "lines": 30,
+      "commands": [
+        "element.setEmbedMarkup"
+      ],
+      "features": [
+        "embed-html"
+      ]
+    },
+    {
+      "path": "src/core/elements/inputs.ts",
+      "lines": 121,
+      "commands": [
+        "element.setInputType",
+        "element.setLabelTarget"
+      ],
+      "features": [
+        "elements-form-inputs-rules",
+        "settings-audit"
+      ]
+    },
+    {
+      "path": "src/core/elements/link.ts",
+      "lines": 88,
+      "commands": [
+        "element.setLink"
+      ],
+      "features": [
+        "elements-structure",
+        "elements-text",
+        "export-multi-page",
+        "link-picker"
+      ]
+    },
+    {
+      "path": "src/core/elements/parts.ts",
+      "lines": 121,
+      "commands": [
+        "parts.toggle",
+        "parts.add",
+        "parts.move",
+        "parts.remove"
+      ],
+      "features": [
+        "elements-form-controls",
+        "elements-media-embeds",
+        "elements-media-images",
+        "elements-svg-shapes",
+        "elements-tables"
+      ]
+    },
+    {
+      "path": "src/core/elements/references.ts",
+      "lines": 104,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/elements/svg.ts",
+      "lines": 278,
+      "commands": [
+        "element.setSvgMarkup"
+      ],
+      "features": [
+        "elements-svg-shapes"
+      ]
+    },
+    {
+      "path": "src/core/elements/table.ts",
+      "lines": 158,
+      "commands": [
+        "table.addColumnAfter",
+        "table.addColumnEnd",
+        "table.removeColumn",
+        "table.addRowAfter",
+        "table.removeRow"
+      ],
+      "features": [
+        "command-bar",
+        "table-commands"
+      ]
+    },
+    {
+      "path": "src/core/elements/tag.ts",
+      "lines": 58,
+      "commands": [
+        "element.setTag"
+      ],
+      "features": [
+        "elements-form-structure",
+        "elements-text",
+        "nesting-grammar-structure",
+        "quick-panel",
+        "semantic-tag-switch",
+        "settings-audit"
+      ]
+    },
+    {
+      "path": "src/core/events/interactions.ts",
+      "lines": 294,
+      "commands": [
+        "interactions.add",
+        "interactions.update",
+        "interactions.remove"
+      ],
+      "features": [
+        "events-actions"
+      ]
+    },
+    {
+      "path": "src/core/events/script.ts",
+      "lines": 100,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/explain.ts",
+      "lines": 71,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/export/export.ts",
+      "lines": 373,
+      "commands": [
+        "project.export"
+      ],
+      "features": [
+        "code-panel-edit-js",
+        "command-bar",
+        "custom-fonts",
+        "explorer-open-folder",
+        "export-assets",
+        "export-bem-css",
+        "export-events-js",
+        "export-file-tree",
+        "export-keyframes",
+        "export-multi-page",
+        "export-zip",
+        "html-import-roundtrip",
+        "page-seo-meta",
+        "preview-mode"
+      ]
+    },
+    {
+      "path": "src/core/files/assets.ts",
+      "lines": 57,
+      "commands": [
+        "assets.insertImageFile"
+      ],
+      "features": [
+        "explorer-assets-use"
+      ]
+    },
+    {
+      "path": "src/core/files/files.ts",
+      "lines": 474,
+      "commands": [
+        "files.upload",
+        "files.createFolder",
+        "files.createFile",
+        "files.rename",
+        "files.move",
+        "files.delete",
+        "files.saveContent"
+      ],
+      "features": [
+        "code-panel-edit-js",
+        "custom-fonts",
+        "explorer-assets",
+        "explorer-file-system",
+        "export-assets",
+        "export-file-tree",
+        "export-multi-page"
+      ]
+    },
+    {
+      "path": "src/core/files/fonts.ts",
+      "lines": 73,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/files/values.ts",
+      "lines": 32,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/geometry/align.ts",
+      "lines": 116,
+      "commands": [
+        "position.align",
+        "position.distribute"
+      ],
+      "features": [
+        "align-distribute",
+        "command-bar"
+      ]
+    },
+    {
+      "path": "src/core/geometry/anchors.ts",
+      "lines": 148,
+      "commands": [
+        "position.setAnchors"
+      ],
+      "features": [
+        "absolute-anchors"
+      ]
+    },
+    {
+      "path": "src/core/geometry/lines.ts",
+      "lines": 61,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/geometry/position.ts",
+      "lines": 112,
+      "commands": [
+        "position.setMode",
+        "position.move"
+      ],
+      "features": [
+        "absolute-free-drag",
+        "absolute-nudge",
+        "command-bar-set-property",
+        "props-position",
+        "smart-guides",
+        "snap-while-moving"
+      ]
+    },
+    {
+      "path": "src/core/geometry/resize.ts",
+      "lines": 143,
+      "commands": [
+        "geometry.resize"
+      ],
+      "features": [
+        "elements-svg-shapes",
+        "resize-handles",
+        "snap-while-moving"
+      ]
+    },
+    {
+      "path": "src/core/geometry/snap.ts",
+      "lines": 128,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/history/history.ts",
+      "lines": 78,
+      "commands": [
+        "history.undo",
+        "history.redo"
+      ],
+      "features": [
+        "app-menu",
+        "command-bar",
+        "delete-element",
+        "undo-redo"
+      ]
+    },
+    {
+      "path": "src/core/history/transaction.ts",
+      "lines": 150,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/import/apply-html.ts",
+      "lines": 75,
+      "commands": [
+        "element.applyHtml"
+      ],
+      "features": [
+        "code-panel-edit-html"
+      ]
+    },
+    {
+      "path": "src/core/import/css.ts",
+      "lines": 264,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/import/folder.ts",
+      "lines": 252,
+      "commands": [
+        "project.openFolder"
+      ],
+      "features": [
+        "explorer-open-folder"
+      ]
+    },
+    {
+      "path": "src/core/import/import.ts",
+      "lines": 1259,
+      "commands": [
+        "project.importHtml"
+      ],
+      "features": [
+        "html-import-cleaning",
+        "html-import-media-queries",
+        "html-import-roundtrip",
+        "html-import-states",
+        "html-import-structure",
+        "html-import-styles"
+      ]
+    },
+    {
+      "path": "src/core/import/selectors.ts",
+      "lines": 206,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/import/stylesheet.ts",
+      "lines": 177,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/incidents.ts",
+      "lines": 57,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/nodes/flags.ts",
+      "lines": 143,
+      "commands": [
+        "element.toggleHidden",
+        "element.toggleLock",
+        "element.setLayerColor"
+      ],
+      "features": [
+        "command-bar",
+        "hide-element",
+        "inspector-panel",
+        "layers-row-colours",
+        "lock-element"
+      ]
+    },
+    {
+      "path": "src/core/nodes/names.ts",
+      "lines": 30,
+      "commands": [
+        "element.rename"
+      ],
+      "features": [
+        "rename-element"
+      ]
+    },
+    {
+      "path": "src/core/page/grid-settings.ts",
+      "lines": 30,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/page/grid.ts",
+      "lines": 133,
+      "commands": [
+        "grid.toggleColumns",
+        "grid.toggleRows",
+        "grid.toggleDots",
+        "grid.toggleFolds",
+        "grid.setSettings"
+      ],
+      "features": [
+        "breakpoints-switch",
+        "layout-grid-overlay",
+        "workspace-settings-dialog"
+      ]
+    },
+    {
+      "path": "src/core/page/guides.ts",
+      "lines": 79,
+      "commands": [
+        "guides.create",
+        "guides.move",
+        "guides.delete",
+        "guides.toggleLock"
+      ],
+      "features": [
+        "guides-manual",
+        "snap-while-moving",
+        "workspace-settings-dialog"
+      ]
+    },
+    {
+      "path": "src/core/page/settings.ts",
+      "lines": 93,
+      "commands": [
+        "page.setSetting"
+      ],
+      "features": [
+        "breakpoints-switch",
+        "code-panel-edit-js",
+        "export-zip",
+        "layout-grid-overlay",
+        "page-properties",
+        "page-seo-meta"
+      ]
+    },
+    {
+      "path": "src/core/ports/clipboard.ts",
+      "lines": 22,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/ports/clock.ts",
+      "lines": 27,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/ports/css.ts",
+      "lines": 15,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/ports/download.ts",
+      "lines": 16,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/ports/ids.ts",
+      "lines": 19,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/ports/layout.ts",
+      "lines": 55,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/project/archive.ts",
+      "lines": 75,
+      "commands": [
+        "project.save",
+        "project.open"
+      ],
+      "features": [
+        "command-bar",
+        "project-open-json",
+        "project-save-json"
+      ]
+    },
+    {
+      "path": "src/core/project/pages.ts",
+      "lines": 157,
+      "commands": [
+        "pages.add",
+        "pages.rename",
+        "pages.duplicate",
+        "pages.delete",
+        "pages.switch"
+      ],
+      "features": [
+        "explorer-pages",
+        "export-multi-page"
+      ]
+    },
+    {
+      "path": "src/core/project/project.ts",
+      "lines": 15,
+      "commands": [
+        "project.newBlankPage"
+      ],
+      "features": [
+        "command-bar",
+        "new-blank-page"
+      ]
+    },
+    {
+      "path": "src/core/project/recovery.ts",
+      "lines": 15,
+      "commands": [
+        "project.restoreVersion"
+      ],
+      "features": [
+        "autosave-corruption-recovery"
+      ]
+    },
+    {
+      "path": "src/core/project/tab-guard.ts",
+      "lines": 7,
+      "commands": [
+        "project.takeOverEditing"
+      ],
+      "features": [
+        "multi-tab-guard"
+      ]
+    },
+    {
+      "path": "src/core/project/zip.ts",
+      "lines": 147,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/render/base.ts",
+      "lines": 42,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/render/output.ts",
+      "lines": 199,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/render/render.ts",
+      "lines": 832,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/selection/selection.ts",
+      "lines": 202,
+      "commands": [
+        "selection.select",
+        "selection.clear",
+        "selection.selectAllInContainer",
+        "selection.marquee",
+        "selection.add",
+        "selection.toggle",
+        "selection.walkNextSibling",
+        "selection.walkPreviousSibling",
+        "selection.walkParent",
+        "selection.walkFirstChild"
+      ],
+      "features": [
+        "accessibility-checks",
+        "app-menu",
+        "code-panel-selection-sync",
+        "command-bar",
+        "keyboard-tree-walk",
+        "layers-keyboard-navigation",
+        "layers-search",
+        "layers-tree",
+        "marquee-select",
+        "multi-select-click",
+        "select-click",
+        "select-container-children",
+        "status-bar"
+      ]
+    },
+    {
+      "path": "src/core/store/store.ts",
+      "lines": 448,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/structure/duplicate.ts",
+      "lines": 103,
+      "commands": [
+        "element.duplicate"
+      ],
+      "features": [
+        "app-menu",
+        "command-bar",
+        "drag-duplicate",
+        "duplicate",
+        "elements-lists",
+        "multi-select-actions"
+      ]
+    },
+    {
+      "path": "src/core/structure/hand.ts",
+      "lines": 166,
+      "commands": [
+        "hand.take",
+        "hand.aimNext",
+        "hand.aimPrevious",
+        "hand.climb",
+        "hand.descend",
+        "hand.drop"
+      ],
+      "features": [
+        "app-menu",
+        "command-bar",
+        "hand-keyboard-move",
+        "multi-select-actions",
+        "nesting-grammar-structure"
+      ]
+    },
+    {
+      "path": "src/core/structure/insert.ts",
+      "lines": 216,
+      "commands": [
+        "element.createNaturalChild",
+        "element.insert"
+      ],
+      "features": [
+        "command-bar",
+        "elements-form-controls",
+        "elements-form-inputs",
+        "elements-form-structure",
+        "elements-interactive",
+        "elements-lists",
+        "elements-media-embeds",
+        "elements-media-images",
+        "elements-structure",
+        "elements-svg-shapes",
+        "elements-tables",
+        "elements-text",
+        "natural-child-command",
+        "nesting-grammar",
+        "palette-click-insert",
+        "palette-drag-insert",
+        "palette-search-groups",
+        "templates-components",
+        "templates-content",
+        "templates-layout",
+        "templates-sections"
+      ]
+    },
+    {
+      "path": "src/core/structure/move.ts",
+      "lines": 251,
+      "commands": [
+        "element.moveTo",
+        "element.nestIntoPrevious",
+        "element.promote",
+        "element.moveUp",
+        "element.moveDown"
+      ],
+      "features": [
+        "app-menu",
+        "command-bar",
+        "context-menu",
+        "drag-drop-inside",
+        "drag-duplicate",
+        "drag-reorder-canvas",
+        "hand-keyboard-move",
+        "layers-drag",
+        "layers-keyboard-navigation",
+        "move-up-down",
+        "multi-select-actions",
+        "nest-into-previous",
+        "nesting-grammar",
+        "nesting-grammar-structure",
+        "promote-out"
+      ]
+    },
+    {
+      "path": "src/core/structure/remove.ts",
+      "lines": 92,
+      "commands": [
+        "element.delete"
+      ],
+      "features": [
+        "app-menu",
+        "command-bar",
+        "context-menu",
+        "delete-element",
+        "layers-keyboard-navigation",
+        "multi-select-actions"
+      ]
+    },
+    {
+      "path": "src/core/structure/wrap.ts",
+      "lines": 249,
+      "commands": [
+        "element.wrapRow",
+        "element.wrapColumn",
+        "element.wrapContainer",
+        "element.wrapGrid",
+        "element.unwrap",
+        "element.wrapBeside"
+      ],
+      "features": [
+        "app-menu",
+        "command-bar",
+        "context-menu",
+        "drag-side-wrap",
+        "layout-actions",
+        "multi-select-actions",
+        "nesting-grammar-structure",
+        "unwrap",
+        "wrap-row-column"
+      ]
+    },
+    {
+      "path": "src/core/style/alignment.ts",
+      "lines": 50,
+      "commands": [
+        "style.setAlignment"
+      ],
+      "features": [
+        "props-flex-container"
+      ]
+    },
+    {
+      "path": "src/core/style/applies.ts",
+      "lines": 164,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/style/background-image.ts",
+      "lines": 63,
+      "commands": [
+        "style.setBackgroundImage"
+      ],
+      "features": [
+        "command-bar-set-property",
+        "gradient-editor",
+        "props-background",
+        "quick-panel"
+      ]
+    },
+    {
+      "path": "src/core/style/border.ts",
+      "lines": 83,
+      "commands": [
+        "style.setBorder",
+        "style.setRadius"
+      ],
+      "features": [
+        "command-bar-set-property",
+        "props-border-outline",
+        "quick-panel",
+        "radius-border-gap-handles"
+      ]
+    },
+    {
+      "path": "src/core/style/codecs.ts",
+      "lines": 800,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/style/color.ts",
+      "lines": 370,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/style/couplings.ts",
+      "lines": 96,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/style/css-rule.ts",
+      "lines": 35,
+      "commands": [
+        "style.applyCssRule"
+      ],
+      "features": [
+        "code-panel-edit-css"
+      ]
+    },
+    {
+      "path": "src/core/style/custom.ts",
+      "lines": 93,
+      "commands": [
+        "style.setCustomDeclarations"
+      ],
+      "features": [
+        "props-attributes"
+      ]
+    },
+    {
+      "path": "src/core/style/direction.ts",
+      "lines": 121,
+      "commands": [
+        "element.swapDirection",
+        "element.stackOnPhone"
+      ],
+      "features": [
+        "layout-actions"
+      ]
+    },
+    {
+      "path": "src/core/style/divider.ts",
+      "lines": 85,
+      "commands": [
+        "element.setDivider"
+      ],
+      "features": [
+        "layout-actions"
+      ]
+    },
+    {
+      "path": "src/core/style/filter.ts",
+      "lines": 34,
+      "commands": [
+        "style.setFilter"
+      ],
+      "features": [
+        "command-bar-set-property",
+        "props-filters-clip",
+        "quick-panel"
+      ]
+    },
+    {
+      "path": "src/core/style/functions.ts",
+      "lines": 101,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/style/gradient.ts",
+      "lines": 191,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/style/grid-item.ts",
+      "lines": 56,
+      "commands": [
+        "style.setGridItem"
+      ],
+      "features": [
+        "props-grid-container"
+      ]
+    },
+    {
+      "path": "src/core/style/organize.ts",
+      "lines": 113,
+      "commands": [
+        "element.organize"
+      ],
+      "features": [
+        "layout-actions"
+      ]
+    },
+    {
+      "path": "src/core/style/recipes.ts",
+      "lines": 20,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/style/reset.ts",
+      "lines": 54,
+      "commands": [
+        "style.reset",
+        "style.resetAll"
+      ],
+      "features": [
+        "breakpoint-overrides",
+        "command-bar",
+        "inspector-provenance-reset"
+      ]
+    },
+    {
+      "path": "src/core/style/set.ts",
+      "lines": 361,
+      "commands": [
+        "style.set"
+      ],
+      "features": [
+        "breakpoint-overrides",
+        "color-picker",
+        "color-swatches-eyedropper",
+        "command-bar-set-property",
+        "custom-fonts",
+        "elements-svg-shapes",
+        "inspector-number-fields",
+        "multi-select-edit",
+        "props-background",
+        "props-border-outline",
+        "props-display",
+        "props-effects-basic",
+        "props-element-specific",
+        "props-filters-clip",
+        "props-flex-container",
+        "props-grid-container",
+        "props-layout-item",
+        "props-more",
+        "props-position",
+        "props-size-overflow",
+        "props-transforms",
+        "props-transition",
+        "props-typography",
+        "props-typography-advanced",
+        "quick-panel",
+        "radius-border-gap-handles",
+        "rotation-handle",
+        "state-styles"
+      ]
+    },
+    {
+      "path": "src/core/style/shadows.ts",
+      "lines": 178,
+      "commands": [
+        "style.setShadows"
+      ],
+      "features": [
+        "command-bar-set-property",
+        "shadow-editor",
+        "shadow-handles"
+      ]
+    },
+    {
+      "path": "src/core/style/spacing.ts",
+      "lines": 43,
+      "commands": [
+        "style.setSpacing"
+      ],
+      "features": [
+        "command-bar-set-property",
+        "props-spacing",
+        "spacing-handles"
+      ]
+    },
+    {
+      "path": "src/core/style/tracks.ts",
+      "lines": 139,
+      "commands": [
+        "style.setGridTracks"
+      ],
+      "features": [
+        "canvas-grid-editor",
+        "props-grid-container"
+      ]
+    },
+    {
+      "path": "src/core/style/transform.ts",
+      "lines": 19,
+      "commands": [
+        "style.setTransform"
+      ],
+      "features": [
+        "command-bar-set-property",
+        "props-transforms",
+        "quick-panel"
+      ]
+    },
+    {
+      "path": "src/core/style/units.ts",
+      "lines": 13,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/text/fold.ts",
+      "lines": 5,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/text/inline.ts",
+      "lines": 327,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/text/text.ts",
+      "lines": 39,
+      "commands": [
+        "text.set"
+      ],
+      "features": [
+        "inspector-panel",
+        "text-edit-inline"
+      ]
+    },
+    {
+      "path": "src/editor/App.tsx",
+      "lines": 11,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/canvas/anchor-tabs.tsx",
+      "lines": 95,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/canvas/band-typing.ts",
+      "lines": 31,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/canvas/chrome.tsx",
+      "lines": 1044,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/canvas/coordinates.ts",
+      "lines": 510,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/canvas/edit-handles.tsx",
+      "lines": 393,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/canvas/edit-mode.ts",
+      "lines": 82,
+      "commands": [
+        "canvas.setEditMode"
+      ],
+      "features": [
+        "spacing-handles"
+      ]
+    },
+    {
+      "path": "src/editor/canvas/frame.tsx",
+      "lines": 218,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/canvas/grid-edit.ts",
+      "lines": 162,
+      "commands": [
+        "grid.enterEdit",
+        "grid.exitEdit",
+        "grid.addTrack",
+        "grid.removeTrack",
+        "grid.spanItem",
+        "grid.mergeCells",
+        "grid.splitCells"
+      ],
+      "features": [
+        "canvas-grid-editor"
+      ]
+    },
+    {
+      "path": "src/editor/canvas/grid-editor.tsx",
+      "lines": 112,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/canvas/grid-overlay.tsx",
+      "lines": 87,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/canvas/guides.tsx",
+      "lines": 68,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/canvas/handles.ts",
+      "lines": 118,
+      "commands": [
+        "handle.step"
+      ],
+      "features": [
+        "radius-border-gap-handles"
+      ]
+    },
+    {
+      "path": "src/editor/canvas/quick-panel.tsx",
+      "lines": 451,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/canvas/rulers.ts",
+      "lines": 73,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/canvas/rulers.tsx",
+      "lines": 90,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/canvas/snap-lines.tsx",
+      "lines": 108,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/canvas/snapping.ts",
+      "lines": 179,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/canvas/text-edit.ts",
+      "lines": 228,
+      "commands": [
+        "text.startEdit",
+        "text.cancelEdit",
+        "text.insertLineBreak",
+        "text.selectAll",
+        "text.toggleBold",
+        "text.toggleItalic",
+        "text.editLink",
+        "text.paste"
+      ],
+      "features": [
+        "command-bar",
+        "inspector-panel",
+        "multi-select-actions",
+        "select-container-children",
+        "settings-audit",
+        "text-edit-inline",
+        "text-inline-formatting"
+      ]
+    },
+    {
+      "path": "src/editor/canvas/text-toolbar.tsx",
+      "lines": 104,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/canvas/view-overlays.tsx",
+      "lines": 82,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/clipboard.ts",
+      "lines": 97,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/code-panel/code-panel.ts",
+      "lines": 159,
+      "commands": [
+        "codePanel.setPane",
+        "codePanel.copyPane",
+        "codePanel.downloadPane"
+      ],
+      "features": [
+        "code-panel-copy-download",
+        "code-panel-view"
+      ]
+    },
+    {
+      "path": "src/editor/code-panel/highlight.ts",
+      "lines": 108,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/command-bar/command-bar.ts",
+      "lines": 184,
+      "commands": [
+        "commandBar.open"
+      ],
+      "features": [
+        "command-bar"
+      ]
+    },
+    {
+      "path": "src/editor/css-support.ts",
+      "lines": 8,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/doors/current.ts",
+      "lines": 25,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/doors/door.tsx",
+      "lines": 304,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/doors/menu.tsx",
+      "lines": 218,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/doors/placement.ts",
+      "lines": 57,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/download.ts",
+      "lines": 16,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/drag/drag-session.ts",
+      "lines": 129,
+      "commands": [
+        "drag.levelUp",
+        "drag.levelDown",
+        "drag.cancel"
+      ],
+      "features": [
+        "color-picker",
+        "drag-level-keys-escape"
+      ]
+    },
+    {
+      "path": "src/editor/drag/drop.ts",
+      "lines": 377,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/errors.ts",
+      "lines": 18,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/explorer/explorer.ts",
+      "lines": 132,
+      "commands": [
+        "files.open",
+        "files.startRename"
+      ],
+      "features": [
+        "explorer-file-system"
+      ]
+    },
+    {
+      "path": "src/editor/explorer/file-tabs.ts",
+      "lines": 52,
+      "commands": [
+        "files.closeTab"
+      ],
+      "features": [
+        "explorer-file-system"
+      ]
+    },
+    {
+      "path": "src/editor/focus/focus.ts",
+      "lines": 160,
+      "commands": [
+        "focus.next",
+        "focus.previous",
+        "focus.first",
+        "focus.last",
+        "focus.activate",
+        "focus.nextRegion",
+        "focus.previousRegion",
+        "focus.canvas"
+      ],
+      "features": [
+        "command-bar",
+        "context-menu",
+        "keyboard-panel-navigation",
+        "layers-keyboard-navigation"
+      ]
+    },
+    {
+      "path": "src/editor/input/keymap.ts",
+      "lines": 392,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/input/pointer.ts",
+      "lines": 2477,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/input/shortcut-rule.ts",
+      "lines": 19,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/inspector/attribute-feedback.ts",
+      "lines": 25,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/inspector/attributes.ts",
+      "lines": 40,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/inspector/color-picker.ts",
+      "lines": 97,
+      "commands": [
+        "colorPicker.open",
+        "colorPicker.setFormat",
+        "colorPicker.setChannel",
+        "colorPicker.apply",
+        "colorPicker.cancel"
+      ],
+      "features": [
+        "color-picker",
+        "color-picker-oklch"
+      ]
+    },
+    {
+      "path": "src/editor/inspector/gradient-view.ts",
+      "lines": 35,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/inspector/number-field.ts",
+      "lines": 121,
+      "commands": [
+        "field.step",
+        "field.scrub",
+        "field.setUnit",
+        "field.cancel"
+      ],
+      "features": [
+        "inspector-number-fields",
+        "props-spacing"
+      ]
+    },
+    {
+      "path": "src/editor/inspector/origin.ts",
+      "lines": 56,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/inspector/page-properties.ts",
+      "lines": 29,
+      "commands": [
+        "page.openProperties"
+      ],
+      "features": [
+        "command-bar",
+        "page-properties"
+      ]
+    },
+    {
+      "path": "src/editor/inspector/pick-target.ts",
+      "lines": 20,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/inspector/rows.ts",
+      "lines": 97,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/inspector/sections.ts",
+      "lines": 289,
+      "commands": [
+        "inspector.toggleSection",
+        "inspector.setMode",
+        "inspector.reveal",
+        "inspector.search"
+      ],
+      "features": [
+        "command-bar-set-property",
+        "elements-form-inputs-rules",
+        "inspector-add-property",
+        "inspector-advanced-mode",
+        "inspector-panel",
+        "inspector-property-search",
+        "workspace-persist-reset"
+      ]
+    },
+    {
+      "path": "src/editor/inspector/shadow-view.ts",
+      "lines": 23,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/inspector/spacing.ts",
+      "lines": 31,
+      "commands": [
+        "inspector.toggleSpacingLink"
+      ],
+      "features": [
+        "props-spacing"
+      ]
+    },
+    {
+      "path": "src/editor/inspector/style-target.ts",
+      "lines": 91,
+      "commands": [
+        "inspector.setStyleTarget"
+      ],
+      "features": [
+        "settings-class-management",
+        "shared-style-classes"
+      ]
+    },
+    {
+      "path": "src/editor/layers/rename.ts",
+      "lines": 60,
+      "commands": [
+        "layers.startRename"
+      ],
+      "features": [
+        "app-menu",
+        "command-bar",
+        "layers-keyboard-navigation",
+        "multi-select-actions",
+        "rename-element"
+      ]
+    },
+    {
+      "path": "src/editor/layers/tree.ts",
+      "lines": 165,
+      "commands": [
+        "layers.search",
+        "layers.setExpanded",
+        "layers.expandOrFocusChild",
+        "layers.collapseOrFocusParent",
+        "layers.collapseAll",
+        "layers.expandAll",
+        "layers.setRowDetails"
+      ],
+      "features": [
+        "layers-drag",
+        "layers-expand-collapse-all",
+        "layers-keyboard-navigation",
+        "layers-row-columns",
+        "layers-search",
+        "layers-tree"
+      ]
+    },
+    {
+      "path": "src/editor/menus/context-menu.ts",
+      "lines": 33,
+      "commands": [
+        "contextMenu.open"
+      ],
+      "features": [
+        "context-menu",
+        "quick-panel"
+      ]
+    },
+    {
+      "path": "src/editor/menus/overlays.ts",
+      "lines": 22,
+      "commands": [
+        "ui.dismiss"
+      ],
+      "features": [
+        "command-bar",
+        "context-menu",
+        "workspace-settings-dialog"
+      ]
+    },
+    {
+      "path": "src/editor/palette/palette.ts",
+      "lines": 50,
+      "commands": [
+        "palette.toggleGroup",
+        "palette.setDensity"
+      ],
+      "features": [
+        "palette-density",
+        "palette-search-groups"
+      ]
+    },
+    {
+      "path": "src/editor/persistence/autosave.ts",
+      "lines": 266,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/persistence/tab-guard.ts",
+      "lines": 54,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/preferences/preferences.ts",
+      "lines": 230,
+      "commands": [
+        "preferences.setLanguage",
+        "preferences.setTheme"
+      ],
+      "features": [
+        "theme-switch",
+        "ui-language"
+      ]
+    },
+    {
+      "path": "src/editor/preferences/said.ts",
+      "lines": 32,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/quick-panel/quick-panel.ts",
+      "lines": 128,
+      "commands": [
+        "quickPanel.setOpen",
+        "quickPanel.setOffset"
+      ],
+      "features": [
+        "quick-panel"
+      ]
+    },
+    {
+      "path": "src/editor/shell/asset-picker.ts",
+      "lines": 16,
+      "commands": [
+        "assetPicker.open",
+        "assetPicker.close"
+      ],
+      "features": [
+        "explorer-assets-use"
+      ]
+    },
+    {
+      "path": "src/editor/shell/asset-picker.tsx",
+      "lines": 69,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/bodies.ts",
+      "lines": 35,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/canvas.tsx",
+      "lines": 249,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/class-bar.tsx",
+      "lines": 183,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/code-pane.tsx",
+      "lines": 163,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/color.tsx",
+      "lines": 413,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/command-bar.tsx",
+      "lines": 169,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/component-prompt.ts",
+      "lines": 24,
+      "commands": [
+        "components.startCreate",
+        "components.closePrompt"
+      ],
+      "features": [
+        "command-bar",
+        "reusable-components"
+      ]
+    },
+    {
+      "path": "src/editor/shell/component-prompt.tsx",
+      "lines": 58,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/confirmation.tsx",
+      "lines": 42,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/dialog.tsx",
+      "lines": 56,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/dock.tsx",
+      "lines": 129,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/field-origin.tsx",
+      "lines": 93,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/field.tsx",
+      "lines": 1194,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/gradient.tsx",
+      "lines": 189,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/guides-grids.tsx",
+      "lines": 191,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/inspector.tsx",
+      "lines": 1458,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/interactions.tsx",
+      "lines": 169,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/link-picker.ts",
+      "lines": 25,
+      "commands": [
+        "linkPicker.open",
+        "linkPicker.setKind",
+        "linkPicker.close"
+      ],
+      "features": [
+        "link-picker"
+      ]
+    },
+    {
+      "path": "src/editor/shell/link-picker.tsx",
+      "lines": 114,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/panel-field.tsx",
+      "lines": 150,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/preview.tsx",
+      "lines": 32,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/recovery.tsx",
+      "lines": 49,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/shadow.tsx",
+      "lines": 193,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/shell.tsx",
+      "lines": 146,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/shortcuts.tsx",
+      "lines": 36,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/sidebar.tsx",
+      "lines": 1036,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/slots.tsx",
+      "lines": 44,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/snap-settings.tsx",
+      "lines": 74,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/status-bar.tsx",
+      "lines": 190,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/tab-guard.tsx",
+      "lines": 25,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/toast.tsx",
+      "lines": 21,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/top-bar.tsx",
+      "lines": 66,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/variables.tsx",
+      "lines": 148,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/state.ts",
+      "lines": 122,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/store.ts",
+      "lines": 131,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/test-port.ts",
+      "lines": 60,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/text.ts",
+      "lines": 49,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/timeline/panel.tsx",
+      "lines": 219,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/timeline/playhead.ts",
+      "lines": 136,
+      "commands": [
+        "timeline.show",
+        "timeline.setPlayhead"
+      ],
+      "features": [
+        "timeline-animations",
+        "timeline-keyframes"
+      ]
+    },
+    {
+      "path": "src/editor/timeline/preview.ts",
+      "lines": 97,
+      "commands": [
+        "timeline.play",
+        "timeline.pause",
+        "timeline.stop",
+        "timeline.toggleLoop"
+      ],
+      "features": [
+        "timeline-preview"
+      ]
+    },
+    {
+      "path": "src/editor/view/breakpoints.ts",
+      "lines": 37,
+      "commands": [
+        "view.setBreakpoint"
+      ],
+      "features": [
+        "breakpoint-overrides",
+        "breakpoints-switch",
+        "preview-mode",
+        "state-styles",
+        "status-bar"
+      ]
+    },
+    {
+      "path": "src/editor/view/camera.ts",
+      "lines": 131,
+      "commands": [
+        "view.zoomIn",
+        "view.zoomOut",
+        "view.zoomReset",
+        "view.zoomTo",
+        "view.zoomFit",
+        "view.zoomAt",
+        "view.pan"
+      ],
+      "features": [
+        "command-bar",
+        "zoom-keyboard-buttons",
+        "zoom-wheel-pan"
+      ]
+    },
+    {
+      "path": "src/editor/view/editor-view.ts",
+      "lines": 22,
+      "commands": [
+        "view.setEditorView"
+      ],
+      "features": [
+        "code-panel-view"
+      ]
+    },
+    {
+      "path": "src/editor/view/overlays.ts",
+      "lines": 64,
+      "commands": [
+        "view.toggleOutlines",
+        "view.toggleZones",
+        "view.toggleRulers",
+        "guides.toggleVisible",
+        "view.toggleSmartGuides",
+        "view.toggleEqualSpacing"
+      ],
+      "features": [
+        "canvas-outlines-zones",
+        "smart-guides",
+        "workspace-settings-dialog"
+      ]
+    },
+    {
+      "path": "src/editor/view/preview.ts",
+      "lines": 23,
+      "commands": [
+        "view.enterPreview",
+        "view.exitPreview"
+      ],
+      "features": [
+        "code-panel-edit-js",
+        "command-bar",
+        "export-events-js",
+        "html-import-states",
+        "preview-mode"
+      ]
+    },
+    {
+      "path": "src/editor/view/snap.ts",
+      "lines": 74,
+      "commands": [
+        "snap.setEnabled",
+        "snap.setSettings"
+      ],
+      "features": [
+        "snap-toggle-settings",
+        "snap-while-moving"
+      ]
+    },
+    {
+      "path": "src/editor/view/style-state.ts",
+      "lines": 49,
+      "commands": [
+        "view.setStyleState"
+      ],
+      "features": [
+        "state-styles",
+        "status-bar"
+      ]
+    },
+    {
+      "path": "src/editor/workspace/dialogs.ts",
+      "lines": 9,
+      "commands": [
+        "workspace.openDialog"
+      ],
+      "features": [
+        "snap-toggle-settings",
+        "workspace-settings-dialog"
+      ]
+    },
+    {
+      "path": "src/editor/workspace/layout.ts",
+      "lines": 328,
+      "commands": [
+        "workspace.setActiveTab",
+        "workspace.setWorkbenchState",
+        "workspace.movePanel",
+        "workspace.reset",
+        "workspace.resizeSplitter"
+      ],
+      "features": [
+        "events-actions",
+        "floating-panels",
+        "inspector-panel",
+        "panel-combine-tabs",
+        "panel-resize",
+        "workbench-panel",
+        "workspace-persist-reset"
+      ]
+    },
+    {
+      "path": "src/editor/workspace/panel-drag.ts",
+      "lines": 102,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/workspace/panels.ts",
+      "lines": 199,
+      "commands": [
+        "workspace.setPanelOpen",
+        "workspace.toggleLeftDock",
+        "workspace.toggleInspector",
+        "workspace.toggleDeveloperTools",
+        "workspace.collapseDocks"
+      ],
+      "features": [
+        "accessibility-checks",
+        "app-menu",
+        "canvas-outlines-zones",
+        "code-panel-view",
+        "command-bar",
+        "css-variables-tokens",
+        "dock-toggles",
+        "editor-shell",
+        "explorer-pages",
+        "layers-tree",
+        "palette-click-insert",
+        "shortcuts-panel",
+        "timeline-animations",
+        "workbench-panel",
+        "workspace-persist-reset"
+      ]
+    },
+    {
+      "path": "src/editor/workspace/persist.ts",
+      "lines": 119,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/workspace/windows.tsx",
+      "lines": 155,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/generated/commands.ts",
+      "lines": 491,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/generated/ids.ts",
+      "lines": 4504,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/generated/value-lists.ts",
+      "lines": 394,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/i18n/index.ts",
+      "lines": 63,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/main.tsx",
+      "lines": 63,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/manifest/check.ts",
+      "lines": 2266,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/manifest/chord.ts",
+      "lines": 35,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/manifest/css.ts",
+      "lines": 302,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/manifest/fields.ts",
+      "lines": 61,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/manifest/runtime.ts",
+      "lines": 142,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/manifest/scenario.ts",
+      "lines": 242,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/manifest/schema.ts",
+      "lines": 1254,
+      "commands": [],
+      "features": []
+    }
+  ]
+}

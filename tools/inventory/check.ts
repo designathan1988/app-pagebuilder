@@ -1,0 +1,47 @@
+// npm run inventory:check: the inventory on disk is what the generator writes now. It reads before it writes (a hand
+// edit is reported, never erased), and it fails on the two things the inventory exists to catch:
+//
+//   - a built feature whose commands no module registers (the feature claims to be built; nothing implements it);
+//   - a module registering commands of a feature that is not built (code for a feature the app does not offer yet).
+import fs from 'node:fs';
+import path from 'node:path';
+import { REPO_ROOT } from '../manifest/load.ts';
+import { generate, inventoryJson, inventoryMarkdown, INVENTORY_JSON, INVENTORY_MD } from './generate.ts';
+
+const expected = generate();
+const wantedJson = inventoryJson(expected);
+const wantedMd = inventoryMarkdown(expected);
+const at = (file: string) => path.join(REPO_ROOT, file);
+const read = (file: string) => (fs.existsSync(at(file)) ? fs.readFileSync(at(file), 'utf8') : '');
+const heldJson = read(INVENTORY_JSON);
+const heldMd = read(INVENTORY_MD);
+
+const problems: string[] = [];
+if (heldJson !== wantedJson) problems.push(`${INVENTORY_JSON} differs from what the generator writes (run npm run inventory)`);
+if (heldMd !== wantedMd) problems.push(`${INVENTORY_MD} differs from what the generator writes (run npm run inventory)`);
+
+// a built feature whose commands nothing registers: code that does not exist behind a door that says it does
+for (const feature of expected.features) {
+  if (!feature.built || feature.commands.length === 0) continue;
+  const registering = expected.modules.filter((module) => module.commands.some((id) => feature.commands.includes(id)));
+  if (registering.length === 0) problems.push(`feature "${feature.id}" is built but no module registers its commands (${feature.commands.slice(0, 3).join(', ')}${feature.commands.length > 3 ? ', …' : ''})`);
+}
+// a module registering a command of a feature that is not built: an implementation the app cannot reach
+const builtOf = new Map(expected.features.map((feature) => [feature.id, feature.built]));
+for (const feature of expected.features) {
+  if (feature.built) continue;
+  for (const module of expected.modules) {
+    if (module.features.includes(feature.id) && module.commands.length > 0) {
+      problems.push(`module "${module.path}" registers commands of "${feature.id}", which is not built`);
+    }
+  }
+}
+for (const [id, built] of builtOf) if (builtOf.get(id) === undefined) problems.push(`feature "${id}" is unknown`);
+
+if (problems.length === 0) {
+  console.log(`inventory:check: ${expected.totals.features} features, ${expected.totals.commands} commands, ${expected.totals.modules} modules — the files match and every built feature has its code.`);
+  process.exit(0);
+}
+for (const problem of problems) console.error(`✗ ${problem}`);
+console.error(`inventory:check FAILED: ${problems.length} problem(s)`);
+process.exit(1);

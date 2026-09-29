@@ -20,7 +20,9 @@
     "gen": "node tools/gen/generate.ts",
     "gen:check": "node tools/gen/check.ts",
     "manifest:check": "node tools/manifest/check.ts",
-    "ui": "node tools/ui/drive.ts"
+    "ui": "node tools/ui/drive.ts",
+    "inventory": "node tools/inventory/generate.ts",
+    "inventory:check": "node tools/inventory/check.ts"
   },
   "dependencies": {
     "react": "^19.3.0",

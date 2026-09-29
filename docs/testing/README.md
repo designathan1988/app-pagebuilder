@@ -51,6 +51,9 @@ npm run unit
 ```
 
 - `gen:check` — `src/generated/` and `src/ui/tokens.css` are what the manifest and the catalogues generate.
+- `inventory:check` — the generated inventory (every feature, command, door and module, and their links) is what the
+  generator writes now; every built feature has a module registering its commands; no module implements a feature the
+  app does not offer.
 - `manifest:check` — the contract: schemas, references, doors, scenarios, i18n, the property model.
 - `typecheck`, `lint` — the code and the project's lint rules (owners, tokens, i18n, no hand-written ids).
 - `unit` — vitest over `src/**/*.test.ts` and `tools/**/*.test.ts`.
