@@ -624,7 +624,8 @@ function TreeRow({ row, doors }: { readonly row: TreeRow; readonly doors: TreeDo
       ) : (
         <span className="row__name">{name}</span>
       )}
-      <span className="row__meta">{file === null ? '' : sizeLabel(file)}</span>
+      {/* the file's folder and its size (spec explorer-assets: "the Explorer lists it, with its path and its size") */}
+      <span className="row__meta">{file === null ? '' : folderOf(row.path) === '' ? sizeLabel(file) : `${folderOf(row.path)}/ · ${sizeLabel(file)}`}</span>
     </>
   );
   return (
