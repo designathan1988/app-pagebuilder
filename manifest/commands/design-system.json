@@ -864,7 +864,7 @@
           "id": "close",
           "kind": "panel-control",
           "feature": "reusable-components",
-          "labelKey": "command.components.create",
+          "labelKey": "command.components.closePrompt",
           "faceLabelKey": null,
           "icon": "x",
           "disabledReasonKey": "status.needsSingleSelection",

@@ -13,6 +13,8 @@ import { useT } from '../text.ts';
 const PARTS = doorSlots('component-prompt');
 const NAME = PARTS.find((p) => p.door.kind === 'panel-control' && p.door.control === 'name') ?? null;
 const CLOSE = PARTS.find((p) => p.door.kind === 'panel-control' && p.door.control === 'close') ?? null;
+// the form the create button submits, by id (a submit button may stand outside the form it submits)
+const FORM_ID = 'component-prompt-name';
 
 export function ComponentPrompt() {
   const t = useT();
@@ -36,6 +38,7 @@ export function ComponentPrompt() {
         <p className="picker__label">{t('components.prompt.title')}</p>
         {NAME === null ? null : (
           <form
+            id={FORM_ID}
             className="field-row"
             data-door={NAME.ref}
             data-args="{}"
@@ -50,7 +53,16 @@ export function ComponentPrompt() {
             <input ref={field} className="input" aria-label={t('components.prompt.name')} defaultValue={node.node.name} spellCheck={false} />
           </form>
         )}
-        <div className="picker__actions">{CLOSE === null ? null : <DoorControl entry={CLOSE} />}</div>
+        <div className="picker__actions">
+          {/* the button a person presses: it submits the field's form, so it creates with the typed name — the same
+              command the form dispatches, named by the manifest (a door a click could run carries no name of its own) */}
+          {NAME === null ? null : (
+            <button type="submit" form={FORM_ID} className="door door--button">
+              {t(NAME.command.labelKey)}
+            </button>
+          )}
+          {CLOSE === null ? null : <DoorControl entry={CLOSE} />}
+        </div>
       </div>
     </div>
   );

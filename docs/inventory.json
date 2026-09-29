@@ -6,7 +6,7 @@
     "doors": 998,
     "scenarios": 1333,
     "modules": 249,
-    "lines": 47923
+    "lines": 47935
   },
   "features": [
     {
@@ -4616,7 +4616,7 @@
     },
     {
       "path": "src/editor/shell/component-prompt.tsx",
-      "lines": 58,
+      "lines": 70,
       "commands": [],
       "features": []
     },
