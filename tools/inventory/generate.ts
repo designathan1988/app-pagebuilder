@@ -14,7 +14,9 @@ import { isRegistered } from '../../src/core/commands/registry.ts';
 import { FEATURES } from '../../src/app/features.ts';
 import { loadManifest, registrationsIn, REPO_ROOT } from '../manifest/load.ts';
 
-export const INVENTORY_JSON = path.join('manifest', 'generated', 'inventory.json');
+// The machine's copy sits beside the person's: the manifest's own folders accept only the files its contract names,
+// and this one is derived from the manifest and the source together (the manifest's checker refused it there).
+export const INVENTORY_JSON = path.join('docs', 'inventory.json');
 export const INVENTORY_MD = path.join('docs', 'INVENTORY.md');
 
 interface FeatureRow {
