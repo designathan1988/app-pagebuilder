@@ -12690,7 +12690,7 @@
                     "base": {
                       "position": "absolute",
                       "top": "306px",
-                      "left": "1034px"
+                      "left": "1031px"
                     }
                   }
                 }
@@ -12714,7 +12714,7 @@
                 {
                   "node": "/Page/Hero/Title",
                   "property": "left",
-                  "value": "1034px"
+                  "value": "1031px"
                 }
               ],
               "geometry": [],

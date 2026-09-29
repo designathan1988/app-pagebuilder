@@ -14,7 +14,7 @@
 export function baseCss(): string {
   return `*, *::before, *::after { box-sizing: border-box; }
 :where(body) { margin: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 16px; line-height: 1.5; }
-:where(h1, h2, h3, h4, h5, h6) { margin: 0 0 0.6em; font-weight: 700; line-height: 1.2; }
+:where(h1, h2, h3, h4, h5, h6) { margin: 0 0 0.6em; font-weight: 700; line-height: normal; }
 :where(h1) { font-size: 2rem; }
 :where(h2) { font-size: 1.5rem; }
 :where(h3) { font-size: 1.25rem; }

@@ -454,7 +454,9 @@ function canvasPoint(page: Page, query: CanvasQuery): Promise<Point | string> {
       const r = q.root ? { left: 0, top: 0, right: vw, bottom: vh } : el.getBoundingClientRect();
       const [x0, x1, y0, y1] = [Math.max(r.left, 0), Math.min(r.right, vw), Math.max(r.top, 0), Math.min(r.bottom, vh)];
       if (x1 - x0 < 1 || y1 - y0 < 1) return 'it is outside the visible page';
-      const along = (a: number, b: number) => [0.5, 0.35, 0.65, 0.2, 0.8, 0.05, 0.95].map((f) => a + f * (b - a)).concat([a + 1.5, b - 1.5]);
+      // a node's own room may be a band a few px tall (the gaps between a container's children, where the margins
+      // between them fall): the search steps finely, from the middle outwards one region at a time
+      const along = (a: number, b: number) => [0.5, 0.35, 0.65, 0.2, 0.8, 0.05, 0.95, ...Array.from({ length: 19 }, (_, i) => 0.05 * (i + 1))].map((f) => a + f * (b - a)).concat([a + 1.5, b - 1.5]);
       const points = along(x0, x1).flatMap((x) => along(y0, y1).map((y) => ({ x, y })));
       const [cx, cy] = q.near === 'start' ? [x0, y0] : [(x0 + x1) / 2, (y0 + y1) / 2];
       points.sort((p, o) => Math.hypot(p.x - cx, p.y - cy) - Math.hypot(o.x - cx, o.y - cy));
@@ -496,10 +498,10 @@ function canvasPoint(page: Page, query: CanvasQuery): Promise<Point | string> {
     const shownBefore = (q.placement === 'before') !== (parent !== null && reversedFlow(parent));
     if (q.placement === 'before' || q.placement === 'after') {
       along = shownBefore ? start + band / 2 : start + size - band / 2;
-      // a container whose band there its content covers (a card's title across its width): just inside its edge,
-      // where its escape band puts the drop before or after it (drag-reorder-canvas, "Hit zones": the escape ladder)
-      const p = row ? { x: along, y: cross } : { x: cross, y: along };
-      if (q.container && doc.elementFromPoint(p.x, p.y)?.closest('[data-node]') !== el) along = shownBefore ? start + q.edgeInset / zoom : start + size - q.edgeInset / zoom;
+      // A container: just inside its edge, whatever its content covers there — that is the one point that reads as
+      // before or after the container itself (its escape band; drag-reorder-canvas, "Hit zones": the escape ladder). The
+      // band inside it reads as a drop into it at the end instead.
+      if (q.container) along = shownBefore ? start + q.edgeInset / zoom : start + size - q.edgeInset / zoom;
     } else if (!q.container) return 'a leaf takes nothing inside';
     else if (kids.length === 0) along = start + size / 2;
     else {
@@ -539,8 +541,12 @@ function canvasPoint(page: Page, query: CanvasQuery): Promise<Point | string> {
         // the side of that child the slot is on, as shown: after the child before it, before the child after it
         const trailing = (prev !== undefined) !== reversed;
         const inset = q.edgeInset / zoom;
-        if (child.hasAttribute('data-container')) along = trailing ? hi(near) - inset : lo(near) + inset;
-        else along = lo(near) + (hi(near) - lo(near)) * (trailing ? 0.75 : 0.25);
+        const extent = hi(near) - lo(near);
+        // an empty child (a card holding nothing) has no extent to aim at: the point goes just inside the container's
+        // own end, which is where a drop at that slot belongs
+        if (extent < inset) along = trailing ? limitHi : limitLo;
+        else if (child.hasAttribute('data-container')) along = trailing ? hi(near) - inset : lo(near) + inset;
+        else along = lo(near) + extent * (trailing ? 0.75 : 0.25);
       }
     }
     const at = x ? screen(along, cross) : screen(cross, along);
@@ -696,6 +702,18 @@ async function controlPoint(page: Page, ref: string, args: Record<string, unknow
 async function canvasDropPoint(page: Page, document: unknown, drop: Drop, index: number | null): Promise<Point> {
   const reference = nodeAt(document, drop.reference);
   await frameElement(page, reference.id, drop.reference);
+  // An empty reference (a card holding nothing) has no extent to aim before or after: its slot point goes just inside
+  // the container it sits in, which is where a drop at that slot belongs — a point at its own edge would fall on
+  // whatever the canvas draws next.
+  const resolved = resolveNode(document, drop.reference.split('/').filter((s) => s !== ''));
+  const parent = typeof resolved === 'string' ? null : (resolved.parent as { id?: unknown } | null);
+  if (index !== null && parent !== null && typeof parent.id === 'string') {
+    const box = await frameBox(page, reference.id, drop.reference);
+    if (box.width < 1 || box.height < 1) {
+      const inside = await canvasPoint(page, { kind: 'drop', id: parent.id, placement: 'inside', container: true, slot: index, edgeInset: EDGE_INSET, aim: EMPTY_AIM });
+      if (typeof inside !== 'string') return inside;
+    }
+  }
   const found = await canvasPoint(page, { kind: 'drop', id: reference.id, placement: drop.placement, container: CONTENT.get(reference.type) === 'children', slot: index, edgeInset: EDGE_INSET, aim: EMPTY_AIM });
   if (typeof found === 'string') throw new Error(`drop ${drop.placement} ${drop.reference}: ${found}`);
   return found;

@@ -3107,11 +3107,11 @@
               "args": {
                 "component": "CardA",
                 "parent": "/Page/Plans/Grid",
-                "index": 3
+                "index": 2
               },
               "target": null,
               "drop": {
-                "placement": "after",
+                "placement": "before",
                 "reference": "/Page/Plans/Grid/CardC"
               },
               "action": true,
@@ -3213,18 +3213,6 @@
                   },
                   {
                     "type": "article",
-                    "name": "CardC",
-                    "tag": "article",
-                    "attributes": {},
-                    "classes": [
-                      "card"
-                    ],
-                    "styles": {},
-                    "text": null,
-                    "children": []
-                  },
-                  {
-                    "type": "article",
                     "name": "CardA 2",
                     "tag": "article",
                     "attributes": {},
@@ -3250,6 +3238,18 @@
                     ],
                     "component": "CardA",
                     "componentPart": []
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardC",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": []
                   }
                 ]
               }

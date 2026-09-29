@@ -8743,7 +8743,7 @@
                           "desktop": {
                             "base": {
                               "position": "absolute",
-                              "top": "43px",
+                              "top": "39px",
                               "left": "0px"
                             }
                           }
@@ -8770,29 +8770,15 @@
                 {
                   "node": "/Page/Plans/Grid/CardB/CardC",
                   "measure": "x",
-                  "relation": "greater-than",
-                  "value": 7,
-                  "reference": null
-                },
-                {
-                  "node": "/Page/Plans/Grid/CardB/CardC",
-                  "measure": "x",
-                  "relation": "less-than",
-                  "value": 9,
+                  "relation": "equals",
+                  "value": 0,
                   "reference": null
                 },
                 {
                   "node": "/Page/Plans/Grid/CardB/CardC",
                   "measure": "y",
-                  "relation": "greater-than",
-                  "value": 369,
-                  "reference": null
-                },
-                {
-                  "node": "/Page/Plans/Grid/CardB/CardC",
-                  "measure": "y",
-                  "relation": "less-than",
-                  "value": 370,
+                  "relation": "equals",
+                  "value": 331.4,
                   "reference": null
                 }
               ],
