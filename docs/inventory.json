@@ -6,7 +6,7 @@
     "doors": 998,
     "scenarios": 1333,
     "modules": 242,
-    "lines": 47557
+    "lines": 47564
   },
   "features": [
     {
@@ -4252,7 +4252,7 @@
     },
     {
       "path": "src/editor/input/pointer.ts",
-      "lines": 2158,
+      "lines": 2165,
       "commands": [],
       "features": []
     },
