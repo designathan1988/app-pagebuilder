@@ -5,20 +5,25 @@
 // document: File › Open and the autosaved work restored at start (src/editor/persistence/autosave.ts) both load
 // through it.
 import { message, registerHandler, type Message } from '../commands/registry.ts';
-import { DOCUMENT_VERSION, isEmptyProject, type DocumentJson } from '../document/model.ts';
+import { isEmptyProject, type DocumentJson } from '../document/model.ts';
+import { migrateDocument } from '../document/migrations.ts';
 import { validateDocument, type ModelRules } from '../document/validate.ts';
 import { isZip, unzip, zip } from './zip.ts';
 
 const invalid = (reason: string): { readonly refused: Message } => ({ refused: message('status.open.invalidArchive', { reason }) });
 
 // A project document read from its parsed JSON: the document when the model accepts it at this app's format
-// version, else the refusal naming why (a newer version, or what is wrong with it).
+// version, else the refusal naming why (a newer version, or what is wrong with it). A file of an older version is
+// carried forward first (document/migrations.ts, the one owner of the format's versions).
 export function readProject(parsed: unknown, rules: ModelRules): { readonly document: DocumentJson } | { readonly refused: Message } {
-  if (parsed === null || typeof parsed !== 'object' || Array.isArray(parsed)) return invalid('it is not a project document');
-  const version = (parsed as { version?: unknown }).version;
-  if (typeof version === 'number' && version > DOCUMENT_VERSION) return { refused: message('status.open.newerVersion', { version }) };
-  if (version !== DOCUMENT_VERSION || !Array.isArray((parsed as { pages?: unknown }).pages)) return invalid('it is not a project document');
-  const document = parsed as DocumentJson;
+  const migrated = migrateDocument(parsed);
+  if (!migrated.ok) {
+    if (migrated.reason === 'newer') return { refused: message('status.open.newerVersion', { version: migrated.version ?? 0 }) };
+    if (migrated.reason === 'no-step') return invalid(`it is a version ${migrated.version} document and this app has no way to carry it forward`);
+    return invalid('it is not a project document');
+  }
+  const document = migrated.document as DocumentJson;
+  if (!Array.isArray(document.pages)) return invalid('it is not a project document');
   const first = validateDocument(document, [], rules)[0];
   if (first !== undefined) return invalid(`${first.path}: ${first.message}`);
   return { document };
