@@ -69,30 +69,30 @@ test.beforeEach(async ({ page }) => {
   await openEditor(page);
 });
 
-test('a door that only opens a panel without its content is disabled with "not available yet" and changes nothing', async ({ page }) => {
+test('every panel door opens a panel that has content', async ({ page }) => {
+  // The two panels this test named before — Help › Keyboard shortcuts and View › Checks — were built since, so no door
+  // is left opening a panel without content. The other half of the rule, a door waiting for an unbuilt feature, is
+  // proven where it can be planted: src/editor/doors/door.test.tsx draws such a door disabled, changing nothing.
   const empty = panelDoors.filter((d) => EMPTY.includes(d.panel));
-  // Help › Keyboard shortcuts and View › Checks
-  expect(empty.map((d) => d.ref).sort()).toEqual(['workspace.setPanelOpen#menu-help-shortcuts', 'workspace.setPanelOpen#menu-view-checks']);
-  for (const door of empty) {
-    const before = await snapshot(page);
-    const button = await control(page, door);
-    await expect(button, door.ref).toHaveAttribute('aria-disabled', 'true');
-    await expect(button, door.ref).toHaveAttribute('title', /not available yet/);
-    await button.click({ force: true });
-    await page.keyboard.press('Escape');
-    expect(await snapshot(page), door.ref).toEqual(before);
-  }
+  expect(empty, 'no panel door is left without content').toEqual([]);
+  const shortcuts = panelDoors.find((d) => d.panel === 'shortcuts');
+  if (shortcuts === undefined) throw new Error('no door opens the keyboard shortcuts panel');
+  const button = await control(page, shortcuts);
+  await expect(button, shortcuts.ref).not.toHaveAttribute('aria-disabled', 'true');
+  await button.click();
+  // the panel it opens is drawn: a region of it appears (the panel docks into the dock area)
+  await expect.poll(async () => (await snapshot(page)).regions.length, { message: 'the shortcuts panel opens' }).toBeGreaterThan(1);
 });
 
 test('the doors of the panels that exist are enabled exactly while their feature is registered', async ({ page }) => {
   const built = panelDoors.filter((d) => BUILT.includes(d.panel));
   expect(built.length).toBeGreaterThan(8);
-  // some wait for their feature (the door rule), most are enabled
-  expect(built.some((d) => isFeatureBuilt(d.feature as FeatureId))).toBe(true);
-  expect(built.some((d) => !isFeatureBuilt(d.feature as FeatureId))).toBe(true);
+  // every panel of the window is built now, so every one of their doors is enabled; a door left waiting for its
+  // feature is drawn disabled by the unit test src/editor/doors/door.test.tsx, which plants an unregistered feature
   for (const door of built) {
+    const enabled = isFeatureBuilt(door.feature as FeatureId);
     const button = await control(page, door);
-    if (isFeatureBuilt(door.feature as FeatureId)) await expect(button, door.ref).not.toHaveAttribute('aria-disabled', 'true');
+    if (enabled) await expect(button, door.ref).not.toHaveAttribute('aria-disabled', 'true');
     else {
       await expect(button, door.ref).toHaveAttribute('aria-disabled', 'true');
       await expect(button, door.ref).toHaveAttribute('title', /not available yet/);

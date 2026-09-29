@@ -242,7 +242,9 @@ test('Escape on a press still under drag.threshold starts no drag: moving on dra
 
 test('Escape during a marquee takes the band away and gives back the selection held before the press', runs(OPEN, SELECT, MARQUEE, CANCEL), async ({ page }) => {
   // Intro selected, then a band from Hero's top-left padding to the middle of Intro, which takes Title and Intro
-  const intro = await screenPoint(page, { x: 720, y: 153 });
+  // (the point is read from the page the canvas draws now: the typography of the base stylesheet moved the Intro
+  // since this spec was written, and a hard point selected the Hero)
+  const intro = centre(await screenBox(page, 'n-intro'));
   await page.mouse.click(intro.x, intro.y);
   expect((await port(page)).selection).toEqual(['n-intro']);
   const start = await screenPoint(page, { x: 20, y: 20 });

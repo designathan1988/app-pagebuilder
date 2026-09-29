@@ -4345,25 +4345,6 @@
                     ]
                   },
                   {
-                    "type": "section",
-                    "name": "Section",
-                    "tag": "section",
-                    "attributes": {},
-                    "classes": [],
-                    "styles": {
-                      "desktop": {
-                        "base": {
-                          "padding-top": "56px",
-                          "padding-right": "40px",
-                          "padding-bottom": "56px",
-                          "padding-left": "40px"
-                        }
-                      }
-                    },
-                    "text": null,
-                    "children": []
-                  },
-                  {
                     "type": "list",
                     "name": "Perks",
                     "tag": "ul",
@@ -4415,6 +4396,25 @@
                         ]
                       }
                     ]
+                  },
+                  {
+                    "type": "section",
+                    "name": "Section",
+                    "tag": "section",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "padding-top": "56px",
+                          "padding-right": "40px",
+                          "padding-bottom": "56px",
+                          "padding-left": "40px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": []
                   }
                 ]
               }
@@ -4444,7 +4444,7 @@
                   "params": {
                     "element": "Section",
                     "parent": "Plans",
-                    "position": 2,
+                    "position": 3,
                     "count": 3
                   }
                 }
@@ -8743,7 +8743,7 @@
                           "desktop": {
                             "base": {
                               "position": "absolute",
-                              "top": "39px",
+                              "top": "43px",
                               "left": "0px"
                             }
                           }
@@ -9788,7 +9788,7 @@
                       "desktop": {
                         "base": {
                           "position": "absolute",
-                          "top": "78px",
+                          "top": "86px",
                           "left": "0px"
                         }
                       }
@@ -9808,7 +9808,7 @@
                       "desktop": {
                         "base": {
                           "position": "absolute",
-                          "top": "88px",
+                          "top": "96px",
                           "left": "10px"
                         }
                       }

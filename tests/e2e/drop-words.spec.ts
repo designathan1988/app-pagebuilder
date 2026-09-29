@@ -72,7 +72,8 @@ test('over a card the label names the neighbour and the path to the card, the st
   const words = 'After CardATitle · … › Plans › Grid › CardA';
   await expect(page.locator('[data-chrome="drop-label"]')).toHaveText(words);
   await expect(page.locator('.status-bar__message')).toHaveText(words);
-  await expect(page.locator('[data-chrome="drag-hint"]')).toHaveText('↑↓ level · Esc cancels · Alt duplicates · Ctrl no snapping');
+  // the hint names every key the drag reads, the wrap's included (the drag-layout spec: Shift wraps the other way)
+  await expect(page.locator('[data-chrome="drag-hint"]')).toHaveText('↑↓ level · Esc cancels · Alt duplicates · Ctrl no snapping · Shift wraps the other way');
   await page.mouse.up();
   await expect.poll(() => childrenOf(page, 'n-card-a')).toEqual(['n-card-a-title', 'n-title']);
   await expect(page.locator('[data-chrome="drag-hint"]')).toHaveCount(0);

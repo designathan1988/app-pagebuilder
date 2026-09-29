@@ -49,8 +49,11 @@ test('the quick panel bar leaves out align and distribute while they cannot act,
 });
 
 test('a control that cannot act is drawn clearly disabled', async ({ page }) => {
-  for (const ref of ['view.setEditorView#toolbar-canvas-toolbar-split', 'view.setEditorView#toolbar-canvas-toolbar-code', 'workspace.setActiveTab#inspector-tab-interactions']) {
-    const drawn = page.locator(`[data-door="${ref}"]`);
+  // The controls that cannot act on the freshly opened page: Redo, with nothing to redo, and the page root's Hide and
+  // Lock, which the root takes none of. The three this test named before — the Split and Code views and the
+  // Interactions tab — are built now and drawn enabled, which is what their features asked for.
+  for (const ref of ['history.redo#toolbar-top-bar', 'element.toggleHidden#layers-row-eye', 'element.toggleLock#layers-row-lock']) {
+    const drawn = page.locator(`[data-door="${ref}"]`).first();
     await expect(drawn, ref).toHaveAttribute('aria-disabled', 'true');
     expect(Number(await drawn.evaluate((el) => getComputedStyle(el).opacity)), ref).toBeLessThanOrEqual(0.5);
   }

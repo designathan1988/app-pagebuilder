@@ -12163,7 +12163,7 @@
               {
                 "op": "set",
                 "path": "/Page/Hero/Actions/@styles/desktop/base/top",
-                "value": "170px"
+                "value": "168px"
               },
               {
                 "op": "set",
@@ -12256,12 +12256,12 @@
               {
                 "op": "set",
                 "path": "/Page/Hero/Actions/@styles/desktop/base/top",
-                "value": "178px"
+                "value": "168px"
               },
               {
                 "op": "set",
                 "path": "/Page/Hero/Actions/@styles/desktop/base/left",
-                "value": "48px"
+                "value": "40px"
               }
             ],
             "selection": [
@@ -36550,7 +36550,7 @@
                 {
                   "node": "/Page/Hero/Title",
                   "property": "font-size",
-                  "value": "16px"
+                  "value": "20px"
                 }
               ],
               "geometry": [],
@@ -36709,7 +36709,7 @@
                 {
                   "node": "/Page/Hero/Intro",
                   "property": "font-family",
-                  "value": "monospace"
+                  "value": "ui-monospace, SFMono-Regular, Consolas, \"Liberation Mono\", monospace"
                 }
               ],
               "geometry": [],
