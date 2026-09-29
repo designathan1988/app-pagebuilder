@@ -23,6 +23,10 @@ for (const file of fs.readdirSync(path.join(REPO_ROOT, GENERATED_DIR))) {
   }
 }
 
+// A generated file that differs from its committed content is read BEFORE the generator runs: regenerating first would
+// erase a hand edit and report "up to date", which is how a hand edit used to vanish without a word.
+const handEdited = git('diff', '--name-only', '--', GENERATED_DIR, TOKENS_CSS, TYPES_DIR, ICON_SPRITE).trim();
+
 const written = await generate();
 // a file in src/generated/ that the generator does not write is hand-made, even when it is committed
 const handMade = fs
@@ -31,6 +35,11 @@ const handMade = fs
   .filter((f) => !written.includes(f));
 const untracked = git('ls-files', '--others', '--exclude-standard', '--', GENERATED_DIR, TOKENS_CSS, TYPES_DIR, ICON_SPRITE).trim();
 const diff = git('diff', '--stat', '--', GENERATED_DIR, TOKENS_CSS, TYPES_DIR, ICON_SPRITE).trim();
+if (handEdited !== '') {
+  for (const line of handEdited.split('\n')) console.log(`✗ ${line} differs from the committed file: a generated file is written by npm run gen alone`);
+  console.log('gen:check FAILED: the file has been put back to what the generator writes; a deliberate change belongs in the generator or in the manifest.');
+  process.exit(1);
+}
 if (untracked === '' && diff === '' && handMade.length === 0) {
   console.log(`gen:check: ${written.join(', ')} are up to date.`);
   process.exit(0);
@@ -39,5 +48,5 @@ for (const line of stale) console.log(`✗ ${line}`);
 if (untracked !== '') console.log(`✗ not added to git:\n${untracked}`);
 if (diff !== '') console.log(`✗ npm run gen changed:\n${diff}`);
 for (const f of handMade) console.log(`✗ ${f} is not written by npm run gen: src/generated/ holds only generated files`);
-console.log('gen:check FAILED: generated files are never edited by hand. Review the regenerated files, then add and commit them.');
+console.log('gen:check FAILED: the generator rewrote them from its sources. Review the regenerated files, then add and commit them (a generated file is written by npm run gen alone).');
 process.exit(1);
