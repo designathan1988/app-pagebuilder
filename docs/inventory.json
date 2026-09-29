@@ -6,7 +6,7 @@
     "doors": 998,
     "scenarios": 1333,
     "modules": 241,
-    "lines": 47339
+    "lines": 47370
   },
   "features": [
     {
@@ -3680,7 +3680,7 @@
     },
     {
       "path": "src/core/style/applies.ts",
-      "lines": 164,
+      "lines": 165,
       "commands": [],
       "features": []
     },
@@ -3966,7 +3966,7 @@
     },
     {
       "path": "src/editor/canvas/chrome.tsx",
-      "lines": 1037,
+      "lines": 1060,
       "commands": [],
       "features": []
     },
@@ -3978,7 +3978,7 @@
     },
     {
       "path": "src/editor/canvas/edit-handles.tsx",
-      "lines": 393,
+      "lines": 396,
       "commands": [],
       "features": []
     },
@@ -4252,7 +4252,7 @@
     },
     {
       "path": "src/editor/input/pointer.ts",
-      "lines": 2154,
+      "lines": 2158,
       "commands": [],
       "features": []
     },
