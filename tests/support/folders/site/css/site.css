@@ -1,0 +1,25 @@
+/* The site's own stylesheet: the folder import reads it into the document's styles. */
+h1 {
+  color: #123456;
+  font-size: 40px;
+}
+
+.title {
+  letter-spacing: 2px;
+}
+
+.card {
+  padding: 24px;
+  background-color: #fafafa;
+}
+
+/* A rule with a pseudo-class, and an at-rule: the reader drops both and the report counts them. */
+.card:hover {
+  background-color: #eeeeee;
+}
+
+@media (max-width: 600px) {
+  h1 {
+    font-size: 24px;
+  }
+}

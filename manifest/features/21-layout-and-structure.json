@@ -1,0 +1,2660 @@
+{
+  "group": "layout-and-structure",
+  "titleKey": "featureGroup.layoutAndStructure",
+  "features": [
+    {
+      "id": "layout-actions",
+      "titleKey": "feature.layoutActions",
+      "commands": [
+        "element.wrapContainer",
+        "element.wrapGrid",
+        "element.swapDirection",
+        "element.stackOnPhone",
+        "element.organize",
+        "element.setDivider"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/layout-actions.md",
+      "intent": {
+        "title": "The layout quick actions: a container, a grid, the swapped direction, the phone stack, the organized children and the column divider",
+        "steps": [
+          "Select three cards in a row and choose 'Wrap in a grid' [command.wrapGrid] from the context menu, the Arrange menu, the palette or with G.",
+          "Select a Row and run 'Swap the direction' [command.swapDirection] (S), then 'Stack on the phone' [command.stackOnPhone] (Shift+S).",
+          "Select a container whose children stand apart and run 'Organize the children' [command.organize] (O).",
+          "Select a Row and drag the grip drawn between its two columns.",
+          "Insert the Grid template and open the Phone breakpoint."
+        ],
+        "expected": [
+          "The wrap commands put the selected elements in a new wrapper at the first one's index, selected after one undo step: a container (a plain div, no styles), or a grid whose columns are one equal track per element, two at the Tablet breakpoint while it holds more, one at the Phone (item A1.4).",
+          "The swap writes the opposite direction of what the element lays out with (a flex row into a column, a grid's auto flow row into column) for every selected element, at the breakpoint and state the editor edits.",
+          "The stack writes one column at the narrowest breakpoint alone (a flex container's flex-direction, a grid's single track), so the Desktop keeps the row: the per-breakpoint override the Styles tab shows.",
+          "The organize lays the loose children of the container out as the flex line they already run along, with the gap most of them stand apart, and takes their margins along that line away, so what the page shows does not move.",
+          "The divider grip stands on the boundary between each two columns of a flex row; its drag writes the two children's share of the row as their flex-grow, bounded so each keeps a column's least width.",
+          "A wrapper around a positioned element, or around elements that were not next to each other, is asked about first (it changes what the page shows)."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "wrapping-three-cards-in-a-grid",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Plans/Grid/CardA",
+              "/Page/Plans/Grid/CardB",
+              "/Page/Plans/Grid/CardC"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "contextMenu.open#canvas-right-click-element-or-page",
+              "args": {
+                "target": "/Page/Plans/Grid/CardA"
+              },
+              "target": "/Page/Plans/Grid/CardA",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.wrapGrid#context-menu",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.wrapGrid#context-menu"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@children",
+                "value": [
+                  {
+                    "type": "div",
+                    "name": "Grid 2",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "display": "grid",
+                          "column-gap": "16px",
+                          "row-gap": "16px",
+                          "grid-template-columns": "repeat(3, minmax(0, 1fr))"
+                        }
+                      },
+                      "tablet": {
+                        "base": {
+                          "grid-template-columns": "repeat(2, minmax(0, 1fr))"
+                        }
+                      },
+                      "phone": {
+                        "base": {
+                          "grid-template-columns": "minmax(0, 1fr)"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "article",
+                        "name": "CardA",
+                        "tag": "article",
+                        "attributes": {},
+                        "classes": [
+                          "card"
+                        ],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "heading",
+                            "name": "CardATitle",
+                            "tag": "h3",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "Monthly",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "type": "article",
+                        "name": "CardB",
+                        "tag": "article",
+                        "attributes": {},
+                        "classes": [
+                          "card"
+                        ],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "heading",
+                            "name": "CardBTitle",
+                            "tag": "h3",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "Weekly",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "type": "article",
+                        "name": "CardC",
+                        "tag": "article",
+                        "attributes": {},
+                        "classes": [
+                          "card"
+                        ],
+                        "styles": {},
+                        "text": null,
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid/Grid 2"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Plans/Grid/Grid 2",
+                  "property": "display",
+                  "value": "grid"
+                },
+                {
+                  "node": "/Page/Plans/Grid/Grid 2/CardA",
+                  "property": "display",
+                  "value": "block"
+                }
+              ],
+              "geometry": [
+                {
+                  "node": "/Page/Plans/Grid/Grid 2/CardB",
+                  "measure": "x",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Plans/Grid/Grid 2/CardA"
+                },
+                {
+                  "node": "/Page/Plans/Grid/Grid 2/CardC",
+                  "measure": "x",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Plans/Grid/Grid 2/CardB"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.wrappedMany",
+                  "params": {
+                    "count": 3,
+                    "wrapper": "Grid 2",
+                    "styles": "display: grid; column-gap: 16px; row-gap: 16px; grid-template-columns: repeat(3, minmax(0, 1fr))"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "wrapping-the-title-and-the-intro-in-a-grid",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title",
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.wrapGrid#menu-arrange",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.wrapGrid#menu-arrange",
+            "element.wrapGrid#command-bar",
+            "element.wrapGrid#key-g-in-canvas"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@children",
+                "value": [
+                  {
+                    "type": "div",
+                    "name": "Grid 2",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "display": "grid",
+                          "column-gap": "16px",
+                          "row-gap": "16px",
+                          "grid-template-columns": "repeat(2, minmax(0, 1fr))"
+                        }
+                      },
+                      "phone": {
+                        "base": {
+                          "grid-template-columns": "minmax(0, 1fr)"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "Title",
+                        "tag": "h1",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Welcome to Aurora",
+                        "children": []
+                      },
+                      {
+                        "type": "paragraph",
+                        "name": "Intro",
+                        "tag": "p",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Fresh coffee, roasted every week.",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "div",
+                    "name": "Actions",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Grid 2"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Grid 2",
+                  "property": "display",
+                  "value": "grid"
+                }
+              ],
+              "geometry": [
+                {
+                  "node": "/Page/Hero/Grid 2/Intro",
+                  "measure": "x",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Hero/Grid 2/Title"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.wrappedMany",
+                  "params": {
+                    "count": 2,
+                    "wrapper": "Grid 2",
+                    "styles": "display: grid; column-gap: 16px; row-gap: 16px; grid-template-columns: repeat(2, minmax(0, 1fr))"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-wrapped-grid-stacks-to-one-column-on-the-phone",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Plans/Grid/CardA",
+              "/Page/Plans/Grid/CardB"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "contextMenu.open#canvas-right-click-element-or-page",
+              "args": {
+                "target": "/Page/Plans/Grid/CardA"
+              },
+              "target": "/Page/Plans/Grid/CardA",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.wrapGrid#context-menu",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "view.setBreakpoint#toolbar-breakpoint-tabs-phone",
+              "args": {
+                "breakpoint": "phone"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.wrapGrid#context-menu"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@children",
+                "value": [
+                  {
+                    "type": "div",
+                    "name": "Grid 2",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "display": "grid",
+                          "column-gap": "16px",
+                          "row-gap": "16px",
+                          "grid-template-columns": "repeat(2, minmax(0, 1fr))"
+                        }
+                      },
+                      "phone": {
+                        "base": {
+                          "grid-template-columns": "minmax(0, 1fr)"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "article",
+                        "name": "CardA",
+                        "tag": "article",
+                        "attributes": {},
+                        "classes": [
+                          "card"
+                        ],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "heading",
+                            "name": "CardATitle",
+                            "tag": "h3",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "Monthly",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "type": "article",
+                        "name": "CardB",
+                        "tag": "article",
+                        "attributes": {},
+                        "classes": [
+                          "card"
+                        ],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "heading",
+                            "name": "CardBTitle",
+                            "tag": "h3",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "Weekly",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardC",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid/Grid 2"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Plans/Grid/Grid 2/CardB",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Plans/Grid/Grid 2/CardA"
+                },
+                {
+                  "node": "/Page/Plans/Grid/Grid 2/CardB",
+                  "measure": "x",
+                  "relation": "equals",
+                  "value": 0,
+                  "reference": "/Page/Plans/Grid/Grid 2/CardA"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.breakpointActive",
+                  "params": {
+                    "breakpoint": "Phone"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "wrapping-two-neighbours-in-a-plain-container",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title",
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.wrapContainer#key-d-in-canvas",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.wrapContainer#key-d-in-canvas",
+            "element.wrapContainer#menu-arrange",
+            "element.wrapContainer#command-bar"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@children",
+                "value": [
+                  {
+                    "type": "div",
+                    "name": "Container",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "Title",
+                        "tag": "h1",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Welcome to Aurora",
+                        "children": []
+                      },
+                      {
+                        "type": "paragraph",
+                        "name": "Intro",
+                        "tag": "p",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Fresh coffee, roasted every week.",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "div",
+                    "name": "Actions",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Container"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Hero/Container/Intro",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Hero/Container/Title"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.wrappedManyPlain",
+                  "params": {
+                    "count": 2,
+                    "wrapper": "Container"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "wrapping-from-the-context-menu-in-a-container",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title",
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "contextMenu.open#canvas-right-click-element-or-page",
+              "args": {
+                "target": "/Page/Hero/Title"
+              },
+              "target": "/Page/Hero/Title",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.wrapContainer#context-menu",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.wrapContainer#context-menu"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@children",
+                "value": [
+                  {
+                    "type": "div",
+                    "name": "Container",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "Title",
+                        "tag": "h1",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Welcome to Aurora",
+                        "children": []
+                      },
+                      {
+                        "type": "paragraph",
+                        "name": "Intro",
+                        "tag": "p",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Fresh coffee, roasted every week.",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "div",
+                    "name": "Actions",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Container"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Hero/Container/Intro",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Hero/Container/Title"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.wrappedManyPlain",
+                  "params": {
+                    "count": 2,
+                    "wrapper": "Container"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "wrapping-elements-that-were-not-next-to-each-other-asks-first",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title",
+              "/Page/Hero/Actions"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.wrapContainer#key-d-in-canvas",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null,
+              "answer": "cancel"
+            }
+          ],
+          "doors": [
+            "element.wrapContainer#key-d-in-canvas"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero/Title",
+              "/Page/Hero/Actions"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.confirmation.cancelled",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "swapping-the-direction-of-a-row",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.wrapRow#key-r-in-canvas",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.swapDirection#key-s-in-canvas",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.swapDirection#key-s-in-canvas",
+            "element.swapDirection#menu-arrange",
+            "element.swapDirection#command-bar"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@children",
+                "value": [
+                  {
+                    "type": "heading",
+                    "name": "Title",
+                    "tag": "h1",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Welcome to Aurora",
+                    "children": []
+                  },
+                  {
+                    "type": "div",
+                    "name": "Row",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "display": "flex",
+                          "flex-direction": "column",
+                          "column-gap": "16px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "paragraph",
+                        "name": "Intro",
+                        "tag": "p",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "flex-grow": "1",
+                              "flex-basis": "0px"
+                            }
+                          }
+                        },
+                        "text": "Fresh coffee, roasted every week.",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "div",
+                    "name": "Actions",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Row"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Row",
+                  "property": "flex-direction",
+                  "value": "column"
+                }
+              ],
+              "geometry": [
+                {
+                  "node": "/Page/Hero/Row",
+                  "measure": "height",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": null
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.swapped",
+                  "params": {
+                    "name": "Row",
+                    "property": "flex-direction",
+                    "value": "column"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "swapping-the-direction-from-the-context-menu",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.wrapRow#key-r-in-canvas",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "contextMenu.open#canvas-right-click-element-or-page",
+              "args": {
+                "target": "/Page/Hero/Row"
+              },
+              "target": "/Page/Hero/Row",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.swapDirection#context-menu",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.swapDirection#context-menu"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@children",
+                "value": [
+                  {
+                    "type": "heading",
+                    "name": "Title",
+                    "tag": "h1",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Welcome to Aurora",
+                    "children": []
+                  },
+                  {
+                    "type": "div",
+                    "name": "Row",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "display": "flex",
+                          "flex-direction": "column",
+                          "column-gap": "16px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "paragraph",
+                        "name": "Intro",
+                        "tag": "p",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "flex-grow": "1",
+                              "flex-basis": "0px"
+                            }
+                          }
+                        },
+                        "text": "Fresh coffee, roasted every week.",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "div",
+                    "name": "Actions",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Row"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Row",
+                  "property": "flex-direction",
+                  "value": "column"
+                }
+              ],
+              "geometry": [
+                {
+                  "node": "/Page/Hero/Row",
+                  "measure": "height",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": null
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.swapped",
+                  "params": {
+                    "name": "Row",
+                    "property": "flex-direction",
+                    "value": "column"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "stacking-a-row-on-the-phone",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title",
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.wrapRow#key-r-in-canvas",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.stackOnPhone#key-shift-s-in-canvas",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "view.setBreakpoint#toolbar-breakpoint-tabs-phone",
+              "args": {
+                "breakpoint": "phone"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.stackOnPhone#key-shift-s-in-canvas",
+            "element.stackOnPhone#menu-arrange",
+            "element.stackOnPhone#command-bar"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@children",
+                "value": [
+                  {
+                    "type": "div",
+                    "name": "Row",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "display": "flex",
+                          "flex-direction": "row",
+                          "column-gap": "16px"
+                        }
+                      },
+                      "phone": {
+                        "base": {
+                          "flex-direction": "column"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "Title",
+                        "tag": "h1",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "flex-grow": "1",
+                              "flex-basis": "0px"
+                            }
+                          }
+                        },
+                        "text": "Welcome to Aurora",
+                        "children": []
+                      },
+                      {
+                        "type": "paragraph",
+                        "name": "Intro",
+                        "tag": "p",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "flex-grow": "1",
+                              "flex-basis": "0px"
+                            }
+                          }
+                        },
+                        "text": "Fresh coffee, roasted every week.",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "div",
+                    "name": "Actions",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Row"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Row",
+                  "property": "flex-direction",
+                  "value": "column"
+                }
+              ],
+              "geometry": [
+                {
+                  "node": "/Page/Hero/Row/Intro",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Hero/Row/Title"
+                },
+                {
+                  "node": "/Page/Hero/Row/Intro",
+                  "measure": "x",
+                  "relation": "equals",
+                  "value": 0,
+                  "reference": "/Page/Hero/Row/Title"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.breakpointActive",
+                  "params": {
+                    "breakpoint": "Phone"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "stacking-on-the-phone-from-the-context-menu",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title",
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.wrapRow#key-r-in-canvas",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "contextMenu.open#canvas-right-click-element-or-page",
+              "args": {
+                "target": "/Page/Hero/Row"
+              },
+              "target": "/Page/Hero/Row",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.stackOnPhone#context-menu",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.stackOnPhone#context-menu"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@children",
+                "value": [
+                  {
+                    "type": "div",
+                    "name": "Row",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "display": "flex",
+                          "flex-direction": "row",
+                          "column-gap": "16px"
+                        }
+                      },
+                      "phone": {
+                        "base": {
+                          "flex-direction": "column"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "Title",
+                        "tag": "h1",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "flex-grow": "1",
+                              "flex-basis": "0px"
+                            }
+                          }
+                        },
+                        "text": "Welcome to Aurora",
+                        "children": []
+                      },
+                      {
+                        "type": "paragraph",
+                        "name": "Intro",
+                        "tag": "p",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "flex-grow": "1",
+                              "flex-basis": "0px"
+                            }
+                          }
+                        },
+                        "text": "Fresh coffee, roasted every week.",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "div",
+                    "name": "Actions",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Row"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Row",
+                  "property": "flex-direction",
+                  "value": "row"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.stacked",
+                  "params": {
+                    "name": "Row",
+                    "breakpoint": "Phone"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "organizing-the-loose-children-of-a-section",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.organize#key-o-in-canvas",
+              "args": {},
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.organize#key-o-in-canvas",
+            "element.organize#menu-arrange",
+            "element.organize#command-bar"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles",
+                "value": {
+                  "desktop": {
+                    "base": {
+                      "padding-top": "56px",
+                      "padding-right": "40px",
+                      "padding-bottom": "56px",
+                      "padding-left": "40px",
+                      "display": "flex",
+                      "flex-direction": "column",
+                      "row-gap": "16px"
+                    }
+                  }
+                }
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero",
+                  "property": "display",
+                  "value": "flex"
+                },
+                {
+                  "node": "/Page/Hero",
+                  "property": "row-gap",
+                  "value": "16px"
+                }
+              ],
+              "geometry": [
+                {
+                  "node": "/Page/Hero/Intro",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Hero/Title"
+                },
+                {
+                  "node": "/Page/Hero/Actions",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Hero/Intro"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.organized",
+                  "params": {
+                    "name": "Hero",
+                    "direction": "column",
+                    "gap": 16
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "organizing-from-the-context-menu",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "contextMenu.open#canvas-right-click-element-or-page",
+              "args": {
+                "target": "/Page/Hero"
+              },
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.organize#context-menu",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.organize#context-menu"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles",
+                "value": {
+                  "desktop": {
+                    "base": {
+                      "padding-top": "56px",
+                      "padding-right": "40px",
+                      "padding-bottom": "56px",
+                      "padding-left": "40px",
+                      "display": "flex",
+                      "flex-direction": "column",
+                      "row-gap": "16px"
+                    }
+                  }
+                }
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero",
+                  "property": "display",
+                  "value": "flex"
+                },
+                {
+                  "node": "/Page/Hero",
+                  "property": "row-gap",
+                  "value": "16px"
+                }
+              ],
+              "geometry": [
+                {
+                  "node": "/Page/Hero/Intro",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Hero/Title"
+                },
+                {
+                  "node": "/Page/Hero/Actions",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Hero/Intro"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.organized",
+                  "params": {
+                    "name": "Hero",
+                    "direction": "column",
+                    "gap": 16
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "organizing-takes-a-childs-margin-into-the-gap",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "selection.select#layers-row",
+              "args": {
+                "target": "/Page/Hero/Title"
+              },
+              "target": "/Page/Hero/Title",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setSpacing#inspector-margin-bottom-box-model",
+              "args": {
+                "box": "margin",
+                "sides": "bottom",
+                "value": "16px"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "16\n"
+            },
+            {
+              "door": "selection.select#layers-row",
+              "args": {
+                "target": "/Page/Hero"
+              },
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.organize#menu-arrange",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.organize#menu-arrange"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles",
+                "value": {
+                  "desktop": {
+                    "base": {
+                      "padding-top": "56px",
+                      "padding-right": "40px",
+                      "padding-bottom": "56px",
+                      "padding-left": "40px",
+                      "display": "flex",
+                      "flex-direction": "column",
+                      "row-gap": "16px"
+                    }
+                  }
+                }
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero",
+                  "property": "display",
+                  "value": "flex"
+                },
+                {
+                  "node": "/Page/Hero",
+                  "property": "row-gap",
+                  "value": "16px"
+                }
+              ],
+              "geometry": [
+                {
+                  "node": "/Page/Hero/Intro",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Hero/Title"
+                },
+                {
+                  "node": "/Page/Hero/Actions",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Hero/Intro"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.organized",
+                  "params": {
+                    "name": "Hero",
+                    "direction": "column",
+                    "gap": 16
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-divider-sets-the-share-of-two-columns",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "template-row"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#inspector-width",
+              "args": {
+                "property": "width",
+                "value": "600px"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "600\n"
+            },
+            {
+              "door": "element.setDivider#handle-divider",
+              "args": {
+                "index": 0,
+                "value": "200px"
+              },
+              "target": "/Page/Row",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.setDivider#handle-divider"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "div",
+                    "name": "Row",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "padding-top": "0px",
+                          "padding-right": "0px",
+                          "padding-bottom": "0px",
+                          "padding-left": "0px",
+                          "display": "flex",
+                          "flex-direction": "row",
+                          "column-gap": "16px",
+                          "width": "600px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "div",
+                        "name": "Column",
+                        "tag": "div",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "padding-top": "0px",
+                              "padding-right": "0px",
+                              "padding-bottom": "0px",
+                              "padding-left": "0px",
+                              "display": "flex",
+                              "flex-direction": "column",
+                              "row-gap": "16px",
+                              "flex-grow": "0.34",
+                              "flex-basis": "0px"
+                            }
+                          }
+                        },
+                        "text": null,
+                        "children": []
+                      },
+                      {
+                        "type": "div",
+                        "name": "Column 2",
+                        "tag": "div",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "padding-top": "0px",
+                              "padding-right": "0px",
+                              "padding-bottom": "0px",
+                              "padding-left": "0px",
+                              "display": "flex",
+                              "flex-direction": "column",
+                              "row-gap": "16px",
+                              "flex-grow": "0.66",
+                              "flex-basis": "0px"
+                            }
+                          }
+                        },
+                        "text": null,
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Row"
+            ],
+            "history": {
+              "undoSteps": 3,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Row/Column 2",
+                  "measure": "x",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Row/Column"
+                },
+                {
+                  "node": "/Page/Row/Column",
+                  "measure": "width",
+                  "relation": "less-than",
+                  "value": 0,
+                  "reference": "/Page/Row/Column 2"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.divider",
+                  "params": {
+                    "name": "Row",
+                    "left": 34,
+                    "right": 66
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
+    },
+    {
+      "id": "canvas-grid-editor",
+      "titleKey": "feature.canvasGridEditor",
+      "commands": [
+        "grid.enterEdit",
+        "grid.exitEdit",
+        "grid.addTrack",
+        "grid.removeTrack",
+        "grid.spanItem",
+        "grid.mergeCells",
+        "grid.splitCells",
+        "style.setGridTracks"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/canvas-grid-editor.md",
+      "intent": {
+        "title": "Edit a grid on the canvas: its tracks, its cells and the items in them",
+        "steps": [
+          "Insert the Grid template, then double-click the grid on the canvas.",
+          "Drag the grip on the first column boundary, press + and −, press Escape.",
+          "Select a cell, enter the editor again, press Ctrl+M, then drag the corner grip of the item."
+        ],
+        "expected": [
+          "The double click opens the grid editor: the canvas draws the numbers of its columns and a grip on every track boundary, and the Escape of its own key context leaves it.",
+          "Dragging a boundary grip writes grid-template-columns with that track sized in px (through the one owner of a grid’s tracks); + adds a column and − takes the last away.",
+          "Ctrl+M merges the selected item’s cell with the next one (an item covering two columns), refused where the next cell holds an element; Ctrl+Shift+M splits its last cell away.",
+          "The corner grip stretches the item over the cells the drag covers (the px divided by the width of one track, read from the item’s own box)."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "the-grid-editor-adds-a-column-and-escape-leaves-it",
+          "setup": {
+            "fixture": "grid-page",
+            "selection": [
+              "/Page/Grid"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "grid.enterEdit#canvas-double-click-grid-container",
+              "args": {},
+              "target": "/Page/Grid",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "grid.addTrack#key-equals-in-grid-edit",
+              "args": {
+                "property": "grid-template-columns"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "grid.exitEdit#key-escape-in-grid-edit",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "grid.addTrack#key-equals-in-grid-edit",
+              "args": {
+                "property": "grid-template-columns"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "grid.addTrack#key-equals-in-grid-edit"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Grid/@styles/desktop/base/grid-template-columns",
+                "value": "repeat(4, minmax(0, 1fr))"
+              }
+            ],
+            "selection": [
+              "/Page/Grid"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "dragging-the-first-tracks-grip-sizes-that-column",
+          "setup": {
+            "fixture": "grid-page",
+            "selection": [
+              "/Page/Grid"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "grid.enterEdit#canvas-double-click-grid-container",
+              "args": {},
+              "target": "/Page/Grid",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setGridTracks#handle-grid-track",
+              "args": {
+                "property": "grid-template-columns",
+                "track": 0,
+                "value": "220px"
+              },
+              "target": "/Page/Grid",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.setGridTracks#handle-grid-track"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Grid/@styles/desktop/base/grid-template-columns",
+                "value": "220px minmax(0, 1fr) minmax(0, 1fr)"
+              }
+            ],
+            "selection": [
+              "/Page/Grid"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Grid/Cell",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 219,
+                  "reference": null
+                },
+                {
+                  "node": "/Page/Grid/Cell",
+                  "measure": "width",
+                  "relation": "less-than",
+                  "value": 221,
+                  "reference": null
+                }
+              ],
+              "feedback": []
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "grid-edit-chrome",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "merging-the-cell-with-the-next-one-makes-an-item-of-span-two",
+          "setup": {
+            "fixture": "grid-page",
+            "selection": [
+              "/Page/Grid/Cell"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "grid.enterEdit#canvas-double-click-grid-container",
+              "args": {},
+              "target": "/Page/Grid",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "selection.select#layers-row",
+              "args": {
+                "target": "/Page/Grid/Cell"
+              },
+              "target": "/Page/Grid/Cell",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "focus.canvas#key-escape-in-layers-tree",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "grid.mergeCells#key-ctrl-m-in-grid-edit",
+              "args": {
+                "property": "grid-column"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "grid.mergeCells#key-ctrl-m-in-grid-edit"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Grid/Cell/@styles/desktop/base/grid-column-start",
+                "value": "span 2"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Grid/Cell/@styles/desktop/base/grid-column-end",
+                "value": "auto"
+              }
+            ],
+            "selection": [
+              "/Page/Grid/Cell"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Grid/Cell",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 900,
+                  "reference": null
+                }
+              ],
+              "feedback": []
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "grid-edit-chrome",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-corner-grip-stretches-the-item-over-two-columns",
+          "setup": {
+            "fixture": "grid-page",
+            "selection": [
+              "/Page/Grid/Cell"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "grid.enterEdit#canvas-double-click-grid-container",
+              "args": {},
+              "target": "/Page/Grid",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "selection.select#layers-row",
+              "args": {
+                "target": "/Page/Grid/Cell"
+              },
+              "target": "/Page/Grid/Cell",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "focus.canvas#key-escape-in-layers-tree",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "grid.spanItem#handle-grid-span",
+              "args": {
+                "property": "grid-column",
+                "value": "906px"
+              },
+              "target": "/Page/Grid",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "grid.spanItem#handle-grid-span"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Grid/Cell/@styles/desktop/base/grid-column-start",
+                "value": "span 2"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Grid/Cell/@styles/desktop/base/grid-column-end",
+                "value": "auto"
+              }
+            ],
+            "selection": [
+              "/Page/Grid/Cell"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Grid/Cell",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 900,
+                  "reference": null
+                }
+              ],
+              "feedback": []
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "grid-edit-chrome",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "removing-a-track-and-splitting-the-merged-cell",
+          "setup": {
+            "fixture": "grid-page",
+            "selection": [
+              "/Page/Grid/Cell"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "grid.enterEdit#canvas-double-click-grid-container",
+              "args": {},
+              "target": "/Page/Grid",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "selection.select#layers-row",
+              "args": {
+                "target": "/Page/Grid/Cell"
+              },
+              "target": "/Page/Grid/Cell",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "focus.canvas#key-escape-in-layers-tree",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "grid.removeTrack#key-minus-in-grid-edit",
+              "args": {
+                "property": "grid-template-columns"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "grid.mergeCells#key-ctrl-m-in-grid-edit",
+              "args": {
+                "property": "grid-column"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "grid.splitCells#key-ctrl-shift-m-in-grid-edit",
+              "args": {
+                "property": "grid-column"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "grid.splitCells#key-ctrl-shift-m-in-grid-edit"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Grid/@styles/desktop/base/grid-template-columns",
+                "value": "repeat(2, minmax(0, 1fr))"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Grid/Cell/@styles/desktop/base/grid-column-start",
+                "value": "auto"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Grid/Cell/@styles/desktop/base/grid-column-end",
+                "value": "auto"
+              }
+            ],
+            "selection": [
+              "/Page/Grid/Cell"
+            ],
+            "history": {
+              "undoSteps": 3,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "grid-edit-chrome",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-grid-editor-opens-from-the-arrange-menu",
+          "setup": {
+            "fixture": "grid-page",
+            "selection": [
+              "/Page/Grid"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "grid.enterEdit#menu-arrange",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "grid.enterEdit#menu-arrange"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Grid"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "grid-edit-chrome",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null
+            },
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
+    }
+  ]
+}

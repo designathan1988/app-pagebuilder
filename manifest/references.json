@@ -1,0 +1,1844 @@
+{
+  "references": [
+    {
+      "kind": "handler",
+      "id": "animation.create",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "animation.rename",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "animation.delete",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "animation.addKeyframe",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "animation.moveKeyframe",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "animation.setKeyframeEasing",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "animation.deleteKeyframe",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "animation.setSettings",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "timeline.setPlayhead",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "timeline.play",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "timeline.pause",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "timeline.stop",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "timeline.toggleLoop",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "clipboard.copy",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "clipboard.paste",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "clipboard.cut",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "clipboard.copyStyle",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "clipboard.pasteStyle",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "colors.saveSwatch",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "colors.removeSwatch",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "tokens.create",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "tokens.update",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "tokens.rename",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "tokens.delete",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "classes.create",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "classes.apply",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "classes.detach",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "classes.rename",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "classes.delete",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "inspector.setStyleTarget",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "components.create",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "components.insertInstance",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "components.detach",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.setTag",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.setAttribute",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.setId",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.setClasses",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.setLink",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.setInputType",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.setLabelTarget",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.setCustomAttribute",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.removeCustomAttribute",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.setSvgMarkup",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.setEmbedMarkup",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.applyHtml",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "parts.toggle",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "parts.add",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "parts.move",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "parts.remove",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "table.addColumnAfter",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "table.addColumnEnd",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "table.removeColumn",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "table.addRowAfter",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "table.removeRow",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "interactions.add",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "interactions.update",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "interactions.remove",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "pages.add",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "pages.rename",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "pages.duplicate",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "pages.delete",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "pages.switch",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "files.createFolder",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "files.createFile",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "files.startRename",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "files.rename",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "files.move",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "files.delete",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "files.open",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "files.closeTab",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "files.upload",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "files.saveContent",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "assets.insertImageFile",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "focus.next",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "focus.previous",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "focus.first",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "focus.last",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "focus.activate",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "focus.nextRegion",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "focus.previousRegion",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "focus.canvas",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "ui.dismiss",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "position.setMode",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "geometry.resize",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "position.move",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "position.setAnchors",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "position.align",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "position.distribute",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "handle.step",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "canvas.setEditMode",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "history.undo",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "history.redo",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "layers.startRename",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.rename",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.toggleLock",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.toggleHidden",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.setLayerColor",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "page.openProperties",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "page.setSetting",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "project.newBlankPage",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "project.restoreVersion",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "project.takeOverEditing",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "project.save",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "project.open",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "project.openFolder",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "project.importHtml",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "project.export",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "selection.select",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "selection.clear",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "selection.add",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "selection.toggle",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "selection.walkNextSibling",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "selection.walkPreviousSibling",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "selection.walkParent",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "selection.walkFirstChild",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "selection.selectAllInContainer",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "selection.marquee",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "contextMenu.open",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.insert",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.moveTo",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "drag.levelUp",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "drag.levelDown",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "drag.cancel",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.moveUp",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.moveDown",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.wrapRow",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.wrapColumn",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.wrapBeside",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.nestIntoPrevious",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.promote",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.duplicate",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.delete",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.unwrap",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.createNaturalChild",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "hand.take",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "hand.aimNext",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "hand.aimPrevious",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "hand.climb",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "hand.descend",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "hand.drop",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "style.set",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "style.setSpacing",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "inspector.toggleSpacingLink",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "style.setBorder",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "style.setRadius",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "style.setBackgroundImage",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "style.setGridTracks",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "style.setGridItem",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "style.setShadows",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "style.setFilter",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "style.setTransform",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "style.setAlignment",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "style.setCustomDeclarations",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "style.applyCssRule",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "style.reset",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "style.resetAll",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "field.step",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "field.scrub",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "field.setUnit",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "field.cancel",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "text.startEdit",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "text.set",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "text.cancelEdit",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "text.insertLineBreak",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "text.toggleBold",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "text.toggleItalic",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "text.editLink",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "text.paste",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "text.selectAll",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "view.zoomIn",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "view.zoomOut",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "view.zoomReset",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "view.zoomTo",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "view.zoomFit",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "view.zoomAt",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "view.pan",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "view.setBreakpoint",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "view.setEditorView",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "view.setStyleState",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "view.enterPreview",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "view.exitPreview",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "view.toggleOutlines",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "view.toggleZones",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "view.toggleRulers",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "view.toggleSmartGuides",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "view.toggleEqualSpacing",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "grid.toggleColumns",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "grid.toggleRows",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "grid.toggleDots",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "grid.toggleFolds",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "grid.setSettings",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "guides.create",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "guides.move",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "guides.delete",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "guides.toggleLock",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "guides.toggleVisible",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "snap.setEnabled",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "snap.setSettings",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "workspace.openDialog",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "workspace.setPanelOpen",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "workspace.toggleLeftDock",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "workspace.toggleInspector",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "workspace.collapseDocks",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "workspace.toggleDeveloperTools",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "workspace.reset",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "workspace.setWorkbenchState",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "workspace.setActiveTab",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "workspace.resizeSplitter",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "workspace.movePanel",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "quickPanel.setOffset",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "quickPanel.setOpen",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "preferences.setLanguage",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "preferences.setTheme",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "commandBar.open",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "palette.toggleGroup",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "palette.setDensity",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "layers.setExpanded",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "layers.collapseAll",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "layers.expandAll",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "layers.expandOrFocusChild",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "layers.collapseOrFocusParent",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "layers.setRowDetails",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "layers.search",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "inspector.toggleSection",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "inspector.setMode",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "inspector.reveal",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "inspector.search",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "codePanel.setPane",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "codePanel.copyPane",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "codePanel.downloadPane",
+      "status": "registered"
+    },
+    {
+      "kind": "predicate",
+      "id": "singleSelection",
+      "status": "registered"
+    },
+    {
+      "kind": "predicate",
+      "id": "always",
+      "status": "registered"
+    },
+    {
+      "kind": "predicate",
+      "id": "hasSelection",
+      "status": "registered"
+    },
+    {
+      "kind": "predicate",
+      "id": "instanceSelected",
+      "status": "registered"
+    },
+    {
+      "kind": "predicate",
+      "id": "cellSelected",
+      "status": "registered"
+    },
+    {
+      "kind": "predicate",
+      "id": "inTable",
+      "status": "registered"
+    },
+    {
+      "kind": "predicate",
+      "id": "positionedSelection",
+      "status": "registered"
+    },
+    {
+      "kind": "predicate",
+      "id": "distributableSelection",
+      "status": "registered"
+    },
+    {
+      "kind": "predicate",
+      "id": "editableSelection",
+      "status": "registered"
+    },
+    {
+      "kind": "predicate",
+      "id": "canUndo",
+      "status": "registered"
+    },
+    {
+      "kind": "predicate",
+      "id": "canRedo",
+      "status": "registered"
+    },
+    {
+      "kind": "predicate",
+      "id": "canNestIntoPrevious",
+      "status": "registered"
+    },
+    {
+      "kind": "predicate",
+      "id": "canUnwrap",
+      "status": "registered"
+    },
+    {
+      "kind": "predicate",
+      "id": "hasNaturalChild",
+      "status": "registered"
+    },
+    {
+      "kind": "predicate",
+      "id": "flexOrGridContainer",
+      "status": "registered"
+    },
+    {
+      "kind": "predicate",
+      "id": "singleTextSelection",
+      "status": "registered"
+    },
+    {
+      "kind": "predicate",
+      "id": "flexContainer",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "gridContainer",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "flexItem",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "flexOrGridItem",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "gridItem",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "container",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "fragmented",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "multicol",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "scrollContainer",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "snapChild",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "table",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "tableOrCaption",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "hasBox",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "textarea",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "media",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "positioned",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "staticBox",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "imagePainting",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "svgShape",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "text",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "clippingBox",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "inlineOrCell",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "list",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "formControl",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "textInput",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "perspectiveContext",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "transformed",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "valueIn",
+      "status": "registered"
+    },
+    {
+      "kind": "predicate",
+      "id": "parentValueIn",
+      "status": "registered"
+    },
+    {
+      "kind": "action",
+      "id": "setValue",
+      "status": "registered"
+    },
+    {
+      "kind": "action",
+      "id": "swapWith",
+      "status": "registered"
+    },
+    {
+      "kind": "action",
+      "id": "setParentValue",
+      "status": "registered"
+    },
+    {
+      "kind": "action",
+      "id": "keepVisualPlace",
+      "status": "registered"
+    },
+    {
+      "kind": "action",
+      "id": "mirror",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "keyword",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "length-percentage",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "track-list",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "grid-area",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "keyword-set",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "grid-areas",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "number",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "integer",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "grid-line",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "length",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "line-width",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "color",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "length-pair",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "counter-list",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "ratio",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "position",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "translate",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "rotate",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "scale",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "image-layers",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "background-size",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "position-axis",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "paint",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "radius",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "font-family-list",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "font-weight",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "font-style",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "line-height",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "text-indent",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "font-stretch",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "feature-tag-list",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "counter-style",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "image",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "alpha",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "cursor",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "animateable-feature-list",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "keyword-list",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "shadow-list",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "text-shadow-list",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "filter-list",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "clip-path",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "transform-list",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "property-list",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "time-list",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "easing-list",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "axis-pair",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "columns",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "grid-line-pair",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "box-sides",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "border",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "border-side",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "box-corners",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "text-decoration",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "white-space",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "vertical-align",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "font-variant",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "line-clamp",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "background-layers",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "transition-list",
+      "status": "registered"
+    },
+    {
+      "kind": "codec",
+      "id": "alignment-matrix",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "colorPicker.open",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "colorPicker.setFormat",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "colorPicker.setChannel",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "colorPicker.apply",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "colorPicker.cancel",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "assetPicker.open",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "assetPicker.close",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "linkPicker.open",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "linkPicker.setKind",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "linkPicker.close",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "timeline.show",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.wrapContainer",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.wrapGrid",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.swapDirection",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.stackOnPhone",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.organize",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "element.setDivider",
+      "status": "registered"
+    },
+    {
+      "kind": "predicate",
+      "id": "organizableSelection",
+      "status": "registered"
+    },
+    {
+      "kind": "predicate",
+      "id": "divideableSelection",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "components.startCreate",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "components.closePrompt",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "grid.enterEdit",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "grid.exitEdit",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "grid.addTrack",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "grid.removeTrack",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "grid.spanItem",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "grid.mergeCells",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "grid.splitCells",
+      "status": "registered"
+    }
+  ]
+}

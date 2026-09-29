@@ -1,0 +1,92 @@
+// A built door that stands for a state says whether it is on, as its door data says it is drawn: a toggle button
+// (pressed) by aria-pressed, a menu item (checked radio or checkbox) by its role and aria-checked, both from the
+// current state the store holds. A door that is no toggle (a close button, a command item) says nothing.
+import { expect, test } from '../support/test.ts';
+import { openEditor } from '../support/editor.ts';
+import { openMenu, runDoor, runs } from './door.ts';
+
+const door = (ref: string) => `[data-door="${ref}"]`;
+
+test.beforeEach(async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await openEditor(page);
+  await expect(page.locator('.workbench')).toBeVisible();
+});
+
+test('the toggle buttons of the panels and the workbench say whether they are on, and a close button says nothing', runs('workspace.setPanelOpen#toolbar-activity-bar-insert', 'workspace.setWorkbenchState#toolbar-workbench-strip-maximize'), async ({ page }) => {
+  // a fresh profile: the Explorer and the canvas tools are open, Insert is not, and the dock is closed — closed, it
+  // draws no strip at all (the audit's A3.18: its 28 px go back to the canvas and its panels stand as icons in the
+  // status bar), so its buttons are checked once View › Workbench has opened it
+  await expect(page.locator(door('workspace.setPanelOpen#toolbar-activity-bar-explorer'))).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator(door('workspace.setPanelOpen#toolbar-activity-bar-insert'))).toHaveAttribute('aria-pressed', 'false');
+  await expect(page.locator(door('workspace.setPanelOpen#toolbar-canvas-toolbar-canvas-tools'))).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator(door('workspace.setWorkbenchState#toolbar-workbench-strip-toggle'))).toHaveCount(0);
+  await runDoor(page, 'workspace.setPanelOpen#menu-view-workbench');
+  await expect(page.locator(door('workspace.setWorkbenchState#toolbar-workbench-strip-toggle'))).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator(door('workspace.setWorkbenchState#toolbar-workbench-strip-maximize'))).toHaveAttribute('aria-pressed', 'false');
+  await expect(page.locator(door('workspace.setPanelOpen#workbench-tab-close'))).not.toHaveAttribute('aria-pressed', /.*/);
+
+  await runDoor(page, 'workspace.setPanelOpen#toolbar-activity-bar-insert');
+  await expect(page.locator(door('workspace.setPanelOpen#toolbar-activity-bar-insert'))).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator(door('workspace.setPanelOpen#toolbar-activity-bar-explorer'))).toHaveAttribute('aria-pressed', 'false');
+
+  await runDoor(page, 'workspace.setWorkbenchState#toolbar-workbench-strip-maximize');
+  await expect(page.locator(door('workspace.setWorkbenchState#toolbar-workbench-strip-maximize'))).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator(door('workspace.setWorkbenchState#toolbar-workbench-strip-toggle'))).toHaveAttribute('aria-pressed', 'true');
+});
+
+test('the Theme and Language items are one choice of a set and say which is chosen', runs('preferences.setTheme#menu-theme-light'), async ({ page }) => {
+  const item = (ref: string) => page.locator(`[role="menuitemradio"]${door(ref)}`);
+  await openMenu(page, 'theme');
+  await expect(item('preferences.setTheme#menu-theme-dark')).toHaveAttribute('aria-checked', 'true');
+  await expect(item('preferences.setTheme#menu-theme-light')).toHaveAttribute('aria-checked', 'false');
+  await expect(item('preferences.setTheme#menu-theme-system')).toHaveAttribute('aria-checked', 'false');
+  await page.keyboard.press('Escape');
+
+  await runDoor(page, 'preferences.setTheme#menu-theme-light');
+  await openMenu(page, 'theme');
+  await expect(item('preferences.setTheme#menu-theme-light')).toHaveAttribute('aria-checked', 'true');
+  await expect(item('preferences.setTheme#menu-theme-dark')).toHaveAttribute('aria-checked', 'false');
+  await page.keyboard.press('Escape');
+
+  await openMenu(page, 'language');
+  await expect(item('preferences.setLanguage#menu-language-en')).toHaveAttribute('aria-checked', 'true');
+  await expect(item('preferences.setLanguage#menu-language-pt-br')).toHaveAttribute('aria-checked', 'false');
+  await page.keyboard.press('Escape');
+
+  // the zoom levels are choices too, and none is chosen while view.zoomTo is not built
+  await openMenu(page, 'zoom');
+  await expect(item('view.zoomTo#menu-zoom-100')).toHaveAttribute('aria-checked', 'false');
+  await expect(page.locator(door('view.zoomFit#menu-zoom'))).toHaveAttribute('role', 'menuitem');
+  await page.keyboard.press('Escape');
+
+  // a command item of the same menu bar is no choice; a toggle of it says what it shows (the audit's A3.23: the left
+  // dock is shown, so its toggle is checked)
+  await openMenu(page, 'view');
+  await expect(page.locator(door('workspace.collapseDocks#menu-view'))).toHaveAttribute('role', 'menuitem');
+  await expect(page.locator(door('workspace.collapseDocks#menu-view'))).not.toHaveAttribute('aria-checked', /.*/);
+  await expect(page.locator(door('workspace.toggleLeftDock#menu-view'))).toHaveAttribute('role', 'menuitemcheckbox');
+  await expect(page.locator(door('workspace.toggleLeftDock#menu-view'))).toHaveAttribute('aria-checked', 'true');
+});
+
+// A control looks like it can run exactly when it can (brief "a aplicação completa": no enabled-looking control that
+// does nothing; finding 32): the top bar's main action, Export project (ZIP), wears the accent only while it can run.
+// Since export-zip is built it can: it wears the accent, and a click hands out the site (the unavailable case of this
+// rule has no main action left outside preview mode).
+test('the top bar\'s main action wears the accent once it can run, and a click exports the site', async ({ page }) => {
+  const exportButton = page.locator(door('project.export#toolbar-top-bar-export'));
+  await expect(exportButton).not.toHaveAttribute('aria-disabled', 'true');
+  const colours = await exportButton.evaluate((el) => {
+    const probe = document.createElement('span');
+    probe.style.color = 'var(--color-accent)';
+    el.parentElement?.append(probe);
+    const accent = getComputedStyle(probe).color;
+    probe.remove();
+    return { accent, background: getComputedStyle(el).backgroundColor };
+  });
+  expect(colours.background).toBe(colours.accent);
+  const download = page.waitForEvent('download');
+  await exportButton.click();
+  expect((await download).suggestedFilename()).toBe('site.zip');
+  await expect(page.locator('[role="status"]')).toHaveText('Exported the site as site.zip.');
+});

@@ -1,0 +1,122 @@
+import css from '@eslint/css';
+import js from '@eslint/js';
+import { defineConfig, globalIgnores } from 'eslint/config';
+import reactHooks from 'eslint-plugin-react-hooks';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
+import builder, { builderCss } from './tools/lint/plugin.ts';
+
+// The generated tokens (ARCHITECTURE.md, Tokens): the one stylesheet that writes colours, spacing, sizes, radii,
+// shadows and font values.
+const TOKENS = 'src/ui/tokens.css';
+
+export default defineConfig(
+  // .cache holds the running Pager copy, .playwright-mcp the browser tool's scratch files and .claude the agents'
+  // worktrees; none is project code. tests/support/folders holds the sample folders a scenario opens with File ›
+  // Open folder (spec explorer-open-folder): those files are the person's own site, kept as they were written.
+  globalIgnores(['dist', 'reference', '.cache', '.playwright-mcp', '.claude', 'node_modules', 'test-results', 'playwright-report', 'tests/support/folders']),
+  // worktrees; none is project code. The fixtures are the scenarios' own input (a page HTML, its stylesheet, its
+  // script…), data and not source: they are never edited to suit a test.
+  globalIgnores(['dist', 'reference', '.cache', '.playwright-mcp', '.claude', 'node_modules', 'test-results', 'playwright-report', 'manifest/features/fixtures']),
+  {
+    // The JavaScript and TypeScript rules. Stylesheets are linted by their own language below.
+    files: ['**/*.{js,mjs,cjs,ts,mts,cts,tsx}'],
+    extends: [js.configs.recommended, tseslint.configs.strict],
+  },
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    languageOptions: { globals: globals.browser },
+    extends: [reactHooks.configs.flat.recommended],
+  },
+  {
+    files: ['*.config.{js,ts}', 'tests/**/*.ts', 'tools/**/*.ts'],
+    languageOptions: { globals: globals.node },
+  },
+  {
+    // Every browser test comes through tests/support/test.ts, whose fixture records what the test depends on for the
+    // limited validation (docs/testing/README.md): a test built on '@playwright/test' directly would be invisible to it.
+    files: ['tests/e2e/**/*.ts', 'tools/runner/**/*.ts'],
+    rules: {
+      'no-restricted-imports': ['error', { paths: [{ name: '@playwright/test', importNames: ['test', 'expect'], message: 'Import test and expect from tests/support/test.ts.' }] }],
+    },
+  },
+  {
+    // The time is read only through the Clock port and ids come only from the IdGenerator port (ARCHITECTURE.md).
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['src/core/ports/clock.ts', 'src/core/ports/ids.ts'],
+    plugins: { builder },
+    rules: { 'builder/use-ports': 'error' },
+  },
+  {
+    // Pointer, mouse and drag input belongs to the pointer owner (ARCHITECTURE.md, Pointer input).
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['src/editor/input/pointer.ts'],
+    plugins: { builder },
+    rules: { 'builder/pointer-owner': 'error' },
+  },
+  {
+    // A gesture's transaction is opened by the pointer owner's doors, never by a handler; the store's own tests open
+    // gestures to prove them.
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['src/editor/input/pointer.ts', 'src/**/*.test.ts'],
+    plugins: { builder },
+    rules: { 'builder/gesture-owner': 'error' },
+  },
+  {
+    // Keys belong to the keymap, which runs the manifest's shortcut doors (ARCHITECTURE.md, Keymap).
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['src/editor/input/keymap.ts'],
+    plugins: { builder },
+    rules: { 'builder/keyboard-owner': 'error' },
+  },
+  {
+    // Commands, doors and edited properties come from the manifest's data; the generated lists, the manifest's own
+    // reader and checker, the command table and the tests name them.
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['src/generated/**', 'src/manifest/**', 'src/app/commands.ts', 'src/app/commands.typecheck.ts', 'src/**/*.test.ts', 'src/**/*.test.tsx'],
+    plugins: { builder },
+    rules: { 'builder/no-manifest-id': 'error' },
+  },
+  {
+    // Only the renderer writes the canvas iframe's page (ARCHITECTURE.md, Renderer); its tests build pages of their own.
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['src/core/render/render.ts', 'src/**/*.test.ts'],
+    plugins: { builder },
+    rules: { 'builder/frame-owner': 'error' },
+  },
+  {
+    // UI text comes only from t() and the i18n catalogues, and style objects take their values from the tokens.
+    files: ['src/**/*.tsx'],
+    plugins: { builder },
+    rules: {
+      'builder/no-literal-ui-string': 'error',
+      'builder/use-tokens': ['error', { tokens: TOKENS }],
+    },
+  },
+  {
+    // Every stylesheet but the generated tokens reads its colours, spacing, sizes, radii, shadows and font values
+    // from the tokens.
+    files: ['src/**/*.css'],
+    ignores: [TOKENS],
+    language: 'css/css',
+    plugins: { css, 'builder-css': builderCss },
+    rules: { 'builder-css/use-tokens': ['error', { tokens: TOKENS }] },
+  },
+  {
+    // The document core stays plain TypeScript so it can run and be tested without React.
+    files: ['src/core/**/*.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['react', 'react/*', 'react-dom', 'react-dom/*'],
+              message: 'src/core is plain TypeScript and must not import React.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+);

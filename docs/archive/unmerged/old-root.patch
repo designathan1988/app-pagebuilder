@@ -1,0 +1,128 @@
+# Unmerged work from .cache/old-root (copy verified UNVERIFIED in the 2026-09-27 cleanup: 2 of 606 files
+# did not match any object of this repository), resolved on 2026-09-27.
+#
+# Files:
+#  - PROGRESS.md — UNIQUE. A 2026-09-25 snapshot of the state file. Its content is this document's own past and
+#    is absent from the current tree: the group-by-group e2e state ("A stale dev server under the other account
+#    holds port 5310... E2E_PORT=5311"), the user's four 2026-09-25 answers as this file kept them, the "another
+#    writer session" note, and its findings list, of which at least finding 23 ("src/manifest/check.ts keeps its
+#    own htmlRefusal, a second content model beside src/core/elements/content-model.ts") is recorded nowhere in
+#    the current tree (the other findings survive in docs/history.md). Kept here as a diff; not applied.
+#  - ARCHITECTURE.md — SUPERSEDED. The copy's 165-line older revision of docs/ARCHITECTURE.md; every concept,
+#    owner and command it names exists in the current tree (checked token by token, no orphan). Nothing kept.
+#
+# The diff below is `git diff --no-index docs/PROGRESS.md <copy>/PROGRESS.md` (current first, copy second).
+diff --git a/docs/PROGRESS.md b/.cache/old-root/PROGRESS.md
+index 2583a92..c2dd7fd 100644
+--- a/docs/PROGRESS.md
++++ b/.cache/old-root/PROGRESS.md
+@@ -2,53 +2,62 @@
+ 
+ At most 60 lines: state, the user's pending decisions, open findings. History and proofs: `docs/history.md`.
+ 
+-## State (2026-09-27, /goal "todas as funcionalidades"; the user's order of the day)
+-
+-- This checkout, the project root (the .cache/wt worktrees are stale); the guard hooks are off (wiring in `tools/hooks/settings.example.json`). The
+-  user, 2026-09-27: "ignore o git", implement first, long suites at the end, commit locally. Solo since 2026-09-26.
+-- DONE: blocks 1 (drag and drop), 5 (the inspector) and 6, 2.4, 2.3+A3.22, 4.1+A3.15, the whole of block 4, 7.1,
+-  7.2, 7.3+A3.6, A3.2 and 7.4+A3.4+A3.44 (each item's proofs: docs/history.md and .memory/audit-checklist.md). The
+-  checkpoint (verify:fast + e2e + the four combinations) runs on the block's closing commits.
+-
+-## Decisions (small ambiguities and the user's corrections)
+-
+-- Older decisions (custom CSS, zoom 100, guides axis-n, the shortcut rule, quick panel side, SVG naming,
+-  swatches, reset tab order, export lines, the 4.5 detail): docs/history.md, "Decisions moved out of PROGRESS.md".
+-
+-- 4.5+A1.5+A1.6+A3.17+A3.21 (decision in full: docs/history.md): the snap line, the distances, the per-breakpoint
+-  column grid, the cursor-anchored zoom 10-800 with Shift+1 to fit.
+-
+-- 7.2 (f87ed02) and 7.3+A3.6 (669865d): the page's SEO fields and the project's files, the asset picker and the media
+-  rules (the decisions in full: docs/history.md, "Decisions moved out of PROGRESS.md", the finish pass).
+-- 7.4+A3.4+A3.44 (this stretch): A3.2 — one rule of an address (core/elements/address.ts) read by every address field
+-  (a link, every url attribute, the page's addresses, a background image, url() in the free declarations, the text
+-  prompt and the paste path): a relative path, a #section, https:, mailto:, tel: and a bare domain (stored as
+-  https://…) are taken; javascript:, data:, blob:, file:, a word alone and a scheme naming nothing (https://) are
+-  refused with their reason. The link picker (linkPicker.open/setKind/close doors): five kinds — an address, a page's
+-  file, an anchor (a reference by node id, so a renamed id follows), email, phone. A3.4: references live in
+-  core/elements/references.ts by node id; the label's field shows name · id and takes either; a delete counts the
+-  references it takes away and removes them in the same undo step. A3.44: the validator owns the semantics (input
+-  type, address, language, pattern, step, the pairs a control cannot hold) and every field asks it; File › Open
+-  refuses with the path and why, and nothing is opened.
++## State (2026-09-25, brief "a aplicação completa": every feature of groups 01-20)
++
++- Group 01 and the foundation pass. One e2e suite at a time (E2E_WORKERS=4); helpers: 3. From now on: blocks of
++  features built, then one full suite. A stale dev server under the other account holds port 5310 and cannot be
++  killed from this session: every suite runs with E2E_PORT=5311.
++- First task: the feature table, the runner and the census run on main (144640b); the door rule on every kind of door
++  is on wip/feature-table, freed by answer 1.
++- The user's answers (2026-09-25; docs/history.md "The user's answers"): 1) project-open-json: the runner does not
++  compare the page's and the root's ids when the action replaces the whole document; release the door rule after it.
++  2) drag-level-keys-escape's first step drops "before Footer" (the one authorized scenario edit; on main, b31f6b4).
++  3) Shift/Ctrl on the Layers Page row does not add the page to the selection (the canvas's rule). 4) The style path
++  comes first: inspector-number-fields, props-spacing, props-typography, color-picker, props-background,
++  props-size-overflow, props-flex-container; helpers may advance others, the style ones are integrated first.
++- Another writer session pushes to origin/main too (rename-element, the drag-level scenario, PROGRESS). Its
++  rename-element let the page root be renamed and edited the committed tests/e2e/context-menu.spec.ts to suit it;
++  both were undone here (the test is restored, the root refused) and the user told.
++- Group 02 passing (24): select-click, layers-tree, keyboard-tree-walk, palette-click-insert, undo-redo,
++  multi-select-click, marquee-select, delete-element, move-up-down, wrap-row-column, drag-reorder-canvas,
++  drag-drop-inside, context-menu, duplicate, text-edit-inline, palette-drag-insert, unwrap, nest-into-previous,
++  promote-out, hide-element, select-container-children, hand-keyboard-move, lock-element, rename-element. Rename
++  refuses the page root (status.rename.root): the page's name is the page's (pages.rename); every other element
++  command refuses it too.
++- Group 03 passing: autosave-restore, project-save-json, ui-language; project-open-json is 4 of 5 (code on
++  wip/project-open-json, answer 1). Group 04 passing: inspector-panel. Group 06 passing: page-properties.
++  Contracts committed, code next: props-spacing (04), export-zip (06), elements-structure (07).
+ 
+ ## Open findings
+ 
+-62. The Image loading field sits in Attributes, not in the Image section (elements.json settingsSections) — a
+-one-line move, waiting for the section pass of 5.1.
+-57. The picker does not open on a colour inside a larger value (a shadow layer's, a stop's): its parts are style.set's
+-doors and write a whole property. The work: the parts carry a write target (the swatch hands the command and its args),
+-which moves ~40 scenario door refs; those fields show a sample and are typed until then.
+-
+-35. The tooth proof also switches off a scenario's setup doors' commands (the quick panel's chip: a helper that waits
+-for what the tooth switches off must assert, not `waitFor`); 52. a feature with no commands has its tooth at its setup.
+-46. hover-measure: no door. 53. A canvas pan clears the selection.
+-59. The Ctrl selection toggle fires at the press, so Ctrl+drag (no snapping) also toggles; deferring it to a release
+-without a drag needs the press/release path reworked (A3.21 asks for a hint meanwhile: the drag hint names it).
+-60. The label's size chip shows the axis-aligned box of a turned element (the audit's A3.16 asks the word of the drawn box).
+-55. A3.31: the position mode clears the inert inset longhands only; z-index, the parent's relative stay (spec). 54. 5.1 ≤
+-4 screens is not met: a card measures 5.7 screens (was 9); pairing needs panel-resize (277 px). 51, 56 and 61 closed:
+-the census's budget is 240 s (it visits 374 states; the walk's length never weakens its assertions), the runner reaches
+-a Layers row with the tree's own arrows, never a 400-press Tab walk, and the asset and the link pickers now have their
+-doors (assetPicker.open, linkPicker.open — finding 61).
+-58. The scrollbar reservation (A3.22) measures 0 here (overlay scrollbars): its tooth cannot bite on this machine; the
+-acceptance itself is tested.
++1. A node path cannot name a page itself nor tell apart two siblings with the same name (blocks no scenario yet).
++5. canvas.tsx RULER_STEP = 200 is a constant in code. 6. panels.spec.ts, doors.spec.ts run doors without `runs()`.
++9. inspector-fields.spec.ts checks the drawing follows the data, so wrong `drawnAs` data passes.
++11. The renderer: newTab renders `target=""` (fix before elements-structure: `_blank` + `rel="noopener"`); a line
++    break in textarea/option becomes `<br>` (elements-form-structure); a `}` in a style value (inspector-number-fields).
++12. Flaky under 4 suites at once, no failure log yet (docs/testing/README.md): coordinates:181, a 'stable' File menu.
++13. Insert's density labels overflow and overlap ("Two columns": 69 px text in a 50 px button).
++14. sidebar.tsx writes the argument name "target" (the manifest's adapter.selection) and builds data-args apart.
++15. shell.tsx keeps the fit zoom in useState (moves with the zoom commands).
++18. A menu item run with Enter or a click closes the menu through onDone, so the focus falls to the page body; the
++    backdrop's focus return is untested.
++19. Canvas chrome not built yet: label hidden under the pointer, size chip, quick panel, label as a hit target;
++    `selection.select` throws on a node the document lacks.
++20. Layers' folds survive File › Open of another project.
++22. Not built, no scenario: walking or inserting onto an off-screen element does not scroll it into view (the frame's
++    scroll needs an owner, frame-owner rule); history.depth (80) is not enforced.
++23. `src/manifest/check.ts` keeps its own htmlRefusal, a second content model beside src/core/elements/content-model.ts.
++24. Escape on a focused palette tile is bound to focus.canvas (not built).
++25. A Layers row's Shift/Ctrl doors have no data-door of their own; the census counts them only through scenarios.
++26. marquee: Escape should cancel a band (drag.cancel is built); hidden and locked nodes are not left out
++    (status.selection.skipped unused); a lost pointer restores it, untested.
++27. M (hand.take) does not refuse a locked element yet.
++28. Arrange › Move up/down enabled at an edge.
++29. The runner selects a node with no point of its own by a descendant plus ArrowUp; adding one with Shift needs its
++    Layers row and focus.canvas#key-escape-in-layers-tree (not built; multi-select-actions needs it); the census sees
++    the canvas click named, not the substitute door run (both have their own tests).
++30. Declared, not built: wrap refusals requiresParent, interactiveInside, formInForm, singleChild, labelOneControl;
++    drop.emptyAimMin (40 px aim of an empty container); the hover label as a hit target (it covered a container's
++    marquee corner); DESIGN's "a label hides while the pointer is over it" contradicts the label as a hit target.
++31. Escape does not cancel a rename in Layers: no door of the manifest runs it (rename-element's field has one door).
++32. With nothing selected the inspector still draws its sections under the hints (current-state.spec.ts needs them).

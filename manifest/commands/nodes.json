@@ -1,0 +1,520 @@
+{
+  "domain": "nodes",
+  "commands": [
+    {
+      "id": "layers.startRename",
+      "labelKey": "command.rename",
+      "owner": "src/editor/layers/rename.ts",
+      "introducedBy": "rename-element",
+      "args": {},
+      "availability": {
+        "predicate": "singleSelection",
+        "refusalKey": "status.needsSingleSelection"
+      },
+      "refusals": [
+        "status.rename.root",
+        "status.locked.rename",
+        "status.locked.byAncestor"
+      ],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "key-f2-in-canvas",
+          "kind": "shortcut",
+          "feature": "rename-element",
+          "chord": "F2",
+          "context": "canvas",
+          "gesture": null,
+          "labelKey": "command.rename",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "layers-row-name",
+          "kind": "panel-control",
+          "drawnAs": "area",
+          "pressed": false,
+          "feature": "rename-element",
+          "panel": "layers",
+          "control": "row-name",
+          "modifier": null,
+          "gesture": null,
+          "count": 2,
+          "labelKey": "layers.renameByDoubleClick",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": {
+            "region": "layers-row",
+            "order": 6
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "rename-element",
+          "labelKey": "command.rename",
+          "faceLabelKey": null,
+          "icon": "type",
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": {
+            "region": "context-menu",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-arrange",
+          "kind": "menu",
+          "feature": "app-menu",
+          "menu": "arrange",
+          "checked": null,
+          "labelKey": "command.rename",
+          "faceLabelKey": null,
+          "icon": "type",
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": {
+            "region": "menu:arrange",
+            "order": 9
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-f2-in-layers-tree",
+          "kind": "shortcut",
+          "feature": "layers-keyboard-navigation",
+          "chord": "F2",
+          "context": "layers-tree",
+          "gesture": null,
+          "labelKey": "command.rename",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": "none",
+          "adapter": {
+            "selection": "focused-row",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.rename",
+          "faceLabelKey": null,
+          "icon": "type",
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": {
+            "region": "command-palette",
+            "order": 23
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.rename",
+      "labelKey": "command.renameCommit",
+      "owner": "src/core/nodes/names.ts",
+      "introducedBy": "rename-element",
+      "args": {
+        "target": {
+          "type": "node",
+          "values": [],
+          "optional": false
+        },
+        "name": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.rename.empty",
+        "status.rename.root",
+        "status.locked.rename",
+        "status.locked.byAncestor"
+      ],
+      "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
+      "entryPoints": [
+        {
+          "id": "layers-row-name-field",
+          "kind": "panel-control",
+          "drawnAs": "field",
+          "pressed": false,
+          "feature": "rename-element",
+          "panel": "layers",
+          "control": "row-name-field",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "layers.renameField",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "layers-row",
+            "order": 7
+          },
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.toggleLock",
+      "labelKey": "command.lock",
+      "owner": "src/core/nodes/flags.ts",
+      "introducedBy": "lock-element",
+      "args": {
+        "target": {
+          "type": "node",
+          "values": [],
+          "optional": true
+        }
+      },
+      "availability": {
+        "predicate": "hasSelection",
+        "refusalKey": "refusal.nothingSelected"
+      },
+      "refusals": [
+        "status.locked.byAncestor",
+        "status.lock.root"
+      ],
+      "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
+      "entryPoints": [
+        {
+          "id": "layers-row-lock",
+          "kind": "panel-control",
+          "drawnAs": "icon-button",
+          "pressed": true,
+          "feature": "lock-element",
+          "panel": "layers",
+          "control": "row-lock",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.lock",
+          "faceLabelKey": null,
+          "icon": "lock-open",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "layers-row",
+            "order": 9
+          },
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "lock-element",
+          "labelKey": "command.lock",
+          "faceLabelKey": null,
+          "icon": "lock",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "context-menu",
+            "order": 14
+          },
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-element-actions",
+          "kind": "menu",
+          "feature": "inspector-panel",
+          "menu": "element-actions",
+          "checked": null,
+          "labelKey": "command.lock",
+          "faceLabelKey": null,
+          "icon": "lock",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "menu:element-actions",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.lock",
+          "faceLabelKey": null,
+          "icon": "lock",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "command-palette",
+            "order": 24
+          },
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.toggleHidden",
+      "labelKey": "command.hide",
+      "owner": "src/core/nodes/flags.ts",
+      "introducedBy": "hide-element",
+      "args": {
+        "target": {
+          "type": "node",
+          "values": [],
+          "optional": true
+        }
+      },
+      "availability": {
+        "predicate": "hasSelection",
+        "refusalKey": "refusal.nothingSelected"
+      },
+      "refusals": [
+        "status.locked.byAncestor",
+        "status.hide.root"
+      ],
+      "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
+      "entryPoints": [
+        {
+          "id": "layers-row-eye",
+          "kind": "panel-control",
+          "drawnAs": "icon-button",
+          "pressed": true,
+          "feature": "hide-element",
+          "panel": "layers",
+          "control": "row-eye",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.hideOnPage",
+          "faceLabelKey": null,
+          "icon": "eye",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "layers-row",
+            "order": 8
+          },
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "hide-element",
+          "labelKey": "command.hide",
+          "faceLabelKey": null,
+          "icon": "eye-off",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "context-menu",
+            "order": 15
+          },
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-element-actions",
+          "kind": "menu",
+          "feature": "inspector-panel",
+          "menu": "element-actions",
+          "checked": null,
+          "labelKey": "command.hide",
+          "faceLabelKey": null,
+          "icon": "eye-off",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "menu:element-actions",
+            "order": 2
+          },
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.hide",
+          "faceLabelKey": null,
+          "icon": "eye-off",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "command-palette",
+            "order": 25
+          },
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.setLayerColor",
+      "labelKey": "command.setLayerColor",
+      "owner": "src/core/nodes/flags.ts",
+      "introducedBy": "layers-row-colours",
+      "args": {
+        "target": {
+          "type": "node",
+          "values": [],
+          "optional": false
+        },
+        "color": {
+          "type": "color",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
+      "entryPoints": [
+        {
+          "id": "layers-row-colour-dot",
+          "kind": "panel-control",
+          "drawnAs": "icon-button",
+          "pressed": false,
+          "feature": "layers-row-colours",
+          "panel": "layers",
+          "control": "row-colour-dot",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.setLayerColor",
+          "faceLabelKey": null,
+          "icon": "circle-dot",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "layers-row",
+            "order": 5
+          },
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    }
+  ]
+}

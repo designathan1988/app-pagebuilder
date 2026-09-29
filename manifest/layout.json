@@ -1,0 +1,563 @@
+{
+  "regions": [
+    {
+      "id": "top-bar",
+      "area": "top-bar",
+      "breaks": [
+        6,
+        10
+      ]
+    },
+    {
+      "id": "preview-bar",
+      "area": "top-bar"
+    },
+    {
+      "id": "preview-page",
+      "area": "centre"
+    },
+    {
+      "id": "activity-bar",
+      "area": "left"
+    },
+    {
+      "id": "explorer-pages",
+      "area": "left"
+    },
+    {
+      "id": "explorer-files",
+      "area": "left"
+    },
+    {
+      "id": "explorer-layers",
+      "area": "left"
+    },
+    {
+      "id": "insert",
+      "area": "left"
+    },
+    {
+      "id": "styles",
+      "area": "left"
+    },
+    {
+      "id": "file-tabs",
+      "area": "centre"
+    },
+    {
+      "id": "canvas-toolbar",
+      "area": "centre"
+    },
+    {
+      "id": "canvas-frame",
+      "area": "centre"
+    },
+    {
+      "id": "canvas-stage",
+      "area": "centre"
+    },
+    {
+      "id": "canvas-breakpoints",
+      "area": "centre"
+    },
+    {
+      "id": "quick-panel",
+      "area": "centre"
+    },
+    {
+      "id": "text-toolbar",
+      "area": "centre"
+    },
+    {
+      "id": "code-view",
+      "area": "centre"
+    },
+    {
+      "id": "inspector-header",
+      "area": "right"
+    },
+    {
+      "id": "inspector-selector-bar",
+      "area": "right"
+    },
+    {
+      "id": "inspector-style",
+      "area": "right"
+    },
+    {
+      "id": "inspector-settings",
+      "area": "right"
+    },
+    {
+      "id": "inspector-interactions",
+      "area": "right"
+    },
+    {
+      "id": "dock-strip",
+      "area": "dock"
+    },
+    {
+      "id": "dock-timeline",
+      "area": "dock"
+    },
+    {
+      "id": "dock-checks",
+      "area": "dock"
+    },
+    {
+      "id": "status-bar",
+      "area": "status-bar"
+    },
+    {
+      "id": "command-palette",
+      "area": "overlay"
+    },
+    {
+      "id": "context-menu",
+      "area": "overlay"
+    },
+    {
+      "id": "menu:file",
+      "area": "overlay"
+    },
+    {
+      "id": "menu:edit",
+      "area": "overlay"
+    },
+    {
+      "id": "menu:arrange",
+      "area": "overlay"
+    },
+    {
+      "id": "menu:view",
+      "area": "overlay"
+    },
+    {
+      "id": "menu:help",
+      "area": "overlay"
+    },
+    {
+      "id": "menu:theme",
+      "area": "overlay"
+    },
+    {
+      "id": "menu:language",
+      "area": "overlay"
+    },
+    {
+      "id": "menu:element-actions",
+      "area": "overlay"
+    },
+    {
+      "id": "menu:zoom",
+      "area": "overlay"
+    },
+    {
+      "id": "menu:snap",
+      "area": "overlay"
+    },
+    {
+      "id": "menu:style-state",
+      "area": "overlay"
+    },
+    {
+      "id": "menu:layers-row-details",
+      "area": "overlay"
+    },
+    {
+      "id": "color-picker",
+      "area": "overlay"
+    },
+    {
+      "id": "link-picker",
+      "area": "overlay"
+    },
+    {
+      "id": "asset-picker",
+      "area": "overlay"
+    },
+    {
+      "id": "guides-grids-dialog",
+      "area": "overlay",
+      "breaks": [
+        3,
+        5,
+        7,
+        9,
+        11
+      ]
+    },
+    {
+      "id": "snap-settings-dialog",
+      "area": "overlay"
+    },
+    {
+      "id": "recovery-dialog",
+      "area": "overlay"
+    },
+    {
+      "id": "tab-guard",
+      "area": "overlay"
+    },
+    {
+      "id": "toast",
+      "area": "overlay"
+    },
+    {
+      "id": "overlay",
+      "area": "overlay"
+    },
+    {
+      "id": "field",
+      "area": "component"
+    },
+    {
+      "id": "layers-row",
+      "area": "component"
+    },
+    {
+      "id": "tab-strip",
+      "area": "component"
+    },
+    {
+      "id": "panel-header",
+      "area": "component"
+    },
+    {
+      "id": "dialog",
+      "area": "component"
+    },
+    {
+      "id": "palette-tiles",
+      "area": "component"
+    },
+    {
+      "id": "layers-row-details",
+      "area": "component"
+    },
+    {
+      "id": "rulers",
+      "area": "component"
+    },
+    {
+      "id": "ruler-selection",
+      "area": "component"
+    },
+    {
+      "id": "canvas-outlines",
+      "area": "component"
+    },
+    {
+      "id": "canvas-zones",
+      "area": "component"
+    },
+    {
+      "id": "canvas-folds",
+      "area": "centre"
+    },
+    {
+      "id": "grid-columns",
+      "area": "component"
+    },
+    {
+      "id": "grid-rows",
+      "area": "component"
+    },
+    {
+      "id": "grid-dots",
+      "area": "component"
+    },
+    {
+      "id": "right-dock",
+      "area": "overlay"
+    },
+    {
+      "id": "panel-window",
+      "area": "overlay"
+    },
+    {
+      "id": "panel-hint",
+      "area": "overlay"
+    },
+    {
+      "id": "shortcuts",
+      "area": "dock"
+    },
+    {
+      "id": "component-prompt",
+      "area": "overlay"
+    },
+    {
+      "id": "inspector-component-notice",
+      "area": "right"
+    },
+    {
+      "id": "grid-edit-chrome",
+      "area": "centre"
+    }
+  ],
+  "menus": [
+    {
+      "id": "file",
+      "labelKey": "menu.file",
+      "anchors": [
+        {
+          "region": "top-bar",
+          "order": 1,
+          "drawnAs": "button",
+          "icon": null
+        }
+      ]
+    },
+    {
+      "id": "edit",
+      "labelKey": "menu.edit",
+      "anchors": [
+        {
+          "region": "top-bar",
+          "order": 2,
+          "drawnAs": "button",
+          "icon": null
+        }
+      ]
+    },
+    {
+      "id": "arrange",
+      "labelKey": "menu.arrange",
+      "anchors": [
+        {
+          "region": "top-bar",
+          "order": 3,
+          "drawnAs": "button",
+          "icon": null
+        }
+      ]
+    },
+    {
+      "id": "view",
+      "labelKey": "menu.view",
+      "anchors": [
+        {
+          "region": "top-bar",
+          "order": 4,
+          "drawnAs": "button",
+          "icon": null
+        }
+      ]
+    },
+    {
+      "id": "help",
+      "labelKey": "menu.help",
+      "anchors": [
+        {
+          "region": "top-bar",
+          "order": 5,
+          "drawnAs": "button",
+          "icon": null
+        }
+      ]
+    },
+    {
+      "id": "theme",
+      "labelKey": "menu.theme",
+      "anchors": [
+        {
+          "region": "menu:view",
+          "order": 17,
+          "drawnAs": "item",
+          "icon": null
+        }
+      ]
+    },
+    {
+      "id": "language",
+      "labelKey": "menu.language",
+      "anchors": [
+        {
+          "region": "menu:view",
+          "order": 18,
+          "drawnAs": "item",
+          "icon": null
+        },
+        {
+          "region": "status-bar",
+          "order": 6,
+          "drawnAs": "button",
+          "icon": "globe"
+        }
+      ]
+    },
+    {
+      "id": "element-actions",
+      "labelKey": "menu.elementActions",
+      "anchors": [
+        {
+          "region": "inspector-header",
+          "order": 5,
+          "drawnAs": "icon-button",
+          "icon": "ellipsis"
+        }
+      ]
+    },
+    {
+      "id": "zoom",
+      "labelKey": "menu.zoom",
+      "anchors": [
+        {
+          "region": "canvas-toolbar",
+          "order": 12,
+          "drawnAs": "button",
+          "icon": null
+        },
+        {
+          "region": "status-bar",
+          "order": 3,
+          "drawnAs": "button",
+          "icon": null
+        }
+      ]
+    },
+    {
+      "id": "snap",
+      "labelKey": "menu.snap",
+      "anchors": [
+        {
+          "region": "canvas-toolbar",
+          "order": 11,
+          "drawnAs": "icon-button",
+          "icon": "chevron-down"
+        }
+      ]
+    },
+    {
+      "id": "style-state",
+      "labelKey": "menu.styleState",
+      "anchors": [
+        {
+          "region": "inspector-selector-bar",
+          "order": 5,
+          "drawnAs": "button",
+          "icon": null
+        }
+      ]
+    },
+    {
+      "id": "layers-row-details",
+      "labelKey": "layers.rowDetails",
+      "anchors": [
+        {
+          "region": "explorer-layers",
+          "order": 4,
+          "drawnAs": "icon-button",
+          "icon": "sliders-horizontal"
+        }
+      ]
+    }
+  ],
+  "glyphs": {
+    "dropdown": "chevron-down",
+    "submenu": "chevron-right",
+    "expanded": "chevron-down",
+    "collapsed": "chevron-right",
+    "checked": "check",
+    "folder": "folder",
+    "sizeVariable": "square-round-corner",
+    "sideRow": "columns-2",
+    "sideColumn": "rows-2",
+    "quickPanel": "sliders-horizontal",
+    "grip": "grip-vertical"
+  },
+  "panels": {
+    "explorer": {
+      "icon": "files",
+      "labelKey": "panel.explorer",
+      "place": "sidebar",
+      "in": null,
+      "open": true
+    },
+    "elements": {
+      "icon": "square-plus",
+      "labelKey": "panel.elements",
+      "place": "sidebar",
+      "in": null,
+      "open": false
+    },
+    "variables": {
+      "icon": "palette",
+      "labelKey": "panel.variables",
+      "place": "sidebar",
+      "in": null,
+      "open": false
+    },
+    "layers": {
+      "icon": "layers",
+      "labelKey": "panel.layers",
+      "place": "section",
+      "in": null,
+      "open": true
+    },
+    "inspector": {
+      "icon": "panel-right",
+      "labelKey": "panel.inspector",
+      "place": "inspector",
+      "in": null,
+      "open": true
+    },
+    "canvas-tools": {
+      "icon": "ruler-dimension-line",
+      "labelKey": "panel.canvasTools",
+      "place": "canvas-toolbar",
+      "in": null,
+      "open": true
+    },
+    "workbench": {
+      "icon": "panel-bottom",
+      "labelKey": "panel.workbench",
+      "place": "workbench",
+      "in": null,
+      "open": false
+    },
+    "timeline": {
+      "icon": "diamond",
+      "labelKey": "panel.timeline",
+      "place": "dock",
+      "in": null,
+      "open": true
+    },
+    "checks": {
+      "icon": "check",
+      "labelKey": "panel.checks",
+      "place": "dock",
+      "in": null,
+      "open": true
+    },
+    "shortcuts": {
+      "icon": "keyboard",
+      "labelKey": "panel.shortcuts",
+      "place": "dock",
+      "in": null,
+      "open": false
+    },
+    "document": {
+      "icon": "braces",
+      "labelKey": "panel.document",
+      "place": "dock",
+      "in": null,
+      "open": false
+    }
+  },
+  "splitters": {
+    "sidebar-stack": {
+      "axis": "y",
+      "grow": "up",
+      "size": 260,
+      "min": 96,
+      "max": 620,
+      "labelKey": "splitter.sidebarStack",
+      "directions": [
+        "up",
+        "down"
+      ]
+    }
+  }
+}

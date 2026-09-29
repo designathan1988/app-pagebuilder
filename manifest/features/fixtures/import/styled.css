@@ -1,0 +1,16 @@
+.panel__title {
+  font-size: 32px;
+  color: #111111;
+}
+
+#lead {
+  font-size: 18px;
+}
+
+p {
+  color: #444444;
+}
+
+.panel__lead {
+  color: #333333;
+}

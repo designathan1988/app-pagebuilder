@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "pages": [
+    {
+      "id": "page-1",
+      "name": "Home",
+      "file": "index.html",
+      "tree": {
+        "id": "node-1",
+        "type": "page",
+        "name": "Page",
+        "tag": "body",
+        "attributes": {},
+        "classes": [],
+        "styles": {},
+        "text": null,
+        "children": [
+          {
+            "id": "node-2",
+            "type": "section",
+            "name": "Hero",
+            "tag": "section",
+            "attributes": {},
+            "classes": [],
+            "styles": {
+              "desktop": { "base": { "padding-top": "56px", "padding-right": "40px", "padding-bottom": "56px", "padding-left": "40px", "background-color": "#f5efe6" } },
+              "laptop": { "base": { "padding-top": "32px" } },
+              "phone": { "base": { "padding-left": "16px", "padding-right": "16px" } }
+            },
+            "text": null,
+            "children": [
+              {
+                "id": "node-3",
+                "type": "heading",
+                "name": "Title",
+                "tag": "h1",
+                "attributes": {},
+                "classes": [],
+                "styles": { "desktop": { "base": { "font-size": "48px", "color": "#0f172a" } } },
+                "text": "Aurora Coffee",
+                "inline": [{ "tag": "strong", "children": ["Aurora"] }, " Coffee"],
+                "children": []
+              },
+              {
+                "id": "node-4",
+                "type": "paragraph",
+                "name": "Intro",
+                "tag": "p",
+                "attributes": {},
+                "classes": [],
+                "styles": { "desktop": { "base": { "font-size": "20px", "color": "#334155" }, "hover": { "color": "#0aa000" } } },
+                "text": "Fresh coffee, roasted every week.",
+                "children": []
+              },
+              {
+                "id": "node-5",
+                "type": "image",
+                "name": "Beans",
+                "tag": "img",
+                "attributes": { "src": "img/graos.png", "alt": "Grains of coffee" },
+                "classes": [],
+                "styles": { "desktop": { "base": { "width": "120px" } } },
+                "text": null,
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "img/graos.png",
+      "type": "image/png",
+      "width": 96,
+      "height": 64,
+      "bytes": "iVBORw0KGgoAAAANSUhEUgAAAGAAAABACAIAAABqVuVZAAAAcklEQVR42u3QQREAIAgAMBpZwAZEsYG97EcDHvjd3RIs3t00QoEgQYIECRIkSBCCBAkSJEiQIEEIEiRIkCBBggQhSJAgQYIECRIkCEGCBAkSJEiQIAQJEiRIkCBBghAk6Dfo5KIhSJAgQYIECRIkCEETBeTW4RJ3Y8T+AAAAAElFTkSuQmCC"
+    }
+  ]
+}

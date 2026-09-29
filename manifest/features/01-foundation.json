@@ -1,0 +1,466 @@
+{
+  "group": "foundation",
+  "titleKey": "featureGroup.foundation",
+  "features": [
+    {
+      "id": "editor-shell",
+      "titleKey": "feature.editorShell",
+      "commands": [
+        "workspace.setPanelOpen"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Editor layout: top bar, left dock, canvas, inspector and status bar",
+        "steps": [
+          "Open the app in Chrome with a 1600x900 window.",
+          "Resize the window to 1280x800."
+        ],
+        "expected": [
+          "A top bar spans the full window width at the top and shows the product name taken from src/config/product.ts; the browser tab title is the same name.",
+          "A left dock shows the Elements panel above the Layers panel, a right dock shows the Inspector, and a status bar spans the bottom.",
+          "The canvas fills the space between the two docks, between the top bar and the status bar.",
+          "At both window sizes the measured bounding boxes of top bar, left dock, canvas, inspector and status bar do not overlap, together cover the window, and the window has no page scrollbar.",
+          "The bottom workbench dock is closed by default; panels added by later entries open as tabs in existing docks or in that workbench, so these five regions stay the default layout."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "hiding-the-inspector-gives-its-column-to-the-canvas",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#menu-view-inspector",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "workspace.setPanelOpen#menu-view-inspector"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.panel.closed",
+                  "params": {
+                    "panel": "Inspector"
+                  }
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "canvas-toolbar",
+                  "measure": "x",
+                  "relation": "equals",
+                  "value": 264,
+                  "reference": null
+                },
+                {
+                  "region": "canvas-toolbar",
+                  "measure": "width",
+                  "relation": "equals",
+                  "value": 1176,
+                  "reference": null
+                },
+                {
+                  "region": "top-bar",
+                  "measure": "width",
+                  "relation": "equals",
+                  "value": 1440,
+                  "reference": null
+                },
+                {
+                  "region": "status-bar",
+                  "measure": "y",
+                  "relation": "equals",
+                  "value": 876,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "hiding-the-inspector-at-1920",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1920",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#menu-view-inspector",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "workspace.setPanelOpen#menu-view-inspector"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.panel.closed",
+                  "params": {
+                    "panel": "Inspector"
+                  }
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "canvas-toolbar",
+                  "measure": "x",
+                  "relation": "equals",
+                  "value": 264,
+                  "reference": null
+                },
+                {
+                  "region": "canvas-toolbar",
+                  "measure": "width",
+                  "relation": "equals",
+                  "value": 1656,
+                  "reference": null
+                },
+                {
+                  "region": "top-bar",
+                  "measure": "width",
+                  "relation": "equals",
+                  "value": 1920,
+                  "reference": null
+                },
+                {
+                  "region": "status-bar",
+                  "measure": "y",
+                  "relation": "equals",
+                  "value": 1056,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-workbench-opens-under-the-canvas",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#menu-view-workbench",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "workspace.setPanelOpen#menu-view-workbench"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.panel.opened",
+                  "params": {
+                    "panel": "Workbench"
+                  }
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "dock-strip",
+                  "measure": "y",
+                  "relation": "less-than",
+                  "value": 700,
+                  "reference": null
+                },
+                {
+                  "region": "canvas-toolbar",
+                  "measure": "width",
+                  "relation": "equals",
+                  "value": 888,
+                  "reference": null
+                },
+                {
+                  "region": "dock-strip",
+                  "measure": "x",
+                  "relation": "equals",
+                  "value": 0,
+                  "reference": "canvas-toolbar"
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
+    },
+    {
+      "id": "canvas-page-iframe",
+      "titleKey": "feature.canvasPageIframe",
+      "commands": [],
+      "dependsOn": [
+        "editor-shell"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "The page renders from the document JSON inside a zoomed iframe",
+        "steps": [
+          "Open the app with no saved project.",
+          "Resize the window from 1600x900 to 1280x800."
+        ],
+        "expected": [
+          "The canvas holds exactly one iframe whose body renders the Page root node of the document JSON.",
+          "The canvas reserves a 20 px band along its top and left edges for rulers (empty until rulers are built); the remaining area is the canvas viewport. Inside the iframe the page is 1440 CSS px wide (the Desktop breakpoint); the iframe is scaled with CSS zoom so the whole page width fits in the canvas viewport, horizontally centred in it.",
+          "The zoom percentage in the status bar equals the iframe zoom factor and is recomputed after the resize.",
+          "An empty page shows the hint 'Click an element or drag it onto this page' [canvas.emptyHint]; the hint is not a node in the document JSON."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "the-page-renders-and-the-frame-refits",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#menu-view-inspector",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "workspace.setPanelOpen#menu-view-inspector"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero",
+                  "property": "padding-top",
+                  "value": "56px"
+                },
+                {
+                  "node": "/Page/Hero/Title",
+                  "property": "font-weight",
+                  "value": "700"
+                }
+              ],
+              "geometry": [
+                {
+                  "node": "/Page",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 1400,
+                  "reference": null
+                },
+                {
+                  "node": "/Page",
+                  "measure": "width",
+                  "relation": "less-than",
+                  "value": 1441,
+                  "reference": null
+                },
+                {
+                  "node": "/Page/Plans",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Hero"
+                }
+              ],
+              "feedback": []
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "canvas-frame",
+                  "measure": "width",
+                  "relation": "equals",
+                  "value": 1140,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-frame-refits-when-the-sidebar-is-hidden-at-1920",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1920",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.toggleLeftDock#key-ctrl-b-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "workspace.toggleLeftDock#key-ctrl-b-in-global",
+            "workspace.toggleLeftDock#menu-view"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero",
+                  "property": "padding-left",
+                  "value": "40px"
+                }
+              ],
+              "geometry": [
+                {
+                  "node": "/Page",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 1400,
+                  "reference": null
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.sidebar.hidden",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "canvas-frame",
+                  "measure": "width",
+                  "relation": "equals",
+                  "value": 1556,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        }
+      ],
+      "toothProof": "src/core/render/render.ts"
+    }
+  ]
+}

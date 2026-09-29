@@ -1,0 +1,4 @@
+/* A folder with no HTML page: the import refuses it. */
+.plain {
+  color: #333333;
+}

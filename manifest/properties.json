@@ -1,0 +1,5185 @@
+{
+  "sections": [
+    {
+      "id": "content",
+      "labelKey": "inspector.section.content",
+      "summary": [],
+      "groups": [
+        {
+          "id": "content",
+          "labelKey": "inspector.group.content"
+        },
+        {
+          "id": "attributes",
+          "labelKey": "inspector.group.attributes"
+        }
+      ]
+    },
+    {
+      "id": "layout",
+      "labelKey": "inspector.section.layout",
+      "summary": [
+        "display",
+        "flex-direction"
+      ],
+      "groups": [
+        {
+          "id": "display",
+          "labelKey": "inspector.group.display"
+        },
+        {
+          "id": "flex",
+          "labelKey": "inspector.group.flex"
+        },
+        {
+          "id": "grid",
+          "labelKey": "inspector.group.grid"
+        },
+        {
+          "id": "in-parent",
+          "labelKey": "inspector.group.inParent"
+        },
+        {
+          "id": "columns",
+          "labelKey": "inspector.group.columns"
+        },
+        {
+          "id": "scroll",
+          "labelKey": "inspector.group.scroll"
+        },
+        {
+          "id": "table",
+          "labelKey": "inspector.group.table"
+        },
+        {
+          "id": "more",
+          "labelKey": "inspector.group.more"
+        }
+      ]
+    },
+    {
+      "id": "space",
+      "labelKey": "inspector.section.space",
+      "summary": [
+        "margin",
+        "padding"
+      ],
+      "groups": [
+        {
+          "id": "box",
+          "labelKey": "inspector.group.box"
+        }
+      ]
+    },
+    {
+      "id": "size",
+      "labelKey": "inspector.section.size",
+      "summary": [
+        "width",
+        "height"
+      ],
+      "groups": [
+        {
+          "id": "size",
+          "labelKey": "inspector.group.size"
+        },
+        {
+          "id": "overflow",
+          "labelKey": "inspector.group.overflow"
+        },
+        {
+          "id": "media",
+          "labelKey": "inspector.group.media"
+        }
+      ]
+    },
+    {
+      "id": "position",
+      "labelKey": "inspector.section.position",
+      "summary": [
+        "position",
+        "z-index"
+      ],
+      "groups": [
+        {
+          "id": "position",
+          "labelKey": "inspector.group.position"
+        },
+        {
+          "id": "anchors",
+          "labelKey": "inspector.group.anchors"
+        }
+      ]
+    },
+    {
+      "id": "text",
+      "labelKey": "inspector.section.text",
+      "summary": [
+        "font-size",
+        "font-weight"
+      ],
+      "groups": [
+        {
+          "id": "typography",
+          "labelKey": "inspector.group.typography"
+        },
+        {
+          "id": "advanced",
+          "labelKey": "inspector.group.advanced"
+        },
+        {
+          "id": "list",
+          "labelKey": "inspector.group.list"
+        },
+        {
+          "id": "form",
+          "labelKey": "inspector.group.form"
+        }
+      ]
+    },
+    {
+      "id": "paint",
+      "labelKey": "inspector.section.paint",
+      "summary": [
+        "background-color"
+      ],
+      "groups": [
+        {
+          "id": "background",
+          "labelKey": "inspector.group.background"
+        },
+        {
+          "id": "svg",
+          "labelKey": "inspector.group.svg"
+        }
+      ]
+    },
+    {
+      "id": "border",
+      "labelKey": "inspector.section.border",
+      "summary": [
+        "border-width",
+        "border-style",
+        "border-radius"
+      ],
+      "groups": [
+        {
+          "id": "border",
+          "labelKey": "inspector.group.border"
+        },
+        {
+          "id": "radius",
+          "labelKey": "inspector.group.radius"
+        },
+        {
+          "id": "outline",
+          "labelKey": "inspector.group.outline"
+        }
+      ]
+    },
+    {
+      "id": "effects",
+      "labelKey": "inspector.section.effects",
+      "summary": [
+        "opacity",
+        "box-shadow",
+        "filter",
+        "transform",
+        "translate",
+        "rotate",
+        "scale"
+      ],
+      "groups": [
+        {
+          "id": "appearance",
+          "labelKey": "inspector.group.appearance"
+        },
+        {
+          "id": "shadow",
+          "labelKey": "inspector.group.shadow"
+        },
+        {
+          "id": "filters",
+          "labelKey": "inspector.group.filters"
+        },
+        {
+          "id": "transform",
+          "labelKey": "inspector.group.transform"
+        },
+        {
+          "id": "motion",
+          "labelKey": "inspector.group.motion"
+        },
+        {
+          "id": "pointer",
+          "labelKey": "inspector.group.pointer"
+        }
+      ]
+    },
+    {
+      "id": "advanced",
+      "labelKey": "inspector.section.advanced",
+      "summary": [],
+      "groups": [
+        {
+          "id": "columns",
+          "labelKey": "inspector.group.columns"
+        },
+        {
+          "id": "more",
+          "labelKey": "inspector.group.more"
+        },
+        {
+          "id": "advanced",
+          "labelKey": "inspector.group.advanced"
+        }
+      ]
+    },
+    {
+      "id": "interactions",
+      "labelKey": "inspector.section.interactions",
+      "summary": [],
+      "groups": [
+        {
+          "id": "interactions",
+          "labelKey": "inspector.group.interactions"
+        }
+      ]
+    }
+  ],
+  "breakpoints": [
+    {
+      "id": "desktop",
+      "labelKey": "breakpoint.desktop",
+      "width": 1440,
+      "base": true,
+      "height": 900
+    },
+    {
+      "id": "laptop",
+      "labelKey": "breakpoint.laptop",
+      "width": 1180,
+      "base": false,
+      "height": 800
+    },
+    {
+      "id": "tablet",
+      "labelKey": "breakpoint.tablet",
+      "width": 834,
+      "base": false,
+      "height": 1194
+    },
+    {
+      "id": "phone",
+      "labelKey": "breakpoint.phone",
+      "width": 390,
+      "base": false,
+      "height": 844
+    }
+  ],
+  "states": [
+    {
+      "id": "base",
+      "labelKey": "styleState.base",
+      "pseudo": null,
+      "elements": null
+    },
+    {
+      "id": "hover",
+      "labelKey": "styleState.hover",
+      "pseudo": ":hover",
+      "elements": null
+    },
+    {
+      "id": "focus",
+      "labelKey": "styleState.focus",
+      "pseudo": ":focus",
+      "elements": null
+    },
+    {
+      "id": "focus-visible",
+      "labelKey": "styleState.focusVisible",
+      "pseudo": ":focus-visible",
+      "elements": null
+    },
+    {
+      "id": "active",
+      "labelKey": "styleState.active",
+      "pseudo": ":active",
+      "elements": null
+    },
+    {
+      "id": "visited",
+      "labelKey": "styleState.visited",
+      "pseudo": ":visited",
+      "elements": [
+        "link"
+      ]
+    },
+    {
+      "id": "disabled",
+      "labelKey": "styleState.disabled",
+      "pseudo": ":disabled",
+      "elements": [
+        "input",
+        "textarea",
+        "select",
+        "button",
+        "optionGroup",
+        "option",
+        "fieldset"
+      ]
+    },
+    {
+      "id": "invalid",
+      "labelKey": "styleState.invalid",
+      "pseudo": ":invalid",
+      "elements": [
+        "input",
+        "textarea",
+        "select"
+      ]
+    },
+    {
+      "id": "placeholder-shown",
+      "labelKey": "styleState.placeholderShown",
+      "pseudo": ":placeholder-shown",
+      "elements": [
+        "input",
+        "textarea"
+      ]
+    },
+    {
+      "id": "first-child",
+      "labelKey": "styleState.firstChild",
+      "pseudo": ":first-child",
+      "elements": null
+    },
+    {
+      "id": "last-child",
+      "labelKey": "styleState.lastChild",
+      "pseudo": ":last-child",
+      "elements": null
+    },
+    {
+      "id": "before",
+      "labelKey": "styleState.before",
+      "pseudo": "::before",
+      "elements": null
+    },
+    {
+      "id": "after",
+      "labelKey": "styleState.after",
+      "pseudo": "::after",
+      "elements": null
+    }
+  ],
+  "structures": [
+    {
+      "id": "shadow-list",
+      "codec": "shadow-list",
+      "list": true,
+      "fields": [
+        {
+          "id": "color",
+          "type": "color",
+          "css": "value",
+          "keyword": null,
+          "units": null,
+          "sample": "rgb(15 23 42 / 0.24)"
+        },
+        {
+          "id": "offsetX",
+          "type": "length",
+          "css": "value",
+          "keyword": null,
+          "units": "length",
+          "sample": "4px"
+        },
+        {
+          "id": "offsetY",
+          "type": "length",
+          "css": "value",
+          "keyword": null,
+          "units": "length",
+          "sample": "6px"
+        },
+        {
+          "id": "blur",
+          "type": "length",
+          "css": "value",
+          "keyword": null,
+          "units": "length",
+          "sample": "12px"
+        },
+        {
+          "id": "spread",
+          "type": "length",
+          "css": "value",
+          "keyword": null,
+          "units": "length",
+          "sample": "0px"
+        },
+        {
+          "id": "inset",
+          "type": "boolean",
+          "css": "keyword",
+          "keyword": "inset",
+          "units": null,
+          "sample": true
+        },
+        {
+          "id": "hidden",
+          "type": "boolean",
+          "css": "hides-layer",
+          "keyword": null,
+          "units": null,
+          "sample": false
+        }
+      ]
+    },
+    {
+      "id": "text-shadow-list",
+      "codec": "text-shadow-list",
+      "list": true,
+      "fields": [
+        {
+          "id": "color",
+          "type": "color",
+          "css": "value",
+          "keyword": null,
+          "units": null,
+          "sample": "rgb(15 23 42 / 0.24)"
+        },
+        {
+          "id": "offsetX",
+          "type": "length",
+          "css": "value",
+          "keyword": null,
+          "units": "length",
+          "sample": "4px"
+        },
+        {
+          "id": "offsetY",
+          "type": "length",
+          "css": "value",
+          "keyword": null,
+          "units": "length",
+          "sample": "6px"
+        },
+        {
+          "id": "blur",
+          "type": "length",
+          "css": "value",
+          "keyword": null,
+          "units": "length",
+          "sample": "12px"
+        },
+        {
+          "id": "hidden",
+          "type": "boolean",
+          "css": "hides-layer",
+          "keyword": null,
+          "units": null,
+          "sample": false
+        }
+      ]
+    }
+  ],
+  "properties": [
+    {
+      "id": "display",
+      "labelKey": "property.display",
+      "section": "layout",
+      "group": "display",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "always",
+      "essential": true,
+      "doors": [
+        "style.set#inspector-display",
+        "style.set#inspector-line-clamp",
+        "element.organize#context-menu",
+        "element.organize#menu-arrange",
+        "element.organize#command-bar",
+        "element.organize#key-o-in-canvas"
+      ],
+      "subsets": [
+        {
+          "id": "menu",
+          "values": [
+            "block",
+            "inline",
+            "inline-block",
+            "flex",
+            "inline-flex",
+            "grid",
+            "inline-grid",
+            "contents",
+            "none"
+          ],
+          "units": null,
+          "reason": "The Display menu offers the outer and inner display types a page layout uses; table-internal, ruby-internal, math and draft values (grid-lanes) of the official list are left out of the menu."
+        }
+      ]
+    },
+    {
+      "id": "flex-direction",
+      "labelKey": "property.flexDirection",
+      "section": "layout",
+      "group": "flex",
+      "control": "keyword-buttons",
+      "icons": {
+        "row": "arrow-right",
+        "row-reverse": "arrow-left",
+        "column": "arrow-down",
+        "column-reverse": "arrow-up"
+      },
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "flexContainer",
+      "essential": true,
+      "doors": [
+        "style.set#inspector-flex-direction",
+        "style.set#quick-panel-direction",
+        "element.swapDirection#context-menu",
+        "element.swapDirection#menu-arrange",
+        "element.swapDirection#command-bar",
+        "element.stackOnPhone#context-menu",
+        "element.stackOnPhone#menu-arrange",
+        "element.stackOnPhone#command-bar",
+        "element.organize#context-menu",
+        "element.organize#menu-arrange",
+        "element.organize#command-bar",
+        "element.swapDirection#key-s-in-canvas",
+        "element.stackOnPhone#key-shift-s-in-canvas",
+        "element.organize#key-o-in-canvas"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "flex-wrap",
+      "labelKey": "property.flexWrap",
+      "section": "layout",
+      "group": "flex",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "flexContainer",
+      "essential": true,
+      "doors": [
+        "style.set#inspector-flex-wrap"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "justify-content",
+      "labelKey": "property.justifyContent",
+      "section": "layout",
+      "group": "flex",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "flexOrGridContainer",
+      "essential": true,
+      "doors": [
+        "style.set#inspector-justify-content",
+        "style.set#inspector-justify-content-spread-button",
+        "style.setAlignment#inspector-alignment-matrix"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "align-items",
+      "labelKey": "property.alignItems",
+      "section": "layout",
+      "group": "flex",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "flexOrGridContainer",
+      "essential": true,
+      "doors": [
+        "style.set#inspector-align-items",
+        "style.set#inspector-align-items-stretch-button",
+        "style.setAlignment#inspector-alignment-matrix",
+        "style.set#quick-panel-align-items"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "align-content",
+      "labelKey": "property.alignContent",
+      "section": "layout",
+      "group": "flex",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "flexOrGridContainer",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-align-content"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "row-gap",
+      "labelKey": "property.rowGap",
+      "section": "layout",
+      "group": "flex",
+      "control": "length-field",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "length-percentage",
+      "appliesTo": "flexOrGridContainer",
+      "essential": true,
+      "doors": [
+        "style.set#inspector-gap",
+        "style.set#inspector-row-gap",
+        "style.set#handle-gap-band",
+        "style.set#handle-row-gap-band",
+        "style.set#quick-panel-gap",
+        "element.organize#context-menu",
+        "element.organize#menu-arrange",
+        "element.organize#command-bar",
+        "element.organize#key-o-in-canvas"
+      ],
+      "subsets": [
+        {
+          "id": "field",
+          "values": [
+            "normal"
+          ],
+          "units": null,
+          "reason": "The gap field offers normal and every length; the line-width keywords (hairline, thin, medium, thick) belong to gap decorations in the CSS Gaps draft and are not offered."
+        }
+      ]
+    },
+    {
+      "id": "column-gap",
+      "labelKey": "property.columnGap",
+      "section": "layout",
+      "group": "flex",
+      "control": "length-field",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "length-percentage",
+      "appliesTo": "flexOrGridContainer",
+      "essential": true,
+      "doors": [
+        "style.set#inspector-gap",
+        "style.set#inspector-column-gap",
+        "style.set#handle-gap-band",
+        "style.set#handle-column-gap-band",
+        "style.set#quick-panel-gap",
+        "element.organize#context-menu",
+        "element.organize#menu-arrange",
+        "element.organize#command-bar",
+        "element.organize#key-o-in-canvas"
+      ],
+      "subsets": [
+        {
+          "id": "field",
+          "values": [
+            "normal"
+          ],
+          "units": null,
+          "reason": "The gap field offers normal and every length; the line-width keywords (hairline, thin, medium, thick) belong to gap decorations in the CSS Gaps draft and are not offered."
+        }
+      ]
+    },
+    {
+      "id": "grid-template-columns",
+      "labelKey": "property.gridTemplateColumns",
+      "section": "layout",
+      "group": "grid",
+      "control": "track-editor",
+      "icons": {},
+      "valueType": "string",
+      "codec": "track-list",
+      "appliesTo": "gridContainer",
+      "essential": true,
+      "doors": [
+        "style.set#inspector-grid-template-columns",
+        "style.setGridTracks#inspector-grid-template-columns-track",
+        "style.setGridTracks#inspector-grid-template-columns-add-track",
+        "style.setGridTracks#inspector-grid-template-columns-remove-track",
+        "style.setGridTracks#handle-grid-track"
+      ],
+      "subsets": [
+        {
+          "id": "tracks",
+          "values": [
+            "auto",
+            "min-content",
+            "max-content"
+          ],
+          "units": [
+            "fr",
+            "%",
+            "px",
+            "em",
+            "rem"
+          ],
+          "reason": "The track editor's field offers the units a track size is written in; the keywords a track takes (auto, min-content, max-content) come from the property's codec, and minmax(…) and repeat(…) are typed."
+        }
+      ]
+    },
+    {
+      "id": "grid-template-rows",
+      "labelKey": "property.gridTemplateRows",
+      "section": "layout",
+      "group": "grid",
+      "control": "track-editor",
+      "icons": {},
+      "valueType": "string",
+      "codec": "track-list",
+      "appliesTo": "gridContainer",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-grid-template-rows",
+        "style.setGridTracks#inspector-grid-template-rows-track",
+        "style.setGridTracks#inspector-grid-template-rows-add-track",
+        "style.setGridTracks#inspector-grid-template-rows-remove-track"
+      ],
+      "subsets": [
+        {
+          "id": "tracks",
+          "values": [
+            "auto",
+            "min-content",
+            "max-content"
+          ],
+          "units": [
+            "fr",
+            "%",
+            "px",
+            "em",
+            "rem"
+          ],
+          "reason": "The track editor's field offers the units a track size is written in; the keywords a track takes (auto, min-content, max-content) come from the property's codec, and minmax(…) and repeat(…) are typed."
+        }
+      ]
+    },
+    {
+      "id": "grid-auto-flow",
+      "labelKey": "property.gridAutoFlow",
+      "section": "layout",
+      "group": "grid",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword-set",
+      "appliesTo": "gridContainer",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-grid-auto-flow"
+      ],
+      "subsets": [
+        {
+          "id": "menu",
+          "values": [
+            "row",
+            "column",
+            "row dense",
+            "column dense"
+          ],
+          "units": null,
+          "reason": "The menu offers each direction with and without dense packing."
+        }
+      ]
+    },
+    {
+      "id": "justify-items",
+      "labelKey": "property.justifyItems",
+      "section": "layout",
+      "group": "grid",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "gridContainer",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-justify-items"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "grid-template-areas",
+      "labelKey": "property.gridTemplateAreas",
+      "section": "layout",
+      "group": "grid",
+      "control": "text-field",
+      "icons": {},
+      "valueType": "string",
+      "codec": "grid-areas",
+      "appliesTo": "gridContainer",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-grid-template-areas"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "flex-grow",
+      "labelKey": "property.flexGrow",
+      "section": "layout",
+      "group": "in-parent",
+      "control": "number-field",
+      "icons": {},
+      "valueType": "number",
+      "codec": "number",
+      "appliesTo": "flexItem",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-flex-grow",
+        "element.setDivider#handle-divider"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "flex-shrink",
+      "labelKey": "property.flexShrink",
+      "section": "layout",
+      "group": "in-parent",
+      "control": "number-field",
+      "icons": {},
+      "valueType": "number",
+      "codec": "number",
+      "appliesTo": "flexItem",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-flex-shrink"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "flex-basis",
+      "labelKey": "property.flexBasis",
+      "section": "layout",
+      "group": "in-parent",
+      "control": "length-field",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "length-percentage",
+      "appliesTo": "flexItem",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-flex-basis"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "align-self",
+      "labelKey": "property.alignSelf",
+      "section": "layout",
+      "group": "in-parent",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "flexOrGridItem",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-align-self"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "justify-self",
+      "labelKey": "property.justifySelf",
+      "section": "layout",
+      "group": "in-parent",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "gridItem",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-justify-self"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "order",
+      "labelKey": "property.order",
+      "section": "layout",
+      "group": "in-parent",
+      "control": "number-field",
+      "icons": {},
+      "valueType": "integer",
+      "codec": "integer",
+      "appliesTo": "flexOrGridItem",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-order"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "grid-column-start",
+      "labelKey": "property.gridColumnStart",
+      "section": "layout",
+      "group": "in-parent",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "string",
+      "codec": "grid-line",
+      "appliesTo": "gridItem",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-grid-column",
+        "style.setGridItem#inspector-grid-column-start",
+        "style.set#inspector-grid-area",
+        "style.setGridItem#inspector-grid-column-span",
+        "grid.spanItem#handle-grid-span"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "grid-column-end",
+      "labelKey": "property.gridColumnEnd",
+      "section": "layout",
+      "group": "in-parent",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "string",
+      "codec": "grid-line",
+      "appliesTo": "gridItem",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-grid-column",
+        "style.setGridItem#inspector-grid-column-span",
+        "style.set#inspector-grid-area",
+        "style.setGridItem#inspector-grid-column-start",
+        "grid.spanItem#handle-grid-span"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "grid-row-start",
+      "labelKey": "property.gridRowStart",
+      "section": "layout",
+      "group": "in-parent",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "string",
+      "codec": "grid-line",
+      "appliesTo": "gridItem",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-grid-row",
+        "style.setGridItem#inspector-grid-row-start",
+        "style.set#inspector-grid-area",
+        "style.setGridItem#inspector-grid-row-span"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "grid-row-end",
+      "labelKey": "property.gridRowEnd",
+      "section": "layout",
+      "group": "in-parent",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "string",
+      "codec": "grid-line",
+      "appliesTo": "gridItem",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-grid-row",
+        "style.setGridItem#inspector-grid-row-span",
+        "style.set#inspector-grid-area",
+        "style.setGridItem#inspector-grid-row-start"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "column-width",
+      "labelKey": "property.columnWidth",
+      "section": "layout",
+      "group": "columns",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "length",
+      "codec": "length",
+      "appliesTo": "container",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-columns"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "column-count",
+      "labelKey": "property.columnCount",
+      "section": "layout",
+      "group": "columns",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "integer",
+      "codec": "integer",
+      "appliesTo": "container",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-columns"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "column-span",
+      "labelKey": "property.columnSpan",
+      "section": "layout",
+      "group": "columns",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "fragmented",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-column-span"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "column-fill",
+      "labelKey": "property.columnFill",
+      "section": "layout",
+      "group": "columns",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "multicol",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-column-fill"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "column-rule-width",
+      "labelKey": "property.columnRuleWidth",
+      "section": "layout",
+      "group": "columns",
+      "control": "length-field",
+      "icons": {},
+      "valueType": "length",
+      "codec": "line-width",
+      "appliesTo": "multicol",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-column-rule-width"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "column-rule-style",
+      "labelKey": "property.columnRuleStyle",
+      "section": "layout",
+      "group": "columns",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "multicol",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-column-rule-style"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "column-rule-color",
+      "labelKey": "property.columnRuleColor",
+      "section": "layout",
+      "group": "columns",
+      "control": "color-field",
+      "icons": {},
+      "valueType": "color",
+      "codec": "color",
+      "appliesTo": "multicol",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-column-rule-color"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "break-before",
+      "labelKey": "property.breakBefore",
+      "section": "advanced",
+      "group": "columns",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "fragmented",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-break-before"
+      ],
+      "subsets": [
+        {
+          "id": "menu",
+          "values": [
+            "auto",
+            "page",
+            "left",
+            "right"
+          ],
+          "units": null,
+          "reason": "The menu leaves out all, region and avoid-region: css-compat.json keeps them only because BCD does not track them and the browser syntax lists them, but they break through nested fragmentation contexts and CSS Regions, which no browser implements and the editor never creates. avoid, avoid-page and avoid-column are left out too: BCD notes for Firefox and Safari that the value is recognized but has no effect (break-before.avoid: firefox and safari false; avoid-page and avoid-column: firefox false), so a page exported with it would break where the editor promised it would not; break-inside offers avoid because all three act on it there."
+        }
+      ]
+    },
+    {
+      "id": "break-after",
+      "labelKey": "property.breakAfter",
+      "section": "advanced",
+      "group": "columns",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "fragmented",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-break-after"
+      ],
+      "subsets": [
+        {
+          "id": "menu",
+          "values": [
+            "auto",
+            "page",
+            "left",
+            "right"
+          ],
+          "units": null,
+          "reason": "The menu leaves out all, region and avoid-region: css-compat.json keeps them only because BCD does not track them and the browser syntax lists them, but they break through nested fragmentation contexts and CSS Regions, which no browser implements and the editor never creates. avoid, avoid-page and avoid-column are left out too: BCD notes for Firefox and Safari that the value is recognized but has no effect (break-after.avoid: firefox and safari false; avoid-page and avoid-column: firefox false), so a page exported with it would break where the editor promised it would not; break-inside offers avoid because all three act on it there."
+        }
+      ]
+    },
+    {
+      "id": "break-inside",
+      "labelKey": "property.breakInside",
+      "section": "advanced",
+      "group": "columns",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "fragmented",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-break-inside"
+      ],
+      "subsets": [
+        {
+          "id": "menu",
+          "values": [
+            "auto",
+            "avoid",
+            "avoid-page",
+            "avoid-column"
+          ],
+          "units": null,
+          "reason": "The menu leaves out avoid-region: css-compat.json keeps it only because BCD does not track it and the browser syntax lists it, but it acts on CSS Regions, which no browser implements."
+        }
+      ]
+    },
+    {
+      "id": "scroll-behavior",
+      "labelKey": "property.scrollBehavior",
+      "section": "layout",
+      "group": "scroll",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "scrollContainer",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-scroll-behavior"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "scroll-snap-type",
+      "labelKey": "property.scrollSnapType",
+      "section": "layout",
+      "group": "scroll",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword-set",
+      "appliesTo": "scrollContainer",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-scroll-snap-type"
+      ],
+      "subsets": [
+        {
+          "id": "menu",
+          "values": [
+            "none",
+            "x mandatory",
+            "y mandatory",
+            "both mandatory",
+            "x proximity",
+            "y proximity"
+          ],
+          "units": null,
+          "reason": "The menu offers each physical axis with each strictness; logical axes are typed."
+        }
+      ]
+    },
+    {
+      "id": "scroll-snap-align",
+      "labelKey": "property.scrollSnapAlign",
+      "section": "layout",
+      "group": "scroll",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword-set",
+      "appliesTo": "snapChild",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-scroll-snap-align"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "border-collapse",
+      "labelKey": "property.borderCollapse",
+      "section": "layout",
+      "group": "table",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "table",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-border-collapse"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "border-spacing",
+      "labelKey": "property.borderSpacing",
+      "section": "layout",
+      "group": "table",
+      "control": "length-field",
+      "icons": {},
+      "valueType": "length",
+      "codec": "length-pair",
+      "appliesTo": "table",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-border-spacing"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "table-layout",
+      "labelKey": "property.tableLayout",
+      "section": "layout",
+      "group": "table",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "table",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-table-layout"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "caption-side",
+      "labelKey": "property.captionSide",
+      "section": "layout",
+      "group": "table",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "tableOrCaption",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-caption-side"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "empty-cells",
+      "labelKey": "property.emptyCells",
+      "section": "layout",
+      "group": "table",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "table",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-empty-cells"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "contain",
+      "labelKey": "property.contain",
+      "section": "advanced",
+      "group": "more",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword-set",
+      "appliesTo": "hasBox",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-contain"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "content-visibility",
+      "labelKey": "property.contentVisibility",
+      "section": "advanced",
+      "group": "more",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "hasBox",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-content-visibility"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "counter-reset",
+      "labelKey": "property.counterReset",
+      "section": "advanced",
+      "group": "more",
+      "control": "text-field",
+      "icons": {},
+      "valueType": "string",
+      "codec": "counter-list",
+      "appliesTo": "container",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-counter-reset"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "counter-increment",
+      "labelKey": "property.counterIncrement",
+      "section": "advanced",
+      "group": "more",
+      "control": "text-field",
+      "icons": {},
+      "valueType": "string",
+      "codec": "counter-list",
+      "appliesTo": "container",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-counter-increment"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "padding-top",
+      "labelKey": "property.paddingTop",
+      "section": "space",
+      "group": "box",
+      "control": "box-model",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "length-percentage",
+      "appliesTo": "always",
+      "essential": true,
+      "doors": [
+        "style.setSpacing#inspector-padding-box-model",
+        "style.setSpacing#inspector-padding-top-box-model",
+        "style.setSpacing#handle-padding-top-band",
+        "style.set#quick-panel-padding"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "padding-right",
+      "labelKey": "property.paddingRight",
+      "section": "space",
+      "group": "box",
+      "control": "box-model",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "length-percentage",
+      "appliesTo": "always",
+      "essential": true,
+      "doors": [
+        "style.setSpacing#inspector-padding-box-model",
+        "style.setSpacing#inspector-padding-right-box-model",
+        "style.setSpacing#handle-padding-right-band",
+        "style.set#quick-panel-padding"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "padding-bottom",
+      "labelKey": "property.paddingBottom",
+      "section": "space",
+      "group": "box",
+      "control": "box-model",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "length-percentage",
+      "appliesTo": "always",
+      "essential": true,
+      "doors": [
+        "style.setSpacing#inspector-padding-box-model",
+        "style.setSpacing#inspector-padding-bottom-box-model",
+        "style.setSpacing#handle-padding-bottom-band",
+        "style.set#quick-panel-padding"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "padding-left",
+      "labelKey": "property.paddingLeft",
+      "section": "space",
+      "group": "box",
+      "control": "box-model",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "length-percentage",
+      "appliesTo": "always",
+      "essential": true,
+      "doors": [
+        "style.setSpacing#inspector-padding-box-model",
+        "style.setSpacing#inspector-padding-left-box-model",
+        "style.setSpacing#handle-padding-left-band",
+        "style.set#quick-panel-padding"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "margin-top",
+      "labelKey": "property.marginTop",
+      "section": "space",
+      "group": "box",
+      "control": "box-model",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "length-percentage",
+      "appliesTo": "always",
+      "essential": true,
+      "doors": [
+        "position.setAnchors#inspector-anchor-control",
+        "style.setSpacing#inspector-margin-box-model",
+        "style.setSpacing#inspector-margin-top-box-model",
+        "style.setSpacing#handle-margin-top-band",
+        "geometry.resize#handle-resize-n",
+        "geometry.resize#handle-resize-ne",
+        "geometry.resize#handle-resize-nw"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "margin-right",
+      "labelKey": "property.marginRight",
+      "section": "space",
+      "group": "box",
+      "control": "box-model",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "length-percentage",
+      "appliesTo": "always",
+      "essential": true,
+      "doors": [
+        "position.setAnchors#inspector-anchor-control",
+        "style.setSpacing#inspector-margin-box-model",
+        "style.setSpacing#inspector-margin-right-box-model",
+        "style.setSpacing#handle-margin-right-band"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "margin-bottom",
+      "labelKey": "property.marginBottom",
+      "section": "space",
+      "group": "box",
+      "control": "box-model",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "length-percentage",
+      "appliesTo": "always",
+      "essential": true,
+      "doors": [
+        "position.setAnchors#inspector-anchor-control",
+        "style.setSpacing#inspector-margin-box-model",
+        "style.setSpacing#inspector-margin-bottom-box-model",
+        "style.setSpacing#handle-margin-bottom-band"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "margin-left",
+      "labelKey": "property.marginLeft",
+      "section": "space",
+      "group": "box",
+      "control": "box-model",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "length-percentage",
+      "appliesTo": "always",
+      "essential": true,
+      "doors": [
+        "position.setAnchors#inspector-anchor-control",
+        "style.setSpacing#inspector-margin-box-model",
+        "style.setSpacing#inspector-margin-left-box-model",
+        "style.setSpacing#handle-margin-left-band",
+        "geometry.resize#handle-resize-sw",
+        "geometry.resize#handle-resize-w",
+        "geometry.resize#handle-resize-nw"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "width",
+      "labelKey": "property.width",
+      "section": "size",
+      "group": "size",
+      "control": "length-field",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "length-percentage",
+      "appliesTo": "hasBox",
+      "essential": true,
+      "doors": [
+        "geometry.resize#handle-resize-ne",
+        "geometry.resize#handle-resize-e",
+        "geometry.resize#handle-resize-se",
+        "geometry.resize#handle-resize-sw",
+        "geometry.resize#handle-resize-w",
+        "geometry.resize#handle-resize-nw",
+        "position.setAnchors#key-alt-shift-arrow-left-in-canvas-positioned",
+        "position.setAnchors#key-alt-shift-arrow-right-in-canvas-positioned",
+        "position.setAnchors#handle-anchor-left",
+        "position.setAnchors#handle-anchor-right",
+        "position.setAnchors#inspector-anchor-control",
+        "style.set#inspector-width",
+        "style.set#quick-panel-width"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "height",
+      "labelKey": "property.height",
+      "section": "size",
+      "group": "size",
+      "control": "length-field",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "length-percentage",
+      "appliesTo": "hasBox",
+      "essential": true,
+      "doors": [
+        "geometry.resize#handle-resize-n",
+        "geometry.resize#handle-resize-ne",
+        "geometry.resize#handle-resize-se",
+        "geometry.resize#handle-resize-s",
+        "geometry.resize#handle-resize-sw",
+        "geometry.resize#handle-resize-nw",
+        "position.setAnchors#key-alt-shift-arrow-up-in-canvas-positioned",
+        "position.setAnchors#key-alt-shift-arrow-down-in-canvas-positioned",
+        "position.setAnchors#handle-anchor-top",
+        "position.setAnchors#handle-anchor-bottom",
+        "position.setAnchors#inspector-anchor-control",
+        "style.set#inspector-height",
+        "style.set#quick-panel-height"
+      ],
+      "subsets": [
+        {
+          "id": "presets",
+          "values": [
+            "100vh"
+          ],
+          "units": null,
+          "reason": "The screen height a hero takes (100vh), which the canvas resolves against the breakpoint's own screen and the export keeps as it is (the user's real-use audit, item 2.3)."
+        }
+      ]
+    },
+    {
+      "id": "min-width",
+      "labelKey": "property.minWidth",
+      "section": "size",
+      "group": "size",
+      "control": "length-field",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "length-percentage",
+      "appliesTo": "hasBox",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-min-width"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "max-width",
+      "labelKey": "property.maxWidth",
+      "section": "size",
+      "group": "size",
+      "control": "length-field",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "length-percentage",
+      "appliesTo": "hasBox",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-max-width"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "min-height",
+      "labelKey": "property.minHeight",
+      "section": "size",
+      "group": "size",
+      "control": "length-field",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "length-percentage",
+      "appliesTo": "hasBox",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-min-height"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "max-height",
+      "labelKey": "property.maxHeight",
+      "section": "size",
+      "group": "size",
+      "control": "length-field",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "length-percentage",
+      "appliesTo": "hasBox",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-max-height"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "box-sizing",
+      "labelKey": "property.boxSizing",
+      "section": "size",
+      "group": "size",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "hasBox",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-box-sizing"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "aspect-ratio",
+      "labelKey": "property.aspectRatio",
+      "section": "size",
+      "group": "size",
+      "control": "text-field",
+      "icons": {},
+      "valueType": "number",
+      "codec": "ratio",
+      "appliesTo": "hasBox",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-aspect-ratio"
+      ],
+      "subsets": [
+        {
+          "id": "presets",
+          "values": [
+            "auto",
+            "16 / 9",
+            "4 / 3",
+            "3 / 2",
+            "1 / 1",
+            "21 / 9",
+            "9 / 16"
+          ],
+          "units": null,
+          "reason": "The menu offers the ratios a screen or a card takes, auto first; any other ratio of two numbers is typed."
+        }
+      ]
+    },
+    {
+      "id": "overflow-x",
+      "labelKey": "property.overflowX",
+      "section": "size",
+      "group": "overflow",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "hasBox",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-overflow",
+        "style.set#inspector-overflow-x",
+        "style.set#inspector-line-clamp"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "overflow-y",
+      "labelKey": "property.overflowY",
+      "section": "size",
+      "group": "overflow",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "hasBox",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-overflow",
+        "style.set#inspector-overflow-y",
+        "style.set#inspector-line-clamp"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "resize",
+      "labelKey": "property.resize",
+      "section": "size",
+      "group": "overflow",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "textarea",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-resize"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "object-fit",
+      "labelKey": "property.objectFit",
+      "section": "size",
+      "group": "media",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "media",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-object-fit",
+        "style.set#quick-panel-object-fit"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "object-position",
+      "labelKey": "property.objectPosition",
+      "section": "size",
+      "group": "media",
+      "control": "text-field",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "position",
+      "appliesTo": "media",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-object-position"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "position",
+      "labelKey": "property.position",
+      "section": "position",
+      "group": "position",
+      "control": "keyword-buttons",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "always",
+      "essential": true,
+      "doors": [
+        "position.setMode#inspector-position"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "top",
+      "labelKey": "property.top",
+      "section": "position",
+      "group": "position",
+      "control": "length-field",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "length-percentage",
+      "appliesTo": "positioned",
+      "essential": false,
+      "doors": [
+        "position.setAnchors#key-alt-shift-arrow-up-in-canvas-positioned",
+        "position.setAnchors#key-alt-shift-arrow-down-in-canvas-positioned",
+        "position.setAnchors#handle-anchor-top",
+        "position.setAnchors#handle-anchor-bottom",
+        "position.setAnchors#inspector-anchor-control",
+        "style.set#inspector-top",
+        "geometry.resize#handle-resize-n",
+        "geometry.resize#handle-resize-ne",
+        "geometry.resize#handle-resize-nw"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "right",
+      "labelKey": "property.right",
+      "section": "position",
+      "group": "position",
+      "control": "length-field",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "length-percentage",
+      "appliesTo": "positioned",
+      "essential": false,
+      "doors": [
+        "position.setAnchors#key-alt-shift-arrow-left-in-canvas-positioned",
+        "position.setAnchors#key-alt-shift-arrow-right-in-canvas-positioned",
+        "position.setAnchors#handle-anchor-left",
+        "position.setAnchors#handle-anchor-right",
+        "position.setAnchors#inspector-anchor-control",
+        "style.set#inspector-right"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "bottom",
+      "labelKey": "property.bottom",
+      "section": "position",
+      "group": "position",
+      "control": "length-field",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "length-percentage",
+      "appliesTo": "positioned",
+      "essential": false,
+      "doors": [
+        "position.setAnchors#key-alt-shift-arrow-up-in-canvas-positioned",
+        "position.setAnchors#key-alt-shift-arrow-down-in-canvas-positioned",
+        "position.setAnchors#handle-anchor-top",
+        "position.setAnchors#handle-anchor-bottom",
+        "position.setAnchors#inspector-anchor-control",
+        "style.set#inspector-bottom"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "left",
+      "labelKey": "property.left",
+      "section": "position",
+      "group": "position",
+      "control": "length-field",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "length-percentage",
+      "appliesTo": "positioned",
+      "essential": false,
+      "doors": [
+        "position.setAnchors#key-alt-shift-arrow-left-in-canvas-positioned",
+        "position.setAnchors#key-alt-shift-arrow-right-in-canvas-positioned",
+        "position.setAnchors#handle-anchor-left",
+        "position.setAnchors#handle-anchor-right",
+        "position.setAnchors#inspector-anchor-control",
+        "style.set#inspector-left",
+        "geometry.resize#handle-resize-w",
+        "geometry.resize#handle-resize-nw"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "z-index",
+      "labelKey": "property.zIndex",
+      "section": "position",
+      "group": "position",
+      "control": "number-field",
+      "icons": {},
+      "valueType": "integer",
+      "codec": "integer",
+      "appliesTo": "positioned",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-z-index"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "float",
+      "labelKey": "property.float",
+      "section": "position",
+      "group": "position",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "staticBox",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-float"
+      ],
+      "subsets": [
+        {
+          "id": "menu",
+          "values": [
+            "none",
+            "left",
+            "right",
+            "inline-start",
+            "inline-end"
+          ],
+          "units": null,
+          "reason": "The menu offers the physical and inline-axis values; block-axis, snap and footnote floats come from the CSS Page Floats and GCPM drafts."
+        }
+      ]
+    },
+    {
+      "id": "clear",
+      "labelKey": "property.clear",
+      "section": "position",
+      "group": "position",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "staticBox",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-clear"
+      ],
+      "subsets": [
+        {
+          "id": "menu",
+          "values": [
+            "none",
+            "left",
+            "right",
+            "both",
+            "inline-start",
+            "inline-end"
+          ],
+          "units": null,
+          "reason": "The menu offers the physical and inline-axis values; block-axis, snap and footnote floats come from the CSS Page Floats and GCPM drafts."
+        }
+      ]
+    },
+    {
+      "id": "translate",
+      "labelKey": "property.translate",
+      "section": "effects",
+      "group": "transform",
+      "control": "transform-fields",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "translate",
+      "appliesTo": "hasBox",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-translate-x",
+        "style.set#inspector-translate-y",
+        "style.set#quick-panel-translate-x"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "rotate",
+      "labelKey": "property.rotate",
+      "section": "effects",
+      "group": "transform",
+      "control": "transform-fields",
+      "icons": {},
+      "valueType": "angle",
+      "codec": "rotate",
+      "appliesTo": "hasBox",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-rotate",
+        "style.set#quick-panel-rotate",
+        "style.set#handle-rotate"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "scale",
+      "labelKey": "property.scale",
+      "section": "effects",
+      "group": "transform",
+      "control": "transform-fields",
+      "icons": {},
+      "valueType": "number",
+      "codec": "scale",
+      "appliesTo": "hasBox",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-scale",
+        "style.set#quick-panel-scale"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "background-color",
+      "labelKey": "property.backgroundColor",
+      "section": "paint",
+      "group": "background",
+      "control": "color-field",
+      "icons": {},
+      "valueType": "color",
+      "codec": "color",
+      "appliesTo": "always",
+      "essential": true,
+      "doors": [
+        "style.set#inspector-background-color",
+        "style.set#quick-panel-background"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "background-image",
+      "labelKey": "property.backgroundImage",
+      "section": "paint",
+      "group": "background",
+      "control": "image-field",
+      "icons": {},
+      "valueType": "image",
+      "codec": "image-layers",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.setBackgroundImage#inspector-background-image",
+        "style.setBackgroundImage#inspector-background-image-gradient-add",
+        "style.setBackgroundImage#inspector-background-image-gradient-type",
+        "style.setBackgroundImage#inspector-background-image-gradient-bar",
+        "style.setBackgroundImage#inspector-background-image-gradient-stop-colour",
+        "style.setBackgroundImage#inspector-background-image-gradient-stop-position",
+        "style.setBackgroundImage#inspector-background-image-gradient-angle",
+        "style.setBackgroundImage#inspector-background-image-gradient-reverse",
+        "style.setBackgroundImage#inspector-background-image-gradient-distribute",
+        "style.setBackgroundImage#inspector-background-image-gradient-add-stop",
+        "style.setBackgroundImage#inspector-background-image-gradient-remove-stop",
+        "style.setBackgroundImage#inspector-background-image-gradient-reset",
+        "style.setBackgroundImage#panel-drag-gradient-stop-gradient-bar",
+        "style.setBackgroundImage#quick-panel-fill-gradient"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "background-size",
+      "labelKey": "property.backgroundSize",
+      "section": "paint",
+      "group": "background",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "background-size",
+      "appliesTo": "imagePainting",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-background-size",
+        "style.setBackgroundImage#inspector-background-image-gradient-add",
+        "style.setBackgroundImage#inspector-background-image-gradient-reset"
+      ],
+      "subsets": [
+        {
+          "id": "menu",
+          "values": [
+            "auto",
+            "cover",
+            "contain",
+            "100% 100%"
+          ],
+          "units": null,
+          "reason": "The menu adds 100% 100% (stretch the image to the box) to the three keywords."
+        }
+      ]
+    },
+    {
+      "id": "background-position-x",
+      "labelKey": "property.backgroundPositionX",
+      "section": "paint",
+      "group": "background",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "position-axis",
+      "appliesTo": "imagePainting",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-background-position",
+        "style.setBackgroundImage#inspector-background-image-gradient-add",
+        "style.setBackgroundImage#inspector-background-image-gradient-reset"
+      ],
+      "subsets": [
+        {
+          "id": "keywords",
+          "values": [
+            "left",
+            "center",
+            "right"
+          ],
+          "units": null,
+          "reason": "The keywords of the horizontal axis: the position codec tells which axis a typed word names by them."
+        }
+      ]
+    },
+    {
+      "id": "background-position-y",
+      "labelKey": "property.backgroundPositionY",
+      "section": "paint",
+      "group": "background",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "position-axis",
+      "appliesTo": "imagePainting",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-background-position",
+        "style.setBackgroundImage#inspector-background-image-gradient-add",
+        "style.setBackgroundImage#inspector-background-image-gradient-reset"
+      ],
+      "subsets": [
+        {
+          "id": "keywords",
+          "values": [
+            "top",
+            "center",
+            "bottom"
+          ],
+          "units": null,
+          "reason": "The keywords of the vertical axis: the position codec tells which axis a typed word names by them."
+        }
+      ]
+    },
+    {
+      "id": "background-repeat",
+      "labelKey": "property.backgroundRepeat",
+      "section": "paint",
+      "group": "background",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword-set",
+      "appliesTo": "imagePainting",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-background-repeat",
+        "style.setBackgroundImage#inspector-background-image-gradient-add",
+        "style.setBackgroundImage#inspector-background-image-gradient-reset"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "background-attachment",
+      "labelKey": "property.backgroundAttachment",
+      "section": "paint",
+      "group": "background",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "imagePainting",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-background-attachment",
+        "style.setBackgroundImage#inspector-background-image-gradient-add",
+        "style.setBackgroundImage#inspector-background-image-gradient-reset"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "background-origin",
+      "labelKey": "property.backgroundOrigin",
+      "section": "paint",
+      "group": "background",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "imagePainting",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-background-origin",
+        "style.setBackgroundImage#inspector-background-image-gradient-add",
+        "style.setBackgroundImage#inspector-background-image-gradient-reset"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "background-clip",
+      "labelKey": "property.backgroundClip",
+      "section": "paint",
+      "group": "background",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-background-clip",
+        "style.setBackgroundImage#inspector-background-image-gradient-add",
+        "style.setBackgroundImage#inspector-background-image-gradient-reset"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "background-blend-mode",
+      "labelKey": "property.backgroundBlendMode",
+      "section": "paint",
+      "group": "background",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "imagePainting",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-background-blend-mode"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "fill",
+      "labelKey": "property.fill",
+      "section": "paint",
+      "group": "svg",
+      "control": "color-field",
+      "icons": {},
+      "valueType": "color",
+      "codec": "paint",
+      "appliesTo": "svgShape",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-fill",
+        "style.set#quick-panel-fill"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "stroke",
+      "labelKey": "property.stroke",
+      "section": "paint",
+      "group": "svg",
+      "control": "color-field",
+      "icons": {},
+      "valueType": "color",
+      "codec": "paint",
+      "appliesTo": "svgShape",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-stroke"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "stroke-width",
+      "labelKey": "property.strokeWidth",
+      "section": "paint",
+      "group": "svg",
+      "control": "length-field",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "length-percentage",
+      "appliesTo": "svgShape",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-stroke-width"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "border-top-width",
+      "labelKey": "property.borderTopWidth",
+      "section": "border",
+      "group": "border",
+      "control": "border-editor",
+      "icons": {},
+      "valueType": "length",
+      "codec": "line-width",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.setBorder#inspector-border-border-editor",
+        "style.setBorder#inspector-border-width-border-editor",
+        "style.setBorder#inspector-border-top-border-editor",
+        "style.setBorder#inspector-border-top-width-border-editor",
+        "style.setBorder#quick-panel-border",
+        "style.setBorder#handle-border-top"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "border-top-style",
+      "labelKey": "property.borderTopStyle",
+      "section": "border",
+      "group": "border",
+      "control": "border-editor",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.setBorder#inspector-border-border-editor",
+        "style.setBorder#inspector-border-style-border-editor",
+        "style.setBorder#inspector-border-top-border-editor",
+        "style.setBorder#quick-panel-border"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "border-top-color",
+      "labelKey": "property.borderTopColor",
+      "section": "border",
+      "group": "border",
+      "control": "border-editor",
+      "icons": {},
+      "valueType": "color",
+      "codec": "color",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.setBorder#inspector-border-border-editor",
+        "style.setBorder#inspector-border-color-border-editor",
+        "style.setBorder#inspector-border-top-border-editor",
+        "style.setBorder#quick-panel-border"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "border-right-width",
+      "labelKey": "property.borderRightWidth",
+      "section": "border",
+      "group": "border",
+      "control": "border-editor",
+      "icons": {},
+      "valueType": "length",
+      "codec": "line-width",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.setBorder#inspector-border-border-editor",
+        "style.setBorder#inspector-border-width-border-editor",
+        "style.setBorder#inspector-border-right-border-editor",
+        "style.setBorder#inspector-border-right-width-border-editor",
+        "style.setBorder#quick-panel-border",
+        "style.setBorder#handle-border-right"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "border-right-style",
+      "labelKey": "property.borderRightStyle",
+      "section": "border",
+      "group": "border",
+      "control": "border-editor",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.setBorder#inspector-border-border-editor",
+        "style.setBorder#inspector-border-style-border-editor",
+        "style.setBorder#inspector-border-right-border-editor",
+        "style.setBorder#quick-panel-border"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "border-right-color",
+      "labelKey": "property.borderRightColor",
+      "section": "border",
+      "group": "border",
+      "control": "border-editor",
+      "icons": {},
+      "valueType": "color",
+      "codec": "color",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.setBorder#inspector-border-border-editor",
+        "style.setBorder#inspector-border-color-border-editor",
+        "style.setBorder#inspector-border-right-border-editor",
+        "style.setBorder#quick-panel-border"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "border-bottom-width",
+      "labelKey": "property.borderBottomWidth",
+      "section": "border",
+      "group": "border",
+      "control": "border-editor",
+      "icons": {},
+      "valueType": "length",
+      "codec": "line-width",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.setBorder#inspector-border-border-editor",
+        "style.setBorder#inspector-border-width-border-editor",
+        "style.setBorder#inspector-border-bottom-border-editor",
+        "style.setBorder#inspector-border-bottom-width-border-editor",
+        "style.setBorder#quick-panel-border",
+        "style.setBorder#handle-border-bottom"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "border-bottom-style",
+      "labelKey": "property.borderBottomStyle",
+      "section": "border",
+      "group": "border",
+      "control": "border-editor",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.setBorder#inspector-border-border-editor",
+        "style.setBorder#inspector-border-style-border-editor",
+        "style.setBorder#inspector-border-bottom-border-editor",
+        "style.setBorder#quick-panel-border"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "border-bottom-color",
+      "labelKey": "property.borderBottomColor",
+      "section": "border",
+      "group": "border",
+      "control": "border-editor",
+      "icons": {},
+      "valueType": "color",
+      "codec": "color",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.setBorder#inspector-border-border-editor",
+        "style.setBorder#inspector-border-color-border-editor",
+        "style.setBorder#inspector-border-bottom-border-editor",
+        "style.setBorder#quick-panel-border"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "border-left-width",
+      "labelKey": "property.borderLeftWidth",
+      "section": "border",
+      "group": "border",
+      "control": "border-editor",
+      "icons": {},
+      "valueType": "length",
+      "codec": "line-width",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.setBorder#inspector-border-border-editor",
+        "style.setBorder#inspector-border-width-border-editor",
+        "style.setBorder#inspector-border-left-border-editor",
+        "style.setBorder#inspector-border-left-width-border-editor",
+        "style.setBorder#quick-panel-border",
+        "style.setBorder#handle-border-left"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "border-left-style",
+      "labelKey": "property.borderLeftStyle",
+      "section": "border",
+      "group": "border",
+      "control": "border-editor",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.setBorder#inspector-border-border-editor",
+        "style.setBorder#inspector-border-style-border-editor",
+        "style.setBorder#inspector-border-left-border-editor",
+        "style.setBorder#quick-panel-border"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "border-left-color",
+      "labelKey": "property.borderLeftColor",
+      "section": "border",
+      "group": "border",
+      "control": "border-editor",
+      "icons": {},
+      "valueType": "color",
+      "codec": "color",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.setBorder#inspector-border-border-editor",
+        "style.setBorder#inspector-border-color-border-editor",
+        "style.setBorder#inspector-border-left-border-editor",
+        "style.setBorder#quick-panel-border"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "border-top-left-radius",
+      "labelKey": "property.borderTopLeftRadius",
+      "section": "border",
+      "group": "radius",
+      "control": "radius-editor",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "radius",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.setRadius#inspector-border-radius-radius-editor",
+        "style.setRadius#inspector-border-top-left-radius-radius-editor",
+        "style.setRadius#handle-radius-corner",
+        "style.set#quick-panel-radius"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "border-top-right-radius",
+      "labelKey": "property.borderTopRightRadius",
+      "section": "border",
+      "group": "radius",
+      "control": "radius-editor",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "radius",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.setRadius#inspector-border-radius-radius-editor",
+        "style.setRadius#inspector-border-top-right-radius-radius-editor",
+        "style.setRadius#handle-radius-corner",
+        "style.set#quick-panel-radius"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "border-bottom-right-radius",
+      "labelKey": "property.borderBottomRightRadius",
+      "section": "border",
+      "group": "radius",
+      "control": "radius-editor",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "radius",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.setRadius#inspector-border-radius-radius-editor",
+        "style.setRadius#inspector-border-bottom-right-radius-radius-editor",
+        "style.setRadius#handle-radius-corner",
+        "style.set#quick-panel-radius"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "border-bottom-left-radius",
+      "labelKey": "property.borderBottomLeftRadius",
+      "section": "border",
+      "group": "radius",
+      "control": "radius-editor",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "radius",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.setRadius#inspector-border-radius-radius-editor",
+        "style.setRadius#inspector-border-bottom-left-radius-radius-editor",
+        "style.setRadius#handle-radius-corner",
+        "style.set#quick-panel-radius"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "outline-width",
+      "labelKey": "property.outlineWidth",
+      "section": "border",
+      "group": "outline",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "length",
+      "codec": "line-width",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-outline"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "outline-style",
+      "labelKey": "property.outlineStyle",
+      "section": "border",
+      "group": "outline",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-outline"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "outline-color",
+      "labelKey": "property.outlineColor",
+      "section": "border",
+      "group": "outline",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "color",
+      "codec": "color",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-outline"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "outline-offset",
+      "labelKey": "property.outlineOffset",
+      "section": "border",
+      "group": "outline",
+      "control": "length-field",
+      "icons": {},
+      "valueType": "length",
+      "codec": "length",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-outline-offset"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "color",
+      "labelKey": "property.color",
+      "section": "text",
+      "group": "typography",
+      "control": "color-field",
+      "icons": {},
+      "valueType": "color",
+      "codec": "color",
+      "appliesTo": "text",
+      "essential": true,
+      "doors": [
+        "style.set#inspector-color",
+        "style.set#quick-panel-text-colour"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "font-family",
+      "labelKey": "property.fontFamily",
+      "section": "text",
+      "group": "typography",
+      "control": "font-menu",
+      "icons": {},
+      "valueType": "font-family-list",
+      "codec": "font-family-list",
+      "appliesTo": "text",
+      "essential": true,
+      "doors": [
+        "style.set#inspector-font-family",
+        "style.set#quick-panel-font-family"
+      ],
+      "subsets": [
+        {
+          "id": "stacks",
+          "values": [
+            "system-ui, sans-serif",
+            "Arial, Helvetica, sans-serif",
+            "Verdana, Geneva, sans-serif",
+            "Tahoma, sans-serif",
+            "'Trebuchet MS', sans-serif",
+            "Georgia, 'Times New Roman', serif",
+            "'Times New Roman', Times, serif",
+            "'Courier New', monospace",
+            "serif",
+            "sans-serif",
+            "monospace"
+          ],
+          "units": null,
+          "reason": "The font menu offers system and web-safe font stacks; the generic families of the official list are the last entry of each stack, and any other family is typed. The ui-serif, ui-sans-serif and ui-monospace families are left out: only Safari supports them (css-compat.json)."
+        }
+      ]
+    },
+    {
+      "id": "font-size",
+      "labelKey": "property.fontSize",
+      "section": "text",
+      "group": "typography",
+      "control": "length-field",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "length-percentage",
+      "appliesTo": "text",
+      "essential": true,
+      "doors": [
+        "style.set#inspector-font-size",
+        "style.set#quick-panel-font-size"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "font-weight",
+      "labelKey": "property.fontWeight",
+      "section": "text",
+      "group": "typography",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "number",
+      "codec": "font-weight",
+      "appliesTo": "text",
+      "essential": true,
+      "doors": [
+        "style.set#inspector-font-weight",
+        "style.set#quick-panel-font-weight"
+      ],
+      "subsets": [
+        {
+          "id": "menu",
+          "values": [
+            "100",
+            "200",
+            "300",
+            "400",
+            "500",
+            "600",
+            "700",
+            "800",
+            "900",
+            "normal",
+            "bold",
+            "lighter",
+            "bolder"
+          ],
+          "units": null,
+          "reason": "The menu offers the nine named weights as numbers with the four keywords; any number from 1 to 1000 is typed."
+        }
+      ]
+    },
+    {
+      "id": "font-style",
+      "labelKey": "property.fontStyle",
+      "section": "text",
+      "group": "typography",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "font-style",
+      "appliesTo": "text",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-font-style"
+      ],
+      "subsets": [
+        {
+          "id": "menu",
+          "values": [
+            "normal",
+            "italic",
+            "oblique"
+          ],
+          "units": null,
+          "reason": "left and right only qualify an oblique angle in the draft grammar; an oblique angle is typed."
+        }
+      ]
+    },
+    {
+      "id": "line-height",
+      "labelKey": "property.lineHeight",
+      "section": "text",
+      "group": "typography",
+      "control": "length-field",
+      "icons": {},
+      "valueType": "number",
+      "codec": "line-height",
+      "appliesTo": "text",
+      "essential": true,
+      "doors": [
+        "style.set#inspector-line-height",
+        "style.set#quick-panel-line-height"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "letter-spacing",
+      "labelKey": "property.letterSpacing",
+      "section": "text",
+      "group": "typography",
+      "control": "length-field",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "length-percentage",
+      "appliesTo": "text",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-letter-spacing",
+        "style.set#quick-panel-letter-spacing"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "word-spacing",
+      "labelKey": "property.wordSpacing",
+      "section": "text",
+      "group": "typography",
+      "control": "length-field",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "length-percentage",
+      "appliesTo": "text",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-word-spacing"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "text-align",
+      "labelKey": "property.textAlign",
+      "section": "text",
+      "group": "typography",
+      "control": "keyword-buttons",
+      "icons": {
+        "start": "arrow-right-to-line",
+        "end": "arrow-left-to-line",
+        "left": "text-align-start",
+        "right": "text-align-end",
+        "center": "text-align-center",
+        "justify": "text-align-justify"
+      },
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "text",
+      "essential": true,
+      "doors": [
+        "style.set#inspector-text-align",
+        "style.set#quick-panel-text-align"
+      ],
+      "subsets": [
+        {
+          "id": "menu",
+          "values": [
+            "left",
+            "center",
+            "right",
+            "justify"
+          ],
+          "units": null,
+          "reason": "The four a text block takes, one row of buttons: start and end say the same as left and right in a left-to-right page, and the other values (match-parent and the engine-specific ones) wait in All properties."
+        }
+      ]
+    },
+    {
+      "id": "text-decoration-line",
+      "labelKey": "property.textDecorationLine",
+      "section": "text",
+      "group": "typography",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword-set",
+      "appliesTo": "text",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-text-decoration"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "text-decoration-thickness",
+      "labelKey": "property.textDecorationThickness",
+      "section": "text",
+      "group": "typography",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "length-percentage",
+      "appliesTo": "text",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-text-decoration"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "text-decoration-style",
+      "labelKey": "property.textDecorationStyle",
+      "section": "text",
+      "group": "typography",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "text",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-text-decoration"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "text-decoration-color",
+      "labelKey": "property.textDecorationColor",
+      "section": "text",
+      "group": "typography",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "color",
+      "codec": "color",
+      "appliesTo": "text",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-text-decoration"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "text-transform",
+      "labelKey": "property.textTransform",
+      "section": "text",
+      "group": "typography",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword-set",
+      "appliesTo": "text",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-text-transform"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "text-indent",
+      "labelKey": "property.textIndent",
+      "section": "text",
+      "group": "typography",
+      "control": "length-field",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "text-indent",
+      "appliesTo": "text",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-text-indent"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "text-overflow",
+      "labelKey": "property.textOverflow",
+      "section": "text",
+      "group": "typography",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "clippingBox",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-text-overflow"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "white-space-collapse",
+      "labelKey": "property.whiteSpaceCollapse",
+      "section": "text",
+      "group": "typography",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "text",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-white-space"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "text-wrap-mode",
+      "labelKey": "property.textWrapMode",
+      "section": "text",
+      "group": "typography",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "text",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-white-space"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "word-break",
+      "labelKey": "property.wordBreak",
+      "section": "text",
+      "group": "typography",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "text",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-word-break"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "vertical-align",
+      "labelKey": "property.verticalAlign",
+      "section": "text",
+      "group": "typography",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "vertical-align",
+      "appliesTo": "inlineOrCell",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-vertical-align"
+      ],
+      "subsets": [
+        {
+          "id": "menu",
+          "values": [
+            "baseline",
+            "top",
+            "middle",
+            "bottom",
+            "sub",
+            "super",
+            "text-top",
+            "text-bottom"
+          ],
+          "units": null,
+          "reason": "The menu offers the keywords Chrome, Firefox and Safari all implement; lengths and percentages are typed. The CSS Inline 3 keywords (first, last, center, alphabetic and the other baselines) are Firefox only (css-compat.json)."
+        }
+      ]
+    },
+    {
+      "id": "font-stretch",
+      "labelKey": "property.fontStretch",
+      "section": "advanced",
+      "group": "advanced",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "font-stretch",
+      "appliesTo": "text",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-font-stretch"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "font-variant-ligatures",
+      "labelKey": "property.fontVariantLigatures",
+      "section": "advanced",
+      "group": "advanced",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword-set",
+      "appliesTo": "text",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-font-variant"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "font-variant-caps",
+      "labelKey": "property.fontVariantCaps",
+      "section": "advanced",
+      "group": "advanced",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword-set",
+      "appliesTo": "text",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-font-variant"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "font-variant-alternates",
+      "labelKey": "property.fontVariantAlternates",
+      "section": "advanced",
+      "group": "advanced",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword-set",
+      "appliesTo": "text",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-font-variant"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "font-variant-numeric",
+      "labelKey": "property.fontVariantNumeric",
+      "section": "advanced",
+      "group": "advanced",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword-set",
+      "appliesTo": "text",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-font-variant"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "font-variant-east-asian",
+      "labelKey": "property.fontVariantEastAsian",
+      "section": "advanced",
+      "group": "advanced",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword-set",
+      "appliesTo": "text",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-font-variant"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "font-variant-position",
+      "labelKey": "property.fontVariantPosition",
+      "section": "advanced",
+      "group": "advanced",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword-set",
+      "appliesTo": "text",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-font-variant"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "font-feature-settings",
+      "labelKey": "property.fontFeatureSettings",
+      "section": "advanced",
+      "group": "advanced",
+      "control": "text-field",
+      "icons": {},
+      "valueType": "string",
+      "codec": "feature-tag-list",
+      "appliesTo": "text",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-font-feature-settings"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "overflow-wrap",
+      "labelKey": "property.overflowWrap",
+      "section": "advanced",
+      "group": "advanced",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "text",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-overflow-wrap"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "hyphens",
+      "labelKey": "property.hyphens",
+      "section": "advanced",
+      "group": "advanced",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "text",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-hyphens"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "direction",
+      "labelKey": "property.direction",
+      "section": "advanced",
+      "group": "advanced",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "text",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-direction"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "writing-mode",
+      "labelKey": "property.writingMode",
+      "section": "advanced",
+      "group": "advanced",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "text",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-writing-mode"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "text-orientation",
+      "labelKey": "property.textOrientation",
+      "section": "advanced",
+      "group": "advanced",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "text",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-text-orientation"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "list-style-type",
+      "labelKey": "property.listStyleType",
+      "section": "text",
+      "group": "list",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "counter-style",
+      "appliesTo": "list",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-list-style-type"
+      ],
+      "subsets": [
+        {
+          "id": "menu",
+          "values": [
+            "none",
+            "disc",
+            "circle",
+            "square",
+            "decimal",
+            "lower-alpha",
+            "upper-alpha",
+            "lower-roman",
+            "upper-roman"
+          ],
+          "units": null,
+          "reason": "Predefined counter styles are custom identifiers in the official syntax, not keywords, so the menu declares the ones it offers; any other counter style or a string is typed."
+        }
+      ]
+    },
+    {
+      "id": "list-style-position",
+      "labelKey": "property.listStylePosition",
+      "section": "text",
+      "group": "list",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "list",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-list-style-position"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "list-style-image",
+      "labelKey": "property.listStyleImage",
+      "section": "text",
+      "group": "list",
+      "control": "image-field",
+      "icons": {},
+      "valueType": "image",
+      "codec": "image",
+      "appliesTo": "list",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-list-style-image"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "accent-color",
+      "labelKey": "property.accentColor",
+      "section": "text",
+      "group": "form",
+      "control": "color-field",
+      "icons": {},
+      "valueType": "color",
+      "codec": "color",
+      "appliesTo": "formControl",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-accent-color"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "caret-color",
+      "labelKey": "property.caretColor",
+      "section": "text",
+      "group": "form",
+      "control": "color-field",
+      "icons": {},
+      "valueType": "color",
+      "codec": "color",
+      "appliesTo": "textInput",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-caret-color"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "appearance",
+      "labelKey": "property.appearance",
+      "section": "text",
+      "group": "form",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "formControl",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-appearance"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "opacity",
+      "labelKey": "property.opacity",
+      "section": "effects",
+      "group": "appearance",
+      "control": "slider",
+      "icons": {},
+      "valueType": "number",
+      "codec": "alpha",
+      "appliesTo": "always",
+      "essential": true,
+      "doors": [
+        "style.set#inspector-opacity",
+        "style.set#quick-panel-opacity"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "visibility",
+      "labelKey": "property.visibility",
+      "section": "effects",
+      "group": "appearance",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-visibility"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "mix-blend-mode",
+      "labelKey": "property.mixBlendMode",
+      "section": "effects",
+      "group": "appearance",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "hasBox",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-mix-blend-mode"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "isolation",
+      "labelKey": "property.isolation",
+      "section": "effects",
+      "group": "appearance",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "hasBox",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-isolation"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "cursor",
+      "labelKey": "property.cursor",
+      "section": "effects",
+      "group": "pointer",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "cursor",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-cursor"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "pointer-events",
+      "labelKey": "property.pointerEvents",
+      "section": "effects",
+      "group": "pointer",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-pointer-events"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "will-change",
+      "labelKey": "property.willChange",
+      "section": "effects",
+      "group": "pointer",
+      "control": "text-field",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "animateable-feature-list",
+      "appliesTo": "hasBox",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-will-change"
+      ],
+      "subsets": [
+        {
+          "id": "menu",
+          "values": [
+            "auto",
+            "scroll-position",
+            "contents",
+            "transform",
+            "opacity"
+          ],
+          "units": null,
+          "reason": "Property names are custom identifiers in the official syntax; the menu adds the two properties the editor animates to the three keywords."
+        }
+      ]
+    },
+    {
+      "id": "box-shadow",
+      "labelKey": "property.boxShadow",
+      "section": "effects",
+      "group": "shadow",
+      "control": "shadow-editor",
+      "icons": {},
+      "valueType": "shadow-list",
+      "codec": "shadow-list",
+      "appliesTo": "always",
+      "essential": true,
+      "doors": [
+        "style.setShadows#inspector-box-shadow-shadow-add",
+        "style.setShadows#inspector-box-shadow-shadow-x",
+        "style.setShadows#inspector-box-shadow-shadow-y",
+        "style.setShadows#inspector-box-shadow-shadow-blur",
+        "style.setShadows#inspector-box-shadow-shadow-spread",
+        "style.setShadows#inspector-box-shadow-shadow-inset",
+        "style.setShadows#inspector-box-shadow-shadow-colour",
+        "style.setShadows#inspector-box-shadow-shadow-visibility",
+        "style.setShadows#inspector-box-shadow-shadow-remove",
+        "style.setShadows#inspector-box-shadow-shadow-reset",
+        "style.setShadows#panel-drag-box-shadow-pad-pad",
+        "style.setShadows#handle-shadow-offset",
+        "style.setShadows#handle-shadow-blur",
+        "style.setShadows#key-arrow-left-in-shadow-pad",
+        "style.setShadows#key-arrow-right-in-shadow-pad",
+        "style.setShadows#key-arrow-up-in-shadow-pad",
+        "style.setShadows#key-arrow-down-in-shadow-pad",
+        "style.setShadows#panel-drag-box-shadow-row"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "text-shadow",
+      "labelKey": "property.textShadow",
+      "section": "text",
+      "group": "typography",
+      "control": "shadow-editor",
+      "icons": {},
+      "valueType": "text-shadow-list",
+      "codec": "text-shadow-list",
+      "appliesTo": "text",
+      "essential": false,
+      "doors": [
+        "style.setShadows#inspector-text-shadow-shadow-add",
+        "style.setShadows#inspector-text-shadow-shadow-x",
+        "style.setShadows#inspector-text-shadow-shadow-y",
+        "style.setShadows#inspector-text-shadow-shadow-blur",
+        "style.setShadows#inspector-text-shadow-shadow-colour",
+        "style.setShadows#inspector-text-shadow-shadow-visibility",
+        "style.setShadows#inspector-text-shadow-shadow-remove",
+        "style.setShadows#inspector-text-shadow-shadow-reset",
+        "style.setShadows#inspector-text-shadow-shadow-css",
+        "style.setShadows#panel-drag-text-shadow-pad-pad",
+        "style.setShadows#handle-shadow-offset",
+        "style.setShadows#handle-shadow-blur",
+        "style.setShadows#key-arrow-left-in-shadow-pad",
+        "style.setShadows#key-arrow-right-in-shadow-pad",
+        "style.setShadows#key-arrow-up-in-shadow-pad",
+        "style.setShadows#key-arrow-down-in-shadow-pad",
+        "style.setShadows#panel-drag-text-shadow-row"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "filter",
+      "labelKey": "property.filter",
+      "section": "effects",
+      "group": "filters",
+      "control": "filter-editor",
+      "icons": {},
+      "valueType": "string",
+      "codec": "filter-list",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.setFilter#inspector-filter-filter-blur",
+        "style.setFilter#inspector-filter-filter-brightness",
+        "style.setFilter#inspector-filter-filter-contrast",
+        "style.setFilter#inspector-filter-filter-saturate",
+        "style.setFilter#inspector-filter-filter-hue-rotate",
+        "style.setFilter#inspector-filter-filter-grayscale",
+        "style.setFilter#inspector-filter-filter-invert",
+        "style.setFilter#inspector-filter-filter-sepia",
+        "style.setFilter#inspector-filter-filter-remove",
+        "style.setFilter#quick-panel-effects"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "backdrop-filter",
+      "labelKey": "property.backdropFilter",
+      "section": "effects",
+      "group": "filters",
+      "control": "text-field",
+      "icons": {},
+      "valueType": "string",
+      "codec": "filter-list",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-backdrop-filter"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "clip-path",
+      "labelKey": "property.clipPath",
+      "section": "effects",
+      "group": "filters",
+      "control": "text-field",
+      "icons": {},
+      "valueType": "string",
+      "codec": "clip-path",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-clip-path"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "mask-image",
+      "labelKey": "property.maskImage",
+      "section": "effects",
+      "group": "filters",
+      "control": "image-field",
+      "icons": {},
+      "valueType": "image",
+      "codec": "image-layers",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-mask-image"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "transform",
+      "labelKey": "property.transform",
+      "section": "effects",
+      "group": "transform",
+      "control": "transform-fields",
+      "icons": {},
+      "valueType": "transform-list",
+      "codec": "transform-list",
+      "appliesTo": "hasBox",
+      "essential": false,
+      "doors": [
+        "style.setTransform#inspector-transform-transform-skew-x",
+        "style.setTransform#inspector-transform-transform-skew-y",
+        "style.setTransform#quick-panel-skew-x",
+        "style.setTransform#quick-panel-skew-y"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "transform-origin",
+      "labelKey": "property.transformOrigin",
+      "section": "effects",
+      "group": "transform",
+      "control": "text-field",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "position",
+      "appliesTo": "hasBox",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-transform-origin"
+      ],
+      "subsets": [
+        {
+          "id": "menu",
+          "values": [
+            "center",
+            "top",
+            "bottom",
+            "left",
+            "right",
+            "top left",
+            "top right",
+            "bottom left",
+            "bottom right"
+          ],
+          "units": null,
+          "reason": "The menu offers the nine anchor points of the box; any other origin is typed."
+        }
+      ]
+    },
+    {
+      "id": "perspective",
+      "labelKey": "property.perspective",
+      "section": "effects",
+      "group": "transform",
+      "control": "length-field",
+      "icons": {},
+      "valueType": "length",
+      "codec": "length",
+      "appliesTo": "hasBox",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-perspective"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "perspective-origin",
+      "labelKey": "property.perspectiveOrigin",
+      "section": "effects",
+      "group": "transform",
+      "control": "text-field",
+      "icons": {},
+      "valueType": "length-percentage",
+      "codec": "position",
+      "appliesTo": "perspectiveContext",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-perspective-origin"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "transform-style",
+      "labelKey": "property.transformStyle",
+      "section": "effects",
+      "group": "transform",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "perspectiveContext",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-transform-style"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "backface-visibility",
+      "labelKey": "property.backfaceVisibility",
+      "section": "effects",
+      "group": "transform",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "perspectiveContext",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-backface-visibility"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "transform-box",
+      "labelKey": "property.transformBox",
+      "section": "effects",
+      "group": "transform",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "transformed",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-transform-box"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "animation-duration",
+      "labelKey": "property.animationDuration",
+      "section": "interactions",
+      "group": "interactions",
+      "control": "length-field",
+      "icons": {},
+      "valueType": "time",
+      "codec": "time-list",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "animation.setSettings#timeline-setting-duration"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "animation-delay",
+      "labelKey": "property.animationDelay",
+      "section": "interactions",
+      "group": "interactions",
+      "control": "length-field",
+      "icons": {},
+      "valueType": "time",
+      "codec": "time-list",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "animation.setSettings#timeline-setting-delay"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "animation-iteration-count",
+      "labelKey": "property.animationIterationCount",
+      "section": "interactions",
+      "group": "interactions",
+      "control": "number-field",
+      "icons": {},
+      "valueType": "number",
+      "codec": "integer",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "animation.setSettings#timeline-setting-iterations"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "animation-direction",
+      "labelKey": "property.animationDirection",
+      "section": "interactions",
+      "group": "interactions",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "animation.setSettings#timeline-setting-direction"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "animation-fill-mode",
+      "labelKey": "property.animationFillMode",
+      "section": "interactions",
+      "group": "interactions",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "animation.setSettings#timeline-setting-fill"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "animation-timing-function",
+      "labelKey": "property.animationTimingFunction",
+      "section": "interactions",
+      "group": "interactions",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "string",
+      "codec": "easing-list",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "animation.setSettings#timeline-setting-timing",
+        "animation.setKeyframeEasing#timeline-keyframe-easing"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "animation-play-state",
+      "labelKey": "property.animationPlayState",
+      "section": "interactions",
+      "group": "interactions",
+      "control": "keyword-menu",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "animation.setSettings#timeline-setting-play-state"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "transition-property",
+      "labelKey": "property.transitionProperty",
+      "section": "effects",
+      "group": "motion",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "property-list",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-transition"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "transition-duration",
+      "labelKey": "property.transitionDuration",
+      "section": "effects",
+      "group": "motion",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "time",
+      "codec": "time-list",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-transition"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "transition-timing-function",
+      "labelKey": "property.transitionTimingFunction",
+      "section": "effects",
+      "group": "motion",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "string",
+      "codec": "easing-list",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-transition"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "transition-delay",
+      "labelKey": "property.transitionDelay",
+      "section": "effects",
+      "group": "motion",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "time",
+      "codec": "time-list",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-transition"
+      ],
+      "subsets": []
+    },
+    {
+      "id": "transition-behavior",
+      "labelKey": "property.transitionBehavior",
+      "section": "effects",
+      "group": "motion",
+      "control": "part-of-composite",
+      "icons": {},
+      "valueType": "keyword",
+      "codec": "keyword-list",
+      "appliesTo": "always",
+      "essential": false,
+      "doors": [
+        "style.set#inspector-transition"
+      ],
+      "subsets": []
+    }
+  ],
+  "composites": [
+    {
+      "id": "gap",
+      "shorthand": "gap",
+      "labelKey": "property.gap",
+      "section": "layout",
+      "group": "flex",
+      "control": "length-field",
+      "codec": "axis-pair",
+      "appliesTo": "flexOrGridContainer",
+      "longhands": [
+        "row-gap",
+        "column-gap"
+      ],
+      "omits": null,
+      "doors": [
+        "style.set#inspector-gap",
+        "style.set#handle-gap-band"
+      ],
+      "subsets": [
+        {
+          "id": "field",
+          "values": [
+            "normal"
+          ],
+          "units": null,
+          "reason": "The gap field offers normal and every length; the line-width keywords (hairline, thin, medium, thick) belong to gap decorations in the CSS Gaps draft and are not offered."
+        }
+      ],
+      "essential": false
+    },
+    {
+      "id": "overflow",
+      "shorthand": "overflow",
+      "labelKey": "property.overflow",
+      "section": "size",
+      "group": "overflow",
+      "control": "keyword-menu",
+      "codec": "axis-pair",
+      "appliesTo": "hasBox",
+      "longhands": [
+        "overflow-x",
+        "overflow-y"
+      ],
+      "omits": null,
+      "doors": [
+        "style.set#inspector-overflow"
+      ],
+      "subsets": [],
+      "essential": false
+    },
+    {
+      "id": "columns",
+      "shorthand": "columns",
+      "labelKey": "property.columns",
+      "section": "layout",
+      "group": "columns",
+      "control": "text-field",
+      "codec": "columns",
+      "appliesTo": "container",
+      "longhands": [
+        "column-width",
+        "column-count"
+      ],
+      "omits": {
+        "longhands": [
+          "column-height"
+        ],
+        "reason": "Only Chrome implements column-height, in the columns shorthand or alone; Firefox and Safari do not (css-compat.json)."
+      },
+      "doors": [
+        "style.set#inspector-columns"
+      ],
+      "subsets": [],
+      "essential": false
+    },
+    {
+      "id": "grid-column",
+      "shorthand": "grid-column",
+      "labelKey": "property.gridColumn",
+      "section": "layout",
+      "group": "in-parent",
+      "control": "text-field",
+      "codec": "grid-line-pair",
+      "appliesTo": "gridItem",
+      "longhands": [
+        "grid-column-start",
+        "grid-column-end"
+      ],
+      "omits": null,
+      "doors": [
+        "style.set#inspector-grid-column"
+      ],
+      "subsets": [],
+      "essential": false
+    },
+    {
+      "id": "grid-row",
+      "shorthand": "grid-row",
+      "labelKey": "property.gridRow",
+      "section": "layout",
+      "group": "in-parent",
+      "control": "text-field",
+      "codec": "grid-line-pair",
+      "appliesTo": "gridItem",
+      "longhands": [
+        "grid-row-start",
+        "grid-row-end"
+      ],
+      "omits": null,
+      "doors": [
+        "style.set#inspector-grid-row"
+      ],
+      "subsets": [],
+      "essential": false
+    },
+    {
+      "id": "grid-area",
+      "shorthand": "grid-area",
+      "labelKey": "property.gridArea",
+      "section": "layout",
+      "group": "in-parent",
+      "control": "text-field",
+      "codec": "grid-area",
+      "appliesTo": "gridItem",
+      "longhands": [
+        "grid-row-start",
+        "grid-column-start",
+        "grid-row-end",
+        "grid-column-end"
+      ],
+      "omits": null,
+      "doors": [
+        "style.set#inspector-grid-area"
+      ],
+      "subsets": [],
+      "essential": false
+    },
+    {
+      "id": "padding",
+      "shorthand": "padding",
+      "labelKey": "property.padding",
+      "section": "space",
+      "group": "box",
+      "control": "box-model",
+      "codec": "box-sides",
+      "appliesTo": "always",
+      "longhands": [
+        "padding-top",
+        "padding-right",
+        "padding-bottom",
+        "padding-left"
+      ],
+      "omits": null,
+      "doors": [
+        "style.setSpacing#inspector-padding-box-model"
+      ],
+      "subsets": [],
+      "essential": false
+    },
+    {
+      "id": "margin",
+      "shorthand": "margin",
+      "labelKey": "property.margin",
+      "section": "space",
+      "group": "box",
+      "control": "box-model",
+      "codec": "box-sides",
+      "appliesTo": "always",
+      "longhands": [
+        "margin-top",
+        "margin-right",
+        "margin-bottom",
+        "margin-left"
+      ],
+      "omits": null,
+      "doors": [
+        "style.setSpacing#inspector-margin-box-model"
+      ],
+      "subsets": [],
+      "essential": false
+    },
+    {
+      "id": "inset",
+      "shorthand": "inset",
+      "labelKey": "property.inset",
+      "section": "position",
+      "group": "position",
+      "control": "length-field",
+      "codec": "box-sides",
+      "appliesTo": "positioned",
+      "longhands": [
+        "top",
+        "right",
+        "bottom",
+        "left"
+      ],
+      "omits": null,
+      "doors": [],
+      "subsets": [],
+      "essential": false
+    },
+    {
+      "id": "border",
+      "shorthand": "border",
+      "labelKey": "property.border",
+      "section": "border",
+      "group": "border",
+      "control": "border-editor",
+      "codec": "border",
+      "appliesTo": "always",
+      "longhands": [
+        "border-top-width",
+        "border-right-width",
+        "border-bottom-width",
+        "border-left-width",
+        "border-top-style",
+        "border-right-style",
+        "border-bottom-style",
+        "border-left-style",
+        "border-top-color",
+        "border-right-color",
+        "border-bottom-color",
+        "border-left-color"
+      ],
+      "omits": null,
+      "doors": [
+        "style.setBorder#inspector-border-border-editor",
+        "style.setBorder#quick-panel-border"
+      ],
+      "subsets": [],
+      "essential": true
+    },
+    {
+      "id": "border-width",
+      "shorthand": "border-width",
+      "labelKey": "property.borderWidth",
+      "section": "border",
+      "group": "border",
+      "control": "border-editor",
+      "codec": "box-sides",
+      "appliesTo": "always",
+      "longhands": [
+        "border-top-width",
+        "border-right-width",
+        "border-bottom-width",
+        "border-left-width"
+      ],
+      "omits": null,
+      "doors": [
+        "style.setBorder#inspector-border-width-border-editor"
+      ],
+      "subsets": [],
+      "essential": false
+    },
+    {
+      "id": "border-style",
+      "shorthand": "border-style",
+      "labelKey": "property.borderStyle",
+      "section": "border",
+      "group": "border",
+      "control": "border-editor",
+      "codec": "box-sides",
+      "appliesTo": "always",
+      "longhands": [
+        "border-top-style",
+        "border-right-style",
+        "border-bottom-style",
+        "border-left-style"
+      ],
+      "omits": null,
+      "doors": [
+        "style.setBorder#inspector-border-style-border-editor"
+      ],
+      "subsets": [],
+      "essential": false
+    },
+    {
+      "id": "border-color",
+      "shorthand": "border-color",
+      "labelKey": "property.borderColor",
+      "section": "border",
+      "group": "border",
+      "control": "border-editor",
+      "codec": "box-sides",
+      "appliesTo": "always",
+      "longhands": [
+        "border-top-color",
+        "border-right-color",
+        "border-bottom-color",
+        "border-left-color"
+      ],
+      "omits": null,
+      "doors": [
+        "style.setBorder#inspector-border-color-border-editor"
+      ],
+      "subsets": [],
+      "essential": true
+    },
+    {
+      "id": "border-top",
+      "shorthand": "border-top",
+      "labelKey": "property.borderTop",
+      "section": "border",
+      "group": "border",
+      "control": "border-editor",
+      "codec": "border-side",
+      "appliesTo": "always",
+      "longhands": [
+        "border-top-width",
+        "border-top-style",
+        "border-top-color"
+      ],
+      "omits": null,
+      "doors": [
+        "style.setBorder#inspector-border-top-border-editor"
+      ],
+      "subsets": [],
+      "essential": false
+    },
+    {
+      "id": "border-right",
+      "shorthand": "border-right",
+      "labelKey": "property.borderRight",
+      "section": "border",
+      "group": "border",
+      "control": "border-editor",
+      "codec": "border-side",
+      "appliesTo": "always",
+      "longhands": [
+        "border-right-width",
+        "border-right-style",
+        "border-right-color"
+      ],
+      "omits": null,
+      "doors": [
+        "style.setBorder#inspector-border-right-border-editor"
+      ],
+      "subsets": [],
+      "essential": false
+    },
+    {
+      "id": "border-bottom",
+      "shorthand": "border-bottom",
+      "labelKey": "property.borderBottom",
+      "section": "border",
+      "group": "border",
+      "control": "border-editor",
+      "codec": "border-side",
+      "appliesTo": "always",
+      "longhands": [
+        "border-bottom-width",
+        "border-bottom-style",
+        "border-bottom-color"
+      ],
+      "omits": null,
+      "doors": [
+        "style.setBorder#inspector-border-bottom-border-editor"
+      ],
+      "subsets": [],
+      "essential": false
+    },
+    {
+      "id": "border-left",
+      "shorthand": "border-left",
+      "labelKey": "property.borderLeft",
+      "section": "border",
+      "group": "border",
+      "control": "border-editor",
+      "codec": "border-side",
+      "appliesTo": "always",
+      "longhands": [
+        "border-left-width",
+        "border-left-style",
+        "border-left-color"
+      ],
+      "omits": null,
+      "doors": [
+        "style.setBorder#inspector-border-left-border-editor"
+      ],
+      "subsets": [],
+      "essential": false
+    },
+    {
+      "id": "border-radius",
+      "shorthand": "border-radius",
+      "labelKey": "property.borderRadius",
+      "section": "border",
+      "group": "radius",
+      "control": "radius-editor",
+      "codec": "box-corners",
+      "appliesTo": "always",
+      "longhands": [
+        "border-top-left-radius",
+        "border-top-right-radius",
+        "border-bottom-right-radius",
+        "border-bottom-left-radius"
+      ],
+      "omits": null,
+      "doors": [
+        "style.setRadius#inspector-border-radius-radius-editor",
+        "style.setRadius#handle-radius-corner"
+      ],
+      "subsets": [],
+      "essential": true
+    },
+    {
+      "id": "outline",
+      "shorthand": "outline",
+      "labelKey": "property.outline",
+      "section": "border",
+      "group": "outline",
+      "control": "text-field",
+      "codec": "border-side",
+      "appliesTo": "always",
+      "longhands": [
+        "outline-width",
+        "outline-style",
+        "outline-color"
+      ],
+      "omits": null,
+      "doors": [
+        "style.set#inspector-outline"
+      ],
+      "subsets": [],
+      "essential": false
+    },
+    {
+      "id": "text-decoration",
+      "shorthand": "text-decoration",
+      "labelKey": "property.textDecoration",
+      "section": "text",
+      "group": "typography",
+      "control": "keyword-menu",
+      "codec": "text-decoration",
+      "appliesTo": "text",
+      "longhands": [
+        "text-decoration-line",
+        "text-decoration-thickness",
+        "text-decoration-style",
+        "text-decoration-color"
+      ],
+      "omits": null,
+      "doors": [
+        "style.set#inspector-text-decoration"
+      ],
+      "subsets": [
+        {
+          "id": "menu",
+          "values": [
+            "none",
+            "underline",
+            "overline",
+            "line-through",
+            "underline dotted"
+          ],
+          "units": null,
+          "reason": "The menu offers the three lines and a dotted underline; thickness, style and colour combinations are typed."
+        }
+      ],
+      "essential": false
+    },
+    {
+      "id": "white-space",
+      "shorthand": "white-space",
+      "labelKey": "property.whiteSpace",
+      "section": "text",
+      "group": "typography",
+      "control": "keyword-menu",
+      "codec": "white-space",
+      "appliesTo": "text",
+      "longhands": [
+        "white-space-collapse",
+        "text-wrap-mode"
+      ],
+      "omits": null,
+      "doors": [
+        "style.set#inspector-white-space"
+      ],
+      "subsets": [],
+      "essential": false
+    },
+    {
+      "id": "font-variant",
+      "shorthand": "font-variant",
+      "labelKey": "property.fontVariant",
+      "section": "text",
+      "group": "advanced",
+      "control": "keyword-menu",
+      "codec": "font-variant",
+      "appliesTo": "text",
+      "longhands": [
+        "font-variant-ligatures",
+        "font-variant-caps",
+        "font-variant-alternates",
+        "font-variant-numeric",
+        "font-variant-east-asian",
+        "font-variant-position"
+      ],
+      "omits": {
+        "longhands": [
+          "font-variant-emoji"
+        ],
+        "reason": "Safari supports font-variant-emoji only in a preview release (css-compat.json); the composite writes the variants every browser implements."
+      },
+      "doors": [
+        "style.set#inspector-font-variant"
+      ],
+      "subsets": [
+        {
+          "id": "menu",
+          "values": [
+            "normal",
+            "small-caps",
+            "all-small-caps",
+            "tabular-nums",
+            "oldstyle-nums"
+          ],
+          "units": null,
+          "reason": "The menu offers the caps and numeric variants a page uses most; other variants are typed."
+        }
+      ],
+      "essential": false
+    },
+    {
+      "id": "background-position",
+      "shorthand": "background-position",
+      "labelKey": "property.backgroundPosition",
+      "section": "paint",
+      "group": "background",
+      "control": "keyword-menu",
+      "codec": "position",
+      "appliesTo": "imagePainting",
+      "longhands": [
+        "background-position-x",
+        "background-position-y"
+      ],
+      "omits": null,
+      "doors": [
+        "style.set#inspector-background-position"
+      ],
+      "subsets": [
+        {
+          "id": "menu",
+          "values": [
+            "center",
+            "top",
+            "bottom",
+            "left",
+            "right",
+            "top left",
+            "top right",
+            "bottom left",
+            "bottom right"
+          ],
+          "units": null,
+          "reason": "The menu offers the nine anchor points; offsets are typed."
+        }
+      ],
+      "essential": false
+    },
+    {
+      "id": "background",
+      "shorthand": "background",
+      "labelKey": "property.background",
+      "section": "paint",
+      "group": "background",
+      "control": "gradient-editor",
+      "codec": "background-layers",
+      "appliesTo": "always",
+      "longhands": [
+        "background-image",
+        "background-position-x",
+        "background-position-y",
+        "background-size",
+        "background-repeat",
+        "background-attachment",
+        "background-origin",
+        "background-clip"
+      ],
+      "omits": {
+        "longhands": [
+          "background-color"
+        ],
+        "reason": "A layer edit never touches the colour under the layers: Pager wrote the background shorthand for a gradient and erased background-color (spec gradient-editor, problem 1). The colour has its own field."
+      },
+      "doors": [
+        "style.setBackgroundImage#inspector-background-image-gradient-add",
+        "style.setBackgroundImage#inspector-background-image-gradient-reset"
+      ],
+      "subsets": [],
+      "essential": false
+    },
+    {
+      "id": "transition",
+      "shorthand": "transition",
+      "labelKey": "property.transition",
+      "section": "effects",
+      "group": "motion",
+      "control": "text-field",
+      "codec": "transition-list",
+      "appliesTo": "always",
+      "longhands": [
+        "transition-property",
+        "transition-duration",
+        "transition-timing-function",
+        "transition-delay",
+        "transition-behavior"
+      ],
+      "omits": null,
+      "doors": [
+        "style.set#inspector-transition"
+      ],
+      "subsets": [
+        {
+          "id": "presets",
+          "values": [
+            "all 200ms ease",
+            "all 300ms ease-in-out",
+            "opacity 200ms ease",
+            "transform 300ms ease",
+            "background-color 150ms linear"
+          ],
+          "units": null,
+          "reason": "The menu offers the transitions a page usually takes; any other shorthand is typed and read as the longhands it writes."
+        }
+      ],
+      "essential": false
+    },
+    {
+      "id": "alignment-matrix",
+      "shorthand": null,
+      "labelKey": "property.alignmentMatrix",
+      "section": "layout",
+      "group": "flex",
+      "control": "alignment-matrix",
+      "codec": "alignment-matrix",
+      "appliesTo": "flexOrGridContainer",
+      "longhands": [
+        "justify-content",
+        "align-items"
+      ],
+      "omits": null,
+      "doors": [
+        "style.setAlignment#inspector-alignment-matrix"
+      ],
+      "subsets": [],
+      "essential": false
+    }
+  ],
+  "recipes": [
+    {
+      "id": "line-clamp",
+      "labelKey": "property.lineClamp",
+      "section": "text",
+      "group": "advanced",
+      "control": "number-field",
+      "codec": "line-clamp",
+      "appliesTo": "text",
+      "declarations": [
+        {
+          "property": "display",
+          "value": "-webkit-box"
+        },
+        {
+          "property": "-webkit-box-orient",
+          "value": "vertical"
+        },
+        {
+          "property": "-webkit-line-clamp",
+          "value": null
+        },
+        {
+          "property": "overflow-x",
+          "value": "hidden"
+        },
+        {
+          "property": "overflow-y",
+          "value": "hidden"
+        }
+      ],
+      "shared": {
+        "clear": "restores-previous",
+        "otherWrite": "clears-recipe",
+        "fields": "show-recipe"
+      },
+      "source": {
+        "spec": "https://drafts.csswg.org/css-overflow-4/#webkit-line-clamp",
+        "bcd": "css.properties.line-clamp"
+      },
+      "doors": [
+        "style.set#inspector-line-clamp"
+      ]
+    },
+    {
+      "id": "user-select",
+      "labelKey": "property.userSelect",
+      "section": "effects",
+      "group": "pointer",
+      "control": "keyword-menu",
+      "codec": "keyword",
+      "appliesTo": "always",
+      "declarations": [
+        {
+          "property": "-webkit-user-select",
+          "value": null
+        },
+        {
+          "property": "user-select",
+          "value": null
+        }
+      ],
+      "shared": null,
+      "source": {
+        "spec": "https://drafts.csswg.org/css-ui-4/#propdef--webkit-user-select",
+        "bcd": "css.properties.user-select"
+      },
+      "doors": [
+        "style.set#inspector-user-select"
+      ]
+    }
+  ],
+  "couplings": [
+    {
+      "id": "border-top-width-shows-style",
+      "trigger": {
+        "property": "border-top-width",
+        "values": null,
+        "via": null
+      },
+      "condition": {
+        "predicate": "valueIn",
+        "property": "border-top-style",
+        "values": [
+          "none"
+        ]
+      },
+      "effect": {
+        "action": "setValue",
+        "property": "border-top-style",
+        "value": "solid"
+      },
+      "feature": "props-border-outline"
+    },
+    {
+      "id": "border-right-width-shows-style",
+      "trigger": {
+        "property": "border-right-width",
+        "values": null,
+        "via": null
+      },
+      "condition": {
+        "predicate": "valueIn",
+        "property": "border-right-style",
+        "values": [
+          "none"
+        ]
+      },
+      "effect": {
+        "action": "setValue",
+        "property": "border-right-style",
+        "value": "solid"
+      },
+      "feature": "props-border-outline"
+    },
+    {
+      "id": "border-bottom-width-shows-style",
+      "trigger": {
+        "property": "border-bottom-width",
+        "values": null,
+        "via": null
+      },
+      "condition": {
+        "predicate": "valueIn",
+        "property": "border-bottom-style",
+        "values": [
+          "none"
+        ]
+      },
+      "effect": {
+        "action": "setValue",
+        "property": "border-bottom-style",
+        "value": "solid"
+      },
+      "feature": "props-border-outline"
+    },
+    {
+      "id": "border-left-width-shows-style",
+      "trigger": {
+        "property": "border-left-width",
+        "values": null,
+        "via": null
+      },
+      "condition": {
+        "predicate": "valueIn",
+        "property": "border-left-style",
+        "values": [
+          "none"
+        ]
+      },
+      "effect": {
+        "action": "setValue",
+        "property": "border-left-style",
+        "value": "solid"
+      },
+      "feature": "props-border-outline"
+    },
+    {
+      "id": "column-rule-width-shows-style",
+      "trigger": {
+        "property": "column-rule-width",
+        "values": null,
+        "via": null
+      },
+      "condition": {
+        "predicate": "valueIn",
+        "property": "column-rule-style",
+        "values": [
+          "none"
+        ]
+      },
+      "effect": {
+        "action": "setValue",
+        "property": "column-rule-style",
+        "value": "solid"
+      },
+      "feature": "props-more"
+    },
+    {
+      "id": "alignment-matrix-mirrors-a-reversed-row",
+      "trigger": {
+        "property": "justify-content",
+        "values": null,
+        "via": "alignment-matrix"
+      },
+      "condition": {
+        "predicate": "valueIn",
+        "property": "flex-direction",
+        "values": [
+          "row-reverse"
+        ]
+      },
+      "effect": {
+        "action": "mirror",
+        "property": "justify-content",
+        "value": null
+      },
+      "feature": "props-flex-container"
+    },
+    {
+      "id": "alignment-matrix-mirrors-a-reversed-column",
+      "trigger": {
+        "property": "align-items",
+        "values": null,
+        "via": "alignment-matrix"
+      },
+      "condition": {
+        "predicate": "valueIn",
+        "property": "flex-direction",
+        "values": [
+          "column-reverse"
+        ]
+      },
+      "effect": {
+        "action": "mirror",
+        "property": "align-items",
+        "value": null
+      },
+      "feature": "props-flex-container"
+    },
+    {
+      "id": "alignment-matrix-follows-column-direction",
+      "trigger": {
+        "property": "justify-content",
+        "values": null,
+        "via": "alignment-matrix"
+      },
+      "condition": {
+        "predicate": "valueIn",
+        "property": "flex-direction",
+        "values": [
+          "column",
+          "column-reverse"
+        ]
+      },
+      "effect": {
+        "action": "swapWith",
+        "property": "align-items",
+        "value": null
+      },
+      "feature": "props-flex-container"
+    },
+    {
+      "id": "absolute-makes-static-parent-relative",
+      "trigger": {
+        "property": "position",
+        "values": [
+          "absolute"
+        ],
+        "via": null
+      },
+      "condition": {
+        "predicate": "parentValueIn",
+        "property": "position",
+        "values": [
+          "static"
+        ]
+      },
+      "effect": {
+        "action": "setParentValue",
+        "property": "position",
+        "value": "relative"
+      },
+      "feature": "absolute-free-drag"
+    },
+    {
+      "id": "absolute-keeps-place-top",
+      "trigger": {
+        "property": "position",
+        "values": [
+          "absolute",
+          "fixed"
+        ],
+        "via": null
+      },
+      "condition": {
+        "predicate": "always",
+        "property": null,
+        "values": []
+      },
+      "effect": {
+        "action": "keepVisualPlace",
+        "property": "top",
+        "value": null
+      },
+      "feature": "absolute-free-drag"
+    },
+    {
+      "id": "absolute-keeps-place-left",
+      "trigger": {
+        "property": "position",
+        "values": [
+          "absolute",
+          "fixed"
+        ],
+        "via": null
+      },
+      "condition": {
+        "predicate": "always",
+        "property": null,
+        "values": []
+      },
+      "effect": {
+        "action": "keepVisualPlace",
+        "property": "left",
+        "value": null
+      },
+      "feature": "absolute-free-drag"
+    }
+  ],
+  "valuePredicates": [
+    {
+      "id": "flexOrGridContainer",
+      "property": "display",
+      "values": [
+        "flex",
+        "inline-flex",
+        "grid",
+        "inline-grid"
+      ]
+    },
+    {
+      "id": "positionedSelection",
+      "property": "position",
+      "values": [
+        "absolute",
+        "fixed"
+      ]
+    },
+    {
+      "id": "gridContainer",
+      "property": "display",
+      "values": [
+        "grid",
+        "inline-grid"
+      ]
+    }
+  ],
+  "context": {
+    "own": [
+      "display",
+      "position",
+      "column-count",
+      "column-width",
+      "overflow-x",
+      "overflow-y",
+      "transform"
+    ],
+    "parent": [
+      "display",
+      "overflow-x",
+      "overflow-y",
+      "scroll-snap-type",
+      "perspective",
+      "transform"
+    ]
+  },
+  "storedWhole": [
+    {
+      "property": "animation-delay",
+      "reason": "BCD records animation-delay-start and animation-delay-end (CSS Animations 2) with no browser entry: every browser implements animation-delay itself, and no browser implements the longhands, so the timeline's Delay field stores it whole."
+    },
+    {
+      "property": "box-shadow",
+      "reason": "BCD has no entry for box-shadow-color, box-shadow-offset, box-shadow-blur, box-shadow-spread or box-shadow-position: no browser implements the longhands, every browser implements box-shadow."
+    },
+    {
+      "property": "text-align",
+      "reason": "BCD has no entry for text-align-all: browsers implement text-align itself. text-align-last, which every browser implements, is not edited, so text-align keeps one writer."
+    },
+    {
+      "property": "vertical-align",
+      "reason": "Safari lacks baseline-source, and BCD records the CSS Inline 3 values of vertical-align (first, last, center, alphabetic, central...) only in Firefox: Chrome and Safari implement vertical-align as the CSS 2 property, not as the shorthand of alignment-baseline, baseline-shift and baseline-source, so a composite of those longhands would not do what vertical-align does there."
+    }
+  ],
+  "syntaxFallbacks": [
+    {
+      "property": "fill",
+      "values": null,
+      "recipe": null,
+      "reason": "The Fill and Stroke 3 draft's <paint> no longer lists <color>, although every browser accepts a colour (the SVG shape default fill: #dbe7ff); the browser syntax still has it."
+    },
+    {
+      "property": "stroke",
+      "values": null,
+      "recipe": null,
+      "reason": "The Fill and Stroke 3 draft's <paint> no longer lists <color>, although every browser accepts a colour (the SVG shape default stroke: #2b5fe3); the browser syntax still has it."
+    },
+    {
+      "property": "display",
+      "values": [
+        "-webkit-box"
+      ],
+      "recipe": "line-clamp",
+      "reason": "CSS Overflow 4, 5.1.1 Legacy compatibility: the legacy line clamp only takes effect when display is -webkit-box or -webkit-inline-box. webref defines no such display value and BCD does not track it; the browser syntax (MDN) has it, and the spec section is the evidence for the recipe."
+    },
+    {
+      "property": "-webkit-box-orient",
+      "values": [
+        "vertical"
+      ],
+      "recipe": "line-clamp",
+      "reason": "CSS Overflow 4, 5.1.1 Legacy compatibility: the legacy line clamp needs -webkit-box-orient: vertical. webref lists -webkit-box-orient (Compatibility Standard) without a syntax, so only the browser syntax (MDN) defines its values."
+    }
+  ],
+  "rows": [
+    {
+      "id": "gap-axes",
+      "section": "layout",
+      "fields": [
+        {
+          "target": "row-gap",
+          "prefixKey": "inspector.pair.row"
+        },
+        {
+          "target": "column-gap",
+          "prefixKey": "inspector.pair.column"
+        }
+      ]
+    },
+    {
+      "id": "size-width-height",
+      "section": "size",
+      "fields": [
+        {
+          "target": "width",
+          "prefixKey": null
+        },
+        {
+          "target": "height",
+          "prefixKey": "quickPanel.height"
+        }
+      ]
+    },
+    {
+      "id": "size-min-max-width",
+      "section": "size",
+      "fields": [
+        {
+          "target": "min-width",
+          "prefixKey": null
+        },
+        {
+          "target": "max-width",
+          "prefixKey": "inspector.pair.max"
+        }
+      ]
+    },
+    {
+      "id": "size-min-max-height",
+      "section": "size",
+      "fields": [
+        {
+          "target": "min-height",
+          "prefixKey": null
+        },
+        {
+          "target": "max-height",
+          "prefixKey": "inspector.pair.max"
+        }
+      ]
+    },
+    {
+      "id": "text-size-weight",
+      "section": "text",
+      "fields": [
+        {
+          "target": "font-size",
+          "prefixKey": null
+        },
+        {
+          "target": "font-weight",
+          "prefixKey": null
+        }
+      ]
+    },
+    {
+      "id": "text-line-height-letter-spacing",
+      "section": "text",
+      "fields": [
+        {
+          "target": "line-height",
+          "prefixKey": null
+        },
+        {
+          "target": "letter-spacing",
+          "prefixKey": "inspector.pair.spacing"
+        }
+      ]
+    },
+    {
+      "id": "border-and-colour",
+      "section": "border",
+      "fields": [
+        {
+          "target": "border",
+          "prefixKey": null
+        },
+        {
+          "target": "border-color",
+          "prefixKey": null
+        }
+      ]
+    }
+  ]
+}

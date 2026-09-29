@@ -1,0 +1,609 @@
+{
+  "domain": "text",
+  "commands": [
+    {
+      "id": "text.startEdit",
+      "labelKey": "command.editText",
+      "owner": "src/editor/canvas/text-edit.ts",
+      "introducedBy": "text-edit-inline",
+      "args": {},
+      "availability": {
+        "predicate": "singleTextSelection",
+        "refusalKey": "status.textEdit.notText"
+      },
+      "refusals": [
+        "status.needsSingleSelection",
+        "status.locked.editText",
+        "status.locked.byAncestor"
+      ],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "canvas-double-click-text-element",
+          "kind": "canvas-click",
+          "feature": "text-edit-inline",
+          "target": "text-element",
+          "button": "primary",
+          "count": 2,
+          "modifier": null,
+          "gesture": "canvas-click",
+          "labelKey": "command.editText",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "status.textEdit.notText",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-enter-in-canvas",
+          "kind": "shortcut",
+          "feature": "text-edit-inline",
+          "chord": "Enter",
+          "context": "canvas",
+          "gesture": null,
+          "labelKey": "command.editText",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "status.textEdit.notText",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.editText",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "status.textEdit.notText",
+          "placement": {
+            "region": "command-palette",
+            "order": 47
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "text.set",
+      "labelKey": "command.setText",
+      "owner": "src/core/text/text.ts",
+      "introducedBy": "text-edit-inline",
+      "args": {
+        "target": {
+          "type": "node",
+          "values": [],
+          "optional": false
+        },
+        "content": {
+          "type": "json",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.locked.editText",
+        "status.locked.byAncestor",
+        "status.link.unsafe"
+      ],
+      "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
+      "entryPoints": [
+        {
+          "id": "key-enter-in-text-editing",
+          "kind": "shortcut",
+          "feature": "text-edit-inline",
+          "chord": "Enter",
+          "context": "text-editing",
+          "gesture": null,
+          "labelKey": "command.textEdit.commit",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "canvas-click-outside-edited-element",
+          "kind": "canvas-click",
+          "feature": "text-edit-inline",
+          "target": "outside-edited-element",
+          "button": "primary",
+          "count": 1,
+          "modifier": null,
+          "gesture": "canvas-click",
+          "labelKey": "command.textEdit.commit",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-text",
+          "kind": "inspector-field",
+          "drawnAs": "field",
+          "feature": "inspector-panel",
+          "property": null,
+          "composite": null,
+          "recipe": null,
+          "attribute": "text",
+          "control": "field",
+          "labelKey": "command.setText",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-enter-in-element-text-field",
+          "kind": "shortcut",
+          "feature": "inspector-panel",
+          "chord": "Enter",
+          "context": "element-text-field",
+          "gesture": null,
+          "labelKey": "command.textEdit.commit",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "quick-panel-text",
+          "kind": "quick-panel",
+          "feature": "inspector-panel",
+          "labelKey": "attribute.text.label",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "quick-panel",
+            "order": 43
+          },
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {},
+          "control": "attribute-field",
+          "attribute": "text"
+        }
+      ]
+    },
+    {
+      "id": "text.cancelEdit",
+      "labelKey": "command.textEdit.cancel",
+      "owner": "src/editor/canvas/text-edit.ts",
+      "introducedBy": "text-edit-inline",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "key-escape-in-text-editing",
+          "kind": "shortcut",
+          "feature": "text-edit-inline",
+          "chord": "Escape",
+          "context": "text-editing",
+          "gesture": null,
+          "labelKey": "command.textEdit.cancel",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-escape-in-element-text-field",
+          "kind": "shortcut",
+          "feature": "inspector-panel",
+          "chord": "Escape",
+          "context": "element-text-field",
+          "gesture": null,
+          "labelKey": "command.textEdit.cancel",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "text.insertLineBreak",
+      "labelKey": "command.textEdit.lineBreak",
+      "owner": "src/editor/canvas/text-edit.ts",
+      "introducedBy": "text-edit-inline",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "key-shift-enter-in-text-editing",
+          "kind": "shortcut",
+          "feature": "text-edit-inline",
+          "chord": "Shift+Enter",
+          "context": "text-editing",
+          "gesture": null,
+          "labelKey": "command.textEdit.lineBreak",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "text.toggleBold",
+      "labelKey": "command.textEdit.bold",
+      "owner": "src/editor/canvas/text-edit.ts",
+      "introducedBy": "text-inline-formatting",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "key-ctrl-b-in-text-editing",
+          "kind": "shortcut",
+          "feature": "text-inline-formatting",
+          "chord": "Ctrl+B",
+          "context": "text-editing",
+          "gesture": null,
+          "labelKey": "command.textEdit.bold",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "toolbar-text-toolbar-bold",
+          "kind": "toolbar",
+          "drawnAs": "icon-button",
+          "pressed": true,
+          "feature": "text-inline-formatting",
+          "toolbar": "text-toolbar",
+          "labelKey": "command.textEdit.bold",
+          "faceLabelKey": null,
+          "icon": "bold",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "text-toolbar",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "text.toggleItalic",
+      "labelKey": "command.textEdit.italic",
+      "owner": "src/editor/canvas/text-edit.ts",
+      "introducedBy": "text-inline-formatting",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "key-ctrl-i-in-text-editing",
+          "kind": "shortcut",
+          "feature": "text-inline-formatting",
+          "chord": "Ctrl+I",
+          "context": "text-editing",
+          "gesture": null,
+          "labelKey": "command.textEdit.italic",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "toolbar-text-toolbar-italic",
+          "kind": "toolbar",
+          "drawnAs": "icon-button",
+          "pressed": true,
+          "feature": "text-inline-formatting",
+          "toolbar": "text-toolbar",
+          "labelKey": "command.textEdit.italic",
+          "faceLabelKey": null,
+          "icon": "italic",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "text-toolbar",
+            "order": 2
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "text.editLink",
+      "labelKey": "command.textEdit.link",
+      "owner": "src/editor/canvas/text-edit.ts",
+      "introducedBy": "text-inline-formatting",
+      "args": {
+        "href": {
+          "type": "string",
+          "values": [],
+          "optional": true
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.link.unsafe"
+      ],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "key-ctrl-k-in-text-editing",
+          "kind": "shortcut",
+          "feature": "text-inline-formatting",
+          "chord": "Ctrl+K",
+          "context": "text-editing",
+          "gesture": null,
+          "labelKey": "command.textEdit.link",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "toolbar-text-toolbar-link",
+          "kind": "toolbar",
+          "drawnAs": "icon-button",
+          "pressed": false,
+          "feature": "text-inline-formatting",
+          "toolbar": "text-toolbar",
+          "labelKey": "command.textEdit.link",
+          "faceLabelKey": null,
+          "icon": "link",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "text-toolbar",
+            "order": 3
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "text.paste",
+      "labelKey": "command.textEdit.paste",
+      "owner": "src/editor/canvas/text-edit.ts",
+      "introducedBy": "text-inline-formatting",
+      "args": {
+        "clipboard": {
+          "type": "clipboard",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.paste.empty",
+        "status.clipboard.denied"
+      ],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "key-ctrl-v-in-text-editing",
+          "kind": "shortcut",
+          "feature": "text-inline-formatting",
+          "chord": "Ctrl+V",
+          "context": "text-editing",
+          "gesture": null,
+          "labelKey": "command.textEdit.paste",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "text.selectAll",
+      "labelKey": "command.textEdit.selectAll",
+      "owner": "src/editor/canvas/text-edit.ts",
+      "introducedBy": "select-container-children",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "key-ctrl-a-in-text-editing",
+          "kind": "shortcut",
+          "feature": "select-container-children",
+          "chord": "Ctrl+A",
+          "context": "text-editing",
+          "gesture": null,
+          "labelKey": "command.textEdit.selectAll",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    }
+  ]
+}

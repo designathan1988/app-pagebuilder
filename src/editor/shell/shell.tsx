@@ -1,0 +1,145 @@
+// The shell regions (ARCHITECTURE.md): the window grid of DESIGN.md "The window", with the top bar, the activity
+// bar and the sidebar, the centre column, the inspector, the dock and the status bar. The sidebar, the inspector and
+// the dock are shown or hidden by the workspace state; the theme and the language follow the preferences.
+import { useEffect, useState } from 'react';
+import { ContextMenu } from '../doors/menu.tsx';
+import { CommandBar } from './command-bar.tsx';
+import { Confirmation } from './confirmation.tsx';
+import { installKeymap } from '../input/keymap.ts';
+import { installOsFileDrop } from '../input/pointer.ts';
+import { installPointer } from '../input/pointer.ts';
+import { installFocus } from '../focus/focus.ts';
+import { useEditorState, useStore } from '../store.ts';
+import { objectUrl } from '../../core/files/files.ts';
+import { fontFaceCss } from '../../core/files/fonts.ts';
+import { isPanelOpen } from '../workspace/panels.ts';
+import { useT } from '../text.ts';
+import { PanelBodies, bodiesDrawn } from './bodies.ts';
+import { CanvasColumn } from './canvas.tsx';
+import { DOCK_TABS, Dock } from './dock.tsx';
+import { Inspector } from './inspector.tsx';
+import { ActivityBar, SIDEBAR_SECTIONS, SIDEBAR_VIEWS, Sidebar } from './sidebar.tsx';
+import { StatusBar } from './status-bar.tsx';
+import { Toast } from './toast.tsx';
+import { AssetPicker } from './asset-picker.tsx';
+import { LinkPicker } from './link-picker.tsx';
+import { ComponentPrompt } from './component-prompt.tsx';
+import { ColorPicker } from './color.tsx';
+import { GuidesGridsDialog } from './guides-grids.tsx';
+import { SnapSettingsDialog } from './snap-settings.tsx';
+import { RecoveryDialog } from './recovery.tsx';
+import { TabGuardNotice } from './tab-guard.tsx';
+import { PreviewBar, PreviewPage } from './preview.tsx';
+import { previewing } from '../view/preview.ts';
+import { TopBar } from './top-bar.tsx';
+import { FitZoom, ReportFitZoom } from './slots.tsx';
+import { FloatingWindows, PanelBodyTable, PanelDragLayer, RightDock } from '../workspace/windows.tsx';
+
+// which panels the shell draws a body for, from the tables it draws them from (bodies.ts), and the component that
+// draws each body: a floating window and the right dock draw a panel of any place from the same table
+const ALL_BODIES = { ...SIDEBAR_VIEWS, ...SIDEBAR_SECTIONS, ...DOCK_TABS };
+const drawsBody = bodiesDrawn(SIDEBAR_VIEWS, DOCK_TABS, SIDEBAR_SECTIONS);
+
+function usePreferencesOnDocument(): void {
+  const theme = useEditorState((s) => s.ui.preferences.theme);
+  const locale = useEditorState((s) => s.ui.preferences.locale);
+  useEffect(() => {
+    // "system" follows prefers-color-scheme (tokens.css); light and dark are forced with data-theme
+    if (theme === 'system') delete document.documentElement.dataset.theme;
+    else document.documentElement.dataset.theme = theme;
+  }, [theme]);
+  useEffect(() => {
+    document.documentElement.lang = locale;
+  }, [locale]);
+}
+
+// The project's fonts in the editor's own document (the manifest's custom-fonts): one @font-face per font file of the
+// tree, served from the file's object URL, so the font menu draws every project family in its own face. The rules come
+// from the one owner of the rule text (core/files/fonts.ts); the canvas's copy is the renderer's.
+const FONTS_STYLE_ATTRIBUTE = 'data-fonts-style';
+function useProjectFontsOnDocument(): void {
+  const files = useEditorState((s) => s.document.files);
+  useEffect(() => {
+    const css = fontFaceCss(files ?? [], (file) => objectUrl(file));
+    let sheet = document.head.querySelector(`style[${FONTS_STYLE_ATTRIBUTE}]`);
+    if (css === '') {
+      sheet?.remove();
+      return;
+    }
+    if (sheet === null) {
+      sheet = document.createElement('style');
+      sheet.setAttribute(FONTS_STYLE_ATTRIBUTE, '');
+      document.head.append(sheet);
+    }
+    if (sheet.textContent !== css) sheet.textContent = css;
+  }, [files]);
+}
+
+export function Shell() {
+  const store = useStore();
+  const t = useT();
+  const sidebar = useEditorState((s) => s.ui.panels.sidebar);
+  const inspector = useEditorState((s) => isPanelOpen(s.ui, 'inspector'));
+  const dock = useEditorState((s) => s.ui.layout.dock);
+  // a measure of the layout (the zoom that fits the frame), not editor state: the camera arrives with the canvas
+  const [zoom, setZoom] = useState(1);
+  usePreferencesOnDocument();
+  useProjectFontsOnDocument();
+  useEffect(() => installKeymap(store), [store]);
+  useEffect(() => installPointer(store), [store]);
+  // an image file dragged in from the operating system: here for the editor's window (the canvas and the Explorer's
+  // folder drop), in canvas/frame.tsx for the frame's own
+  useEffect(() => installOsFileDrop(window, false), [store]);
+  useEffect(() => installFocus(store), [store]);
+  const classes = ['shell', sidebar ? '' : 'shell--no-sidebar', inspector ? '' : 'shell--no-inspector', `shell--dock-${dock}`].filter((c) => c !== '').join(' ');
+  // while previewing, the preview bar and the exported page over the editor (spec preview-mode): the editor stays as it
+  // is underneath, its canvas included, and the status bar below says so
+  const inPreview = useEditorState((s) => previewing(s.ui));
+  return (
+    <PanelBodyTable.Provider value={ALL_BODIES}>
+    <PanelBodies.Provider value={drawsBody}>
+      <FitZoom.Provider value={zoom}>
+        <ReportFitZoom.Provider value={setZoom}>
+          <div className={classes} aria-label={t('editor.label')} data-key-context="global">
+            <TopBar />
+            <ActivityBar />
+            {sidebar ? <Sidebar /> : null}
+            <div className="workbench">
+              <div className="workbench__row">
+                <CanvasColumn />
+                {/* the panels docked to the right edge, beside the canvas (spec floating-panels) */}
+                <RightDock />
+              </div>
+              <Dock />
+            </div>
+            <Inspector />
+            <StatusBar />
+            <Toast />
+            <ContextMenu />
+            {/* the panels dragged out of their dock, and the drag that moves a panel (specs floating-panels and
+                panel-combine-tabs) */}
+            <FloatingWindows />
+            <PanelDragLayer />
+            <CommandBar />
+            <Confirmation />
+            <ColorPicker />
+            <AssetPicker />
+            <LinkPicker />
+            <ComponentPrompt />
+            <GuidesGridsDialog />
+            <SnapSettingsDialog />
+            <RecoveryDialog />
+            <TabGuardNotice />
+            {inPreview ? (
+              <div className="preview" data-key-context="preview">
+                <PreviewBar />
+                <PreviewPage />
+              </div>
+            ) : null}
+          </div>
+        </ReportFitZoom.Provider>
+      </FitZoom.Provider>
+    </PanelBodies.Provider>
+    </PanelBodyTable.Provider>
+  );
+}

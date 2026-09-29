@@ -1,0 +1,372 @@
+// The export (ARCHITECTURE.md, Command owners; spec export-zip): project.export hands the person site.zip, written by
+// the one ZIP writer (core/project/zip.ts), holding each page at its file's path in the project (index.html for the
+// home page) and the stylesheet css/styles.css it links. Nothing of the editor reaches the files: no data attribute of
+// the renderer, no node id, no editor class or rule, no style attribute or <style> element.
+//  - The page's HTML: <!DOCTYPE html>, <html> with the page's language and direction when its settings hold them, a
+//    head of <meta charset="utf-8">, the viewport, the title (its setting, else the page's name) and the stylesheet
+//    link, then the page root as the <body>. Each element is written with its tag and the attributes the page writes
+//    (render.ts elementAttributes, the canvas's rule); a hidden element carries the hidden attribute, its subtree in it.
+//    A text is escaped (& < > as entities, " too in an attribute), its marks as <strong>, <em> and <a href>, a line
+//    break as <br>; an embed's markup is written as it is. A void element has no end tag.
+//  - Classes (spec export-bem-css): an element with styles of its own gets a BEM class from its layer name (lower
+//    case, words joined by "-"): outside every styled element it is a block (Hero → hero); inside one it is an element
+//    of the outermost styled ancestor below the page (Title in Hero → hero__title); with an author class it is a
+//    modifier of its first class (card named Plano assinatura → card--plano-assinatura). A class already taken gets a
+//    numeric suffix (hero-2). The author classes come first; an element with neither has no class attribute.
+//  - Two exports of the same document are byte-identical: the archive's entries carry a fixed time.
+//  - The stylesheet: the design tokens' :root rule, then one rule per style class that holds styles, in the project's
+//    order (spec shared-style-classes: before the elements', so an element's own values override its classes), then one
+//    rule per styled element, in document order, one declaration per line indented by two spaces, a breakpoint's values
+//    in an @media block and a state's under its pseudo-class (render.ts nodeCss, the canvas's).
+// Exporting changes nothing in the document and records nothing; the status bar names the file.
+import { message, registerHandler } from '../commands/registry.ts';
+import type { NodeId } from '../../generated/commands.ts';
+import { walk, type Animation, type DocNode, type DocumentJson } from '../document/model.ts';
+import type { ModelRules } from '../document/validate.ts';
+import { zip } from '../project/zip.ts';
+import { baseCss } from '../render/base.ts';
+import { classesCss, elementAttributes, nodeCss, writesNode } from '../render/output.ts';
+import { svgMarkupOf } from '../elements/svg.ts';
+import { fileAt, fileBytes, filesOf, objectUrl, relativePath } from '../files/files.ts';
+import { fontFaceCss, fontFiles } from '../files/fonts.ts';
+import { exportValue } from '../files/values.ts';
+import { rootCss } from '../design/tokens.ts';
+import type { InlineRun } from '../text/inline.ts';
+import { animationsOf, keyframesCss, playedClassDeclarations, playedClassName, animationDeclarations } from '../animation/animation.ts';
+import { addressedNodes, interactionsOf, playedAnimations } from '../events/interactions.ts';
+import { interactionsJs } from '../events/script.ts';
+
+export const SITE_ARCHIVE = 'site.zip';
+export const STYLESHEET = 'css/styles.css';
+// the site's interactions script (spec export-events-js): written when the project holds interactions, linked with
+// <script defer> from every page that uses them
+export const INTERACTIONS_SCRIPT = 'js/interactions.js';
+// the page setting that is the page's title (elements.json), written in the head rather than as an attribute
+const TITLE_SETTING = 'pageTitle';
+
+const escapeText = (text: string): string => text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+const escapeAttribute = (text: string): string => escapeText(text).replaceAll('"', '&quot;');
+
+// The page's own head settings (spec export-zip; the user's real-use audit, 7.2): each attribute elements.json maps to
+// the head (`head`: "meta:description", "link:canonical", "script:") is written there, in the manifest's order, as a
+// meta name, a meta property (og:, twitter:), a link or a script src; a path list (the linked scripts) writes one
+// script per entry. Nothing set writes nothing.
+function headLines(document: DocumentJson, page: DocNode, rules: ModelRules, from: string): string[] {
+  const lines: string[] = [];
+  // a script of the project is written where the page stands (the same rule an element's address asks)
+  const written = (value: string) => exportValue(document, 'src', value, from) ?? value;
+  for (const [id, facts] of rules.attributeValues) {
+    if (facts.head === null) continue;
+    const held = (page.attributes as Readonly<Record<string, unknown>>)[id];
+    if (typeof held !== 'string' || held === '') continue;
+    const [form, name = ''] = facts.head.split(/:(.*)/s) as [string, string?];
+    const values = facts.valueType === 'path-list' ? held.split(/\s+/).filter((each) => each !== '') : [held];
+    for (const value of values) {
+      if (form === 'script') lines.push(`  <script src="${escapeAttribute(written(value))}"></script>`);
+      else if (form === 'link') lines.push(`  <link rel="${escapeAttribute(name)}" href="${escapeAttribute(value)}">`);
+      else if (name.startsWith('og:') || name.startsWith('twitter:')) lines.push(`  <meta property="${escapeAttribute(name)}" content="${escapeAttribute(value)}">`);
+      else lines.push(`  <meta name="${escapeAttribute(name)}" content="${escapeAttribute(value)}">`);
+    }
+  }
+  return lines;
+}
+
+// a text's runs as HTML: marks as their elements, a line break as <br>
+function runsHtml(runs: readonly InlineRun[]): string {
+  return runs
+    .map((run) => {
+      if (typeof run === 'string') return run.split('\n').map(escapeText).join('<br>');
+      const href = run.tag === 'a' ? ` href="${escapeAttribute(run.href)}"` : '';
+      return `<${run.tag}${href}>${runsHtml(run.children)}</${run.tag}>`;
+    })
+    .join('');
+}
+
+const hasStyles = (node: DocNode): boolean => Object.values(node.styles).some((byState) => byState !== undefined && Object.values(byState).some((d) => d !== undefined && Object.keys(d).length > 0));
+
+// a layer name as a class: lower case, every run of other characters one "-", none at either end
+function classOf(name: string, fallback: string): string {
+  const words = name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return words === '' || /^[0-9]/.test(words) ? fallback : words;
+}
+
+// The classes the elements of instances share across the pages of one export (spec reusable-components): per component
+// and definition part, the class the first styled element of that part got and the styles it holds; and the elements
+// that took such a class, whose rule the stylesheet already holds.
+interface SharedClasses {
+  readonly parts: Map<string, { readonly name: string; readonly styles: string }>;
+  readonly reused: Set<string>;
+}
+const newShared = (): SharedClasses => ({ parts: new Map(), reused: new Set() });
+
+// The generated class of every styled node of a tree, in document order, unique within it: a block, an element of
+// its block (the outermost styled ancestor below the page), or a modifier of its first author class. An element of an
+// instance holding the same styles as an element of the same part met before takes that element's class. An element an
+// interaction addresses (the one that holds one, or one an interaction acts on) takes a class too, so the script can
+// select it (spec export-events-js): it carries the class in the HTML, and writes a rule only when it holds styles.
+function generatedClasses(tree: DocNode, shared: SharedClasses, addressed: ReadonlySet<NodeId> = new Set()): Map<string, string> {
+  const taken = new Set<string>();
+  const classes = new Map<string, string>();
+  const unique = (base: string) => {
+    let name = base;
+    for (let n = 2; taken.has(name); n++) name = `${base}-${n}`;
+    taken.add(name);
+    return name;
+  };
+  const visit = (node: DocNode, block: string | null, root: boolean, instanceOf: string | null) => {
+    for (const own of node.classes) taken.add(own);
+    let inner = block;
+    const within = node.component ?? instanceOf;
+    if (hasStyles(node) || addressed.has(node.id as NodeId)) {
+      const key = within !== null && node.componentPart !== undefined ? `${within}|${node.componentPart.join('.')}` : null;
+      const styles = JSON.stringify(node.styles);
+      const met = key === null ? undefined : shared.parts.get(key);
+      const author = node.classes[0];
+      let name: string;
+      if (met !== undefined && met.styles === styles) {
+        name = met.name;
+        taken.add(name);
+        shared.reused.add(node.id);
+      } else {
+        const word = classOf(node.name, node.type.toLowerCase());
+        name = unique(author !== undefined ? `${author}--${word}` : block !== null ? `${block}__${word}` : word);
+        if (key !== null && met === undefined) shared.parts.set(key, { name, styles });
+      }
+      classes.set(node.id, name);
+      // the outermost styled element below the page is the block of every styled element inside it
+      if (block === null && !root && author === undefined) inner = name;
+    }
+    node.children.forEach((child) => visit(child, inner, false, within));
+  };
+  visit(tree, null, true, null);
+  return classes;
+}
+
+const attributesHtml = (attributes: ReadonlyMap<string, string | true>): string => [...attributes].map(([name, value]) => (value === true ? ` ${name}` : ` ${name}="${escapeAttribute(value)}"`)).join('');
+
+// One line of a generated file, and the node it was written for; null on a line the document did not write (the
+// head, the shell). The code pane reads these to follow the selection and to select from a click (spec
+// code-panel-selection-sync): the export writes no node id into the file, so the writer is the only one who knows
+// which node a line belongs to — this is why the lines are written here and nowhere else.
+export interface CodeLine {
+  readonly text: string;
+  readonly node: NodeId | null;
+}
+export interface PageCode {
+  readonly html: readonly CodeLine[];
+  readonly css: readonly CodeLine[];
+  // the class the export gave each node of the page that has one (the stylesheet's selectors; the interactions script
+  // addresses elements by them)
+  readonly classes: ReadonlyMap<string, string>;
+}
+
+// One page of the document as its HTML file and its CSS.
+export function exportPage(document: DocumentJson, pageIndex: number, rules: ModelRules, shared: SharedClasses = newShared()): { readonly html: string; readonly css: string } {
+  const code = pageLines(document, pageIndex, rules, shared);
+  return { html: code.html.map((line) => line.text).join('\n'), css: pageCss(code.css) };
+}
+
+// A page's CSS as text: one blank line between rules, a line's end at the end, as the export writes it.
+export const pageCss = (css: readonly CodeLine[]): string => (css.length === 0 ? '' : `${css.map((line) => line.text).join('\n')}\n`);
+
+// One page's HTML and CSS as lines, each with the node it was written for.
+export function pageLines(document: DocumentJson, pageIndex: number, rules: ModelRules, shared: SharedClasses = newShared(), relative = true): PageCode {
+  const page = document.pages[pageIndex];
+  if (page === undefined) throw new Error(`export: the document has no page ${pageIndex}`);
+  // the elements an interaction addresses, and every element that holds an animation: both take a class, so the script
+  // (and the animation's own rule) can name them
+  const addressed = new Set<NodeId>(addressedNodes(document));
+  for (const page of document.pages) for (const node of walk(page.tree)) if (animationsOf(node).length > 0) addressed.add(node.id as NodeId);
+  const classes = generatedClasses(page.tree, shared, addressed);
+  // the file the page is written at: the base of every address it holds (the preview writes absolute paths, which it
+  // then turns into object URLs of its own)
+  const from = relative ? page.file : '';
+  const { output, contentModel } = rules;
+  // the animations an event of this project plays: their animation properties go to a class rule beside their
+  // @keyframes rather than the element's own rule, so nothing plays until the event fires (spec export-events-js)
+  const played = playedAnimations(document);
+  // the page's animations: by name, and the elements each is written for (the reduced-motion rule's selectors)
+  const ownAnimations = new Map<string, { readonly animation: Animation; readonly selector: string }>();
+  const eventAnimations = new Map<string, { readonly animation: Animation; readonly selector: string }>();
+  const body: CodeLine[] = [];
+  const css: CodeLine[] = [];
+  let pageAttributes = new Map<string, string>();
+  const write = (node: DocNode, depth: number, root: boolean): void => {
+    const tag = node.tag ?? 'div';
+    const own = elementAttributes(node, tag, root, output, (name, value) => exportValue(document, name, value, from));
+    if (root) pageAttributes = own.page;
+    const generated = classes.get(node.id);
+    const attributes = new Map(own.element);
+    if (generated !== undefined) {
+      attributes.set('class', [...node.classes, generated].join(' '));
+      const held = animationsOf(node);
+      const byEvent = played.get(node.id as NodeId) ?? new Set<string>();
+      for (const animation of held) (byEvent.has(animation.name) ? eventAnimations : ownAnimations).set(animation.name, { animation, selector: `.${generated}` });
+      // a class the elements of instances share is written once, by the first of them
+      if (!shared.reused.has(node.id)) {
+        const plain = held.filter((animation) => !byEvent.has(animation.name));
+        const block = nodeCss(node, `.${generated}`, output, 'block', null, plain.flatMap((animation) => animationDeclarations(animation)));
+        if (block !== '') for (const text of block.split('\n')) css.push({ text, node: node.id });
+      }
+    }
+    if (node.hidden === true) attributes.set('hidden', true);
+    const indent = '  '.repeat(depth);
+    const open = `${indent}<${tag}${attributesHtml(attributes)}>`;
+    if (contentModel.isVoid(tag)) {
+      body.push({ text: open, node: node.id });
+      return;
+    }
+    const content = output.elements.get(node.type)?.content;
+    if (content === 'text' || content === 'markup') {
+      body.push({ text: `${open}${content === 'text' ? runsHtml(node.inline ?? [node.text ?? '']) : (node.text ?? '')}</${tag}>`, node: node.id });
+      return;
+    }
+    // an SVG's markup after its shapes (core/elements/svg.ts)
+    const markup = svgMarkupOf(node);
+    const inner = node.children.filter((child) => writesNode(child, output));
+    if (inner.length === 0 && markup === '') {
+      body.push({ text: `${open}</${tag}>`, node: node.id });
+      return;
+    }
+    body.push({ text: open, node: node.id });
+    for (const child of inner) write(child, depth + 1, false);
+    if (markup !== '') body.push({ text: `${indent}  ${markup}`, node: node.id });
+    body.push({ text: `${indent}</${tag}>`, node: node.id });
+  };
+  // the body first: writing it is what reads the page's own attributes, which the <html> line carries
+  if (writesNode(page.tree, output)) write(page.tree, 0, true);
+  // The page's animations, after its rules: the @keyframes of every animation it holds, the class rule of every
+  // animation an event plays (spec export-events-js: the script adds that class when the event fires), and the rule
+  // that turns the animations off for a reduced-motion reader. Nothing of it is written when the page has none, so a
+  // page without animations exports exactly as before (spec export-keyframes).
+  const hasAnimations = ownAnimations.size > 0 || eventAnimations.size > 0;
+  if (hasAnimations) {
+    const selectors = [...ownAnimations.values()].map((entry) => entry.selector).concat([...eventAnimations.keys()].map((name) => `.${playedClassName(name)}`));
+    const reduced = `@media (prefers-reduced-motion: reduce) {\n  ${selectors.join(',\n  ')} {\n    animation: none;\n  }\n}`;
+    for (const text of [...new Set([...ownAnimations.keys(), ...eventAnimations.keys()])]
+      .map((name) => (ownAnimations.get(name) ?? eventAnimations.get(name))?.animation)
+      .filter((animation): animation is Animation => animation !== undefined)
+      .flatMap((animation) => keyframesCss(animation, output, 'block').split('\n'))
+      .concat(
+        [...eventAnimations.values()].flatMap((entry) => [
+          `.${playedClassName(entry.animation.name)} {`,
+          ...playedClassDeclarations(entry.animation).map((line) => `  ${line}`),
+          '}',
+        ]),
+        reduced.split('\n'),
+      ))
+      css.push({ text, node: null });
+  }
+  const stored = page.tree.attributes[TITLE_SETTING as keyof DocNode['attributes']];
+  const title = typeof stored === 'string' && stored !== '' ? stored : page.name;
+  // a page that uses interactions links the script (spec export-events-js); one that does not, does not
+  const usesInteractions = [...walk(page.tree)].some((node) => interactionsOf(node).length > 0);
+  const head: CodeLine[] = [
+    '<!DOCTYPE html>',
+    `<html${attributesHtml(pageAttributes)}>`,
+    '<head>',
+    '  <meta charset="utf-8">',
+    '  <meta name="viewport" content="width=device-width, initial-scale=1">',
+    `  <title>${escapeText(title)}</title>`,
+    ...headLines(document, page.tree, rules, from),
+    `  <link rel="stylesheet" href="${escapeAttribute(relativePath(from, STYLESHEET))}">`,
+    ...(usesInteractions ? [`  <script defer src="${escapeAttribute(relativePath(from, INTERACTIONS_SCRIPT))}"></script>`] : []),
+    '</head>',
+  ].map((text) => ({ text, node: null }));
+  const html: CodeLine[] = [...head, ...body, { text: '</html>', node: null }, { text: '', node: null }];
+  return { html, css, classes };
+}
+
+// the time every entry of the archive carries: the ZIP format's first day, so the same document gives the same bytes
+const FIXED_TIME = Date.UTC(1980, 0, 1);
+
+// The site's files: each page's HTML, by its file, and the one stylesheet they link (the export writes them; the preview
+// shows them). `cssLines` is the same stylesheet line by line, each line of a page's rule carrying its node — what the
+// code pane follows the selection with; the base style, the tokens and the classes are lines no node was written for.
+export function siteFiles(
+  document: DocumentJson,
+  rules: ModelRules,
+  relative = true,
+): { readonly pages: readonly { readonly file: string; readonly html: string }[]; readonly css: string; readonly cssLines: readonly CodeLine[]; readonly interactions: string | null } {
+  const classes = newShared();
+  const pages = document.pages.map((page, i) => ({ page, code: pageLines(document, i, rules, classes, relative) }));
+  // the project's base style first (core/render/base.ts: the same text the canvas writes), then the design tokens'
+  // :root rule (core/design/tokens.ts), then the project's fonts (core/files/fonts.ts: a custom font draws in the
+  // export at the path its file holds, relative to the stylesheet that names it)
+  // each block ends with its line's end, as a page's rules do, so a blank line parts every rule from the next
+  const fonts = fontFaceCss(filesOf(document), (file) => relativePath(STYLESHEET, file.path));
+  const shared = [baseCss(), rootCss(document.tokens ?? []), fonts === '' ? '' : `${fonts}\n`, classesCss(document.classes ?? [], rules.output, 'block')].filter((c) => c !== '').map((c) => `${c}\n`);
+  const files = pages.map((p) => pageCss(p.code.css));
+  const css = [...shared, ...files].filter((c) => c !== '').join('\n');
+  // the same text, line by line: every part's own lines, and the blank line the join writes between two parts
+  const parts = [...shared.map((text) => text.split('\n').slice(0, -1).map((line) => ({ text: line, node: null as NodeId | null }))), ...pages.map((p) => p.code.css.map((line) => ({ text: line.text, node: line.node as NodeId | null })))];
+  const lines: CodeLine[] = parts.flatMap((one, i) => (i < parts.length - 1 ? [...one, { text: '', node: null }] : one));
+  // the stylesheet ends with a line's end, so its last line is the empty one a text ends with
+  const cssLines: CodeLine[] = css.endsWith('\n') ? [...lines, { text: '', node: null }] : lines;
+  // The selectors the script addresses elements by (spec export-events-js): the class the export gave the element, else
+  // the person's own id attribute. Every element an interaction names has one or the other (an addressed element takes
+  // a generated class).
+  const selectorById = new Map<string, string>();
+  for (const { page, code } of pages) {
+    for (const node of walk(page.tree)) {
+      const generated = code.classes.get(node.id);
+      const own = node.attributes.id;
+      const selector = generated !== undefined ? `.${generated}` : typeof own === 'string' && own !== '' ? `#${own}` : null;
+      if (selector !== null && !selectorById.has(node.id)) selectorById.set(node.id, selector);
+    }
+  }
+  const interactions = interactionsJs(document, (id) => selectorById.get(id) ?? '.');
+  return { pages: pages.map(({ page, code }) => ({ file: page.file, html: code.html.map((line) => line.text).join('\n') })), css, cssLines, interactions };
+}
+
+// A page as the preview shows it (spec preview-mode): the exported page itself, its stylesheet written in its head in
+// place of the link (the preview has no files to load), and links and forms opening in a new tab, never in the editor.
+export function previewPage(document: DocumentJson, rules: ModelRules, pageIndex = 0): string {
+  // the preview writes the paths as the document holds them, then draws each through its object URL
+  const site = siteFiles(document, rules, false);
+  let html = site.pages[pageIndex]?.html ?? '';
+  // the preview has no files to load, so a source that names a project file draws as its object URL (as the canvas
+  // does; the export keeps the path)
+  for (const file of filesOf(document)) html = html.replaceAll(`"${file.path}"`, `"${objectUrl(file)}"`);
+  // A linked script of the project runs from its own text: the preview's frame has an opaque origin, and a blob: URL
+  // of the editor's origin does not load there (spec code-panel-edit-js: "Preview runs the linked scripts"). A script
+  // whose address is no project file keeps its address, as the export writes it.
+  const page = document.pages[pageIndex];
+  const linked = typeof page?.tree.attributes.pageScripts === 'string' ? page.tree.attributes.pageScripts.split(/\s+/).filter((one) => one !== '') : [];
+  for (const path of linked) {
+    const file = fileAt(document, path);
+    if (file === null) continue;
+    const text = new TextDecoder().decode(fileBytes(file));
+    html = html.replace(`  <script src="${objectUrl(file)}"></script>`, `  <script>\n${text}\n  </script>`);
+  }
+  // a font of the project draws in the preview from its object URL too, as the page's own sources do (the preview has
+  // no folder to serve css/styles.css's relative paths from)
+  let css = site.css;
+  for (const file of fontFiles(document)) css = css.replaceAll(`"${relativePath(STYLESHEET, file.path)}"`, `"${objectUrl(file)}"`);
+  // The interactions script runs in the preview exactly as the exported page runs it (spec export-events-js): the file
+  // has no address the preview could load, so its text is written in, and it waits for the page as its `defer` does —
+  // an inline script is never deferred.
+  if (site.interactions !== null) {
+    const inline = `  <script>document.addEventListener('DOMContentLoaded', function () {\n${site.interactions}  });</script>`;
+    html = html.replace(`  <script defer src="${relativePath(page?.file ?? '', INTERACTIONS_SCRIPT)}"></script>`, inline);
+  }
+  const link = `  <link rel="stylesheet" href="${STYLESHEET}">`;
+  return html.replace(link, `  <base target="_blank">\n  <style>\n${css}  </style>`);
+}
+
+export const exportProject = registerHandler('project.export', ({ state, rules }) => {
+  const encoder = new TextEncoder();
+  const site = siteFiles(state.document, rules);
+  // every file of the project at its path (spec export-assets): an image an element uses is in the archive, so the
+  // exported page shows it
+  const assets = filesOf(state.document).map((file) => ({ path: file.path, bytes: fileBytes(file) }));
+  // the interactions' script, at the path the pages link it by, while the project holds interactions (spec
+  // export-events-js)
+  const script = site.interactions === null ? [] : [{ path: INTERACTIONS_SCRIPT, bytes: encoder.encode(site.interactions) }];
+  const entries = [...site.pages.map(({ file, html }) => ({ path: file, bytes: encoder.encode(html) })), { path: STYLESHEET, bytes: encoder.encode(site.css) }, ...script, ...assets];
+  const bytes = zip(entries, FIXED_TIME);
+  return { kind: 'change' as const, message: message('status.export.done', { file: SITE_ARCHIVE }), download: { name: SITE_ARCHIVE, type: 'application/zip', bytes } };
+});

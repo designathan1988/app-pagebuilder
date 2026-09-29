@@ -1,0 +1,252 @@
+// The census (the user's decision 5): no command works without a browser test that proves it, and no door looks
+// usable without a command behind it. It reads the manifest (the built commands are the registered handlers of
+// references.json), the doors every browser test names (its annotations "door", read from Playwright's own list of
+// the suite), and the editor in Chrome with every menu and submenu opened. It fails when
+//   - a door is drawn enabled while its command is not built;
+//   - a built command has no test that runs one of its doors;
+//   - a door of a built command that a user can run (drawn enabled, or a shortcut that runs by the keymap's own rule,
+//     src/editor/input/shortcut-rule.ts) is run by no test.
+//   - a control that stands for a palette entry (an Insert tile) is drawn enabled while the entry's feature is not
+//     registered as built;
+//   - a feature registered as built in the feature table (src/app/features.ts) has no scenario, a command it lists is
+//     not built, or a scenario of it runs a door that does not work yet (so its scenarios cannot all run and pass;
+//     a scenario that runs and fails fails the run through its own test and the status reporter).
+// While the manifest has no built undoable command, a built command none of whose drawn doors is enabled (Undo and
+// Redo: there is nothing to undo) is proven instead by a test that runs each of its doors and shows it cannot run yet
+// (annotation "door-unavailable"); from the first undoable command on it needs tests of its own (the user's answer).
+import { execFile } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
+import { expect, test, type Page } from '../support/test.ts';
+import { shortcutRuns } from '../../src/editor/input/shortcut-rule.ts';
+import { isFeatureBuilt } from '../../src/app/features.ts';
+import type { FeatureId } from '../../src/generated/ids.ts';
+import { FEATURES, blockers, registered } from '../../tools/runner/scenarios.ts';
+import { DOOR_ANNOTATION, UNAVAILABLE_ANNOTATION, runDoor } from './door.ts';
+
+interface Command {
+  readonly id: string;
+  readonly introducedBy: string;
+  readonly history: { readonly undoable: boolean };
+  readonly entryPoints: readonly { readonly id: string; readonly kind: string; readonly feature: string }[];
+}
+const COMMANDS: Command[] = [];
+for (const file of fs.readdirSync('manifest/commands')) COMMANDS.push(...(JSON.parse(fs.readFileSync(path.join('manifest/commands', file), 'utf8')) as { commands: Command[] }).commands);
+const REFERENCES = (JSON.parse(fs.readFileSync('manifest/references.json', 'utf8')) as { references: { kind: string; id: string; status: string }[] }).references;
+const BUILT = new Set(REFERENCES.filter((r) => r.kind === 'handler' && r.status === 'registered').map((r) => r.id));
+const UNDOABLE_BUILT = COMMANDS.some((c) => c.history.undoable && BUILT.has(c.id));
+// the feature of every palette entry (elements.json)
+const PALETTE_FEATURE = new Map(
+  (JSON.parse(fs.readFileSync('manifest/elements.json', 'utf8')) as { palette: { entries: { id: string; feature: string }[] }[] }).palette.flatMap((g) => g.entries.map((e) => [e.id, e.feature] as const)),
+);
+// a shortcut a user can press now: the keymap's own rule (src/editor/input/shortcut-rule.ts), on the manifest's data
+const runs = (c: Command, d: Command['entryPoints'][number]) =>
+  d.kind === 'shortcut' && shortcutRuns({ command: c.id, introducedBy: c.introducedBy, feature: d.feature }, (id) => BUILT.has(id), (feature) => isFeatureBuilt(feature as FeatureId));
+
+interface Listed {
+  readonly specs?: readonly { readonly title: string; readonly tests: readonly { readonly annotations: readonly { readonly type: string; readonly description?: string }[] }[] }[];
+  readonly suites?: readonly Listed[];
+}
+// the doors each annotation type names, over every test of the suite (Playwright's list, which starts no server)
+async function annotated(): Promise<Map<string, Set<string>>> {
+  const cli = path.join('node_modules', '@playwright', 'test', 'cli.js');
+  const listed = await new Promise<string>((resolve, reject) =>
+    // every test of the suite, also when this run is a limited validation (its selection must not narrow the list)
+    execFile(process.execPath, [cli, 'test', '--list', '--reporter=json'], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, env: { ...process.env, E2E_SELECTION: '' } }, (error, stdout) =>
+      error ? reject(error) : resolve(stdout),
+    ),
+  );
+  const report = JSON.parse(listed) as { suites: Listed[] };
+  const found = new Map<string, Set<string>>();
+  const walk = (suite: Listed) => {
+    for (const spec of suite.specs ?? []) for (const t of spec.tests) for (const a of t.annotations) if (a.description !== undefined) found.set(a.type, (found.get(a.type) ?? new Set()).add(a.description));
+    for (const inner of suite.suites ?? []) walk(inner);
+  };
+  for (const suite of report.suites) walk(suite);
+  return found;
+}
+
+// how many states are read at the same time, each in a browser context of its own
+const PARALLEL = 6;
+
+test('every feature registered as built has scenarios that can all run', () => {
+  const unproven = FEATURES.filter(registered).flatMap((f) => blockers(f).map((why) => `${f.id}: ${why}`));
+  expect(unproven, 'registered features whose scenarios cannot all run').toEqual([]);
+  console.log(`census: ${FEATURES.filter(registered).length} features registered as built, each with scenarios that can all run`);
+});
+
+test('every working command is proven by a browser test, and no door looks usable without a command', async ({ browser }, testInfo) => {
+  // it visits every state a built door leads to, each from a fresh profile: a new browser context.
+  // The budget bounds the walk only, never a proof: with the app's doors (184 features, 232 commands) the walk needs
+  // more than two minutes when the suite runs it beside three other workers (finding 51: the earlier 120 s was crossed
+  // by the app's own growth). The assertions below run whatever the walk's length, so a door left without a test still
+  // fails this test.
+  test.setTimeout(240_000);
+  // Playwright's list of the suite, read while the states are visited
+  const listing = annotated();
+  const baseURL = testInfo.project.use.baseURL;
+
+  // every door drawn on screen, and whether a user can use it: a control that is not disabled; a door drawn as a
+  // container (a field row, a label) counts by the controls it holds that are not doors of their own. `drawn` keeps,
+  // over every state the census reaches, whether a door was ever drawn enabled.
+  const drawn = new Map<string, boolean>();
+  // the palette entries whose control (an Insert tile) was ever drawn enabled
+  const enabledEntries = new Set<string>();
+  const read = async (page: Page, state: Map<string, boolean>) => {
+    const seen = await page.evaluate(() => {
+      const CONTROL = 'button, input, select, textarea, [role^="menuitem"], [role="treeitem"], [role="tab"], [tabindex]';
+      // a control under a modal (the rest of the window while the colour picker is open) is inert: nobody can use it
+      const usable = (el: Element) => el.getAttribute('aria-disabled') !== 'true' && !el.matches(':disabled') && el.closest('[inert]') === null;
+      return [...document.querySelectorAll('[data-door]')].map((el) => {
+        const controls = el.matches(CONTROL) ? [el] : [...el.querySelectorAll(CONTROL)].filter((c) => c.closest('[data-door]') === el);
+        return { ref: el.getAttribute('data-door') ?? '', args: el.getAttribute('data-args'), control: controls.length > 0, enabled: controls.some(usable) };
+      });
+    });
+    for (const d of seen) {
+      if (!d.control) continue;
+      state.set(d.ref, (state.get(d.ref) ?? false) || d.enabled);
+      drawn.set(d.ref, (drawn.get(d.ref) ?? false) || d.enabled);
+      const entry = d.args === null ? undefined : (JSON.parse(d.args) as { entry?: unknown }).entry;
+      if (d.enabled && typeof entry === 'string') enabledEntries.add(entry);
+    }
+  };
+  // one state: the screen, then every menu and submenu opened in turn; `screen` keeps what the screen draws with no
+  // menu open. A state already read (the same doors drawn the same way, the same selection and history, read through
+  // the test port) is not read again: it holds nothing new and leads nowhere new.
+  const seenStates = new Set<string>();
+  const readState = async (page: Page) => {
+    const state = new Map<string, boolean>();
+    await read(page, state);
+    const screen = new Set(state.keys());
+    const fingerprint = JSON.stringify([
+      [...state].sort(),
+      await page.evaluate(() => {
+        const p = (window as unknown as Record<string, { selection: () => unknown; history: () => unknown }>).__builderTestPort;
+        return p ? [p.selection(), p.history()] : null;
+      }),
+    ]);
+    if (seenStates.has(fingerprint)) return null;
+    seenStates.add(fingerprint);
+    const buttons = page.locator('.menu-button[data-menu]');
+    for (let m = 0; m < (await buttons.count()); m += 1) {
+      await page.keyboard.press('Escape');
+      // a menu button of a region the state hides (the canvas toolbar under a maximised dock) is not there to open, nor
+      // one under a modal (inert)
+      if (!(await buttons.nth(m).isVisible()) || (await buttons.nth(m).evaluate((el) => el.closest('[inert]') !== null))) continue;
+      await buttons.nth(m).click();
+      await read(page, state);
+      const subs = page.locator('.menu__sub > [aria-haspopup="menu"]');
+      for (let s = 0; s < (await subs.count()); s += 1) {
+        await subs.nth(s).hover();
+        await read(page, state);
+      }
+    }
+    await page.keyboard.press('Escape');
+    // the quick panel beside the selection draws its doors once its chip opens it (the chip is a door of the panel's
+    // region: quickPanel.setOpen, item 6.3)
+    const chip = page.locator('[data-quick-panel-chip][aria-expanded="false"]');
+    if ((await chip.count()) > 0 && (await chip.isVisible()) && (await chip.evaluate((el) => el.closest('[inert]') === null))) {
+      await chip.click();
+      await page.locator('[data-quick-panel-chip][aria-expanded="true"]').waitFor();
+      await read(page, state);
+      await page.locator('[data-quick-panel-chip][aria-expanded="true"]').click();
+    }
+    return { state, screen };
+  };
+  const commandOf = (ref: string) => ref.split('#')[0] ?? '';
+  const KIND = new Map<string, string>(COMMANDS.flatMap((c) => c.entryPoints.map((d) => [`${c.id}#${d.id}`, d.kind] as const)));
+  const TEXT_FIELD = new Set<string>(COMMANDS.flatMap((c) => c.entryPoints.filter((d) => d.kind === 'inspector-field' && (d as { drawnAs?: string }).drawnAs === 'field').map((d) => `${c.id}#${d.id}`)));
+
+  // Every place a built door can open: from a fresh profile, each door of a built command that is drawn enabled (and
+  // each shortcut of one) is run once, from the first state it was seen in, and the state it leads to is read the same
+  // way; a door first seen in such a state is run from there in turn. A door drawn only while a menu is open and not
+  // an item of it (the backdrop under the menu) only closes that menu, back to the state it was opened in: it is
+  // counted as drawn, and a test must run it, but it leads to no state of its own.
+  const shortcuts = COMMANDS.filter((c) => BUILT.has(c.id)).flatMap((c) => c.entryPoints.filter((d) => runs(c, d)).map((d) => `${c.id}#${d.id}`));
+  const explored = new Set<string>();
+  const queue: string[][] = [[]];
+  let states = 0;
+  // one path: a fresh browser context, the path's doors run in order, then the state it reaches read
+  const visit = async (path: readonly string[]) => {
+    const context = await browser.newContext({ ...(baseURL !== undefined ? { baseURL } : {}), viewport: { width: 1440, height: 900 } });
+    try {
+      const page = await context.newPage();
+      await page.goto('/');
+      await expect(page.locator('.workbench')).toBeVisible();
+      // a door drawn once per item (a Layers row, an Insert tile) is run on its first item
+      for (const ref of path) await runDoor(page, ref, { any: true });
+      const read = await readState(page);
+      states += 1;
+      if (read === null) return;
+      // a text field of the inspector leads nowhere by a click (it takes the focus; only typing changes anything, and
+      // the census types nothing): it is read in every state, and not run to reach a new one
+      const leads = (ref: string) => (read.screen.has(ref) || KIND.get(ref) === 'menu') && !TEXT_FIELD.has(ref);
+      const next = [...[...read.state].filter(([ref, enabled]) => enabled && BUILT.has(commandOf(ref)) && leads(ref)).map(([ref]) => ref), ...(path.length === 0 ? shortcuts : [])];
+      for (const ref of next) {
+        if (explored.has(ref)) continue;
+        explored.add(ref);
+        queue.push([...path, ref]);
+      }
+    } finally {
+      await context.close();
+    }
+  };
+  // PARALLEL workers take paths from the queue until it is empty and none of them can add to it
+  let busy = 0;
+  const worker = async () => {
+    for (;;) {
+      const path = queue.shift();
+      if (path === undefined) {
+        if (busy === 0) return;
+        await new Promise((resolve) => setTimeout(resolve, 20));
+        continue;
+      }
+      busy += 1;
+      try {
+        await visit(path);
+      } finally {
+        busy -= 1;
+      }
+    }
+  };
+  await Promise.all(Array.from({ length: PARALLEL }, worker));
+  const tests = await listing;
+  const runsDoor = tests.get(DOOR_ANNOTATION) ?? new Set<string>();
+  const runsUnavailable = tests.get(UNAVAILABLE_ANNOTATION) ?? new Set<string>();
+  expect(drawn.size).toBeGreaterThan(200);
+  expect(states).toBeGreaterThan(20);
+
+  // a door drawn enabled has a built command behind it
+  expect([...drawn].filter(([ref, enabled]) => enabled && !BUILT.has(commandOf(ref))).map(([ref]) => ref), 'enabled on screen without a built command').toEqual([]);
+  // and its feature is registered as built (the door rule: a menu item, a context-menu item or a toolbar button of a
+  // feature still to come is not usable, even when another feature built its command)
+  const featureOf = (ref: string) => COMMANDS.find((c) => c.id === commandOf(ref))?.entryPoints.find((d) => `${commandOf(ref)}#${d.id}` === ref)?.feature ?? '';
+  expect([...drawn].filter(([ref, enabled]) => enabled && !isFeatureBuilt(featureOf(ref) as FeatureId)).map(([ref]) => `${ref} (${featureOf(ref)})`), 'enabled on screen while its feature is not registered as built').toEqual([]);
+  // a control that stands for a palette entry (an Insert tile) is drawn enabled only once the entry's feature is
+  // registered as built: a tile of a feature still to come would insert a bare element (a "Hero" as an empty section)
+  expect(
+    [...enabledEntries].filter((id) => !isFeatureBuilt(PALETTE_FEATURE.get(id) as FeatureId)).map((id) => `${id} (${PALETTE_FEATURE.get(id) ?? 'no palette entry'})`),
+    'palette entries drawn enabled while their feature is not registered as built',
+  ).toEqual([]);
+  expect(enabledEntries.size, 'the census reached the Insert tiles').toBeGreaterThan(0);
+
+  const missing: string[] = [];
+  for (const c of COMMANDS.filter((c) => BUILT.has(c.id))) {
+    const refs = c.entryPoints.map((d) => `${c.id}#${d.id}`);
+    const shown = refs.filter((r) => drawn.has(r));
+    // a built command that cannot run yet: no drawn door is enabled, and nothing built can be undone
+    const cannotRunYet = !UNDOABLE_BUILT && shown.length > 0 && shown.every((r) => drawn.get(r) === false);
+    // the doors a user can run: drawn enabled, or a shortcut (a key needs no drawing)
+    const reachable = c.entryPoints.filter((d) => runs(c, d) || drawn.get(`${c.id}#${d.id}`) === true).map((d) => `${c.id}#${d.id}`);
+    if (cannotRunYet) {
+      // every door drawn, and every shortcut, is shown to be unavailable
+      const doors = c.entryPoints.filter((d) => runs(c, d) || drawn.has(`${c.id}#${d.id}`)).map((d) => `${c.id}#${d.id}`);
+      for (const r of doors) if (!runsUnavailable.has(r)) missing.push(`${r}: no test shows it cannot run yet`);
+      continue;
+    }
+    if (!refs.some((r) => runsDoor.has(r))) missing.push(`${c.id}: no browser test runs any of its doors`);
+    for (const r of reachable) if (!runsDoor.has(r)) missing.push(`${r}: usable, and no browser test runs it`);
+  }
+  expect(missing, 'built commands and usable doors without a browser test').toEqual([]);
+  console.log(`census: ${BUILT.size} built commands, ${states} states visited (${seenStates.size} distinct), ${drawn.size} doors drawn (${[...drawn.values()].filter(Boolean).length} enabled), ${runsDoor.size} doors run by tests, ${runsUnavailable.size} shown unavailable; built undoable commands: ${UNDOABLE_BUILT ? 'yes' : 'none'}`);
+});

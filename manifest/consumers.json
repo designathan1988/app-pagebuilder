@@ -1,0 +1,2140 @@
+{
+  "consumers": [
+    {
+      "field": "environment:browser",
+      "reader": "tools/runner/environment.ts"
+    },
+    {
+      "field": "environment:browser.channel",
+      "reader": "tools/runner/environment.ts"
+    },
+    {
+      "field": "environment:viewports",
+      "reader": "tools/runner/environment.ts"
+    },
+    {
+      "field": "environment:viewports[].id",
+      "reader": "tools/runner/environment.ts"
+    },
+    {
+      "field": "environment:viewports[].width",
+      "reader": "tools/runner/environment.ts"
+    },
+    {
+      "field": "environment:viewports[].height",
+      "reader": "tools/runner/environment.ts"
+    },
+    {
+      "field": "environment:locales",
+      "reader": "tools/runner/environment.ts"
+    },
+    {
+      "field": "environment:locales.default",
+      "reader": "tools/runner/environment.ts"
+    },
+    {
+      "field": "environment:locales.available",
+      "reader": "tools/runner/environment.ts"
+    },
+    {
+      "field": "environment:theme",
+      "reader": "src/editor/preferences/preferences.ts"
+    },
+    {
+      "field": "environment:theme.default",
+      "reader": "src/editor/preferences/preferences.ts"
+    },
+    {
+      "field": "environment:zoomLevels",
+      "reader": "tools/runner/environment.ts"
+    },
+    {
+      "field": "environment:reducedMotion",
+      "reader": "tools/runner/environment.ts"
+    },
+    {
+      "field": "elements:elements",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "elements:elements[].id",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "elements:elements[].tag",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "elements:elements[].namespace",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "elements:elements[].alternativeTags",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "elements:elements[].labelKey",
+      "reader": "src/editor/palette/palette.ts"
+    },
+    {
+      "field": "elements:elements[].icon",
+      "reader": "src/editor/palette/palette.ts"
+    },
+    {
+      "field": "elements:elements[].palette",
+      "reader": "src/editor/palette/palette.ts"
+    },
+    {
+      "field": "elements:elements[].content",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "elements:elements[].naturalChild",
+      "reader": "src/core/structure/insert.ts"
+    },
+    {
+      "field": "elements:elements[].filePicker",
+      "reader": "src/editor/shell/inspector.tsx"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].adapter.fileReading",
+      "reader": "src/editor/doors/door.tsx"
+    },
+    {
+      "field": "elements:elements[].defaultStyles",
+      "reader": "src/core/structure/insert.ts"
+    },
+    {
+      "field": "elements:elements[].defaultTextKey",
+      "reader": "src/core/structure/insert.ts"
+    },
+    {
+      "field": "elements:attributes",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "elements:attributes[].id",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "elements:attributes[].html",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "elements:attributes[].labelKey",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "elements:attributes[].valueType",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "elements:attributes[].keywords",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "elements:attributes[].elements",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "elements:attributes[].command",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "elements:settingsSections",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "elements:settingsSections[].id",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "elements:settingsSections[].labelKey",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "elements:settingsSections[].descriptionKey",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "elements:settingsSections[].elements",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "elements:settingsSections[].attributes",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "elements:autocompleteTokens",
+      "reader": "src/core/document/validate.ts"
+    },
+    {
+      "field": "elements:inputValueEditors",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "elements:palette",
+      "reader": "src/editor/palette/palette.ts"
+    },
+    {
+      "field": "elements:palette[].id",
+      "reader": "src/editor/palette/palette.ts"
+    },
+    {
+      "field": "elements:palette[].labelKey",
+      "reader": "src/editor/palette/palette.ts"
+    },
+    {
+      "field": "elements:palette[].entries",
+      "reader": "src/editor/palette/palette.ts"
+    },
+    {
+      "field": "elements:palette[].entries[].id",
+      "reader": "src/editor/palette/palette.ts"
+    },
+    {
+      "field": "elements:palette[].entries[].labelKey",
+      "reader": "src/editor/palette/palette.ts"
+    },
+    {
+      "field": "elements:palette[].entries[].element",
+      "reader": "src/editor/palette/palette.ts"
+    },
+    {
+      "field": "elements:palette[].entries[].kind",
+      "reader": "src/editor/palette/palette.ts"
+    },
+    {
+      "field": "elements:palette[].entries[].inputType",
+      "reader": "src/editor/palette/palette.ts"
+    },
+    {
+      "field": "elements:palette[].entries[].template",
+      "reader": "src/core/structure/insert.ts"
+    },
+    {
+      "field": "elements:palette[].entries[].feature",
+      "reader": "src/editor/palette/palette.ts"
+    },
+    {
+      "field": "elements:wrappers",
+      "reader": "src/core/structure/wrap.ts"
+    },
+    {
+      "field": "elements:wrappers[].id",
+      "reader": "src/core/structure/wrap.ts"
+    },
+    {
+      "field": "elements:wrappers[].element",
+      "reader": "src/core/structure/wrap.ts"
+    },
+    {
+      "field": "elements:wrappers[].nameKey",
+      "reader": "src/core/structure/wrap.ts"
+    },
+    {
+      "field": "elements:wrappers[].styles",
+      "reader": "src/core/structure/wrap.ts"
+    },
+    {
+      "field": "properties:sections",
+      "reader": "src/editor/inspector/sections.ts"
+    },
+    {
+      "field": "properties:sections[].id",
+      "reader": "src/editor/inspector/sections.ts"
+    },
+    {
+      "field": "properties:sections[].labelKey",
+      "reader": "src/editor/inspector/sections.ts"
+    },
+    {
+      "field": "properties:sections[].summary",
+      "reader": "src/editor/inspector/sections.ts"
+    },
+    {
+      "field": "properties:sections[].groups",
+      "reader": "src/editor/inspector/sections.ts"
+    },
+    {
+      "field": "properties:sections[].groups[].id",
+      "reader": "src/editor/inspector/sections.ts"
+    },
+    {
+      "field": "properties:sections[].groups[].labelKey",
+      "reader": "src/editor/inspector/sections.ts"
+    },
+    {
+      "field": "properties:breakpoints",
+      "reader": "src/editor/view/breakpoints.ts"
+    },
+    {
+      "field": "properties:breakpoints[].id",
+      "reader": "src/editor/view/breakpoints.ts"
+    },
+    {
+      "field": "properties:breakpoints[].labelKey",
+      "reader": "src/editor/view/breakpoints.ts"
+    },
+    {
+      "field": "properties:breakpoints[].width",
+      "reader": "src/editor/view/breakpoints.ts"
+    },
+    {
+      "field": "properties:breakpoints[].height",
+      "reader": "src/editor/view/breakpoints.ts"
+    },
+    {
+      "field": "properties:breakpoints[].base",
+      "reader": "src/editor/view/breakpoints.ts"
+    },
+    {
+      "field": "properties:states",
+      "reader": "src/editor/view/style-state.ts"
+    },
+    {
+      "field": "properties:states[].id",
+      "reader": "src/editor/view/style-state.ts"
+    },
+    {
+      "field": "properties:states[].labelKey",
+      "reader": "src/editor/view/style-state.ts"
+    },
+    {
+      "field": "properties:states[].pseudo",
+      "reader": "src/editor/view/style-state.ts"
+    },
+    {
+      "field": "properties:properties",
+      "reader": "src/core/style/properties.ts"
+    },
+    {
+      "field": "properties:properties[].id",
+      "reader": "src/core/style/properties.ts"
+    },
+    {
+      "field": "properties:properties[].labelKey",
+      "reader": "src/editor/inspector/fields.ts"
+    },
+    {
+      "field": "properties:properties[].section",
+      "reader": "src/editor/inspector/fields.ts"
+    },
+    {
+      "field": "properties:properties[].group",
+      "reader": "src/editor/inspector/fields.ts"
+    },
+    {
+      "field": "properties:properties[].control",
+      "reader": "src/editor/inspector/fields.ts"
+    },
+    {
+      "field": "properties:properties[].valueType",
+      "reader": "src/core/style/properties.ts"
+    },
+    {
+      "field": "properties:properties[].codec",
+      "reader": "src/core/style/codecs.ts"
+    },
+    {
+      "field": "properties:properties[].appliesTo",
+      "reader": "src/core/style/applies-to.ts"
+    },
+    {
+      "field": "properties:properties[].essential",
+      "reader": "src/editor/inspector/fields.ts"
+    },
+    {
+      "field": "properties:properties[].doors",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "properties:properties[].subsets",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "properties:properties[].subsets[].id",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "properties:properties[].subsets[].values",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "properties:properties[].subsets[].units",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "properties:properties[].subsets[].reason",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "properties:composites",
+      "reader": "src/core/style/composites.ts"
+    },
+    {
+      "field": "properties:composites[].id",
+      "reader": "src/core/style/composites.ts"
+    },
+    {
+      "field": "properties:composites[].shorthand",
+      "reader": "src/core/style/composites.ts"
+    },
+    {
+      "field": "properties:composites[].labelKey",
+      "reader": "src/editor/inspector/fields.ts"
+    },
+    {
+      "field": "properties:composites[].section",
+      "reader": "src/editor/inspector/fields.ts"
+    },
+    {
+      "field": "properties:composites[].group",
+      "reader": "src/editor/inspector/fields.ts"
+    },
+    {
+      "field": "properties:composites[].control",
+      "reader": "src/editor/inspector/fields.ts"
+    },
+    {
+      "field": "properties:composites[].codec",
+      "reader": "src/core/style/codecs.ts"
+    },
+    {
+      "field": "properties:composites[].appliesTo",
+      "reader": "src/core/style/applies-to.ts"
+    },
+    {
+      "field": "properties:composites[].longhands",
+      "reader": "src/core/style/composites.ts"
+    },
+    {
+      "field": "properties:composites[].omits",
+      "reader": "src/core/style/composites.ts"
+    },
+    {
+      "field": "properties:composites[].omits.longhands",
+      "reader": "src/core/style/composites.ts"
+    },
+    {
+      "field": "properties:composites[].omits.reason",
+      "reader": "src/core/style/composites.ts"
+    },
+    {
+      "field": "properties:composites[].doors",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "properties:composites[].subsets",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "properties:composites[].subsets[].id",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "properties:composites[].subsets[].values",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "properties:composites[].subsets[].units",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "properties:composites[].subsets[].reason",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "properties:structures",
+      "reader": "src/core/style/structures.ts"
+    },
+    {
+      "field": "properties:structures[].id",
+      "reader": "src/core/style/structures.ts"
+    },
+    {
+      "field": "properties:structures[].codec",
+      "reader": "src/core/style/codecs.ts"
+    },
+    {
+      "field": "properties:structures[].list",
+      "reader": "src/core/style/structures.ts"
+    },
+    {
+      "field": "properties:structures[].fields",
+      "reader": "src/core/style/structures.ts"
+    },
+    {
+      "field": "properties:structures[].fields[].id",
+      "reader": "src/core/style/structures.ts"
+    },
+    {
+      "field": "properties:structures[].fields[].type",
+      "reader": "src/core/style/structures.ts"
+    },
+    {
+      "field": "properties:structures[].fields[].css",
+      "reader": "src/core/style/structures.ts"
+    },
+    {
+      "field": "properties:structures[].fields[].keyword",
+      "reader": "src/core/style/structures.ts"
+    },
+    {
+      "field": "properties:structures[].fields[].units",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "properties:structures[].fields[].sample",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "properties:recipes",
+      "reader": "src/core/style/recipes.ts"
+    },
+    {
+      "field": "properties:recipes[].id",
+      "reader": "src/core/style/recipes.ts"
+    },
+    {
+      "field": "properties:recipes[].labelKey",
+      "reader": "src/editor/inspector/fields.ts"
+    },
+    {
+      "field": "properties:recipes[].section",
+      "reader": "src/editor/inspector/fields.ts"
+    },
+    {
+      "field": "properties:recipes[].group",
+      "reader": "src/editor/inspector/fields.ts"
+    },
+    {
+      "field": "properties:recipes[].control",
+      "reader": "src/editor/inspector/fields.ts"
+    },
+    {
+      "field": "properties:recipes[].codec",
+      "reader": "src/core/style/codecs.ts"
+    },
+    {
+      "field": "properties:recipes[].appliesTo",
+      "reader": "src/core/style/applies-to.ts"
+    },
+    {
+      "field": "properties:recipes[].declarations",
+      "reader": "src/core/style/recipes.ts"
+    },
+    {
+      "field": "properties:recipes[].declarations[].property",
+      "reader": "src/core/style/recipes.ts"
+    },
+    {
+      "field": "properties:recipes[].declarations[].value",
+      "reader": "src/core/style/recipes.ts"
+    },
+    {
+      "field": "properties:recipes[].shared",
+      "reader": "src/core/style/recipes.ts"
+    },
+    {
+      "field": "properties:recipes[].shared.clear",
+      "reader": "src/core/style/recipes.ts"
+    },
+    {
+      "field": "properties:recipes[].shared.otherWrite",
+      "reader": "src/core/style/recipes.ts"
+    },
+    {
+      "field": "properties:recipes[].shared.fields",
+      "reader": "src/editor/inspector/fields.ts"
+    },
+    {
+      "field": "properties:recipes[].doors",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "properties:recipes[].source",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "properties:recipes[].source.spec",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "properties:recipes[].source.bcd",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "properties:couplings",
+      "reader": "src/core/style/couplings.ts"
+    },
+    {
+      "field": "properties:couplings[].id",
+      "reader": "src/core/style/couplings.ts"
+    },
+    {
+      "field": "properties:couplings[].trigger",
+      "reader": "src/core/style/couplings.ts"
+    },
+    {
+      "field": "properties:couplings[].trigger.property",
+      "reader": "src/core/style/couplings.ts"
+    },
+    {
+      "field": "properties:couplings[].trigger.values",
+      "reader": "src/core/style/couplings.ts"
+    },
+    {
+      "field": "properties:couplings[].trigger.via",
+      "reader": "src/core/style/couplings.ts"
+    },
+    {
+      "field": "properties:couplings[].condition",
+      "reader": "src/core/style/couplings.ts"
+    },
+    {
+      "field": "properties:couplings[].condition.predicate",
+      "reader": "src/core/style/couplings.ts"
+    },
+    {
+      "field": "properties:couplings[].condition.property",
+      "reader": "src/core/style/couplings.ts"
+    },
+    {
+      "field": "properties:couplings[].condition.values",
+      "reader": "src/core/style/couplings.ts"
+    },
+    {
+      "field": "properties:couplings[].effect",
+      "reader": "src/core/style/couplings.ts"
+    },
+    {
+      "field": "properties:couplings[].effect.action",
+      "reader": "src/core/style/couplings.ts"
+    },
+    {
+      "field": "properties:couplings[].effect.property",
+      "reader": "src/core/style/couplings.ts"
+    },
+    {
+      "field": "properties:couplings[].effect.value",
+      "reader": "src/core/style/couplings.ts"
+    },
+    {
+      "field": "properties:couplings[].feature",
+      "reader": "src/core/style/couplings.ts"
+    },
+    {
+      "field": "properties:context",
+      "reader": "src/editor/shell/inspector.tsx"
+    },
+    {
+      "field": "properties:valuePredicates",
+      "reader": "src/core/style/couplings.ts"
+    },
+    {
+      "field": "properties:context.own",
+      "reader": "src/editor/shell/inspector.tsx"
+    },
+    {
+      "field": "properties:context.parent",
+      "reader": "src/editor/shell/inspector.tsx"
+    },
+    {
+      "field": "properties:valuePredicates[].id",
+      "reader": "src/core/style/couplings.ts"
+    },
+    {
+      "field": "properties:valuePredicates[].property",
+      "reader": "src/core/style/couplings.ts"
+    },
+    {
+      "field": "properties:valuePredicates[].values",
+      "reader": "src/core/style/couplings.ts"
+    },
+    {
+      "field": "properties:storedWhole",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "properties:storedWhole[].property",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "properties:storedWhole[].reason",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "properties:syntaxFallbacks",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "properties:syntaxFallbacks[].property",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "properties:syntaxFallbacks[].values",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "properties:syntaxFallbacks[].recipe",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "properties:syntaxFallbacks[].reason",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "interactions:keyContexts",
+      "reader": "src/editor/input/keymap.ts"
+    },
+    {
+      "field": "interactions:keyContexts[].id",
+      "reader": "src/editor/input/keymap.ts"
+    },
+    {
+      "field": "interactions:keyContexts[].labelKey",
+      "reader": "src/editor/input/keymap.ts"
+    },
+    {
+      "field": "interactions:keyContexts[].inherits",
+      "reader": "src/editor/input/keymap.ts"
+    },
+    {
+      "field": "interactions:keyContexts[].absorbsFields",
+      "reader": "src/editor/input/keymap.ts"
+    },
+    {
+      "field": "interactions:constants",
+      "reader": "src/editor/input/constants.ts"
+    },
+    {
+      "field": "interactions:constants[].id",
+      "reader": "src/editor/input/constants.ts"
+    },
+    {
+      "field": "interactions:constants[].value",
+      "reader": "src/editor/input/constants.ts"
+    },
+    {
+      "field": "interactions:constants[].unit",
+      "reader": "src/editor/input/constants.ts"
+    },
+    {
+      "field": "interactions:constants[].source",
+      "reader": "src/editor/input/constants.ts"
+    },
+    {
+      "field": "interactions:constants[].note",
+      "reader": "src/editor/input/constants.ts"
+    },
+    {
+      "field": "interactions:gestures",
+      "reader": "src/editor/input/gestures.ts"
+    },
+    {
+      "field": "interactions:gestures[].id",
+      "reader": "src/editor/input/gestures.ts"
+    },
+    {
+      "field": "interactions:gestures[].source",
+      "reader": "src/editor/input/gestures.ts"
+    },
+    {
+      "field": "interactions:gestures[].modifiers",
+      "reader": "src/editor/input/gestures.ts"
+    },
+    {
+      "field": "interactions:gestures[].modifiers[].key",
+      "reader": "src/editor/input/gestures.ts"
+    },
+    {
+      "field": "interactions:gestures[].modifiers[].meaning",
+      "reader": "src/editor/input/gestures.ts"
+    },
+    {
+      "field": "commands:domain",
+      "reader": "src/core/commands/registry.ts"
+    },
+    {
+      "field": "commands:commands",
+      "reader": "src/core/commands/registry.ts"
+    },
+    {
+      "field": "commands:commands[].id",
+      "reader": "src/core/commands/registry.ts"
+    },
+    {
+      "field": "commands:commands[].labelKey",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "commands:commands[].owner",
+      "reader": "src/core/commands/registry.ts"
+    },
+    {
+      "field": "commands:commands[].introducedBy",
+      "reader": "src/core/features/registry.ts"
+    },
+    {
+      "field": "commands:commands[].args",
+      "reader": "src/core/commands/registry.ts"
+    },
+    {
+      "field": "commands:commands[].args{}.type",
+      "reader": "src/core/commands/registry.ts"
+    },
+    {
+      "field": "commands:commands[].args{}.values",
+      "reader": "src/core/commands/registry.ts"
+    },
+    {
+      "field": "commands:commands[].args{}.optional",
+      "reader": "src/core/commands/registry.ts"
+    },
+    {
+      "field": "commands:commands[].availability",
+      "reader": "src/core/commands/registry.ts"
+    },
+    {
+      "field": "commands:commands[].availability.predicate",
+      "reader": "src/core/commands/registry.ts"
+    },
+    {
+      "field": "commands:commands[].availability.refusalKey",
+      "reader": "src/core/commands/registry.ts"
+    },
+    {
+      "field": "commands:commands[].refusals",
+      "reader": "src/core/commands/registry.ts"
+    },
+    {
+      "field": "commands:commands[].confirmation",
+      "reader": "src/core/commands/registry.ts"
+    },
+    {
+      "field": "commands:commands[].confirmation.messageKey",
+      "reader": "src/core/commands/registry.ts"
+    },
+    {
+      "field": "commands:commands[].confirmation.confirmKey",
+      "reader": "src/core/commands/registry.ts"
+    },
+    {
+      "field": "commands:commands[].confirmation.cancelKey",
+      "reader": "src/core/commands/registry.ts"
+    },
+    {
+      "field": "commands:commands[].history",
+      "reader": "src/core/history/history.ts"
+    },
+    {
+      "field": "commands:commands[].history.undoable",
+      "reader": "src/core/history/history.ts"
+    },
+    {
+      "field": "commands:commands[].history.coalesce",
+      "reader": "src/core/store/store.ts"
+    },
+    {
+      "field": "commands:commands[].history.coalesce.same",
+      "reader": "src/core/history/history.ts"
+    },
+    {
+      "field": "commands:commands[].history.coalesce.within",
+      "reader": "src/core/history/history.ts"
+    },
+    {
+      "field": "commands:commands[].history.undoRestoresSelection",
+      "reader": "src/core/history/history.ts"
+    },
+    {
+      "field": "commands:commands[].history.transaction",
+      "reader": "src/core/store/store.ts"
+    },
+    {
+      "field": "commands:commands[].history.noChange",
+      "reader": "src/core/history/history.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].id",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].feature",
+      "reader": "src/core/features/registry.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].labelKey",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].faceLabelKey",
+      "reader": "src/editor/doors/door.tsx"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].pressed",
+      "reader": "src/editor/doors/door.tsx"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].checked",
+      "reader": "src/editor/doors/menu.tsx"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].disabledReasonKey",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].placement",
+      "reader": "src/editor/doors/placement.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].placement.region",
+      "reader": "src/editor/doors/placement.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].placement.order",
+      "reader": "src/editor/doors/placement.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].adapter",
+      "reader": "src/editor/doors/adapter.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].adapter.selection",
+      "reader": "src/editor/doors/adapter.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].adapter.offers",
+      "reader": "src/editor/doors/adapter.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].adapter.offers.property",
+      "reader": "src/editor/doors/adapter.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].adapter.offers.list",
+      "reader": "src/editor/doors/adapter.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].adapter.offers.presets",
+      "reader": "src/editor/doors/adapter.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].adapter.offers.essentials",
+      "reader": "src/editor/doors/adapter.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].adapter.writes",
+      "reader": "src/editor/doors/adapter.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].adapter.fields",
+      "reader": "src/editor/doors/adapter.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].args",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].kind",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].chord",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].context",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].gesture",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].menu",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].toolbar",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].control",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].entry",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].property",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].composite",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].recipe",
+      "reader": "src/editor/doors/adapter.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].attribute",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].source",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].zone",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].target",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].button",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].count",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].modifier",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].handle",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].panel",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "layout:regions",
+      "reader": "src/editor/doors/placement.ts"
+    },
+    {
+      "field": "layout:regions[].id",
+      "reader": "src/editor/doors/placement.ts"
+    },
+    {
+      "field": "layout:regions[].area",
+      "reader": "src/editor/doors/placement.ts"
+    },
+    {
+      "field": "layout:regions[].breaks",
+      "reader": "src/editor/doors/placement.ts"
+    },
+    {
+      "field": "layout:menus",
+      "reader": "src/editor/doors/placement.ts"
+    },
+    {
+      "field": "layout:menus[].id",
+      "reader": "src/editor/doors/placement.ts"
+    },
+    {
+      "field": "layout:menus[].labelKey",
+      "reader": "src/editor/doors/placement.ts"
+    },
+    {
+      "field": "layout:menus[].anchors",
+      "reader": "src/editor/doors/placement.ts"
+    },
+    {
+      "field": "layout:menus[].anchors[].region",
+      "reader": "src/editor/doors/placement.ts"
+    },
+    {
+      "field": "layout:menus[].anchors[].order",
+      "reader": "src/editor/doors/placement.ts"
+    },
+    {
+      "field": "checks:categories",
+      "reader": "src/editor/checks/checks.ts"
+    },
+    {
+      "field": "checks:categories[].id",
+      "reader": "src/editor/checks/checks.ts"
+    },
+    {
+      "field": "checks:categories[].labelKey",
+      "reader": "src/editor/checks/checks.ts"
+    },
+    {
+      "field": "checks:categories[].feature",
+      "reader": "src/editor/checks/checks.ts"
+    },
+    {
+      "field": "features:group",
+      "reader": "src/core/features/registry.ts"
+    },
+    {
+      "field": "features:titleKey",
+      "reader": "src/core/features/registry.ts"
+    },
+    {
+      "field": "features:features",
+      "reader": "src/core/features/registry.ts"
+    },
+    {
+      "field": "features:features[].id",
+      "reader": "src/core/features/registry.ts"
+    },
+    {
+      "field": "features:features[].titleKey",
+      "reader": "src/core/features/registry.ts"
+    },
+    {
+      "field": "features:features[].commands",
+      "reader": "src/core/features/registry.ts"
+    },
+    {
+      "field": "features:features[].dependsOn",
+      "reader": "src/core/features/registry.ts"
+    },
+    {
+      "field": "features:features[].spec",
+      "reader": "CLAUDE.md"
+    },
+    {
+      "field": "features:features[].toothProof",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].intent",
+      "reader": "CLAUDE.md"
+    },
+    {
+      "field": "features:features[].intent.title",
+      "reader": "CLAUDE.md"
+    },
+    {
+      "field": "features:features[].intent.steps",
+      "reader": "CLAUDE.md"
+    },
+    {
+      "field": "features:features[].intent.expected",
+      "reader": "CLAUDE.md"
+    },
+    {
+      "field": "features:features[].scenarios",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].id",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].setup",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].setup.fixture",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].setup.selection",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].setup.context",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].setup.breakpoint",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].setup.state",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].setup.locale",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].setup.viewport",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].setup.zoom",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].setup.storage",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].setup.tabs",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].setup.clipboard",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].setup.clipboard.html",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].setup.clipboard.text",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].steps",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].steps[].door",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].steps[].args",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].steps[].target",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].steps[].drop",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].steps[].drop.placement",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].steps[].drop.reference",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].steps[].drop.on",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].steps[].action",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].steps[].hold",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].steps[].type",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].steps[].answer",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].doors",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.document",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.document[].op",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.document[].path",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.document[].value",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.selection",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.history",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.history.undoSteps",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.history.undoRestores",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.history.redoRestores",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.render",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.render.computed",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.render.computed[].node",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.render.computed[].property",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.render.computed[].value",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.render.geometry",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.render.geometry[].node",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.render.geometry[].measure",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.render.geometry[].relation",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.render.geometry[].value",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.render.geometry[].reference",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.render.feedback",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.render.feedback[].key",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.render.feedback[].params",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.editor",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.editor.regions",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.editor.regions[].region",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.editor.regions[].measure",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.editor.regions[].relation",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.editor.regions[].value",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.editor.regions[].reference",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.editor.computed",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.editor.computed[].region",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.editor.computed[].property",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.editor.computed[].value",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.persistence",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.persistence.reload",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.persistence.document",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.persistence.preferences",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.persistence.selection",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.export",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.export.files",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.export.files[].path",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.export.files[].present",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.export.files[].absent",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].refusals",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].refusals[].key",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].refusals[].document",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "references:references",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "references:references[].kind",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "references:references[].id",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "references:references[].status",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "consumers:consumers",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "consumers:consumers[].field",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "consumers:consumers[].reader",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-properties:$generated",
+      "reader": "tools/gen/check.ts"
+    },
+    {
+      "field": "generated/css-properties:$generated.notice",
+      "reader": "tools/gen/check.ts"
+    },
+    {
+      "field": "generated/css-properties:$generated.by",
+      "reader": "tools/gen/check.ts"
+    },
+    {
+      "field": "generated/css-properties:$generated.from",
+      "reader": "tools/gen/check.ts"
+    },
+    {
+      "field": "generated/css-properties:cssWideKeywords",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "generated/css-properties:units",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "generated/css-properties:properties",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-properties:properties{}.syntax",
+      "reader": "src/manifest/css.ts"
+    },
+    {
+      "field": "generated/css-properties:properties{}.initial",
+      "reader": "src/core/style/cascade.ts"
+    },
+    {
+      "field": "generated/css-properties:properties{}.inherited",
+      "reader": "src/core/style/cascade.ts"
+    },
+    {
+      "field": "generated/css-properties:properties{}.longhands",
+      "reader": "src/core/style/composites.ts"
+    },
+    {
+      "field": "generated/css-properties:properties{}.legacyAliasOf",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-properties:properties{}.keywords",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "generated/css-properties:properties{}.units",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "generated/css-properties:properties{}.numeric",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "generated/css-properties:types",
+      "reader": "src/manifest/css.ts"
+    },
+    {
+      "field": "generated/css-properties:scopedFunctions",
+      "reader": "tools/gen/compat.ts"
+    },
+    {
+      "field": "generated/css-compat:$generated",
+      "reader": "tools/gen/check.ts"
+    },
+    {
+      "field": "generated/css-compat:$generated.notice",
+      "reader": "tools/gen/check.ts"
+    },
+    {
+      "field": "generated/css-compat:$generated.by",
+      "reader": "tools/gen/check.ts"
+    },
+    {
+      "field": "generated/css-compat:$generated.from",
+      "reader": "tools/gen/check.ts"
+    },
+    {
+      "field": "generated/css-compat:browsers",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:browsers.chrome",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:browsers.firefox",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:browsers.safari",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:valueFunctions",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:valueFunctions{}.bcd",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:valueFunctions{}.chrome",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:valueFunctions{}.firefox",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:valueFunctions{}.safari",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:valueFunctions{}.why",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:units",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "generated/css-compat:units{}.bcd",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:units{}.chrome",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:units{}.firefox",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:units{}.safari",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:units{}.why",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.bcd",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.via",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.chrome",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.firefox",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.safari",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.why",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.keywords",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.keywords{}.bcd",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.keywords{}.chrome",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.keywords{}.firefox",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.keywords{}.safari",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.keywords{}.why",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.keywords{}.inFunctions",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.keywords{}.inFunctions{}.bcd",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.keywords{}.inFunctions{}.chrome",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.keywords{}.inFunctions{}.firefox",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.keywords{}.inFunctions{}.safari",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.keywords{}.inFunctions{}.why",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.functions",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.functions{}.bcd",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.functions{}.chrome",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.functions{}.firefox",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.functions{}.safari",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.functions{}.why",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.forms",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.forms{}.shape",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.forms{}.bcd",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.forms{}.chrome",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.forms{}.firefox",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.forms{}.safari",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.forms{}.why",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/html-elements:$generated",
+      "reader": "tools/gen/check.ts"
+    },
+    {
+      "field": "generated/html-elements:$generated.notice",
+      "reader": "tools/gen/check.ts"
+    },
+    {
+      "field": "generated/html-elements:$generated.by",
+      "reader": "tools/gen/check.ts"
+    },
+    {
+      "field": "generated/html-elements:$generated.from",
+      "reader": "tools/gen/check.ts"
+    },
+    {
+      "field": "generated/html-elements:elements",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.deprecated",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.void",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.foreign",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.textOnly",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.categories",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.categories.metadata",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.categories.flow",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.categories.sectioning",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.categories.heading",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.categories.phrasing",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.categories.embedded",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.categories.interactive",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.categories.labelable",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.categories.form",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.categories.scriptSupporting",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.transparent",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.permittedContent",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.permittedDescendants",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.permittedDescendants[].exclude",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.permittedOrder",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.permittedParent",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.requiredAncestors",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.requiredContent",
+      "reader": "src/core/elements/content-model.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.attributes",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.attributes{}.boolean",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.attributes{}.deprecated",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "generated/html-elements:elements{}.attributes{}.enum",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "properties:properties[].icons",
+      "reader": "src/editor/inspector/fields.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].icon",
+      "reader": "src/editor/doors/door.tsx"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].drawnAs",
+      "reader": "src/editor/doors/door.tsx"
+    },
+    {
+      "field": "layout:menus[].anchors[].drawnAs",
+      "reader": "src/editor/doors/menu.tsx"
+    },
+    {
+      "field": "layout:menus[].anchors[].icon",
+      "reader": "src/editor/doors/menu.tsx"
+    },
+    {
+      "field": "layout:glyphs",
+      "reader": "src/editor/doors/door.tsx"
+    },
+    {
+      "field": "layout:glyphs.dropdown",
+      "reader": "src/editor/doors/door.tsx"
+    },
+    {
+      "field": "layout:glyphs.submenu",
+      "reader": "src/editor/doors/menu.tsx"
+    },
+    {
+      "field": "layout:glyphs.sideRow",
+      "reader": "src/editor/canvas/chrome.tsx"
+    },
+    {
+      "field": "layout:glyphs.sideColumn",
+      "reader": "src/editor/canvas/chrome.tsx"
+    },
+    {
+      "field": "layout:glyphs.quickPanel",
+      "reader": "src/editor/canvas/quick-panel.tsx"
+    },
+    {
+      "field": "layout:glyphs.grip",
+      "reader": "src/editor/canvas/quick-panel.tsx"
+    },
+    {
+      "field": "layout:glyphs.expanded",
+      "reader": "src/editor/doors/door.tsx"
+    },
+    {
+      "field": "layout:glyphs.collapsed",
+      "reader": "src/editor/doors/door.tsx"
+    },
+    {
+      "field": "layout:glyphs.checked",
+      "reader": "src/editor/doors/menu.tsx"
+    },
+    {
+      "field": "generated/icons:$generated",
+      "reader": "tools/gen/check.ts"
+    },
+    {
+      "field": "generated/icons:$generated.notice",
+      "reader": "tools/gen/check.ts"
+    },
+    {
+      "field": "generated/icons:$generated.by",
+      "reader": "tools/gen/check.ts"
+    },
+    {
+      "field": "generated/icons:$generated.from",
+      "reader": "tools/gen/check.ts"
+    },
+    {
+      "field": "generated/icons:icons",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "layout:glyphs.folder",
+      "reader": "src/editor/doors/door.tsx"
+    },
+    {
+      "field": "layout:glyphs.sizeVariable",
+      "reader": "src/editor/doors/door.tsx"
+    },
+    {
+      "field": "layout:panels",
+      "reader": "src/editor/workspace/panels.ts"
+    },
+    {
+      "field": "layout:panels{}.icon",
+      "reader": "src/editor/shell/dock.tsx"
+    },
+    {
+      "field": "layout:panels{}.labelKey",
+      "reader": "src/editor/workspace/panels.ts"
+    },
+    {
+      "field": "layout:panels{}.place",
+      "reader": "src/editor/workspace/panels.ts"
+    },
+    {
+      "field": "layout:panels{}.in",
+      "reader": "src/editor/workspace/panels.ts"
+    },
+    {
+      "field": "layout:panels{}.open",
+      "reader": "src/editor/workspace/panels.ts"
+    },
+    {
+      "field": "layout:splitters",
+      "reader": "src/editor/workspace/layout.ts"
+    },
+    {
+      "field": "layout:splitters{}.axis",
+      "reader": "src/editor/workspace/layout.ts"
+    },
+    {
+      "field": "layout:splitters{}.grow",
+      "reader": "src/editor/workspace/layout.ts"
+    },
+    {
+      "field": "layout:splitters{}.directions",
+      "reader": "src/editor/workspace/layout.ts"
+    },
+    {
+      "field": "layout:splitters{}.size",
+      "reader": "src/editor/workspace/layout.ts"
+    },
+    {
+      "field": "layout:splitters{}.min",
+      "reader": "src/editor/workspace/layout.ts"
+    },
+    {
+      "field": "layout:splitters{}.max",
+      "reader": "src/editor/workspace/layout.ts"
+    },
+    {
+      "field": "layout:splitters{}.labelKey",
+      "reader": "src/editor/shell/sidebar.tsx"
+    },
+    {
+      "field": "css-exclusions:exclusions",
+      "reader": "tools/gen/generate.ts"
+    },
+    {
+      "field": "css-exclusions:exclusions[].property",
+      "reader": "tools/gen/generate.ts"
+    },
+    {
+      "field": "css-exclusions:exclusions[].keyword",
+      "reader": "tools/gen/generate.ts"
+    },
+    {
+      "field": "css-exclusions:exclusions[].unit",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "css-exclusions:exclusions[].evidence",
+      "reader": "tools/gen/generate.ts"
+    },
+    {
+      "field": "css-exclusions:exclusions[].evidence.kind",
+      "reader": "tools/gen/generate.ts"
+    },
+    {
+      "field": "css-exclusions:exclusions[].evidence.source",
+      "reader": "tools/gen/generate.ts"
+    },
+    {
+      "field": "css-exclusions:exclusions[].evidence.note",
+      "reader": "tools/gen/generate.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].steps[].wait",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "elements:wrappers[].childStyles",
+      "reader": "src/core/structure/wrap.ts"
+    },
+    {
+      "field": "elements:wrappers[].perChildTracks",
+      "reader": "src/core/structure/wrap.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].slider",
+      "reader": "src/editor/shell/field.tsx"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].slider.min",
+      "reader": "src/editor/shell/field.tsx"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].slider.max",
+      "reader": "src/editor/shell/field.tsx"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].slider.step",
+      "reader": "src/editor/shell/field.tsx"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].slider.unit",
+      "reader": "src/editor/shell/field.tsx"
+    },
+    {
+      "field": "properties:states[].elements",
+      "reader": "src/editor/view/style-state.ts"
+    },
+    {
+      "field": "elements:attributes[].global",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "elements:attributes[].head",
+      "reader": "src/core/export/export.ts"
+    },
+    {
+      "field": "elements:attributes[].keepsEmpty",
+      "reader": "src/core/elements/attributes.ts"
+    },
+    {
+      "field": "interactions:checks",
+      "reader": "src/editor/shell/dock.tsx"
+    },
+    {
+      "field": "interactions:checks.colourProperty",
+      "reader": "src/core/a11y/checks.ts"
+    },
+    {
+      "field": "interactions:checks.backgroundProperty",
+      "reader": "src/core/a11y/checks.ts"
+    },
+    {
+      "field": "interactions:layerColours",
+      "reader": "src/editor/shell/sidebar.tsx"
+    },
+    {
+      "field": "properties:composites[].essential",
+      "reader": "src/editor/inspector/sections.ts"
+    },
+    {
+      "field": "properties:rows",
+      "reader": "src/editor/inspector/rows.ts"
+    },
+    {
+      "field": "properties:rows[].id",
+      "reader": "src/editor/inspector/rows.ts"
+    },
+    {
+      "field": "properties:rows[].section",
+      "reader": "src/editor/inspector/rows.ts"
+    },
+    {
+      "field": "properties:rows[].fields",
+      "reader": "src/editor/inspector/rows.ts"
+    },
+    {
+      "field": "properties:rows[].fields[].target",
+      "reader": "src/editor/inspector/rows.ts"
+    },
+    {
+      "field": "properties:rows[].fields[].prefixKey",
+      "reader": "src/editor/inspector/rows.ts"
+    }
+  ]
+}

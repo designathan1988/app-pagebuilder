@@ -1,0 +1,563 @@
+{
+  "domain": "project",
+  "commands": [
+    {
+      "id": "project.newBlankPage",
+      "labelKey": "command.newBlankPage",
+      "owner": "src/core/project/project.ts",
+      "introducedBy": "new-blank-page",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": {
+        "messageKey": "dialog.newBlankPage.message",
+        "confirmKey": "dialog.newBlankPage.confirm",
+        "cancelKey": "dialog.cancel"
+      },
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "menu-file",
+          "kind": "menu",
+          "feature": "new-blank-page",
+          "menu": "file",
+          "checked": null,
+          "labelKey": "command.newBlankPage",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:file",
+            "order": 6
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.newBlankPage",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "command-palette",
+            "order": 27
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "project.restoreVersion",
+      "labelKey": "command.restoreVersion",
+      "owner": "src/core/project/recovery.ts",
+      "introducedBy": "autosave-corruption-recovery",
+      "args": {
+        "version": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.open.invalidArchive"
+      ],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "recovery-dialog-restore",
+          "kind": "panel-control",
+          "drawnAs": "button",
+          "pressed": false,
+          "feature": "autosave-corruption-recovery",
+          "panel": "recovery-dialog",
+          "control": "restore",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.restoreVersion",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "recovery-dialog",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "project.takeOverEditing",
+      "labelKey": "tabGuard.takeOver",
+      "owner": "src/core/project/tab-guard.ts",
+      "introducedBy": "multi-tab-guard",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "tab-guard-take-over",
+          "kind": "panel-control",
+          "drawnAs": "button",
+          "pressed": false,
+          "feature": "multi-tab-guard",
+          "panel": "tab-guard",
+          "control": "take-over",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "tabGuard.takeOver",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "tab-guard",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "project.save",
+      "labelKey": "command.saveProject",
+      "owner": "src/core/project/archive.ts",
+      "introducedBy": "project-save-json",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "menu-file",
+          "kind": "menu",
+          "feature": "project-save-json",
+          "menu": "file",
+          "checked": null,
+          "labelKey": "command.saveProject",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:file",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.saveProject",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "command-palette",
+            "order": 28
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "project.open",
+      "labelKey": "command.openProject",
+      "owner": "src/core/project/archive.ts",
+      "introducedBy": "project-open-json",
+      "args": {
+        "file": {
+          "type": "file",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.open.invalidArchive",
+        "status.open.newerVersion"
+      ],
+      "confirmation": {
+        "messageKey": "dialog.openProject.message",
+        "confirmKey": "dialog.replace",
+        "cancelKey": "dialog.cancel"
+      },
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "menu-file",
+          "kind": "menu",
+          "feature": "project-open-json",
+          "menu": "file",
+          "checked": null,
+          "labelKey": "command.openProject",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:file",
+            "order": 2
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.openProject",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "command-palette",
+            "order": 29
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "project.openFolder",
+      "labelKey": "command.openFolder",
+      "owner": "src/core/import/folder.ts",
+      "introducedBy": "explorer-open-folder",
+      "args": {
+        "folder": {
+          "type": "file",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.folder.unsupported",
+        "status.import.noPage",
+        "status.folder.pageRefused"
+      ],
+      "confirmation": {
+        "messageKey": "dialog.openFolder.message",
+        "confirmKey": "dialog.replace",
+        "cancelKey": "dialog.cancel"
+      },
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "menu-file",
+          "kind": "menu",
+          "feature": "explorer-open-folder",
+          "menu": "file",
+          "checked": null,
+          "labelKey": "command.openFolder",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:file",
+            "order": 3
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": [],
+            "fileReading": "folder"
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "explorer-open-folder",
+          "entry": "command",
+          "labelKey": "command.openFolder",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "command-palette",
+            "order": 30
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": [],
+            "fileReading": "folder"
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "project.importHtml",
+      "labelKey": "command.importHtml",
+      "owner": "src/core/import/import.ts",
+      "introducedBy": "html-import-structure",
+      "args": {
+        "files": {
+          "type": "files",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.import.noPage",
+        "status.import.invalidArchive"
+      ],
+      "confirmation": {
+        "messageKey": "dialog.importHtml.message",
+        "confirmKey": "dialog.replace",
+        "cancelKey": "dialog.cancel"
+      },
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
+      "entryPoints": [
+        {
+          "id": "menu-file",
+          "kind": "menu",
+          "feature": "html-import-structure",
+          "menu": "file",
+          "checked": null,
+          "labelKey": "command.importHtml",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:file",
+            "order": 4
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "html-import-structure",
+          "entry": "command",
+          "labelKey": "command.importHtml",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "command-palette",
+            "order": 31
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "project.export",
+      "labelKey": "command.exportPage",
+      "owner": "src/core/export/export.ts",
+      "introducedBy": "export-zip",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "menu-file",
+          "kind": "menu",
+          "feature": "export-zip",
+          "menu": "file",
+          "checked": null,
+          "labelKey": "command.exportPage",
+          "faceLabelKey": null,
+          "icon": "share",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:file",
+            "order": 5
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "toolbar-top-bar-export",
+          "kind": "toolbar",
+          "drawnAs": "primary",
+          "pressed": false,
+          "feature": "export-zip",
+          "toolbar": "top-bar",
+          "labelKey": "command.exportPage",
+          "faceLabelKey": null,
+          "icon": "share",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "top-bar",
+            "order": 11
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "toolbar-preview-bar-export",
+          "kind": "toolbar",
+          "drawnAs": "button",
+          "pressed": false,
+          "feature": "preview-mode",
+          "toolbar": "preview-bar",
+          "labelKey": "command.exportPage",
+          "faceLabelKey": null,
+          "icon": "share",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "preview-bar",
+            "order": 6
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.exportPage",
+          "faceLabelKey": null,
+          "icon": "share",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "command-palette",
+            "order": 32
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    }
+  ]
+}

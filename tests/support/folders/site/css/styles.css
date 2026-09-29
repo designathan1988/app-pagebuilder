@@ -1,0 +1,5 @@
+/* The site's old stylesheet: its path belongs to the stylesheet the project generates, so the import keeps it under
+   a new name (css/styles-1.css) and the report says so. */
+.old {
+  color: #667788;
+}

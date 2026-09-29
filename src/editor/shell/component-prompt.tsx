@@ -1,0 +1,57 @@
+// The component name prompt's view (the user's real-use audit, item A3.12): a small panel over a shield, its field
+// filled with the element's own name and selected, Enter (or the form's submission) handing components.create the
+// name the person typed, the close button and a click on the shield closing it. Typing is not a command: the form
+// dispatches the create itself, as the link prompt's field does, and the prompt's field is the door
+// components.create#prompt-name, whose control this form is.
+import { useEffect, useRef } from 'react';
+import { locate } from '../../core/document/model.ts';
+import { DoorControl } from '../doors/door.tsx';
+import { doorSlots } from '../doors/placement.ts';
+import { useEditorState, useStore } from '../store.ts';
+import { useT } from '../text.ts';
+
+const PARTS = doorSlots('component-prompt');
+const NAME = PARTS.find((p) => p.door.kind === 'panel-control' && p.door.control === 'name') ?? null;
+const CLOSE = PARTS.find((p) => p.door.kind === 'panel-control' && p.door.control === 'close') ?? null;
+
+export function ComponentPrompt() {
+  const t = useT();
+  const store = useStore();
+  const open = useEditorState((s) => s.ui.componentPrompt);
+  const document = useEditorState((s) => s.document);
+  const field = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    field.current?.focus();
+    field.current?.select();
+  }, [open]);
+  if (open === null) return null;
+  const node = locate(document, open.node);
+  if (node === null) return null;
+  const close = () => {
+    if (CLOSE !== null) (store.dispatch as (id: string, args: unknown) => unknown)(CLOSE.command.id, {});
+  };
+  return (
+    <div className="picker-shield" onClick={close}>
+      <div className="picker picker--component" role="dialog" aria-modal="true" aria-label={t('components.prompt.title')} data-region="component-prompt" onClick={(event) => event.stopPropagation()}>
+        <p className="picker__label">{t('components.prompt.title')}</p>
+        {NAME === null ? null : (
+          <form
+            className="field-row"
+            data-door={NAME.ref}
+            data-args="{}"
+            onSubmit={(event) => {
+              event.preventDefault();
+              const value = field.current?.value ?? '';
+              close();
+              (store.dispatch as (id: string, args: unknown) => unknown)(NAME.command.id, { name: value });
+            }}
+          >
+            <span className="field-row__label">{t('components.prompt.name')}</span>
+            <input ref={field} className="input" aria-label={t('components.prompt.name')} defaultValue={node.node.name} spellCheck={false} />
+          </form>
+        )}
+        <div className="picker__actions">{CLOSE === null ? null : <DoorControl entry={CLOSE} />}</div>
+      </div>
+    </div>
+  );
+}

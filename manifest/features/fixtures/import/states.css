@@ -1,0 +1,39 @@
+.band__title {
+  font-size: 40px;
+}
+
+@media (max-width: 834px) {
+  .band__title {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 900px) {
+  .band__lead {
+    color: #444444;
+  }
+}
+
+@media (min-width: 1000px) {
+  .band__lead {
+    color: #222222;
+  }
+}
+
+.band__cta:hover {
+  color: #00aa00;
+}
+
+.band__title::before {
+  content: ">";
+}
+
+.band .band__cta:hover {
+  color: #ff0000;
+}
+
+@supports (display: grid) {
+  .band__lead {
+    display: grid;
+  }
+}

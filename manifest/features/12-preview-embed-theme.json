@@ -1,0 +1,1341 @@
+{
+  "group": "preview-embed-theme",
+  "titleKey": "featureGroup.previewEmbedTheme",
+  "features": [
+    {
+      "id": "preview-mode",
+      "titleKey": "feature.previewMode",
+      "commands": [
+        "view.setBreakpoint",
+        "view.enterPreview",
+        "view.exitPreview",
+        "project.export"
+      ],
+      "dependsOn": [
+        "state-styles"
+      ],
+      "spec": "spec/behavior/preview-mode.md",
+      "intent": {
+        "title": "Preview the page without editor chrome",
+        "steps": [
+          "Build a page with a Button that has a hover state and a Details element.",
+          "Press Ctrl+P (or click Preview).",
+          "Hover the button, open the details, switch to Phone.",
+          "Press Escape."
+        ],
+        "expected": [
+          "Preview hides docks, selection, guides and handles; only a slim bar with the breakpoint switcher, Exit preview and Export remains.",
+          "The page renders exactly like the export: hover states apply and details open; links do not navigate the editor away.",
+          "Escape or Ctrl+Enter exits preview and restores the previous selection and zoom.",
+          "Preview never changes the document JSON."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "ctrl-p-shows-the-page-as-exported",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "view.enterPreview#key-ctrl-p-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "view.enterPreview#key-ctrl-p-in-global"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.preview.on",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "preview-bar",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 300,
+                  "reference": null
+                },
+                {
+                  "region": "preview-page",
+                  "measure": "width",
+                  "relation": "equals",
+                  "value": 1440,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "ctrl-enter-shows-the-page-as-exported",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "view.enterPreview#key-ctrl-enter-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "view.enterPreview#key-ctrl-enter-in-global"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.preview.on",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "preview-bar",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 300,
+                  "reference": null
+                },
+                {
+                  "region": "preview-page",
+                  "measure": "width",
+                  "relation": "equals",
+                  "value": 1440,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-preview-button-shows-the-page-as-exported",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "view.enterPreview#toolbar-top-bar-preview",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "view.enterPreview#toolbar-top-bar-preview"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.preview.on",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "preview-bar",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 300,
+                  "reference": null
+                },
+                {
+                  "region": "preview-page",
+                  "measure": "width",
+                  "relation": "equals",
+                  "value": 1440,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "escape-returns-to-editing-with-the-selection",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "view.enterPreview#key-ctrl-p-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "view.exitPreview#key-escape-in-preview",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "view.exitPreview#key-escape-in-preview"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.preview.off",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "canvas-frame",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 300,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "ctrl-enter-returns-to-editing-with-the-selection",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "view.enterPreview#key-ctrl-p-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "view.exitPreview#key-ctrl-enter-in-preview",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "view.exitPreview#key-ctrl-enter-in-preview"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.preview.off",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "canvas-frame",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 300,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-exit-button-returns-to-editing-with-the-selection",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "view.enterPreview#key-ctrl-p-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "view.exitPreview#toolbar-preview-bar-exit",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "view.exitPreview#toolbar-preview-bar-exit"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.preview.off",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "canvas-frame",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 300,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-preview-bar-shows-the-page-at-laptop",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "view.enterPreview#key-ctrl-p-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "view.setBreakpoint#toolbar-preview-bar-laptop",
+              "args": {
+                "breakpoint": "laptop"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "view.setBreakpoint#toolbar-preview-bar-laptop"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.breakpointActive",
+                  "params": {
+                    "breakpoint": "Laptop"
+                  }
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "preview-bar",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 300,
+                  "reference": null
+                },
+                {
+                  "region": "preview-page",
+                  "measure": "width",
+                  "relation": "equals",
+                  "value": 1180,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": {
+              "reload": "immediate",
+              "document": null,
+              "preferences": "same",
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-preview-bar-shows-the-page-at-tablet",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "view.enterPreview#key-ctrl-p-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "view.setBreakpoint#toolbar-preview-bar-tablet",
+              "args": {
+                "breakpoint": "tablet"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "view.setBreakpoint#toolbar-preview-bar-tablet"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.breakpointActive",
+                  "params": {
+                    "breakpoint": "Tablet"
+                  }
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "preview-bar",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 300,
+                  "reference": null
+                },
+                {
+                  "region": "preview-page",
+                  "measure": "width",
+                  "relation": "equals",
+                  "value": 834,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": {
+              "reload": "immediate",
+              "document": null,
+              "preferences": "same",
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-preview-bar-shows-the-page-at-phone",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "view.enterPreview#key-ctrl-p-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "view.setBreakpoint#toolbar-preview-bar-phone",
+              "args": {
+                "breakpoint": "phone"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "view.setBreakpoint#toolbar-preview-bar-phone"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.breakpointActive",
+                  "params": {
+                    "breakpoint": "Phone"
+                  }
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "preview-bar",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 300,
+                  "reference": null
+                },
+                {
+                  "region": "preview-page",
+                  "measure": "width",
+                  "relation": "equals",
+                  "value": 390,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": {
+              "reload": "immediate",
+              "document": null,
+              "preferences": "same",
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-preview-bar-shows-the-page-at-desktop",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "view.enterPreview#key-ctrl-p-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "view.setBreakpoint#toolbar-preview-bar-tablet",
+              "args": {
+                "breakpoint": "tablet"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "view.setBreakpoint#toolbar-preview-bar-desktop",
+              "args": {
+                "breakpoint": "desktop"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "view.setBreakpoint#toolbar-preview-bar-desktop"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.breakpointActive",
+                  "params": {
+                    "breakpoint": "Desktop"
+                  }
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "preview-bar",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 300,
+                  "reference": null
+                },
+                {
+                  "region": "preview-page",
+                  "measure": "width",
+                  "relation": "equals",
+                  "value": 1440,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": {
+              "reload": "immediate",
+              "document": null,
+              "preferences": "same",
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-preview-bar-exports-the-page",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "view.enterPreview#key-ctrl-p-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "project.export#toolbar-preview-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.export#toolbar-preview-bar-export"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "index.html",
+                  "present": [
+                    "<h1>Welcome to Aurora</h1>"
+                  ],
+                  "absent": []
+                }
+              ]
+            }
+          },
+          "refusals": []
+        }
+      ]
+    },
+    {
+      "id": "embed-html",
+      "titleKey": "feature.embedHtml",
+      "commands": [
+        "element.setEmbedMarkup"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Embed custom HTML",
+        "steps": [
+          "Insert an Embed and paste third-party widget markup with a script.",
+          "Preview the page.",
+          "Export."
+        ],
+        "expected": [
+          "The markup is stored as-is and shown sandboxed on the editing canvas, where its scripts never run.",
+          "Preview runs it.",
+          "The export writes it verbatim at its place; Layers marks it as an embed."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "the-embed-tile-inserts-an-empty-embed",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "embed-html"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "embed",
+                    "name": "Embed",
+                    "tag": null,
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "",
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Embed"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Embed",
+                    "parent": "Page",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-markup-is-kept-as-it-is-typed",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "embed-html"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setEmbedMarkup#inspector-embed-markup",
+              "args": {
+                "markup": "<div id=\"widget\">Weather</div><script>document.body.dataset.ran = \"yes\"</script>"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "<div id=\"widget\">Weather</div><script>document.body.dataset.ran = \"yes\"</script>"
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-style",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.setEmbedMarkup#inspector-embed-markup"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "embed",
+                    "name": "Embed",
+                    "tag": null,
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "<div id=\"widget\">Weather</div><script>document.body.dataset.ran = \"yes\"</script>",
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Embed"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.embed.set",
+                  "params": {
+                    "name": "Embed"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
+    },
+    {
+      "id": "theme-switch",
+      "titleKey": "feature.themeSwitch",
+      "commands": [
+        "preferences.setTheme"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/theme-switch.md",
+      "intent": {
+        "title": "Light, dark and system theme",
+        "steps": [
+          "Choose Theme > Light, then Dark, then System.",
+          "With System chosen, switch the OS/browser colour scheme emulation.",
+          "Reload."
+        ],
+        "expected": [
+          "The editor chrome switches its colour tokens; the page inside the iframe keeps its own colours.",
+          "System follows prefers-color-scheme live.",
+          "The choice is stored in the preferences store and restored after reload."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "dark-draws-the-editor-dark",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "preferences.setTheme#menu-theme-light",
+              "args": {
+                "theme": "light"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "preferences.setTheme#menu-theme-dark",
+              "args": {
+                "theme": "dark"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "preferences.setTheme#menu-theme-dark"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": {
+              "regions": [],
+              "computed": [
+                {
+                  "region": "top-bar",
+                  "property": "background-color",
+                  "value": "rgb(21, 24, 29)"
+                }
+              ]
+            },
+            "persistence": {
+              "reload": "immediate",
+              "document": null,
+              "preferences": "same",
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "light-draws-the-editor-light",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "preferences.setTheme#menu-theme-light",
+              "args": {
+                "theme": "light"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "preferences.setTheme#menu-theme-light"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": {
+              "regions": [],
+              "computed": [
+                {
+                  "region": "top-bar",
+                  "property": "background-color",
+                  "value": "rgb(247, 248, 250)"
+                }
+              ]
+            },
+            "persistence": {
+              "reload": "immediate",
+              "document": null,
+              "preferences": "same",
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "system-follows-the-browser-scheme",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "preferences.setTheme#menu-theme-system",
+              "args": {
+                "theme": "system"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "preferences.setTheme#menu-theme-system"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": {
+              "regions": [],
+              "computed": [
+                {
+                  "region": "top-bar",
+                  "property": "background-color",
+                  "value": "rgb(247, 248, 250)"
+                }
+              ]
+            },
+            "persistence": {
+              "reload": "immediate",
+              "document": null,
+              "preferences": "same",
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
+    }
+  ]
+}

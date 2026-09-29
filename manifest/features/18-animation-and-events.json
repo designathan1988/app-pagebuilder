@@ -1,0 +1,3440 @@
+{
+  "group": "animation-and-events",
+  "titleKey": "featureGroup.animationAndEvents",
+  "features": [
+    {
+      "id": "timeline-animations",
+      "titleKey": "feature.timelineAnimations",
+      "commands": [
+        "workspace.setPanelOpen",
+        "animation.create",
+        "animation.rename",
+        "animation.delete",
+        "timeline.show"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Timeline panel: create animations for an element",
+        "steps": [
+          "Select a Heading and open the Timeline panel.",
+          "Click 'New animation' [timeline.newAnimation], name it 'fade-in'.",
+          "Create a second animation and rename and delete it."
+        ],
+        "expected": [
+          "View > Timeline opens the Timeline panel as a tab in the bottom workbench.",
+          "The Timeline panel lists the animations of the selected element with a time ruler.",
+          "New animations are stored in the document JSON with a unique keyframes name, a 1 s duration and keyframes at 0% and 100%.",
+          "Rename and delete are undo steps; a deleted animation leaves no animation properties on the element."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "an-animation-is-made-on-the-selected-element",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#menu-view-timeline",
+              "args": {
+                "panel": "timeline",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.create#timeline-new-animation",
+              "args": {
+                "name": "fade-in"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "fade-in\n"
+            }
+          ],
+          "doors": [
+            "animation.create#timeline-new-animation"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@animations",
+                "value": [
+                  {
+                    "name": "fade-in",
+                    "settings": {
+                      "duration": "1s",
+                      "delay": "0s",
+                      "iterations": "1",
+                      "direction": "normal",
+                      "fill": "none",
+                      "timing": "linear",
+                      "play-state": "running"
+                    },
+                    "keyframes": [
+                      {
+                        "offset": 0,
+                        "easing": "",
+                        "declarations": {}
+                      },
+                      {
+                        "offset": 100,
+                        "easing": "",
+                        "declarations": {}
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.animation.created",
+                  "params": {
+                    "name": "fade-in",
+                    "element": "Title"
+                  }
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "dock-timeline",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-taken-name-is-refused",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#status-bar-timeline",
+              "args": {
+                "panel": "timeline",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.create#timeline-new-animation",
+              "args": {
+                "name": "fade-in"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "fade-in\n"
+            },
+            {
+              "door": "animation.create#timeline-new-animation",
+              "args": {
+                "name": "fade-in"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "fade-in\n"
+            }
+          ],
+          "doors": [
+            "animation.create#timeline-new-animation"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@animations",
+                "value": [
+                  {
+                    "name": "fade-in",
+                    "settings": {
+                      "duration": "1s",
+                      "delay": "0s",
+                      "iterations": "1",
+                      "direction": "normal",
+                      "fill": "none",
+                      "timing": "linear",
+                      "play-state": "running"
+                    },
+                    "keyframes": [
+                      {
+                        "offset": 0,
+                        "easing": "",
+                        "declarations": {}
+                      },
+                      {
+                        "offset": 100,
+                        "easing": "",
+                        "declarations": {}
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.animation.nameTaken",
+                  "params": {
+                    "name": "fade-in"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.animation.nameTaken",
+              "document": "unchanged"
+            }
+          ]
+        },
+        {
+          "id": "an-animation-is-shown-by-its-row-renamed-and-deleted",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#status-bar-timeline",
+              "args": {
+                "panel": "timeline",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.create#timeline-new-animation",
+              "args": {
+                "name": "fade-in"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "fade-in\n"
+            },
+            {
+              "door": "animation.create#timeline-new-animation",
+              "args": {
+                "name": "slide-in"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "slide-in\n"
+            },
+            {
+              "door": "timeline.show#timeline-animation-row",
+              "args": {
+                "animation": "slide-in"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.rename#timeline-animation-name-field",
+              "args": {
+                "animation": "slide-in",
+                "name": "slide"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.delete#timeline-animation-delete",
+              "args": {
+                "animation": "slide"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "animation.rename#timeline-animation-name-field"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@animations",
+                "value": [
+                  {
+                    "name": "fade-in",
+                    "settings": {
+                      "duration": "1s",
+                      "delay": "0s",
+                      "iterations": "1",
+                      "direction": "normal",
+                      "fill": "none",
+                      "timing": "linear",
+                      "play-state": "running"
+                    },
+                    "keyframes": [
+                      {
+                        "offset": 0,
+                        "easing": "",
+                        "declarations": {}
+                      },
+                      {
+                        "offset": 100,
+                        "easing": "",
+                        "declarations": {}
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 4,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.animation.deleted",
+                  "params": {
+                    "name": "slide"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null
+            },
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
+    },
+    {
+      "id": "timeline-keyframes",
+      "titleKey": "feature.timelineKeyframes",
+      "commands": [
+        "animation.addKeyframe",
+        "animation.moveKeyframe",
+        "animation.setKeyframeEasing",
+        "animation.deleteKeyframe",
+        "timeline.setPlayhead"
+      ],
+      "dependsOn": [
+        "timeline-animations"
+      ],
+      "spec": "spec/behavior/timeline-keyframes.md",
+      "intent": {
+        "title": "Add, edit, move and delete keyframes on the timeline",
+        "steps": [
+          "Select the 'fade-in' animation, move the playhead to 50% and click 'Add keyframe' [timeline.addKeyframe].",
+          "With the playhead on the 0% keyframe set opacity 0 and Move Y 20px in the inspector; on 100% set opacity 1 and Move Y 0.",
+          "Drag the 50% keyframe to 30%; set its easing to ease-out; delete it."
+        ],
+        "expected": [
+          "Keyframes show as diamonds on the track at their percentage.",
+          "While the playhead sits on a keyframe the inspector edits that keyframe's values (a badge says so) and not the base styles.",
+          "Keyframe offsets, values and per-keyframe easing are stored in the document JSON; moving and deleting are undo steps."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "a-keyframe-added-at-the-playhead-holds-what-the-inspector-gives-it",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#status-bar-timeline",
+              "args": {
+                "panel": "timeline",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.create#timeline-new-animation",
+              "args": {
+                "name": "fade-in"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "fade-in\n"
+            },
+            {
+              "door": "timeline.setPlayhead#panel-drag-playhead-ruler",
+              "args": {
+                "distance": 0
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.addKeyframe#timeline-add-keyframe",
+              "args": {
+                "animation": "fade-in",
+                "offset": 50
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#inspector-opacity",
+              "args": {
+                "property": "opacity",
+                "value": "0"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "0\n"
+            }
+          ],
+          "doors": [
+            "animation.addKeyframe#timeline-add-keyframe"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@animations",
+                "value": [
+                  {
+                    "name": "fade-in",
+                    "settings": {
+                      "duration": "1s",
+                      "delay": "0s",
+                      "iterations": "1",
+                      "direction": "normal",
+                      "fill": "none",
+                      "timing": "linear",
+                      "play-state": "running"
+                    },
+                    "keyframes": [
+                      {
+                        "offset": 0,
+                        "easing": "",
+                        "declarations": {}
+                      },
+                      {
+                        "offset": 50,
+                        "easing": "",
+                        "declarations": {
+                          "opacity": "0"
+                        }
+                      },
+                      {
+                        "offset": 100,
+                        "easing": "",
+                        "declarations": {}
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 3,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.keyframe.value",
+                  "params": {
+                    "property": "Opacity",
+                    "name": "Title",
+                    "animation": "fade-in",
+                    "offset": "50",
+                    "value": "0"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-keyframe-is-dragged-along-the-track",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#status-bar-timeline",
+              "args": {
+                "panel": "timeline",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.create#timeline-new-animation",
+              "args": {
+                "name": "fade-in"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "fade-in\n"
+            },
+            {
+              "door": "timeline.setPlayhead#panel-drag-playhead-ruler",
+              "args": {
+                "distance": 0
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.addKeyframe#timeline-add-keyframe",
+              "args": {
+                "animation": "fade-in",
+                "offset": 50
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.moveKeyframe#panel-drag-keyframe-track",
+              "args": {
+                "animation": "fade-in",
+                "keyframe": 50,
+                "distance": -80
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "animation.moveKeyframe#panel-drag-keyframe-track"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@animations",
+                "value": [
+                  {
+                    "name": "fade-in",
+                    "settings": {
+                      "duration": "1s",
+                      "delay": "0s",
+                      "iterations": "1",
+                      "direction": "normal",
+                      "fill": "none",
+                      "timing": "linear",
+                      "play-state": "running"
+                    },
+                    "keyframes": [
+                      {
+                        "offset": 0,
+                        "easing": "",
+                        "declarations": {}
+                      },
+                      {
+                        "offset": 30,
+                        "easing": "",
+                        "declarations": {}
+                      },
+                      {
+                        "offset": 100,
+                        "easing": "",
+                        "declarations": {}
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 3,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.animation.keyframeMoved",
+                  "params": {
+                    "name": "fade-in",
+                    "offset": "30"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-keyframe-under-the-playhead-eases",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#status-bar-timeline",
+              "args": {
+                "panel": "timeline",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.create#timeline-new-animation",
+              "args": {
+                "name": "fade-in"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "fade-in\n"
+            },
+            {
+              "door": "timeline.setPlayhead#panel-drag-playhead-ruler",
+              "args": {
+                "distance": 0
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.addKeyframe#timeline-add-keyframe",
+              "args": {
+                "animation": "fade-in",
+                "offset": 50
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.setKeyframeEasing#timeline-keyframe-easing",
+              "args": {
+                "animation": "fade-in",
+                "keyframe": 50,
+                "easing": "ease-out"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "animation.setKeyframeEasing#timeline-keyframe-easing"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@animations",
+                "value": [
+                  {
+                    "name": "fade-in",
+                    "settings": {
+                      "duration": "1s",
+                      "delay": "0s",
+                      "iterations": "1",
+                      "direction": "normal",
+                      "fill": "none",
+                      "timing": "linear",
+                      "play-state": "running"
+                    },
+                    "keyframes": [
+                      {
+                        "offset": 0,
+                        "easing": "",
+                        "declarations": {}
+                      },
+                      {
+                        "offset": 50,
+                        "easing": "ease-out",
+                        "declarations": {}
+                      },
+                      {
+                        "offset": 100,
+                        "easing": "",
+                        "declarations": {}
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 3,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.animation.easingSet",
+                  "params": {
+                    "name": "fade-in",
+                    "offset": "50",
+                    "value": "ease-out"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-keyframe-under-the-playhead-is-deleted",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#status-bar-timeline",
+              "args": {
+                "panel": "timeline",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.create#timeline-new-animation",
+              "args": {
+                "name": "fade-in"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "fade-in\n"
+            },
+            {
+              "door": "timeline.setPlayhead#panel-drag-playhead-ruler",
+              "args": {
+                "distance": 0
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.addKeyframe#timeline-add-keyframe",
+              "args": {
+                "animation": "fade-in",
+                "offset": 50
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.deleteKeyframe#timeline-keyframe-delete",
+              "args": {
+                "animation": "fade-in",
+                "keyframe": 50
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "animation.deleteKeyframe#timeline-keyframe-delete",
+            "animation.deleteKeyframe#key-delete-in-timeline"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@animations",
+                "value": [
+                  {
+                    "name": "fade-in",
+                    "settings": {
+                      "duration": "1s",
+                      "delay": "0s",
+                      "iterations": "1",
+                      "direction": "normal",
+                      "fill": "none",
+                      "timing": "linear",
+                      "play-state": "running"
+                    },
+                    "keyframes": [
+                      {
+                        "offset": 0,
+                        "easing": "",
+                        "declarations": {}
+                      },
+                      {
+                        "offset": 100,
+                        "easing": "",
+                        "declarations": {}
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 3,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.animation.keyframeDeleted",
+                  "params": {
+                    "name": "fade-in",
+                    "offset": "50"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
+    },
+    {
+      "id": "timeline-animation-settings",
+      "titleKey": "feature.timelineAnimationSettings",
+      "commands": [
+        "animation.setSettings"
+      ],
+      "dependsOn": [
+        "timeline-animations"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Animation duration, delay, repeat, direction and fill",
+        "steps": [
+          "Set duration 800 ms, delay 200 ms, iteration count infinite, direction alternate, fill mode both, timing function ease-in-out and play state paused, then running."
+        ],
+        "expected": [
+          "Each setting is stored with the animation in the document JSON.",
+          "The animation has no trigger setting of its own."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "every-setting-of-an-animation-is-stored",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#status-bar-timeline",
+              "args": {
+                "panel": "timeline",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.create#timeline-new-animation",
+              "args": {
+                "name": "fade-in"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "fade-in\n"
+            },
+            {
+              "door": "animation.setSettings#timeline-setting-duration",
+              "args": {
+                "animation": "fade-in",
+                "setting": "duration",
+                "value": "800ms"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.setSettings#timeline-setting-delay",
+              "args": {
+                "animation": "fade-in",
+                "setting": "delay",
+                "value": "200ms"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.setSettings#timeline-setting-iterations",
+              "args": {
+                "animation": "fade-in",
+                "setting": "iterations",
+                "value": "infinite"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.setSettings#timeline-setting-direction",
+              "args": {
+                "animation": "fade-in",
+                "setting": "direction",
+                "value": "alternate"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.setSettings#timeline-setting-fill",
+              "args": {
+                "animation": "fade-in",
+                "setting": "fill",
+                "value": "both"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.setSettings#timeline-setting-timing",
+              "args": {
+                "animation": "fade-in",
+                "setting": "timing",
+                "value": "ease-in-out"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.setSettings#timeline-setting-play-state",
+              "args": {
+                "animation": "fade-in",
+                "setting": "play-state",
+                "value": "paused"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.setSettings#timeline-setting-play-state",
+              "args": {
+                "animation": "fade-in",
+                "setting": "play-state",
+                "value": "running"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "animation.setSettings#timeline-setting-play-state"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@animations",
+                "value": [
+                  {
+                    "name": "fade-in",
+                    "settings": {
+                      "duration": "800ms",
+                      "delay": "200ms",
+                      "iterations": "infinite",
+                      "direction": "alternate",
+                      "fill": "both",
+                      "timing": "ease-in-out",
+                      "play-state": "running"
+                    },
+                    "keyframes": [
+                      {
+                        "offset": 0,
+                        "easing": "",
+                        "declarations": {}
+                      },
+                      {
+                        "offset": 100,
+                        "easing": "",
+                        "declarations": {}
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 9,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.animation.settingSet",
+                  "params": {
+                    "setting": "Play state",
+                    "name": "fade-in",
+                    "value": "running"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-setting-that-is-no-value-is-refused",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#status-bar-timeline",
+              "args": {
+                "panel": "timeline",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.create#timeline-new-animation",
+              "args": {
+                "name": "fade-in"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "fade-in\n"
+            },
+            {
+              "door": "animation.setSettings#timeline-setting-duration",
+              "args": {
+                "animation": "fade-in",
+                "setting": "duration",
+                "value": "banana"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "animation.setSettings#timeline-setting-duration"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@animations",
+                "value": [
+                  {
+                    "name": "fade-in",
+                    "settings": {
+                      "duration": "1s",
+                      "delay": "0s",
+                      "iterations": "1",
+                      "direction": "normal",
+                      "fill": "none",
+                      "timing": "linear",
+                      "play-state": "running"
+                    },
+                    "keyframes": [
+                      {
+                        "offset": 0,
+                        "easing": "",
+                        "declarations": {}
+                      },
+                      {
+                        "offset": 100,
+                        "easing": "",
+                        "declarations": {}
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.animation.invalidSetting",
+                  "params": {
+                    "setting": "Duration",
+                    "value": "banana"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.animation.invalidSetting",
+              "document": "unchanged"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "timeline-preview",
+      "titleKey": "feature.timelinePreview",
+      "commands": [
+        "timeline.play",
+        "timeline.pause",
+        "timeline.stop",
+        "timeline.toggleLoop"
+      ],
+      "dependsOn": [
+        "timeline-keyframes"
+      ],
+      "spec": "spec/behavior/timeline-preview.md",
+      "intent": {
+        "title": "Preview animations by playing and scrubbing the timeline",
+        "steps": [
+          "Click Play on the 'fade-in' animation, then Pause, then Stop.",
+          "Drag the playhead from 0% to 100%.",
+          "Turn on Loop and play."
+        ],
+        "expected": [
+          "Play animates the element on the canvas using the stored keyframes; Pause freezes it; Stop returns it to its base styles.",
+          "Scrubbing shows the interpolated state at the playhead: at 50% of a linear 0-to-1 opacity animation the computed opacity is 0.5.",
+          "Previewing never changes the document JSON."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "the-canvas-plays-the-animation-at-the-playhead",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#status-bar-timeline",
+              "args": {
+                "panel": "timeline",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.create#timeline-new-animation",
+              "args": {
+                "name": "fade-in"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "fade-in\n"
+            },
+            {
+              "door": "timeline.play#timeline-play",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "timeline.play#timeline-play"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@animations",
+                "value": [
+                  {
+                    "name": "fade-in",
+                    "settings": {
+                      "duration": "1s",
+                      "delay": "0s",
+                      "iterations": "1",
+                      "direction": "normal",
+                      "fill": "none",
+                      "timing": "linear",
+                      "play-state": "running"
+                    },
+                    "keyframes": [
+                      {
+                        "offset": 0,
+                        "easing": "",
+                        "declarations": {}
+                      },
+                      {
+                        "offset": 100,
+                        "easing": "",
+                        "declarations": {}
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Title",
+                  "property": "animation-name",
+                  "value": "fade-in"
+                },
+                {
+                  "node": "/Page/Hero/Title",
+                  "property": "animation-play-state",
+                  "value": "running"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.timeline.playing",
+                  "params": {
+                    "name": "fade-in"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "pausing-freezes-the-animation-where-the-playhead-is",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#status-bar-timeline",
+              "args": {
+                "panel": "timeline",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.create#timeline-new-animation",
+              "args": {
+                "name": "fade-in"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "fade-in\n"
+            },
+            {
+              "door": "timeline.play#timeline-play",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "timeline.pause#timeline-pause",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "timeline.pause#timeline-pause"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@animations",
+                "value": [
+                  {
+                    "name": "fade-in",
+                    "settings": {
+                      "duration": "1s",
+                      "delay": "0s",
+                      "iterations": "1",
+                      "direction": "normal",
+                      "fill": "none",
+                      "timing": "linear",
+                      "play-state": "running"
+                    },
+                    "keyframes": [
+                      {
+                        "offset": 0,
+                        "easing": "",
+                        "declarations": {}
+                      },
+                      {
+                        "offset": 100,
+                        "easing": "",
+                        "declarations": {}
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Title",
+                  "property": "animation-name",
+                  "value": "fade-in"
+                },
+                {
+                  "node": "/Page/Hero/Title",
+                  "property": "animation-play-state",
+                  "value": "paused"
+                }
+              ],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "stopping-puts-the-element-back-to-its-own-styles",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#status-bar-timeline",
+              "args": {
+                "panel": "timeline",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.create#timeline-new-animation",
+              "args": {
+                "name": "fade-in"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "fade-in\n"
+            },
+            {
+              "door": "timeline.play#timeline-play",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "timeline.stop#timeline-stop",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "timeline.stop#timeline-stop"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@animations",
+                "value": [
+                  {
+                    "name": "fade-in",
+                    "settings": {
+                      "duration": "1s",
+                      "delay": "0s",
+                      "iterations": "1",
+                      "direction": "normal",
+                      "fill": "none",
+                      "timing": "linear",
+                      "play-state": "running"
+                    },
+                    "keyframes": [
+                      {
+                        "offset": 0,
+                        "easing": "",
+                        "declarations": {}
+                      },
+                      {
+                        "offset": 100,
+                        "easing": "",
+                        "declarations": {}
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Title",
+                  "property": "animation-name",
+                  "value": "none"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.timeline.stopped",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "looping-repeats-the-animation",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#status-bar-timeline",
+              "args": {
+                "panel": "timeline",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.create#timeline-new-animation",
+              "args": {
+                "name": "fade-in"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "fade-in\n"
+            },
+            {
+              "door": "timeline.play#timeline-play",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "timeline.toggleLoop#timeline-loop",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "timeline.toggleLoop#timeline-loop"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@animations",
+                "value": [
+                  {
+                    "name": "fade-in",
+                    "settings": {
+                      "duration": "1s",
+                      "delay": "0s",
+                      "iterations": "1",
+                      "direction": "normal",
+                      "fill": "none",
+                      "timing": "linear",
+                      "play-state": "running"
+                    },
+                    "keyframes": [
+                      {
+                        "offset": 0,
+                        "easing": "",
+                        "declarations": {}
+                      },
+                      {
+                        "offset": 100,
+                        "easing": "",
+                        "declarations": {}
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Title",
+                  "property": "animation-name",
+                  "value": "fade-in"
+                },
+                {
+                  "node": "/Page/Hero/Title",
+                  "property": "animation-iteration-count",
+                  "value": "infinite"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.timeline.loopOn",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "scrubbing-shows-the-interpolated-state-at-the-playhead",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#status-bar-timeline",
+              "args": {
+                "panel": "timeline",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.create#timeline-new-animation",
+              "args": {
+                "name": "fade-in"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "fade-in\n"
+            },
+            {
+              "door": "timeline.setPlayhead#panel-drag-playhead-ruler",
+              "args": {
+                "distance": -200
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#inspector-opacity",
+              "args": {
+                "property": "opacity",
+                "value": "0"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "0\n"
+            },
+            {
+              "door": "timeline.setPlayhead#panel-drag-playhead-ruler",
+              "args": {
+                "distance": 400
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#inspector-opacity",
+              "args": {
+                "property": "opacity",
+                "value": "1"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "1\n"
+            },
+            {
+              "door": "timeline.setPlayhead#panel-drag-playhead-ruler",
+              "args": {
+                "distance": 0
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "timeline.setPlayhead#panel-drag-playhead-ruler"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@animations",
+                "value": [
+                  {
+                    "name": "fade-in",
+                    "settings": {
+                      "duration": "1s",
+                      "delay": "0s",
+                      "iterations": "1",
+                      "direction": "normal",
+                      "fill": "none",
+                      "timing": "linear",
+                      "play-state": "running"
+                    },
+                    "keyframes": [
+                      {
+                        "offset": 0,
+                        "easing": "",
+                        "declarations": {
+                          "opacity": "0"
+                        }
+                      },
+                      {
+                        "offset": 100,
+                        "easing": "",
+                        "declarations": {
+                          "opacity": "1"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 3,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Title",
+                  "property": "opacity",
+                  "value": "0.5"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.keyframe.value",
+                  "params": {
+                    "property": "Opacity",
+                    "name": "Title",
+                    "animation": "fade-in",
+                    "offset": "100",
+                    "value": "1"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
+    },
+    {
+      "id": "export-keyframes",
+      "titleKey": "feature.exportKeyframes",
+      "commands": [
+        "project.export"
+      ],
+      "dependsOn": [
+        "timeline-animation-settings",
+        "export-zip"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Export animations as @keyframes",
+        "steps": [
+          "Build an element with the 'fade-in' animation and settings, and export."
+        ],
+        "expected": [
+          "styles.css contains @keyframes fade-in with every keyframe and its values, and the animation properties on the element's base rule, so the animation plays when the page loads.",
+          "A @media (prefers-reduced-motion: reduce) block turns the animations off; it is written only when the page has animations, so pages without animations export exactly as before.",
+          "In the exported page the element's computed animation-name is fade-in and two exports are byte-identical."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "the-keyframes-and-the-animation-properties-reach-the-stylesheet",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#status-bar-timeline",
+              "args": {
+                "panel": "timeline",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.create#timeline-new-animation",
+              "args": {
+                "name": "fade-in"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "fade-in\n"
+            },
+            {
+              "door": "timeline.setPlayhead#panel-drag-playhead-ruler",
+              "args": {
+                "distance": -200
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#inspector-opacity",
+              "args": {
+                "property": "opacity",
+                "value": "0"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "0\n"
+            },
+            {
+              "door": "timeline.setPlayhead#panel-drag-playhead-ruler",
+              "args": {
+                "distance": 400
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#inspector-opacity",
+              "args": {
+                "property": "opacity",
+                "value": "1"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "1\n"
+            },
+            {
+              "door": "project.export#menu-file",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.export#menu-file"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@animations",
+                "value": [
+                  {
+                    "name": "fade-in",
+                    "settings": {
+                      "duration": "1s",
+                      "delay": "0s",
+                      "iterations": "1",
+                      "direction": "normal",
+                      "fill": "none",
+                      "timing": "linear",
+                      "play-state": "running"
+                    },
+                    "keyframes": [
+                      {
+                        "offset": 0,
+                        "easing": "",
+                        "declarations": {
+                          "opacity": "0"
+                        }
+                      },
+                      {
+                        "offset": 100,
+                        "easing": "",
+                        "declarations": {
+                          "opacity": "1"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 3,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.export.done",
+                  "params": {
+                    "file": "site.zip"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "css/styles.css",
+                  "present": [
+                    "@keyframes fade-in {",
+                    "0% {",
+                    "opacity: 0;",
+                    "100% {",
+                    "opacity: 1;",
+                    "animation-name: fade-in;",
+                    "animation-duration: 1s;",
+                    "animation-timing-function: linear;",
+                    "@media (prefers-reduced-motion: reduce) {",
+                    "animation: none;"
+                  ],
+                  "absent": [
+                    "animation-name: fade-in;}"
+                  ]
+                },
+                {
+                  "path": "index.html",
+                  "present": [
+                    "<link rel=\"stylesheet\" href=\"css/styles.css\">"
+                  ],
+                  "absent": [
+                    "js/interactions.js"
+                  ]
+                }
+              ]
+            }
+          },
+          "refusals": []
+        }
+      ]
+    },
+    {
+      "id": "events-actions",
+      "titleKey": "feature.eventsActions",
+      "commands": [
+        "interactions.add",
+        "interactions.update",
+        "interactions.remove",
+        "workspace.setActiveTab"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/events-actions.md",
+      "intent": {
+        "title": "Events and actions per element",
+        "steps": [
+          "Select a Button, open the Interactions section and add: on click, toggle the class 'is-open' on a Container.",
+          "Add: on hover, show a hidden element; on scroll into view, play the 'fade-in' animation; on page load, scroll to an element; on submit of a Form, hide the form and show a message; on click, open a link in a new tab.",
+          "Remove an action and undo."
+        ],
+        "expected": [
+          "Triggers are click, hover (enter and leave), scroll into view, page load and form submit; actions are show, hide, toggle class, play animation, scroll to and open link.",
+          "Targets are picked from the page or Layers, never typed ids; combinations that cannot apply (form submit on a non-form) are not offered.",
+          "Interactions are stored per element in the document JSON; each add, edit and remove is one undo step.",
+          "The editing canvas never runs them."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "an-interaction-is-added-to-the-selected-element",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setActiveTab#inspector-tab-interactions",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.add#inspector-interaction-add",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "interactions.add#inspector-interaction-add"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@interactions",
+                "value": [
+                  {
+                    "trigger": "click",
+                    "action": "show"
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.interactions.added",
+                  "params": {
+                    "name": "On click",
+                    "element": "Hero",
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-trigger-action-options-and-scope-of-an-interaction-are-edited",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Plans/Grid/CardA"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setActiveTab#inspector-tab-interactions",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.add#inspector-interaction-add",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.update#inspector-interaction-trigger",
+              "args": {
+                "interaction": 0,
+                "changes": "hover"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.update#inspector-interaction-action",
+              "args": {
+                "interaction": 0,
+                "changes": "toggle-class"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.update#inspector-interaction-options",
+              "args": {
+                "interaction": 0,
+                "changes": "is-open"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.update#inspector-interaction-scope",
+              "args": {
+                "interaction": 0,
+                "changes": "card"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "interactions.update#inspector-interaction-trigger"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/CardA/@interactions",
+                "value": [
+                  {
+                    "trigger": "hover",
+                    "action": "toggle-class",
+                    "className": "is-open",
+                    "scope": "card"
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid/CardA"
+            ],
+            "history": {
+              "undoSteps": 5,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.interactions.updated",
+                  "params": {
+                    "name": "On hover",
+                    "element": "CardA"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-target-is-picked-on-the-canvas",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setActiveTab#inspector-tab-interactions",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.add#inspector-interaction-add",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.update#inspector-interaction-target",
+              "args": {
+                "interaction": 0
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.update#canvas-click-pick-target",
+              "args": {
+                "interaction": 0
+              },
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "interactions.update#canvas-click-pick-target"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@interactions",
+                "value": [
+                  {
+                    "trigger": "click",
+                    "action": "show",
+                    "target": "@/Page/Hero/Intro"
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.interactions.updated",
+                  "params": {
+                    "name": "On click",
+                    "element": "Hero"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-target-is-picked-on-a-layers-row",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setActiveTab#inspector-tab-interactions",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.add#inspector-interaction-add",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.update#inspector-interaction-target",
+              "args": {
+                "interaction": 0
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.update#layers-row-pick-target",
+              "args": {},
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "interactions.update#layers-row-pick-target"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@interactions",
+                "value": [
+                  {
+                    "trigger": "click",
+                    "action": "show",
+                    "target": "@/Page/Hero/Intro"
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.interactions.updated",
+                  "params": {
+                    "name": "On click",
+                    "element": "Hero"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "an-interaction-opens-a-link-in-a-new-tab",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setActiveTab#inspector-tab-interactions",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.add#inspector-interaction-add",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.update#inspector-interaction-action",
+              "args": {
+                "interaction": 0,
+                "changes": "open-link"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.update#inspector-interaction-options",
+              "args": {
+                "interaction": 0,
+                "changes": "https://example.com/plans"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.update#inspector-interaction-new-tab",
+              "args": {
+                "interaction": 0,
+                "changes": {
+                  "newTab": true
+                }
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "interactions.update#inspector-interaction-new-tab"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@interactions",
+                "value": [
+                  {
+                    "trigger": "click",
+                    "action": "open-link",
+                    "address": "https://example.com/plans",
+                    "newTab": true
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 4,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.interactions.updated",
+                  "params": {
+                    "name": "On click",
+                    "element": "Hero"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "an-interaction-is-removed",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setActiveTab#inspector-tab-interactions",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.add#inspector-interaction-add",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.remove#inspector-interaction-remove",
+              "args": {
+                "interaction": 0
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "interactions.remove#inspector-interaction-remove"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.interactions.removed",
+                  "params": {
+                    "name": "On click",
+                    "element": "Hero"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-trigger-that-cannot-apply-is-refused",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setActiveTab#inspector-tab-interactions",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.add#inspector-interaction-add",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.update#inspector-interaction-trigger",
+              "args": {
+                "interaction": 0,
+                "changes": "form-submit"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "interactions.update#inspector-interaction-trigger"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@interactions",
+                "value": [
+                  {
+                    "trigger": "click",
+                    "action": "show"
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.interactions.notApplicable",
+                  "params": {
+                    "name": "On form submit"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.interactions.notApplicable",
+              "document": "unchanged"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "export-events-js",
+      "titleKey": "feature.exportEventsJs",
+      "commands": [
+        "view.enterPreview",
+        "project.export"
+      ],
+      "dependsOn": [
+        "events-actions",
+        "preview-mode"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Export interactions as standard JavaScript",
+        "steps": [
+          "Build the interactions of events-actions, preview the page and trigger each event, then export."
+        ],
+        "expected": [
+          "The ZIP contains the plain JavaScript file js/interactions.js (no framework, no inline handlers), linked with <script defer> from every page that uses interactions.",
+          "Targets are addressed by their BEM class or user id, never by editor ids or data attributes.",
+          "An animation played by an event gets a class rule in styles.css, next to its @keyframes, that the script adds when the event fires.",
+          "Preview runs every interaction exactly like the exported page; an animation used by a play-animation action no longer plays on page load and plays when its event fires.",
+          "In the exported page opened in Chrome every trigger performs its action, checked by class, computed style or scroll position.",
+          "Pages without interactions export exactly as before, with no script."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "the-interactions-become-plain-javascript",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setActiveTab#inspector-tab-interactions",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.add#inspector-interaction-add",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.update#inspector-interaction-action",
+              "args": {
+                "interaction": 0,
+                "changes": "scroll-to"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.update#inspector-interaction-target",
+              "args": {
+                "interaction": 0
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.update#canvas-click-pick-target",
+              "args": {
+                "interaction": 0
+              },
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "project.export#menu-file",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.export#menu-file"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@interactions",
+                "value": [
+                  {
+                    "trigger": "click",
+                    "action": "scroll-to",
+                    "target": "@/Page/Hero/Intro"
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 3,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.export.done",
+                  "params": {
+                    "file": "site.zip"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "js/interactions.js",
+                  "present": [
+                    "addEventListener('click'",
+                    "scrollIntoView",
+                    "querySelector('.hero"
+                  ],
+                  "absent": [
+                    "data-node",
+                    "n-hero",
+                    "n-intro",
+                    "builderTestPort"
+                  ]
+                },
+                {
+                  "path": "index.html",
+                  "present": [
+                    "<script defer src=\"js/interactions.js\"></script>",
+                    "class=\"hero"
+                  ],
+                  "absent": []
+                }
+              ]
+            }
+          },
+          "refusals": []
+        },
+        {
+          "id": "an-animation-played-by-an-event-becomes-a-class",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setActiveTab#inspector-tab-interactions",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.add#inspector-interaction-add",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setPanelOpen#status-bar-timeline",
+              "args": {
+                "panel": "timeline",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "animation.create#timeline-new-animation",
+              "args": {
+                "name": "fade-in"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "fade-in\n"
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-style",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "timeline.setPlayhead#panel-drag-playhead-ruler",
+              "args": {
+                "distance": -200
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#inspector-opacity",
+              "args": {
+                "property": "opacity",
+                "value": "0"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "0\n"
+            },
+            {
+              "door": "timeline.setPlayhead#panel-drag-playhead-ruler",
+              "args": {
+                "distance": 400
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#inspector-opacity",
+              "args": {
+                "property": "opacity",
+                "value": "1"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "1\n"
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-interactions",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.update#inspector-interaction-action",
+              "args": {
+                "interaction": 0,
+                "changes": "play-animation"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "interactions.update#inspector-interaction-options",
+              "args": {
+                "interaction": 0,
+                "changes": "fade-in"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "project.export#menu-file",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.export#menu-file"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@animations",
+                "value": [
+                  {
+                    "name": "fade-in",
+                    "settings": {
+                      "duration": "1s",
+                      "delay": "0s",
+                      "iterations": "1",
+                      "direction": "normal",
+                      "fill": "none",
+                      "timing": "linear",
+                      "play-state": "running"
+                    },
+                    "keyframes": [
+                      {
+                        "offset": 0,
+                        "easing": "",
+                        "declarations": {
+                          "opacity": "0"
+                        }
+                      },
+                      {
+                        "offset": 100,
+                        "easing": "",
+                        "declarations": {
+                          "opacity": "1"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@interactions",
+                "value": [
+                  {
+                    "trigger": "click",
+                    "action": "play-animation",
+                    "animation": "fade-in"
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 6,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.export.done",
+                  "params": {
+                    "file": "site.zip"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "css/styles.css",
+                  "present": [
+                    "@keyframes fade-in {",
+                    ".anim-fade-in {",
+                    "animation-name: fade-in;"
+                  ],
+                  "absent": []
+                },
+                {
+                  "path": "js/interactions.js",
+                  "present": [
+                    "classList.add('anim-fade-in')"
+                  ],
+                  "absent": []
+                }
+              ]
+            }
+          },
+          "refusals": []
+        }
+      ]
+    }
+  ]
+}

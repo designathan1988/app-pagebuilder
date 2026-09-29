@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "pages": [
+    {
+      "id": "p-grid",
+      "name": "Home",
+      "file": "index.html",
+      "tree": {
+        "id": "n-page",
+        "type": "page",
+        "name": "Page",
+        "tag": "body",
+        "attributes": {},
+        "classes": [],
+        "styles": {},
+        "text": null,
+        "children": [
+          {
+            "id": "n-grid",
+            "type": "div",
+            "name": "Grid",
+            "tag": "div",
+            "attributes": {},
+            "classes": [],
+            "styles": {
+              "desktop": {
+                "base": {
+                  "display": "grid",
+                  "grid-template-columns": "repeat(3, minmax(0, 1fr))",
+                  "column-gap": "16px",
+                  "row-gap": "16px",
+                  "padding-top": "16px",
+                  "padding-right": "16px",
+                  "padding-bottom": "16px",
+                  "padding-left": "16px"
+                }
+              }
+            },
+            "text": null,
+            "children": [
+              {
+                "id": "n-cell-1",
+                "type": "div",
+                "name": "Cell",
+                "tag": "div",
+                "attributes": {},
+                "classes": [],
+                "styles": {},
+                "text": null,
+                "children": [
+                  {
+                    "id": "n-cell-1-text",
+                    "type": "paragraph",
+                    "name": "Text",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "One",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "n-cell-2",
+                "type": "div",
+                "name": "Cell 2",
+                "tag": "div",
+                "attributes": {},
+                "classes": [],
+                "styles": {},
+                "text": null,
+                "children": [
+                  {
+                    "id": "n-cell-2-text",
+                    "type": "paragraph",
+                    "name": "Text 2",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Two",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "n-cell-3",
+                "type": "div",
+                "name": "Cell 3",
+                "tag": "div",
+                "attributes": {},
+                "classes": [],
+                "styles": {},
+                "text": null,
+                "children": [
+                  {
+                    "id": "n-cell-3-text",
+                    "type": "paragraph",
+                    "name": "Text 3",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Three",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

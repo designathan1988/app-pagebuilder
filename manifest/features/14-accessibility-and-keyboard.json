@@ -1,0 +1,1400 @@
+{
+  "group": "accessibility-and-keyboard",
+  "titleKey": "featureGroup.accessibilityAndKeyboard",
+  "features": [
+    {
+      "id": "accessibility-checks",
+      "titleKey": "feature.accessibilityChecks",
+      "commands": [
+        "selection.select",
+        "workspace.setPanelOpen"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/accessibility-checks.md",
+      "intent": {
+        "title": "Accessibility and structure checks",
+        "steps": [
+          "Build a page with an image without alt, a skipped heading level, low-contrast text and a link without text.",
+          "Open the Checks panel and click each issue."
+        ],
+        "expected": [
+          "Each issue is listed with its rule, the element and a suggested fix; clicking it selects the element on the canvas and in Layers.",
+          "The list updates after every command.",
+          "Checks never block editing or export."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "an-image-without-alt-is-listed-and-its-row-selects-it",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "heading"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "image"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "link"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setPanelOpen#menu-view-checks",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "selection.select#checks-issue",
+              "args": {
+                "target": "/Page/Image"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "selection.select#checks-issue"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "heading",
+                    "name": "Heading",
+                    "tag": "h2",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "New heading",
+                    "children": []
+                  },
+                  {
+                    "type": "image",
+                    "name": "Image",
+                    "tag": "img",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "max-width": "100%"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": []
+                  },
+                  {
+                    "type": "link",
+                    "name": "Link",
+                    "tag": "a",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "A link",
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Image"
+            ],
+            "history": {
+              "undoSteps": 3,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.selected",
+                  "params": {
+                    "name": "Image"
+                  }
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "dock-checks",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 100,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
+    },
+    {
+      "id": "keyboard-panel-navigation",
+      "titleKey": "feature.keyboardPanelNavigation",
+      "commands": [
+        "focus.next",
+        "focus.previous",
+        "focus.first",
+        "focus.last",
+        "focus.activate",
+        "focus.nextRegion",
+        "focus.previousRegion",
+        "focus.canvas"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/keyboard-panel-navigation.md",
+      "intent": {
+        "title": "Move between panels and inside them with the keyboard",
+        "steps": [
+          "Press F6 repeatedly, then Shift+F6.",
+          "In a tab strip press ArrowRight, Home, End and Enter.",
+          "In the top bar toolbar press ArrowRight and ArrowLeft.",
+          "Press Escape inside a panel."
+        ],
+        "expected": [
+          "F6 and Shift+F6 cycle focus between top bar, left dock, canvas, inspector, workbench and status bar; the focused region shows a visible focus ring.",
+          "Tab strips and toolbars use roving tabindex: arrows move, Home/End jump, Enter/Space activate.",
+          "Escape inside a panel returns focus to the canvas with the selection intact.",
+          "An automated sweep that presses F6 and Tab through the whole UI reaches every enabled button, input, tab and tree of every open panel."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "f6-walks-the-regions",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "focus.nextRegion#key-f6-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "focus.nextRegion#key-f6-in-global",
+            "focus.nextRegion#key-f6-in-field"
+          ],
+          "expect": {
+            "document": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "canvas-stage",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 100,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null,
+            "selection": []
+          },
+          "refusals": []
+        },
+        {
+          "id": "shift-f6-walks-the-regions-back",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "focus.previousRegion#key-shift-f6-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "focus.previousRegion#key-shift-f6-in-global",
+            "focus.previousRegion#key-shift-f6-in-field"
+          ],
+          "expect": {
+            "document": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "canvas-stage",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 100,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null,
+            "selection": []
+          },
+          "refusals": []
+        },
+        {
+          "id": "escape-in-a-panel-returns-the-focus-to-the-canvas",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "focus.canvas#key-escape-in-layers-tree",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "focus.canvas#key-escape-in-layers-tree",
+            "focus.canvas#key-escape-in-palette",
+            "focus.canvas#key-escape-in-splitter",
+            "focus.canvas#key-escape-in-tab-strip",
+            "focus.canvas#key-escape-in-toolbar"
+          ],
+          "expect": {
+            "document": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "canvas-stage",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 100,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null,
+            "selection": []
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-arrows-walk-the-items-of-a-region",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "focus.next#key-arrow-right-in-toolbar",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "focus.next#key-arrow-right-in-toolbar",
+            "focus.next#key-arrow-down-in-toolbar",
+            "focus.next#key-arrow-right-in-tab-strip",
+            "focus.next#key-arrow-down-in-tab-strip",
+            "focus.next#key-arrow-right-in-palette",
+            "focus.next#key-arrow-down-in-palette"
+          ],
+          "expect": {
+            "document": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "canvas-stage",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 100,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null,
+            "selection": []
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-arrows-walk-the-items-back",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "focus.previous#key-arrow-left-in-toolbar",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "focus.previous#key-arrow-left-in-toolbar",
+            "focus.previous#key-arrow-up-in-toolbar",
+            "focus.previous#key-arrow-left-in-tab-strip",
+            "focus.previous#key-arrow-up-in-tab-strip",
+            "focus.previous#key-arrow-left-in-palette",
+            "focus.previous#key-arrow-up-in-palette"
+          ],
+          "expect": {
+            "document": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "canvas-stage",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 100,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null,
+            "selection": []
+          },
+          "refusals": []
+        },
+        {
+          "id": "home-jumps-to-the-first-item-of-a-region",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "focus.first#key-home-in-toolbar",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "focus.first#key-home-in-toolbar",
+            "focus.first#key-home-in-tab-strip",
+            "focus.first#key-home-in-palette"
+          ],
+          "expect": {
+            "document": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "canvas-stage",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 100,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null,
+            "selection": []
+          },
+          "refusals": []
+        },
+        {
+          "id": "end-jumps-to-the-last-item-of-a-region",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "focus.last#key-end-in-toolbar",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "focus.last#key-end-in-toolbar",
+            "focus.last#key-end-in-tab-strip",
+            "focus.last#key-end-in-palette"
+          ],
+          "expect": {
+            "document": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "canvas-stage",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 100,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null,
+            "selection": []
+          },
+          "refusals": []
+        },
+        {
+          "id": "enter-and-space-run-the-item-the-focus-is-on",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "focus.activate#key-enter-in-toolbar",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "focus.activate#key-enter-in-toolbar",
+            "focus.activate#key-space-in-toolbar",
+            "focus.activate#key-enter-in-tab-strip",
+            "focus.activate#key-space-in-tab-strip"
+          ],
+          "expect": {
+            "document": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "canvas-stage",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 100,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null,
+            "selection": []
+          },
+          "refusals": []
+        }
+      ]
+    },
+    {
+      "id": "layers-keyboard-navigation",
+      "titleKey": "feature.layersKeyboardNavigation",
+      "commands": [
+        "selection.select",
+        "focus.next",
+        "focus.previous",
+        "focus.first",
+        "focus.last",
+        "element.moveUp",
+        "element.moveDown",
+        "element.delete",
+        "layers.startRename",
+        "layers.expandOrFocusChild",
+        "layers.collapseOrFocusParent"
+      ],
+      "dependsOn": [
+        "keyboard-panel-navigation"
+      ],
+      "spec": "spec/behavior/layers-keyboard-navigation.md",
+      "intent": {
+        "title": "Operate the Layers tree with the keyboard",
+        "steps": [
+          "Focus the Layers tree.",
+          "Press ArrowDown, ArrowUp, ArrowRight on a collapsed row, ArrowLeft on an expanded row, Home, End.",
+          "Press Enter, F2, Delete and Alt+ArrowUp on a row."
+        ],
+        "expected": [
+          "The tree has role tree with treeitems, aria-level and aria-expanded; one row is focusable at a time.",
+          "Arrows move focus and expand/collapse as in the WAI-ARIA tree pattern; Home/End jump to first/last visible row.",
+          "Enter selects the element, F2 renames, Delete deletes and Alt+ArrowUp moves it, with the same commands as the canvas."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "arrow-left-folds-the-focused-row",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "selection.select#layers-row",
+              "args": {
+                "target": "/Page/Hero"
+              },
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "layers.collapseOrFocusParent#key-arrow-left-in-layers-tree",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "layers.collapseOrFocusParent#key-arrow-left-in-layers-tree"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.layers.folded",
+                  "params": {
+                    "name": "Hero"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "arrow-right-unfolds-the-focused-row",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "selection.select#layers-row",
+              "args": {
+                "target": "/Page/Hero"
+              },
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "layers.collapseOrFocusParent#key-arrow-left-in-layers-tree",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "layers.expandOrFocusChild#key-arrow-right-in-layers-tree",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "layers.expandOrFocusChild#key-arrow-right-in-layers-tree"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.layers.unfolded",
+                  "params": {
+                    "name": "Hero"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "delete-in-layers-removes-every-selected-element",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "selection.select#layers-row",
+              "args": {
+                "target": "/Page/Hero/Title"
+              },
+              "target": "/Page/Hero/Title",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "selection.add#layers-row-shift",
+              "args": {
+                "target": "/Page/Hero/Intro"
+              },
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.delete#key-delete-in-layers-tree",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.delete#key-delete-in-layers-tree",
+            "element.delete#key-backspace-in-layers-tree"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "remove",
+                "path": "/Page/Hero/Title"
+              },
+              {
+                "op": "remove",
+                "path": "/Page/Hero/Intro"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Actions"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.deletedMany",
+                  "params": {
+                    "count": 2
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "arrow-keys-move-the-focus-and-enter-selects-the-focused-row",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "selection.select#layers-row",
+              "args": {
+                "target": "/Page/Hero/Title"
+              },
+              "target": "/Page/Hero/Title",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "focus.last#key-end-in-layers-tree",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "focus.first#key-home-in-layers-tree",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "focus.next#key-arrow-down-in-layers-tree",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "focus.next#key-arrow-down-in-layers-tree",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "focus.next#key-arrow-down-in-layers-tree",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "focus.previous#key-arrow-up-in-layers-tree",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "focus.next#key-arrow-down-in-layers-tree",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "selection.select#key-enter-in-layers-tree",
+              "args": {
+                "target": "/Page/Hero/Intro"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "selection.select#key-enter-in-layers-tree"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.selected",
+                  "params": {
+                    "name": "Intro"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "alt-arrow-up-in-layers-moves-the-element-one-place-earlier",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "selection.select#layers-row",
+              "args": {
+                "target": "/Page/Hero/Intro"
+              },
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.moveUp#key-alt-arrow-up-in-layers-tree",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.moveUp#key-alt-arrow-up-in-layers-tree"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@children",
+                "value": [
+                  {
+                    "type": "paragraph",
+                    "name": "Intro",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Fresh coffee, roasted every week.",
+                    "children": []
+                  },
+                  {
+                    "type": "heading",
+                    "name": "Title",
+                    "tag": "h1",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Welcome to Aurora",
+                    "children": []
+                  },
+                  {
+                    "type": "div",
+                    "name": "Actions",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.moved",
+                  "params": {
+                    "name": "Intro",
+                    "position": 1,
+                    "count": 3,
+                    "parent": "Hero"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "alt-arrow-down-in-layers-moves-the-element-one-place-later",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "selection.select#layers-row",
+              "args": {
+                "target": "/Page/Hero/Intro"
+              },
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.moveDown#key-alt-arrow-down-in-layers-tree",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.moveDown#key-alt-arrow-down-in-layers-tree"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@children",
+                "value": [
+                  {
+                    "type": "heading",
+                    "name": "Title",
+                    "tag": "h1",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Welcome to Aurora",
+                    "children": []
+                  },
+                  {
+                    "type": "div",
+                    "name": "Actions",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  },
+                  {
+                    "type": "paragraph",
+                    "name": "Intro",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Fresh coffee, roasted every week.",
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.moved",
+                  "params": {
+                    "name": "Intro",
+                    "position": 3,
+                    "count": 3,
+                    "parent": "Hero"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "f2-in-layers-renames-the-element-in-place",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "selection.select#layers-row",
+              "args": {
+                "target": "/Page/Hero/Intro"
+              },
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "layers.startRename#key-f2-in-layers-tree",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.rename#layers-row-name-field",
+              "args": {
+                "target": "/Page/Hero/Intro",
+                "name": "Lead"
+              },
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "layers.startRename#key-f2-in-layers-tree"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Intro/@name",
+                "value": "Lead"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Lead"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.renamed",
+                  "params": {
+                    "old": "Intro",
+                    "name": "Lead"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
+    }
+  ]
+}

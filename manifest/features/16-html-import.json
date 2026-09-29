@@ -1,0 +1,2519 @@
+{
+  "group": "html-import",
+  "titleKey": "featureGroup.htmlImport",
+  "features": [
+    {
+      "id": "html-import-structure",
+      "titleKey": "feature.htmlImportStructure",
+      "commands": [
+        "project.importHtml"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Import an HTML file: tags, text, inline marks and attributes",
+        "steps": [
+          "Choose File > Import HTML and pick an .html file with headings, paragraphs with strong/em/a, lists, a table, a form, images and links.",
+          "Confirm replacing the page."
+        ],
+        "expected": [
+          "Each supported tag becomes the matching element type in the document JSON with its text, inline marks and supported attributes (href, src, alt, type, name, ...).",
+          "Element names are taken from BEM classes when present, else from the element type.",
+          "The import is one undo step."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "a-page-imports-with-its-tags-text-marks-and-attributes",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "project.importHtml#menu-file",
+              "args": {
+                "files": [
+                  "import:page.html",
+                  "import:graos.png"
+                ]
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.importHtml#menu-file",
+            "project.importHtml#command-bar"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@pages",
+                "value": [
+                  {
+                    "name": "Aurora café",
+                    "file": "page.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page",
+                      "tag": "body",
+                      "attributes": {
+                        "pageLanguage": "pt-BR"
+                      },
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "heading",
+                          "name": "Title",
+                          "tag": "h2",
+                          "attributes": {},
+                          "classes": [
+                            "hero__title"
+                          ],
+                          "styles": {},
+                          "text": "Bem-vindo",
+                          "children": []
+                        },
+                        {
+                          "type": "paragraph",
+                          "name": "Lead",
+                          "tag": "p",
+                          "attributes": {},
+                          "classes": [
+                            "hero__lead"
+                          ],
+                          "styles": {},
+                          "text": "Um café feito à mão para o menu.",
+                          "children": [],
+                          "inline": [
+                            "Um café ",
+                            {
+                              "tag": "strong",
+                              "children": [
+                                "feito à mão"
+                              ]
+                            },
+                            " para ",
+                            {
+                              "tag": "a",
+                              "href": "/menu",
+                              "children": [
+                                "o menu"
+                              ]
+                            },
+                            "."
+                          ]
+                        },
+                        {
+                          "type": "list",
+                          "name": "List",
+                          "tag": "ul",
+                          "attributes": {},
+                          "classes": [
+                            "list"
+                          ],
+                          "styles": {},
+                          "text": null,
+                          "children": [
+                            {
+                              "type": "listItem",
+                              "name": "Item",
+                              "tag": "li",
+                              "attributes": {},
+                              "classes": [
+                                "list__item"
+                              ],
+                              "styles": {},
+                              "text": null,
+                              "children": [
+                                {
+                                  "type": "paragraph",
+                                  "name": "Paragraph",
+                                  "tag": "p",
+                                  "attributes": {},
+                                  "classes": [],
+                                  "styles": {},
+                                  "text": "Espresso",
+                                  "children": []
+                                }
+                              ]
+                            },
+                            {
+                              "type": "listItem",
+                              "name": "Item 2",
+                              "tag": "li",
+                              "attributes": {},
+                              "classes": [
+                                "list__item"
+                              ],
+                              "styles": {},
+                              "text": null,
+                              "children": [
+                                {
+                                  "type": "paragraph",
+                                  "name": "Paragraph 2",
+                                  "tag": "p",
+                                  "attributes": {},
+                                  "classes": [],
+                                  "styles": {},
+                                  "text": "Coado",
+                                  "children": []
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "image",
+                          "name": "Image",
+                          "tag": "img",
+                          "attributes": {
+                            "src": "img/graos.png",
+                            "alt": "Grãos de café"
+                          },
+                          "classes": [
+                            "card__image"
+                          ],
+                          "styles": {},
+                          "text": null,
+                          "children": []
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "img/graos.png",
+                    "type": "image/png",
+                    "bytes": "iVBORw0KGgoAAAANSUhEUgAAAGAAAABACAIAAABqVuVZAAAAcklEQVR42u3QQREAIAgAMBpZwAZEsYG97EcDHvjd3RIs3t00QoEgQYIECRIkSBCCBAkSJEiQIEEIEiRIkCBBggQhSJAgQYIECRIkCEGCBAkSJEiQIAQJEiRIkCBBghAk6Dfo5KIhSJAgQYIECRIkCEETBeTW4RJ3Y8T+AAAAAElFTkSuQmCC",
+                    "width": 96,
+                    "height": 64
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Title",
+                  "property": "font-weight",
+                  "value": "700"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.import.done",
+                  "params": {
+                    "elements": 8,
+                    "files": "page",
+                    "notes": "html. Elements repaired to fit the content model (lines 11)."
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": "same"
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-export-holds-the-imported-page-its-text-and-its-image",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "project.importHtml#menu-file",
+              "args": {
+                "files": [
+                  "import:page.html",
+                  "import:graos.png"
+                ]
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "project.export#toolbar-top-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.importHtml#menu-file",
+            "project.importHtml#command-bar"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@pages",
+                "value": [
+                  {
+                    "name": "Aurora café",
+                    "file": "page.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page",
+                      "tag": "body",
+                      "attributes": {
+                        "pageLanguage": "pt-BR"
+                      },
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "heading",
+                          "name": "Title",
+                          "tag": "h2",
+                          "attributes": {},
+                          "classes": [
+                            "hero__title"
+                          ],
+                          "styles": {},
+                          "text": "Bem-vindo",
+                          "children": []
+                        },
+                        {
+                          "type": "paragraph",
+                          "name": "Lead",
+                          "tag": "p",
+                          "attributes": {},
+                          "classes": [
+                            "hero__lead"
+                          ],
+                          "styles": {},
+                          "text": "Um café feito à mão para o menu.",
+                          "children": [],
+                          "inline": [
+                            "Um café ",
+                            {
+                              "tag": "strong",
+                              "children": [
+                                "feito à mão"
+                              ]
+                            },
+                            " para ",
+                            {
+                              "tag": "a",
+                              "href": "/menu",
+                              "children": [
+                                "o menu"
+                              ]
+                            },
+                            "."
+                          ]
+                        },
+                        {
+                          "type": "list",
+                          "name": "List",
+                          "tag": "ul",
+                          "attributes": {},
+                          "classes": [
+                            "list"
+                          ],
+                          "styles": {},
+                          "text": null,
+                          "children": [
+                            {
+                              "type": "listItem",
+                              "name": "Item",
+                              "tag": "li",
+                              "attributes": {},
+                              "classes": [
+                                "list__item"
+                              ],
+                              "styles": {},
+                              "text": null,
+                              "children": [
+                                {
+                                  "type": "paragraph",
+                                  "name": "Paragraph",
+                                  "tag": "p",
+                                  "attributes": {},
+                                  "classes": [],
+                                  "styles": {},
+                                  "text": "Espresso",
+                                  "children": []
+                                }
+                              ]
+                            },
+                            {
+                              "type": "listItem",
+                              "name": "Item 2",
+                              "tag": "li",
+                              "attributes": {},
+                              "classes": [
+                                "list__item"
+                              ],
+                              "styles": {},
+                              "text": null,
+                              "children": [
+                                {
+                                  "type": "paragraph",
+                                  "name": "Paragraph 2",
+                                  "tag": "p",
+                                  "attributes": {},
+                                  "classes": [],
+                                  "styles": {},
+                                  "text": "Coado",
+                                  "children": []
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "image",
+                          "name": "Image",
+                          "tag": "img",
+                          "attributes": {
+                            "src": "img/graos.png",
+                            "alt": "Grãos de café"
+                          },
+                          "classes": [
+                            "card__image"
+                          ],
+                          "styles": {},
+                          "text": null,
+                          "children": []
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "img/graos.png",
+                    "type": "image/png",
+                    "bytes": "iVBORw0KGgoAAAANSUhEUgAAAGAAAABACAIAAABqVuVZAAAAcklEQVR42u3QQREAIAgAMBpZwAZEsYG97EcDHvjd3RIs3t00QoEgQYIECRIkSBCCBAkSJEiQIEEIEiRIkCBBggQhSJAgQYIECRIkCEGCBAkSJEiQIAQJEiRIkCBBghAk6Dfo5KIhSJAgQYIECRIkCEETBeTW4RJ3Y8T+AAAAAElFTkSuQmCC",
+                    "width": 96,
+                    "height": 64
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.export.done",
+                  "params": {
+                    "file": "site.zip"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "page.html",
+                  "present": [
+                    "<h2 class=\"hero__title\">Bem-vindo</h2>",
+                    "Um café <strong>feito à mão</strong> para <a href=\"/menu\">o menu</a>.",
+                    "<li class=\"list__item\">",
+                    "<p>Espresso</p>",
+                    "<img class=\"card__image\" src=\"img/graos.png\" alt=\"Grãos de café\">"
+                  ],
+                  "absent": [
+                    "data-node",
+                    "style=\""
+                  ]
+                },
+                {
+                  "path": "img/graos.png",
+                  "present": [],
+                  "absent": []
+                }
+              ]
+            }
+          },
+          "refusals": []
+        },
+        {
+          "id": "files-with-no-html-page-are-refused-and-the-next-import-runs",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "project.importHtml#menu-file",
+              "args": {
+                "files": [
+                  "import:styled.css"
+                ]
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "project.importHtml#menu-file",
+              "args": {
+                "files": [
+                  "import:page.html",
+                  "import:graos.png"
+                ]
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.importHtml#menu-file",
+            "project.importHtml#command-bar"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@pages",
+                "value": [
+                  {
+                    "name": "Aurora café",
+                    "file": "page.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page",
+                      "tag": "body",
+                      "attributes": {
+                        "pageLanguage": "pt-BR"
+                      },
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "heading",
+                          "name": "Title",
+                          "tag": "h2",
+                          "attributes": {},
+                          "classes": [
+                            "hero__title"
+                          ],
+                          "styles": {},
+                          "text": "Bem-vindo",
+                          "children": []
+                        },
+                        {
+                          "type": "paragraph",
+                          "name": "Lead",
+                          "tag": "p",
+                          "attributes": {},
+                          "classes": [
+                            "hero__lead"
+                          ],
+                          "styles": {},
+                          "text": "Um café feito à mão para o menu.",
+                          "children": [],
+                          "inline": [
+                            "Um café ",
+                            {
+                              "tag": "strong",
+                              "children": [
+                                "feito à mão"
+                              ]
+                            },
+                            " para ",
+                            {
+                              "tag": "a",
+                              "href": "/menu",
+                              "children": [
+                                "o menu"
+                              ]
+                            },
+                            "."
+                          ]
+                        },
+                        {
+                          "type": "list",
+                          "name": "List",
+                          "tag": "ul",
+                          "attributes": {},
+                          "classes": [
+                            "list"
+                          ],
+                          "styles": {},
+                          "text": null,
+                          "children": [
+                            {
+                              "type": "listItem",
+                              "name": "Item",
+                              "tag": "li",
+                              "attributes": {},
+                              "classes": [
+                                "list__item"
+                              ],
+                              "styles": {},
+                              "text": null,
+                              "children": [
+                                {
+                                  "type": "paragraph",
+                                  "name": "Paragraph",
+                                  "tag": "p",
+                                  "attributes": {},
+                                  "classes": [],
+                                  "styles": {},
+                                  "text": "Espresso",
+                                  "children": []
+                                }
+                              ]
+                            },
+                            {
+                              "type": "listItem",
+                              "name": "Item 2",
+                              "tag": "li",
+                              "attributes": {},
+                              "classes": [
+                                "list__item"
+                              ],
+                              "styles": {},
+                              "text": null,
+                              "children": [
+                                {
+                                  "type": "paragraph",
+                                  "name": "Paragraph 2",
+                                  "tag": "p",
+                                  "attributes": {},
+                                  "classes": [],
+                                  "styles": {},
+                                  "text": "Coado",
+                                  "children": []
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "image",
+                          "name": "Image",
+                          "tag": "img",
+                          "attributes": {
+                            "src": "img/graos.png",
+                            "alt": "Grãos de café"
+                          },
+                          "classes": [
+                            "card__image"
+                          ],
+                          "styles": {},
+                          "text": null,
+                          "children": []
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "img/graos.png",
+                    "type": "image/png",
+                    "bytes": "iVBORw0KGgoAAAANSUhEUgAAAGAAAABACAIAAABqVuVZAAAAcklEQVR42u3QQREAIAgAMBpZwAZEsYG97EcDHvjd3RIs3t00QoEgQYIECRIkSBCCBAkSJEiQIEEIEiRIkCBBggQhSJAgQYIECRIkCEGCBAkSJEiQIAQJEiRIkCBBghAk6Dfo5KIhSJAgQYIECRIkCEETBeTW4RJ3Y8T+AAAAAElFTkSuQmCC",
+                    "width": 96,
+                    "height": 64
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.import.done",
+                  "params": {
+                    "elements": 8,
+                    "files": "page",
+                    "notes": "html. Elements repaired to fit the content model (lines 11)."
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": "same"
+            },
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.import.noPage",
+              "document": "unchanged"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "html-import-cleaning",
+      "titleKey": "feature.htmlImportCleaning",
+      "commands": [
+        "project.importHtml"
+      ],
+      "dependsOn": [
+        "html-import-structure"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Import cleaning: scripts, unknown elements, broken nesting and the import report",
+        "steps": [
+          "Import an HTML file that contains an inline <script>, a <script src>, onclick attributes, an unknown custom element, a <div> inside a <p> and a <li> outside any list."
+        ],
+        "expected": [
+          "Scripts are not dropped: each is kept with its page (its code or its src), never run on the editing canvas, written back by the export, and listed in the report; event handler attributes are removed and listed in the report.",
+          "Unknown elements are unwrapped into their children.",
+          "Structures that break the nesting rules are repaired (e.g. a stray li gets a ul) or dropped; the resulting document always passes the nesting rules.",
+          "An import report lists everything that was dropped, unwrapped, repaired or kept, with the source line."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "scripts-handlers-and-broken-nesting-are-kept-or-repaired",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "project.importHtml#menu-file",
+              "args": {
+                "files": [
+                  "import:messy.html",
+                  "import:app.js"
+                ]
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.importHtml#menu-file",
+            "project.importHtml#command-bar"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@pages",
+                "value": [
+                  {
+                    "name": "Messy page",
+                    "file": "messy.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page",
+                      "tag": "body",
+                      "attributes": {
+                        "pageLanguage": "en",
+                        "pageScripts": "js/messy-1.js app.js"
+                      },
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "heading",
+                          "name": "Title",
+                          "tag": "h2",
+                          "attributes": {},
+                          "classes": [
+                            "messy__title"
+                          ],
+                          "styles": {},
+                          "text": "Hi",
+                          "children": []
+                        },
+                        {
+                          "type": "div",
+                          "name": "Hero",
+                          "tag": "div",
+                          "attributes": {},
+                          "classes": [
+                            "messy__hero"
+                          ],
+                          "styles": {},
+                          "text": null,
+                          "children": [
+                            {
+                              "type": "paragraph",
+                              "name": "Lead",
+                              "tag": "p",
+                              "attributes": {},
+                              "classes": [
+                                "messy__lead"
+                              ],
+                              "styles": {},
+                              "text": "We ship fast worldwide.",
+                              "children": []
+                            },
+                            {
+                              "type": "list",
+                              "name": "Unordered list",
+                              "tag": "ul",
+                              "attributes": {},
+                              "classes": [],
+                              "styles": {},
+                              "text": null,
+                              "children": [
+                                {
+                                  "type": "listItem",
+                                  "name": "Item",
+                                  "tag": "li",
+                                  "attributes": {},
+                                  "classes": [
+                                    "messy__item"
+                                  ],
+                                  "styles": {},
+                                  "text": null,
+                                  "children": [
+                                    {
+                                      "type": "paragraph",
+                                      "name": "Paragraph",
+                                      "tag": "p",
+                                      "attributes": {},
+                                      "classes": [],
+                                      "styles": {},
+                                      "text": "A stray item",
+                                      "children": []
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "js/messy-1.js",
+                    "type": "text/javascript",
+                    "bytes": "d2luZG93LnJlYWR5ID0gdHJ1ZTs="
+                  },
+                  {
+                    "path": "app.js",
+                    "type": "text/javascript",
+                    "bytes": "Y29uc29sZS5sb2coImFwcCIpOwo="
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.import.done",
+                  "params": {
+                    "elements": 6,
+                    "files": "messy",
+                    "notes": "html. Scripts kept (lines 11, 12). Event handlers removed (lines 8). Unknown elements unwrapped (lines 10). Elements repaired to fit the content model (lines 13)."
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-export-writes-the-scripts-back-and-no-event-attribute",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "project.importHtml#menu-file",
+              "args": {
+                "files": [
+                  "import:messy.html",
+                  "import:app.js"
+                ]
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "project.export#toolbar-top-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.importHtml#menu-file",
+            "project.importHtml#command-bar"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@pages",
+                "value": [
+                  {
+                    "name": "Messy page",
+                    "file": "messy.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page",
+                      "tag": "body",
+                      "attributes": {
+                        "pageLanguage": "en",
+                        "pageScripts": "js/messy-1.js app.js"
+                      },
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "heading",
+                          "name": "Title",
+                          "tag": "h2",
+                          "attributes": {},
+                          "classes": [
+                            "messy__title"
+                          ],
+                          "styles": {},
+                          "text": "Hi",
+                          "children": []
+                        },
+                        {
+                          "type": "div",
+                          "name": "Hero",
+                          "tag": "div",
+                          "attributes": {},
+                          "classes": [
+                            "messy__hero"
+                          ],
+                          "styles": {},
+                          "text": null,
+                          "children": [
+                            {
+                              "type": "paragraph",
+                              "name": "Lead",
+                              "tag": "p",
+                              "attributes": {},
+                              "classes": [
+                                "messy__lead"
+                              ],
+                              "styles": {},
+                              "text": "We ship fast worldwide.",
+                              "children": []
+                            },
+                            {
+                              "type": "list",
+                              "name": "Unordered list",
+                              "tag": "ul",
+                              "attributes": {},
+                              "classes": [],
+                              "styles": {},
+                              "text": null,
+                              "children": [
+                                {
+                                  "type": "listItem",
+                                  "name": "Item",
+                                  "tag": "li",
+                                  "attributes": {},
+                                  "classes": [
+                                    "messy__item"
+                                  ],
+                                  "styles": {},
+                                  "text": null,
+                                  "children": [
+                                    {
+                                      "type": "paragraph",
+                                      "name": "Paragraph",
+                                      "tag": "p",
+                                      "attributes": {},
+                                      "classes": [],
+                                      "styles": {},
+                                      "text": "A stray item",
+                                      "children": []
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "js/messy-1.js",
+                    "type": "text/javascript",
+                    "bytes": "d2luZG93LnJlYWR5ID0gdHJ1ZTs="
+                  },
+                  {
+                    "path": "app.js",
+                    "type": "text/javascript",
+                    "bytes": "Y29uc29sZS5sb2coImFwcCIpOwo="
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.export.done",
+                  "params": {
+                    "file": "site.zip"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "messy.html",
+                  "present": [
+                    "<script src=\"js/messy-1.js\"></script>",
+                    "<script src=\"app.js\"></script>",
+                    "We ship fast worldwide."
+                  ],
+                  "absent": [
+                    "onclick",
+                    "<x-badge"
+                  ]
+                },
+                {
+                  "path": "js/messy-1.js",
+                  "present": [
+                    "window.ready = true;"
+                  ],
+                  "absent": []
+                },
+                {
+                  "path": "app.js",
+                  "present": [
+                    "console.log(\"app\");"
+                  ],
+                  "absent": []
+                }
+              ]
+            }
+          },
+          "refusals": []
+        }
+      ]
+    },
+    {
+      "id": "html-import-styles",
+      "titleKey": "feature.htmlImportStyles",
+      "commands": [
+        "project.importHtml"
+      ],
+      "dependsOn": [
+        "html-import-structure"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Import CSS: style attributes, style blocks and linked stylesheets",
+        "steps": [
+          "Choose File > Import HTML and pick, in one selection, an HTML file and the stylesheet it links; the page also has a <style> block with class, tag and id rules and style attributes (a fixture whose rules are all mappable).",
+          "Import the same page again without its stylesheet."
+        ],
+        "expected": [
+          "The import accepts several files at once; a linked stylesheet is found by its path among the picked files.",
+          "Declarations that apply to each element, resolved by specificity and order, become that element styles in the document JSON.",
+          "For this fixture, the computed styles of every element in the iframe match the original file opened in Chrome.",
+          "A linked stylesheet that was not picked is listed in the import report."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "a-linked-stylesheet-and-a-style-block-land-on-the-elements",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "project.importHtml#menu-file",
+              "args": {
+                "files": [
+                  "import:styled.html",
+                  "import:styled.css"
+                ]
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.importHtml#menu-file",
+            "project.importHtml#command-bar"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@pages",
+                "value": [
+                  {
+                    "name": "Styled page",
+                    "file": "styled.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page",
+                      "tag": "body",
+                      "attributes": {
+                        "pageLanguage": "en"
+                      },
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "heading",
+                          "name": "Title",
+                          "tag": "h2",
+                          "attributes": {},
+                          "classes": [],
+                          "styles": {
+                            "desktop": {
+                              "base": {
+                                "font-size": "32px",
+                                "color": "#111111"
+                              }
+                            }
+                          },
+                          "text": "Coffee",
+                          "children": []
+                        },
+                        {
+                          "type": "paragraph",
+                          "name": "Lead",
+                          "tag": "p",
+                          "attributes": {},
+                          "classes": [],
+                          "styles": {
+                            "desktop": {
+                              "base": {
+                                "font-size": "18px",
+                                "color": "#333333",
+                                "letter-spacing": "1px",
+                                "margin-top": "4px"
+                              }
+                            }
+                          },
+                          "text": "Fresh every morning.",
+                          "children": []
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Title",
+                  "property": "font-size",
+                  "value": "32px"
+                },
+                {
+                  "node": "/Page/Title",
+                  "property": "color",
+                  "value": "rgb(17, 17, 17)"
+                },
+                {
+                  "node": "/Page/Lead",
+                  "property": "font-size",
+                  "value": "18px"
+                },
+                {
+                  "node": "/Page/Lead",
+                  "property": "color",
+                  "value": "rgb(51, 51, 51)"
+                },
+                {
+                  "node": "/Page/Lead",
+                  "property": "letter-spacing",
+                  "value": "1px"
+                },
+                {
+                  "node": "/Page/Lead",
+                  "property": "margin-top",
+                  "value": "4px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.import.done",
+                  "params": {
+                    "elements": 2,
+                    "files": "styled",
+                    "notes": "html."
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-stylesheet-that-was-not-picked-is-listed-in-the-report",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "project.importHtml#menu-file",
+              "args": {
+                "files": [
+                  "import:styled.html"
+                ]
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.importHtml#menu-file",
+            "project.importHtml#command-bar"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@pages",
+                "value": [
+                  {
+                    "name": "Styled page",
+                    "file": "styled.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page",
+                      "tag": "body",
+                      "attributes": {
+                        "pageLanguage": "en"
+                      },
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "heading",
+                          "name": "Title",
+                          "tag": "h2",
+                          "attributes": {},
+                          "classes": [
+                            "panel__title"
+                          ],
+                          "styles": {},
+                          "text": "Coffee",
+                          "children": []
+                        },
+                        {
+                          "type": "paragraph",
+                          "name": "Lead",
+                          "tag": "p",
+                          "attributes": {},
+                          "classes": [
+                            "panel__lead"
+                          ],
+                          "styles": {
+                            "desktop": {
+                              "base": {
+                                "letter-spacing": "1px",
+                                "margin-top": "4px"
+                              }
+                            }
+                          },
+                          "text": "Fresh every morning.",
+                          "children": []
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Title",
+                  "property": "font-size",
+                  "value": "24px"
+                },
+                {
+                  "node": "/Page/Lead",
+                  "property": "color",
+                  "value": "rgb(0, 0, 0)"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.import.done",
+                  "params": {
+                    "elements": 2,
+                    "files": "styled",
+                    "notes": "html. styled.css was not picked."
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
+    },
+    {
+      "id": "html-import-media-queries",
+      "titleKey": "feature.htmlImportMediaQueries",
+      "commands": [
+        "project.importHtml"
+      ],
+      "dependsOn": [
+        "html-import-styles",
+        "breakpoint-overrides"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Import @media rules as breakpoint overrides",
+        "steps": [
+          "Import an HTML file whose CSS has @media (max-width: 834px) and @media (max-width: 390px) rules, and a @media (min-width: 1000px) rule."
+        ],
+        "expected": [
+          "max-width rules at a breakpoint width become overrides of that breakpoint; other widths map to the nearest breakpoint at or below them and are reported.",
+          "Rules that cannot be mapped (min-width, orientation, print) are listed in the import report.",
+          "At each breakpoint the computed styles in the iframe match the original page at that width for every element not affected by a reported rule."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "a-max-width-rule-becomes-its-breakpoint-and-a-nearer-width-is-reported",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "project.importHtml#menu-file",
+              "args": {
+                "files": [
+                  "import:states.html",
+                  "import:states.css"
+                ]
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.importHtml#menu-file",
+            "project.importHtml#command-bar"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@pages",
+                "value": [
+                  {
+                    "name": "States page",
+                    "file": "states.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page",
+                      "tag": "body",
+                      "attributes": {
+                        "pageLanguage": "en"
+                      },
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "heading",
+                          "name": "Title",
+                          "tag": "h2",
+                          "attributes": {},
+                          "classes": [],
+                          "styles": {
+                            "desktop": {
+                              "base": {
+                                "font-size": "40px"
+                              }
+                            },
+                            "tablet": {
+                              "base": {
+                                "font-size": "24px"
+                              }
+                            }
+                          },
+                          "text": "Shop",
+                          "children": []
+                        },
+                        {
+                          "type": "paragraph",
+                          "name": "Lead",
+                          "tag": "p",
+                          "attributes": {},
+                          "classes": [],
+                          "styles": {
+                            "tablet": {
+                              "base": {
+                                "color": "#444444"
+                              }
+                            }
+                          },
+                          "text": "Open today.",
+                          "children": []
+                        },
+                        {
+                          "type": "link",
+                          "name": "Cta",
+                          "tag": "a",
+                          "attributes": {
+                            "href": "https://aurora.example/menu"
+                          },
+                          "classes": [],
+                          "styles": {
+                            "desktop": {
+                              "hover": {
+                                "color": "#00aa00"
+                              }
+                            }
+                          },
+                          "text": "Menu",
+                          "children": []
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Title",
+                  "property": "font-size",
+                  "value": "40px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.import.done",
+                  "params": {
+                    "elements": 3,
+                    "files": "states",
+                    "notes": "html. states.css: rules mapped to the nearest breakpoint (lines 12). states.css: rules not mapped (lines 18, 27, 31, 35)."
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "at-the-tablet-breakpoint-the-mapped-rules-compute-as-the-original",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "project.importHtml#menu-file",
+              "args": {
+                "files": [
+                  "import:states.html",
+                  "import:states.css"
+                ]
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "view.setBreakpoint#toolbar-breakpoint-tabs-tablet",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.importHtml#menu-file",
+            "project.importHtml#command-bar"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@pages",
+                "value": [
+                  {
+                    "name": "States page",
+                    "file": "states.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page",
+                      "tag": "body",
+                      "attributes": {
+                        "pageLanguage": "en"
+                      },
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "heading",
+                          "name": "Title",
+                          "tag": "h2",
+                          "attributes": {},
+                          "classes": [],
+                          "styles": {
+                            "desktop": {
+                              "base": {
+                                "font-size": "40px"
+                              }
+                            },
+                            "tablet": {
+                              "base": {
+                                "font-size": "24px"
+                              }
+                            }
+                          },
+                          "text": "Shop",
+                          "children": []
+                        },
+                        {
+                          "type": "paragraph",
+                          "name": "Lead",
+                          "tag": "p",
+                          "attributes": {},
+                          "classes": [],
+                          "styles": {
+                            "tablet": {
+                              "base": {
+                                "color": "#444444"
+                              }
+                            }
+                          },
+                          "text": "Open today.",
+                          "children": []
+                        },
+                        {
+                          "type": "link",
+                          "name": "Cta",
+                          "tag": "a",
+                          "attributes": {
+                            "href": "https://aurora.example/menu"
+                          },
+                          "classes": [],
+                          "styles": {
+                            "desktop": {
+                              "hover": {
+                                "color": "#00aa00"
+                              }
+                            }
+                          },
+                          "text": "Menu",
+                          "children": []
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Title",
+                  "property": "font-size",
+                  "value": "24px"
+                },
+                {
+                  "node": "/Page/Lead",
+                  "property": "color",
+                  "value": "rgb(68, 68, 68)"
+                }
+              ],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
+    },
+    {
+      "id": "html-import-states",
+      "titleKey": "feature.htmlImportStates",
+      "commands": [
+        "view.enterPreview",
+        "project.importHtml"
+      ],
+      "dependsOn": [
+        "html-import-styles",
+        "state-styles"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Import pseudo-class rules as state styles",
+        "steps": [
+          "Import an HTML file whose CSS has :hover, :focus, :active, :disabled, :invalid and :placeholder-shown rules, plus a descendant selector and an @supports block."
+        ],
+        "expected": [
+          "Each supported pseudo-class rule becomes a state style of the matching element in the document JSON.",
+          "Selectors that cannot be mapped to single elements (descendant rules across unrelated elements, @supports, ::before) are listed in the import report.",
+          "In preview, hovering an imported element shows its hover styles."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "a-pseudo-class-rule-becomes-the-state-of-the-element-it-names",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "project.importHtml#menu-file",
+              "args": {
+                "files": [
+                  "import:states.html",
+                  "import:states.css"
+                ]
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.importHtml#menu-file",
+            "project.importHtml#command-bar"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@pages",
+                "value": [
+                  {
+                    "name": "States page",
+                    "file": "states.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page",
+                      "tag": "body",
+                      "attributes": {
+                        "pageLanguage": "en"
+                      },
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "heading",
+                          "name": "Title",
+                          "tag": "h2",
+                          "attributes": {},
+                          "classes": [],
+                          "styles": {
+                            "desktop": {
+                              "base": {
+                                "font-size": "40px"
+                              }
+                            },
+                            "tablet": {
+                              "base": {
+                                "font-size": "24px"
+                              }
+                            }
+                          },
+                          "text": "Shop",
+                          "children": []
+                        },
+                        {
+                          "type": "paragraph",
+                          "name": "Lead",
+                          "tag": "p",
+                          "attributes": {},
+                          "classes": [],
+                          "styles": {
+                            "tablet": {
+                              "base": {
+                                "color": "#444444"
+                              }
+                            }
+                          },
+                          "text": "Open today.",
+                          "children": []
+                        },
+                        {
+                          "type": "link",
+                          "name": "Cta",
+                          "tag": "a",
+                          "attributes": {
+                            "href": "https://aurora.example/menu"
+                          },
+                          "classes": [],
+                          "styles": {
+                            "desktop": {
+                              "hover": {
+                                "color": "#00aa00"
+                              }
+                            }
+                          },
+                          "text": "Menu",
+                          "children": []
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Title",
+                  "property": "font-size",
+                  "value": "40px"
+                },
+                {
+                  "node": "/Page/Lead",
+                  "property": "color",
+                  "value": "rgb(0, 0, 0)"
+                }
+              ],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
+    },
+    {
+      "id": "html-import-roundtrip",
+      "titleKey": "feature.htmlImportRoundtrip",
+      "commands": [
+        "project.importHtml",
+        "project.export"
+      ],
+      "dependsOn": [
+        "html-import-states",
+        "export-bem-css"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Exported pages import back unchanged",
+        "steps": [
+          "Build a page using templates, breakpoint overrides and hover states and export it.",
+          "Choose File > Import HTML and pick the exported ZIP.",
+          "Export again."
+        ],
+        "expected": [
+          "Importing a ZIP imports its pages together with their linked CSS files as a whole.",
+          "The imported document equals the original in tag structure, texts, attributes and styles per breakpoint and state; element types are compared by HTML tag (types that share a tag, such as Link and Link Block, cannot be told apart in plain HTML); ids and editor-only data (locks, layer colours, guides, grid settings, saved colours) are ignored.",
+          "Element names are recovered from their BEM classes, so the second export is byte-identical to the first."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "the-exported-site-imports-back-as-it-was",
+          "setup": {
+            "fixture": "import-roundtrip",
+            "selection": [
+              "/Page"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "project.export#toolbar-top-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "project.importHtml#menu-file",
+              "args": {
+                "files": [
+                  "download"
+                ]
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null,
+              "answer": "confirm"
+            },
+            {
+              "door": "project.export#toolbar-top-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.importHtml#menu-file",
+            "project.importHtml#command-bar"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@pages",
+                "value": [
+                  {
+                    "name": "Home",
+                    "file": "index.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page",
+                      "tag": "body",
+                      "attributes": {},
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "section",
+                          "name": "Hero",
+                          "tag": "section",
+                          "attributes": {},
+                          "classes": [],
+                          "styles": {
+                            "desktop": {
+                              "base": {
+                                "padding-top": "56px",
+                                "padding-right": "40px",
+                                "padding-bottom": "56px",
+                                "padding-left": "40px",
+                                "background-color": "#f5efe6"
+                              }
+                            },
+                            "laptop": {
+                              "base": {
+                                "padding-top": "32px"
+                              }
+                            },
+                            "phone": {
+                              "base": {
+                                "padding-left": "16px",
+                                "padding-right": "16px"
+                              }
+                            }
+                          },
+                          "text": null,
+                          "children": [
+                            {
+                              "type": "heading",
+                              "name": "Title",
+                              "tag": "h1",
+                              "attributes": {},
+                              "classes": [],
+                              "styles": {
+                                "desktop": {
+                                  "base": {
+                                    "font-size": "48px",
+                                    "color": "#0f172a"
+                                  }
+                                }
+                              },
+                              "text": "Aurora Coffee",
+                              "inline": [
+                                {
+                                  "tag": "strong",
+                                  "children": [
+                                    "Aurora"
+                                  ]
+                                },
+                                " Coffee"
+                              ],
+                              "children": []
+                            },
+                            {
+                              "type": "paragraph",
+                              "name": "Intro",
+                              "tag": "p",
+                              "attributes": {},
+                              "classes": [],
+                              "styles": {
+                                "desktop": {
+                                  "base": {
+                                    "font-size": "20px",
+                                    "color": "#334155"
+                                  },
+                                  "hover": {
+                                    "color": "#0aa000"
+                                  }
+                                }
+                              },
+                              "text": "Fresh coffee, roasted every week.",
+                              "children": []
+                            },
+                            {
+                              "type": "image",
+                              "name": "Beans",
+                              "tag": "img",
+                              "attributes": {
+                                "src": "img/graos.png",
+                                "alt": "Grains of coffee"
+                              },
+                              "classes": [],
+                              "styles": {
+                                "desktop": {
+                                  "base": {
+                                    "width": "120px"
+                                  }
+                                }
+                              },
+                              "text": null,
+                              "children": []
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "img/graos.png",
+                    "type": "image/png",
+                    "width": 96,
+                    "height": 64,
+                    "bytes": "iVBORw0KGgoAAAANSUhEUgAAAGAAAABACAIAAABqVuVZAAAAcklEQVR42u3QQREAIAgAMBpZwAZEsYG97EcDHvjd3RIs3t00QoEgQYIECRIkSBCCBAkSJEiQIEEIEiRIkCBBggQhSJAgQYIECRIkCEGCBAkSJEiQIAQJEiRIkCBBghAk6Dfo5KIhSJAgQYIECRIkCEETBeTW4RJ3Y8T+AAAAAElFTkSuQmCC"
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Title",
+                  "property": "font-size",
+                  "value": "48px"
+                },
+                {
+                  "node": "/Page/Hero/Intro",
+                  "property": "color",
+                  "value": "rgb(51, 65, 85)"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.export.done",
+                  "params": {
+                    "file": "site.zip"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "index.html",
+                  "present": [
+                    "<h1 class=\"hero__title\"><strong>Aurora</strong> Coffee</h1>",
+                    "<p class=\"hero__intro\">Fresh coffee, roasted every week.</p>",
+                    "<img src=\"img/graos.png\" alt=\"Grains of coffee\" class=\"hero__beans\">"
+                  ],
+                  "absent": [
+                    "data-node"
+                  ]
+                },
+                {
+                  "path": "css/styles.css",
+                  "present": [
+                    "padding-top: 56px;",
+                    "@media (max-width: 1180px)",
+                    "@media (max-width: 390px)",
+                    ".hero__intro:hover",
+                    "width: 120px;"
+                  ],
+                  "absent": []
+                },
+                {
+                  "path": "img/graos.png",
+                  "present": [],
+                  "absent": []
+                }
+              ]
+            }
+          },
+          "refusals": []
+        }
+      ]
+    },
+    {
+      "id": "clipboard-paste-external",
+      "titleKey": "feature.clipboardPasteExternal",
+      "commands": [
+        "clipboard.paste"
+      ],
+      "dependsOn": [
+        "html-import-cleaning"
+      ],
+      "spec": "spec/behavior/clipboard-paste-external.md",
+      "intent": {
+        "title": "Paste HTML and text copied from outside the app",
+        "steps": [
+          "Put text/html of a small article (heading, paragraphs, a list, a script tag) on the system clipboard and press Ctrl+V with a Section selected.",
+          "Put multi-line text/plain on the system clipboard and press Ctrl+V with a Section selected."
+        ],
+        "expected": [
+          "Pasted HTML goes through the HTML importer (same cleaning and nesting rules) and is inserted into the selection as one undo step; scripts in pasted HTML are not kept, because a pasted fragment has no page to keep them with.",
+          "Plain text becomes one Paragraph per line.",
+          "Anything the importer drops is reported in the status bar."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "html-copied-outside-goes-through-the-importer",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit",
+            "clipboard": {
+              "html": "<h2>Imprensa</h2>\n<p onclick=\"alert(1)\">Sobre <strong>nós</strong> e <x-pill>novo</x-pill>.</p>\n<script>alert(1)</script>",
+              "text": "Imprensa"
+            }
+          },
+          "steps": [
+            {
+              "door": "clipboard.paste#key-ctrl-v-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "clipboard.paste#key-ctrl-v-in-global",
+            "clipboard.paste#menu-edit"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@children",
+                "value": [
+                  {
+                    "type": "heading",
+                    "name": "Title",
+                    "tag": "h1",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Welcome to Aurora",
+                    "children": []
+                  },
+                  {
+                    "type": "paragraph",
+                    "name": "Intro",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Fresh coffee, roasted every week.",
+                    "children": []
+                  },
+                  {
+                    "type": "div",
+                    "name": "Actions",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  },
+                  {
+                    "type": "heading",
+                    "name": "Heading",
+                    "tag": "h2",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Imprensa",
+                    "children": []
+                  },
+                  {
+                    "type": "paragraph",
+                    "name": "Paragraph",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Sobre nós e novo.",
+                    "children": [],
+                    "inline": [
+                      "Sobre ",
+                      {
+                        "tag": "strong",
+                        "children": [
+                          "nós"
+                        ]
+                      },
+                      " e novo."
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Heading",
+              "/Page/Hero/Paragraph"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.pasted.html",
+                  "params": {
+                    "count": 2,
+                    "notes": " Unknown elements unwrapped (lines 2)."
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "plain-text-pasted-becomes-one-paragraph-per-line",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit",
+            "clipboard": {
+              "text": "Primeira linha\nSegunda linha"
+            }
+          },
+          "steps": [
+            {
+              "door": "clipboard.paste#key-ctrl-v-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "clipboard.paste#key-ctrl-v-in-global",
+            "clipboard.paste#menu-edit"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@children",
+                "value": [
+                  {
+                    "type": "heading",
+                    "name": "Title",
+                    "tag": "h1",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Welcome to Aurora",
+                    "children": []
+                  },
+                  {
+                    "type": "paragraph",
+                    "name": "Intro",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Fresh coffee, roasted every week.",
+                    "children": []
+                  },
+                  {
+                    "type": "div",
+                    "name": "Actions",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  },
+                  {
+                    "type": "paragraph",
+                    "name": "Paragraph",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Primeira linha",
+                    "children": []
+                  },
+                  {
+                    "type": "paragraph",
+                    "name": "Paragraph 2",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Segunda linha",
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Paragraph",
+              "/Page/Hero/Paragraph 2"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.pasted.text",
+                  "params": {
+                    "count": 2
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
+    }
+  ]
+}

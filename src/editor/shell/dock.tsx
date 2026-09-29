@@ -1,0 +1,128 @@
+// The bottom dock (DESIGN.md "Dock and status bar"): its strip with a tab for each open dock panel (the tab-strip
+// component, the panel's icon from layout.json panels), show or hide, maximize, close the tab; its body when open.
+import { useMemo } from 'react';
+import { checksOf } from '../../core/a11y/checks.ts';
+import { manifest } from '../../manifest/runtime.ts';
+import type { MessageId } from '../../generated/ids.ts';
+import { locate } from '../../core/document/model.ts';
+import { TimelinePanel } from '../timeline/panel.tsx';
+import { DoorControl, Icon } from '../doors/door.tsx';
+import { doorSlots } from '../doors/placement.ts';
+import { useEditorState } from '../store.ts';
+import { useT } from '../text.ts';
+import { PANELS, panelName, type Panel } from '../workspace/panels.ts';
+import type { BodyTable } from './bodies.ts';
+import { Slots } from './slots.tsx';
+import { Shortcuts } from './shortcuts.tsx';
+
+const TAB = doorSlots('tab-strip')[0];
+// the strip's button that closes the tab it shows (its door's own arguments close a panel)
+const CLOSE = doorSlots('dock-strip').find((d) => d.door.args.open === 'close');
+// the Checks panel's row: the door that selects the node an issue is about (the region's own entry, spec
+// accessibility-checks)
+const ISSUE = doorSlots('dock-checks').find((d) => d.door.kind === 'panel-control' && d.door.control === 'issue');
+
+// The Timeline tab: the animations of the selected element, the settings of the one it shows, and the track with its
+// ruler, playhead and keyframes (group 18; src/editor/timeline/panel.tsx draws it, every control a door placed in the
+// region).
+function Timeline() {
+  return <TimelinePanel />;
+}
+
+// The Document tab of Developer tools (spec workbench-panel, Problems in Pager 2): the document as it is now, as JSON,
+// read-only, drawn again after every command that changes it.
+function DocumentJson() {
+  const t = useT();
+  const document = useEditorState((s) => s.document);
+  const text = useMemo(() => JSON.stringify(document, null, 2), [document]);
+  return (
+    <pre className="dock-document" tabIndex={0} aria-readonly="true" aria-label={t(panelName('document'))}>
+      {text}
+    </pre>
+  );
+}
+
+// The Checks panel (spec accessibility-checks): one row per issue the document has (core/a11y/checks.ts, the one
+// owner of the list), each the region's own door (selection.select) with the node it is about, so pressing a row
+// selects that element on the canvas and in the Layers. The list is read from the store, so it follows every command;
+// it never blocks editing or the export — a page with issues is a page like any other.
+function Checks() {
+  const t = useT();
+  const document = useEditorState((s) => s.document);
+  const issues = useMemo(() => checksOf(document, manifest.interactions.checks), [document]);
+  // the issue's own words: the rule, the category the manifest names and the element it is about
+  const words = (issue: { rule: MessageId; category: string; node: string }) => {
+    const category = manifest.checks.categories.find((one) => one.id === issue.category);
+    return { category: t((category?.labelKey ?? 'checks.title') as MessageId), name: locate(document, issue.node)?.node.name ?? '' };
+  };
+  return (
+    <div className="dock-region" data-region="dock-checks">
+      {issues.length === 0 || ISSUE === undefined ? (
+        <p className="dock-checks__none">{t('checks.none')}</p>
+      ) : (
+        <ul className="dock-checks__list">
+          {issues.map((issue) => (
+            <li key={`${issue.node}:${issue.rule}`}>
+              <DoorControl entry={ISSUE} args={{ target: issue.node }} className="dock-checks__row">
+                <Icon name={PANELS.checks.icon} size="sm" />
+                <span className="dock-checks__rule">{t(issue.rule, words(issue))}</span>
+                
+                <span className="dock-checks__fix">{t('checks.fix', { fix: t(issue.fix) })}</span>
+              </DoorControl>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+// The body of each dock tab the editor draws; a tab without one says "not available yet" and the doors that only open
+// it are not available yet (bodies.ts).
+export const DOCK_TABS: BodyTable = { timeline: Timeline, document: DocumentJson, checks: Checks, shortcuts: Shortcuts };
+
+// the tab's panel, named after its tab
+function DockBody({ tab }: { readonly tab: Panel }) {
+  const t = useT();
+  const Body = DOCK_TABS[tab];
+  return (
+    <div className={`dock-body${Body ? '' : ' dock-body--empty'}`} role="tabpanel" aria-label={t(panelName(tab))}>
+      {Body ? <Body /> : t('common.notAvailableYet')}
+    </div>
+  );
+}
+
+export function Dock() {
+  const t = useT();
+  const tabs = useEditorState((s) => s.ui.panels.dockTabs);
+  const active = useEditorState((s) => s.ui.layout.activeDockTab);
+  const state = useEditorState((s) => s.ui.layout.dock);
+  // collapsed, the dock is no strip: the status bar draws its panels as icons (the audit's A3.18)
+  if (state === 'collapsed') return null;
+  return (
+    <section className={`dock dock--${state}`} aria-label={t(panelName('workbench'))}>
+      <div className="dock-strip" data-region="dock-strip">
+        <div className="dock-strip__tabs" role="tablist" data-region="tab-strip" data-key-context="tab-strip">
+          {TAB
+            ? tabs.map((tab) => (
+                <DoorControl key={tab} entry={TAB} args={{ group: 'workbench', panel: tab }}>
+                  <Icon name={PANELS[tab].icon} size="sm" />
+                  <span className="door__label">{t(panelName(tab))}</span>
+                </DoorControl>
+              ))
+            : null}
+        </div>
+        <span className="dock-strip__actions">
+          <Slots
+            region="dock-strip"
+            render={(slot) => {
+              if (slot.kind !== 'door' || slot.entry !== CLOSE) return undefined;
+              return active !== null ? <DoorControl key={slot.entry.ref} entry={slot.entry} args={{ panel: active }} /> : null;
+            }}
+          />
+        </span>
+      </div>
+      {active !== null ? <DockBody tab={active} /> : null}
+    </section>
+  );
+}

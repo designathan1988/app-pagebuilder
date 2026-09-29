@@ -1,0 +1,56 @@
+{
+  "name": "builder",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:proofs": "vite build --config vite.proofs.config.ts",
+    "preview": "vite preview",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit",
+    "lint": "eslint . --max-warnings 0",
+    "unit": "vitest run",
+    "e2e": "playwright test",
+    "e2e:diagnose": "playwright test --last-failed --trace on",
+    "e2e:tooth": "node tools/runner/tooth.ts",
+    "gen": "node tools/gen/generate.ts",
+    "gen:check": "node tools/gen/check.ts",
+    "manifest:check": "node tools/manifest/check.ts"
+  },
+  "dependencies": {
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@eslint/core": "^1.2.1",
+    "@eslint/css": "^2.0.0",
+    "@eslint/js": "^10.0.1",
+    "@mdn/browser-compat-data": "^8.1.2",
+    "@playwright/test": "^1.63.0",
+    "@types/css-tree": "^3.2.0",
+    "@types/node": "^26.6.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@typescript-eslint/utils": "^8.70.1",
+    "@vitejs/plugin-react": "^6.1.1",
+    "@webref/css": "^8.7.5",
+    "css-tree": "^3.2.1",
+    "eslint": "^10.11.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "fast-check": "^4.10.2",
+    "globals": "^17.12.0",
+    "happy-dom": "^20.14.5",
+    "html-validate": "^11.16.0",
+    "lucide-static": "^1.48.0",
+    "style-dictionary": "^5.5.5",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.70.1",
+    "vite": "^8.3.0",
+    "vitest": "^5.0.1"
+  }
+}

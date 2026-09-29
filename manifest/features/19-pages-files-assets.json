@@ -1,0 +1,5425 @@
+{
+  "group": "pages-files-assets",
+  "titleKey": "featureGroup.pagesFilesAssets",
+  "features": [
+    {
+      "id": "explorer-pages",
+      "titleKey": "feature.explorerPages",
+      "commands": [
+        "pages.add",
+        "pages.rename",
+        "pages.duplicate",
+        "pages.delete",
+        "pages.switch",
+        "workspace.setPanelOpen"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "File explorer: add, rename, duplicate, delete and switch pages",
+        "steps": [
+          "Open the Explorer panel.",
+          "Add a page 'About', rename it 'About us', duplicate it, delete the duplicate after confirming.",
+          "Switch between the pages; undo the delete."
+        ],
+        "expected": [
+          "View > Explorer opens the Explorer as a tab next to Elements in the left dock; Elements stays the default tab.",
+          "The Explorer lists the project pages as .html files; the active page is highlighted and shown on the canvas.",
+          "Each page has its own document tree, guides and settings in the project JSON; page names are unique; each page is an .html file whose path follows its name: the home page is index.html and the others take their file name from their name (about-us.html).",
+          "The home page cannot be deleted; delete asks for confirmation; every page operation is an undo step.",
+          "File > New blank page now empties only the active page; File > Open project replaces all pages.",
+          "The active page is restored after reload."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "adding-a-page-lists-it-and-opens-it",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "pages.add#explorer-add-page",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "pages.add#explorer-add-page"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@pages",
+                "value": [
+                  {
+                    "name": "Home",
+                    "file": "index.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page",
+                      "tag": "body",
+                      "attributes": {},
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": []
+                    }
+                  },
+                  {
+                    "name": "Page",
+                    "file": "page.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page 2",
+                      "tag": "body",
+                      "attributes": {},
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": []
+                    }
+                  }
+                ]
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page 2",
+                  "property": "display",
+                  "value": "block"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.pages.added",
+                  "params": {
+                    "name": "Page",
+                    "file": "page.html"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "an-element-inserted-while-another-page-is-open-lands-on-it",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "pages.add#explorer-add-page",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "paragraph"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@pages",
+                "value": [
+                  {
+                    "name": "Home",
+                    "file": "index.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page",
+                      "tag": "body",
+                      "attributes": {},
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": []
+                    }
+                  },
+                  {
+                    "name": "Page",
+                    "file": "page.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page 2",
+                      "tag": "body",
+                      "attributes": {},
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "paragraph",
+                          "name": "Paragraph",
+                          "tag": "p",
+                          "attributes": {},
+                          "classes": [],
+                          "styles": {},
+                          "text": "A freshly created paragraph.",
+                          "children": []
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page 2/Paragraph"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page 2",
+                  "property": "display",
+                  "value": "block"
+                },
+                {
+                  "node": "/Page 2/Paragraph",
+                  "property": "display",
+                  "value": "block"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Paragraph",
+                    "parent": "Page 2",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": "same"
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "renaming-a-page-keeps-the-home-file",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "pages.rename#explorer-page-name-field",
+              "args": {
+                "page": "/Page",
+                "name": "About us"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "pages.rename#explorer-page-name-field"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@pages",
+                "value": [
+                  {
+                    "name": "About us",
+                    "file": "index.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page",
+                      "tag": "body",
+                      "attributes": {},
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": []
+                    }
+                  }
+                ]
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.pages.renamed",
+                  "params": {
+                    "name": "About us"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "duplicating-a-page-adds-the-copy-right-after-it",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "pages.duplicate#explorer-page-duplicate",
+              "args": {
+                "page": "/Page"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "pages.duplicate#explorer-page-duplicate"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@pages",
+                "value": [
+                  {
+                    "name": "Home",
+                    "file": "index.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page",
+                      "tag": "body",
+                      "attributes": {},
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": []
+                    }
+                  },
+                  {
+                    "name": "Home 2",
+                    "file": "home-2.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Home 2",
+                      "tag": "body",
+                      "attributes": {},
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": []
+                    }
+                  }
+                ]
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.pages.duplicated",
+                  "params": {
+                    "name": "Home",
+                    "copy": "Home 2"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "switching-pages-opens-the-page-the-door-stands-for",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "pages.add#explorer-add-page",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "pages.switch#explorer-page-row",
+              "args": {
+                "page": "/Page"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "pages.switch#file-tab",
+              "args": {
+                "page": "/Page"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "pages.switch#explorer-page-row",
+            "pages.switch#file-tab"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@pages",
+                "value": [
+                  {
+                    "name": "Home",
+                    "file": "index.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page",
+                      "tag": "body",
+                      "attributes": {},
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": []
+                    }
+                  },
+                  {
+                    "name": "Page",
+                    "file": "page.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page 2",
+                      "tag": "body",
+                      "attributes": {},
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": []
+                    }
+                  }
+                ]
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page",
+                  "property": "display",
+                  "value": "block"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.pages.opened",
+                  "params": {
+                    "name": "Home"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-top-bars-switcher-stands-for-the-page-on-the-canvas",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "pages.add#explorer-add-page",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "pages.switch#toolbar-top-bar-page-switcher",
+              "args": {
+                "page": "/Page 2"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "pages.switch#toolbar-top-bar-page-switcher"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@pages",
+                "value": [
+                  {
+                    "name": "Home",
+                    "file": "index.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page",
+                      "tag": "body",
+                      "attributes": {},
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": []
+                    }
+                  },
+                  {
+                    "name": "Page",
+                    "file": "page.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page 2",
+                      "tag": "body",
+                      "attributes": {},
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": []
+                    }
+                  }
+                ]
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page 2",
+                  "property": "display",
+                  "value": "block"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.pages.opened",
+                  "params": {
+                    "name": "Page"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-home-page-cannot-be-deleted",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "pages.delete#explorer-page-delete",
+              "args": {
+                "page": "/Page"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "pages.delete#explorer-page-delete"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.pages.homeUndeletable",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.pages.homeUndeletable",
+              "document": "unchanged"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "explorer-file-system",
+      "titleKey": "feature.explorerFileSystem",
+      "commands": [
+        "files.createFolder",
+        "files.createFile",
+        "files.rename",
+        "files.move",
+        "files.delete",
+        "files.open",
+        "files.closeTab",
+        "files.startRename"
+      ],
+      "dependsOn": [
+        "explorer-pages"
+      ],
+      "spec": "spec/behavior/explorer-file-system.md",
+      "intent": {
+        "title": "File explorer with a virtual file system",
+        "steps": [
+          "Open the Explorer.",
+          "Create the folders 'js' and 'img/icons' and the file 'js/main.js'.",
+          "Rename a folder; drag a file into another folder; delete a folder that holds files, after confirming.",
+          "Click css/styles.css and a page file in the tree.",
+          "Undo the delete; reload."
+        ],
+        "expected": [
+          "The Explorer shows the project's file tree (pages, CSS, JS, images, fonts) with folders: one .html per page, css/styles.css, js/interactions.js when the project has interactions, and every file the project holds.",
+          "Files and folders can be created, renamed, moved (drag and drop, and a Move to… command) and deleted; names are unique per folder.",
+          "css/styles.css and js/interactions.js are generated from the document and keep fixed paths: they cannot be renamed, moved or deleted, neither can a folder that holds one of them, and creating or moving another file to either path is refused, even before js/interactions.js exists.",
+          "Pages can be moved into folders; a page file is deleted by deleting its page, and a folder that holds a page file cannot be deleted; renaming a page file renames its page and moving it moves the page; a page stores its file name, so a renamed or imported file keeps its exact name (Contact Us.html stays Contact Us.html) while a new page still gets a file name derived from its name (about-us.html); page names are unique within each folder, and pages in different folders may share a name (about/index.html and blog/index.html); the home page's index.html cannot be renamed or moved out of the root.",
+          "Deleting a folder that holds files asks for confirmation; every operation is one undo step.",
+          "Clicking a page file or css/styles.css opens it in the Code panel; the tree updates when pages or files change.",
+          "The tree is stored with the project in IndexedDB and restored after reload; File > Save project and Open project include every file of the tree. The product is new, so there is no earlier saved format to open: the saved format has carried a schema version since the first save, and every future migration is tested on the real loading path (Open project, and the autosaved project and its saved versions when the app loads them)."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "a-folder-and-a-file-are-made-by-their-paths",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "files.createFolder#explorer-new-folder",
+              "args": {
+                "path": "js"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "files.createFolder#explorer-new-folder"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@folders",
+                "value": [
+                  "js"
+                ]
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.files.folderCreated",
+                  "params": {
+                    "name": "js"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-file-is-made-in-a-folder-by-its-path",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "files.createFolder#explorer-new-folder",
+              "args": {
+                "path": "js"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.createFile#explorer-new-file",
+              "args": {
+                "path": "js/main.js"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "files.createFile#explorer-new-file"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@folders",
+                "value": [
+                  "js"
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "js/main.js",
+                    "type": "text/javascript",
+                    "bytes": ""
+                  }
+                ]
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.files.fileCreated",
+                  "params": {
+                    "name": "main.js"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-files-name-is-kept-from-its-row",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "files.createFile#explorer-new-file",
+              "args": {
+                "path": "note.txt"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.startRename#explorer-file-name",
+              "args": {
+                "path": "note.txt"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.rename#explorer-file-name-field",
+              "args": {
+                "path": "note.txt",
+                "name": "about.txt"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "files.rename#explorer-file-name-field"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "about.txt",
+                    "type": "text/plain",
+                    "bytes": ""
+                  }
+                ]
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.files.renamed",
+                  "params": {
+                    "name": "about.txt"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-file-moves-into-a-folder-through-the-entries",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "files.createFolder#explorer-new-folder",
+              "args": {
+                "path": "src"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.createFile#explorer-new-file",
+              "args": {
+                "path": "note.txt"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.move#explorer-move-to",
+              "args": {
+                "path": "note.txt",
+                "to": ""
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.move#explorer-move-target",
+              "args": {
+                "path": "note.txt",
+                "to": "src"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "files.move#explorer-move-target"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@folders",
+                "value": [
+                  "src"
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "src/note.txt",
+                    "type": "text/plain",
+                    "bytes": ""
+                  }
+                ]
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 3,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.files.moved",
+                  "params": {
+                    "name": "note.txt",
+                    "folder": "src"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-page-file-is-opened-in-the-code-pane-by-its-row",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "files.open#explorer-file-row",
+              "args": {
+                "path": "index.html"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "files.open#explorer-file-row"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.files.opened",
+                  "params": {
+                    "path": "index.html"
+                  }
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "code-view",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 350,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-file-tab-closes-the-file-the-pane-shows",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "files.open#explorer-file-row",
+              "args": {
+                "path": "index.html"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.closeTab#file-tab-close",
+              "args": {
+                "path": "index.html"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "files.closeTab#file-tab-close"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.files.closed",
+                  "params": {
+                    "path": "index.html"
+                  }
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "canvas-frame",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 100,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-generated-path-is-refused",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "files.createFile#explorer-new-file",
+              "args": {
+                "path": "css/styles.css"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "files.createFile#explorer-new-file"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.files.generatedPath",
+                  "params": {
+                    "path": "css/styles.css"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.files.generatedPath",
+              "document": "unchanged"
+            }
+          ]
+        },
+        {
+          "id": "a-row-is-dragged-into-a-folder",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "files.createFolder#explorer-new-folder",
+              "args": {
+                "path": "js"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.createFile#explorer-new-file",
+              "args": {
+                "path": "note.txt"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.move#panel-drag-explorer-row-folder",
+              "args": {
+                "path": "note.txt",
+                "to": "",
+                "distance": -48
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "files.move#panel-drag-explorer-row-folder"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@folders",
+                "value": [
+                  "js"
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "js/note.txt",
+                    "type": "text/plain",
+                    "bytes": ""
+                  }
+                ]
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 3,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.files.moved",
+                  "params": {
+                    "name": "note.txt",
+                    "folder": "js"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-move-to-button-stands-for-the-folder-the-row-is-in",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "files.createFolder#explorer-new-folder",
+              "args": {
+                "path": "src"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.createFile#explorer-new-file",
+              "args": {
+                "path": "note.txt"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.move#explorer-move-to",
+              "args": {
+                "path": "note.txt",
+                "to": ""
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "files.move#explorer-move-to"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@folders",
+                "value": [
+                  "src"
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "note.txt",
+                    "type": "text/plain",
+                    "bytes": ""
+                  }
+                ]
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-file-a-row-holds-is-deleted-after-the-confirmation",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "files.createFolder#explorer-new-folder",
+              "args": {
+                "path": "src"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.createFile#explorer-new-file",
+              "args": {
+                "path": "src/note.txt"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.delete#explorer-delete",
+              "args": {
+                "path": "src"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null,
+              "answer": "confirm"
+            }
+          ],
+          "doors": [
+            "files.delete#explorer-delete"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@folders",
+                "value": []
+              },
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": []
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 3,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.files.deleted",
+                  "params": {
+                    "name": "src"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-file-tab-opens-the-file-the-pane-shows",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "files.createFile#explorer-new-file",
+              "args": {
+                "path": "note.txt"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.open#explorer-file-row",
+              "args": {
+                "path": "note.txt"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.open#file-tab",
+              "args": {
+                "path": "note.txt"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "files.open#file-tab"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "note.txt",
+                    "type": "text/plain",
+                    "bytes": ""
+                  }
+                ]
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.files.opened",
+                  "params": {
+                    "path": "note.txt"
+                  }
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "code-view",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 350,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-rows-name-opens-the-field-that-renames-it",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "files.createFile#explorer-new-file",
+              "args": {
+                "path": "note.txt"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.startRename#explorer-file-name",
+              "args": {
+                "path": "note.txt"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "files.startRename#explorer-file-name"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "note.txt",
+                    "type": "text/plain",
+                    "bytes": ""
+                  }
+                ]
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
+    },
+    {
+      "id": "link-picker",
+      "titleKey": "feature.linkPicker",
+      "commands": [
+        "element.setLink",
+        "linkPicker.open",
+        "linkPicker.setKind",
+        "linkPicker.close"
+      ],
+      "dependsOn": [
+        "explorer-pages"
+      ],
+      "spec": "spec/behavior/media-embed-rules.md",
+      "intent": {
+        "title": "Link to pages, anchors, email and phone",
+        "steps": [
+          "Select a Link and pick another page as its target.",
+          "Pick an element of the current page as an anchor target.",
+          "Enter an email address and a phone number as targets.",
+          "Rename and move the target page."
+        ],
+        "expected": [
+          "The picker offers the pages of the file tree, the elements of a page (giving them an id if they have none), a URL, email (mailto:) and phone (tel:); unsafe URLs are refused.",
+          "Page links are stored as references to the page file.",
+          "Renaming or moving the target page updates every link to it."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "a-link-points-at-a-section-of-the-page-and-follows-its-id",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "heading"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setId#inspector-id",
+              "args": {
+                "id": "inicio"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "inicio\n"
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "link"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "linkPicker.open#field-href-choose",
+              "args": {
+                "target": "/Page/Link"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "linkPicker.setKind#link-picker-page",
+              "args": {
+                "kind": "page"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "linkPicker.setKind#link-picker-anchor",
+              "args": {
+                "kind": "anchor"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "linkPicker.setKind#link-picker-email",
+              "args": {
+                "kind": "email"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "linkPicker.setKind#link-picker-phone",
+              "args": {
+                "kind": "phone"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "linkPicker.setKind#link-picker-url",
+              "args": {
+                "kind": "url"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "linkPicker.setKind#link-picker-anchor",
+              "args": {
+                "kind": "anchor"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setLink#link-picker-anchor-item",
+              "args": {
+                "anchor": "/Page/Heading"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "linkPicker.close#link-picker-close",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "linkPicker.open#field-href-choose",
+              "args": {
+                "target": "/Page/Link"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "linkPicker.close#key-escape-in-link-picker",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "project.export#toolbar-top-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.setLink#link-picker-anchor-item"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "heading",
+                    "name": "Heading",
+                    "tag": "h2",
+                    "attributes": {
+                      "id": "inicio"
+                    },
+                    "classes": [],
+                    "styles": {},
+                    "text": "New heading",
+                    "children": []
+                  },
+                  {
+                    "type": "link",
+                    "name": "Link",
+                    "tag": "a",
+                    "attributes": {
+                      "href": "#@/Page/Heading"
+                    },
+                    "classes": [],
+                    "styles": {},
+                    "text": "A link",
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Link"
+            ],
+            "history": {
+              "undoSteps": 4,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.export.done",
+                  "params": {
+                    "file": "site.zip"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "index.html",
+                  "present": [
+                    "<a href=\"#inicio\">A link</a>"
+                  ],
+                  "absent": [
+                    "href=\"#\""
+                  ]
+                }
+              ]
+            }
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-link-points-at-a-page-of-the-project",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "link"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "linkPicker.open#field-href-choose",
+              "args": {
+                "target": "/Page/Link"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "linkPicker.setKind#link-picker-page",
+              "args": {
+                "kind": "page"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setLink#link-picker-page-item",
+              "args": {
+                "page": "index.html"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "linkPicker.close#link-picker-close",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "project.export#toolbar-top-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.setLink#link-picker-page-item"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "link",
+                    "name": "Link",
+                    "tag": "a",
+                    "attributes": {
+                      "href": "index.html"
+                    },
+                    "classes": [],
+                    "styles": {},
+                    "text": "A link",
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Link"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.export.done",
+                  "params": {
+                    "file": "site.zip"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "index.html",
+                  "present": [
+                    "<a href=\"index.html\">A link</a>"
+                  ],
+                  "absent": []
+                }
+              ]
+            }
+          },
+          "refusals": []
+        }
+      ]
+    },
+    {
+      "id": "export-multi-page",
+      "titleKey": "feature.exportMultiPage",
+      "commands": [
+        "element.setLink",
+        "project.export",
+        "pages.add",
+        "files.move"
+      ],
+      "dependsOn": [
+        "link-picker",
+        "explorer-file-system"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Export every page of the project",
+        "steps": [
+          "Create a project with pages Home and About us, move About us into a folder 'company', link from Home to About us with the link picker, and export."
+        ],
+        "expected": [
+          "The ZIP contains index.html, company/about-us.html and one shared css/styles.css, each at its path in the file tree.",
+          "Links chosen with the link picker are written as relative links computed from the two files' paths (company/about-us.html from index.html, ../index.html back).",
+          "Each page file has its own title, lang and dir, and links the shared stylesheet with a path relative to its folder."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "a-page-in-a-folder-is-exported-at-its-path-and-linked-relatively",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "link"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-explorer",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "pages.add#explorer-add-page",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "pages.rename#explorer-page-name-field",
+              "args": {
+                "page": "/Page 2",
+                "name": "About us"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.createFolder#explorer-new-folder",
+              "args": {
+                "path": "company"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.move#explorer-move-to",
+              "args": {
+                "path": "about-us.html",
+                "to": ""
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.move#explorer-move-target",
+              "args": {
+                "path": "about-us.html",
+                "to": "company"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "pages.switch#explorer-page-row",
+              "args": {
+                "page": "/Page"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "selection.select#layers-row",
+              "args": {
+                "target": "/Page/Link"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "linkPicker.open#field-href-choose",
+              "args": {
+                "target": "/Page/Link"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "linkPicker.setKind#link-picker-page",
+              "args": {
+                "kind": "page"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setLink#link-picker-page-item",
+              "args": {
+                "page": "company/about-us.html"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "linkPicker.close#link-picker-close",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "project.export#toolbar-top-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.export#toolbar-top-bar-export"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@pages",
+                "value": [
+                  {
+                    "name": "Home",
+                    "file": "index.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page",
+                      "tag": "body",
+                      "attributes": {},
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "link",
+                          "name": "Link",
+                          "tag": "a",
+                          "attributes": {
+                            "href": "company/about-us.html"
+                          },
+                          "classes": [],
+                          "styles": {},
+                          "text": "A link",
+                          "children": []
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "name": "About us",
+                    "file": "company/about-us.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page 2",
+                      "tag": "body",
+                      "attributes": {},
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": []
+                    }
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/@folders",
+                "value": [
+                  "company"
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Link"
+            ],
+            "history": {
+              "undoSteps": 6,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.export.done",
+                  "params": {
+                    "file": "site.zip"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "index.html",
+                  "present": [
+                    "<a href=\"company/about-us.html\">A link</a>"
+                  ],
+                  "absent": [
+                    "href=\"about-us.html\""
+                  ]
+                },
+                {
+                  "path": "company/about-us.html",
+                  "present": [
+                    "<link rel=\"stylesheet\" href=\"../css/styles.css\">"
+                  ],
+                  "absent": []
+                },
+                {
+                  "path": "css/styles.css",
+                  "present": [
+                    "box-sizing"
+                  ],
+                  "absent": []
+                }
+              ]
+            }
+          },
+          "refusals": []
+        }
+      ]
+    },
+    {
+      "id": "explorer-assets",
+      "titleKey": "feature.explorerAssets",
+      "commands": [
+        "files.upload"
+      ],
+      "dependsOn": [
+        "explorer-file-system"
+      ],
+      "spec": "spec/behavior/explorer-assets.md",
+      "intent": {
+        "title": "Upload and manage image and font files",
+        "steps": [
+          "In the Explorer upload two images and a font file with the file picker.",
+          "Drop a third image file onto a folder in the Explorer (the test dispatches a drop whose DataTransfer holds the file).",
+          "Rename a file; delete a file."
+        ],
+        "expected": [
+          "Uploaded files are ordinary files of the file tree, stored in IndexedDB, placed in the folder they were uploaded or dropped into (img/ by default for images, fonts/ for fonts), and listed with a thumbnail for images, their name and size.",
+          "Renaming changes the listed name; names stay unique per folder.",
+          "Deleting an unused file removes it from the tree and from IndexedDB, as an undo step."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "the-upload-stores-the-file-and-it-survives-a-reload",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-explorer",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.upload#explorer-upload",
+              "args": {
+                "files": "png:photo.png"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "files.upload#explorer-upload"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "img/photo.png",
+                    "type": "image/png",
+                    "bytes": "png:photo.png",
+                    "width": 4,
+                    "height": 3
+                  }
+                ]
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.files.uploaded",
+                  "params": {
+                    "names": "img/photo.png"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-file-dropped-on-the-folder-is-stored",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-explorer",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.upload#panel-drag-os-file-explorer-folder",
+              "args": {
+                "files": "png:photo.png"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "files.upload#panel-drag-os-file-explorer-folder"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "img/photo.png",
+                    "type": "image/png",
+                    "bytes": "png:photo.png",
+                    "width": 4,
+                    "height": 3
+                  }
+                ]
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.files.uploaded",
+                  "params": {
+                    "names": "img/photo.png"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
+    },
+    {
+      "id": "explorer-assets-use",
+      "titleKey": "feature.explorerAssetsUse",
+      "commands": [
+        "element.setAttribute",
+        "assets.insertImageFile",
+        "assetPicker.open",
+        "assetPicker.close"
+      ],
+      "dependsOn": [
+        "explorer-assets"
+      ],
+      "spec": "spec/behavior/explorer-assets-use.md",
+      "intent": {
+        "title": "Use assets in Image elements and drop images onto the canvas",
+        "steps": [
+          "Select an Image and choose an uploaded asset with the asset picker of its Source field.",
+          "Drop an image file onto the canvas between two elements (the test dispatches a drop whose DataTransfer holds the file).",
+          "Rename an asset that is in use; try to delete it."
+        ],
+        "expected": [
+          "The Image stores a reference to the asset in the document JSON and renders it on the canvas.",
+          "Dropping an image file on the canvas uploads it as an asset and inserts an Image that uses it at the drop position, as one undo step.",
+          "Renaming an asset keeps every Image that uses it working.",
+          "Deleting an asset in use, or a folder that holds one, asks for confirmation and lists where it is used."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "an-image-draws-an-uploaded-file-and-the-export-carries-it",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-explorer",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.upload#explorer-upload",
+              "args": {
+                "files": "png:photo.png"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "image"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setAttribute#inspector-src",
+              "args": {
+                "attribute": "src",
+                "value": "img/photo.png"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "img/photo.png\n"
+            },
+            {
+              "door": "project.export#toolbar-top-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.setAttribute#inspector-src"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "img/photo.png",
+                    "type": "image/png",
+                    "bytes": "png:photo.png",
+                    "width": 4,
+                    "height": 3
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "image",
+                    "name": "Image",
+                    "tag": "img",
+                    "attributes": {
+                      "src": "img/photo.png"
+                    },
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "max-width": "100%"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Image"
+            ],
+            "history": {
+              "undoSteps": 3,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.export.done",
+                  "params": {
+                    "file": "site.zip"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "index.html",
+                  "present": [
+                    "<img src=\"img/photo.png\""
+                  ],
+                  "absent": [
+                    "src=\"img/photo-2.png\""
+                  ]
+                },
+                {
+                  "path": "img/photo.png",
+                  "present": [
+                    "PNG"
+                  ],
+                  "absent": []
+                }
+              ]
+            }
+          },
+          "refusals": []
+        },
+        {
+          "id": "an-image-file-dropped-on-the-canvas-places-an-image",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-explorer",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "assets.insertImageFile#canvas-drag-os-image-file-drop-proposal",
+              "args": {
+                "file": "png:photo.png"
+              },
+              "target": null,
+              "drop": {
+                "placement": "inside",
+                "reference": "/Page"
+              },
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "project.export#toolbar-top-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "assets.insertImageFile#canvas-drag-os-image-file-drop-proposal"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "img/photo.png",
+                    "type": "image/png",
+                    "bytes": "png:photo.png",
+                    "width": 4,
+                    "height": 3
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "image",
+                    "name": "Image",
+                    "tag": "img",
+                    "attributes": {
+                      "src": "img/photo.png"
+                    },
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "max-width": "100%"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Image"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.export.done",
+                  "params": {
+                    "file": "site.zip"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "index.html",
+                  "present": [
+                    "<img src=\"img/photo.png\""
+                  ],
+                  "absent": []
+                },
+                {
+                  "path": "img/photo.png",
+                  "present": [
+                    "PNG"
+                  ],
+                  "absent": []
+                }
+              ]
+            }
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-source-field-chooses-a-project-file-from-the-picker",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-explorer",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.upload#explorer-upload",
+              "args": {
+                "files": "png:photo.png"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "image"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "assetPicker.open#field-source-choose",
+              "args": {
+                "attribute": "src"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setAttribute#asset-picker-choose",
+              "args": {
+                "value": "img/photo.png"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "assetPicker.close#key-escape-in-asset-picker",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "assetPicker.open#field-source-choose",
+              "args": {
+                "attribute": "src"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "assetPicker.close#asset-picker-close",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.setAttribute#asset-picker-choose"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "img/photo.png",
+                    "type": "image/png",
+                    "bytes": "png:photo.png",
+                    "width": 4,
+                    "height": 3
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "image",
+                    "name": "Image",
+                    "tag": "img",
+                    "attributes": {
+                      "src": "img/photo.png"
+                    },
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "max-width": "100%"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Image"
+            ],
+            "history": {
+              "undoSteps": 3,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.attribute.set",
+                  "params": {
+                    "attribute": "Source",
+                    "name": "Image",
+                    "value": "img/photo.png"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
+    },
+    {
+      "id": "export-file-tree",
+      "titleKey": "feature.exportFileTree",
+      "commands": [
+        "project.export",
+        "files.createFolder"
+      ],
+      "dependsOn": [
+        "export-multi-page"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Export the file tree as a ZIP",
+        "steps": [
+          "Create folders and files in the Explorer, including a page inside a folder and an image used by it, and export."
+        ],
+        "expected": [
+          "The ZIP holds exactly the Explorer's tree: every folder and file at its path, pages generated from the document, CSS in separate files with BEM classes.",
+          "Relative links between pages and to files (stylesheets, scripts, images) are computed from their paths, so they follow a moved or renamed file.",
+          "Two exports without changes are byte-identical."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "the-archive-holds-the-tree-at-every-path",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "files.createFolder#explorer-new-folder",
+              "args": {
+                "path": "img"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.upload#explorer-upload",
+              "args": {
+                "files": "png:photo.png"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "image"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setAttribute#inspector-src",
+              "args": {
+                "attribute": "src",
+                "value": "img/photo.png"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "img/photo.png\n"
+            },
+            {
+              "door": "project.export#toolbar-top-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.export#toolbar-top-bar-export"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@folders",
+                "value": [
+                  "img"
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "img/photo.png",
+                    "type": "image/png",
+                    "bytes": "png:photo.png",
+                    "width": 4,
+                    "height": 3
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "image",
+                    "name": "Image",
+                    "tag": "img",
+                    "attributes": {
+                      "src": "img/photo.png"
+                    },
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "max-width": "100%"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Image"
+            ],
+            "history": {
+              "undoSteps": 4,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.export.done",
+                  "params": {
+                    "file": "site.zip"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "img/photo.png",
+                  "present": [
+                    "PNG"
+                  ],
+                  "absent": []
+                },
+                {
+                  "path": "index.html",
+                  "present": [
+                    "src=\"img/photo.png\""
+                  ],
+                  "absent": []
+                },
+                {
+                  "path": "css/styles.css",
+                  "present": [
+                    "box-sizing"
+                  ],
+                  "absent": []
+                }
+              ]
+            }
+          },
+          "refusals": []
+        }
+      ]
+    },
+    {
+      "id": "export-assets",
+      "titleKey": "feature.exportAssets",
+      "commands": [
+        "project.export",
+        "files.upload"
+      ],
+      "dependsOn": [
+        "explorer-assets-use",
+        "export-file-tree"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Export includes every file of the tree",
+        "steps": [
+          "Use two uploaded images in Images, leave a third image unused in its folder, and export."
+        ],
+        "expected": [
+          "The ZIP contains every file of the tree at its path, byte-identical to the uploads, the unused image included.",
+          "The img src attributes are relative paths to those files and the exported page shows the images."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "the-export-carries-every-file-of-the-project-at-its-path",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-explorer",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.upload#explorer-upload",
+              "args": {
+                "files": "png:photo.png"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "project.export#toolbar-top-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.export#toolbar-top-bar-export"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "img/photo.png",
+                    "type": "image/png",
+                    "bytes": "png:photo.png",
+                    "width": 4,
+                    "height": 3
+                  }
+                ]
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.export.done",
+                  "params": {
+                    "file": "site.zip"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "img/photo.png",
+                  "present": [
+                    "PNG"
+                  ],
+                  "absent": []
+                },
+                {
+                  "path": "index.html",
+                  "present": [
+                    "<meta charset=\"utf-8\">"
+                  ],
+                  "absent": [
+                    "src=\"img/photo.png\""
+                  ]
+                },
+                {
+                  "path": "css/styles.css",
+                  "present": [
+                    "box-sizing"
+                  ],
+                  "absent": []
+                }
+              ]
+            }
+          },
+          "refusals": []
+        }
+      ]
+    },
+    {
+      "id": "page-seo-meta",
+      "titleKey": "feature.pageSeoMeta",
+      "commands": [
+        "page.setSetting",
+        "project.export"
+      ],
+      "dependsOn": [
+        "page-properties",
+        "explorer-assets"
+      ],
+      "spec": "spec/behavior/page-seo-meta.md",
+      "intent": {
+        "title": "Page metadata for search and sharing",
+        "steps": [
+          "Open Page properties and set the description, the canonical URL, the Open Graph title and image, and the favicon.",
+          "Export."
+        ],
+        "expected": [
+          "The values are stored in the page settings of the document JSON; image fields pick files from the file tree.",
+          "The exported page head has meta description, link rel=canonical, the og: tags and link rel=icon with paths relative to the page file."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "the-page-metadata-fields-reach-the-head-of-the-export",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "page.openProperties#inspector-page-properties-button",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "page.setSetting#inspector-page-description",
+              "args": {
+                "setting": "pageDescription",
+                "value": "Aurora builds the whole page."
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "Aurora builds the whole page.\n"
+            },
+            {
+              "door": "page.setSetting#inspector-page-canonical",
+              "args": {
+                "setting": "pageCanonical",
+                "value": "https://aurora.example/"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "https://aurora.example/\n"
+            },
+            {
+              "door": "page.setSetting#inspector-page-og-title",
+              "args": {
+                "setting": "pageOgTitle",
+                "value": "Aurora: build the whole page"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "Aurora: build the whole page\n"
+            },
+            {
+              "door": "page.setSetting#inspector-page-og-image",
+              "args": {
+                "setting": "pageOgImage",
+                "value": "https://aurora.example/card.png"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "https://aurora.example/card.png\n"
+            },
+            {
+              "door": "page.setSetting#inspector-page-favicon",
+              "args": {
+                "setting": "pageFavicon",
+                "value": "/favicon.ico"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "/favicon.ico\n"
+            },
+            {
+              "door": "project.export#toolbar-top-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.export#toolbar-top-bar-export"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@attributes/pageDescription",
+                "value": "Aurora builds the whole page."
+              },
+              {
+                "op": "set",
+                "path": "/Page/@attributes/pageCanonical",
+                "value": "https://aurora.example/"
+              },
+              {
+                "op": "set",
+                "path": "/Page/@attributes/pageOgTitle",
+                "value": "Aurora: build the whole page"
+              },
+              {
+                "op": "set",
+                "path": "/Page/@attributes/pageOgImage",
+                "value": "https://aurora.example/card.png"
+              },
+              {
+                "op": "set",
+                "path": "/Page/@attributes/pageFavicon",
+                "value": "/favicon.ico"
+              }
+            ],
+            "selection": [
+              "/Page"
+            ],
+            "history": {
+              "undoSteps": 5,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.export.done",
+                  "params": {
+                    "file": "site.zip"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "index.html",
+                  "present": [
+                    "<meta name=\"description\" content=\"Aurora builds the whole page.\">",
+                    "<link rel=\"canonical\" href=\"https://aurora.example/\">",
+                    "<meta property=\"og:title\" content=\"Aurora: build the whole page\">",
+                    "<meta property=\"og:image\" content=\"https://aurora.example/card.png\">",
+                    "<link rel=\"icon\" href=\"/favicon.ico\">"
+                  ],
+                  "absent": [
+                    "<meta name=\"description\" content=\"\">",
+                    "<meta property=\"og:title\" content=\"\">",
+                    "<link rel=\"icon\" href=\"\">"
+                  ]
+                }
+              ]
+            }
+          },
+          "refusals": []
+        }
+      ]
+    },
+    {
+      "id": "custom-fonts",
+      "titleKey": "feature.customFonts",
+      "commands": [
+        "style.set",
+        "project.export",
+        "files.upload"
+      ],
+      "dependsOn": [
+        "explorer-assets"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Use custom font files",
+        "steps": [
+          "Add two .woff2 font files to the project.",
+          "Select a Heading and choose the new font in the font menu.",
+          "Export."
+        ],
+        "expected": [
+          "The font menu lists the project fonts above the system stacks, each previewed in its own face.",
+          "The canvas renders the Heading with the font.",
+          "The export writes @font-face rules in the CSS pointing to the font files at their paths in the tree, and the exported page renders with the font."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "the-heading-draws-with-the-font-of-the-project-and-the-export-carries-it",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-explorer",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.upload#explorer-upload",
+              "args": {
+                "files": "woff2:Heading.woff2"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.upload#explorer-upload",
+              "args": {
+                "files": "woff2:Body.woff2"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "heading"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#inspector-font-size",
+              "args": {
+                "property": "font-size",
+                "value": "100px"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "100px\n"
+            },
+            {
+              "door": "style.set#inspector-font-family",
+              "args": {
+                "property": "font-family",
+                "value": "Heading"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "Heading\n"
+            },
+            {
+              "door": "project.export#toolbar-top-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.set#inspector-font-family"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "fonts/Heading.woff2",
+                    "type": "font/woff2",
+                    "bytes": "woff2:Heading.woff2"
+                  },
+                  {
+                    "path": "fonts/Body.woff2",
+                    "type": "font/woff2",
+                    "bytes": "woff2:Body.woff2"
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "heading",
+                    "name": "Heading",
+                    "tag": "h2",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "font-size": "100px",
+                          "font-family": "Heading"
+                        }
+                      }
+                    },
+                    "text": "New heading",
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Heading"
+            ],
+            "history": {
+              "undoSteps": 5,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Heading",
+                  "property": "font-family",
+                  "value": "Heading"
+                }
+              ],
+              "geometry": [
+                {
+                  "node": "/Page/Heading",
+                  "measure": "height",
+                  "relation": "equals",
+                  "value": 100,
+                  "reference": null
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.export.done",
+                  "params": {
+                    "file": "site.zip"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": {
+              "files": [
+                {
+                  "path": "index.html",
+                  "present": [
+                    "<h2 class=\"heading\">New heading</h2>",
+                    "<link rel=\"stylesheet\" href=\"css/styles.css\">"
+                  ],
+                  "absent": [
+                    "style=\"font-family"
+                  ]
+                },
+                {
+                  "path": "css/styles.css",
+                  "present": [
+                    "@font-face {",
+                    "font-family: Heading;",
+                    "src: url(\"../fonts/Heading.woff2\") format(\"woff2\");",
+                    "font-display: swap;",
+                    "font-family: Body;",
+                    "src: url(\"../fonts/Body.woff2\") format(\"woff2\");",
+                    ".heading {",
+                    "font-size: 100px;",
+                    "font-family: Heading;"
+                  ],
+                  "absent": []
+                },
+                {
+                  "path": "fonts/Heading.woff2",
+                  "present": [
+                    "wOF2"
+                  ],
+                  "absent": []
+                },
+                {
+                  "path": "fonts/Body.woff2",
+                  "present": [
+                    "wOF2"
+                  ],
+                  "absent": []
+                }
+              ]
+            }
+          },
+          "refusals": []
+        }
+      ]
+    },
+    {
+      "id": "explorer-open-folder",
+      "titleKey": "feature.explorerOpenFolder",
+      "commands": [
+        "project.openFolder",
+        "project.export"
+      ],
+      "dependsOn": [
+        "html-import-styles",
+        "explorer-file-system"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Open a whole folder from disk",
+        "steps": [
+          "Choose File > Open folder and pick a folder with index.html, about/index.html, css/site.css, js/app.js and img/logo.png.",
+          "Confirm replacing the project.",
+          "Export."
+        ],
+        "expected": [
+          "The folder is read with Chrome's directory picker and every file lands at the same path in the virtual file system, except a file whose path belongs to a generated file (css/styles.css, js/interactions.js): it is kept under a new name (css/styles-1.css) and the import report lists it.",
+          "HTML pages go through the HTML importer: the stylesheets they link are resolved from the folder and parsed into the document's styles, because the document JSON is the source of truth; each page becomes a page named after its file, at its path (about/index.html is the page index in the folder about), and the root index.html is the home page (a folder without one gets an empty home page index.html, listed in the report); the original .css files stay in the tree as ordinary files that no page links any more, and the import report says so; JS, images and fonts are kept as files.",
+          "The import report lists what was converted, kept as-is or dropped.",
+          "The export right after reproduces the same folder structure."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "a-whole-folder-opens-as-the-project",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "paragraph"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "project.openFolder#menu-file",
+              "args": {
+                "folder": "folder:site"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null,
+              "answer": "confirm"
+            }
+          ],
+          "doors": [
+            "project.openFolder#menu-file",
+            "project.openFolder#command-bar"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@pages",
+                "value": [
+                  {
+                    "name": "Home",
+                    "file": "index.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Home",
+                      "tag": "body",
+                      "attributes": {
+                        "pageLanguage": "en",
+                        "pageTitle": "Site",
+                        "pageScripts": "js/app.js"
+                      },
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "heading",
+                          "name": "Title",
+                          "tag": "h1",
+                          "attributes": {},
+                          "classes": [
+                            "title"
+                          ],
+                          "styles": {
+                            "desktop": {
+                              "base": {
+                                "color": "#123456",
+                                "font-size": "40px"
+                              }
+                            }
+                          },
+                          "text": "Welcome",
+                          "children": []
+                        },
+                        {
+                          "type": "div",
+                          "name": "Card",
+                          "tag": "div",
+                          "attributes": {},
+                          "classes": [
+                            "card"
+                          ],
+                          "styles": {},
+                          "text": null,
+                          "children": [
+                            {
+                              "type": "paragraph",
+                              "name": "Paragraph",
+                              "tag": "p",
+                              "attributes": {},
+                              "classes": [],
+                              "styles": {},
+                              "text": "Body text.",
+                              "children": []
+                            },
+                            {
+                              "type": "image",
+                              "name": "Image",
+                              "tag": "img",
+                              "attributes": {
+                                "src": "img/logo.png",
+                                "alt": "Logo"
+                              },
+                              "classes": [],
+                              "styles": {},
+                              "text": null,
+                              "children": []
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "name": "About",
+                    "file": "about/index.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "About",
+                      "tag": "body",
+                      "attributes": {
+                        "pageLanguage": "en",
+                        "pageTitle": "About"
+                      },
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "heading",
+                          "name": "Title 2",
+                          "tag": "h1",
+                          "attributes": {},
+                          "classes": [
+                            "title"
+                          ],
+                          "styles": {
+                            "desktop": {
+                              "base": {
+                                "color": "#123456",
+                                "font-size": "40px"
+                              }
+                            }
+                          },
+                          "text": "About us",
+                          "children": []
+                        },
+                        {
+                          "type": "paragraph",
+                          "name": "Paragraph 2",
+                          "tag": "p",
+                          "attributes": {},
+                          "classes": [],
+                          "styles": {},
+                          "text": "Told by the people who build it.",
+                          "children": []
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "css/site.css",
+                    "type": "text/css",
+                    "bytes": "file:site/css/site.css"
+                  },
+                  {
+                    "path": "css/styles-1.css",
+                    "type": "text/css",
+                    "bytes": "file:site/css/styles.css"
+                  },
+                  {
+                    "path": "img/logo.png",
+                    "type": "image/png",
+                    "bytes": "png:logo.png",
+                    "width": 4,
+                    "height": 3
+                  },
+                  {
+                    "path": "js/app.js",
+                    "type": "text/javascript",
+                    "bytes": "file:site/js/app.js"
+                  },
+                  {
+                    "path": "js/interactions-1.js",
+                    "type": "text/javascript",
+                    "bytes": "file:site/js/interactions.js"
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/@classes",
+                "value": [
+                  {
+                    "name": "title",
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "letter-spacing": "2px"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "name": "card",
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "padding-top": "24px",
+                          "padding-right": "24px",
+                          "padding-bottom": "24px",
+                          "padding-left": "24px",
+                          "background-color": "#fafafa"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Home",
+                  "property": "display",
+                  "value": "block"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.folder.imported",
+                  "params": {
+                    "folder": "site",
+                    "pages": "index.html → Home, about/index.html → About",
+                    "styles": "css/site.css",
+                    "kept": "css/site.css, css/styles-1.css, img/logo.png, js/app.js, js/interactions-1.js",
+                    "created": "none",
+                    "renamed": "css/styles.css → css/styles-1.css, js/interactions.js → js/interactions-1.js",
+                    "droppedElements": 1,
+                    "droppedAttributes": 0,
+                    "droppedRules": 2
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-folder-without-a-home-page-gets-an-empty-one",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "project.openFolder#menu-file",
+              "args": {
+                "folder": "folder:notes"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.openFolder#menu-file",
+            "project.openFolder#command-bar"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@pages",
+                "value": [
+                  {
+                    "name": "Home",
+                    "file": "index.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Home",
+                      "tag": "body",
+                      "attributes": {},
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": []
+                    }
+                  },
+                  {
+                    "name": "Note",
+                    "file": "note.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Note",
+                      "tag": "body",
+                      "attributes": {
+                        "pageLanguage": "pt-BR",
+                        "pageTitle": "Nota"
+                      },
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "heading",
+                          "name": "Heading",
+                          "tag": "h2",
+                          "attributes": {},
+                          "classes": [],
+                          "styles": {},
+                          "text": "Nota",
+                          "children": []
+                        },
+                        {
+                          "type": "paragraph",
+                          "name": "Paragraph",
+                          "tag": "p",
+                          "attributes": {},
+                          "classes": [],
+                          "styles": {},
+                          "text": "Uma nota.",
+                          "children": []
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Home",
+                  "property": "display",
+                  "value": "block"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.folder.imported",
+                  "params": {
+                    "folder": "notes",
+                    "pages": "index.html → Home, note.html → Note",
+                    "styles": "none",
+                    "kept": "none",
+                    "created": "index.html",
+                    "renamed": "none",
+                    "droppedElements": 0,
+                    "droppedAttributes": 0,
+                    "droppedRules": 0
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-folder-without-any-html-page-is-refused",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "project.openFolder#menu-file",
+              "args": {
+                "folder": "folder:static"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.openFolder#menu-file",
+            "project.openFolder#command-bar"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.import.noPage",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.import.noPage",
+              "document": "unchanged"
+            }
+          ]
+        },
+        {
+          "id": "the-export-of-an-opened-folder-reproduces-its-paths",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "paragraph"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "project.openFolder#menu-file",
+              "args": {
+                "folder": "folder:site"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null,
+              "answer": "confirm"
+            },
+            {
+              "door": "project.export#toolbar-top-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.export#toolbar-top-bar-export"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@pages",
+                "value": [
+                  {
+                    "name": "Home",
+                    "file": "index.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Home",
+                      "tag": "body",
+                      "attributes": {
+                        "pageLanguage": "en",
+                        "pageTitle": "Site",
+                        "pageScripts": "js/app.js"
+                      },
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "heading",
+                          "name": "Title",
+                          "tag": "h1",
+                          "attributes": {},
+                          "classes": [
+                            "title"
+                          ],
+                          "styles": {
+                            "desktop": {
+                              "base": {
+                                "color": "#123456",
+                                "font-size": "40px"
+                              }
+                            }
+                          },
+                          "text": "Welcome",
+                          "children": []
+                        },
+                        {
+                          "type": "div",
+                          "name": "Card",
+                          "tag": "div",
+                          "attributes": {},
+                          "classes": [
+                            "card"
+                          ],
+                          "styles": {},
+                          "text": null,
+                          "children": [
+                            {
+                              "type": "paragraph",
+                              "name": "Paragraph",
+                              "tag": "p",
+                              "attributes": {},
+                              "classes": [],
+                              "styles": {},
+                              "text": "Body text.",
+                              "children": []
+                            },
+                            {
+                              "type": "image",
+                              "name": "Image",
+                              "tag": "img",
+                              "attributes": {
+                                "src": "img/logo.png",
+                                "alt": "Logo"
+                              },
+                              "classes": [],
+                              "styles": {},
+                              "text": null,
+                              "children": []
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "name": "About",
+                    "file": "about/index.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "About",
+                      "tag": "body",
+                      "attributes": {
+                        "pageLanguage": "en",
+                        "pageTitle": "About"
+                      },
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "heading",
+                          "name": "Title 2",
+                          "tag": "h1",
+                          "attributes": {},
+                          "classes": [
+                            "title"
+                          ],
+                          "styles": {
+                            "desktop": {
+                              "base": {
+                                "color": "#123456",
+                                "font-size": "40px"
+                              }
+                            }
+                          },
+                          "text": "About us",
+                          "children": []
+                        },
+                        {
+                          "type": "paragraph",
+                          "name": "Paragraph 2",
+                          "tag": "p",
+                          "attributes": {},
+                          "classes": [],
+                          "styles": {},
+                          "text": "Told by the people who build it.",
+                          "children": []
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "css/site.css",
+                    "type": "text/css",
+                    "bytes": "file:site/css/site.css"
+                  },
+                  {
+                    "path": "css/styles-1.css",
+                    "type": "text/css",
+                    "bytes": "file:site/css/styles.css"
+                  },
+                  {
+                    "path": "img/logo.png",
+                    "type": "image/png",
+                    "bytes": "png:logo.png",
+                    "width": 4,
+                    "height": 3
+                  },
+                  {
+                    "path": "js/app.js",
+                    "type": "text/javascript",
+                    "bytes": "file:site/js/app.js"
+                  },
+                  {
+                    "path": "js/interactions-1.js",
+                    "type": "text/javascript",
+                    "bytes": "file:site/js/interactions.js"
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/@classes",
+                "value": [
+                  {
+                    "name": "title",
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "letter-spacing": "2px"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "name": "card",
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "padding-top": "24px",
+                          "padding-right": "24px",
+                          "padding-bottom": "24px",
+                          "padding-left": "24px",
+                          "background-color": "#fafafa"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Home",
+                  "property": "display",
+                  "value": "block"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.export.done",
+                  "params": {
+                    "file": "site.zip"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "index.html",
+                  "present": [
+                    "<html lang=\"en\">",
+                    "<h1 class=\"title title--title\">Welcome</h1>",
+                    "<div class=\"card\">",
+                    "<img src=\"img/logo.png\" alt=\"Logo\">",
+                    "<script src=\"js/app.js\"></script>"
+                  ],
+                  "absent": [
+                    "css/site.css",
+                    "css/styles-1.css"
+                  ]
+                },
+                {
+                  "path": "about/index.html",
+                  "present": [
+                    "<h1 class=\"title title--title-2\">About us</h1>",
+                    "<link rel=\"stylesheet\" href=\"../css/styles.css\">"
+                  ],
+                  "absent": [
+                    "css/site.css"
+                  ]
+                },
+                {
+                  "path": "css/styles.css",
+                  "present": [
+                    ".title {",
+                    "letter-spacing: 2px;",
+                    ".card {",
+                    "padding-top: 24px;",
+                    "background-color: #fafafa;"
+                  ],
+                  "absent": [
+                    ":hover",
+                    "@media"
+                  ]
+                },
+                {
+                  "path": "css/site.css",
+                  "present": [
+                    "color: #123456"
+                  ],
+                  "absent": []
+                },
+                {
+                  "path": "css/styles-1.css",
+                  "present": [
+                    "667788"
+                  ],
+                  "absent": []
+                },
+                {
+                  "path": "js/app.js",
+                  "present": [
+                    "site ready"
+                  ],
+                  "absent": []
+                },
+                {
+                  "path": "js/interactions-1.js",
+                  "present": [
+                    "siteReady"
+                  ],
+                  "absent": []
+                },
+                {
+                  "path": "img/logo.png",
+                  "present": [
+                    "PNG"
+                  ],
+                  "absent": []
+                }
+              ]
+            }
+          },
+          "refusals": []
+        }
+      ]
+    },
+    {
+      "id": "code-panel-edit-js",
+      "titleKey": "feature.codePanelEditJs",
+      "commands": [
+        "page.setSetting",
+        "view.enterPreview",
+        "project.export",
+        "files.createFile",
+        "files.saveContent"
+      ],
+      "dependsOn": [
+        "explorer-file-system",
+        "code-panel-view"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Edit JavaScript files in the Code panel",
+        "steps": [
+          "Create js/main.js in the Explorer, open it in the Code panel, type code and save.",
+          "Type a syntax error and save.",
+          "Link the script to the page in Page properties and open Preview."
+        ],
+        "expected": [
+          "JS files open with line numbers and syntax colouring; saving writes the file in the file tree as one undo step; js/interactions.js, which is generated, opens read-only.",
+          "Syntax errors are shown with the line and the reason.",
+          "Preview runs the linked scripts and reloads after each save; the editing canvas never runs them.",
+          "The export writes the files unchanged and links them from their pages.",
+          "Deleting a JS file that a page links, or a folder that holds one, asks for confirmation and lists those pages."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "the-panes-save-writes-the-file-in-the-project",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "files.createFile#explorer-new-file",
+              "args": {
+                "path": "js/main.js"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.open#explorer-file-row",
+              "args": {
+                "path": "js/main.js"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.saveContent#code-panel-editor",
+              "args": {
+                "path": "js/main.js",
+                "content": "let a = 12;"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.saveContent#code-panel-save",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "files.saveContent#code-panel-save"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "js/main.js",
+                    "type": "text/javascript",
+                    "bytes": "bGV0IGEgPSAxMjsK"
+                  }
+                ]
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.files.saved",
+                  "params": {
+                    "path": "js/main.js"
+                  }
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "code-view",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 350,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-panes-save-keeps-what-was-typed-with-its-own-key",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "files.createFile#explorer-new-file",
+              "args": {
+                "path": "js/main.js"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.open#explorer-file-row",
+              "args": {
+                "path": "js/main.js"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.saveContent#code-panel-editor",
+              "args": {
+                "path": "js/main.js",
+                "content": "let a = 12;"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.saveContent#code-panel-save",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.saveContent#key-ctrl-s-in-code-editor",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "files.saveContent#key-ctrl-s-in-code-editor"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "js/main.js",
+                    "type": "text/javascript",
+                    "bytes": "bGV0IGEgPSAxMjsK"
+                  }
+                ]
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.files.saved",
+                  "params": {
+                    "path": "js/main.js"
+                  }
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "code-view",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 350,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-page-that-links-a-script-runs-it-in-the-preview",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "files.createFile#explorer-new-file",
+              "args": {
+                "path": "js/main.js"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.open#explorer-file-row",
+              "args": {
+                "path": "js/main.js"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.saveContent#code-panel-editor",
+              "args": {
+                "path": "js/main.js",
+                "content": "document.title = \"Ran\";"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.saveContent#code-panel-save",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "selection.select#layers-row",
+              "args": {
+                "target": "/Page"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "page.setSetting#inspector-page-scripts",
+              "args": {
+                "setting": "pageScripts",
+                "value": "js/main.js"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "js/main.js\n"
+            },
+            {
+              "door": "view.enterPreview#toolbar-top-bar-preview",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "view.exitPreview#toolbar-preview-bar-exit",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "view.enterPreview#toolbar-top-bar-preview"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "js/main.js",
+                    "type": "text/javascript",
+                    "bytes": "ZG9jdW1lbnQudGl0bGUgPSAiUmFuIjsK"
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/Page/@attributes/pageScripts",
+                "value": "js/main.js"
+              }
+            ],
+            "selection": [
+              "/Page"
+            ],
+            "history": {
+              "undoSteps": 3,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.preview.off",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "code-view",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 350,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
+    }
+  ]
+}

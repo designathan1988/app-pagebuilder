@@ -1,0 +1,53 @@
+# inspector-provenance-reset — Mark set values and reset one property or all of them
+
+How Pager behaves, read from its source (source references are `path:line` inside Pager) and checked in `.cache/pager-run`. Test element: a Paragraph with padding, colour and font size set.
+
+## Trigger
+
+- Each field row carries a provenance chip saying where its value comes from (`chip.dataset.provenance`, `src/features/inspector/properties.js:3078-3110`: the element itself, a class, inherited, the default); its menu can clear the value.
+- The element actions menu holds **Reset all** (`{label:t('inspector.resetAll'),onRun:()=>clearAllProps()}`, `:2814`).
+
+## Hit zones and thresholds
+
+Not applicable: the controls are buttons and menu items.
+
+## Visual feedback
+
+A value set on the element is marked by its chip; a cleared field is empty and its muted placeholder shows the value inherited or the default (Problems in Pager 4).
+
+## Result in the document
+
+- Clearing a value removes the property from the element's styles.
+- Reset all removes every style value of the element.
+- The computed values in the iframe fall back to what the element inherits or its defaults.
+
+## Undo and redo
+
+Each clearing is one undo step; Reset all is one undo step.
+
+## Nested elements
+
+Not applicable.
+
+## Zoom other than 100 %
+
+Not affected.
+
+## Keyboard equivalent
+
+The chip's menu and the element actions menu are keyboard-operable.
+
+## Problems in Pager
+
+1. **Where a value comes from is shown per row only:** a collapsed section tells nothing about the values set inside it. Required: every field whose element holds a value of its own shows a dot, and each section's header shows how many values are set in it, as a badge beside its summary; the summary text is unchanged.
+2. **Clearing a value takes the chip's menu:** there is no reset control on the field itself. Required: each field has Reset this value (`style.reset`), usable while the element holds a value of its own; the field then shows the value inherited or the default, muted.
+3. **Reset all has no command:** it cannot be reached from the keyboard map or the command bar. Required: Reset every value is `style.resetAll`, in the element actions menu, one undo step, refused on a locked element.
+4. **Fields showed what the page computes as if it were the element's value** (the user's real-use audit, item 1.1): `Font "Times New Roman"`, `rgb(0, 0, 0)`, `rgba(0, 0, 0, 0)` in fields the element never set, and `Border 1.7561px…` on an element with no border (Chrome's typed computed value of `medium`, scaled by the canvas zoom: 2.85366px in Phone at 210 %), with the Border handles' chips reading `1.76`. Required, in the Style tab and the quick panel alike:
+   - a field's value is the value the document holds for the element at the edited target, breakpoint and state, as written: a composite shows its shorthand (`2px solid #00aa00`, never its twelve longhands); a border side with no style reads `none`;
+   - with no value there, the field is empty and its placeholder, muted, shows the effective value: the one the document gives along the cascade (another breakpoint or state), else what the page computes (inherited or the default);
+   - nothing a field or a handle's chip shows depends on the canvas zoom: a border or outline side whose style is `none` or `hidden` computes to `0px`, and any other side's width is read unscaled by the zoom.
+5. **Reset this value was drawn with nothing to reset, disabled, saying "not available yet"** (the user's real-use audit, item 1.4). Required: a field's Reset is drawn only while the element holds a value of its own, in the Style tab and the quick panel alike; with nothing to reset there is no control.
+6. **Where a shown value comes from was said for classes and other breakpoints only, and an edit gave no notice** (the user's real-use audit, A3.10): with the Element target a class's value read as the element's own, an inherited colour named no source, and typing over a value from elsewhere did not say where it would be written. Required, in the Style tab (the one rule: `src/editor/inspector/origin.ts`):
+   - a field whose target holds no value of its own at the edited layer shows, under it, where the placeholder's value comes from, in the legend colour of that origin: `From Desktop` or `From Desktop · Hover` (a larger breakpoint or the base state), `From .card2` (a class the element lists, muted: the legend names no class), `Inherited from Plans` (an inherited property, per the CSS data, that the nearest ancestor setting it sets, itself or through a class); a value set at the edited breakpoint away from the base layer reads `Set at Tablet`; the element's own value at the base layer and the default have no note (the default's placeholder already wears the Default colour);
+   - which value wins follows the stylesheet the canvas and the export share: the element's own value at the edited layer or the nearest one up the cascade, else the last class it lists that holds one;
+   - while such a field holds the focus, a second line says where typing writes: `Typing writes to CardB · Desktop` (the class while it is the target, `.card2`, and the state after the breakpoint away from the base state); what is typed is written there, and the classes and ancestors keep their values.

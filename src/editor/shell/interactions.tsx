@@ -1,0 +1,168 @@
+// The Interactions tab of the inspector (DESIGN.md "Inspector"; spec events-actions): the selected element, Add, then
+// one card per interaction — Applies to, Trigger, Action, Options and the target it acts on — and Remove. Every
+// control is a door the manifest places in the inspector-interactions region: Add (interactions.add), the card's
+// fields (interactions.update, each fixing the `field` it edits), the target's picks (the canvas door and a Layers
+// row's) and Remove. The target is not typed: the field starts picking (src/editor/inspector/pick-target.ts, DESIGN's
+// data-local) and the next press on the canvas or on a Layers row gives it. The editing canvas never runs an
+// interaction: the note under the cards says so (interactions.canvasNote).
+import { isFeatureBuilt } from '../../app/features.ts';
+import { locate, type DocNode, type Interaction } from '../../core/document/model.ts';
+import { actionLabel, applicableActions, applicableTriggers, interactionsOf, needsAddress, needsAnimation, needsClassName, needsTarget, primaryNodeOf, triggerLabel } from '../../core/events/interactions.ts';
+import { animationsOf } from '../../core/animation/animation.ts';
+import type { DoorEntry } from '../../manifest/runtime.ts';
+import { manifest } from '../../manifest/runtime.ts';
+import { Icon } from '../doors/door.tsx';
+import { PanelButton, PanelField } from './panel-field.tsx';
+import { useEditorState, useStore } from '../store.ts';
+import { useT } from '../text.ts';
+import { pickingTarget } from '../inspector/pick-target.ts';
+import type { DispatchResult } from '../../core/store/store.ts';
+import type { CommandId, FeatureId } from '../../generated/ids.ts';
+
+// The doors the tab draws, read from the manifest's own data: the panel-control doors of the inspector's region
+// (manifest/layout.json: the region each is placed in), by their control names.
+const doorOf = (name: string): DoorEntry | null =>
+  manifest.doors.find((d) => d.door.kind === 'panel-control' && d.door.panel === 'inspector' && d.door.control === name) ?? null;
+const ADD = doorOf('interaction-add');
+const TRIGGER_FIELD = doorOf('interaction-trigger');
+const ACTION_FIELD = doorOf('interaction-action');
+const TARGET_FIELD = doorOf('interaction-target');
+const OPTIONS_FIELD = doorOf('interaction-options');
+const SCOPE_FIELD = doorOf('interaction-scope');
+const NEW_TAB = doorOf('interaction-new-tab');
+const REMOVE = doorOf('interaction-remove');
+
+// the words of a trigger or an action, in the language the editor shows
+const useOptionLabel = (): ((key: string) => string) => {
+  const t = useT();
+  return (key) => {
+    const found = key.startsWith('trigger:') ? triggerLabel(key.slice('trigger:'.length)) : actionLabel(key.slice('action:'.length));
+    return t(found);
+  };
+};
+
+// what an interaction's options field holds, by its action
+function optionValue(interaction: Interaction): string {
+  if (needsClassName(interaction.action)) return interaction.className ?? '';
+  if (needsAnimation(interaction.action)) return interaction.animation ?? '';
+  if (needsAddress(interaction.action)) return interaction.address ?? '';
+  return '';
+}
+
+function Card({ node, interaction, index }: { readonly node: DocNode; readonly interaction: Interaction; readonly index: number }) {
+  const t = useT();
+  const label = useOptionLabel();
+  const store = useStore();
+  const picking = pickingTarget(useEditorState((s) => s.ui)) === index;
+  const target = interaction.target === undefined ? null : (locate(store.getState().document, interaction.target)?.node ?? null);
+  const animations = animationsOf(node).map((animation) => animation.name);
+  const classes = [...node.classes];
+  return (
+    <article className="interaction-card">
+      <header className="interaction-card__head">
+        <span className="interaction-card__name">{label(`trigger:${interaction.trigger}`)}</span>
+        {REMOVE !== null ? <PanelButton entry={REMOVE} args={{ interaction: index }} label={t('command.interactions.remove')} icon={<Icon name="trash" size="sm" />} /> : null}
+      </header>
+      <div className="interaction-card__fields">
+        {TRIGGER_FIELD !== null ? (
+          <PanelField entry={TRIGGER_FIELD} args={{ interaction: index }} value={interaction.trigger} label={t('interactions.field.trigger')} offered={applicableTriggers(node)} />
+        ) : null}
+        {ACTION_FIELD !== null ? (
+          <PanelField entry={ACTION_FIELD} args={{ interaction: index }} value={interaction.action} label={t('interactions.field.action')} offered={applicableActions(node)} />
+        ) : null}
+        <div className="field-row interaction-card__target" data-interaction-target={index}>
+          <span className="field-row__label">{t('interactions.field.target')}</span>
+          {TARGET_FIELD !== null ? (
+            <PanelButton entry={TARGET_FIELD} args={{ interaction: index }} pressed={picking} icon={<Icon name="locate-fixed" size="sm" />}>
+              {picking ? t('interactions.picking') : (target?.name ?? t('interactions.target.none'))}
+            </PanelButton>
+          ) : null}
+        </div>
+        {OPTIONS_FIELD !== null && (needsClassName(interaction.action) || needsAnimation(interaction.action) || needsAddress(interaction.action)) ? (
+          <PanelField
+            entry={OPTIONS_FIELD}
+            args={{ interaction: index }}
+            value={optionValue(interaction)}
+            label={t('interactions.field.options')}
+            offered={needsClassName(interaction.action) ? classes : needsAnimation(interaction.action) ? animations : undefined}
+          />
+        ) : null}
+        {NEW_TAB !== null && needsAddress(interaction.action) ? (
+          <div className="field-row">
+            <span className="field-row__label">{t('inspector.interactionNewTab')}</span>
+            <PanelButton
+              entry={NEW_TAB}
+              args={{ interaction: index, changes: { newTab: interaction.newTab !== true } }}
+              label={t('inspector.interactionNewTab')}
+              pressed={interaction.newTab === true}
+            />
+          </div>
+        ) : null}
+        {SCOPE_FIELD !== null ? (
+          <PanelField entry={SCOPE_FIELD} args={{ interaction: index }} value={interaction.scope ?? ''} label={t('inspector.interactionScope')} offered={['', ...classes]} />
+        ) : null}
+      </div>
+      <p className="interaction-card__note">
+        {interaction.scope === undefined ? t('interactions.scope.element') : t('interactions.scope.classCount', { class: interaction.scope, count: countWithClass(store.getState().document, interaction.scope) })}
+        {needsTarget(interaction.action) && interaction.target === undefined ? ` · ${t('interactions.target.none')}` : ''}
+      </p>
+    </article>
+  );
+}
+
+// how many elements of the project list a class (the scope's own count; core/design/classes.ts usesOfClass does the
+// same for the class bar)
+function countWithClass(document: DocumentJsonLike, name: string): number {
+  let count = 0;
+  for (const page of document.pages) {
+    const walk = (node: DocNode): void => {
+      if (node.classes.includes(name)) count += 1;
+      for (const child of node.children) walk(child);
+    };
+    walk(page.tree);
+  }
+  return count;
+}
+type DocumentJsonLike = { readonly pages: readonly { readonly tree: DocNode }[] };
+
+export function InteractionsTab() {
+  const t = useT();
+  const state = useEditorState((s) => s);
+  const node = primaryNodeOf(state.document, state.selection);
+  const interactions = node === null ? [] : interactionsOf(node);
+  const store = useStore();
+  const single = state.selection.length === 1;
+  const add = () => {
+    if (ADD === null) return;
+    (store.dispatch as (id: CommandId, a: unknown) => DispatchResult)(ADD.command.id as CommandId, { ...ADD.door.args });
+  };
+  return (
+    <div className="inspector-tab inspector-tab--interactions" data-region="inspector-interactions" data-key-context="interactions">
+      <div className="interactions__head">
+        <span className="interactions__element">{node === null ? t('inspector.nothingSelected') : `${node.name} · ${node.tag ?? ''}`}</span>
+        <button
+          type="button"
+          className={`door door--button${single && ADD !== null && isFeatureBuilt('events-actions' as FeatureId) ? '' : ' is-unavailable'}`}
+          data-door={ADD?.ref}
+          data-args={JSON.stringify(ADD?.door.args ?? {})}
+          aria-disabled={single && ADD !== null ? undefined : true}
+          title={t('command.interactions.add')}
+          onClick={() => {
+            if (single) add();
+          }}
+        >
+          <Icon name="plus" size="sm" />
+          <span className="door__label">{t('inspector.addInteraction')}</span>
+        </button>
+      </div>
+      {node === null ? null : interactions.length === 0 ? <p className="interactions__none">{t('interactions.canvasNote')}</p> : null}
+      {node === null ? null : interactions.map((interaction, index) => <Card key={index} node={node} interaction={interaction} index={index} />)}
+      {node !== null && interactions.length > 0 ? <p className="interactions__note">{t('interactions.canvasNote')}</p> : null}
+    </div>
+  );
+}
+
+// the Layers row's pick control (the door the manifest places on a Layers row): while an interaction's target is being
+// picked, every row offers to give it (spec events-actions)
+export const LAYERS_PICK: DoorEntry | null =
+  manifest.doors.find((d) => d.door.kind === 'panel-control' && d.door.panel === 'layers' && d.door.control === 'row-pick-target') ?? null;

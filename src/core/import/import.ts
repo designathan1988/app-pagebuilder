@@ -1,0 +1,1258 @@
+// project.importHtml (ARCHITECTURE.md, Command owners; the manifest's html-import-* and clipboard-paste-external; the
+// spec spec/behavior/html-import.md): the one owner of reading HTML — from files the person picked, from a ZIP they
+// hold, or from the code pane's markup — into nodes of the model, with the cleaning, the repair and the report the
+// manifest's features ask for. The rules are the ones the editor already holds: an element type is the one whose tags
+// elements.json names (its own tag is kept, so an h3 stays an h3), an attribute is the one elements.json declares for
+// that type under that HTML name, its value validated by the model's own rule (validate.ts attributeValueRefusal), a
+// text element's content becomes its text and its inline marks (core/text/inline.ts), an <svg> keeps its markup
+// (core/elements/svg.ts), and the nesting is the content model (core/elements/content-model.ts).
+//
+// What the model has no place for is never invented and never silently lost:
+//  - a script is kept with its page: an inline script's code becomes a project file whose path joins the page's own
+//    scripts (pageScripts), a `src` among the picked files keeps that file at its path, and a `src` that is no picked
+//    file stays the address the page lists. Nothing of it runs on the editing canvas, and the export writes it back;
+//  - an element no type is written with is unwrapped: its children take its place, and the report says so;
+//  - a nesting the content model forbids is repaired the way HTML repairs it (a stray li gets a ul; an element a
+//    closed list refuses is wrapped in the first tag that list accepts) or dropped, and the report says so;
+//  - an event handler attribute (on…) and an attribute the model refuses are removed, and the report says so.
+// The import report is the message the command says: what came in, and per kind the source lines. The status bar shows
+// it (DESIGN.md "Dock and status bar").
+//
+// The styles (html-import-styles, html-import-media-queries, html-import-states): the <style> blocks the page holds,
+// the stylesheets it links (found by their path among the picked files) and the style attributes are read by the one
+// reader of a stylesheet (src/core/import/stylesheet.ts) and matched onto the nodes by the one matcher
+// (src/core/import/selectors.ts); the declarations themselves are read by the one owner of a declarations text
+// (style/custom.ts parseDeclarations), a shadow by its own reader (style/shadows.ts shadowLayersFromCss). A declaration
+// lands on the element, the breakpoint and the state CSS gives it (importance, inline, specificity, then order), so the
+// canvas computes what the original page computed.
+//
+// The parsing of the markup itself is the browser's (DOMParser: the same parser the clipboard reads with), so an outer
+// <html>, <body> or a stray <table> wrapper is unwrapped as the parser does; the source's line of a piece is found by
+// looking it up in the text, which is why the report names lines a person can see.
+import type { NodeId, PickedFile } from '../../generated/commands.ts';
+import type { ElementType, MessageId } from '../../generated/ids.ts';
+import { message, registerHandler, type HandlerContext, type Message } from '../commands/registry.ts';
+import { isEmptyProject, type DocNode, type Page, type ProjectFile, type StoredValue, type Styles } from '../document/model.ts';
+import type { InlineRun } from '../text/inline.ts';
+import { attributeValueRefusal, customAttributeRefusal, type ModelRules } from '../document/validate.ts';
+import { validClassName } from '../design/classes.ts';
+import type { Patch } from '../history/transaction.ts';
+import { childrenRefusal } from '../elements/content-model.ts';
+import { readAddress } from '../elements/address.ts';
+import { sanitizedSvgMarkup } from '../elements/svg.ts';
+import { fileBytes, typeOfFile } from '../files/files.ts';
+import { isZip, unzip } from '../project/zip.ts';
+import { canonical, hasMarks } from '../text/inline.ts';
+import { freshName, type NodeMaker } from '../structure/insert.ts';
+import { parseDeclarations } from '../style/custom.ts';
+import { shadowLayersFromCss } from '../style/shadows.ts';
+import { matches, readSelector, type Compound, type Facts, type Selector } from './selectors.ts';
+import { readDeclarations, readStylesheet, type CssRule, type CssSheet } from './stylesheet.ts';
+import { baseCss } from '../render/base.ts';
+
+export interface MarkupNode {
+  readonly tag: string;
+  readonly attributes: ReadonlyMap<string, string>;
+  readonly children: readonly MarkupChild[];
+}
+export type MarkupChild = MarkupNode | string;
+
+const ELEMENT_NODE = 1;
+const TEXT_NODE = 3;
+
+const defaultParse = (text: string): Document => new DOMParser().parseFromString(text, 'text/html');
+
+// the children of a parsed element as markup: its texts and its elements, each element with its attributes
+function childrenOf(parent: Node): MarkupChild[] {
+  const out: MarkupChild[] = [];
+  for (const child of parent.childNodes) {
+    if (child.nodeType === TEXT_NODE) out.push(child.nodeValue ?? '');
+    else if (child.nodeType === ELEMENT_NODE) {
+      const element = child as Element;
+      const attributes = new Map<string, string>();
+      for (const attribute of element.attributes) attributes.set(attribute.name.toLowerCase(), attribute.value);
+      out.push({ tag: element.localName, attributes, children: childrenOf(element.localName === 'template' ? (element as HTMLTemplateElement).content : element) });
+    }
+  }
+  return out;
+}
+
+// The markup's own elements and texts, as the browser parses them (the wrappers a fragment was written with are gone:
+// parseFromString puts what it finds where the content model says, and its body holds the rest).
+export function parseMarkup(markup: string, parse: (text: string) => Document = defaultParse): readonly MarkupChild[] {
+  return childrenOf(parse(markup).body);
+}
+
+// A whole page's markup: the head's elements, the title, and the body's children and attributes (File › Import HTML
+// reads the page's settings from the head, which parseMarkup alone leaves out).
+export interface MarkupPage {
+  readonly head: readonly MarkupNode[];
+  readonly title: string;
+  readonly htmlAttributes: ReadonlyMap<string, string>;
+  readonly body: readonly MarkupChild[];
+  readonly bodyAttributes: ReadonlyMap<string, string>;
+}
+
+export function parsePage(markup: string, parse: (text: string) => Document = defaultParse): MarkupPage {
+  const document = parse(markup);
+  const html = document.documentElement;
+  const head = html?.querySelector('head') ?? null;
+  const attributes = (element: Element | null): ReadonlyMap<string, string> => {
+    const out = new Map<string, string>();
+    for (const attribute of element?.attributes ?? []) out.set(attribute.name.toLowerCase(), attribute.value);
+    return out;
+  };
+  return {
+    head: head === null ? [] : childrenOf(head).filter((child): child is MarkupNode => typeof child !== 'string'),
+    title: head?.querySelector('title')?.textContent ?? '',
+    htmlAttributes: attributes(html ?? null),
+    body: childrenOf(document.body),
+    bodyAttributes: attributes(document.body),
+  };
+}
+
+// the text an element's children hold as one string (a head element's content, a script's code)
+function textOf(node: MarkupNode): string {
+  return node.children.map((child) => (typeof child === 'string' ? child : textOf(child))).join('');
+}
+
+// The line of the first piece of the source that starts with `needle` (1 when the source does not hold it): what a
+// report names, so the person sees where the piece is.
+export function lineOf(markup: string, needle: string): number {
+  const at = markup.indexOf(needle);
+  return at < 0 ? 1 : markup.slice(0, at).split('\n').length;
+}
+
+// the line of an element's start tag as the source wrote it (a repeated identical tag names the first of them)
+function lineOfNode(markup: string, node: MarkupNode): number {
+  const attributes = [...node.attributes].map(([name, value]) => ` ${name}="${value.replaceAll('"', '&quot;')}"`).join('');
+  return lineOf(markup, `<${node.tag}${attributes}`);
+}
+
+// ---------------------------------------------------------------- the picked files
+
+// The files a door that reads several at once hands the command, read here (the door calls this before it dispatches):
+// each file's bytes (base64), its type and, for an image, its intrinsic size. A ZIP file stands for the entries it
+// holds, each with the path it has inside the archive; one the reader cannot read stands for its own file with the
+// reason, which the command refuses with.
+export async function readPickedFiles(files: readonly File[]): Promise<readonly PickedFile[]> {
+  const picked: PickedFile[] = [];
+  for (const file of files) {
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    if (isZip(bytes)) {
+      try {
+        for (const [path, data] of await unzip(bytes)) {
+          if (!path.endsWith('/')) picked.push(await fileOf(path, data, ''));
+        }
+      } catch (error) {
+        picked.push({ name: file.name, type: file.type === '' ? 'application/zip' : file.type, bytes: base64(bytes), error: (error as Error).message });
+      }
+      continue;
+    }
+    picked.push(await fileOf(file.name, bytes, file.type));
+  }
+  return picked;
+}
+
+function base64(bytes: Uint8Array): string {
+  let binary = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+  return btoa(binary);
+}
+
+async function fileOf(name: string, bytes: Uint8Array, declared: string): Promise<PickedFile> {
+  const type = declared !== '' ? declared : typeOfFile(name);
+  const held = base64(bytes);
+  // an image's own size, as an upload reads it: the document keeps it beside the bytes
+  if (type.startsWith('image/') && type !== 'image/svg+xml') {
+    const size = await sizeOfImage(held, type);
+    if (size !== null) return { name, type, bytes: held, width: size.width, height: size.height };
+  }
+  return { name, type, bytes: held };
+}
+
+// an image's intrinsic size in the browser, where the door hands the files over
+function sizeOfImage(bytes: string, type: string): Promise<{ width: number; height: number } | null> {
+  return new Promise((resolve) => {
+    const image = new Image();
+    image.onload = () => resolve({ width: image.naturalWidth, height: image.naturalHeight });
+    image.onerror = () => resolve(null);
+    image.src = `data:${type};base64,${bytes}`;
+  });
+}
+
+const isHtmlFile = (name: string): boolean => /\.html?$/i.test(name);
+const isCssFile = (name: string): boolean => /\.css$/i.test(name);
+const baseName = (path: string): string => {
+  const name = path.slice(path.lastIndexOf('/') + 1);
+  const dot = name.lastIndexOf('.');
+  return dot <= 0 ? name : name.slice(0, dot);
+};
+
+// the text a picked file holds
+const textOfFile = (file: PickedFile): string => new TextDecoder().decode(fileBytes({ path: file.name, type: file.type, bytes: file.bytes }));
+
+// A file's record in the project, at the path it came with: the export writes it back where it stood.
+const recordOf = (file: PickedFile): ProjectFile => ({
+  path: file.name,
+  type: file.type,
+  bytes: file.bytes,
+  ...(file.width === undefined ? {} : { width: file.width }),
+  ...(file.height === undefined ? {} : { height: file.height }),
+});
+
+// ---------------------------------------------------------------- the import report
+
+// What the import found, per kind, by the source line: the message the command says reads it, nothing else does.
+interface Report {
+  readonly scripts: number[];
+  readonly handlers: number[];
+  readonly unwrapped: number[];
+  readonly repaired: number[];
+  readonly dropped: number[];
+  readonly attributes: number[];
+  // per file: the rules that could not be mapped, the rules a nearby breakpoint took, and the declarations the editor
+  // does not store, each by line
+  readonly unmapped: Map<string, number[]>;
+  readonly approximated: Map<string, number[]>;
+  readonly declarations: Map<string, number[]>;
+  readonly sheetsMissing: string[];
+}
+
+const emptyReport = (): Report => ({ scripts: [], handlers: [], unwrapped: [], repaired: [], dropped: [], attributes: [], unmapped: new Map(), approximated: new Map(), declarations: new Map(), sheetsMissing: [] });
+
+const add = (into: Map<string, number[]>, file: string, line: number): void => {
+  const held = into.get(file);
+  if (held === undefined) into.set(file, [line]);
+  else if (!held.includes(line)) held.push(line);
+};
+
+// a list of lines as the report reads them (a long one is cut: the status bar holds one line)
+const linesOf = (lines: readonly number[]): string => {
+  const sorted = [...new Set(lines)].sort((a, b) => a - b);
+  return sorted.length <= 12 ? sorted.join(', ') : `${sorted.slice(0, 12).join(', ')}…`;
+};
+
+// The report as the words of a message: one fragment per kind that found something, the words from the catalogue
+// (words, the language the person reads the editor in) and the lines themselves. The fragments are full sentences, so
+// the message reads in any language.
+export function reportNotes(report: Report, words: (key: MessageId, params?: Readonly<Record<string, string | number>>) => string): string {
+  const notes: string[] = [];
+  // a fragment the person pasted has no file name of its own: the lines are the pasted markup's own
+  const named = (file: string): string => (file === '' ? words('status.pasted.source') : file);
+  if (report.scripts.length > 0) notes.push(words('status.import.scripts', { lines: linesOf(report.scripts) }));
+  if (report.handlers.length > 0) notes.push(words('status.import.handlers', { lines: linesOf(report.handlers) }));
+  if (report.unwrapped.length > 0) notes.push(words('status.import.unwrapped', { lines: linesOf(report.unwrapped) }));
+  if (report.repaired.length > 0) notes.push(words('status.import.repaired', { lines: linesOf(report.repaired) }));
+  if (report.dropped.length > 0) notes.push(words('status.import.dropped', { lines: linesOf(report.dropped) }));
+  if (report.attributes.length > 0) notes.push(words('status.import.attributes', { lines: linesOf(report.attributes) }));
+  for (const [file, lines] of report.approximated) notes.push(words('status.import.approximated', { file: named(file), lines: linesOf(lines) }));
+  for (const [file, lines] of report.unmapped) notes.push(words('status.import.unmapped', { file: named(file), lines: linesOf(lines) }));
+  for (const [file, lines] of report.declarations) notes.push(words('status.import.declarations', { file: named(file), lines: linesOf(lines) }));
+  for (const file of report.sheetsMissing) notes.push(words('status.import.sheetMissing', { file }));
+  return notes.length === 0 ? '' : ` ${notes.join(' ')}`;
+}
+
+// ---------------------------------------------------------------- building one page's nodes
+
+export interface ImportProblem {
+  readonly line: number;
+  readonly message: Message;
+}
+
+// what the strict reader (element.applyHtml) did with what the model has no place for
+export interface Dropped {
+  readonly elements: number;
+  readonly attributes: number;
+}
+
+export interface Imported {
+  readonly nodes: readonly DocNode[];
+  readonly dropped: Dropped;
+}
+
+// What a fragment of markup the person pasted becomes (spec clipboard-paste-external, Problems in Pager 1): the nodes
+// the importer's rules make of it — the same cleaning, the same repair, the same report — with no page to keep a script
+// with, so a script is dropped and reported, and no stylesheet of its own (a pasted style attribute lands on its
+// element as it does for a page).
+export interface PastedFragment {
+  readonly nodes: readonly DocNode[];
+  readonly report: Report;
+}
+
+export function nodesFromExternal(markup: string, make: NodeMaker, context: HandlerContext<never>): PastedFragment {
+  const builder = newBuilder(make, context, markup, [], '', 'import');
+  const nodes = buildChildren(parseMarkup(markup) as readonly MarkupChild[], 'body', ['body'], builder, 1);
+  // a fragment holds no stylesheet: what its elements carry is their own style attributes, at the base layer
+  const write = (node: DocNode): void => {
+    const own = builder.inline.get(node.id) ?? [];
+    if (own.length > 0) (node as { styles: Styles }).styles = { [builder.rules.baseLayer.breakpoint]: { [builder.rules.baseLayer.state]: Object.fromEntries(own) } } as Styles;
+    for (const child of node.children) write(child);
+  };
+  for (const node of nodes) write(node);
+  return { nodes, report: builder.report };
+}
+
+interface Script {
+  readonly line: number;
+  // the address the page lists (a src that is no picked file), or the path of the file that holds the code
+  readonly path: string;
+}
+
+interface Sheet {
+  readonly file: string;
+  readonly css: CssSheet;
+}
+
+// What builds one page: the names no node has, the picked files (a script's src resolves among them), the report, the
+// cells the cascade reads (the style attributes, by node) and what the page keeps.
+interface Builder {
+  readonly make: NodeMaker;
+  readonly rules: ModelRules;
+  readonly context: HandlerContext<never>;
+  readonly markup: string;
+  readonly picked: readonly PickedFile[];
+  readonly file: string;
+  readonly pageFile: string;
+  readonly report: Report;
+  readonly scripts: Script[];
+  readonly sheets: Sheet[];
+  readonly held: ProjectFile[];
+  // the declarations a style attribute holds, by node id, and the line each node was written on
+  readonly inline: Map<string, readonly (readonly [string, StoredValue])[]>;
+  readonly lines: Map<string, number>;
+  // 'import': an unknown element is unwrapped and a forbidden nesting repaired or dropped, each reported; 'strict':
+  // the code pane's own reader (element.applyHtml) refuses a nesting the model forbids and drops what it cannot read
+  readonly mode: 'import' | 'strict';
+  // whether a script is kept with the page (a page import) or dropped, with the report (a pasted fragment)
+  readonly keepScripts: boolean;
+  // what the strict reader dropped, and the first nesting it refused (the import reports instead)
+  readonly dropped: { elements: number; attributes: number };
+  problem: ImportProblem | null;
+}
+
+// the element type whose tags name this tag, the type the tag is its own first tag for: <section> is the Section and
+// not the Div that may also be written with it, <pre> is the Pre and not the Paragraph that offers it too
+function typeOfTag(tag: string, rules: ModelRules): string | null {
+  let fallback: string | null = null;
+  for (const [id, element] of rules.elements) {
+    if (!element.tags.includes(tag)) continue;
+    if (element.tags[0] === tag) return id;
+    fallback ??= id;
+  }
+  return fallback;
+}
+
+// an attribute of the element's type under this HTML name
+function attributeNamed(html: string, type: string, rules: ModelRules): string | null {
+  for (const [id, kinds] of rules.attributes) {
+    if ((rules.attributeValues.get(id)?.html ?? null) !== html) continue;
+    if (kinds === 'all' || kinds.includes(type)) return id;
+  }
+  return null;
+}
+
+// The class list a node keeps: the model's own rule (validate.ts: a class name, once each), and whether any was left
+// out
+function classList(value: string): { readonly names: readonly string[]; readonly dropped: boolean } {
+  const words = value.split(/\s+/).filter((one) => one !== '');
+  const names: string[] = [];
+  for (const word of words) if (validClassName(word) && !names.includes(word)) names.push(word);
+  return { names, dropped: names.length !== words.length };
+}
+
+// The name the import gives an element: the BEM class it was written with, else the type's own name in the person's
+// language (the manifest's html-import-structure: "Element names are taken from BEM classes when present").
+function elementName(classes: readonly string[], type: string, rules: ModelRules, make: NodeMaker): string {
+  const element = rules.elements.get(type as ElementType);
+  // card__title -> Title, card--featured -> Featured, hero -> Hero
+  const last = classes[classes.length - 1] ?? '';
+  const part = last.includes('__') ? (last.split('__')[1] ?? '') : last.includes('--') ? (last.split('--')[1] ?? '') : last;
+  const base = part.replace(/[-_]+/g, ' ').trim();
+  if (base === '') return make.words((element?.labelKey ?? 'element.container.label') as MessageId);
+  return base.charAt(0).toUpperCase() + base.slice(1);
+}
+
+type Raw = { readonly node: DocNode } | { readonly text: string } | { readonly nothing: true } | { readonly nodes: readonly DocNode[] };
+
+// the inline runs of a text element's markup: its elements' marks, its texts as they are (a <br> is a line break)
+function runsOf(children: readonly MarkupChild[], builder: Builder): InlineRun[] {
+  const out: InlineRun[] = [];
+  for (const child of children) {
+    if (typeof child === 'string') {
+      if (child !== '') out.push(child);
+      continue;
+    }
+    if (child.tag === 'br') {
+      out.push('\n');
+      continue;
+    }
+    const inner = runsOf(child.children, builder);
+    if (child.tag === 'a') {
+      const href = (child.attributes.get('href') ?? '').trim();
+      // the one rule of an address a link may have (core/elements/address.ts): one it refuses leaves the text plain,
+      // and the report names the line
+      const read = readAddress(href);
+      if (href !== '' && !read.ok) builder.report.attributes.push(lineOfNode(builder.markup, child));
+      out.push({ tag: 'a', href: read.ok ? read.value : '', children: inner });
+      continue;
+    }
+    if (child.tag === 'strong' || child.tag === 'b') out.push({ tag: 'strong', children: inner });
+    else if (child.tag === 'em' || child.tag === 'i') out.push({ tag: 'em', children: inner });
+    // anything else a text element holds is unwrapped: what it holds runs on in the line, and what it cannot hold is
+    // dropped (an image inside a paragraph); the report says which, with the line
+    else {
+      if (builder.mode === 'import') {
+        const holds = textOf(child).trim() !== '';
+        (holds ? builder.report.unwrapped : builder.report.dropped).push(lineOfNode(builder.markup, child));
+      }
+      out.push(...inner);
+    }
+  }
+  return out;
+}
+
+const plainOf = (runs: readonly InlineRun[]): string => runs.map((run) => (typeof run === 'string' ? run : plainOf(run.children))).join('');
+
+// the path an inline script's code takes in the project: js/<page>-<n>.js, the first free number
+function scriptPath(builder: Builder, module: boolean): string {
+  const extension = module ? 'mjs' : 'js';
+  for (let n = 1; ; n += 1) {
+    const path = `js/${builder.pageFile}-${n}.${extension}`;
+    if (!builder.held.some((file) => file.path === path)) return path;
+  }
+}
+
+// A <script> the page keeps: its code (an inline script, kept as a project file) or its address (a src among the picked
+// files keeps that file, at its own path; any other src stays the address the page lists). Never runs on the canvas.
+function keepScript(child: MarkupNode, builder: Builder): void {
+  const line = lineOfNode(builder.markup, child);
+  const src = (child.attributes.get('src') ?? '').trim();
+  const type = (child.attributes.get('type') ?? '').trim().toLowerCase();
+  if (src === '') {
+    // a script that is data (a JSON-LD block) holds no code the editor could keep: it is dropped, reported
+    if (type !== '' && type !== 'text/javascript' && type !== 'module' && type !== 'application/javascript') {
+      builder.report.dropped.push(line);
+      return;
+    }
+    const code = textOf(child);
+    const path = scriptPath(builder, type === 'module');
+    builder.held.push({ path, type: 'text/javascript', bytes: utf8Base64(code) });
+    builder.scripts.push({ line, path });
+    builder.report.scripts.push(line);
+    return;
+  }
+  const read = readAddress(src);
+  if (!read.ok) {
+    builder.report.attributes.push(line);
+    return;
+  }
+  const held = builder.picked.find((file) => !isHtmlFile(file.name) && !isCssFile(file.name) && (file.name === read.value || file.name.endsWith(`/${read.value}`) || read.value.endsWith(`/${file.name}`)));
+  // the file a src names, kept at its own path; anything else is the address the page lists
+  if (held !== undefined) builder.held.push(recordOf(held));
+  builder.scripts.push({ line, path: held === undefined ? read.value : held.name });
+  builder.report.scripts.push(line);
+}
+
+function utf8Base64(text: string): string {
+  return btoa(String.fromCharCode(...new TextEncoder().encode(text)));
+}
+
+// Why the nodes below a node may not sit where they are, read from the content model the way placementRefusal reads a
+// whole document: an ancestor that refuses interactive content inside it, or one that excludes the element or
+// something inside it.
+function nestingRefusal(rules: ModelRules, ancestors: readonly string[], node: DocNode): Message | null {
+  const tags = [...walkTags(node)];
+  const interactive = [...walkNodes(node)].some((inner) => inner.tag !== null && rules.contentModel.isInteractive(inner.tag, htmlNames(inner, rules)));
+  const excludingAncestor = [...ancestors].reverse().find((tag) => rules.contentModel.excludesInteractive(tag));
+  if (excludingAncestor !== undefined && interactive) return message('status.refused.interactiveInside', { parent: `<${excludingAncestor}>` });
+  for (const inner of tags) {
+    const excluding = [...ancestors].reverse().find((ancestor) => rules.contentModel.excludes(ancestor, inner));
+    if (excluding !== undefined) return message('status.refused.notInside', { child: `<${inner}>`, ancestor: `<${excluding}>` });
+  }
+  return null;
+}
+
+function* walkNodes(node: DocNode): Generator<DocNode> {
+  yield node;
+  for (const child of node.children) yield* walkNodes(child);
+}
+
+function* walkTags(node: DocNode): Generator<string> {
+  if (node.tag !== null) yield node.tag;
+  for (const child of node.children) yield* walkTags(child);
+}
+
+// a node's attributes under their HTML names, as HTML's own rules read them (the interactive conditions)
+function htmlNames(node: DocNode, rules: ModelRules): ReadonlyMap<string, string | true> {
+  const out = new Map<string, string | true>();
+  for (const [id, value] of Object.entries(node.attributes)) {
+    const name = rules.attributeValues.get(id)?.html;
+    if (name === null || name === undefined || value === false) continue;
+    out.set(name, typeof value === 'boolean' ? true : String(value));
+  }
+  return out;
+}
+
+// Builds the nodes of one markup child: the element it names, the text it holds (inside a text element), nothing (an
+// empty text, a script, a style, a piece with no place here), or several nodes (an unknown element unwrapped).
+function build(child: MarkupChild, builder: Builder, ancestors: readonly string[]): Raw {
+  if (typeof child === 'string') return child.trim() === '' && ancestors[ancestors.length - 1] !== 'pre' ? { nothing: true } : { text: child };
+  const { rules, make } = builder;
+  // an <a> is the Link Block when it holds a block of its own (a card made of one link) and the Link otherwise, as
+  // the editor's two types of the same tag are meant (elements.json)
+  const type = child.tag === 'a' ? (holdsBlock(child, rules) ? 'linkBlock' : 'link') : typeOfTag(child.tag, rules);
+  if (type === null) {
+    // A script and a style are no elements of the page: the import reads them itself (a page keeps its script's code,
+    // a linked sheet's rules land on the elements), the code pane's reader drops them as anything else it has no
+    // element for, and a pasted fragment has no page to keep a script with — it is dropped, and the report says so.
+    if (builder.mode === 'import' && child.tag === 'script') {
+      if (builder.keepScripts) {
+        keepScript(child, builder);
+        return { nothing: true };
+      }
+      builder.report.dropped.push(lineOfNode(builder.markup, child));
+      return { nothing: true };
+    }
+    if (builder.mode === 'import' && child.tag === 'style') {
+      if (builder.keepScripts) builder.sheets.push({ file: builder.file, css: readStylesheet(textOf(child)) });
+      else builder.report.dropped.push(lineOfNode(builder.markup, child));
+      return { nothing: true };
+    }
+    if (builder.mode === 'strict') {
+      builder.dropped.elements += 1;
+      return { nothing: true };
+    }
+    // an unknown element is unwrapped: its children take its place, and the report says so
+    builder.report.unwrapped.push(lineOfNode(builder.markup, child));
+    const inner: DocNode[] = [];
+    for (const grand of child.children) {
+      const made = build(grand, builder, ancestors);
+      if ('node' in made) inner.push(made.node);
+    }
+    return { nodes: inner };
+  }
+  const element = rules.elements.get(type as ElementType);
+  const line = lineOfNode(builder.markup, child);
+  const kept = classList(child.attributes.get('class') ?? '');
+  const start: DocNode = {
+    id: make.ids.next(),
+    type: type as ElementType,
+    name: freshName(make, elementName(kept.names, type, rules, make)),
+    tag: child.tag,
+    attributes: {},
+    classes: kept.names,
+    styles: {},
+    text: null,
+    children: [],
+  };
+  let attributes: Record<string, unknown> = {};
+  let customAttributes: Record<string, string> = {};
+  let inlineStyle: string | null = null;
+  // a class the model cannot hold (a name it refuses, one listed twice) is left out, and the report says so
+  if (kept.dropped) {
+    if (builder.mode === 'import') builder.report.attributes.push(line);
+    else builder.dropped.attributes += 1;
+  }
+  for (const [html, value] of child.attributes) {
+    if (html === 'class') continue;
+    // the inline style is read with the stylesheet's rules (the styles pass), not as an attribute
+    if (html === 'style') {
+      if (builder.mode === 'import') inlineStyle = value;
+      else builder.dropped.attributes += 1;
+      continue;
+    }
+    if (html.startsWith('on')) {
+      if (builder.mode === 'import') builder.report.handlers.push(line);
+      else builder.dropped.attributes += 1;
+      continue;
+    }
+    const id = attributeNamed(html, type, rules);
+    if (id !== null) {
+      const facts = rules.attributeValues.get(id);
+      const kept = facts?.valueType === 'boolean' ? true : facts?.valueType === 'number' ? Number(value) : value;
+      if (attributeValueRefusal(id, kept, rules) !== null) {
+        if (builder.mode === 'import') builder.report.attributes.push(line);
+        else builder.dropped.attributes += 1;
+        continue;
+      }
+      attributes = { ...attributes, [id]: kept };
+      continue;
+    }
+    // the person's own attributes (aria-*, data-*, role…): kept as they are, unless the model refuses the name
+    if (customAttributeRefusal(html, rules) === null) customAttributes = { ...customAttributes, [html]: value };
+    else if (builder.mode === 'import') builder.report.attributes.push(line);
+    else builder.dropped.attributes += 1;
+  }
+  const made: DocNode = {
+    ...start,
+    attributes: attributes as DocNode['attributes'],
+    ...(Object.keys(customAttributes).length === 0 ? {} : { customAttributes }),
+  };
+  builder.lines.set(made.id, line);
+  if (inlineStyle !== null) builder.inline.set(made.id, styleDeclarations(builder, inlineStyle, line));
+  const content = element?.content ?? 'children';
+  if (content === 'text') {
+    const runs = canonical(runsOf(child.children, builder));
+    // the tree of marks is kept only while something is marked: a plain text carries none (validate.ts)
+    return { node: { ...made, text: plainOf(runs), ...(hasMarks(runs) ? { inline: runs } : {}) } };
+  }
+  if (content === 'markup') return { node: { ...made, text: child.children.map((one) => (typeof one === 'string' ? one : '')).join('') } };
+  // an <svg> keeps its markup: its shapes and its own content are the svg element's business (core/elements/svg.ts)
+  if (type === 'svg') {
+    const parsed = sanitizedSvgMarkup(nodeMarkup(child));
+    if ('refusal' in parsed) return { nothing: true };
+    return { node: { ...made, attributes: { ...attributes, ...(parsed.markup === '' ? {} : { svgMarkup: parsed.markup }) } as DocNode['attributes'] } };
+  }
+  const below = [...ancestors, child.tag];
+  return { node: { ...made, children: buildChildren(child.children, child.tag, below, builder, line) } };
+}
+
+// The children of an element that holds elements (or of the page's body): each built, each placed by the content
+// model, and a run of text directly inside it (with its marks, or an element the table does not know) becoming one
+// Paragraph — the model has no text there, and the editor's own list items and cells hold their words in one.
+function buildChildren(children: readonly MarkupChild[], parentTag: string, ancestors: readonly string[], builder: Builder, parentLine: number): DocNode[] {
+  const { rules } = builder;
+  const out: DocNode[] = [];
+  let phrasing: MarkupChild[] = [];
+  const flushPhrasing = (): void => {
+    const run = phrasing;
+    phrasing = [];
+    if (run.length === 0) return;
+    const runs = canonical(runsOf(run, builder));
+    const text = plainOf(runs);
+    if (text.trim() === '') return;
+    place(buildParagraph(text, runs, builder, parentLine), parentTag, ancestors, out, builder);
+  };
+  for (const grand of children) {
+    if (typeof grand === 'string') {
+      if (grand.trim() !== '' || parentTag === 'pre') phrasing.push(grand);
+      continue;
+    }
+    if (holdsInline(grand, rules)) {
+      phrasing.push(grand);
+      continue;
+    }
+    flushPhrasing();
+    const inner = build(grand, builder, ancestors);
+    if ('node' in inner) place(inner.node, parentTag, ancestors, out, builder);
+  }
+  flushPhrasing();
+  return out;
+}
+
+// The marks a text element's run reads itself (runsOf): a link, a bold, an italic and a line break. Only the marks
+// that carry no element of their own outside a text: an <a> in a container is a Link, an element like any other.
+const RUN_MARKS: ReadonlySet<string> = new Set(['br', 'strong', 'b', 'em', 'i']);
+
+// Whether an element belongs to the run of text around it: a mark that is no element of its own, or an element the
+// table does not know (a custom element) that holds no block of its own — it unwraps into the text it carries.
+// Anything else (a link, an image, a span the editor writes as a Paragraph, a known block) is a node of its own, and a
+// script or a style is read by its own pass.
+function holdsInline(node: MarkupNode, rules: ModelRules): boolean {
+  if (RUN_MARKS.has(node.tag)) return true;
+  if (node.tag === 'script' || node.tag === 'style') return false;
+  return typeOfTag(node.tag, rules) === null && !holdsBlock(node, rules);
+}
+
+// whether anything inside an element is a block-level element (HTML's own categories; an element the table does not
+// know counts as inline unless a block is inside it)
+function holdsBlock(node: MarkupNode, rules: ModelRules): boolean {
+  return node.children.some((child) => typeof child !== 'string' && (rules.contentModel.phrasing(child.tag) === false || holdsBlock(child, rules)));
+}
+
+// the Paragraph a run of text directly inside a container becomes: built as any text element, some of its runs marked
+function buildParagraph(text: string, runs: readonly InlineRun[], builder: Builder, line: number): DocNode {
+  const { rules, make } = builder;
+  const element = rules.elements.get('paragraph' as ElementType);
+  const node: DocNode = {
+    id: make.ids.next(),
+    type: 'paragraph' as ElementType,
+    name: freshName(make, make.words((element?.labelKey ?? 'element.paragraph.label') as MessageId)),
+    tag: element?.tags[0] ?? 'p',
+    attributes: {},
+    classes: [],
+    styles: {},
+    text,
+    ...(hasMarks(runs) ? { inline: runs } : {}),
+    children: [],
+  };
+  builder.lines.set(node.id, line);
+  builder.report.repaired.push(line);
+  return node;
+}
+
+// Where a built node goes among a parent's children: itself when the content model takes it; wrapped in the element
+// HTML would require (a stray li gets a ul; a child a closed list refuses is wrapped in the first tag that list
+// accepts) when that repairs it; dropped, and reported, when nothing can.
+function place(node: DocNode, parentTag: string | null, ancestors: readonly string[], children: DocNode[], builder: Builder): void {
+  const { rules, make } = builder;
+  const line = builder.lines.get(node.id) ?? 1;
+  const refusal = parentTag === null ? null : childrenRefusal(rules, parentTag, [node]);
+  // the code pane's reader refuses the nesting instead of repairing it (its own contract: the markup is the person's,
+  // and it is their business to fix it), and names the line of the piece that is wrong
+  if (builder.mode === 'strict') {
+    if (refusal !== null) builder.problem = { line, message: message('status.html.invalidAt', { line, reason: { key: refusal.key, params: refusal.params } }) };
+    else children.push(node);
+    return;
+  }
+  const inside = nestingRefusal(rules, ancestors, node);
+  // the parent holds at most one of it and has it already
+  const uniqueHeld = node.tag !== null && parentTag !== null && rules.contentModel.unique(parentTag, node.tag) && children.some((held) => held.tag === node.tag);
+  if (refusal === null && inside === null && !uniqueHeld) {
+    children.push(node);
+    return;
+  }
+  // The repair: the element HTML requires around it (a stray li gets the List: the first parent the editor has an
+  // element type for, in the manifest's order, so HTML's <menu> and <ol> do not win), or the first tag the parent's
+  // closed list accepts (that list's own order).
+  const required = refusal !== null ? rules.contentModel.parentsOf(node.tag ?? '') : null;
+  const accepted = parentTag === null ? null : rules.contentModel.refusal(parentTag, node.tag ?? '');
+  const wrapperTag = (required === null ? null : firstWrapper(required, rules)) ?? accepted?.find((tag) => typeOfTag(tag, rules) !== null) ?? null;
+  const wrapperType = wrapperTag === null ? null : typeOfTag(wrapperTag, rules);
+  if (wrapperTag !== null && wrapperType !== null && childrenRefusal(rules, wrapperTag, [node]) === null) {
+    const labelKey = rules.elements.get(wrapperType as ElementType)?.labelKey ?? 'element.container.label';
+    const wrapper: DocNode = {
+      id: make.ids.next(),
+      type: wrapperType as ElementType,
+      name: freshName(make, make.words(labelKey as MessageId)),
+      tag: wrapperTag,
+      attributes: {},
+      classes: [],
+      styles: {},
+      text: null,
+      children: [node],
+    };
+    if (nestingRefusal(rules, ancestors, wrapper) === null) {
+      children.push(wrapper);
+      builder.report.repaired.push(line);
+      return;
+    }
+  }
+  builder.report.dropped.push(line);
+}
+
+// the first of these tags the editor has an element type for, in the manifest's order (a stray li: the List, not the
+// Ordered list)
+function firstWrapper(tags: readonly string[], rules: ModelRules): string | null {
+  for (const [, element] of rules.elements) {
+    const tag = element.tags.find((one): one is string => one !== null && tags.includes(one));
+    if (tag !== undefined) return tag;
+  }
+  return null;
+}
+
+// the markup of an element as the source holds it, the way the parser kept it (an <svg>'s own content)
+function nodeMarkup(node: MarkupNode): string {
+  const attributes = [...node.attributes].map(([name, value]) => ` ${name}="${value.replaceAll('"', '&quot;')}"`).join('');
+  const inner = node.children.map((child) => (typeof child === 'string' ? child : nodeMarkup(child))).join('');
+  return `<${node.tag}${attributes}>${inner}</${node.tag}>`;
+}
+
+// ---------------------------------------------------------------- the styles
+
+// The declared values one declaration's text stands for: the pairs "property: value" (a composite expanded into its
+// longhands, a shadow read into its layers), or nothing when the editor does not store it, reported with its line.
+function storedDeclarations(builder: Builder, text: string, line: number, file: string): readonly (readonly [string, StoredValue])[] {
+  const colon = text.indexOf(':');
+  const property = colon <= 0 ? '' : text.slice(0, colon).trim().toLowerCase();
+  if (property === '') {
+    add(builder.report.declarations, file, line);
+    return [];
+  }
+  const fields = builder.rules.structures.get(property);
+  if (fields !== undefined) {
+    const layers = shadowLayersFromCss(text.slice(colon + 1), fields);
+    if (layers === null) {
+      add(builder.report.declarations, file, line);
+      return [];
+    }
+    return [[property, layers]];
+  }
+  const parsed = parseDeclarations(`${property}: ${text.slice(colon + 1).trim()};`, builder.context);
+  if ('refused' in parsed) {
+    add(builder.report.declarations, file, line);
+    return [];
+  }
+  return [...parsed.declarations].map(([name, value]) => [name, value] as const);
+}
+
+// the declarations of a style attribute, with the line they are on
+function styleDeclarations(builder: Builder, text: string, line: number): readonly (readonly [string, StoredValue])[] {
+  return readDeclarations(text, line, text).flatMap((declaration) => storedDeclarations(builder, declaration.text, declaration.line, builder.file));
+}
+
+interface Candidate {
+  readonly value: StoredValue;
+  readonly rank: readonly number[];
+}
+
+const higher = (a: readonly number[], b: readonly number[]): boolean => {
+  for (let at = 0; at < Math.max(a.length, b.length); at += 1) {
+    const left = a[at] ?? 0;
+    const right = b[at] ?? 0;
+    if (left !== right) return left > right;
+  }
+  return false;
+};
+
+// The layer a rule's media conditions name: the breakpoint it becomes an override of (null for no condition), the
+// nearest breakpoint at or below a width that is no breakpoint's own (reported), or one no breakpoint can take.
+function mediaPlace(conditions: readonly string[], rules: ModelRules): { readonly breakpoint: string | null; readonly unmappable: boolean; readonly approximated: boolean } {
+  if (conditions.length === 0) return { breakpoint: null, unmappable: false, approximated: false };
+  // a rule inside two media queries at once is no breakpoint (the reader reports the inner one as an at-rule already)
+  if (conditions.length > 1) return { breakpoint: null, unmappable: true, approximated: false };
+  const condition = (conditions[0] ?? '').trim().toLowerCase().replace(/^(only\s+)?(screen|all)\s*(and\s*)?/, '').trim();
+  if (condition === '') return { breakpoint: null, unmappable: false, approximated: false };
+  const width = /^\(?\s*max-width\s*:\s*([\d.]+)px\s*\)?$/.exec(condition);
+  if (width === null) return { breakpoint: null, unmappable: true, approximated: false };
+  const px = Number(width[1]);
+  const widths = [...rules.breakpoints].flatMap((id) => {
+    const held = rules.breakpointWidths.get(id);
+    return held === undefined ? [] : [{ id, width: held }];
+  });
+  const exact = widths.find((one) => one.width === px);
+  if (exact !== undefined) return { breakpoint: exact.id, unmappable: false, approximated: false };
+  const below = widths.filter((one) => one.width <= px).sort((a, b) => b.width - a.width)[0];
+  return below === undefined ? { breakpoint: null, unmappable: true, approximated: false } : { breakpoint: below.id, unmappable: false, approximated: true };
+}
+
+interface SheetSource {
+  readonly file: string;
+  readonly css: CssSheet;
+}
+
+// The declarations a stylesheet gives the nodes of a page: each rule read by the matcher, its declarations read by the
+// one readers of a declarations text, and the winners by importance, inline, specificity and order — the cascade the
+// browser runs. A rule that cannot be mapped (a media query no breakpoint takes, a selector this importer does not
+// read, a pseudo-class that is no state, a descendant state rule) is reported and left alone.
+//
+// A rule whose selector is one class name alone (`.card`, `.card:hover`, `.card` inside a @media) is the class's own:
+// it becomes a definition of the project's style classes (core/design/classes.ts), not a value written on each element
+// that lists it — that is what a class is for, and it is what makes an exported page import back as it was.
+function applyStyles(tree: DocNode, builder: Builder, sources: readonly SheetSource[]): void {
+  const { rules } = builder;
+  // One pass over every source: the rules the importer cannot map are reported here (once each, with their line) and
+  // the rest are kept with the layer (breakpoint and state) and the rank (specificity and order) CSS gives them.
+  interface Ready {
+    readonly rule: CssRule;
+    readonly source: string;
+    readonly media: { readonly breakpoint: string | null };
+    readonly state: string;
+    readonly bare: Selector;
+    readonly classRule: string | null;
+    readonly order: number;
+  }
+  const ready: Ready[] = [];
+  // the class names the sheets name: the last class of an element that one of them names is its own rule's
+  const classNames = new Set<string>();
+  let order = 0;
+  for (const source of sources) {
+    // the at-rules the importer cannot map (@supports, @font-face, a nested @media): reported with their lines
+    for (const at of source.css.atRules) add(builder.report.unmapped, source.file, at.line);
+    for (const rule of source.css.rules) {
+      order += 1;
+      // The exported base is already in force. Match its entire selector and declaration list: an author's rule
+      // may reuse a value such as margin: 0 on another selector and still needs to be imported.
+      if (isBaseRule(rule)) continue;
+      const media = mediaPlace(rule.media, rules);
+      if (media.unmappable) {
+        add(builder.report.unmapped, source.file, rule.line);
+        continue;
+      }
+      if (media.approximated) add(builder.report.approximated, source.file, rule.line);
+      const selector = readSelector(rule.selector);
+      if (selector === null) {
+        add(builder.report.unmapped, source.file, rule.line);
+        continue;
+      }
+      const last = selector.compounds[selector.compounds.length - 1] as Compound;
+      const classRule = classRuleOf(selector);
+      let state = rules.baseLayer.state;
+      if (last.pseudo !== null) {
+        const named = rules.statePseudos.get(last.pseudo);
+        // a pseudo-class that is no state of the editor, or a state rule whose selector names more than the element
+        // (a descendant rule): the rule is reported, never guessed
+        if (named === undefined || (selector.compounds.length > 1 && classRule === null)) {
+          add(builder.report.unmapped, source.file, rule.line);
+          continue;
+        }
+        state = named;
+      }
+      if (classRule !== null) {
+        // a class name the project's own registry cannot hold is nothing this importer can map
+        if (!validClassName(classRule)) {
+          add(builder.report.unmapped, source.file, rule.line);
+          continue;
+        }
+        classNames.add(classRule);
+      }
+      const bare: Selector = last.pseudo === null ? selector : { ...selector, compounds: [...selector.compounds.slice(0, -1), { ...last, pseudo: null }] };
+      ready.push({ rule, source: source.file, media, state, bare, classRule, order });
+    }
+  }
+  // The elements: the winner of each property, in each layer (a breakpoint and a state), by importance, inline,
+  // specificity and order — the cascade the browser runs, a rule of one breakpoint never beating one of another. The
+  // class of the element's own rule (the last of its classes the sheet names) reads as a value of the element's own,
+  // and that class does not stand among its classes: the export makes it again from the name.
+  interface Layer {
+    readonly breakpoint: string;
+    readonly state: string;
+    readonly own: Map<string, Candidate>;
+  }
+  const winners = new Map<string, Map<string, Layer>>();
+  const kept = new Map<string, readonly string[]>();
+  const walk = (node: DocNode, ancestors: readonly Facts[]): void => {
+    // the last of the element's classes a rule of the sheet is written for: the export's own class, which does not
+    // stand among the element's (the export makes it again from the name); the others the element keeps as its own
+    let at = node.classes.length - 1;
+    while (at >= 0 && !classNames.has(node.classes[at] as string)) at -= 1;
+    const generated = at < 0 ? null : (node.classes[at] as string);
+    const classes = node.classes.filter((_one, i) => i !== at);
+    kept.set(node.id, classes);
+    const facts: Facts = {
+      tag: node.tag,
+      classes,
+      id: typeof node.attributes.id === 'string' ? node.attributes.id : null,
+      attributes: cssAttributes(node, rules),
+    };
+    const layers = new Map<string, Layer>();
+    const layerOf = (breakpoint: string, state: string): Layer => {
+      const key = `${breakpoint}\u0000${state}`;
+      let held = layers.get(key);
+      if (held === undefined) {
+        held = { breakpoint, state, own: new Map() };
+        layers.set(key, held);
+      }
+      return held;
+    };
+    for (const one of ready) {
+      // the rule of the class the element's own rule is written with applies to the element (the class left its class
+      // list); every other rule applies where the matcher says it does
+      const ownRule = one.classRule !== null && one.classRule === generated;
+      if (!ownRule && !matches(one.bare, facts, ancestors)) continue;
+      const layer = layerOf(one.media.breakpoint ?? rules.baseLayer.breakpoint, one.state);
+      for (const declaration of one.rule.declarations) {
+        for (const [property, value] of storedDeclarations(builder, declaration.text, declaration.line, one.source)) {
+          const rank = [declaration.important ? 1 : 0, 0, one.bare.specificity[0], one.bare.specificity[1] + one.bare.specificity[2], one.order];
+          const held = layer.own.get(property);
+          if (held === undefined || higher(rank, held.rank)) layer.own.set(property, { value, rank });
+        }
+      }
+    }
+    // the element's own style attribute: above any selector, below an !important declaration (as CSS has it)
+    const base = layerOf(rules.baseLayer.breakpoint, rules.baseLayer.state);
+    for (const [property, value] of builder.inline.get(node.id) ?? []) {
+      const rank = [0, 1, 0, 0, order + 1];
+      const held = base.own.get(property);
+      if (held === undefined || higher(rank, held.rank)) base.own.set(property, { value, rank });
+    }
+    const own = new Map<string, Layer>();
+    for (const [key, layer] of layers) if (layer.own.size > 0) own.set(key, layer);
+    if (own.size > 0) winners.set(node.id, own);
+    for (const child of node.children) walk(child, [facts, ...ancestors]);
+  };
+  walk(tree, []);
+  const write = (node: DocNode): void => {
+    const own = winners.get(node.id);
+    if (own !== undefined) {
+      const styles: Record<string, Record<string, Record<string, StoredValue>>> = {};
+      for (const layer of own.values()) {
+        const byState = (styles[layer.breakpoint] ??= {});
+        const declarations = (byState[layer.state] ??= {});
+        for (const [property, candidate] of layer.own) declarations[property] = candidate.value;
+      }
+      (node as { styles: Styles }).styles = styles as Styles;
+    }
+    const classes = kept.get(node.id);
+    if (classes !== undefined && classes.length !== node.classes.length) (node as { classes: readonly string[] }).classes = classes;
+    for (const child of node.children) write(child);
+  };
+  write(tree);
+}
+
+// A base rule exported by this editor, identified by selector and all its declarations rather than by values alone.
+// The stylesheet reader splits a selector list into rules, so this comparison also handles the grouped :where rules.
+const normalizedBaseText = (text: string): string => text.replace(/\s+/g, ' ').trim().toLowerCase();
+const BASE_RULES = readStylesheet(baseCss()).rules;
+function isBaseRule(rule: CssRule): boolean {
+  if (rule.media.length > 0 || rule.declarations.some((declaration) => declaration.important)) return false;
+  const selector = normalizedBaseText(rule.selector);
+  const declarations = rule.declarations.map((declaration) => normalizedBaseText(declaration.text)).sort();
+  return BASE_RULES.some((base) => {
+    if (normalizedBaseText(base.selector) !== selector || base.declarations.length !== declarations.length) return false;
+    const expected = base.declarations.map((declaration) => normalizedBaseText(declaration.text)).sort();
+    return expected.every((value, index) => value === declarations[index]);
+  });
+}
+
+// the class name a selector is the rule of (`.card`, `.card:hover`), or null when it is no single class
+function classRuleOf(selector: Selector): string | null {
+  if (selector.compounds.length !== 1) return null;
+  const only = selector.compounds[0] as Compound;
+  return only.tag === null && !only.universal && only.id === null && only.attributes.length === 0 && only.classes.length === 1 ? (only.classes[0] as string) : null;
+}
+
+// the CSS facts of a node: its attributes under their HTML names (an id and a class list included) and the person's own
+function cssAttributes(node: DocNode, rules: ModelRules): ReadonlyMap<string, string> {
+  const out = new Map<string, string>();
+  for (const [id, value] of Object.entries(node.attributes)) {
+    const name = rules.attributeValues.get(id)?.html;
+    if (name === null || name === undefined || typeof value === 'boolean') continue;
+    out.set(name, String(value));
+  }
+  for (const [name, value] of Object.entries(node.customAttributes ?? {})) out.set(name, value);
+  return out;
+}
+
+// The strict reader (element.applyHtml, the code pane's markup): the markup read as nodes, or the line and the reason
+// of the first piece the model refuses (a nesting the content model forbids), as the code pane's contract has it.
+export function nodesFromMarkup(markup: string, make: NodeMaker, context: HandlerContext<never>): Imported | ImportProblem {
+  const builder = newBuilder(make, context, markup, [], '(markup)', 'strict');
+  const nodes: DocNode[] = [];
+  for (const child of parseMarkup(markup)) {
+    const made = build(child, builder, []);
+    if (builder.problem !== null) return builder.problem;
+    if ('node' in made) place(made.node, null, [], nodes, builder);
+    if (builder.problem !== null) return builder.problem;
+  }
+  return { nodes, dropped: builder.dropped };
+}
+
+// One builder per page (or per markup the code pane reads)
+function newBuilder(make: NodeMaker, context: HandlerContext<never>, markup: string, picked: readonly PickedFile[], file: string, mode: 'import' | 'strict', report: Report = emptyReport(), held: ProjectFile[] = []): Builder {
+  return {
+    make,
+    rules: make.rules,
+    context,
+    markup,
+    picked,
+    file,
+    pageFile: baseName(file),
+    report,
+    scripts: [],
+    sheets: [],
+    held,
+    inline: new Map(),
+    lines: new Map(),
+    mode,
+    dropped: { elements: 0, attributes: 0 },
+    problem: null,
+    // a page keeps its scripts; a fragment the person pasted has no page to keep them with
+    keepScripts: mode === 'import' && file !== '',
+  };
+}
+
+// ---------------------------------------------------------------- one page
+
+// One page's markup as a page of the document: its root element named as every page's root is, the head's settings, its
+// scripts and its stylesheets, and the nodes its body holds.
+function pageFrom(file: PickedFile, builder: Builder): Page {
+  const { rules, ids, words } = builder.make;
+  const parsed = parsePage(builder.markup);
+  const rootElement = rules.elements.get(rules.root.type as ElementType);
+  const body: DocNode = {
+    id: ids.next(),
+    type: rules.root.type as ElementType,
+    name: words((rootElement?.labelKey ?? 'element.page.label') as MessageId),
+    tag: rootElement?.tags[0] ?? 'body',
+    attributes: {},
+    classes: [],
+    styles: {},
+    text: null,
+    children: [],
+  };
+  builder.lines.set(body.id, lineOf(builder.markup, '<body'));
+  // the head first: the stylesheets it links and the settings it holds come before the body's own (a <style> block in
+  // the body is later in the document, and later rules win)
+  const settings: [string, string][] = [];
+  const lang = (parsed.htmlAttributes.get('lang') ?? '').trim();
+  const dir = (parsed.htmlAttributes.get('dir') ?? '').trim().toLowerCase();
+  if (lang !== '') settings.push(['pageLanguage', lang]);
+  if (['ltr', 'rtl', 'auto'].includes(dir)) settings.push(['pageDirection', dir]);
+  for (const node of parsed.head) {
+    if (node.tag === 'meta') {
+      const name = (node.attributes.get('name') ?? '').trim().toLowerCase();
+      const property = (node.attributes.get('property') ?? '').trim().toLowerCase();
+      const content = (node.attributes.get('content') ?? '').trim();
+      if (content === '') continue;
+      if (name === 'description') settings.push(['pageDescription', content]);
+      if (property === 'og:title') settings.push(['pageOgTitle', content]);
+      if (property === 'og:image') settings.push(['pageOgImage', content]);
+      continue;
+    }
+    if (node.tag === 'link') {
+      const rel = (node.attributes.get('rel') ?? '').trim().toLowerCase();
+      const href = (node.attributes.get('href') ?? '').trim();
+      if (href === '') continue;
+      if (rel.split(/\s+/).includes('stylesheet')) {
+        const sheet = builder.picked.find((one) => !isHtmlFile(one.name) && (one.name === href || one.name.endsWith(`/${href}`) || one.name === href.replace(/^\.?\//, '')));
+        if (sheet === undefined) builder.report.sheetsMissing.push(href);
+        else builder.sheets.push({ file: sheet.name, css: readStylesheet(textOfFile(sheet)) });
+        continue;
+      }
+      if (rel === 'canonical') settings.push(['pageCanonical', href]);
+      else if (rel.split(/\s+/).includes('icon')) settings.push(['pageFavicon', href]);
+      continue;
+    }
+    if (node.tag === 'style') builder.sheets.push({ file: builder.file, css: readStylesheet(textOf(node)) });
+  }
+  const children = buildChildren(parsed.body, 'body', ['body'], builder, lineOf(builder.markup, '<body'));
+  // the body's own attributes: its classes, its inline style and the person's own attributes
+  let attributes: Record<string, unknown> = {};
+  let customAttributes: Record<string, string> = {};
+  let classes: readonly string[] = [];
+  let inlineStyle: string | null = null;
+  for (const [html, value] of parsed.bodyAttributes) {
+    if (html === 'class') {
+      const held = classList(value);
+      classes = held.names;
+      if (held.dropped) builder.report.attributes.push(lineOf(builder.markup, '<body'));
+      continue;
+    }
+    if (html === 'style') {
+      inlineStyle = value;
+      continue;
+    }
+    if (html.startsWith('on')) {
+      builder.report.handlers.push(lineOf(builder.markup, '<body'));
+      continue;
+    }
+    const id = attributeNamed(html, rules.root.type, rules);
+    if (id !== null && attributeValueRefusal(id, value, rules) === null) {
+      attributes = { ...attributes, [id]: value };
+      continue;
+    }
+    if (customAttributeRefusal(html, rules) === null) customAttributes = { ...customAttributes, [html]: value };
+    else builder.report.attributes.push(lineOf(builder.markup, '<body'));
+  }
+  if (inlineStyle !== null) builder.inline.set(body.id, styleDeclarations(builder, inlineStyle, lineOf(builder.markup, '<body')));
+  for (const [setting, value] of settings) {
+    const facts = rules.attributeValues.get(setting);
+    if (facts === undefined) continue;
+    const kept = settingValue(facts.valueType, value, rules, setting);
+    if (kept !== null) attributes[setting] = kept;
+  }
+  // the scripts the page keeps, in order, as the export writes them back one <script src> each
+  if (builder.scripts.length > 0) attributes.pageScripts = builder.scripts.map((script) => script.path).join(' ');
+  const title = parsed.title.trim();
+  return {
+    id: ids.next(),
+    name: title !== '' ? title : baseName(file.name),
+    file: file.name,
+    tree: { ...body, attributes: attributes as DocNode['attributes'], classes, children, ...(Object.keys(customAttributes).length === 0 ? {} : { customAttributes }) },
+  };
+}
+
+// a page setting's value as the model keeps it (a language tag, an address, a path list), or null when it cannot hold it
+function settingValue(valueType: string, value: string, rules: ModelRules, setting: string): string | null {
+  if (valueType === 'url') {
+    const read = readAddress(value);
+    return read.ok ? read.value : null;
+  }
+  if (valueType === 'path-list') {
+    const parts = value.split(/\s+/).filter((one) => one !== '');
+    const read = parts.map((one) => readAddress(one));
+    return read.every((one) => one.ok) ? read.map((one) => (one.ok ? one.value : '')).join(' ') : null;
+  }
+  return attributeValueRefusal(setting, value, rules) === null ? value : null;
+}
+
+// ---------------------------------------------------------------- the command
+
+export const importHtmlCommand = registerHandler('project.importHtml', (context, { files }) => {
+  const { state, rules, ids, words, confirmed } = context;
+  const picked = (files ?? []) as readonly PickedFile[];
+  const broken = picked.find((file) => typeof file.error === 'string' && file.error !== '');
+  if (broken !== undefined) return { kind: 'refused' as const, message: message('status.import.invalidArchive', { file: broken.name, reason: broken.error ?? '' }) };
+  // the home page first: index.html, else the files in their own order
+  const markup = picked.filter((file) => isHtmlFile(file.name)).sort((a, b) => rank(a.name) - rank(b.name) || a.name.localeCompare(b.name));
+  if (markup.length === 0) return { kind: 'refused' as const, message: message('status.import.noPage') };
+  // the import replaces the pages: the person is asked first unless the project holds nothing (File › Open asks the
+  // same way; the manifest declares the confirmation)
+  if (confirmed !== true && !isEmptyProject(state.document)) return { kind: 'confirm' as const };
+  const report = emptyReport();
+  // the names no imported node has: the import replaces the pages, so the names the document holds now do not stand in
+  // their way (a fresh maker, not nodeMaker: that one counts the document's own names in)
+  const make: NodeMaker = { rules, ids, words, taken: new Set() };
+  const held: ProjectFile[] = [];
+  const pages: Page[] = [];
+  const sources: SheetSource[] = [];
+  const built: { readonly page: Page; readonly builder: Builder }[] = [];
+  let elements = 0;
+  for (const file of markup) {
+    const builder = newBuilder(make, context as HandlerContext<never>, textOfFile(file), picked, file.name, 'import', report, held);
+    const page = pageFrom(file, builder);
+    elements += countOf(page.tree) - 1;
+    pages.push(page);
+    built.push({ page, builder });
+    for (const sheet of builder.sheets) sources.push(sheet);
+  }
+  for (const one of built) applyStyles(one.page.tree, one.builder, sources);
+  // The files the import keeps: everything picked that is no page (a stylesheet's rules are in the document now) and no
+  // file a script already kept. A file an address of a page names is kept at that address's path — a src written
+  // img/logo.png with the file picked as logo.png draws on the canvas — and the others at their own path.
+  const wanted = new Map<string, string>();
+  for (const page of pages) {
+    for (const node of walkNodes(page.tree)) {
+      for (const [id, value] of Object.entries(node.attributes)) {
+        const html = rules.attributeValues.get(id)?.html;
+        if ((html !== 'src' && html !== 'poster') || typeof value !== 'string' || value === '' || /^[a-z][a-z0-9+.-]*:/i.test(value)) continue;
+        const file = picked.find((one) => !isHtmlFile(one.name) && !isCssFile(one.name) && (one.name === value || one.name.endsWith(`/${value}`) || value.endsWith(`/${one.name}`)));
+        if (file !== undefined && !wanted.has(value)) wanted.set(value, file.name);
+      }
+    }
+  }
+  for (const file of picked) {
+    if (isHtmlFile(file.name) || isCssFile(file.name)) continue;
+    if (held.some((one) => one.path === file.name)) continue;
+    const referenced = [...wanted].find(([, name]) => name === file.name);
+    if (referenced !== undefined && held.some((one) => one.path === referenced[0])) continue;
+    held.push(referenced === undefined ? recordOf(file) : { ...recordOf(file), path: referenced[0] });
+  }
+  // the patches: the pages as a whole, and the files the import keeps beside the ones the project holds
+  const patches: Patch[] = [{ op: 'replace', path: ['pages'], value: pages }];
+  if (held.length > 0) {
+    const current = (state.document.files ?? []).filter((file) => !held.some((one) => one.path === file.path));
+    patches.push({ op: state.document.files === undefined && current.length === 0 ? 'add' : 'replace', path: ['files'], value: [...current, ...held] });
+  }
+  const said = message('status.import.done', {
+    elements,
+    files: markup.map((file) => file.name).join(', '),
+    notes: reportNotes(report, words),
+  });
+  return { kind: 'change' as const, patches, selection: [pages[0]?.tree.id as NodeId], message: said };
+});
+
+const rank = (name: string): number => (name === 'index.html' || name.endsWith('/index.html') ? 0 : 1);
+
+// every node of a tree
+function countOf(node: DocNode): number {
+  return 1 + node.children.reduce((sum, child) => sum + countOf(child), 0);
+}
+
+// What a page's own head holds (the manifest's explorer-open-folder): its language and direction, its title, and the
+// stylesheets and scripts it links, as the source wrote them. The same reader parses the markup (the browser's own
+// parser), so a page imported with its markup keeps what its head said about the page itself.
+export interface PageHead {
+  readonly lang: string | null;
+  readonly dir: string | null;
+  readonly title: string | null;
+  readonly stylesheets: readonly string[];
+  readonly scripts: readonly string[];
+}
+export function pageHead(markup: string, parse: (text: string) => Document = (text) => new DOMParser().parseFromString(text, 'text/html')): PageHead {
+  const document = parse(markup);
+  const attribute = (name: string): string | null => {
+    const value = document.documentElement.getAttribute(name)?.trim() ?? '';
+    return value === '' ? null : value;
+  };
+  const written = (element: Element, name: string): string => (element.getAttribute(name) ?? '').trim();
+  return {
+    lang: attribute('lang'),
+    dir: attribute('dir'),
+    title: document.title.trim() === '' ? null : document.title.trim(),
+    stylesheets: [...document.querySelectorAll('link[href]')].filter((link) => (link.getAttribute('rel') ?? '').split(/\s+/).includes('stylesheet')).map((link) => written(link, 'href')).filter((href) => href !== ''),
+    scripts: [...document.querySelectorAll('script[src]')].map((script) => written(script, 'src')).filter((src) => src !== ''),
+  };
+}

@@ -1,0 +1,156 @@
+// The pages of the project (ARCHITECTURE.md, Command owners; spec explorer-pages): how a project gains a page, keeps
+// its name and its file straight, and loses one. The document holds them in their order (`document.pages`), the
+// Explorer lists them, and every command that acts on "the page" reads the first one until pages.switch arrives.
+//
+// pages.add (the Explorer's Pages section header): a page named after the text its door hands, or the next free
+// default name; its file is the name's slug ("About us" -> about-us.html), numbered when taken, and its root is the
+// root element the manifest gives every page (validate.ts ModelRules.root). The new page opens (spec
+// explorer-pages, "listing a page and opening it"): the editor shows what was just added, so the canvas, the Layers,
+// the top bar's switcher and an insert all follow it. One undo step.
+// pages.rename: the page's name; the file follows it while another page holds neither (so a file a link points at is
+// never taken silently), and a name another page already holds is refused.
+// pages.duplicate: a copy right after the page, every node with an id and a styles record of its own, "About 2" when
+// "About" is taken.
+// pages.delete: the page goes; the home page (index.html, what the project opens on) cannot be deleted, and a project
+// keeps at least one page.
+import { message, registerHandler } from '../commands/registry.ts';
+import type { DocNode, Page } from '../document/model.ts';
+import type { Patch } from '../history/transaction.ts';
+
+// A page's name as a file name: lower case, no accent, its words joined by one dash (spec explorer-pages).
+export function pageFile(name: string): string {
+  const slug = name
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return `${slug === '' ? 'page' : slug}.html`;
+}
+
+// The home page: a page the project cannot lose, and the file a rename never hands to another page.
+const HOME = 'index.html';
+
+// The first free name and file for a base: "About", "About 2", "About 3"…
+function fresh(names: readonly string[], files: readonly string[], base: string): { readonly name: string; readonly file: string } {
+  for (let n = 1; ; n += 1) {
+    const name = n === 1 ? base : `${base} ${n}`;
+    const file = pageFile(name);
+    if (!names.includes(name) && !files.includes(file)) return { name, file };
+  }
+}
+
+// The page a command acts on, by the id its door hands (a door that hands none is a defect of the door).
+function pageIndex(pages: readonly Page[], page: unknown): number {
+  const at = pages.findIndex((p) => p.id === page || p.tree.id === page);
+  if (at < 0) throw new Error(`pages: the document has no page ${String(page)}`);
+  return at;
+}
+
+// The page the editor shows: the one pages.switch opened (`ui.page`, an id), else the project's first. Every command
+// that acts on "the page" — page.setSetting, the grid settings, an insert at the root, the canvas — reads it here, so
+// one page is open everywhere at once. An unknown id (a page that was deleted) reads as the first, and the editor
+// keeps working.
+export function openedPage(state: { readonly document: { readonly pages: readonly Page[] }; readonly ui?: unknown }): number {
+  const named = (state.ui as { readonly page?: unknown } | undefined)?.page;
+  if (typeof named !== 'string') return 0;
+  const at = state.document.pages.findIndex((p) => p.id === named || p.tree.id === named);
+  return at < 0 ? 0 : at;
+}
+
+// The open page, for the readers that need the page itself (the canvas, the page's panel).
+export const pageShown = (state: { readonly document: { readonly pages: readonly Page[] }; readonly ui?: unknown }): Page | null => state.document.pages[openedPage(state)] ?? null;
+
+// A page name no other page's root holds: a node path names a page by its root's name (src/manifest/scenario.ts), so
+// two pages never share one.
+function rootName(pages: readonly Page[], base: string): string {
+  const taken = pages.map((p) => p.tree.name);
+  for (let n = 1; ; n += 1) {
+    const name = n === 1 ? base : `${base} ${n}`;
+    if (!taken.includes(name)) return name;
+  }
+}
+
+export function addPageCommand<Ui extends WithPage>() {
+  return registerHandler<'pages.add', Ui>('pages.add', ({ state, ids, rules, words }, { name }) => {
+  const document = state.document;
+  const typed = typeof name === 'string' && name.trim() !== '' ? name.trim() : words('pages.defaultName');
+  if (document.pages.some((p) => p.name === typed)) return { kind: 'refused' as const, message: message('status.pages.nameTaken', { name: typed }) };
+  const { name: chosen, file } = fresh(document.pages.map((p) => p.name), document.pages.map((p) => p.file), typed);
+  const root: DocNode = { id: ids.next(), type: rules.root.type, name: rootName(document.pages, chosen), tag: rules.root.tag, attributes: {}, classes: [], styles: {}, text: null, children: [] };
+  const made: Page = { id: ids.next(), name: chosen, file, tree: root };
+  return { kind: 'change' as const, patches: [{ op: 'add', path: ['pages', document.pages.length], value: made }], ui: { ...state.ui, page: made.id }, selection: [], message: message('status.pages.added', { name: chosen, file }) };
+  });
+}
+
+export const renamePageCommand = registerHandler('pages.rename', ({ state }, { page, name }) => {
+  const document = state.document;
+  const at = pageIndex(document.pages, page);
+  const held = document.pages[at];
+  const typed = typeof name === 'string' ? name.trim() : '';
+  if (held === undefined) throw new Error(`pages.rename: the document has no page ${String(page)}`);
+  if (typed === '') throw new Error('pages.rename: a page takes a name');
+  if (held.name === typed) return { kind: 'change' as const, message: message('status.pages.renamed', { name: typed }) };
+  if (document.pages.some((p, i) => i !== at && p.name === typed)) return { kind: 'refused' as const, message: message('status.pages.nameTaken', { name: typed }) };
+  const wanted = pageFile(typed);
+  // the home page keeps its file (index.html is what the project opens on); another page's file follows its new name
+  // while nothing else holds it, so a file a link points at is never taken silently
+  const free = held.file !== HOME && wanted !== HOME && !document.pages.some((p, i) => i !== at && p.file === wanted);
+  const patches: Patch[] = [{ op: 'replace', path: ['pages', at, 'name'], value: typed }];
+  if (free && held.file !== wanted) patches.push({ op: 'replace', path: ['pages', at, 'file'], value: wanted });
+  return { kind: 'change' as const, patches, message: message('status.pages.renamed', { name: typed }) };
+});
+
+export const duplicatePageCommand = registerHandler('pages.duplicate', ({ state, ids }, { page }) => {
+  const document = state.document;
+  const at = pageIndex(document.pages, page);
+  const source = document.pages[at];
+  if (source === undefined) throw new Error(`pages.duplicate: the document has no page ${String(page)}`);
+  // every node of the copy gets an id of its own and its own styles record; the rest of the node is data
+  const copy = (node: DocNode): DocNode => ({ ...node, id: ids.next(), classes: [...node.classes], styles: structuredClone(node.styles), children: node.children.map(copy) });
+  const { name, file } = fresh(document.pages.map((p) => p.name), document.pages.map((p) => p.file), source.name);
+  const made: Page = { id: ids.next(), name, file, tree: { ...copy(source.tree), name: rootName(document.pages, name) } };
+  return { kind: 'change' as const, patches: [{ op: 'add', path: ['pages', at + 1], value: made }], message: message('status.pages.duplicated', { name: source.name, copy: name }) };
+});
+
+export const deletePageCommand = registerHandler('pages.delete', ({ state }, { page }) => {
+  const document = state.document;
+  const at = pageIndex(document.pages, page);
+  const held = document.pages[at];
+  if (held === undefined) throw new Error(`pages.delete: the document has no page ${String(page)}`);
+  if (held.file === HOME) return { kind: 'refused' as const, message: message('status.pages.homeUndeletable') };
+  // the selection goes with the page: a node of a page that is not open is not on the canvas (the store reads the
+  // open page through openedPage, which falls back to the first while ui.page names a page that is gone)
+  return { kind: 'change' as const, patches: [{ op: 'remove', path: ['pages', at] }], selection: [], message: message('status.pages.deleted', { name: held.name }) };
+});
+
+// the editor state's part pages.switch owns: the page the editor shows (the editor's EditorUi is wider)
+export interface WithPage {
+  readonly page?: string | undefined;
+}
+
+// pages.switch: the page the editor shows (the Explorer's rows, the file tabs, the top bar's page switcher). It
+// changes no document field — the open page belongs to the editor, not to the project — so it is an editor change
+// (Outcome.ui), and the door of the page that is already open is current (the row is drawn marked). Bound to the
+// editor state the app holds, as handCommands is.
+export function switchPageCommand<Ui extends WithPage>() {
+  return registerHandler<'pages.switch', Ui>(
+    'pages.switch',
+    ({ state }, { page }) => {
+      const at = pageIndex(state.document.pages, page);
+      const held = state.document.pages[at];
+      if (held === undefined) throw new Error(`pages.switch: the document has no page ${String(page)}`);
+      const said = message('status.pages.opened', { name: held.name });
+      if (openedPage(state) === at) return { kind: 'change' as const, message: said };
+      // the selection goes with the page: the panel and the handles would otherwise edit a node the canvas no
+      // longer draws
+      return { kind: 'change' as const, ui: { ...state.ui, page: held.id }, selection: [], message: said };
+    },
+    // a door of this command stands for the open page by the id its item carries: a page's own id or its root's
+    // (pageIndex takes either), so a tab, a row or the switcher is marked while its page is the one on the canvas
+    (state, { page }) => {
+      const open = state.document.pages[openedPage(state)];
+      return open !== undefined && (open.id === page || open.tree.id === page);
+    },
+  );
+}

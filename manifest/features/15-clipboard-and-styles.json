@@ -1,0 +1,780 @@
+{
+  "group": "clipboard-and-styles",
+  "titleKey": "featureGroup.clipboardAndStyles",
+  "features": [
+    {
+      "id": "clipboard-cut-system",
+      "titleKey": "feature.clipboardCutSystem",
+      "commands": [
+        "clipboard.cut"
+      ],
+      "dependsOn": [
+        "clipboard-copy-paste",
+        "export-bem-css"
+      ],
+      "spec": "spec/behavior/clipboard-cut-system.md",
+      "intent": {
+        "title": "Cut, and copy elements as HTML for other applications",
+        "steps": [
+          "Insert the Card template, select its root and press Ctrl+X.",
+          "Select a Section and press Ctrl+V.",
+          "Press Ctrl+C on the pasted Card and read the system clipboard's text/html."
+        ],
+        "expected": [
+          "Ctrl+X copies the element to the system clipboard and deletes it as one undo step; Cut appears in the context menu and the Edit menu.",
+          "Copy also writes text/html of the element's exported markup with its CSS rules, next to the app's element format.",
+          "The clipboard text/html contains no editor attributes, editor-generated ids or inline styles."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "cut-by-the-key-takes-the-heading-out-in-one-undo-step",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "clipboard.cut#key-ctrl-x-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "clipboard.cut#key-ctrl-x-in-global",
+            "clipboard.cut#menu-edit",
+            "clipboard.cut#command-bar"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "remove",
+                "path": "/Page/Hero/Title"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.cut",
+                  "params": {
+                    "name": "Title"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "cut-from-the-context-menu-takes-the-same-heading-out",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "contextMenu.open#canvas-right-click-element-or-page",
+              "args": {
+                "target": "/Page/Hero/Title"
+              },
+              "target": "/Page/Hero/Title",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "clipboard.cut#context-menu",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "clipboard.cut#context-menu"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "remove",
+                "path": "/Page/Hero/Title"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.cut",
+                  "params": {
+                    "name": "Title"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-cut-heading-pastes-back-from-the-system-clipboard",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "clipboard.cut#key-ctrl-x-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "selection.select#canvas-click-element-or-page",
+              "args": {
+                "target": "/Page/Hero/Actions"
+              },
+              "target": "/Page/Hero/Actions",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "clipboard.paste#key-ctrl-v-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "clipboard.paste#key-ctrl-v-in-global"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "remove",
+                "path": "/Page/Hero/Title"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/Actions/@children",
+                "value": [
+                  {
+                    "type": "heading",
+                    "name": "Title",
+                    "tag": "h1",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Welcome to Aurora",
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Actions/Title"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.pasted.inside",
+                  "params": {
+                    "name": "Title",
+                    "parent": "Actions",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "cutting-a-locked-element-is-refused",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.toggleLock#layers-row-lock",
+              "args": {
+                "target": "/Page/Hero"
+              },
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "clipboard.cut#key-ctrl-x-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "clipboard.cut#key-ctrl-x-in-global"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@locked",
+                "value": true
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.locked.delete",
+                  "params": {
+                    "name": "Hero"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.locked.delete",
+              "document": "unchanged"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "copy-paste-styles",
+      "titleKey": "feature.copyPasteStyles",
+      "commands": [
+        "clipboard.copyStyle",
+        "clipboard.pasteStyle"
+      ],
+      "dependsOn": [
+        "clipboard-copy-paste"
+      ],
+      "spec": "spec/behavior/copy-paste-styles.md",
+      "intent": {
+        "title": "Copy and paste styles between elements",
+        "steps": [
+          "Select a styled Heading and press Ctrl+Alt+C.",
+          "Select a Paragraph and press Ctrl+Alt+V.",
+          "Press Ctrl+Z."
+        ],
+        "expected": [
+          "Copy style puts every style value of the element on the system clipboard in the app format.",
+          "Paste style replaces the target's style values with the copied ones as one undo step; text, children and attributes stay.",
+          "Both commands are in the context menu and the Edit menu with their shortcuts."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "copy-style-puts-the-element-style-on-the-clipboard",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "clipboard.copyStyle#key-ctrl-alt-c-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "clipboard.copyStyle#key-ctrl-alt-c-in-global",
+            "clipboard.copyStyle#menu-edit",
+            "clipboard.copyStyle#command-bar"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.style.copied",
+                  "params": {
+                    "name": "Hero"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "paste-style-replaces-the-target-style-in-one-undo-step",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Plans/Grid/CardB"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "selection.select#canvas-click-element-or-page",
+              "args": {
+                "target": "/Page/Hero"
+              },
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "clipboard.copyStyle#key-ctrl-alt-c-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "selection.select#canvas-click-element-or-page",
+              "args": {
+                "target": "/Page/Plans/Grid/CardB"
+              },
+              "target": "/Page/Plans/Grid/CardB",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "clipboard.pasteStyle#key-ctrl-alt-v-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "clipboard.pasteStyle#key-ctrl-alt-v-in-global",
+            "clipboard.pasteStyle#menu-edit",
+            "clipboard.pasteStyle#command-bar"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/CardB/@styles",
+                "value": {
+                  "desktop": {
+                    "base": {
+                      "padding-top": "56px",
+                      "padding-right": "40px",
+                      "padding-bottom": "56px",
+                      "padding-left": "40px"
+                    }
+                  }
+                }
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid/CardB"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Plans/Grid/CardB",
+                  "property": "padding-top",
+                  "value": "56px"
+                },
+                {
+                  "node": "/Page/Plans/Grid/CardB",
+                  "property": "padding-left",
+                  "value": "40px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.style.pasted",
+                  "params": {
+                    "name": "CardB"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "pasting-a-style-with-an-empty-clipboard-is-refused",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "clipboard.pasteStyle#key-ctrl-alt-v-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "clipboard.pasteStyle#key-ctrl-alt-v-in-global"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.paste.empty",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.paste.empty",
+              "document": "unchanged"
+            }
+          ]
+        },
+        {
+          "id": "copy-style-from-the-context-menu-takes-the-same-style",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "contextMenu.open#canvas-right-click-element-or-page",
+              "args": {
+                "target": "/Page/Hero"
+              },
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "clipboard.copyStyle#context-menu",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "clipboard.copyStyle#context-menu"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.style.copied",
+                  "params": {
+                    "name": "Hero"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "paste-style-from-the-context-menu-replaces-the-target-style",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "clipboard.copyStyle#key-ctrl-alt-c-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "selection.select#canvas-click-element-or-page",
+              "args": {
+                "target": "/Page/Plans/Grid/CardB"
+              },
+              "target": "/Page/Plans/Grid/CardB",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "contextMenu.open#canvas-right-click-element-or-page",
+              "args": {
+                "target": "/Page/Plans/Grid/CardB"
+              },
+              "target": "/Page/Plans/Grid/CardB",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "clipboard.pasteStyle#context-menu",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "clipboard.pasteStyle#context-menu"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/CardB/@styles",
+                "value": {
+                  "desktop": {
+                    "base": {
+                      "padding-top": "56px",
+                      "padding-right": "40px",
+                      "padding-bottom": "56px",
+                      "padding-left": "40px"
+                    }
+                  }
+                }
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid/CardB"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Plans/Grid/CardB",
+                  "property": "padding-top",
+                  "value": "56px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.style.pasted",
+                  "params": {
+                    "name": "CardB"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
+    }
+  ]
+}

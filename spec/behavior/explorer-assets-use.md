@@ -1,0 +1,67 @@
+# explorer-assets-use — Use assets in Image elements and drop images onto the canvas
+
+How Pager behaves, observed by running it from `.cache/pager-run` (Chrome, window 1600×900) and read from its source. Source references are `path:line` inside Pager. Test page: Section > [Heading, Paragraph].
+
+## Trigger
+
+- **Image Source:** a plain text field for a URL (observed: one text input, no asset picker).
+- **Dropping an image file on the canvas does nothing.** Observed by dispatching `dragenter`, `dragover` and `drop` with a `DataTransfer` holding `photo.png` (`image/png`) at a point between the Heading and the Paragraph:
+  - on the shell (the target was the `IFRAME#paperFrame`) and inside the iframe (target `P`);
+  - no handler called `preventDefault`;
+  - the document was unchanged and no status message appeared.
+- The only `drop` handler in Pager belongs to the in-place text editor and takes `text/plain` only (`src/app/boot.js:666-672`). Because `dragover` is never prevented, the page does not accept file drops at all; the browser's default handling applies.
+- There are no assets to rename or delete (see `explorer-assets.md`).
+
+## Hit zones and thresholds
+
+None for file drops in Pager.
+
+## Visual feedback
+
+None in Pager: no indicator, no insertion line, no message.
+
+## Result in the document
+
+Unchanged.
+
+## Undo and redo
+
+Not applicable in Pager.
+
+## Nested elements
+
+Not applicable in Pager.
+
+## Zoom other than 100 %
+
+Not applicable in Pager.
+
+## Keyboard equivalent
+
+None in Pager.
+
+## Problems in Pager
+
+1. **An Image cannot use an uploaded asset.** Required: the Image's Source field has an asset picker. Choosing an asset stores a reference to the asset in the document JSON and the canvas renders it (manifest feature `explorer-assets-use`).
+2. **Image files dropped on the canvas are ignored.** Required:
+   - While an image file is dragged over the canvas, the same drop indicator as a palette drag is shown (receiver tint, insertion line, label; see `palette-drag-insert.md`) at the same drop positions.
+   - On drop, the file is uploaded as an asset and an Image that uses it is inserted at the indicated position, as one undo step.
+3. **Renaming and deleting assets in use.** Required:
+   - Renaming an asset keeps every Image that uses it working.
+   - Deleting an asset in use, or a folder that holds one, asks for confirmation and lists where it is used.
+
+
+## Our rule (the user's real-use audit, item 7.3)
+
+- **The canvas draws a project file**: an attribute whose value names a file of the project (`src`, `poster`) draws as
+  the object URL of its bytes, while the document keeps the path (`resolvedSource`), so what the canvas shows is the
+  stored file.
+- **The Source field picks files**: the images the project holds are suggested under the field, and the choose button
+  beside it (`assetPicker.open`) opens the asset picker (`shell/asset-picker.tsx`) whose items
+  (`element.setAttribute#asset-picker-choose`) write the field's attribute with the file's path — one undo step.
+  Escape (the picker's own key context), the close button and a click on the shield leave it.
+- **An image file dropped on the canvas** (`assets.insertImageFile`) is stored and placed where the drop proposal says
+  (`parent` + `index`), as element.insert places an element; dropped on an image, the file becomes that image's source
+  (`replace`) — the acceptance of item 7.3. The proposal the palette draws is drawn for it too (the pointer owner).
+- **The export carries every file of the tree** at its path (feature export-assets), so the exported page shows its
+  images, and the preview draws them from the stored bytes.

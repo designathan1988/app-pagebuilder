@@ -1,0 +1,1140 @@
+{
+  "domain": "files",
+  "commands": [
+    {
+      "id": "pages.add",
+      "labelKey": "command.pages.add",
+      "owner": "src/core/project/pages.ts",
+      "introducedBy": "explorer-pages",
+      "args": {
+        "name": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.pages.nameTaken"
+      ],
+      "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
+      "entryPoints": [
+        {
+          "id": "explorer-add-page",
+          "kind": "panel-control",
+          "drawnAs": "icon-button",
+          "pressed": false,
+          "feature": "explorer-pages",
+          "panel": "explorer",
+          "control": "add-page",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.pages.add",
+          "faceLabelKey": null,
+          "icon": "plus",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "explorer-pages",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {
+            "name": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "pages.rename",
+      "labelKey": "command.pages.rename",
+      "owner": "src/core/project/pages.ts",
+      "introducedBy": "explorer-pages",
+      "args": {
+        "page": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        },
+        "name": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.pages.nameTaken"
+      ],
+      "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
+      "entryPoints": [
+        {
+          "id": "explorer-page-name-field",
+          "kind": "panel-control",
+          "drawnAs": "field",
+          "pressed": false,
+          "feature": "explorer-pages",
+          "panel": "explorer",
+          "control": "page-name-field",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.pages.rename",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "explorer-pages",
+            "order": 3
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "pages.duplicate",
+      "labelKey": "command.pages.duplicate",
+      "owner": "src/core/project/pages.ts",
+      "introducedBy": "explorer-pages",
+      "args": {
+        "page": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
+      "entryPoints": [
+        {
+          "id": "explorer-page-duplicate",
+          "kind": "panel-control",
+          "drawnAs": "icon-button",
+          "pressed": false,
+          "feature": "explorer-pages",
+          "panel": "explorer",
+          "control": "page-duplicate",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.pages.duplicate",
+          "faceLabelKey": null,
+          "icon": "copy",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "explorer-pages",
+            "order": 4
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "pages.delete",
+      "labelKey": "command.pages.delete",
+      "owner": "src/core/project/pages.ts",
+      "introducedBy": "explorer-pages",
+      "args": {
+        "page": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.pages.homeUndeletable"
+      ],
+      "confirmation": {
+        "messageKey": "dialog.deletePage.message",
+        "confirmKey": "dialog.delete",
+        "cancelKey": "dialog.cancel"
+      },
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
+      "entryPoints": [
+        {
+          "id": "explorer-page-delete",
+          "kind": "panel-control",
+          "drawnAs": "icon-button",
+          "pressed": false,
+          "feature": "explorer-pages",
+          "panel": "explorer",
+          "control": "page-delete",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.pages.delete",
+          "faceLabelKey": null,
+          "icon": "trash",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "explorer-pages",
+            "order": 5
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "pages.switch",
+      "labelKey": "command.pages.switch",
+      "owner": "src/core/project/pages.ts",
+      "introducedBy": "explorer-pages",
+      "args": {
+        "page": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "explorer-page-row",
+          "kind": "panel-control",
+          "drawnAs": "item",
+          "pressed": false,
+          "feature": "explorer-pages",
+          "panel": "explorer",
+          "control": "page-row",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.pages.switch",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "explorer-pages",
+            "order": 2
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "file-tab",
+          "kind": "panel-control",
+          "drawnAs": "item",
+          "pressed": false,
+          "feature": "explorer-pages",
+          "panel": "file-tabs",
+          "control": "page-tab",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.pages.switch",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "file-tabs",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {
+            "page": ""
+          }
+        },
+        {
+          "id": "toolbar-top-bar-page-switcher",
+          "kind": "toolbar",
+          "drawnAs": "item",
+          "pressed": false,
+          "feature": "explorer-pages",
+          "toolbar": "top-bar",
+          "labelKey": "topbar.pageSwitcher",
+          "faceLabelKey": null,
+          "icon": "file",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "top-bar",
+            "order": 6
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {
+            "page": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "files.createFolder",
+      "labelKey": "command.files.newFolder",
+      "owner": "src/core/files/files.ts",
+      "introducedBy": "explorer-file-system",
+      "args": {
+        "path": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.files.nameTaken",
+        "status.files.generatedPath"
+      ],
+      "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
+      "entryPoints": [
+        {
+          "id": "explorer-new-folder",
+          "kind": "panel-control",
+          "drawnAs": "field",
+          "pressed": false,
+          "feature": "explorer-file-system",
+          "panel": "explorer",
+          "control": "new-folder",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.files.newFolder",
+          "faceLabelKey": null,
+          "icon": "folder-plus",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "explorer-files",
+            "order": 2
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "files.createFile",
+      "labelKey": "command.files.newFile",
+      "owner": "src/core/files/files.ts",
+      "introducedBy": "explorer-file-system",
+      "args": {
+        "path": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.files.nameTaken",
+        "status.files.generatedPath"
+      ],
+      "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
+      "entryPoints": [
+        {
+          "id": "explorer-new-file",
+          "kind": "panel-control",
+          "drawnAs": "field",
+          "pressed": false,
+          "feature": "explorer-file-system",
+          "panel": "explorer",
+          "control": "new-file",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.files.newFile",
+          "faceLabelKey": null,
+          "icon": "file-plus",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "explorer-files",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "files.startRename",
+      "labelKey": "command.files.startRename",
+      "owner": "src/editor/explorer/explorer.ts",
+      "introducedBy": "explorer-file-system",
+      "args": {
+        "path": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "explorer-file-name",
+          "kind": "panel-control",
+          "drawnAs": "icon-button",
+          "pressed": false,
+          "feature": "explorer-file-system",
+          "panel": "explorer",
+          "control": "file-name",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "explorer.renameRow",
+          "faceLabelKey": null,
+          "icon": "pen",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "explorer-files",
+            "order": 5
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "files.rename",
+      "labelKey": "command.files.rename",
+      "owner": "src/core/files/files.ts",
+      "introducedBy": "explorer-file-system",
+      "args": {
+        "path": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        },
+        "name": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.files.nameTaken",
+        "status.files.generatedPath"
+      ],
+      "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
+      "entryPoints": [
+        {
+          "id": "explorer-file-name-field",
+          "kind": "panel-control",
+          "drawnAs": "field",
+          "pressed": false,
+          "feature": "explorer-file-system",
+          "panel": "explorer",
+          "control": "file-name-field",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.files.rename",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "explorer-files",
+            "order": 6
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "files.move",
+      "labelKey": "command.files.moveTo",
+      "owner": "src/core/files/files.ts",
+      "introducedBy": "explorer-file-system",
+      "args": {
+        "path": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        },
+        "to": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        },
+        "distance": {
+          "type": "number",
+          "values": [],
+          "optional": true
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.files.nameTaken",
+        "status.files.generatedPath"
+      ],
+      "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-gesture",
+        "noChange": "no-entry"
+      },
+      "entryPoints": [
+        {
+          "id": "panel-drag-explorer-row-folder",
+          "kind": "panel-drag",
+          "feature": "explorer-file-system",
+          "source": "explorer-row",
+          "zone": "folder",
+          "gesture": "explorer-drag",
+          "labelKey": "command.files.moveTo",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "explorer-move-to",
+          "kind": "panel-control",
+          "drawnAs": "icon-button",
+          "pressed": false,
+          "feature": "explorer-file-system",
+          "panel": "explorer",
+          "control": "move-to",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.files.moveTo",
+          "faceLabelKey": null,
+          "icon": "folder-input",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "explorer-files",
+            "order": 7
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "explorer-move-target",
+          "kind": "panel-control",
+          "drawnAs": "item",
+          "pressed": false,
+          "feature": "explorer-file-system",
+          "panel": "explorer",
+          "control": "move-target",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "explorer.moveInto",
+          "faceLabelKey": null,
+          "icon": "folder-input",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "explorer-files",
+            "order": 8
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "files.delete",
+      "labelKey": "command.files.delete",
+      "owner": "src/core/files/files.ts",
+      "introducedBy": "explorer-file-system",
+      "args": {
+        "path": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.files.generatedPath",
+        "status.files.holdsPage"
+      ],
+      "confirmation": {
+        "messageKey": "dialog.deleteFiles.message",
+        "confirmKey": "dialog.delete",
+        "cancelKey": "dialog.cancel"
+      },
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
+      "entryPoints": [
+        {
+          "id": "explorer-delete",
+          "kind": "panel-control",
+          "drawnAs": "icon-button",
+          "pressed": false,
+          "feature": "explorer-file-system",
+          "panel": "explorer",
+          "control": "delete",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.files.delete",
+          "faceLabelKey": null,
+          "icon": "trash",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "explorer-files",
+            "order": 9
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "files.open",
+      "labelKey": "command.files.open",
+      "owner": "src/editor/explorer/explorer.ts",
+      "introducedBy": "explorer-file-system",
+      "args": {
+        "path": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "explorer-file-row",
+          "kind": "panel-control",
+          "drawnAs": "item",
+          "pressed": false,
+          "feature": "explorer-file-system",
+          "panel": "explorer",
+          "control": "file-row",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.files.open",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "explorer-files",
+            "order": 4
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "file-tab",
+          "kind": "panel-control",
+          "drawnAs": "item",
+          "pressed": false,
+          "feature": "explorer-file-system",
+          "panel": "file-tabs",
+          "control": "file-tab",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.files.open",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "file-tabs",
+            "order": 3
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "files.closeTab",
+      "labelKey": "command.files.closeTab",
+      "owner": "src/editor/explorer/file-tabs.ts",
+      "introducedBy": "explorer-file-system",
+      "args": {
+        "path": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "file-tab-close",
+          "kind": "panel-control",
+          "drawnAs": "icon-button",
+          "pressed": false,
+          "feature": "explorer-file-system",
+          "panel": "file-tabs",
+          "control": "close",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.files.closeTab",
+          "faceLabelKey": null,
+          "icon": "x",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "file-tabs",
+            "order": 2
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "files.upload",
+      "labelKey": "command.files.upload",
+      "owner": "src/core/files/files.ts",
+      "introducedBy": "explorer-assets",
+      "args": {
+        "files": {
+          "type": "file",
+          "values": [],
+          "optional": false
+        },
+        "folder": {
+          "type": "path",
+          "values": [],
+          "optional": true
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.files.nameTaken",
+        "status.files.unsupportedType"
+      ],
+      "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-gesture",
+        "noChange": "no-entry"
+      },
+      "entryPoints": [
+        {
+          "id": "explorer-upload",
+          "kind": "panel-control",
+          "drawnAs": "icon-button",
+          "pressed": false,
+          "feature": "explorer-assets",
+          "panel": "explorer",
+          "control": "upload",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.files.upload",
+          "faceLabelKey": null,
+          "icon": "arrow-up-to-line",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "explorer-files",
+            "order": 3
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": [],
+            "fileReading": "upload"
+          },
+          "args": {}
+        },
+        {
+          "id": "panel-drag-os-file-explorer-folder",
+          "kind": "panel-drag",
+          "feature": "explorer-assets",
+          "source": "os-file",
+          "zone": "explorer-folder",
+          "gesture": "file-drag",
+          "labelKey": "command.files.upload",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": [],
+            "fileReading": "upload"
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "files.saveContent",
+      "labelKey": "command.files.save",
+      "owner": "src/core/files/files.ts",
+      "introducedBy": "code-panel-edit-js",
+      "args": {
+        "path": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        },
+        "content": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.js.invalidAt",
+        "status.files.generatedPath"
+      ],
+      "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
+      "entryPoints": [
+        {
+          "id": "code-panel-save",
+          "kind": "panel-control",
+          "drawnAs": "primary",
+          "pressed": false,
+          "feature": "code-panel-edit-js",
+          "panel": "code-panel",
+          "control": "save",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.files.save",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "code-view",
+            "order": 9
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {
+            "path": "",
+            "content": ""
+          }
+        },
+        {
+          "id": "key-ctrl-s-in-code-editor",
+          "kind": "shortcut",
+          "feature": "code-panel-edit-js",
+          "chord": "Ctrl+S",
+          "context": "code-editor",
+          "gesture": null,
+          "labelKey": "command.files.save",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {
+            "path": "",
+            "content": ""
+          }
+        },
+        {
+          "id": "code-panel-editor",
+          "kind": "panel-control",
+          "drawnAs": "field",
+          "pressed": false,
+          "feature": "code-panel-edit-js",
+          "panel": "code-panel",
+          "control": "editor",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.files.save",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "code-view",
+            "order": 10
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {
+            "path": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "assets.insertImageFile",
+      "labelKey": "command.assets.insertImage",
+      "owner": "src/core/files/assets.ts",
+      "introducedBy": "explorer-assets-use",
+      "args": {
+        "file": {
+          "type": "file",
+          "values": [],
+          "optional": false
+        },
+        "parent": {
+          "type": "node",
+          "values": [],
+          "optional": true
+        },
+        "index": {
+          "type": "integer",
+          "values": [],
+          "optional": true
+        },
+        "replace": {
+          "type": "node",
+          "values": [],
+          "optional": true
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.refused.onlyAccepts",
+        "status.refused.requiresParent",
+        "status.refused.interactiveInside",
+        "status.refused.formInForm",
+        "status.refused.singleChild",
+        "status.refused.labelOneControl",
+        "status.refused.noChildren",
+        "status.locked.insert"
+      ],
+      "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-gesture",
+        "noChange": "no-entry"
+      },
+      "entryPoints": [
+        {
+          "id": "canvas-drag-os-image-file-drop-proposal",
+          "kind": "canvas-drag",
+          "feature": "explorer-assets-use",
+          "source": "os-image-file",
+          "zone": "drop-proposal",
+          "gesture": "file-drag",
+          "labelKey": "command.assets.insertImage",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": [],
+            "fileReading": "upload"
+          },
+          "args": {}
+        }
+      ]
+    }
+  ]
+}

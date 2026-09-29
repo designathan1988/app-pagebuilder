@@ -1,0 +1,114 @@
+{
+  "exclusions": [
+    {
+      "property": "break-before",
+      "keyword": "region",
+      "unit": null,
+      "evidence": {
+        "kind": "spec",
+        "source": "https://drafts.csswg.org/css-break-3/#break-between and https://drafts.csswg.org/css-regions-1/",
+        "note": "The Fragmentation 3 values region and avoid-region force or avoid a break between CSS Regions. CSS Regions has no implementation in the current Chrome, Firefox or Safari (Blink removed it in 2014; BCD css.properties.flow-into has no support in any of them), so every browser parses these values and none acts on them. BCD has no entry of their own, so css-compat.json gave them the support of the property."
+      }
+    },
+    {
+      "property": "break-before",
+      "keyword": "avoid-region",
+      "unit": null,
+      "evidence": {
+        "kind": "spec",
+        "source": "https://drafts.csswg.org/css-break-3/#break-between and https://drafts.csswg.org/css-regions-1/",
+        "note": "The Fragmentation 3 values region and avoid-region force or avoid a break between CSS Regions. CSS Regions has no implementation in the current Chrome, Firefox or Safari (Blink removed it in 2014; BCD css.properties.flow-into has no support in any of them), so every browser parses these values and none acts on them. BCD has no entry of their own, so css-compat.json gave them the support of the property."
+      }
+    },
+    {
+      "property": "break-after",
+      "keyword": "region",
+      "unit": null,
+      "evidence": {
+        "kind": "spec",
+        "source": "https://drafts.csswg.org/css-break-3/#break-between and https://drafts.csswg.org/css-regions-1/",
+        "note": "The Fragmentation 3 values region and avoid-region force or avoid a break between CSS Regions. CSS Regions has no implementation in the current Chrome, Firefox or Safari (Blink removed it in 2014; BCD css.properties.flow-into has no support in any of them), so every browser parses these values and none acts on them. BCD has no entry of their own, so css-compat.json gave them the support of the property."
+      }
+    },
+    {
+      "property": "break-after",
+      "keyword": "avoid-region",
+      "unit": null,
+      "evidence": {
+        "kind": "spec",
+        "source": "https://drafts.csswg.org/css-break-3/#break-between and https://drafts.csswg.org/css-regions-1/",
+        "note": "The Fragmentation 3 values region and avoid-region force or avoid a break between CSS Regions. CSS Regions has no implementation in the current Chrome, Firefox or Safari (Blink removed it in 2014; BCD css.properties.flow-into has no support in any of them), so every browser parses these values and none acts on them. BCD has no entry of their own, so css-compat.json gave them the support of the property."
+      }
+    },
+    {
+      "property": "break-inside",
+      "keyword": "avoid-region",
+      "unit": null,
+      "evidence": {
+        "kind": "spec",
+        "source": "https://drafts.csswg.org/css-break-3/#break-between and https://drafts.csswg.org/css-regions-1/",
+        "note": "The Fragmentation 3 values region and avoid-region force or avoid a break between CSS Regions. CSS Regions has no implementation in the current Chrome, Firefox or Safari (Blink removed it in 2014; BCD css.properties.flow-into has no support in any of them), so every browser parses these values and none acts on them. BCD has no entry of their own, so css-compat.json gave them the support of the property."
+      }
+    },
+    {
+      "property": "text-decoration",
+      "keyword": "blink",
+      "unit": null,
+      "evidence": {
+        "kind": "spec",
+        "source": "https://drafts.csswg.org/css-text-decor-3/#valdef-text-decoration-line-blink",
+        "note": "The Text Decoration 3 value blink lets conforming user agents not blink the text, and the current Chrome, Firefox and Safari parse it and never blink: the declaration changes nothing on the page."
+      }
+    },
+    {
+      "property": "text-decoration-line",
+      "keyword": "blink",
+      "unit": null,
+      "evidence": {
+        "kind": "spec",
+        "source": "https://drafts.csswg.org/css-text-decor-3/#valdef-text-decoration-line-blink",
+        "note": "The Text Decoration 3 value blink lets conforming user agents not blink the text, and the current Chrome, Firefox and Safari parse it and never blink: the declaration changes nothing on the page."
+      }
+    },
+    {
+      "property": "break-before",
+      "keyword": "all",
+      "unit": null,
+      "evidence": {
+        "kind": "chrome",
+        "source": "tests/e2e/css-support.spec.ts in Chrome 153.0.8010.54: CSS.supports('break-before', 'all') is false",
+        "note": "The installed Chrome's own parser refuses break-before: all, so a declaration with it is dropped and does nothing on the page; the browser is the truth, whatever the compatibility data says."
+      }
+    },
+    {
+      "property": "break-after",
+      "keyword": "all",
+      "unit": null,
+      "evidence": {
+        "kind": "chrome",
+        "source": "tests/e2e/css-support.spec.ts in Chrome 153.0.8010.54: CSS.supports('break-after', 'all') is false",
+        "note": "The installed Chrome's own parser refuses break-after: all, so a declaration with it is dropped and does nothing on the page; the browser is the truth, whatever the compatibility data says."
+      }
+    },
+    {
+      "property": "display",
+      "keyword": "run-in",
+      "unit": null,
+      "evidence": {
+        "kind": "chrome",
+        "source": "tests/e2e/css-support.spec.ts in Chrome 153.0.8010.54: CSS.supports('display', 'run-in') is false",
+        "note": "The installed Chrome's own parser refuses display: run-in, so a declaration with it is dropped and does nothing on the page; the browser is the truth, whatever the compatibility data says."
+      }
+    },
+    {
+      "property": "columns",
+      "keyword": null,
+      "unit": "%",
+      "evidence": {
+        "kind": "chrome",
+        "source": "tests/e2e/css-support.spec.ts in Chrome 153.0.8010.54: CSS.supports('columns', '1%') is false, as is CSS.supports('column-width', '1%'), while CSS.supports('columns', '10em') is true",
+        "note": "A column width takes no percentage in Chrome: The installed Chrome's own parser refuses columns: 1%, so a declaration with it is dropped and does nothing on the page; the browser is the truth, whatever the compatibility data says."
+      }
+    }
+  ]
+}

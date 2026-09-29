@@ -1,0 +1,159 @@
+// Keyboard focus (ARCHITECTURE.md, Command owners): focus.next, focus.previous, focus.first, focus.last and
+// focus.activate move the keyboard focus among the items of the region that holds it, or run the focused item. The
+// region is the element that names the focused key context (data-key-context: a menu, a toolbar, a tab strip…) and
+// its items are its own focusable controls, in document order, not those of a region nested in it (a submenu).
+// A handler never touches the page: it records the request in the editor state, and the focus owner's installer
+// carries it out on the DOM focus when the state changes.
+import { registerHandler } from '../../core/commands/registry.ts';
+import type { EditorUi } from '../state.ts';
+import type { EditorStore } from '../store.ts';
+
+export type FocusMove = 'next' | 'previous' | 'first' | 'last' | 'activate' | 'parent' | 'nextRegion' | 'previousRegion' | 'canvas';
+
+export interface FocusState {
+  // the last request; its number tells a new request from one already carried out
+  readonly request: { readonly move: FocusMove; readonly count: number } | null;
+}
+
+export const INITIAL_FOCUS: FocusState = { request: null };
+
+export const asking = (ui: EditorUi, move: FocusMove): EditorUi => ({ ...ui, focus: { request: { move, count: (ui.focus.request?.count ?? 0) + 1 } } });
+
+export const focusNext = registerHandler<'focus.next', EditorUi>('focus.next', ({ state }) => ({ kind: 'change', ui: asking(state.ui, 'next') }));
+export const focusPrevious = registerHandler<'focus.previous', EditorUi>('focus.previous', ({ state }) => ({ kind: 'change', ui: asking(state.ui, 'previous') }));
+export const focusFirst = registerHandler<'focus.first', EditorUi>('focus.first', ({ state }) => ({ kind: 'change', ui: asking(state.ui, 'first') }));
+export const focusLast = registerHandler<'focus.last', EditorUi>('focus.last', ({ state }) => ({ kind: 'change', ui: asking(state.ui, 'last') }));
+export const focusActivate = registerHandler<'focus.activate', EditorUi>('focus.activate', ({ state }) => ({ kind: 'change', ui: asking(state.ui, 'activate') }));
+
+// The editor's regions, in the order F6 walks them (spec keyboard-panel-navigation): the top bar, the left dock (the
+// activity bar and the panel it shows), the canvas, the workbench's dock, the inspector and the status bar. Regions a
+// window does not draw (a closed dock, the sidebar when it is collapsed) are skipped.
+const REGION_ROOTS: readonly string[] = ['header.top-bar', 'nav.activity-bar', 'aside.sidebar', '.stage', '.dock-strip', 'aside.inspector', 'footer.status-bar'];
+
+// the region roots the window draws, in that order
+const drawnRegions = (): Element[] => REGION_ROOTS.map((one) => document.querySelector(one)).filter((one): one is Element => one !== null);
+
+// The keyboard focus goes into a region: its first enabled control takes it, or the region itself when it holds none
+// (a region that takes the focus keeps the focus ring of its own).
+function focusRegion(region: Element): void {
+  const first = [...region.querySelectorAll<HTMLElement>(FOCUSABLE)].find((el) => el.getClientRects().length > 0 && !el.hasAttribute('disabled') && el.tabIndex >= 0);
+  if (first !== undefined) {
+    first.focus();
+    return;
+  }
+  const own = region as HTMLElement;
+  if (!own.hasAttribute('tabindex')) own.setAttribute('tabindex', '-1');
+  own.focus();
+}
+
+// The canvas takes the focus back (spec keyboard-panel-navigation: Escape inside a panel): the panel's control lets it
+// go, and the editor's own document holds the focus again — which is the canvas's key context (input/keymap.ts: the
+// body is the canvas), so the keys the person presses act on the page. The selection is untouched.
+export function focusTheCanvas(): void {
+  const held = document.activeElement;
+  if (held instanceof HTMLElement && held !== document.body) held.blur();
+}
+
+export const focusNextRegion = registerHandler<'focus.nextRegion', EditorUi>('focus.nextRegion', ({ state }) => ({ kind: 'change', ui: asking(state.ui, 'nextRegion') }));
+export const focusPreviousRegion = registerHandler<'focus.previousRegion', EditorUi>('focus.previousRegion', ({ state }) => ({ kind: 'change', ui: asking(state.ui, 'previousRegion') }));
+export const focusCanvas = registerHandler<'focus.canvas', EditorUi>('focus.canvas', ({ state }) => ({ kind: 'change', ui: asking(state.ui, 'canvas') }));
+
+// the controls that take the focus (an icon's <use href> is none)
+const FOCUSABLE = 'button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"]), [role^="menuitem"], [role="treeitem"], [role="tab"]';
+
+// The items of the region the focus is in: its own visible focusable controls, in document order.
+function itemsAround(focused: Element): { readonly items: HTMLElement[]; readonly at: number } | null {
+  const region = focused.closest('[data-key-context]');
+  if (!region) return null;
+  const own = [...region.querySelectorAll<HTMLElement>(FOCUSABLE)].filter((el) => el.closest('[data-key-context]') === region && el.getClientRects().length > 0);
+  // in a tree the items are its rows, not the buttons inside them (a row's caret, eye or lock)
+  const rows = own.filter((el) => el.getAttribute('role') === 'treeitem');
+  const items = rows.length > 0 ? rows : own;
+  return { items, at: items.findIndex((el) => el === focused || el.contains(focused)) };
+}
+
+// The option a combobox names active (its aria-activedescendant), marked selected; null for none.
+export function setActiveOption(field: HTMLElement, options: readonly HTMLElement[], index: number | null): void {
+  for (const [i, option] of options.entries()) option.setAttribute('aria-selected', String(i === index));
+  const option = index === null ? undefined : options[index];
+  if (option === undefined) {
+    field.removeAttribute('aria-activedescendant');
+    return;
+  }
+  field.setAttribute('aria-activedescendant', option.id);
+  option.scrollIntoView({ block: 'nearest' });
+}
+
+// A combobox (the command bar's search field) keeps the focus while its active option moves (the WAI-ARIA combobox):
+// its items are the options of the listbox it controls, and activating it clicks the active option's control. False
+// when the focus is on no combobox.
+function comboboxMove(move: FocusMove, field: Element): boolean {
+  if (!(field instanceof HTMLElement) || field.getAttribute('role') !== 'combobox') return false;
+  const list = document.getElementById(field.getAttribute('aria-controls') ?? '');
+  if (!list) return false;
+  const options = [...list.querySelectorAll<HTMLElement>('[role="option"]')];
+  const count = options.length;
+  if (count === 0) return true;
+  const at = options.findIndex((o) => o.id !== '' && o.id === field.getAttribute('aria-activedescendant'));
+  if (move === 'activate') {
+    const option = options[at];
+    (option?.querySelector<HTMLElement>('[data-door]') ?? option)?.click();
+    return true;
+  }
+  if (move === 'parent') return true;
+  const index = move === 'first' ? 0 : move === 'last' ? count - 1 : move === 'next' ? (at + 1) % count : at < 0 ? count - 1 : (at - 1 + count) % count;
+  setActiveOption(field, options, index);
+  return true;
+}
+
+export function carryOut(move: FocusMove, focused: Element | null): void {
+  if (move === 'canvas') {
+    focusTheCanvas();
+    return;
+  }
+  if (!focused) return;
+  // F6 and Shift+F6: the next (previous) region that a window draws, after (before) the region the focus is in; from
+  // no region at all the first (last) one
+  if (move === 'nextRegion' || move === 'previousRegion') {
+    const regions = drawnRegions();
+    if (regions.length === 0) return;
+    const at = regions.findIndex((one) => one.contains(focused));
+    const step = move === 'nextRegion' ? 1 : -1;
+    focusRegion(regions[at < 0 ? (step > 0 ? 0 : regions.length - 1) : (at + step + regions.length) % regions.length] as Element);
+    return;
+  }
+  if (comboboxMove(move, focused)) return;
+  const around = itemsAround(focused);
+  if (!around || around.items.length === 0) return;
+  const { items, at } = around;
+  if (move === 'activate') {
+    items[at]?.click();
+    return;
+  }
+  // a tree row's parent row: the nearest row before it one level up (aria-level)
+  if (move === 'parent') {
+    const level = Number(items[at]?.getAttribute('aria-level') ?? '0');
+    for (let i = at - 1; i >= 0; i -= 1) {
+      if (Number(items[i]?.getAttribute('aria-level') ?? '0') === level - 1) {
+        items[i]?.focus();
+        return;
+      }
+    }
+    return;
+  }
+  const count = items.length;
+  // from the region itself (no item has the focus yet) next is the first item and previous the last
+  const index = move === 'first' ? 0 : move === 'last' ? count - 1 : move === 'next' ? (at + 1) % count : at < 0 ? count - 1 : (at - 1 + count) % count;
+  items[index]?.focus();
+}
+
+// Carries out each new request on the document's focus; returns its removal.
+export function installFocus(store: EditorStore): () => void {
+  let done = store.getState().ui.focus.request?.count ?? 0;
+  return store.subscribe(() => {
+    const request = store.getState().ui.focus.request;
+    if (request === null || request.count === done) return;
+    done = request.count;
+    carryOut(request.move, document.activeElement);
+  });
+}
