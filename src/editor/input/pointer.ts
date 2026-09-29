@@ -301,6 +301,9 @@ const CHROME_CONTROLS = '[data-canvas-overlay] [data-edit-handle], [data-canvas-
 function chromeControl(at: Point, selector: string, target: EventTarget | null): Element | null {
   const direct = target instanceof Element ? target.closest(selector) : null;
   if (direct !== null) return direct;
+  // a press on a control of the editor's own — a drawn door, an anchor tab among them — is that control's, never one
+  // of the chrome's handles drawn over the same point (a tab stands beside the edge its handle sits on)
+  if (target instanceof Element && target.closest('[data-door]') !== null) return null;
   // Only a press that lands on the stage looks past its own target: a press on the page keeps its own door (a marquee
   // on a container's own area, a guide from a ruler), and a press on any editor surface over the canvas — a panel, the
   // quick panel, the text toolbar, the command bar, a dialog — keeps it too, or a handle drawn underneath would take

@@ -3161,14 +3161,14 @@
                   "region": "grid-columns",
                   "measure": "width",
                   "relation": "greater-than",
-                  "value": 48,
+                  "value": 49,
                   "reference": null
                 },
                 {
                   "region": "grid-columns",
                   "measure": "width",
                   "relation": "less-than",
-                  "value": 50,
+                  "value": 51,
                   "reference": null
                 }
               ],
@@ -3379,14 +3379,14 @@
                   "region": "grid-dots",
                   "measure": "width",
                   "relation": "greater-than",
-                  "value": 838,
+                  "value": 847,
                   "reference": null
                 },
                 {
                   "region": "grid-dots",
                   "measure": "width",
                   "relation": "less-than",
-                  "value": 848,
+                  "value": 857,
                   "reference": null
                 }
               ],
@@ -3469,14 +3469,14 @@
                   "region": "grid-columns",
                   "measure": "width",
                   "relation": "greater-than",
-                  "value": 48,
+                  "value": 49,
                   "reference": null
                 },
                 {
                   "region": "grid-columns",
                   "measure": "width",
                   "relation": "less-than",
-                  "value": 50,
+                  "value": 51,
                   "reference": null
                 }
               ],
@@ -3649,14 +3649,14 @@
                   "region": "grid-dots",
                   "measure": "width",
                   "relation": "greater-than",
-                  "value": 838,
+                  "value": 847,
                   "reference": null
                 },
                 {
                   "region": "grid-dots",
                   "measure": "width",
                   "relation": "less-than",
-                  "value": 848,
+                  "value": 857,
                   "reference": null
                 }
               ],
@@ -6124,7 +6124,7 @@
                       "width": "200px",
                       "top": "56px",
                       "left": "40px",
-                      "bottom": "151px"
+                      "bottom": "170px"
                     }
                   }
                 }
@@ -6143,7 +6143,7 @@
                 {
                   "node": "/Page/Hero/Title",
                   "property": "bottom",
-                  "value": "151px"
+                  "value": "170px"
                 }
               ],
               "geometry": [],
@@ -6492,7 +6492,7 @@
                       "width": "200px",
                       "height": "50px",
                       "left": "40px",
-                      "bottom": "151px"
+                      "bottom": "170px"
                     }
                   }
                 }
@@ -6511,7 +6511,7 @@
                 {
                   "node": "/Page/Hero/Title",
                   "property": "bottom",
-                  "value": "151px"
+                  "value": "170px"
                 }
               ],
               "geometry": [],
@@ -6855,7 +6855,7 @@
                       "width": "200px",
                       "top": "56px",
                       "left": "40px",
-                      "bottom": "151px"
+                      "bottom": "170px"
                     }
                   }
                 }
@@ -6874,7 +6874,7 @@
                 {
                   "node": "/Page/Hero/Title",
                   "property": "bottom",
-                  "value": "151px"
+                  "value": "170px"
                 }
               ],
               "geometry": [],
@@ -7213,7 +7213,7 @@
                       "width": "200px",
                       "height": "50px",
                       "left": "40px",
-                      "bottom": "151px"
+                      "bottom": "170px"
                     }
                   }
                 }
@@ -7232,7 +7232,7 @@
                 {
                   "node": "/Page/Hero/Title",
                   "property": "bottom",
-                  "value": "151px"
+                  "value": "170px"
                 }
               ],
               "geometry": [],
@@ -7595,7 +7595,7 @@
                       "width": "200px",
                       "top": "56px",
                       "left": "40px",
-                      "bottom": "151px"
+                      "bottom": "170px"
                     }
                   }
                 }
@@ -7614,7 +7614,7 @@
                 {
                   "node": "/Page/Hero/Title",
                   "property": "bottom",
-                  "value": "151px"
+                  "value": "170px"
                 }
               ],
               "geometry": [],
@@ -12100,7 +12100,7 @@
             {
               "door": "geometry.resize#handle-resize-e",
               "args": {
-                "width": "951px"
+                "width": "961px"
               },
               "target": "/Page/Hero/Intro",
               "drop": null,
@@ -12128,7 +12128,7 @@
               {
                 "op": "set",
                 "path": "/Page/Hero/Intro/@styles/desktop/base/width",
-                "value": "955px"
+                "value": "963px"
               }
             ],
             "selection": [
@@ -12146,14 +12146,14 @@
                   "node": "/Page/Hero/Intro",
                   "measure": "width",
                   "relation": "greater-than",
-                  "value": 954.5,
+                  "value": 962.5,
                   "reference": null
                 },
                 {
                   "node": "/Page/Hero/Intro",
                   "measure": "width",
                   "relation": "less-than",
-                  "value": 955.5,
+                  "value": 963.5,
                   "reference": null
                 }
               ],
@@ -12161,7 +12161,7 @@
                 {
                   "key": "status.resized",
                   "params": {
-                    "width": "955px",
+                    "width": "963px",
                     "height": "auto"
                   }
                 }
@@ -12365,7 +12365,7 @@
             {
               "door": "geometry.resize#handle-resize-e",
               "args": {
-                "width": "951px"
+                "width": "961px"
               },
               "target": "/Page/Hero/Intro",
               "drop": null,
@@ -12393,7 +12393,7 @@
               {
                 "op": "set",
                 "path": "/Page/Hero/Intro/@styles/desktop/base/width",
-                "value": "952px"
+                "value": "960px"
               }
             ],
             "selection": [
@@ -12411,14 +12411,14 @@
                   "node": "/Page/Hero/Intro",
                   "measure": "width",
                   "relation": "greater-than",
-                  "value": 951.5,
+                  "value": 959.5,
                   "reference": null
                 },
                 {
                   "node": "/Page/Hero/Intro",
                   "measure": "width",
                   "relation": "less-than",
-                  "value": 952.5,
+                  "value": 960.5,
                   "reference": null
                 }
               ],
@@ -12426,7 +12426,7 @@
                 {
                   "key": "status.resized",
                   "params": {
-                    "width": "952px",
+                    "width": "960px",
                     "height": "auto"
                   }
                 }
@@ -12521,7 +12521,7 @@
             {
               "door": "position.move#canvas-drag-positioned-element-containing-block",
               "args": {
-                "dx": 351,
+                "dx": 357,
                 "dy": 250
               },
               "target": "/Page/Hero/Title",
@@ -12544,7 +12544,7 @@
                     "base": {
                       "position": "absolute",
                       "top": "306px",
-                      "left": "395px"
+                      "left": "403px"
                     }
                   }
                 }
@@ -12579,7 +12579,7 @@
                 {
                   "node": "/Page/Hero/Title",
                   "property": "left",
-                  "value": "395px"
+                  "value": "403px"
                 }
               ],
               "geometry": [],
@@ -12667,7 +12667,7 @@
             {
               "door": "position.move#canvas-drag-positioned-element-containing-block",
               "args": {
-                "dx": 1075,
+                "dx": 991,
                 "dy": 250
               },
               "target": "/Page/Hero/Title",
@@ -12690,7 +12690,7 @@
                     "base": {
                       "position": "absolute",
                       "top": "306px",
-                      "left": "1118px"
+                      "left": "1034px"
                     }
                   }
                 }
@@ -12714,7 +12714,7 @@
                 {
                   "node": "/Page/Hero/Title",
                   "property": "left",
-                  "value": "1118px"
+                  "value": "1034px"
                 }
               ],
               "geometry": [],
