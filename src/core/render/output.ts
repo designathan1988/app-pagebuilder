@@ -50,6 +50,18 @@ export function writesNode(node: DocNode, model: OutputModel): boolean {
 const SIZE_SECTION = 'size';
 export const boxSizeOf = (properties: PropertiesFile): readonly string[] => properties.sections.find((s) => s.id === SIZE_SECTION)?.summary ?? [];
 
+// A stylesheet's own addresses, resolved: every url(…) an address names goes through the resolver, the way an
+// element's source attribute does (files.ts resolvedSource) — the canvas draws a project file through its object URL,
+// since it holds the bytes and has no folder to fetch a path from, while the published stylesheet keeps the path.
+export function fileUrlsIn(css: string, resolve: (address: string) => string | null): string {
+  return css.replace(/url\(\s*(?:'([^']*)'|"([^"]*)"|([^'")]*))\s*\)/g, (all, single: string | undefined, double: string | undefined, bare: string | undefined) => {
+    const address = (single ?? double ?? bare ?? '').trim();
+    if (address === '') return all;
+    const resolved = resolve(address);
+    return resolved === null || resolved === address ? all : `url("${resolved}")`;
+  });
+}
+
 export function outputModelFromManifest(elements: ElementsFile, properties: PropertiesFile): OutputModel {
   return {
     elements: new Map(elements.elements.map((e) => [e.id, { namespace: e.namespace, content: e.content }])),

@@ -6,7 +6,7 @@
     "doors": 998,
     "scenarios": 1333,
     "modules": 249,
-    "lines": 47872
+    "lines": 47899
   },
   "features": [
     {
@@ -3502,13 +3502,13 @@
     },
     {
       "path": "src/core/render/output.ts",
-      "lines": 199,
+      "lines": 211,
       "commands": [],
       "features": []
     },
     {
       "path": "src/core/render/render.ts",
-      "lines": 780,
+      "lines": 795,
       "commands": [],
       "features": []
     },

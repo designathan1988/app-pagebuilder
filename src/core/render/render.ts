@@ -41,7 +41,7 @@
 // They are the renderer's state, never the document's, and the page still gets no event handler.
 import type { NodeId } from '../../generated/commands.ts';
 import { baseCss } from './base.ts';
-import { classesCss, elementAttributes, nodeCss, outputModelFromManifest, type OutputModel } from './output.ts';
+import { classesCss, elementAttributes, fileUrlsIn, nodeCss, outputModelFromManifest, type OutputModel } from './output.ts';
 export { elementAttributes, nodeCss, outputModelFromManifest, type OutputModel } from './output.ts';
 import type { ElementsFile, InteractionsFile, PropertiesFile } from '../../manifest/schema.ts';
 import { locate, walk, type DocNode, type DocumentJson } from '../document/model.ts';
@@ -51,7 +51,7 @@ import { canonical, type InlineRun, type TextRange } from '../text/inline.ts';
 import { ELEMENT_NODE, TEXT_NODE, browserBreak, leavesOf, lastContent, precedes, runsOfLeaves, type Leaf } from './inline.ts';
 import { svgMarkupOf } from '../elements/svg.ts';
 import { rootCss } from '../design/tokens.ts';
-import { filesOf, objectUrl } from '../files/files.ts';
+import { filesOf, objectUrl, resolvedSource } from '../files/files.ts';
 import { fontFaceCss } from '../files/fonts.ts';
 import { animationsOf, keyframesCss, previewDeclarations } from '../animation/animation.ts';
 
@@ -217,6 +217,10 @@ export class PageRenderer {
   private edit: { readonly node: NodeId; readonly context: string } | null = null;
   // the closed details and dialogs drawn open because of the selection (reveal)
   private revealed = new Set<NodeId>();
+  // The document the page shows now, kept at every entry point: a stylesheet's url(…) naming a project file is written
+  // as the file's object URL, as the source attributes are (files.ts), since the canvas holds the bytes and has no
+  // folder to fetch a path from — a background image the person uploaded draws on the canvas as it does in the export.
+  private doc: DocumentJson | null = null;
 
   constructor(
     private readonly target: Document,
@@ -258,6 +262,7 @@ export class PageRenderer {
   // edited: one stylesheet, after every node's, holding each selected node's values of that state as plain rules (with
   // their breakpoints' media queries); none otherwise. The export never has it.
   previewState(doc: DocumentJson, selection: readonly NodeId[], state: string | null): void {
+    this.doc = doc;
     const tree = doc.pages[this.page]?.tree ?? null;
     const css =
       state === null || tree === null
@@ -288,8 +293,9 @@ export class PageRenderer {
             })
             .filter((c) => c !== '')
             .join('\n');
+    const resolved = this.fileCss(css);
     let sheet = this.target.head.querySelector(`style[${PREVIEW_STYLE_ATTRIBUTE}]`);
-    if (css === '') {
+    if (resolved === '') {
       sheet?.remove();
       return;
     }
@@ -299,12 +305,13 @@ export class PageRenderer {
     }
     // always last, after every node's rules, so the state's values win as a state would
     if (sheet !== this.target.head.lastElementChild) this.target.head.append(sheet);
-    if (sheet.textContent !== css) sheet.textContent = css;
+    if (sheet.textContent !== resolved) sheet.textContent = resolved;
   }
 
   // The @keyframes of every animation the shown page holds, in the one style element of the canvas: what the timeline
   // preview plays (spec timeline-preview; the export writes its own from the same writer, core/animation/animation.ts).
   writeKeyframes(doc: DocumentJson): void {
+    this.doc = doc;
     const tree = doc.pages[this.page]?.tree ?? null;
     const blocks: string[] = [];
     const walk = (node: DocNode): void => {
@@ -325,7 +332,7 @@ export class PageRenderer {
       sheet.setAttribute(KEYFRAMES_STYLE_ATTRIBUTE, '');
       this.target.head.append(sheet);
     }
-    const css = blocks.join('\n');
+    const css = this.fileCss(blocks.join('\n'));
     if (sheet.textContent !== css) sheet.textContent = css;
   }
 
@@ -336,7 +343,7 @@ export class PageRenderer {
     const tree = doc.pages[this.page]?.tree ?? null;
     const node = preview === null || tree === null ? null : findNode(tree, preview.node);
     const animation = node === null || preview === null ? null : (node.animations ?? []).find((a) => a.name === preview.animation) ?? null;
-    const css = node === null || animation === null || preview === null ? '' : `${nodeSelector(node.id)} { ${previewDeclarations(animation, preview.time, preview.playing, preview.loop).join(' ')} }`;
+    const css = node === null || animation === null || preview === null ? '' : this.fileCss(`${nodeSelector(node.id)} { ${previewDeclarations(animation, preview.time, preview.playing, preview.loop).join(' ')} }`);
     let sheet = this.target.head.querySelector(`style[${PLAY_STYLE_ATTRIBUTE}]`);
     if (css === '') {
       sheet?.remove();
@@ -489,6 +496,7 @@ export class PageRenderer {
 
   // Builds the whole page: once, and when the rendered page itself is replaced.
   mount(doc: DocumentJson): void {
+    this.doc = doc;
     // the style elements of every node, also those a previous renderer of this document left
     for (const sheet of [...this.target.head.querySelectorAll(`style[${NODE_STYLE_ATTRIBUTE}], style[${EDITOR_STYLE_ATTRIBUTE}], style[${TOKENS_STYLE_ATTRIBUTE}], style[${CLASSES_STYLE_ATTRIBUTE}], style[${FONTS_STYLE_ATTRIBUTE}], style[${BASE_STYLE_ATTRIBUTE}]`)]) sheet.remove();
     for (const sheet of [
@@ -540,6 +548,7 @@ export class PageRenderer {
   // Applies a change's patches to the page: `before` is the document the page shows, `after` the one the patches
   // make of it.
   apply(before: DocumentJson, after: DocumentJson, patches: readonly Patch[]): void {
+    this.doc = after;
     if (patches.some((patch) => patch.path[0] === TOKENS_FIELD)) this.writeTokens(after);
     if (patches.some((patch) => patch.path[0] === CLASSES_FIELD)) this.writeClasses(after);
     // a font file added, removed or changed writes the fonts' @font-face rules again (the manifest's custom-fonts)
@@ -605,6 +614,12 @@ export class PageRenderer {
     element.append(...node.children.map((child) => this.build(child)));
     markupLast(element);
     return element;
+  }
+
+  // A stylesheet's text with its project-file addresses resolved to the files' object URLs (files.ts resolvedSource):
+  // what the canvas writes; the export writes the same CSS with its paths, which the archive's folder serves.
+  private fileCss(css: string): string {
+    return this.doc === null ? css : fileUrlsIn(css, (address) => resolvedSource(this.doc as DocumentJson, address));
   }
 
   // The node's own attributes (elementAttributes, the output's) and text on its element, with the editor's own marks,
@@ -722,7 +737,7 @@ export class PageRenderer {
   // The rules of the project's style classes, in their style element.
   private writeClasses(doc: DocumentJson): void {
     const sheet = this.target.head.querySelector(`style[${CLASSES_STYLE_ATTRIBUTE}]`);
-    const css = classesCss(doc.classes ?? [], this.model);
+    const css = this.fileCss(classesCss(doc.classes ?? [], this.model));
     if (sheet !== null && sheet.textContent !== css) sheet.textContent = css;
   }
 
@@ -761,7 +776,7 @@ export class PageRenderer {
   }
 
   private writeStyle(node: DocNode): void {
-    const css = nodeCss(node, nodeSelector(node.id), this.model, 'line', this.screen);
+    const css = this.fileCss(nodeCss(node, nodeSelector(node.id), this.model, 'line', this.screen));
     let sheet = this.sheets.get(node.id);
     if (css === '') {
       sheet?.remove();

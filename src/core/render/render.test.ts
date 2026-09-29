@@ -363,4 +363,30 @@ describe('the renderer (src/core/render/render.ts)', () => {
     const { target } = mounted(d, withEvent);
     expect(target.querySelector('[data-node="footer"]')?.hasAttribute('onclick')).toBe(false);
   });
+
+  // The dogfood finding of 2026-09-29: a hero with an uploaded background image drew white on the canvas while the
+  // export carried the picture — the stylesheet kept the path the canvas cannot fetch (a source ATTRIBUTE was already
+  // written as the file's object URL). A stylesheet's url(…) goes through the same resolver; the export never does.
+  it("writes a background image that names a project file as the file's object URL", () => {
+    const onePixel = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+    const mountedWith = applyPatches(doc, [
+      { op: 'add', path: ['files'], value: [{ path: 'img/hero.png', type: 'image/png', bytes: onePixel }] },
+      { op: 'add', path: at('children', 0, 'styles'), value: styles({ desktop: { base: { 'background-image': 'url("img/hero.png")' } } }) },
+    ]).document;
+    const created = URL.createObjectURL;
+    const urls: string[] = [];
+    URL.createObjectURL = () => {
+      const url = `blob:test/${urls.length}`;
+      urls.push(url);
+      return url;
+    };
+    try {
+      const { target } = mounted(mountedWith);
+      const sheet = target.querySelector('style[data-node-style="hero"]')?.textContent ?? '';
+      expect(sheet).toContain('background-image: url("blob:test/0")');
+      expect(sheet).not.toContain('img/hero.png');
+    } finally {
+      URL.createObjectURL = created;
+    }
+  });
 });
