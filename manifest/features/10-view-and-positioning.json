@@ -2912,14 +2912,14 @@
                   "region": "canvas-outlines",
                   "measure": "width",
                   "relation": "greater-than",
-                  "value": 838,
+                  "value": 847,
                   "reference": null
                 },
                 {
                   "region": "canvas-outlines",
                   "measure": "width",
                   "relation": "less-than",
-                  "value": 848,
+                  "value": 857,
                   "reference": null
                 }
               ],
@@ -3059,14 +3059,14 @@
                   "region": "canvas-outlines",
                   "measure": "width",
                   "relation": "greater-than",
-                  "value": 838,
+                  "value": 847,
                   "reference": null
                 },
                 {
                   "region": "canvas-outlines",
                   "measure": "width",
                   "relation": "less-than",
-                  "value": 848,
+                  "value": 857,
                   "reference": null
                 }
               ],

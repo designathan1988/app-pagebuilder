@@ -486,7 +486,9 @@ function nearestAccepted(document: DocumentJson, dragged: readonly NodeId[], ref
     const box = nodeBox(frame, refuser);
     if (box === null) return null;
     const axis = flowAxis(frame, parent.id);
-    const shownBefore = axis === 'x' ? at.x < box.x + box.width / 2 : at.y < box.y + box.height / 2;
+    // the pointer exactly on the refusing element's middle counts as on its near side: a drag aimed at the middle of
+    // what refuses it lands before it, the side a person reading the list expects (the audit's rule, asked at the tie)
+    const shownBefore = axis === 'x' ? at.x <= box.x + box.width / 2 : at.y <= box.y + box.height / 2;
     const placement = flowReversed(frame, parent.id) === shownBefore ? 'after' : 'before';
     const siblings = parent.children.filter((c) => !dragged.includes(c.id));
     const index = siblings.findIndex((c) => c.id === refuser) + (placement === 'after' ? 1 : 0);
@@ -1253,7 +1255,11 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     else if (insideOnce && across && fromBottom >= 0 && fromBottom < AUTOSCROLL_ZONE) step = AUTOSCROLL_MAX * (1 - fromBottom / AUTOSCROLL_ZONE);
     if (step !== 0 && scrollPage(frame, step)) scrolled = true;
     // the Layers tree scrolls the same way while the pointer is over it (Problems in Pager 2: a row below its fold is
-    // reached by dragging): its own box, its own arming, its own scrolled distance
+    // reached by dragging): its own box, its own arming, its own scrolled distance — and only where no row lies under
+    // the pointer. The zone is wider than a row, so on a short panel (the Insert view open above it) most rows sit
+    // inside it: a person aiming at a visible row had the tree carried away under the pointer, and the drop landed on
+    // the room the row had left (the audit's tile onto a Layers row landed nowhere). A drag taken past the rows — the
+    // empty room below the last one, above the first — still scrolls, which is what the drag needs to reach them.
     const tree = document.querySelector('.layers-tree');
     if (tree !== null) {
       const treeBox = tree.getBoundingClientRect();
@@ -1261,9 +1267,10 @@ export function installPointer(store: EditorStore, target: Window = window): () 
       const treeBottom = treeBox.bottom - pointerAt.y;
       const overTree = pointerAt.x >= treeBox.left && pointerAt.x <= treeBox.right;
       if (overTree && treeTop > AUTOSCROLL_ZONE && treeBottom > AUTOSCROLL_ZONE) insideTreeOnce = true;
+      const underRow = ROW_SELECT !== null && document.elementFromPoint(pointerAt.x, pointerAt.y)?.closest(`[data-door="${ROW_SELECT.ref}"]`) != null;
       let treeStep = 0;
-      if (insideTreeOnce && overTree && treeTop >= 0 && treeTop < AUTOSCROLL_ZONE) treeStep = -AUTOSCROLL_MAX * (1 - treeTop / AUTOSCROLL_ZONE);
-      else if (insideTreeOnce && overTree && treeBottom >= 0 && treeBottom < AUTOSCROLL_ZONE) treeStep = AUTOSCROLL_MAX * (1 - treeBottom / AUTOSCROLL_ZONE);
+      if (!underRow && insideTreeOnce && overTree && treeTop >= 0 && treeTop < AUTOSCROLL_ZONE) treeStep = -AUTOSCROLL_MAX * (1 - treeTop / AUTOSCROLL_ZONE);
+      else if (!underRow && insideTreeOnce && overTree && treeBottom >= 0 && treeBottom < AUTOSCROLL_ZONE) treeStep = AUTOSCROLL_MAX * (1 - treeBottom / AUTOSCROLL_ZONE);
       if (treeStep !== 0) {
         const before = tree.scrollTop;
         tree.scrollTop += treeStep;

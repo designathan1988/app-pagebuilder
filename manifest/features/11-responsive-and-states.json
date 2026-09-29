@@ -68,14 +68,14 @@
                   "node": "/Page/Hero",
                   "measure": "width",
                   "relation": "greater-than",
-                  "value": 1163.5,
+                  "value": 1179.5,
                   "reference": null
                 },
                 {
                   "node": "/Page/Hero",
                   "measure": "width",
                   "relation": "less-than",
-                  "value": 1164.5,
+                  "value": 1180.5,
                   "reference": null
                 }
               ],
@@ -142,14 +142,14 @@
                   "node": "/Page/Hero",
                   "measure": "width",
                   "relation": "greater-than",
-                  "value": 817.5,
+                  "value": 833.5,
                   "reference": null
                 },
                 {
                   "node": "/Page/Hero",
                   "measure": "width",
                   "relation": "less-than",
-                  "value": 818.5,
+                  "value": 834.5,
                   "reference": null
                 }
               ],
@@ -216,14 +216,14 @@
                   "node": "/Page/Hero",
                   "measure": "width",
                   "relation": "greater-than",
-                  "value": 373.5,
+                  "value": 389.5,
                   "reference": null
                 },
                 {
                   "node": "/Page/Hero",
                   "measure": "width",
                   "relation": "less-than",
-                  "value": 374.5,
+                  "value": 390.5,
                   "reference": null
                 }
               ],
@@ -290,14 +290,14 @@
                   "node": "/Page/Hero",
                   "measure": "width",
                   "relation": "greater-than",
-                  "value": 1423.5,
+                  "value": 1439.5,
                   "reference": null
                 },
                 {
                   "node": "/Page/Hero",
                   "measure": "width",
                   "relation": "less-than",
-                  "value": 1424.5,
+                  "value": 1440.5,
                   "reference": null
                 }
               ],
