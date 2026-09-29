@@ -1307,7 +1307,11 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
     const carried = named === undefined ? undefined : step.args[named];
     if (typeof carried !== 'string') throw new Error(`step ${ref}: a file drag hands the file its "${named ?? 'file'}" argument names`);
     const at = d.kind === 'panel-drag' || step.drop === null ? null : await nodePoint(page, nodeAt(document, step.drop.reference).id, isRoot(document, step.drop.reference), step.drop.reference);
+    // the command reads the dropped file after the drop, as it reads a chosen one after the chooser closes: it has run
+    // once the status bar says something else (the drop itself only hands the events over)
+    const saidBeforeDrop = await page.getByRole('status').textContent();
     await dropOsFile(page, carried, at);
+    await expect.poll(() => page.getByRole('status').textContent(), { message: `step ${ref}: the dropped file is stored` }).not.toBe(saidBeforeDrop);
   } else if (d.kind === 'canvas-drag' && d.gesture === 'space-pan') {
     // a pan: pressed over the step's node with Space held (or with the middle button) and moved by the page's travel
     if (target === null || step.target === null) throw new Error(`step ${ref}: a pan starts over the node it names`);
