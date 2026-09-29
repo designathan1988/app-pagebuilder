@@ -55,12 +55,11 @@ test('the gap is the distance the page measures between neighbouring children', 
   expect(b.left - a.right).toBe(24);
 });
 
-test('on an element that is no flex or grid container a cell writes nothing', runs(OPEN, ROW), async ({ page }) => {
+test('on an element that is no flex or grid container no cell is drawn, so nothing writes', runs(OPEN, ROW), async ({ page }) => {
   const before = await declared(page, 'n-grid');
-  const cell = control(page, MATRIX, { args: { x: 'end', y: 'end' } });
-  await expect(cell).toHaveAttribute('aria-disabled', 'true');
-  // a person can press a control drawn disabled: the press reaches it (Playwright would wait for it to be enabled)
-  await cell.click({ force: true });
+  // the page computes no flex or grid layout for it, and a field of a context predicate shows only while it does
+  // (spec props-element-specific, "Our rule"): the matrix is not drawn at all, so no press can write
+  await expect(control(page, MATRIX, { args: { x: 'end', y: 'end' } })).toHaveCount(0);
   expect(await declared(page, 'n-grid'), 'nothing written').toEqual(before);
 });
 

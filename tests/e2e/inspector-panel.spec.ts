@@ -283,9 +283,10 @@ test('a collapsed section summarises the values the page computes; an open one s
   await expect(summary('border')).toHaveText(none);
   await expect(summary('text')).toHaveText('16px · 400');
   await expect(summary('effects')).toHaveText(none);
-  // a paragraph's margins come from the browser
+  // a paragraph carries the project's base style: margin 0 0 1rem (core/render/base.ts, spec base-style), so the page
+  // computes 0 in top, 16px at the bottom — the summary says exactly that
   await select(page, 'n-intro');
-  await expect(summary('space')).toHaveText('M 16px 0px');
+  await expect(summary('space')).toHaveText('M 0px 0px 16px');
   await runDoor(page, SECTION, { args: { section: 'space' } });
   await expect(summary('space')).toHaveCount(0);
 });
@@ -459,11 +460,13 @@ test('Element actions › Hide hides the selected element on the canvas, as one 
 });
 
 test('the status-bar Timeline icon opens the collapsed dock on its panel, where the tab then switches it', runs(DOCK_ICON, DOCK_TAB), async ({ page }) => {
-  await expect(page.getByRole('tabpanel')).toHaveCount(0);
+  // the dock's own body: the sidebar's panel area draws a tabpanel of its own (the workspace panels), so the
+  // collapsed dock is measured by what it draws
+  await expect(page.locator('.dock-body')).toHaveCount(0);
   // a collapsed dock draws no tab strip (A3.18): its panels stand as status-bar icons
   await expect(control(page, DOCK_TAB, { args: { panel: 'timeline' } })).toHaveCount(0);
   await runDoor(page, DOCK_ICON, { args: { panel: 'timeline' } });
-  const panel = page.getByRole('tabpanel');
+  const panel = page.locator('.dock-body');
   await expect(panel).toHaveAttribute('aria-label', words(LAYOUT.panels.timeline?.labelKey ?? ''));
   const tab = control(page, DOCK_TAB, { args: { panel: 'timeline' } });
   await expect(tab).toHaveAttribute('aria-selected', 'true');
