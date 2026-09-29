@@ -41,7 +41,9 @@ test('the test port has only its four readers, frozen and fixed on window', asyn
       configurable: descriptor?.configurable,
     };
   });
-  expect(shape).toEqual({ members: ['document', 'export', 'history', 'selection'], kinds: ['function', 'function', 'function', 'function'], frozen: true, writable: false, configurable: false });
+  // its readers: the document, the selection, the history and the export, and the incident feed's list and its
+  // explanations (main.tsx: what the page throws goes to the feed, and the test port carries it)
+  expect(shape).toEqual({ members: ['document', 'explain', 'export', 'history', 'incidents', 'selection'], kinds: ['function', 'function', 'function', 'function', 'function', 'object'], frozen: true, writable: false, configurable: false });
 });
 
 test('the test port reads what File › Open loaded, as copies, and its members change nothing', runs('project.open#menu-file'), async ({ page }) => {
@@ -57,7 +59,20 @@ test('the test port reads what File › Open loaded, as copies, and its members 
     // change a read, and call every member with arguments, as a test that tried to write would
     const document = port.document?.() as { pages: unknown[] };
     document.pages.length = 0;
-    for (const member of Object.values(port)) member({ version: 1, pages: [] }, ['x'], true);
+    // every reader called with arguments, and every explanation on the port's explain object, as a test that tried to
+    // write would (the explain object is not callable itself): a reader that refuses its arguments (an explanation of
+    // a command no manifest holds) still changes nothing, which is what this test is about
+    const attempt = (call: () => unknown) => {
+      try {
+        call();
+      } catch {
+        // a refused read
+      }
+    };
+    for (const member of Object.values(port)) {
+      if (typeof member === 'function') attempt(() => member({ version: 1, pages: [] }, ['x'], true));
+      else if (member !== null && typeof member === 'object') for (const inner of Object.values(member)) attempt(() => (inner as (...a: unknown[]) => unknown)({ version: 1, pages: [] }, ['x']));
+    }
   });
   expect(await read(page)).toEqual({ document: aurora, selection: [], history: { undoSteps: 0, redoSteps: 0 }, export: null });
   expect(await rendered()).toBe(nodes);

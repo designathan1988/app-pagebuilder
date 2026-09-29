@@ -74,15 +74,28 @@ test(
 
     // the selection outline lies on the element's box
     await expectBox(page, '[data-chrome="selection"]', intro, 'the selection outline lies on the paragraph');
-    // the label names the element and its tag, and sits above it, whatever the element, never inside it (DESIGN.md
-    // "Label rule", the user's decision of 2026-09-25)
+    // the label names the element and its tag, and takes the first free place of the label rule (chrome.tsx): above
+    // the element when that space is free, else inside its top-left corner when the label fits it, else below. The
+    // Intro's space above holds the Title's text and the label is taller than the one line it names, so it goes below.
     const label = page.locator('[data-chrome="label"]');
     await expect(label).toHaveText(/Intro\s*p/);
-    await expect(label).toHaveAttribute('data-placement', 'above');
+    await expect(label).toHaveAttribute('data-placement', 'below');
     const labelBox = await label.boundingBox();
     if (labelBox === null) throw new Error('the label is not laid out');
-    expect(labelBox.y + labelBox.height, 'the label ends above the element').toBeLessThanOrEqual(intro.y + 0.5);
+    expect(labelBox.y, 'the label starts below the element').toBeGreaterThanOrEqual(intro.y + intro.height - 0.5);
     expect(overlaps(labelBox, intro), 'the label lies outside the element').toBe(false);
+    // the Title's own space above is free: its label sits above it, outside its box
+    await page.locator('[data-door="selection.select#layers-row"][data-args*="n-title"]').first().click();
+    const titleBox = await screenBox(page, 'n-title');
+    await expect(label).toHaveAttribute('data-placement', 'above');
+    const above = await label.boundingBox();
+    if (above === null) throw new Error('the label is not laid out');
+    expect(above.y + above.height, 'the label ends above the element').toBeLessThanOrEqual(titleBox.y + 0.5);
+    expect(overlaps(above, titleBox), 'the label lies outside the element').toBe(false);
+    // the Intro again, clicked on the canvas (the focus stays in the canvas, so the Escape below reaches it): the
+    // hover after it compares its outline with the selection's
+    await page.mouse.click(centre(intro).x, centre(intro).y);
+    expect(await selection(page)).toEqual(['n-intro']);
 
     // hovering the title outlines it, thinner than the selection, and selects nothing
     const title = await screenBox(page, 'n-title');

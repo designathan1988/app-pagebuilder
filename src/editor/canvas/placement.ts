@@ -115,13 +115,17 @@ function heldInside(box: Box, area: Box): Box {
 // never the largest overlap just because it is the documented order.
 export function placeLabel(box: Box, size: { readonly width: number; readonly height: number }, gap: number, content: readonly Box[], canvas: Box, ghost: Box | null = null): { box: Box; placement: Placement } {
   const far = box.x + box.width - size.width;
+  // 'inside' needs the label to fit within the element it names: a label taller than the element spills past its
+  // bottom edge and reads as a label of whatever lies there (a paragraph one line tall), so the corner is offered only
+  // where the label fits it
+  const fitsInside = size.height <= box.height && size.width <= box.width;
   const places: { box: Box; placement: Placement }[] = [
     { placement: 'above', box: { x: box.x, y: box.y - gap - size.height, ...size } },
-    { placement: 'inside', box: { x: box.x + gap, y: box.y + gap, ...size } },
+    ...(fitsInside ? [{ placement: 'inside' as const, box: { x: box.x + gap, y: box.y + gap, ...size } }] : []),
     { placement: 'below', box: { x: box.x, y: box.y + box.height + gap, ...size } },
     { placement: 'above', box: { x: far, y: box.y - gap - size.height, ...size } },
     { placement: 'below', box: { x: far, y: box.y + box.height + gap, ...size } },
-    { placement: 'inside', box: { x: far - gap, y: box.y + gap, ...size } },
+    ...(fitsInside ? [{ placement: 'inside' as const, box: { x: far - gap, y: box.y + gap, ...size } }] : []),
   ];
   const clear = (p: { box: Box }) => ghost === null || !overlaps(p.box, ghost);
   // how much of the label's area covers page content, in square pixels
@@ -133,7 +137,7 @@ export function placeLabel(box: Box, size: { readonly width: number; readonly he
     }, 0);
   const candidates = places.map((p) => (within(p.box, canvas) ? p : { ...p, box: heldInside(p.box, canvas) }));
   const free = candidates.find((p) => !content.some((c) => overlaps(p.box, c)) && clear(p));
-  const fallback = places[2] as { box: Box; placement: Placement };
+  const fallback = places.find((p) => p.placement === 'below') as { box: Box; placement: Placement };
   const best = candidates.reduce((held, p) => (covered(p.box) < covered(held.box) ? p : held), { ...fallback, box: heldInside(fallback.box, canvas) });
   const chosen = free ?? best;
   if (ghost === null || clear(chosen)) return chosen;

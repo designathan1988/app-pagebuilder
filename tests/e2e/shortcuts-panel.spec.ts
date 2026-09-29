@@ -6,6 +6,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { expect, test } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
+import { isFeatureBuilt } from '../../src/app/features.ts';
+import type { FeatureId } from '../../src/generated/ids.ts';
 import { runDoor, runs } from './door.ts';
 
 const HELP = 'workspace.setPanelOpen#menu-help-shortcuts';
@@ -13,12 +15,12 @@ const TAB = 'workspace.setActiveTab#tab-strip-tab';
 
 interface Command {
   readonly id: string;
-  readonly entryPoints: readonly { readonly id: string; readonly kind: string; readonly chord?: string; readonly context?: string; readonly labelKey: string }[];
+  readonly entryPoints: readonly { readonly id: string; readonly kind: string; readonly chord?: string; readonly context?: string; readonly labelKey: string; readonly feature: string }[];
 }
 const COMMANDS: readonly Command[] = fs
   .readdirSync('manifest/commands')
   .flatMap((file) => (JSON.parse(fs.readFileSync(path.join('manifest/commands', file), 'utf8')) as { commands: Command[] }).commands);
-const SHORTCUTS = COMMANDS.flatMap((command) => command.entryPoints.filter((door) => door.kind === 'shortcut').map((door) => ({ ref: `${command.id}#${door.id}`, chord: door.chord ?? '', context: door.context ?? '', labelKey: door.labelKey })));
+const SHORTCUTS = COMMANDS.flatMap((command) => command.entryPoints.filter((door) => door.kind === 'shortcut').map((door) => ({ ref: `${command.id}#${door.id}`, chord: door.chord ?? '', context: door.context ?? '', labelKey: door.labelKey, feature: door.feature })));
 const EN = JSON.parse(fs.readFileSync('src/i18n/locales/en.json', 'utf8')) as Record<string, string>;
 
 test.beforeEach(async ({ page }) => {
@@ -55,9 +57,12 @@ test('Help › Keyboard shortcuts opens the panel as a dock tab, listing every b
     .filter((group) => group.count > 0)
     .map((group) => `${group.label} (${group.count})`);
   expect(groupLabels).toEqual(expectedGroups);
-  // a binding whose command the editor has not built yet is marked as not available, a built one is not
+  // a binding whose command the editor has not built yet is marked as not available, a built one is not: the marked
+  // rows are exactly the bindings of the features the registry has not built (every keyed feature is built now, so
+  // the list is empty — and a keyed feature that waits again is marked, which is what this pair proves)
   const marked = await panel.locator('[data-shortcut] .shortcuts__reason').evaluateAll((els) => els.map((el) => el.closest('[data-shortcut]')?.getAttribute('data-shortcut') ?? ''));
-  expect(marked.length).toBeGreaterThan(0);
+  const waiting = SHORTCUTS.filter((binding) => !isFeatureBuilt(binding.feature as FeatureId)).map((binding) => binding.ref);
+  expect(marked.sort()).toEqual(waiting.sort());
   expect(marked).not.toContain('history.undo#key-ctrl-z-in-global');
   // and the tab closes with the dock's own close button
   await page.locator('[data-door="workspace.setPanelOpen#workbench-tab-close"][data-args*="shortcuts"]').click();

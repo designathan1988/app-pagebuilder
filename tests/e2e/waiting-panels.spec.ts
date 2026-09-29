@@ -1,6 +1,7 @@
-// The panels where the doors of future features wait: a door whose feature is not registered as built is not usable
-// (the door rule), so View › Timeline, View › Checks and Help › Keyboard shortcuts say "not available yet"; the Styles
-// view, whose feature is built, opens with its New variable usable.
+// The panels whose features were built last: a door whose feature is registered as built is usable (the door rule,
+// src/app/features.ts), so View › Timeline, View › Checks and Help › Keyboard shortcuts open their panels — the dock's
+// Timeline, the Checks and the Keyboard shortcuts — and the Styles view opens with its New variable usable. A door of
+// a feature that waits is drawn disabled by the unit test src/editor/doors/door.test.tsx, which plants one.
 import fs from 'node:fs';
 import path from 'node:path';
 import { expect, test, type Page } from '../support/test.ts';
@@ -27,25 +28,20 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator('.workbench')).toBeVisible();
 });
 
-// The door rule (the user's order of 2026-09-26, item 3): View › Timeline's feature (timeline-animations) is not
-// registered as built, so the item is not usable, says why, and a click on it opens nothing: the dock keeps its tabs
-// and stays folded. The 18 doors of dock-timeline wait behind it; the census fails any of them drawn usable.
-test('View › Timeline waits for its feature: not available yet, and a click opens nothing', runsUnavailable('workspace.setPanelOpen#menu-view-timeline'), async ({ page }) => {
+// The door rule (the user's order of 2026-09-26, item 3): View › Timeline's feature (timeline-animations) is
+// registered as built, so the item is usable and opens the dock's Timeline tab with its 18 doors drawn.
+test('View › Timeline opens the dock on its Timeline tab', runs('workspace.setPanelOpen#menu-view-timeline'), async ({ page }) => {
   const tabs = () => page.locator('[data-region="tab-strip"] [role="tab"]').evaluateAll((els) => els.map((el) => el.textContent));
-  // a fresh profile keeps the dock closed, drawing no strip (the audit's A3.18): it is opened first
-  await runDoor(page, 'workspace.setPanelOpen#menu-view-workbench');
-  const canvas = await page.locator('.centre').boundingBox();
-  expect(await tabs()).toEqual(['Timeline', 'Checks']);
-  expect(placedIn('dock-timeline').length).toBe(18);
+  // a fresh profile keeps the dock closed, drawing no strip (the audit's A3.18): the door opens it
   await openMenu(page, 'view');
   const door = page.locator('[data-door="workspace.setPanelOpen#menu-view-timeline"]');
-  await expect(door).toHaveAttribute('aria-disabled', 'true');
-  await expect(door).toHaveAttribute('title', /not available yet/);
-  await door.click({ force: true });
+  await expect(door).not.toHaveAttribute('aria-disabled', 'true');
+  await door.click();
   expect(await tabs()).toEqual(['Timeline', 'Checks']);
-  expect((await page.locator('.centre').boundingBox())?.height).toBe(canvas?.height);
-  await page.keyboard.press('Escape');
-  expect((await page.locator('.centre').boundingBox())?.height).toBe(canvas?.height);
+  const shown = page.locator('[data-region="dock-timeline"]');
+  await expect(shown).toBeVisible();
+  expect(placedIn('dock-timeline').length).toBe(18);
+  expect((await shown.locator('[data-door]').count())).toBeGreaterThan(0);
 });
 
 // css-variables-tokens is built: the Styles view's New variable is usable (it was "not available yet" while its feature
@@ -61,21 +57,24 @@ for (const ref of ['workspace.setPanelOpen#toolbar-activity-bar-styles', 'worksp
     await expect(page.locator('[data-region="explorer-pages"]')).toHaveCount(0);
     await expect(page.locator('[data-region="explorer-layers"]')).toHaveCount(1);
     const drawn = await drawnIn(page, 'styles');
-    // the view's title draws the panel header's Close (dock-toggles), then New variable
-    expect(drawn.map((d) => d.ref)).toEqual(['workspace.setPanelOpen#panel-header-close', 'tokens.create#variables-add']);
+    // the view's title draws the panel header's own drag handles, then the header's Close (dock-toggles), then New variable
+    expect(drawn.map((d) => d.ref).filter((ref) => !ref.startsWith('workspace.movePanel'))).toEqual(['workspace.setPanelOpen#panel-header-close', 'tokens.create#variables-add']);
     expect(drawn.filter((d) => d.disabled || d.title.includes('not available yet')).map((d) => d.ref)).toEqual([]);
   });
 }
 
-test('View › Checks and Help › Keyboard shortcuts stay not available yet', async ({ page }) => {
-  for (const [menu, ref] of [
-    ['view', 'workspace.setPanelOpen#menu-view-checks'],
-    ['help', 'workspace.setPanelOpen#menu-help-shortcuts'],
+test('View › Checks and Help › Keyboard shortcuts open their panels', async ({ page }) => {
+  for (const [menu, ref, region] of [
+    ['view', 'workspace.setPanelOpen#menu-view-checks', 'dock-checks'],
+    ['help', 'workspace.setPanelOpen#menu-help-shortcuts', 'shortcuts'],
   ] as const) {
     await page.keyboard.press('Escape');
     await openMenu(page, menu);
     const door = page.locator(`[data-door="${ref}"]`);
-    await expect(door, ref).toHaveAttribute('aria-disabled', 'true');
-    await expect(door, ref).toHaveAttribute('title', /not available yet/);
+    await expect(door, ref).not.toHaveAttribute('aria-disabled', 'true');
+    await door.click();
+    // the panel it opens is drawn with content, a region of it and the doors inside
+    const shown = page.locator(`[data-region="${region}"]`);
+    await expect(shown, ref).toBeVisible();
   }
 });

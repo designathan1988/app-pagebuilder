@@ -11,7 +11,9 @@ import { openEditor } from '../support/editor.ts';
 import { isFeatureBuilt } from '../../src/app/features.ts';
 import type { FeatureId } from '../../src/generated/ids.ts';
 
-const EMPTY = ['checks', 'shortcuts'];
+// every panel of the window is drawn with content now: a panel that waits behind an unbuilt feature is drawn disabled
+// by the unit test, and no door opens an empty panel
+const EMPTY: readonly string[] = [];
 const BUILT = ['explorer', 'elements', 'variables', 'layers', 'inspector', 'workbench', 'timeline', 'canvas-tools'];
 
 interface Door {
