@@ -10668,7 +10668,7 @@
               {
                 "op": "set",
                 "path": "/Page/Plans/Grid/CardB/@styles/desktop/base/background-image",
-                "value": "url(\"hero.png\")"
+                "value": "url(\"https://example.com/hero.png\")"
               }
             ],
             "selection": [

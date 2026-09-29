@@ -42,7 +42,11 @@ const box = async (page: Page, selector: string) => {
 test('each box of the box model holds the next, and each side field sits on its side', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await openEditor(page);
-  // the boxes live in the Space section, drawn collapsed while nothing is selected (item 5.1)
+  // an element selected first: with nothing selected the Style tab is the guidance alone, drawing no section at all
+  // (spec inspector-empty-style), and the boxes live in the Space section, drawn collapsed for an element holding no
+  // margin or padding (item 5.1)
+  await page.locator('[data-door="selection.select#layers-row"]').first().click();
+  await expect(page.locator('[data-region="inspector-sections"]')).toHaveCount(1);
   await setSectionOpen(page, 'space', true);
   expect(BOXES.length).toBe(COMPOSITES.length);
   expect(BOXES.length).toBeGreaterThan(1);

@@ -61,9 +61,12 @@ test('neutral defaults render in the canvas and export while authored CSS keeps 
   expect(canvas.bodyMargin).toBe('0px');
   expect(canvas.bodyFont).toContain('system-ui');
   expect(canvas.titleSize).toBe('28px');
-  expect(canvas.subtitleSize).toBe('24px');
+  // the ladder the base gives a heading that carries no authored size: h3 is 1.25rem (the neutral defaults follow the
+  // browser's own top two steps, src/core/render/base.ts)
+  expect(canvas.subtitleSize).toBe('20px');
   expect(canvas.paragraphMargin).toBe('16px');
-  expect(canvas.listPadding).toBe('24px');
+  // a list keeps the browser's own indent (spec elements-lists, Problems in Pager 6: no style of the editor's own)
+  expect(canvas.listPadding).toBe('40px');
   expect(canvas.cardColor).toBe('rgb(37, 99, 235)');
   expect(canvas.linkColor).toBe('rgb(37, 99, 235)');
   expect(canvas.quoteBorder).toBe('3px');

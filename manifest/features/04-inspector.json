@@ -11965,7 +11965,7 @@
               {
                 "op": "set",
                 "path": "/Page/Hero/Actions/@styles/desktop/base/top",
-                "value": "168px"
+                "value": "158px"
               },
               {
                 "op": "set",
@@ -12058,7 +12058,7 @@
               {
                 "op": "set",
                 "path": "/Page/Hero/Actions/@styles/desktop/base/top",
-                "value": "168px"
+                "value": "158px"
               },
               {
                 "op": "set",
