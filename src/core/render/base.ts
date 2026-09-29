@@ -2,7 +2,9 @@
 // border-box sizing, so a height or a width the person sets is the size the element takes on screen, padding and
 // border included, and a hero at 100vh measures the screen. One owner: the editor's canvas writes it into the page's
 // document before every other rule (core/render/render.ts) and every exported stylesheet carries it at its head
-// (core/export/export.ts), so what the canvas shows is what the site does.
+// (core/export/export.ts), so what the canvas shows is what the site does. A list keeps the browser's own indent (its
+// rule once narrowed it to 1.5rem, and a list nested in an item then indented 24 px where the browser indents 40:
+// spec elements-lists, Problems in Pager 6, "no style of the editor's own").
 //
 // A neutral starting point for page content belongs here, not in each node's stored styles. All presentation rules
 // use :where() so a class or an element's own declaration wins without extra specificity.
@@ -19,7 +21,6 @@ export function baseCss(): string {
 :where(h5) { font-size: 1.125rem; }
 :where(h6) { font-size: 1rem; }
 :where(p, ul, ol, dl) { margin: 0 0 1rem; }
-:where(ul, ol) { padding-inline-start: 1.5rem; }
 :where(a) { color: #2563eb; text-decoration-thickness: 1px; text-underline-offset: 2px; }
 :where(blockquote) { margin: 0 0 1rem; padding: 0.75rem 1rem; border-inline-start: 3px solid #cbd5e1; background: #f8fafc; color: #475569; }
 :where(pre) { max-width: 100%; margin: 0 0 1rem; padding: 1rem; overflow: auto; border: 1px solid #e2e8f0; border-radius: 6px; background: #f8fafc; }
