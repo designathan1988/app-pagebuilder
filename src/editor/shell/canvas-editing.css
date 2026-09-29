@@ -114,7 +114,10 @@
 }
 
 .quick-panel__tag .input {
-  width: var(--space-10);
+  /* As wide as the longest tag a person types (blockquote), centred: a box of the bar's own height alone (32 px) left
+     the input a content box too narrow for Chrome, which takes the focus and refuses every character typed into it */
+  width: var(--size-tag-field);
+  min-width: var(--size-tag-field);
   height: var(--size-control);
   padding: 0 var(--space-1);
   text-align: center;
