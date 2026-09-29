@@ -1,7 +1,7 @@
 // The activity bar and the sidebar (DESIGN.md "Regions"): Explorer (Pages, Files, Layers), Insert (the element grid
 // of elements.json's palette) and Styles (classes and variables). Rows and tiles are the doors of their regions, one
 // per page, node or palette entry; a section's actions are the region's controls before its first item.
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties, type FormEvent, type MouseEvent } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties, type FormEvent, type MouseEvent, type ReactNode } from 'react';
 import { isFeatureBuilt } from '../../app/features.ts';
 import { walk, type DocNode, type Location, type Page } from '../../core/document/model.ts';
 import { placement } from '../../core/structure/insert.ts';
@@ -116,11 +116,12 @@ export function ActivityBar() {
   );
 }
 
-function SectionTitle({ title, region, skip }: { readonly title: string; readonly region: RegionId; readonly skip?: (entry: DoorEntry) => boolean }) {
+function SectionTitle({ title, region, skip, children }: { readonly title: string; readonly region: RegionId; readonly skip?: (entry: DoorEntry) => boolean; readonly children?: ReactNode }) {
   return (
     <div className="section-title">
       <span className="section-title__text">{title}</span>
       <span className="section-title__actions">
+        {children}
         <Slots region={region} to={itemOrder(region, skip) - 1} render={(slot) => (skip !== undefined && slot.kind === 'door' && skip(slot.entry) ? null : undefined)} />
       </span>
     </div>
@@ -130,7 +131,7 @@ function SectionTitle({ title, region, skip }: { readonly title: string; readonl
 // the current page's row is marked by its door's own current state (pages.switch), none before that command exists
 function PageRow({ page }: { readonly page: Page }) {
   return (
-    <div className="row">
+    <div className="row row--page">
       <DoorControl entry={PAGE_ROW} args={{ page: page.tree.id }} className="row__main">
         <Icon name={elementIcon('page') ?? GLYPHS.folder} size="sm" />
         <span className="row__meta">{page.file}</span>
@@ -488,6 +489,7 @@ const nodeCount = (tree: DocNode): number => [...walk(tree)].length;
 function Explorer() {
   const t = useT();
   const pages = useEditorState((s) => s.document.pages);
+  const makers = useMemo(() => paletteDoors('explorer-files'), []);
   return (
     <section className="view" aria-label={t(panelName('explorer'))}>
       <ViewTitle panel="explorer" title={t(panelName('explorer'))} />
@@ -498,9 +500,10 @@ function Explorer() {
         ))}
       </div>
       <div data-region="explorer-files">
-        {/* the two create doors are drawn as the fields their paths are typed into (FileRows): the title keeps the
-            upload button alone */}
-        <SectionTitle title={t('explorer.files')} region="explorer-files" skip={(one) => (one.door.kind === 'panel-control' ? one.door.control === 'new-file' || one.door.control === 'new-folder' : false)} />
+        <SectionTitle title={t('explorer.files')} region="explorer-files" skip={(one) => (one.door.kind === 'panel-control' ? one.door.control === 'new-file' || one.door.control === 'new-folder' : false)}>
+          {makers.newFile === undefined ? null : <NewPath door={makers.newFile} folder={false} />}
+          {makers.newFolder === undefined ? null : <NewPath door={makers.newFolder} folder />}
+        </SectionTitle>
         <FileRows />
       </div>
     </section>
@@ -520,11 +523,6 @@ function FileRows() {
   // an image file dropped onto the folder uploads: the pointer owner listens (input/pointer.ts), this marks the place
   return (
     <div data-region="explorer-file-rows" data-drop-zone="explorer-folder">
-      <div className="row row--maker">
-        {makers.newFile === undefined ? null : <NewPath door={makers.newFile} folder={false} />}
-        {makers.newFolder === undefined ? null : <NewPath door={makers.newFolder} folder />}
-        <span className="row__meta" />
-      </div>
       {rows.map((row) => (
         <TreeRow key={row.path} row={row} doors={makers} />
       ))}
@@ -553,10 +551,10 @@ function NewPath({ door, folder }: { readonly door: DoorEntry; readonly folder: 
     (store.dispatch as (id: CommandId, args: unknown) => DispatchResult)(door.command.id as CommandId, { ...door.door.args, path });
   };
   return (
-    <form className="row__maker" onSubmit={(event) => { event.preventDefault(); make(String(new FormData(event.currentTarget).get('path') ?? '')); event.currentTarget.reset(); }}>
+    <form className="file-maker" onSubmit={(event) => { event.preventDefault(); make(String(new FormData(event.currentTarget).get('path') ?? '')); event.currentTarget.reset(); (event.currentTarget.elements.namedItem('path') as HTMLInputElement | null)?.blur(); }}>
       <Icon name={folder ? 'folder-plus' : 'file-plus'} size="sm" />
       <input
-        className="input row__maker-field"
+        className="input file-maker__input"
         type="text"
         name="path"
         data-door={door.ref}
