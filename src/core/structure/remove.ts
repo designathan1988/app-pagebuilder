@@ -8,7 +8,8 @@
 import type { NodeId } from '../../generated/commands.ts';
 import { message, registerHandler, type Outcome } from '../commands/registry.ts';
 import { locate, walk, type DocNode, type DocumentJson, type Location, type Selection } from '../document/model.ts';
-import { referencesOf, referencesTo } from '../elements/references.ts';
+import { referencesTo } from '../elements/references.ts';
+import { releaseReferencesPatch } from '../document/tree.ts';
 import type { Patch } from '../history/transaction.ts';
 import { firstLockRefusal } from '../nodes/flags.ts';
 import type { StoreState } from '../store/store.ts';
@@ -71,14 +72,7 @@ export const deleteCommand = registerHandler('element.delete', ({ state }): Outc
         ? message('status.deleted', { name: primary.node.name })
         : message('status.deletedMany', { count: roots.length });
   const going = new Set(roots.flatMap((root) => [...walk(root.node)].map((node) => node.id)));
-  const released: Patch[] = [];
-  for (const reference of referencesOf(state.document)) {
-    if (going.has(reference.node.id)) continue;
-    const named = reference.value.startsWith('#') ? reference.value.slice(1) : reference.value;
-    if (!going.has(named)) continue;
-    const at = locate(state.document, reference.node.id);
-    if (at !== null) released.push({ op: 'remove', path: [...at.path, 'attributes', reference.attribute] });
-  }
+  const released = releaseReferencesPatch(state.document, going);
   return {
     kind: 'change',
     patches: [...released, ...patches],

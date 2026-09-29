@@ -11,7 +11,8 @@
 // wrapper becomes the selection. element.unwrap (feature unwrap, below) takes a wrapper away and lifts its children.
 import type { NodeId } from '../../generated/commands.ts';
 import { message, registerHandler, registerPredicate, type HandlerContext, type Outcome } from '../commands/registry.ts';
-import { locate, walk, type DocNode, type Location, type StoredValue, type Styles } from '../document/model.ts';
+import { locate, type DocNode, type Location, type StoredValue, type Styles } from '../document/model.ts';
+import { childPath, movesIntoItself, releaseReferencesPatch, removeSubtree, withoutReferencesTo } from '../document/tree.ts';
 import type { ModelRules, WrapperId } from '../document/validate.ts';
 import { applyPatches, type Patch } from '../history/transaction.ts';
 import { firstLockRefusal, lockRefusal } from '../nodes/flags.ts';
@@ -164,10 +165,21 @@ export const unwrapCommand = registerHandler('element.unwrap', ({ state, rules }
   // the one rule of where elements may go (content-model.ts): the children in the wrapper's parent
   const refused = placementRefusal(state.document, rules, parent.id, wrapper.node.children);
   if (refused !== null) return { kind: 'refused', message: refused };
-  const siblings = [...wrapper.path.slice(0, -1)];
+  // The wrapper leaves and its children take its place, keeping their ids — so what leaves is the wrapper alone, and
+  // whatever pointed at it (a label's `for`, a link's `#anchor`) is released in the same undo step. Without this the
+  // document would hold a reference to nothing, which the model refuses: an unwrap would have thrown instead of
+  // running (the plan's T1/T6; the kernel owns the rule).
+  const leaving = new Set([wrapper.node.id]);
+  // a reference inside the children the wrapper held goes with them (they are written back, so a patch would not reach
+  // it), and every other reference to the wrapper is released by its own patch
+  const released = releaseReferencesPatch(state.document, leaving);
+  const kept = wrapper.node.children.map((child) => withoutReferencesTo(child, leaving));
+  // the wrapper's own place (`…/children/<i>`) gives way to its children, at the wrapper's index on
+  const parentPath = wrapper.path.slice(0, -2);
   const patches: Patch[] = [
-    { op: 'remove', path: wrapper.path },
-    ...wrapper.node.children.map((child, i): Patch => ({ op: 'add', path: [...siblings, wrapper.index + i], value: child })),
+    ...released,
+    ...removeSubtree(wrapper),
+    ...kept.map((child, i): Patch => ({ op: 'add', path: childPath(parentPath, wrapper.index + i), value: child })),
   ];
   return { kind: 'change', patches, selection: wrapper.node.children.map((c) => c.id), message: message('status.unwrapped', { name: wrapper.node.name }) };
 });
@@ -187,7 +199,7 @@ export const wrapBesideCommand = registerHandler('element.wrapBeside', ({ state,
   const make = nodeMaker(state.document, rules, ids, words);
   const arriving: DocNode[] = entry === undefined ? selectionRoots(state.document, state.selection).map((l) => l.node) : [paletteNode(make, entry)];
   if (arriving.length === 0) throw new Error('element.wrapBeside: nothing arrives');
-  for (const node of arriving) for (const inner of walk(node)) if (inner.id === target) return { kind: 'refused', message: message('status.refused.intoItself') };
+  if (movesIntoItself(arriving, target)) return { kind: 'refused', message: message('status.refused.intoItself') };
   const moving = entry === undefined ? arriving.map((n) => n.id) : [];
   const locked = firstLockRefusal(state.document, moving, 'status.locked.move') ?? lockRefusal(state.document, at.parent.id, 'status.locked.insert') ?? lockRefusal(state.document, target, 'status.locked.move');
   if (locked !== null) return { kind: 'refused', message: locked };

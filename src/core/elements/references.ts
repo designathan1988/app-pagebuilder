@@ -54,22 +54,43 @@ export function referencesOf(document: DocumentJson): readonly { readonly node: 
 
 // the attribute ids whose HTML name is a reference holder, mapped from the manifest's data (set once, read everywhere)
 let REFERENCE_ATTRIBUTES = new Map<string, string>();
+
+// The HTML name of a reference-holding attribute ('for' or 'href'), or undefined for any other: what a writer of nodes
+// asks before it keeps a stored value (`isReferenceValue` below, the tree kernel's value-level release).
+export function referenceHtmlOf(attribute: string): string | undefined {
+  return REFERENCE_ATTRIBUTES.get(attribute);
+}
+
+// Whether a stored attribute value is a reference to a node that is leaving: the one test the writers share.
+export function referenceNamesLeaving(attribute: string, value: unknown, leaving: ReadonlySet<NodeId>): boolean {
+  const html = referenceHtmlOf(attribute);
+  if (html === undefined || typeof value !== 'string' || value === '') return false;
+  if (html === 'href' && !value.startsWith('#')) return false;
+  return leaving.has((value.startsWith('#') ? value.slice(1) : value) as NodeId);
+}
 export function setReferenceAttributes(entries: readonly { readonly id: string; readonly html: string | null }[]): void {
   REFERENCE_ATTRIBUTES = new Map(entries.filter((entry) => entry.html !== null && REFERENCE_HTM.includes(entry.html)).map((entry) => [entry.id, entry.html as string]));
 }
 
-// an element's id attribute (the rule element.setId and the ID field keep): a value of that shape is the person's own
-// id, not a reference to a node
-const ID_VALUE = /^[A-Za-z][A-Za-z0-9_-]*$/;
-
 // The references that name no node of the document: what the validator refuses a project over (a reference whose
-// target is gone, or that a hand-edited file names wrongly). A value that is no node id at all — a plain id attribute
-// an imported file carried — is left as it is.
+// target is gone, or that a hand-edited file names wrongly).
+//
+// A value that names no node but IS some node's `id` attribute is left alone: that is HTML's own contract — a label's
+// `for="user-name"` pointing at the element whose id is "user-name" — and it is what an imported form carries. The
+// check reads the document, never the value's shape: a shape test (an id "looks like" a name) forgave a real orphan
+// whose id happened to be a word (the audit's A3.4/F4) and reported a hand-typed id that starts with a digit.
 export function orphanReferences(document: DocumentJson): readonly { readonly node: DocNode; readonly attribute: string; readonly value: string }[] {
   if (REFERENCE_ATTRIBUTES.size === 0) return [];
+  const htmlIds = new Set<string>();
+  for (const page of document.pages) {
+    for (const node of walk(page.tree)) {
+      const id = node.attributes.id;
+      if (typeof id === 'string' && id !== '') htmlIds.add(id);
+    }
+  }
   return referencesOf(document).filter((reference) => {
     const named = reference.value.startsWith('#') ? reference.value.slice(1) : reference.value;
-    return referenceTarget(document, reference.value) === null && !ID_VALUE.test(named);
+    return referenceTarget(document, reference.value) === null && !htmlIds.has(named);
   });
 }
 

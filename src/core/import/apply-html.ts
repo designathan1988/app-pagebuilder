@@ -9,7 +9,8 @@
 import type { NodeId } from '../../generated/commands.ts';
 import { message, registerHandler, type HandlerContext } from '../commands/registry.ts';
 import { placementRefusal } from '../elements/content-model.ts';
-import { locate, type DocNode } from '../document/model.ts';
+import { locate, walk, type DocNode } from '../document/model.ts';
+import { releaseReferencesPatch, withoutReferencesTo } from '../document/tree.ts';
 import { lockRefusal } from '../nodes/flags.ts';
 import { nodeMaker } from '../structure/insert.ts';
 import { nodesFromMarkup } from './import.ts';
@@ -50,9 +51,24 @@ export const applyHtmlCommand = registerHandler('element.applyHtml', (context, {
     const refusal = placementRefusal(state.document, rules, at.parent.id, [root]);
     if (refusal !== null) return { kind: 'refused' as const, message: refusal };
   }
-  const written = reconciled(at.node, root);
+  const reconciledNode = reconciled(at.node, root);
+  // What the markup dropped leaves the document: a reference inside the written subtree goes with it (the value-level
+  // rule — the node is written back, so a patch would put the old value back), and a reference elsewhere in the
+  // document is released by its own patch (the plan's T1/T6; the kernel owns both shapes of the rule).
+  const kept = new Set([...walk(reconciledNode)].map((inner) => inner.id as NodeId));
+  const leaving = new Set([...walk(at.node)].map((inner) => inner.id as NodeId).filter((id) => !kept.has(id)));
+  const written = leaving.size === 0 ? reconciledNode : withoutReferencesTo(reconciledNode, leaving);
   const same = JSON.stringify(at.node) === JSON.stringify(written);
   const said = message('status.html.applied', { name: at.node.name });
   if (same) return { kind: 'change' as const, message: said };
-  return { kind: 'change' as const, patches: [{ op: 'replace', path: [...at.path], value: written }], message: said };
+  const rootPath = at.path.join('/');
+  const released =
+    leaving.size === 0
+      ? []
+      : releaseReferencesPatch(state.document, leaving).filter((patch) => {
+          // the written subtree carries its own release; these patches cover the references that stay where they are
+          const owner = patch.path.slice(0, at.path.length).join('/');
+          return owner !== rootPath;
+        });
+  return { kind: 'change' as const, patches: [{ op: 'replace', path: [...at.path], value: written }, ...released], message: said };
 });
