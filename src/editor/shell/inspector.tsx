@@ -565,12 +565,11 @@ const STYLE_SECTIONS = SECTIONS.filter((s) => (SECTION_DOORS.get(s.id) ?? []).le
 
 // The section header's origin dot (DESIGN.md "Inspector", the value-origin legend; the mockup's .has mark): where the
 // values the section holds come from — the edited layer (here), a larger breakpoint, or the base state — read by the
-// one rule of inspector/origin.ts over the section's own summary properties. Nothing for a section that holds no
-// value, nor for one whose values come from a class or an ancestor: the fields say so, and the dot colours are the
-// legend's three.
+// one rule of inspector/origin.ts over the section's own fields. Nothing for a section that holds no value, nor for
+// one whose values come from a class or an ancestor: the fields say so, and the dot colours are the legend's three.
 function SectionOrigin({ section }: { readonly section: SectionId }) {
   const kind = useEditorState((s) => {
-    const origin = valueOrigin(s, summaryProperties(section), layeredRules(s.ui));
+    const origin = valueOrigin(s, sectionProperties(section), layeredRules(s.ui));
     return origin !== null && (origin.kind === 'here' || origin.kind === 'breakpoint' || origin.kind === 'state') ? origin.kind : null;
   });
   return kind === null ? null : <span className="inspector-section__origin" data-origin={kind} aria-hidden="true" />;

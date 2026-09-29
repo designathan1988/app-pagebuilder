@@ -58,7 +58,8 @@ describe('the groups of a section (inspector/rows.ts)', () => {
   it('titles the groups of a section that declares more than one', () => {
     expect(titledGroups('layout')).toBe(true);
     expect(titledGroups('space')).toBe(false);
-    expect(titledGroups('position')).toBe(true);
+    // position declares one group since the group nothing drew went: its title would repeat the section's own name
+    expect(titledGroups('position')).toBe(false);
   });
 
   it('orders a section group by group, keeping the order inside a group and attaching a control to the field before it', () => {
@@ -69,7 +70,7 @@ describe('the groups of a section (inspector/rows.ts)', () => {
       { ref: 'd', target: 'flex-direction' },
       { ref: 'e' },
     ];
-    // layout's groups in order: display, flex, grid, in-parent, columns, scroll, table, more — and the control that
+    // layout's groups in order: display, flex, grid, in-parent, columns, scroll, table — and the control that
     // edits no property of its own (e) stays in the group of the field before it (flex)
     expect(orderByGroup('layout', entries).map((e) => e.ref)).toEqual(['b', 'd', 'e', 'c', 'a']);
     // a section with one group keeps the order it is given
