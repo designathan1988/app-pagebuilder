@@ -38,6 +38,7 @@ import { inspectorTab } from '../workspace/layout.ts';
 import { isPanelOpen, panelName } from '../workspace/panels.ts';
 import { useLocale, useT } from '../text.ts';
 import { activeBreakpoint } from '../view/breakpoints.ts';
+import { usePrimarySize } from '../view/selection-size.ts';
 import { activeState } from '../view/style-state.ts';
 import { KeywordButtons, NumberField, TextStyleField, keepAfterGesture, presetsOf, useEffectiveText, useMixed, usePageValues, useSelectionContext, type FieldPart } from './field.tsx';
 import { storedValue } from '../../core/style/set.ts';
@@ -479,6 +480,18 @@ function SpacingField({ entry, box, sides, properties, where, label }: { readonl
   );
 }
 
+// The innermost cell of the box model (DESIGN.md "Sections", the design's centre): the selection's own measured size,
+// in page pixels whatever the zoom — the number a person compares the Width and Height fields against — or, with
+// several elements selected, how many there are. Nothing with nothing selected.
+function BoxCore() {
+  const t = useT();
+  const count = useEditorState((s) => s.selection.length);
+  const primary = useEditorState((s) => (s.selection.length === 1 ? (s.selection[0] ?? null) : null));
+  const size = usePrimarySize(primary);
+  const words = size !== null ? t('statusBar.size', { width: size.width, height: size.height }) : count > 1 ? t('inspector.elementCount', { count }) : '';
+  return <span className="box__core">{words}</span>;
+}
+
 // The box model (DESIGN.md "Sections": margin outside, padding inside): the composites drawn as a box model
 // (properties.json control box-model), each a box around the next in their placement order, the first outermost. Each
 // box has its label and its link (inspector.toggleSpacingLink); unlinked, a field on each side writes that side's
@@ -493,7 +506,7 @@ function BoxModel({ doors }: { readonly doors: readonly DoorEntry[] }) {
   const draw = (level: number): ReactNode => {
     const box = boxes[level];
     const target = box ? targetOf(box) : null;
-    if (!box || !target) return <span className="box__core" />;
+    if (!box || !target) return <BoxCore />;
     const linked = (links as readonly string[]).includes(target.id);
     const longhands = target.longhands ?? [];
     const side = (where: (typeof BOX_SIDES)[number]) => {

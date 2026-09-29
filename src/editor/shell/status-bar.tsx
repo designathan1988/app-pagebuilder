@@ -4,16 +4,15 @@
 // status-bar, then the save state (autosave-restore). During a palette tile's creation drag the message is the drag's
 // words (palette-drag-insert).
 import { activeBreakpoint } from '../view/breakpoints.ts';
-import { useEffect, useState, useSyncExternalStore } from 'react';
+import { usePrimarySize } from '../view/selection-size.ts';
+import { useState, useSyncExternalStore } from 'react';
 import type { MessageId } from '../../generated/ids.ts';
-import type { NodeId } from '../../generated/commands.ts';
 import { saveState, type SaveState } from '../persistence/autosave.ts';
 import { incidents, onIncident } from '../../core/incidents.ts';
 import { allNodes, locate, type DocNode } from '../../core/document/model.ts';
 import type { Message } from '../../core/commands/registry.ts';
 import { pluralForm } from '../../i18n/index.ts';
 import { dragMessages } from '../canvas/chrome.tsx';
-import { pageLayout } from '../canvas/coordinates.ts';
 import { DoorControl, Icon } from '../doors/door.tsx';
 import { elementIcon, type DoorEntry } from '../../manifest/runtime.ts';
 import { MenuButton } from '../doors/menu.tsx';
@@ -154,24 +153,6 @@ function SelectionSize() {
       {t('statusBar.size', { width: size.width, height: size.height })}
     </span>
   );
-}
-
-function usePrimarySize(id: NodeId | null): { readonly width: number; readonly height: number } | null {
-  const [size, setSize] = useState<{ readonly width: number; readonly height: number } | null>(null);
-  useEffect(() => {
-    if (id === null) {
-      setSize(null);
-      return;
-    }
-    let frame = requestAnimationFrame(function measure() {
-      const box = pageLayout.box(id);
-      const next = box === null ? null : { width: Math.round(box.width), height: Math.round(box.height) };
-      setSize((was) => (was?.width === next?.width && was?.height === next?.height ? was : next));
-      frame = requestAnimationFrame(measure);
-    });
-    return () => cancelAnimationFrame(frame);
-  }, [id]);
-  return size;
 }
 
 // The save state, last in the bar (autosave: Not saved, Saving…, Saved, Save failed). A read-only display.

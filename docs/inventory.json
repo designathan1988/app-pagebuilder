@@ -5,8 +5,8 @@
     "commands": 256,
     "doors": 998,
     "scenarios": 1333,
-    "modules": 241,
-    "lines": 47495
+    "modules": 242,
+    "lines": 47519
   },
   "features": [
     {
@@ -4640,7 +4640,7 @@
     },
     {
       "path": "src/editor/shell/inspector.tsx",
-      "lines": 1162,
+      "lines": 1175,
       "commands": [],
       "features": []
     },
@@ -4724,7 +4724,7 @@
     },
     {
       "path": "src/editor/shell/status-bar.tsx",
-      "lines": 190,
+      "lines": 171,
       "commands": [],
       "features": []
     },
@@ -4880,6 +4880,12 @@
         "html-import-states",
         "preview-mode"
       ]
+    },
+    {
+      "path": "src/editor/view/selection-size.ts",
+      "lines": 30,
+      "commands": [],
+      "features": []
     },
     {
       "path": "src/editor/view/snap.ts",
