@@ -14,10 +14,9 @@
 //
 // Where the chip goes (placeChip): beside the selection's label, on its right (on its left when the stage has no room
 // there), level with it (DESIGN.md "Canvas": the label, its size chip and the quick panel chip beside it), so it covers
-// no more of the page than the label does. Where the open panel goes (placeQuickPanel): a remembered offset, held inside the stage, while the panel it places covers
-// no part of the element; otherwise the side of the element with the most free space where the panel fits (above,
-// below, right, left, in that order on a tie), clear of the element's label above it; with no side free, at the top
-// of the stage. The stage keeps an inset free all round.
+// no more of the page than the label does. Where the open panel goes (placeQuickPanel): a remembered offset, held inside the stage, whichever part of the element it covers — the person dragged it there; otherwise the side of the
+// element with the most free space where the panel fits (above, below, right, left, in that order on a tie), clear of
+// the element's label above it; with no side free, at the top of the stage. The stage keeps an inset free all round.
 //
 // Which fields it shows (appliesTo): a field shows only when its property applies to the selected element, by the
 // element predicates of core/style/applies.ts: the text properties on an element that holds text, the SVG fill on an
@@ -74,7 +73,6 @@ export function readOffsets(stored: unknown): Readonly<Record<string, Offset>> |
   return kept.length > 0 ? Object.fromEntries(kept) : undefined;
 }
 
-const overlaps = (a: Box, b: Box) => a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
 const clamp = (value: number, low: number, high: number) => Math.max(low, Math.min(value, high));
 
 // Where the panel (or its chip) of `size` goes for an element's box, all in the stage's pixels: `above` is the room the
@@ -88,8 +86,10 @@ export function placeQuickPanel(element: Box, size: { readonly width: number; re
   const heldX = (x: number) => clamp(x, inner.x, right - size.width);
   const heldY = (y: number) => clamp(y, inner.y, bottom - size.height);
   if (offset !== null) {
-    const moved = { x: heldX(element.x + offset.x), y: heldY(element.y + offset.y), ...size };
-    if (!overlaps(moved, element)) return moved;
+    // The person's own drag wins: the panel is where it was left, held inside the stage. A remembered offset is never
+    // refused for covering the element — the panel is taller than most elements, and refusing the drag would leave a
+    // panel that jumps back under the pointer (spec quick-panel, scenario the-grip-drags-the-panel-…).
+    return { x: heldX(element.x + offset.x), y: heldY(element.y + offset.y), ...size };
   }
   const centreX = heldX(element.x + element.width / 2 - size.width / 2);
   const centreY = heldY(element.y);
