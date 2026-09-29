@@ -134,7 +134,10 @@ test('a tile resting between two elements keeps one proposal and the line still,
   const before = await documentText(page);
   const title = await nodeBox(page, 'n-title');
   const intro = await nodeBox(page, 'n-intro');
-  const tile = await control(page, TILE, { args: { entry: 'paragraph' } }).boundingBox();
+  // the insert panel is a scrollable palette: the tile is scrolled to before it is pressed, as a person does
+  const tileControl = control(page, TILE, { args: { entry: 'paragraph' } });
+  await tileControl.scrollIntoViewIfNeeded();
+  const tile = await tileControl.boundingBox();
   if (tile === null) throw new Error('the paragraph tile is not laid out');
   const start = { x: tile.x + tile.width / 2, y: tile.y + tile.height / 2 };
   await page.mouse.move(start.x, start.y);

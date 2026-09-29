@@ -74,6 +74,8 @@ async function canvasZoom(page: Page): Promise<number> {
 // presses the paragraph tile, moves the pointer to a point of the page in steps, the button held, and releases there
 async function dropTileAt(page: Page, at: { readonly x: number; readonly y: number }): Promise<void> {
   const tile = control(page, TILE, { args: { entry: 'paragraph' } });
+  // the insert panel is a scrollable palette: the tile is scrolled to before it is pressed, as a person does
+  await tile.scrollIntoViewIfNeeded();
   const box = await tile.boundingBox();
   if (box === null) throw new Error('the paragraph tile is not laid out');
   await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);

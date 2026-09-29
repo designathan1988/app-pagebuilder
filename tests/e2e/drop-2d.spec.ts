@@ -71,6 +71,9 @@ async function dropLine(page: Page): Promise<Box | null> {
 // presses the paragraph tile and moves the pointer to a point of the page in steps, the button held
 async function holdTileAt(page: Page, at: { readonly x: number; readonly y: number }): Promise<void> {
   const tile = control(page, TILE, { args: { entry: 'paragraph' } });
+  // the insert panel is a scrollable palette, as tall as its view: a tile below the fold is scrolled to before it is
+  // pressed, as a person scrolls to the tile they mean — a press below the fold would land on whatever is drawn there
+  await tile.scrollIntoViewIfNeeded();
   const box = await tile.boundingBox();
   if (box === null) throw new Error('the paragraph tile is not laid out');
   await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
