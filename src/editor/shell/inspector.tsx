@@ -669,8 +669,15 @@ function StyleSections() {
         // a section with no match is not drawn while searching
         if (searching && doors.length === 0) return null;
         const set = sectionProperties(section).filter((p) => held.has(p)).length;
-        // a collapsed section with a match is drawn open for the search; its collapsed state is kept
-        const closed = !searching && collapsed.includes(section);
+        // The field just revealed (inspector.reveal) is drawn in its section and takes the focus (spec
+        // inspector-add-property): a section drawn collapsed shows no field, so the section holding it is drawn open —
+        // the person asked for that field by name. A collapsed section with a match is drawn open for the search too;
+        // its collapsed state is kept.
+        const holdsRevealed = revealed !== null && doors.some((d) => {
+          const target = editedTarget(d);
+          return target === revealed || (target !== null && editedProperties(target).includes(revealed));
+        });
+        const closed = !searching && collapsed.includes(section) && !holdsRevealed;
         const summary = closed ? summaryOf(section, values, t, locale) : null;
         const boxDoors = doors.filter((d) => targetOf(d)?.control === 'box-model');
         // The manifest orders the fields by group; the design draws the fields without subgroup headings.
@@ -847,9 +854,6 @@ function shownForSelection(entry: DoorEntry, kinds: readonly string[], context: 
   // entries whose doors list it, so the same rules read it
   const properties = target !== null ? editedProperties(target) : editedPropertiesByDoor(entry.ref);
   if (properties === null) return true;
-  // with nothing selected the section is a map of what the panel holds, drawn collapsed (item 5.1): a field of a kind
-  // is not filtered out for want of an element of that kind, which would leave the section's header undrawn
-  if (kinds.length === 0) return shownForContext(properties, context, MODEL_RULES);
   return shownForKinds(properties, kinds, MODEL_RULES) && shownForContext(properties, context, MODEL_RULES);
 }
 
@@ -1124,17 +1128,9 @@ function StyleTab() {
     <>
       <SelectorBar />
       <div className="inspector-style" data-region="inspector-style">
+        {/* with nothing selected the tab is the guidance alone (spec inspector-empty-style): the sections are a map of
+            the selected element's values, and there is no element */}
         <div className="inspector-body inspector-body--empty"><Hints /></div>
-        {/* the sections a person can open while nothing is selected: the panel is a map of what it holds, each
-            section drawn collapsed, its own header reached by the pointer (item 5.1; spec box-model reads the Space
-            section's header here) */}
-        <div className="inspector-scroll">
-          <div className="inspector-body">
-            <div className="inspector-sections">
-              <StyleSections />
-            </div>
-          </div>
-        </div>
       </div>
     </>
   );

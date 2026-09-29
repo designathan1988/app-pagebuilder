@@ -72,9 +72,13 @@ test('two titles aligned differently: Text align says Mixed with no button press
   const group = page.locator(`[data-door="${ALIGN}"]`).first().locator('xpath=..');
   await expect(group).toHaveAttribute('data-mixed', '');
   await expect(page.locator(`[data-door="${ALIGN}"][aria-pressed="true"]`)).toHaveCount(0);
-  await expect(group.locator('xpath=..').locator('.field-row__mixed')).toHaveText('Mixed');
+  // the Mixed word stands beside the field's control, in the row itself (the row holds the control's cell and the marker)
+  await expect(group.locator('xpath=../..').locator('.field-row__mixed')).toHaveText('Mixed');
   const before = (await read(page)).undoSteps;
-  await group.locator('xpath=..').locator(`[data-door="${RESET}"]`).click();
+  // the reset floats beside the active field: hovering the field draws it
+  const choice = group.locator('xpath=..');
+  await choice.hover();
+  await choice.locator(`[data-door="${RESET}"]`).click();
   await expect.poll(() => alignOf(page, 'n-card-a-title')).toBeUndefined();
   expect(await alignOf(page, 'n-card-b-title')).toBeUndefined();
   expect((await read(page)).undoSteps).toBe(before + 1);
@@ -100,10 +104,15 @@ test('Reset this value is drawn when only another selected element holds the val
   // the first title's alignment taken away: only the second holds one
   await control(page, ROW, { args: { target: 'n-card-a-title' } }).click();
   const row = page.locator(`[data-door="${ALIGN}"]`).first().locator('xpath=../..');
-  await row.locator(`[data-door="${RESET}"]`).click();
+  // the reset floats beside the active field, drawn while the field is hovered or holds the focus
+  const reset = async () => {
+    await row.hover();
+    await row.locator(`[data-door="${RESET}"]`).click();
+  };
+  await reset();
   await expect.poll(() => alignOf(page, 'n-card-a-title')).toBeUndefined();
   await clickOnCanvas(page, 'n-card-a-title', false);
   await clickOnCanvas(page, 'n-card-b-title', true);
-  await row.locator(`[data-door="${RESET}"]`).click();
+  await reset();
   await expect.poll(() => alignOf(page, 'n-card-b-title')).toBeUndefined();
 });

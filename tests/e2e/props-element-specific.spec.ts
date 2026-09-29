@@ -52,13 +52,15 @@ test('a list draws its marker fields and no table, media or form field; a sectio
 
 test('add a property offers a list property for a list and not for a section', runs(OPEN, ROW, ESSENTIALS, REVEAL), async ({ page }) => {
   await openAurora(page);
-  await runDoor(page, ESSENTIALS);
   const item = (property: string) => page.locator(`[data-door="${REVEAL}"][data-args*='"property":"${property}"']`);
   const openList = async () => {
     await page.locator('.add-property > button').click();
     await expect(page.locator('.add-property__menu')).toBeVisible();
   };
+  // the mode switch is drawn for a selection (spec inspector-empty-style): the essentials mode is chosen once the first
+  // element is selected, and holds for the elements selected after it
   await select(page, 'n-hero');
+  await runDoor(page, ESSENTIALS);
   await openList();
   await expect(item('word-spacing')).toHaveCount(1);
   await expect(item('list-style-type')).toHaveCount(0);

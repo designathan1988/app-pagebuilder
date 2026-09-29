@@ -981,17 +981,10 @@
   clip-path: inset(50%);
   white-space: nowrap;
 }
-[data-region='inspector-style'] .field__slider {
-  position: absolute;
-  left: var(--space-3);
-  right: var(--space-3);
-  bottom: 0;
-  width: calc(100% - var(--space-3) * 2);
-  height: var(--space-4);
-  opacity: 0;
-}
-[data-region='inspector-style'] .input-wrap:hover .field__slider,
-[data-region='inspector-style'] .input-wrap:focus-within .field__slider { opacity: 1; }
+/* The slider a field's door declares stands beside the value (A3.30), the value first and the slider after it. It once
+   lay over the field's lower half, invisible until hovered: an invisible control that took the click a person aimed at
+   the value — the field could not be focused in its lower half and Chromium's hit area for a range input reached the
+   field's middle. A slider is never drawn over the value it writes. */
 
 .input-wrap--number {
   gap: var(--space-1);

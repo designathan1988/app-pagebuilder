@@ -32,6 +32,7 @@ import { holdsExecutableCode } from '../../core/elements/embed.ts';
 import { equivalentTags } from '../../core/elements/tag.ts';
 import { elementPredicate, type ElementContext } from '../../core/style/applies.ts';
 import { ATTRIBUTES, inputValueEditorOf } from '../inspector/attributes.ts';
+import { editedProperties } from '../inspector/sections.ts';
 import { useSettingsRefusal } from '../inspector/attribute-feedback.ts';
 import { GENERATED_VALUES } from '../../generated/value-lists.ts';
 import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
@@ -353,11 +354,13 @@ function ownArgs(entry: DoorEntry, property: string, text: string, extra: Readon
   return { ...entry.door.args, ...extra, ...('property' in takes ? { property } : {}), ...('value' in takes ? { value: text } : borderArgs(property, text, MODEL_RULES)) };
 }
 
-// The field the inspector was asked to show (inspector.reveal, the Add a property list) takes the focus.
+// The field the inspector was asked to show (inspector.reveal, the Add a property list) takes the focus: the field of
+// that property, or the one editor that edits it — the border and the radius draw one field for their longhands, and a
+// person who asked for border-top-color is answered by the border editor that holds it.
 function useRevealed(property: string, input: { readonly current: HTMLInputElement | null }): void {
   const revealed = useEditorState((s) => s.ui.revealed);
   useEffect(() => {
-    if (revealed !== undefined && revealed.field === property) input.current?.focus();
+    if (revealed !== undefined && (revealed.field === property || editedProperties(property).includes(revealed.field))) input.current?.focus();
   }, [revealed, property, input]);
 }
 

@@ -36,6 +36,9 @@ test('the Text section counts the values set in it, and a reset takes one off', 
   await type(page, COLOR, '#ff0000');
   await type(page, FONT_SIZE, '24px');
   await expect.poll(() => textCount(page)).toBe('2 set');
+  // the field's reset floats beside the active field: hovering the field it belongs to draws it (a keyboard tab into the
+  // field draws it too, through :focus-within)
+  await control(page, COLOR).first().hover();
   await control(page, RESET, { args: { property: 'color' } }).click();
   await expect.poll(() => textCount(page)).toBe('1 set');
 });

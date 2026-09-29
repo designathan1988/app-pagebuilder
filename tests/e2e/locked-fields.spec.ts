@@ -50,9 +50,14 @@ async function open(page: Page): Promise<void> {
   await (await chooser).setFiles({ name: 'aurora.json', mimeType: 'application/json', buffer: fs.readFileSync(FIXTURE) });
   await expect(page.frameLocator('.frame__page').locator('[data-node="n-grid"]')).toHaveCount(1);
   await page.keyboard.press('Control+0');
+}
+// The mode switch and the section headers exist for a selection alone: with nothing selected the Style tab is the
+// guidance alone (spec inspector-empty-style). Each test calls this with the element it works on; every section is drawn
+// open, since a section the selected element holds no value in is drawn collapsed by itself (item 5.1) and this spec
+// reads the fields of every section.
+async function prepared(page: Page, target: string): Promise<void> {
+  await control(page, ROW, { args: { target } }).click();
   await runDoor(page, ALL);
-  // every section drawn open: a section the selected element holds no value in is drawn collapsed by itself (item
-  // 5.1), and this spec reads the fields of every section
   await openEverySection(page);
 }
 // the element typed into or pressed: a field's input, else its button, else the control itself
@@ -94,7 +99,7 @@ async function unlock(page: Page, id: string): Promise<void> {
 
 test('a locked element: its style fields are disabled with the lock as their reason before anything is typed, and usable once unlocked', runs(OPEN, ROW, LOCK, ALL, WIDTH, DISPLAY, BORDER, SHADOW_ADD, SWATCH, PICKER_VALUE, QUICK_WIDTH), async ({ page }) => {
   await open(page);
-  await control(page, ROW, { args: { target: 'n-actions' } }).click();
+  await prepared(page, 'n-actions');
   await lock(page, 'n-actions');
   for (const ref of [WIDTH, DISPLAY, BORDER, SHADOW_ADD]) await refusedBeforeTyping(page, ref, 'Actions');
   // the background colour's swatch, which opens the colour picker, is disabled with the same reason: no picker opens
@@ -124,7 +129,7 @@ test('a locked element: its style fields are disabled with the lock as their rea
 
 test('inside a locked section: the fields of the section and of a paragraph in it are disabled, the lock named', runs(OPEN, ROW, LOCK, ALL, PADDING_TOP, OVERFLOW, IMAGE, GRADIENT_ADD, GRADIENT_REVERSE, FONT_SIZE), async ({ page }) => {
   await open(page);
-  await control(page, ROW, { args: { target: 'n-hero' } }).click();
+  await prepared(page, 'n-hero');
   // a gradient to reverse, added before the lock
   await control(page, GRADIENT_ADD).first().click();
   await expect.poll(async () => String((await nodeOf(page, 'n-hero'))?.styles.desktop?.base?.['background-image'] ?? '')).toContain('linear-gradient');
