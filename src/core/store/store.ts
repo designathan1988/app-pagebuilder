@@ -16,6 +16,7 @@ import type { Clock } from '../ports/clock.ts';
 import type { ClipboardWriter } from '../ports/clipboard.ts';
 import { anyCss, type CssSupport } from '../ports/css.ts';
 import type { Downloads } from '../ports/download.ts';
+import { reportInvariantBreach } from '../incidents.ts';
 import type { IdGenerator } from '../ports/ids.ts';
 import { noLayout, type Layout } from '../ports/layout.ts';
 
@@ -187,16 +188,26 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
     }
   }
 
+  // A command that produced patches the model refuses is a bug, never a normal refusal: nothing is published (the
+  // previous state stays), the incident feed records it, and development and tests throw so it is loud (plan T2).
+  // Predictable invalid operations are refused by the operation itself, before any patch exists.
   const commit = (next: StoreState<Ui>, source: string): StoreState<Ui> => {
     const problems = validateDocument(next.document, next.selection, rules);
-    if (problems.length > 0) throw new InvalidStateError(source, problems);
+    if (problems.length > 0) {
+      reportInvariantBreach(source, problems);
+      // the first state has no previous one to keep: it must be valid, always
+      if (!started || options.freeze) throw new InvalidStateError(source, problems);
+      return state;
+    }
     return options.freeze ? deepFreeze(next) : next;
   };
+  let started = false;
 
   let state = commit(
     { document: options.initial.document, selection: options.initial.selection ?? [], history: EMPTY_HISTORY, message: options.initial.message ?? null, ui: options.initial.ui },
     'the initial state',
   );
+  started = true;
   let open: OpenGesture | null = null;
   // the coalescing key of the last dispatch when it recorded an entry that may merge; any other dispatch clears it,
   // so a burst merges only when no other command came in between (spec absolute-nudge)

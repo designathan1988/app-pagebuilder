@@ -9,6 +9,7 @@ import { createEmptyDocument, locate, type DocNode, type DocumentJson, type Sele
 import { rulesFromManifest } from '../document/validate.ts';
 import { deepEqual } from '../history/transaction.ts';
 import { manualClock, type ManualClock } from '../ports/clock.ts';
+import { clearIncidents, incidents } from '../incidents.ts';
 import { sequentialIds, type IdGenerator } from '../ports/ids.ts';
 import { InvalidStateError, createStore, type Store } from './store.ts';
 import { INITIAL_PREFERENCES } from '../../editor/preferences/preferences.ts';
@@ -99,7 +100,7 @@ function emptyDocument(ids: IdGenerator): DocumentJson {
   return createEmptyDocument(ids, { page: 'Home', root: 'Page' }, RULES.root);
 }
 
-function testStore(table: CommandTable<EditorUi> = TEST_COMMANDS, predicates: PredicateTable<EditorUi> = TEST_PREDICATES): TestStore {
+function testStore(table: CommandTable<EditorUi> = TEST_COMMANDS, predicates: PredicateTable<EditorUi> = TEST_PREDICATES, freeze = true): TestStore {
   const clock = manualClock(1_000_000);
   const ids = sequentialIds('n');
   const document = emptyDocument(ids);
@@ -113,7 +114,7 @@ function testStore(table: CommandTable<EditorUi> = TEST_COMMANDS, predicates: Pr
     ids,
     words: WORDS,
     initial: { document, ui: initialEditorUi(INITIAL_PREFERENCES) },
-    freeze: true,
+    freeze,
   });
   return { store, clock, ids, root: document.pages[0]?.tree.id ?? '' };
 }
@@ -406,6 +407,37 @@ describe('the store', () => {
     off();
     insertInto(s);
     expect(calls).toBe(1);
+  });
+
+  // a command whose patches the model refuses: the page root's id used a second time (a bug, not a refusal)
+  const twinInsert = registerHandler('element.insert', ({ state }) => {
+    const root = state.document.pages[0]?.tree;
+    const at = root === undefined ? null : locate(state.document, root.id);
+    if (at === null || root === undefined) return { kind: 'refused', message: message('status.refused.intoItself') };
+    const twin: DocNode = { id: root.id, type: 'div', name: 'Twin', tag: 'div', attributes: {}, classes: [], styles: {}, text: null, children: [] };
+    return { kind: 'change', patches: [{ op: 'add', path: [...at.path, 'children', 0], value: twin }] };
+  });
+
+  it('keeps the previous state and records an incident when a commit fails validation (plan T2)', () => {
+    clearIncidents();
+    const s = testStore({ ...TEST_COMMANDS, 'element.insert': twinInsert });
+    const before = s.store.getState();
+    // development and tests: the defect is loud
+    expect(() => s.store.dispatch('element.insert', { entry: 'container' })).toThrow(/invalid state/);
+    // the broken state was never published, and the feed holds what happened
+    expect(s.store.getState().document).toBe(before.document);
+    const recorded = incidents();
+    expect(recorded.length).toBe(1);
+    expect(recorded[0]?.kind).toBe('invariant');
+    expect(recorded[0]?.what).toContain('element.insert');
+    expect(recorded[0]?.detail).toContain('already used');
+    // production (no freeze): the dispatch answers, the previous state stays, the incident is recorded for the UI
+    clearIncidents();
+    const loose = testStore({ ...TEST_COMMANDS, 'element.insert': twinInsert }, TEST_PREDICATES, false);
+    const kept = loose.store.getState();
+    expect(loose.store.dispatch('element.insert', { entry: 'container' })).toEqual({ status: 'done', changed: true });
+    expect(loose.store.getState().document).toBe(kept.document);
+    expect(incidents().length).toBe(1);
   });
 
   it('says something in the status bar without running a command (notice: the stale drop)', () => {
