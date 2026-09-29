@@ -5,6 +5,7 @@
 // components.create#prompt-name, whose control this form is.
 import { useEffect, useRef } from 'react';
 import { locate } from '../../core/document/model.ts';
+import type { MessageId } from '../../generated/ids.ts';
 import { DoorControl } from '../doors/door.tsx';
 import { doorSlots } from '../doors/placement.ts';
 import { useEditorState, useStore } from '../store.ts';
@@ -58,7 +59,7 @@ export function ComponentPrompt() {
               command the form dispatches, named by the manifest (a door a click could run carries no name of its own) */}
           {NAME === null ? null : (
             <button type="submit" form={FORM_ID} className="door door--button">
-              {t(NAME.command.labelKey)}
+              {t(NAME.command.labelKey as MessageId)}
             </button>
           )}
           {CLOSE === null ? null : <DoorControl entry={CLOSE} />}
