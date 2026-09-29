@@ -27,7 +27,7 @@ import { DoorControl, Icon, useDoor } from '../doors/door.tsx';
 import { MenuButton } from '../doors/menu.tsx';
 import { GLYPHS, doorSlots, drawnAsOf, partOf, slotsIn } from '../doors/placement.ts';
 import { setActiveOption } from '../focus/focus.ts';
-import { editedProperties, editedPropertiesByDoor, heldProperties, inspectorMode, inspectorSearchOf, isColourValue, isEssential, searchMatches, sectionClosed, sectionProperties, summaryOf, summaryProperties } from '../inspector/sections.ts';
+import { authoredProperties, editedProperties, editedPropertiesByDoor, inspectorMode, inspectorSearchOf, isColourValue, isEssential, searchMatches, sectionClosed, sectionProperties, summaryOf, summaryProperties } from '../inspector/sections.ts';
 import { groupOf, groupsOf, orderByGroup, pairRowOf, rowPrefixKey, titledGroups } from '../inspector/rows.ts';
 import { valueOrigin } from '../inspector/origin.ts';
 import { MODEL_RULES, useEditorState, useStore, layeredRules } from '../store.ts';
@@ -579,11 +579,10 @@ function StyleSections() {
   const t = useT();
   const locale = useLocale();
   // The sections drawn collapsed: the user's own collapses and openings (the preferences), and, for a section nobody
-  // has touched, whether the selected element holds a value in it (sections.ts). As one text, so the hook's answer is
-  // stable while nothing changes.
+  // has touched, whether the edit target holds a value in it — the element, or the class while a class is the target
+  // (sections.ts authoredProperties). As one text, so the hook's answer is stable while nothing changes.
   const collapsedText = useEditorState((s) => {
-    const node = s.selection.length === 1 ? (locate(s.document, s.selection[0] ?? '')?.node ?? null) : null;
-    const held = node === null ? NO_HELD : heldProperties(node);
+    const held = authoredProperties(s);
     return STYLE_SECTIONS.filter((section) => sectionClosed(s.ui, section.id as SectionId, held))
       .map((section) => section.id)
       .join(' ');
@@ -602,8 +601,11 @@ function StyleSections() {
   // inspector-property-search)
   const query = useEditorState((s) => inspectorSearchOf(s.ui));
   const searching = query.trim() !== '';
-  // what the element holds a value of, at the base breakpoint and state
-  const held = node === null ? NO_HELD : heldProperties(node);
+  // What the edit target holds a value of, in any layer: the element, or the class while a class is the target. One
+  // text, so the hook's answer is stable while nothing changes; the Essentials filter and the headers' counts read it
+  // (the interface audit, findings F05 and F17).
+  const heldText = useEditorState((s) => [...authoredProperties(s)].sort().join(' '));
+  const held = useMemo(() => new Set(heldText.split(' ').filter((property) => property !== '')), [heldText]);
   const shownDoors = (section: string) =>
     (SECTION_DOORS.get(section) ?? []).filter((d) => shownForSelection(d, kinds, context) && (searching ? searchMatches(query, t(fieldLabelKey(d)), cssNamesOf(d)) : mode === 'all' || shownInEssentials(d, held, revealed)));
   if (searching && STYLE_SECTIONS.every((s) => shownDoors(s.id).length === 0)) return <p className="inspector-search__none">{t('inspector.searchNoMatch', { query: query.trim() })}</p>;
@@ -732,7 +734,6 @@ function PropertySearch() {
   );
 }
 
-const NO_HELD: ReadonlySet<string> = new Set();
 // the property, composite or recipe a door of the Style tab edits, or null (an editor control)
 function editedTarget(entry: DoorEntry): string | null {
   if (entry.door.kind !== 'inspector-field') return null;
@@ -829,6 +830,10 @@ function AddProperty() {
   const revealed = useEditorState((s) => s.ui.revealed?.field ?? null);
   const node = useSingleNode();
   const kinds = useSelectionKinds();
+  // what the edit target holds: the element, or the class while a class is the target (findings F05 and F17), so a
+  // property the class already sets is never offered as one to add
+  const heldText = useEditorState((s) => [...authoredProperties(s)].sort().join(' '));
+  const held = useMemo(() => new Set(heldText.split(' ').filter((property) => property !== '')), [heldText]);
   // the first property listed is the marked one after every change of the list (what is typed, the selection)
   const kindsKey = kinds.join(' ');
   useLayoutEffect(() => {
@@ -838,7 +843,6 @@ function AddProperty() {
   }, [open, query, mode, revealed, node, kindsKey]);
   const door = useDoor(REVEAL ?? (manifest.doors[0] as DoorEntry), {}, t('inspector.addProperty'), REVEAL !== undefined && isFeatureBuilt(REVEAL.door.feature as FeatureId));
   if (REVEAL === undefined) return null;
-  const held = node === null ? NO_HELD : heldProperties(node);
   const hidden =
     mode === 'all'
       ? []

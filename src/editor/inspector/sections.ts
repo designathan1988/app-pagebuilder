@@ -11,8 +11,9 @@
 // sets them: the element's own styles or the browser's defaults; spec, Problems in Pager 2). How each section writes
 // them is below (SUMMARIES); the words come from the catalogue.
 import { message, registerHandler, type RegisteredHandler } from '../../core/commands/registry.ts';
+import { classesOf } from '../../core/design/classes.ts';
 import { locate, type DocNode } from '../../core/document/model.ts';
-import type { StoredValue } from '../../core/document/model.ts';
+import type { StoreState } from '../../core/store/store.ts';
 import { fold } from '../../core/text/fold.ts';
 import type { CommandArgs } from '../../generated/commands.ts';
 import { SECTION_IDS, type MessageId, type SectionId } from '../../generated/ids.ts';
@@ -21,7 +22,7 @@ import { pluralForm } from '../../i18n/index.ts';
 import { manifest } from '../../manifest/runtime.ts';
 import type { EditorUi } from '../state.ts';
 import { chosen } from '../preferences/said.ts';
-import { MODEL_RULES } from '../store.ts';
+import { styleClassOf } from './style-target.ts';
 import { withInspectorTab } from '../workspace/layout.ts';
 import { withInspector } from '../workspace/panels.ts';
 
@@ -91,19 +92,32 @@ export function sectionClosed(ui: EditorUi, section: SectionId, held: ReadonlySe
   return !sectionEssential(section) && !sectionHoldsValue(section, held);
 }
 
-// The properties one selected element holds a value of at the base breakpoint and state.
-export function heldProperties(node: DocNode): ReadonlySet<string> {
-  const byState = (node.styles as Record<string, Record<string, Record<string, StoredValue>> | undefined>)[MODEL_RULES.base.breakpoint];
-  return new Set(Object.keys(byState?.[MODEL_RULES.base.state] ?? {}));
+// The properties a styles object holds, in any layer (every breakpoint, every state).
+function heldInStyles(styles: DocNode['styles'] | undefined): ReadonlySet<string> {
+  const held = new Set<string>();
+  for (const states of Object.values(styles ?? {})) {
+    for (const declarations of Object.values(states ?? {})) for (const property of Object.keys(declarations ?? {})) held.add(property);
+  }
+  return held;
+}
+
+// The properties the edit target holds a value of, in any layer: the element, or the class definition while a class is
+// the target. The panel's counts, its Essentials filter, the sections' opening and the header's origin dot read this
+// one answer, so a value authored on the class or at another breakpoint is never invisible (the interface audit,
+// findings F05 and F17). emptyHeld for nothing selected.
+export function authoredProperties(state: StoreState<EditorUi>): ReadonlySet<string> {
+  const className = styleClassOf(state);
+  if (className !== null) return heldInStyles(classesOf(state.document).find((one) => one.name === className)?.styles);
+  const node = state.selection.length === 1 ? (locate(state.document, state.selection[0] ?? '')?.node ?? null) : null;
+  return node === null ? EMPTY_HELD : heldInStyles(node.styles);
 }
 
 export const toggleSection = registerHandler<'inspector.toggleSection', EditorUi>('inspector.toggleSection', ({ state }, { section }) => {
   // the header door of a section names it; anything else is a defect of the door
   if (!isSectionId(section)) throw new Error(`inspector.toggleSection: the inspector has no section ${section}`);
-  // what the element holds decides what the click does to a section nobody has touched yet: the door opens a section
-  // drawn collapsed and closes one drawn open, the way the header reads to the person clicking it
-  const node = state.selection.length === 1 ? (locate(state.document, state.selection[0] ?? '')?.node ?? null) : null;
-  const closed = sectionClosed(state.ui, section, node === null ? EMPTY_HELD : heldProperties(node));
+  // what the edit target holds decides what the click does to a section nobody has touched yet: the door opens a
+  // section drawn collapsed and closes one drawn open, the way the header reads to the person clicking it
+  const closed = sectionClosed(state.ui, section, authoredProperties(state));
   const drop = (list: readonly SectionId[]) => list.filter((s) => s !== section);
   const add = (list: readonly SectionId[]) => SECTION_IDS.filter((s) => s === section || list.includes(s));
   const { collapsedSections: wasClosed, expandedSections: wasOpen, ...rest } = state.ui.preferences;

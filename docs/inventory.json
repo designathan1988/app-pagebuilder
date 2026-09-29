@@ -6,7 +6,7 @@
     "doors": 998,
     "scenarios": 1333,
     "modules": 241,
-    "lines": 47384
+    "lines": 47495
   },
   "features": [
     {
@@ -2901,7 +2901,7 @@
     },
     {
       "path": "src/core/design/tokens.ts",
-      "lines": 159,
+      "lines": 231,
       "commands": [
         "tokens.create",
         "tokens.update",
@@ -3533,7 +3533,7 @@
     },
     {
       "path": "src/core/store/store.ts",
-      "lines": 448,
+      "lines": 449,
       "commands": [],
       "features": []
     },
@@ -4358,7 +4358,7 @@
     },
     {
       "path": "src/editor/inspector/sections.ts",
-      "lines": 289,
+      "lines": 303,
       "commands": [
         "inspector.toggleSection",
         "inspector.setMode",
@@ -4399,7 +4399,7 @@
     },
     {
       "path": "src/editor/inspector/style-target.ts",
-      "lines": 91,
+      "lines": 103,
       "commands": [
         "inspector.setStyleTarget"
       ],
@@ -4640,7 +4640,7 @@
     },
     {
       "path": "src/editor/shell/inspector.tsx",
-      "lines": 1158,
+      "lines": 1162,
       "commands": [],
       "features": []
     },
@@ -4676,7 +4676,7 @@
     },
     {
       "path": "src/editor/shell/preview.tsx",
-      "lines": 32,
+      "lines": 36,
       "commands": [],
       "features": []
     },
@@ -4760,7 +4760,7 @@
     },
     {
       "path": "src/editor/store.ts",
-      "lines": 131,
+      "lines": 134,
       "commands": [],
       "features": []
     },
@@ -4989,7 +4989,7 @@
     },
     {
       "path": "src/generated/ids.ts",
-      "lines": 4504,
+      "lines": 4505,
       "commands": [],
       "features": []
     },

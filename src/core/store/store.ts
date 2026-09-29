@@ -156,9 +156,10 @@ export interface StoreOptions<Ui> {
   // the editor state that follows a new selection, whichever command or undo step changed it (the editor's owner of
   // that state knows it: Layers unfolds the branches that hide a selected node)
   readonly followSelection?: (state: StoreState<Ui>) => Ui;
-  // the editor state that follows a command that ran, by the command's manifest data (a text edit ends when an
-  // undoable command runs: the document may change under it); it returns the same editor state when nothing follows
-  readonly followCommand?: (state: StoreState<Ui>, command: Command) => Ui;
+  // the editor state that follows a command that ran, by the command's manifest data and the arguments it ran with (a
+  // text edit ends when an undoable command runs: the document may change under it; a renamed class the editor targets
+  // moves the target with it); it returns the same editor state when nothing follows
+  readonly followCommand?: (state: StoreState<Ui>, command: Command, args: Readonly<Record<string, unknown>>) => Ui;
 }
 
 export function deepFreeze<T>(value: T): T {
@@ -352,7 +353,7 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
       refused: false,
       ui: outcome.ui ?? before.ui,
     };
-    const next: StoreState<Ui> = options.followCommand === undefined ? ran : { ...ran, ui: options.followCommand(ran, command) };
+    const next: StoreState<Ui> = options.followCommand === undefined ? ran : { ...ran, ui: options.followCommand(ran, command, args) };
     const changed = documentChanged || !deepEqual(before.selection, next.selection) || next.ui !== before.ui || next.message !== before.message;
     if (changed) publish(commit(next, id), documentChanged ? applied.applied : []);
     // the file the command hands out, once its state is committed

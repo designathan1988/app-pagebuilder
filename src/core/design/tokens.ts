@@ -1,19 +1,20 @@
 // The project's design tokens as CSS variables (ARCHITECTURE.md, Command owners; spec css-variables-tokens): each a
 // name, a kind (a colour, a length, a font size: tokens.create's kinds) and a value, kept with the project (the
-// document's `tokens`, in the order they were made) and named in an element's style as var(--name). The one owner of:
+// document's `tokens`, in the order they were made) and named in a style value as var(--name). The one owner of:
 //  - tokens.create, tokens.update, tokens.rename, tokens.delete, one undo step each. A name is a CSS custom property's
 //    without its dashes (a letter, then letters, digits and "-"), unique in the project; a value is one the browser takes
 //    for the kind (read as the property the kind names reads it: color for a colour, font-size for a font size, a
-//    length-percentage property for a length). A rename renames every var(--name) that uses it, in every page (Problems
-//    in Pager 2); a variable in use is not deleted, the refusal counts the elements that use it (Problems in Pager 3).
-//  - usesToken / tokenReferenceOf: which style values name a variable;
+//    length-percentage property for a length). A rename renames every var(--name) that uses it, wherever a value lives
+//    (Problems in Pager 2); a variable in use is not deleted, the refusal counting the elements that use it and, when
+//    only a shared holder does, saying so (Problems in Pager 3).
+//  - usesOf / usesToken / tokenReferenceOf: which values name a variable, and who holds them;
 //  - rootCss: the variables as the :root rule the page and the export write (Problems in Pager 1);
 //  - tokenKindOf: the kind of variable a property's field offers (Problems in Pager 4): the kind the property is (a
 //    font size), else the kind whose value is read as the property's is (a colour field: a colour; a length field: a
 //    length); none for any other.
 import type { Message } from '../commands/registry.ts';
 import { message, registerHandler, type HandlerContext, type Outcome } from '../commands/registry.ts';
-import { walk, type DocNode, type DocumentJson } from '../document/model.ts';
+import { walk, type DocNode, type DocumentJson, type StoredValue } from '../document/model.ts';
 import type { Patch } from '../history/transaction.ts';
 import { readValue } from '../style/set.ts';
 
@@ -35,40 +36,110 @@ export function tokenReferenceOf(value: string): string | null {
   return /var\(\s*--([a-z][a-z0-9-]*)/i.exec(value)?.[1] ?? null;
 }
 
-// the text of a style value, a structured one's (a shadow's layers) as its JSON
-const texts = (value: unknown): readonly string[] => (typeof value === 'string' ? [value] : []);
+type Path = readonly (string | number)[];
 
-// every place a style value names a variable: the node, its style's breakpoint, state and property, and its text
-function usesOf(document: DocumentJson, name: string): { readonly page: number; readonly node: DocNode; readonly path: readonly string[]; readonly value: string }[] {
-  const found: { page: number; node: DocNode; path: readonly string[]; value: string }[] = [];
-  document.pages.forEach((page, index) => {
-    for (const node of walk(page.tree)) {
-      const styles = node.styles as Record<string, Record<string, Record<string, unknown>> | undefined>;
-      for (const [breakpoint, states] of Object.entries(styles)) {
-        for (const [state, declarations] of Object.entries(states ?? {})) {
-          for (const [property, value] of Object.entries(declarations ?? {})) {
-            for (const text of texts(value)) if (referenceTo(name).test(text)) found.push({ page: index, node, path: [breakpoint, state, property], value: text });
-          }
-        }
-      }
+// One place a value names a variable: the document path the rename writes to, the value itself (a structured value
+// carried whole, so its layers are rewritten in place), and who holds it — an element's own style, a class's, a
+// component's tree, an element's animation, or another variable's value (an alias).
+interface Use {
+  readonly path: Path;
+  readonly value: StoredValue;
+  readonly holder: 'element' | 'class' | 'component' | 'animation' | 'token';
+  readonly element: string | null;
+  readonly className: string | null;
+  readonly component: string | null;
+}
+
+// The texts a stored value names a variable in: the value itself, or every text of a structured value's layers (a
+// shadow's colour or length is CSS text a variable may be named in).
+const texts = (value: StoredValue): readonly string[] =>
+  typeof value === 'string'
+    ? [value]
+    : value.flatMap((layer) => Object.values(layer).filter((field): field is string => typeof field === 'string'));
+
+// The stored value with every reference to the variable renamed.
+function renamedIn(value: StoredValue, name: string, next: string): StoredValue {
+  const rewrite = (text: string) => text.replace(referenceTo(name), `var(--${next}$1`);
+  if (typeof value === 'string') return rewrite(value);
+  return value.map((layer) => Object.fromEntries(Object.entries(layer).map(([field, held]) => [field, typeof held === 'string' ? rewrite(held) : held])));
+}
+
+// every value of one declarations object that names the variable
+function usesInDeclarations(name: string, declarations: Readonly<Record<string, StoredValue | undefined>> | undefined, base: Path, make: (path: Path, value: StoredValue) => Use, into: Use[]): void {
+  for (const [property, value] of Object.entries(declarations ?? {})) {
+    if (value === undefined) continue;
+    if (texts(value).some((text) => referenceTo(name).test(text))) into.push(make([...base, property], value));
+  }
+}
+
+// every value of one styles object (breakpoint → state → declarations) that names the variable
+function usesInStyles(name: string, styles: DocNode['styles'] | undefined, base: Path, make: (path: Path, value: StoredValue) => Use, into: Use[]): void {
+  for (const [breakpoint, states] of Object.entries(styles ?? {})) {
+    for (const [state, declarations] of Object.entries(states ?? {})) usesInDeclarations(name, declarations as Record<string, StoredValue>, [...base, breakpoint, state], make, into);
+  }
+}
+
+// every value inside one node — its styles, its animations' keyframes and settings — that names the variable; an
+// animation's use keeps the holder it belongs to (the element, or the class it stands for) and says it is a keyframe's
+function usesInNode(name: string, node: DocNode, base: Path, make: (path: Path, value: StoredValue) => Use, into: Use[]): void {
+  usesInStyles(name, node.styles, [...base, 'styles'], make, into);
+  const fromAnimation = (path: Path, value: StoredValue): Use => ({ ...make(path, value), holder: 'animation' });
+  (node.animations ?? []).forEach((animation, a) => {
+    animation.keyframes.forEach((frame, k) => usesInDeclarations(name, frame.declarations as Record<string, StoredValue>, [...base, 'animations', a, 'keyframes', k, 'declarations'], fromAnimation, into));
+    for (const [setting, value] of Object.entries(animation.settings ?? {})) {
+      if (referenceTo(name).test(value)) into.push(fromAnimation([...base, 'animations', a, 'settings', setting], value));
     }
+  });
+}
+
+// every node of a tree with its own document path
+function walkPaths(node: DocNode, base: Path, visit: (node: DocNode, path: Path) => void): void {
+  visit(node, base);
+  node.children.forEach((child, i) => walkPaths(child, [...base, 'children', i], visit));
+}
+
+// every place a value names the variable: every element of every page (and its animations), every class definition,
+// every component's tree, and the variables' own values (an alias). The one traversal rename and delete read.
+export function usesOf(document: DocumentJson, name: string): readonly Use[] {
+  const found: Use[] = [];
+  document.pages.forEach((page, index) => {
+    walkPaths(page.tree, ['pages', index, 'tree'], (node, path) => {
+      const make = (at: Path, value: StoredValue): Use => ({ path: at, value, holder: 'element', element: node.id, className: null, component: null });
+      usesInNode(name, node, path, make, found);
+    });
+  });
+  (document.classes ?? []).forEach((styleClass, index) => {
+    const make = (at: Path, value: StoredValue): Use => ({ path: at, value, holder: 'class', element: null, className: styleClass.name, component: null });
+    usesInStyles(name, styleClass.styles, ['classes', index, 'styles'], make, found);
+  });
+  (document.components ?? []).forEach((definition, index) => {
+    walkPaths(definition.tree, ['components', index, 'tree'], (node, path) => {
+      const make = (at: Path, value: StoredValue): Use => ({ path: at, value, holder: 'component', element: null, className: null, component: definition.name });
+      usesInNode(name, node, path, make, found);
+    });
+  });
+  tokensOf(document).forEach((token, index) => {
+    if (referenceTo(name).test(token.value)) found.push({ path: ['tokens', index, 'value'], value: token.value, holder: 'token', element: null, className: null, component: null });
   });
   return found;
 }
-export const usesToken = (document: DocumentJson, name: string): number => new Set(usesOf(document, name).map((u) => u.node.id)).size;
 
-// the path of a node in a document, from its page
-function pathOf(document: DocumentJson, page: number, id: string): (string | number)[] | null {
-  const search = (node: DocNode, at: (string | number)[]): (string | number)[] | null => {
-    if (node.id === id) return at;
-    for (const [i, child] of node.children.entries()) {
-      const inner = search(child, [...at, 'children', i]);
-      if (inner !== null) return inner;
+// The elements that use the variable: an element whose own styles, keyframes or settings name it, every element
+// listing a class that names it, and every instance of a component whose tree names it (the count the refusal says).
+export function usesToken(document: DocumentJson, name: string): number {
+  const uses = usesOf(document, name);
+  const elements = new Set<string>();
+  for (const use of uses) if (use.element !== null) elements.add(use.element);
+  const classNames = new Set(uses.filter((u) => u.className !== null).map((u) => u.className as string));
+  const componentNames = new Set(uses.filter((u) => u.component !== null).map((u) => u.component as string));
+  if (classNames.size === 0 && componentNames.size === 0) return elements.size;
+  for (const page of document.pages) {
+    for (const node of walk(page.tree)) {
+      if (node.classes.some((one) => classNames.has(one))) elements.add(node.id);
+      if (node.component !== undefined && componentNames.has(node.component)) elements.add(node.id);
     }
-    return null;
-  };
-  const tree = document.pages[page]?.tree;
-  return tree === undefined ? null : search(tree, ['pages', page, 'tree']);
+  }
+  return elements.size;
 }
 
 // the property whose values a kind's value is read as: the property the kind names, else one whose codec reads the kind
@@ -126,19 +197,20 @@ export const renameToken = registerHandler('tokens.rename', (context, { token, n
   if (typed === token) return { kind: 'change', message: said };
   const refused = nameRefusal(state.document, typed, token);
   if (refused !== null) return { kind: 'refused', message: refused };
-  // every value that names it names the new name
-  const uses: Patch[] = usesOf(state.document, token).flatMap((use) => {
-    const nodePath = pathOf(state.document, use.page, use.node.id);
-    return nodePath === null ? [] : [{ op: 'replace' as const, path: [...nodePath, 'styles', ...use.path], value: use.value.replace(referenceTo(token), `var(--${typed}$1`) }];
-  });
+  // every value that names it names the new name, wherever it lives: an element's style or animation, a class, a
+  // component's tree, or another variable
+  const uses: Patch[] = usesOf(state.document, token).map((use) => ({ op: 'replace', path: use.path, value: renamedIn(use.value, token, typed) }));
   return { kind: 'change', patches: [{ op: 'replace', path: ['tokens', at, 'name'], value: typed }, ...uses], message: said };
 });
 
 export const deleteToken = registerHandler('tokens.delete', ({ state }, { token }): Outcome<never> => {
   const at = indexOf(state.document, token);
-  const count = usesToken(state.document, token);
+  const document = state.document;
+  const count = usesToken(document, token);
   if (count > 0) return { kind: 'refused', message: message('status.tokens.inUse', { name: token, count }) };
-  const patch: Patch = tokensOf(state.document).length === 1 ? { op: 'remove', path: ['tokens'] } : { op: 'remove', path: ['tokens', at] };
+  // no element uses it, but a shared holder does: a class no element lists, a component's tree, or another variable
+  if (usesOf(document, token).length > 0) return { kind: 'refused', message: message('status.tokens.inUseShared', { name: token }) };
+  const patch: Patch = tokensOf(document).length === 1 ? { op: 'remove', path: ['tokens'] } : { op: 'remove', path: ['tokens', at] };
   return { kind: 'change', patches: [patch], message: message('status.tokens.deleted', { name: token }) };
 });
 

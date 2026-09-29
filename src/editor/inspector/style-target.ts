@@ -9,7 +9,8 @@
 //    element holding the class's styles; and, with the Element target, the class a value comes from when the element
 //    holds none of its own (cascadeSource, in the stylesheet's order; inspector/origin.ts names it).
 import { message, registerHandler } from '../../core/commands/registry.ts';
-import { classTarget, classesOf, missingClassDefinitions } from '../../core/design/classes.ts';
+import type { Command } from '../../manifest/schema.ts';
+import { classTarget, classesOf, missingClassDefinitions, renameClassCommand } from '../../core/design/classes.ts';
 import { locate, type DocNode, type DocumentJson } from '../../core/document/model.ts';
 import type { ModelRules } from '../../core/document/validate.ts';
 import type { StoreState } from '../../core/store/store.ts';
@@ -87,4 +88,15 @@ export function cascadeSource(doc: DocumentJson, node: DocNode, property: string
     if (held !== undefined) return { breakpoint: held.breakpoint, state: held.state, className: c.name };
   }
   return null;
+}
+
+// The style target follows a class rename (spec shared-style-classes; the interface audit F02): renaming the class the
+// Style tab targets moves the target to the renamed class, so the next write still lands on the class instead of
+// silently becoming a write on the element. Only a command that changed the document reaches here — a refusal does not.
+export function targetFollowsClassRename(state: StoreState<EditorUi>, command: Command, args: Readonly<Record<string, unknown>>): EditorUi {
+  if (command.id !== renameClassCommand.command) return state.ui;
+  const renamed = typeof args.className === 'string' ? args.className : null;
+  const next = typeof args.nextName === 'string' ? args.nextName.trim() : null;
+  if (renamed === null || next === null || (state.ui.styleTarget ?? null) !== renamed) return state.ui;
+  return { ...state.ui, styleTarget: next };
 }

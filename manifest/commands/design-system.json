@@ -321,7 +321,8 @@
         "refusalKey": null
       },
       "refusals": [
-        "status.tokens.inUse"
+        "status.tokens.inUse",
+        "status.tokens.inUseShared"
       ],
       "confirmation": null,
       "history": {

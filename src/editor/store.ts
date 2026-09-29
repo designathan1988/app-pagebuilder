@@ -21,7 +21,7 @@ import { browserDownloads } from './download.ts';
 import { endOffSelection, endOnUndoable } from './canvas/text-edit.ts';
 import { endRenameOffSelection, endRenameOnUndoable } from './layers/rename.ts';
 import { revealSelection } from './layers/tree.ts';
-import { targetOffSelection } from './inspector/style-target.ts';
+import { targetFollowsClassRename, targetOffSelection } from './inspector/style-target.ts';
 import { keyframeTarget } from './timeline/playhead.ts';
 import { browserStorage, loadPreferences, persistPreferences, type PreferenceStorage } from './preferences/preferences.ts';
 import { browserWorkspace, persistWorkspace, readWorkspace, type WorkspaceStorage } from './workspace/persist.ts';
@@ -108,7 +108,10 @@ export function createEditorStore(options: EditorStoreOptions = {}): EditorStore
       const revealed = { ...state, ui: targetOffSelection({ ...state, ui: revealSelection(state) }) };
       return endRenameOffSelection({ ...revealed, ui: endOffSelection(revealed) });
     },
-    followCommand: (state, command) => endRenameOnUndoable({ ...state, ui: endOnUndoable(state, command) }, command),
+    followCommand: (state, command, args) => {
+      const followed = { ...state, ui: targetFollowsClassRename(state, command, args) };
+      return endRenameOnUndoable({ ...followed, ui: endOnUndoable(followed, command) }, command);
+    },
   });
   persistPreferences(store, storage);
   persistWorkspace(store, options.workspace ?? browserWorkspace);

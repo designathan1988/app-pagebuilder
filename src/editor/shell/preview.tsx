@@ -5,6 +5,7 @@
 // sandboxed, never the editing canvas. No selection, guides, handles, docks or rulers are drawn.
 import { useMemo } from 'react';
 import { previewPage } from '../../core/export/export.ts';
+import { openedPage } from '../../core/project/pages.ts';
 import { activeBreakpoint } from '../view/breakpoints.ts';
 import { MODEL_RULES, useEditorState } from '../store.ts';
 import { useT } from '../text.ts';
@@ -22,7 +23,10 @@ export function PreviewPage() {
   const t = useT();
   const document = useEditorState((s) => s.document);
   const width = useEditorState((s) => activeBreakpoint(s.ui).width);
-  const html = useMemo(() => previewPage(document, MODEL_RULES), [document]);
+  // the page the editor has open, never the project's first: previewing a second page must show that page (the
+  // interface audit F03), and the memo re-runs when the open page changes
+  const page = useEditorState((s) => openedPage(s));
+  const html = useMemo(() => previewPage(document, MODEL_RULES, page), [document, page]);
   return (
     <main className="preview-stage">
       <iframe className="preview__page" data-region="preview-page" title={t('preview.pageLabel')} srcDoc={html} sandbox="allow-scripts allow-popups allow-forms allow-popups-to-escape-sandbox" style={{ width }} />
