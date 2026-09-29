@@ -19,7 +19,8 @@
     "e2e:tooth": "node tools/runner/tooth.ts",
     "gen": "node tools/gen/generate.ts",
     "gen:check": "node tools/gen/check.ts",
-    "manifest:check": "node tools/manifest/check.ts"
+    "manifest:check": "node tools/manifest/check.ts",
+    "ui": "node tools/ui/drive.ts"
   },
   "dependencies": {
     "react": "^19.3.0",

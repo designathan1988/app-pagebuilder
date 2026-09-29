@@ -70,6 +70,11 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 
 ## Open findings
 
+- **The selection label rests on the text above it** (`npm run ui -- insert` photographs it after the last
+  step): with a Paragraph selected under a Heading, the label is placed above the Paragraph and overlaps the
+  Heading's text, though the label rule (DESIGN.md "Label rule") says it never covers page text. Found by the UI
+  driver's photo; to fix in the UI pass, with the driver as the proof.
+
 - The complete suite has not run since the consolidation; run it once before the next block's work is called
   done (the user's rule: the whole suite only when the application is ready).
 - The `.memory/` brief still carries orders of the fragmented period (worktrees, agents, the parallel Codex
