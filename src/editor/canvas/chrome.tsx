@@ -428,16 +428,6 @@ function heldInside(box: Box, area: Box): Box {
   };
 }
 
-// Where the label of a box goes: the first free place in the rule's order, all in screen pixels; a place is free
-// when it lies on the canvas and covers no page content. With none free it goes below.
-// The selection's label: always above its element (DESIGN.md "Label rule", the user's decision), held inside the
-// canvas at its top and at its sides.
-export function placeAbove(box: Box, size: { readonly width: number; readonly height: number }, gap: number, canvas: Box): { box: Box; placement: Placement } {
-  const x = Math.max(canvas.x, Math.min(box.x, canvas.x + canvas.width - size.width));
-  const y = Math.max(canvas.y, box.y - gap - size.height);
-  return { placement: 'above', box: { x, y, ...size } };
-}
-
 // A drop label also keeps clear of the drag's ghost chip (`ghost`, the user's real-use audit, item 3.1): a place it
 // would cover is not free, and with none free the label moves beside the chip, on the side with room. The rule's
 // invariant is that no label covers page content (DESIGN.md "Label rule"); the line of a drop spans the receiver, so
@@ -865,10 +855,13 @@ export function CanvasChrome() {
           // (the side's own translate), and the rotation zones stand a further --space-4 outside the corners (4.4).
           const spacing = getComputedStyle(layer.current as HTMLDivElement);
           const clear = (parseFloat(spacing.getPropertyValue('--space-6')) || 0) + (parseFloat(spacing.getPropertyValue('--space-4')) || 0);
-          // the selection's label always above its element; while a text is edited in place, its toolbar sits above
-          // its label and the two are placed as one (DESIGN.md "Canvas", text)
+          // the selection's label sits above its element, and it clears the page's own content like every other label
+          // (the label rule: never over page text — the boxes are the same contentBoxes the drop indicator's label
+          // avoids): above while there is room, inside the element's top-left corner, or below, whichever covers least.
+          // While a text is edited in place, its toolbar sits above its label and the two are placed as one.
           const whole = tools === null ? size : { width: Math.max(size.width, tools.width), height: tools.height + gap + size.height };
-          const spot = placeAbove(first, whole, gap + clear, visibleCanvas(origin));
+          const content = contentBoxes(iframe).map((b) => local(b) as Box);
+          const spot = placeLabel(first, whole, gap + clear, content, visibleCanvas(origin));
           placed = tools === null ? spot : { placement: spot.placement, box: { x: spot.box.x, y: spot.box.y + tools.height + gap, ...size } };
           placedToolbar = tools === null ? null : { x: spot.box.x, y: spot.box.y };
         }
