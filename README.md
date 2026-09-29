@@ -12,10 +12,11 @@ inside an iframe scaled with CSS `zoom`; the document JSON is the source of trut
 ## Run and check
 
 - `npm run dev` starts the dev server; the port comes from the `PORT` environment variable.
-- `npm run check` is the limited validation after a change: the static checks and the browser tests the change can affect.
-- `npm run verify:fast`, then `npm run e2e`, is the checkpoint a commit must pass on to reach `main`.
 - `npm run unit` runs the unit suite; `npm run manifest:check` validates the manifest contract; `npm run gen:check`
   fails when the generated files are stale or hand-edited; `npm run lint` and `npm run typecheck` are the static checks.
+- `npm run e2e` runs the browser tests on the installed Chrome; at the end of a block, run the tests of what the block
+  built (`npm run e2e -- <spec file>`). The complete suite runs once, when the whole application is ready.
+  `docs/testing/README.md` is the cycle in full.
 
 ## Where things are
 
@@ -25,7 +26,8 @@ inside an iframe scaled with CSS `zoom`; the document JSON is the source of trut
   the two, `src/manifest/` reads and checks the contract.
 - `spec/behavior/`: the behaviour specs the scenarios are written from.
 - `tests/`: the browser tests (`tests/e2e/`) and their one fixture (`tests/support/`).
-- `tools/`: contract generation, the manifest checker, the lint rules, the scenario runner and the validation cycle.
+- `tools/`: contract generation (`gen`), the manifest checker (`manifest`), the lint rules (`lint`) and the scenario
+  runner with its tooth proof (`runner`).
 - `docs/DESIGN.md` and `docs/ARCHITECTURE.md`: the interface, and the single owner module of every concept.
 - `docs/PROGRESS.md` and `docs/history.md`: the current state and the appended history.
 - `docs/testing/README.md`: how the project validates a change, and the measurements behind each rule.
