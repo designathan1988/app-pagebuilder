@@ -5,8 +5,8 @@
     "commands": 256,
     "doors": 998,
     "scenarios": 1333,
-    "modules": 242,
-    "lines": 47564
+    "modules": 243,
+    "lines": 47577
   },
   "features": [
     {
@@ -3966,7 +3966,7 @@
     },
     {
       "path": "src/editor/canvas/chrome.tsx",
-      "lines": 1060,
+      "lines": 934,
       "commands": [],
       "features": []
     },
@@ -4041,6 +4041,12 @@
       "features": [
         "radius-border-gap-handles"
       ]
+    },
+    {
+      "path": "src/editor/canvas/placement.ts",
+      "lines": 149,
+      "commands": [],
+      "features": []
     },
     {
       "path": "src/editor/canvas/quick-panel.tsx",
@@ -4352,7 +4358,7 @@
     },
     {
       "path": "src/editor/inspector/rows.ts",
-      "lines": 97,
+      "lines": 94,
       "commands": [],
       "features": []
     },
@@ -4640,7 +4646,7 @@
     },
     {
       "path": "src/editor/shell/inspector.tsx",
-      "lines": 1181,
+      "lines": 1171,
       "commands": [],
       "features": []
     },
@@ -5055,7 +5061,7 @@
     },
     {
       "path": "src/manifest/schema.ts",
-      "lines": 1256,
+      "lines": 1259,
       "commands": [],
       "features": []
     }

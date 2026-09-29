@@ -53,6 +53,12 @@ import { editMode, modeApplies, NO_MODE } from './edit-mode.ts';
 const LEAVE_MODE = manifest.doors.find((d) => d.door.kind === 'shortcut' && d.door.args.mode === NO_MODE) ?? null;
 import { ViewOverlays } from './view-overlays.tsx';
 import { GridOverlay } from './grid-overlay.tsx';
+// where a label and a resize handle may be drawn (canvas/placement.ts): the rules moved out of this file, which draws
+import { controlBoxes, handleHitBox, placeLabel, visibleCanvas, type Box, type Placement } from './placement.ts';
+
+// the entries this module published before the placement rules moved out stay published here: consumers need not change
+export { controlBoxes, handleHitBox, placeLabel, visibleCanvas } from './placement.ts';
+export type { Box, Placement } from './placement.ts';
 
 // the palette's entries by id: the element a creation drag inserts and the words that name it
 // the resize handles (spec resize-handles): the doors of the resize gesture, one per handle, drawn on the one selected
@@ -83,61 +89,7 @@ const handlePoint = (handle: string, b: { x: number; y: number; width: number; h
   return { left: b.x + (side.includes('w') ? 0 : side.includes('e') ? b.width : b.width / 2), top: b.y + (side.includes('n') ? 0 : side.includes('s') ? b.height : b.height / 2) };
 };
 
-// The hit area of one resize handle in the chrome layer's pixels: a `size` square beside the element's edge or
-// corner, wholly outside it, as the stylesheet draws it — slid toward the element where a neighbour's box would be
-// covered (the canvas audit, 2026-09-28: the south handle of a selected card sat wholly over the 23 px card below it,
-// so a press meant to drag that card resized instead). The room the neighbour leaves outside is all the handle keeps;
-// the rest moves inside the element, so the box never covers a neighbouring element, and the drawn dot keeps to the
-// element's edge wherever the box went: `at` is the edge point within the box as the fractions the dot is drawn at
-// (--handle-x/--handle-y). With no neighbour at the edge the box is exactly where the stylesheet draws it.
-export function handleHitBox(side: string, element: Box, size: number, neighbours: readonly Box[]): { readonly box: Box; readonly at: { readonly x: number; readonly y: number } } {
-  const west = side.includes('w');
-  const east = side.includes('e');
-  const north = side.includes('n');
-  const south = side.includes('s');
-  const edgeX = west ? element.x : east ? element.x + element.width : element.x + element.width / 2;
-  const edgeY = north ? element.y : south ? element.y + element.height : element.y + element.height / 2;
-  // the box as the stylesheet draws it: wholly outside, centred on the edge point along the other axis
-  let x = west ? edgeX - size : east ? edgeX : edgeX - size / 2;
-  let y = north ? edgeY - size : south ? edgeY : edgeY - size / 2;
-  // The far edge of the box on one axis, read from the neighbour's own near edge: where none is in the way it is the
-  // whole drawn box (the element's edge, the size); a neighbour beyond the edge sets it to its near edge; and one drawn
-  // over the edge leaves no room outside, the box keeping to the element's own edge (the audit of 2026-09-28). A
-  // neighbour that begins where the element ends (within a hair: the layout reports one boundary twice, a fractional
-  // zoom apart) keeps the box a layout unit short of it, so no rounding of the browser's can report the box inside it —
-  // the boundary the two share is a place a press meant for either must reach.
-  const NEAR = 0.5;
-  const CLEAR = 1 / 64;
-  const farEdge = (axis: 'x' | 'y', drawn: Box, edge: number, direction: number): number => {
-    let far = edge + direction * size;
-    for (const n of neighbours) {
-      const crosses = axis === 'x' ? drawn.y < n.y + n.height && n.y < drawn.y + drawn.height : drawn.x < n.x + n.width && n.x < drawn.x + drawn.width;
-      if (!crosses) continue;
-      const lo = axis === 'x' ? n.x : n.y;
-      const hi = lo + (axis === 'x' ? n.width : n.height);
-      if (direction > 0) {
-        if (hi <= edge) continue;
-        far = Math.min(far, Math.abs(lo - edge) <= NEAR ? lo - CLEAR : Math.max(lo, edge));
-      } else {
-        if (lo >= edge) continue;
-        far = Math.max(far, Math.abs(hi - edge) <= NEAR ? hi + CLEAR : Math.min(hi, edge));
-      }
-    }
-    return far;
-  };
-  if (west || east) {
-    const far = farEdge('x', { x, y, width: size, height: size }, edgeX, east ? 1 : -1);
-    x = east ? far - size : far;
-  }
-  if (north || south) {
-    const far = farEdge('y', { x, y, width: size, height: size }, edgeY, south ? 1 : -1);
-    y = south ? far - size : far;
-  }
-  // the dot is drawn at the edge point as a fraction of the box, kept inside the box: the clearance the box keeps from
-  // a neighbour at the same boundary leaves the fraction a hair past its end, where the dot would stand outside it
-  const fraction = (value: number): number => Math.min(1, Math.max(0, value));
-  return { box: { x, y, width: size, height: size }, at: { x: fraction((edgeX - x) / size), y: fraction((edgeY - y) / size) } };
-}
+
 
 // How many siblings on each side of the selected element are measured for the handles: the ones sharing a handle's
 // edge (in a grid a good number of columns away). A very long child list is not measured whole, per frame.
@@ -247,13 +199,6 @@ export function sideLine(target: Box, side: SideView['offer']): Box {
   return { x: target.x, y: side.side === 'before' ? target.y : target.y + target.height, width: target.width, height: 0 };
 }
 
-export interface Box {
-  readonly x: number;
-  readonly y: number;
-  readonly width: number;
-  readonly height: number;
-}
-export type Placement = 'above' | 'inside' | 'below';
 interface Layout {
   readonly selected: readonly Box[];
   // the box around every selected node, drawn dashed while several are selected (DESIGN.md "Canvas", multi)
@@ -400,6 +345,10 @@ const startHeld = (handle: string, starts: Layout['starts']): boolean => {
 
 const EMPTY: Layout = { selected: [], union: null, hovered: null, label: null, toolbar: null, band: null, rotate: null, starts: null, size: null, rotation: 0, hoverSize: null, distances: [], neighbours: [], handleSize: 24 };
 
+// whether two pieces of what the chrome draws read the same (the layout is compared as its text, so an unchanged
+// measure is not drawn again)
+const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
+
 // the smallest box around every box given; null for none
 export function unionOf(boxes: readonly Box[]): Box | null {
   if (boxes.length === 0) return null;
@@ -410,82 +359,7 @@ export function unionOf(boxes: readonly Box[]): Box | null {
   return { x, y, width: right - x, height: bottom - y };
 }
 
-const overlaps = (a: Box, b: Box) => a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
-const within = (a: Box, area: Box) => a.x >= area.x && a.y >= area.y && a.x + a.width <= area.x + area.width && a.y + a.height <= area.y + area.height;
-const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
 
-// What the person can see of the canvas, in the chrome layer's own pixels: the overlay covers the whole page, which at
-// some zooms (a page wider than the canvas viewport) reaches under the panels; a label held inside the overlay could
-// still be drawn where nobody sees it (the user's real-use audit). The stage's box, mapped into the layer.
-export function visibleCanvas(origin: { readonly left: number; readonly top: number; readonly right: number; readonly bottom: number }): Box {
-  const stage = document.querySelector('[data-canvas-stage]')?.getBoundingClientRect();
-  if (!stage) return { x: 0, y: 0, width: origin.right - origin.left, height: origin.bottom - origin.top };
-  const left = Math.max(origin.left, stage.left);
-  const top = Math.max(origin.top, stage.top);
-  const right = Math.min(origin.right, stage.right);
-  const bottom = Math.min(origin.bottom, stage.bottom);
-  return { x: left - origin.left, y: top - origin.top, width: Math.max(0, right - left), height: Math.max(0, bottom - top) };
-}
-
-// The chrome's own controls drawn over the page (the resize handles, the Edit on canvas bands and radius corners, the
-// rotation zones), in the chrome layer's pixels: what a label must never cover either, or the press a person aims at
-// the control lands on the label, which stands for the element and starts a move (the label rule; A3.16).
-export function controlBoxes(layer: HTMLElement, origin: { readonly x: number; readonly y: number }): Box[] {
-  return [...layer.querySelectorAll('[data-edit-handle], [data-resize-handle], [data-rotate-handle]')].map((element) => {
-    const box = element.getBoundingClientRect();
-    return { x: box.x - origin.x, y: box.y - origin.y, width: box.width, height: box.height };
-  });
-}
-
-// A label's box held inside an area: moved the least distance that puts it inside, its size kept.
-function heldInside(box: Box, area: Box): Box {
-  return {
-    x: Math.min(Math.max(box.x, area.x), Math.max(area.x, area.x + area.width - box.width)),
-    y: Math.min(Math.max(box.y, area.y), Math.max(area.y, area.y + area.height - box.height)),
-    width: box.width,
-    height: box.height,
-  };
-}
-
-// A drop label also keeps clear of the drag's ghost chip (`ghost`, the user's real-use audit, item 3.1): a place it
-// would cover is not free, and with none free the label moves beside the chip, on the side with room. The rule's
-// invariant is that no label covers page content (DESIGN.md "Label rule"); the line of a drop spans the receiver, so
-// the three places are tried at its start and then at its far end (a line between two lines of text: the text sits at
-// the left, and the far end is empty), and where even those are not free the place covering the least content wins —
-// never the largest overlap just because it is the documented order.
-export function placeLabel(box: Box, size: { readonly width: number; readonly height: number }, gap: number, content: readonly Box[], canvas: Box, ghost: Box | null = null): { box: Box; placement: Placement } {
-  const far = box.x + box.width - size.width;
-  const places: { box: Box; placement: Placement }[] = [
-    { placement: 'above', box: { x: box.x, y: box.y - gap - size.height, ...size } },
-    { placement: 'inside', box: { x: box.x + gap, y: box.y + gap, ...size } },
-    { placement: 'below', box: { x: box.x, y: box.y + box.height + gap, ...size } },
-    { placement: 'above', box: { x: far, y: box.y - gap - size.height, ...size } },
-    { placement: 'below', box: { x: far, y: box.y + box.height + gap, ...size } },
-    { placement: 'inside', box: { x: far - gap, y: box.y + gap, ...size } },
-  ];
-  const clear = (p: { box: Box }) => ghost === null || !overlaps(p.box, ghost);
-  // how much of the label's area covers page content, in square pixels
-  const covered = (b: Box) =>
-    content.reduce((sum, c) => {
-      const width = Math.min(b.x + b.width, c.x + c.width) - Math.max(b.x, c.x);
-      const height = Math.min(b.y + b.height, c.y + c.height) - Math.max(b.y, c.y);
-      return width > 0 && height > 0 ? sum + width * height : sum;
-    }, 0);
-  const candidates = places.map((p) => (within(p.box, canvas) ? p : { ...p, box: heldInside(p.box, canvas) }));
-  const free = candidates.find((p) => !content.some((c) => overlaps(p.box, c)) && clear(p));
-  const fallback = places[2] as { box: Box; placement: Placement };
-  const best = candidates.reduce((held, p) => (covered(p.box) < covered(held.box) ? p : held), { ...fallback, box: heldInside(fallback.box, canvas) });
-  const chosen = free ?? best;
-  if (ghost === null || clear(chosen)) return chosen;
-  // beside the chip: to its left, to its right, above it or below it, the first on the canvas
-  const beside = [
-    { ...chosen.box, x: ghost.x - gap - size.width },
-    { ...chosen.box, x: ghost.x + ghost.width + gap },
-    { ...chosen.box, y: ghost.y - gap - size.height },
-    { ...chosen.box, y: ghost.y + ghost.height + gap },
-  ];
-  return { placement: chosen.placement, box: beside.find((b) => within(b, canvas)) ?? heldInside(beside[0] as Box, canvas) };
-}
 
 // Where the insertion line of a drop goes, on the screen: in the middle of the gap between the reference and its
 // neighbour on the side of the drop as shown (the reference's own edge when it has none there), along the receiver's
