@@ -136,6 +136,10 @@ test(
     await clickNode(page, 'n-actions');
     await clickNode(page, 'n-title', 'Shift');
     await runDoor(page, 'element.wrapRow#key-r-in-canvas');
+    // Title and Actions are not next to each other, so wrapping them moves Intro past them: the command tells the
+    // person the order changes and asks first (the user's real-use audit, A3.13). Answering wraps them, in the
+    // document's order.
+    await page.locator('[data-confirmation="confirm"]').click();
     expect(await read(page)).toEqual({ tree: `Page(Hero(Row(Title Actions) Intro) ${REST})`, selection: ['Row'], undoSteps: 1 });
     expect(await childIds(page, 'Row'), 'the Row holds Title and Actions themselves, with their ids').toEqual(['n-title', 'n-actions']);
     await expect(status).toHaveText('Wrapped 2 elements in Row (display: flex; flex-direction: row; column-gap: 16px).');

@@ -35,10 +35,17 @@ test('several selected elements show Mixed where their values differ, and the va
   await type(page, COLOR, '#ff0000');
   await expect(input(page, COLOR)).toHaveValue('#ff0000');
   // one element holding no size of its own: an empty field, the size it has as the placeholder (the user's real-use
-  // audit, item 1.1: a field shows the document's value; spec inspector-provenance-reset, Problems in Pager 4)
+  // audit, item 1.1: a field shows the document's value; spec inspector-provenance-reset, Problems in Pager 4). The
+  // placeholder is the size the page computes for it — read from the frame, so it follows the base style rather than
+  // a number written here.
   await control(page, ROW, { args: { target: 'n-title' } }).click();
   await expect(input(page, FONT_SIZE)).toHaveValue('');
-  await expect(input(page, FONT_SIZE)).toHaveAttribute('placeholder', '32px');
+  const computed = await page
+    .frameLocator('.frame__page')
+    .locator('[data-node="n-title"]')
+    .evaluate((el) => getComputedStyle(el).fontSize);
+  expect(computed).not.toBe('');
+  await expect(input(page, FONT_SIZE)).toHaveAttribute('placeholder', computed);
   // Title (an h1) and Intro (a red paragraph): different sizes, colours and weights
   await control(page, ROW, { args: { target: 'n-intro' } }).click({ modifiers: ['Shift'] });
   await expect.poll(async () => (await page.evaluate(() => (window as unknown as { __builderTestPort: { selection: () => string[] } }).__builderTestPort.selection())).length).toBe(2);
