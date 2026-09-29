@@ -412,6 +412,25 @@
   color: var(--color-text);
 }
 
+/* The section's origin dot (the mockup's .has mark): where the values the section holds come from, in the legend's
+   colours — the edited layer, a larger breakpoint, the base state (inspector.tsx, SectionOrigin). */
+.inspector-section__origin {
+  align-self: center;
+  width: calc(var(--space-1) + var(--space-2));
+  height: calc(var(--space-1) + var(--space-2));
+  margin-left: var(--space-1);
+  border-radius: var(--radius-pill);
+  background: var(--color-origin-here);
+}
+
+.inspector-section__origin[data-origin='breakpoint'] {
+  background: var(--color-origin-breakpoint);
+}
+
+.inspector-section__origin[data-origin='state'] {
+  background: var(--color-origin-state);
+}
+
 /* a collapsed section's summary, on its header's row, in the code face (CSS values) */
 .inspector-section__summary {
   overflow: hidden;

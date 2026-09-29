@@ -50,10 +50,6 @@
         {
           "id": "table",
           "labelKey": "inspector.group.table"
-        },
-        {
-          "id": "more",
-          "labelKey": "inspector.group.more"
         }
       ]
     },
@@ -104,36 +100,6 @@
         {
           "id": "position",
           "labelKey": "inspector.group.position"
-        },
-        {
-          "id": "anchors",
-          "labelKey": "inspector.group.anchors"
-        }
-      ]
-    },
-    {
-      "id": "text",
-      "labelKey": "inspector.section.text",
-      "summary": [
-        "font-size",
-        "font-weight"
-      ],
-      "groups": [
-        {
-          "id": "typography",
-          "labelKey": "inspector.group.typography"
-        },
-        {
-          "id": "advanced",
-          "labelKey": "inspector.group.advanced"
-        },
-        {
-          "id": "list",
-          "labelKey": "inspector.group.list"
-        },
-        {
-          "id": "form",
-          "labelKey": "inspector.group.form"
         }
       ]
     },
@@ -174,6 +140,32 @@
         {
           "id": "outline",
           "labelKey": "inspector.group.outline"
+        }
+      ]
+    },
+    {
+      "id": "text",
+      "labelKey": "inspector.section.text",
+      "summary": [
+        "font-size",
+        "font-weight"
+      ],
+      "groups": [
+        {
+          "id": "typography",
+          "labelKey": "inspector.group.typography"
+        },
+        {
+          "id": "advanced",
+          "labelKey": "inspector.group.advanced"
+        },
+        {
+          "id": "list",
+          "labelKey": "inspector.group.list"
+        },
+        {
+          "id": "form",
+          "labelKey": "inspector.group.form"
         }
       ]
     },
