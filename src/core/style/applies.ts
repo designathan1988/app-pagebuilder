@@ -138,13 +138,14 @@ export function shownForContext(properties: readonly string[], context: ElementC
 
 // The predicates that decide a field's kind: the tags above and the SVG shape. An SVG field (fill, stroke,
 // stroke-width) is shown only on an SVG element — the user's order, item 5.1 ("SVG só em SVG"): a fill written on a
-// paragraph paints nothing, so its field is not offered. The other HOLDS predicates (text, hasBox) are deliberately
-// not here: the inspector keeps a text field on a container (the text inside inherits it) and the quick panel trims
-// them itself (the module comment above).
-// Every predicate that says what the element itself is: the tags it is written with (KINDS) and what it holds
-// (HOLDS: text, a CSS box, an SVG shape). A field of one of them shows only on elements it holds for — an image
-// takes no font (the user's real-use audit, item 5.1).
-const KIND_FILTERS: ReadonlySet<string> = new Set([...KIND_PREDICATES, ...Object.keys(HOLDS), SVG_SHAPE]);
+// paragraph paints nothing, so its field is not offered.
+//
+// What an element *holds* narrows the *Essentials* a type shows and the quick panel's own fields (quick-panel.ts
+// trims them itself, spec quick-panel: "a section holds no text of its own"), never the inspector's Style tab, which
+// keeps a text field on a container — the text inside inherits it — and on a form control, whose value wears it.
+// Hiding a text field there was what left the styles a scenario writes on a container untypable (props-typography,
+// state-styles). A box field, though, reads the element's own box, so it stays a kind: a rule takes none.
+const KIND_FILTERS: ReadonlySet<string> = new Set([...KIND_PREDICATES, 'hasBox', SVG_SHAPE]);
 
 // The kinds every node is of, in KINDS' order; none for no node.
 export function kindsOf(nodes: readonly DocNode[], rules: ModelRules): readonly string[] {
