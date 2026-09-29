@@ -5,8 +5,8 @@
     "commands": 256,
     "doors": 998,
     "scenarios": 1333,
-    "modules": 246,
-    "lines": 47817
+    "modules": 248,
+    "lines": 47852
   },
   "features": [
     {
@@ -4263,6 +4263,18 @@
       ]
     },
     {
+      "path": "src/editor/input/drop-proposals.ts",
+      "lines": 104,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/input/file-drop.ts",
+      "lines": 173,
+      "commands": [],
+      "features": []
+    },
+    {
       "path": "src/editor/input/keymap.ts",
       "lines": 392,
       "commands": [],
@@ -4270,7 +4282,7 @@
     },
     {
       "path": "src/editor/input/pointer.ts",
-      "lines": 2165,
+      "lines": 1923,
       "commands": [],
       "features": []
     },

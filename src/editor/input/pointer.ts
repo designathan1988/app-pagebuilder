@@ -44,15 +44,14 @@
 // key held now (the gesture number-scrub: Shift, Alt), so the field and the canvas follow the pointer live and the
 // release commits the last value: one undo step. Escape (drag.cancel) cancels it back to the value before the press.
 import { isFeatureBuilt } from '../../app/features.ts';
-import { message, type Message } from '../../core/commands/registry.ts';
+import type { Message } from '../../core/commands/registry.ts';
 import { reportError } from '../../core/incidents.ts';
-import { locate, type DocumentJson, type NodeId } from '../../core/document/model.ts';
+import { locate, type NodeId } from '../../core/document/model.ts';
 import type { DispatchResult, Gesture } from '../../core/store/store.ts';
 import { selectionRoots } from '../../core/structure/remove.ts';
 import type { CommandId, DoorId, FeatureId, KeyContextId } from '../../generated/ids.ts';
 import { manifest, numberConstant, pairConstant, type DoorEntry } from '../../manifest/runtime.ts';
-import { readUploadFile, type UploadedFile } from '../../core/files/files.ts';
-import { canvasFrame, flowAxis, flowReversed, framePointOnScreen, geometryOf, laysOut, nodeAt, nodeBox, nodesUnder, pageLayout, resizeBasis, screenToPage, scrollPage, sideFlow, type Point } from '../canvas/coordinates.ts';
+import { canvasFrame, geometryOf, nodeAt, nodeBox, nodesUnder, pageLayout, resizeBasis, screenToPage, scrollPage, type Point } from '../canvas/coordinates.ts';
 import { snapMode, snapMove, snapResize, snapShown } from '../canvas/snapping.ts';
 import type { Box } from '../../core/geometry/snap.ts';
 import { resizedBox, type ResizeFrom } from '../../core/geometry/resize.ts';
@@ -63,7 +62,7 @@ import { PANELS, type Panel } from '../workspace/panels.ts';
 import { formatColor, hsbToRgb, pickedAlpha } from '../../core/style/color.ts';
 import { gradientView } from '../inspector/gradient-view.ts';
 import { drawnProposal, liveDrag } from '../drag/drag-session.ts';
-import { offerSide, proposeDrop, rowDrop, sideBand, SIDE_DWELL, SIDE_ZONES, type DropProposal, type SideOffer } from '../drag/drop.ts';
+import { rowDrop, SIDE_DWELL, type DropProposal, type SideOffer } from '../drag/drop.ts';
 import { elementPredicate } from '../../core/style/applies.ts';
 import { MODEL_RULES, type EditorStore } from '../store.ts';
 import { SPLITTERS, splitterSize, type SplitterId } from '../workspace/layout.ts';
@@ -80,6 +79,7 @@ import { pickingTarget } from '../inspector/pick-target.ts';
 import { DRAG_HYSTERESIS, DRAG_THRESHOLD, IDLE, step, type Effect, type Machine, type Press } from './pointer/machine.ts';
 // which door a press runs lives in its own module too (pointer/press.ts): the facts it is judged by, the modifier held
 import { argsFor, clickDoor, editEndDoor, laysGrid, modifierOf, type Button, type PressFacts } from './pointer/press.ts';
+import { CONTAINERS, isInside, keepsSide, layersDrag, nearestAccepted, proposalAt, ROW_DROP, ROW_SELECT, rowUnder, sideAt } from './drop-proposals.ts';
 // what the pointer publishes for the canvas chrome and the panels (pointer/views.ts); the installer is their only writer
 import {
   altHeld,
@@ -124,7 +124,7 @@ export type { Band, DragView, Dropped, GhostReturn, Inserting, PanView, Redirect
 // its own work to the live key (altDown).
 const MARQUEE = manifest.doors.find((d) => d.door.kind === 'canvas-drag' && d.door.source === 'empty-area') ?? null;
 const MARQUEE_ELEMENT = manifest.doors.find((d) => d.door.kind === 'canvas-drag' && d.door.source === 'element') ?? null;
-const CONTAINERS = new Set(manifest.elements.elements.filter((e) => e.content === 'children').map((e) => e.id));
+// the element types that hold children, and the Layers row's tables: measured with the drops (input/drop-proposals.ts)
 function marqueeMode(entry: DoorEntry, press: Press, modifier: string | null, node: { readonly type: string; readonly children: readonly unknown[] } | null): string | null {
   const door = entry.door;
   if (door.kind !== 'canvas-drag' || press.on !== 'node' || press.label === true) return null;
@@ -196,11 +196,8 @@ const DRAG_ONLY_MODIFIERS = new Set([...DRAG_MODIFIERS].filter((key) => !CLICK_K
 // at the selection). A drag runs once its feature is registered as built in the feature table (src/app/features.ts);
 // until then a tile's press is the tile's own click.
 const TILE_DRAGS = manifest.doors.filter((d) => d.door.kind === 'canvas-drag' && d.door.gesture === 'palette-drag' && d.door.zone === 'drop-proposal');
-// The drag of a Layers row (spec layers-drag): the row's own click door (which selects its node), the drop of its row
-// zones and the dwell that unfolds a folded row, each only once its feature is built.
-const ROW_SELECT = manifest.doors.find((d) => d.door.kind === 'panel-control' && d.door.gesture === 'layers-row-click' && (d.door.modifier ?? null) === null && d.door.button === undefined) ?? null;
-const layersDrag = (zone: string) => manifest.doors.find((d) => d.door.kind === 'layers-drag' && d.door.zone === zone && isFeatureBuilt(d.door.feature as FeatureId)) ?? null;
-const ROW_DROP = layersDrag('row-zones');
+// The dwell that unfolds a folded row, once its feature is built (the row's own click and drop doors are measured
+// with the drops, input/drop-proposals.ts).
 const ROW_DWELL = layersDrag('collapsed-row-dwell');
 // how long the pointer rests on a folded row before it unfolds (interactions.json layers.expandDwell)
 // the confirmed side drop's pill: where it is drawn from the pointer, and how near it the pointer keeps the offer
@@ -358,9 +355,6 @@ const SIDE_ELEMENT = sideDoor('canvas-element');
 const WRAP_KEY = manifest.interactions.gestures.find((g) => g.id === 'element-drag')?.modifiers.find((m) => m.meaning === 'wrap-vertical')?.key ?? null;
 const wrapped = (wrapper: 'row' | 'column', modifier: string | null): 'row' | 'column' => (WRAP_KEY !== null && modifier === WRAP_KEY ? (wrapper === 'row' ? 'column' : 'row') : wrapper);
 const SIDE_TILE = sideDoor('palette-tile');
-// The door an image file dropped in from the operating system runs (spec explorer-assets-use): the same creation-drag
-// proposal the palette draws, read by the module that owns the HTML5 drag events (input/file-drop.ts).
-export const osImageDoor: DoorEntry | null = manifest.doors.find((d) => d.door.kind === 'canvas-drag' && d.door.source === 'os-image-file') ?? null;
 const isTile = (entry: DoorEntry) => tileDrag(entry) !== null;
 // The side drop of a creation drag: the side band's door, when its command takes what the tile stands for (a palette
 // entry: element.wrapBeside); a component's tile offers none.
@@ -419,116 +413,6 @@ export function pressedByPointer(entry: DoorEntry): boolean {
 // it). Pointer state, not editor state: nothing changes until the release.
 // What a creation drag inserts: the tile pressed, the arguments it stands for (a palette entry: {entry}; a component:
 // {component}) and the canvas-drag door that drops it where the proposal says.
-// The store the canvas edits, kept when the pointer owner is installed: the module-level functions below (the OS file
-// drop's among them) read it.
-let editing: EditorStore | null = null;
-
-// An image file dragged in from the operating system and held over the canvas (spec explorer-assets-use; the user's
-// real-use audit, 7.3): the module that owns the HTML5 drag events (input/file-drop.ts) publishes the same
-// creation-drag proposal the palette's drag draws, so the person sees where the image lands; over an image, the image
-// the file would replace is outlined instead (the pointer's own hover mark). Pointer state, not editor state.
-export function showFileDrag(inserting: Inserting, at: Point): void {
-  const proposal = editing === null ? null : proposalAt(editing.getState().document, [], at);
-  setHovered(null);
-  setDrag({ dragged: [], inserting, proposal, refusal: null, redirect: null, levels: 0, at, side: null });
-}
-// The place an image file released at this point would take, as the proposal the chrome drew: what the drop dispatches.
-export function fileDropProposal(at: Point): { readonly parent: string; readonly index: number } | null {
-  const proposal = editing === null ? null : proposalAt(editing.getState().document, [], at);
-  return proposal === null ? null : { parent: proposal.parent, index: proposal.index };
-}
-export function showFileTarget(node: string): void {
-  setDrag(null);
-  setHovered(node);
-}
-export function hideFileDrag(): void {
-  setDrag(null);
-  setHovered(null);
-}
-
-// The proposal a pointer position makes now, measured on the page through the coordinates module.
-function proposalAt(document: DocumentJson, dragged: readonly NodeId[], at: Point): DropProposal | null {
-  const frame = canvasFrame();
-  const g = frame ? geometryOf(frame) : null;
-  if (!frame || !g) return null;
-  return proposeDrop(document, (type) => CONTAINERS.has(type), dragged, nodesUnder(frame, at), at, {
-    zoom: g.zoom,
-    box: (id) => nodeBox(frame, id),
-    axis: (id) => flowAxis(frame, id),
-    reversed: (id) => flowReversed(frame, id),
-    laysOut: (id) => laysOut(frame, id),
-  });
-}
-
-// Whether a pointer position still lies by the side of the element a side drop was offered for: within its box and
-// its side strip, both widened by wrap.sideEdgeExclusion, and never needing the clearance from its other edges.
-function keepsSide(offer: SideOffer, at: Point): boolean {
-  const frame = canvasFrame();
-  const b = frame ? nodeBox(frame, offer.target) : null;
-  if (!b) return false;
-  const m = SIDE_ZONES.edgeExclusion;
-  if (at.x < b.x - m || at.x > b.x + b.width + m || at.y < b.y - m || at.y > b.y + b.height + m) return false;
-  const across = offer.wrapper === 'row' ? b.width : b.height;
-  const pos = offer.wrapper === 'row' ? at.x - b.x : at.y - b.y;
-  const band = sideBand(across);
-  return offer.side === 'before' ? pos <= band + m : pos >= across - band - m;
-}
-
-// The nearest place that takes the drop where `refused` would not: before or after the element that refused (its
-// receiver), on the pointer's side of its middle along its parent's flow, one level further up while that is refused
-// too; null when no level takes it (spec drag-layout, Problems in Pager 4).
-function nearestAccepted(document: DocumentJson, dragged: readonly NodeId[], refused: DropProposal, at: Point, accepts: (p: DropProposal) => boolean): DropProposal | null {
-  const frame = canvasFrame();
-  if (frame === null) return null;
-  for (let at_ = locate(document, refused.parent); at_?.parent; at_ = locate(document, at_.parent.id)) {
-    const refuser = at_.node.id;
-    const parent = at_.parent;
-    const box = nodeBox(frame, refuser);
-    if (box === null) return null;
-    const axis = flowAxis(frame, parent.id);
-    // the pointer exactly on the refusing element's middle counts as on its near side: a drag aimed at the middle of
-    // what refuses it lands before it, the side a person reading the list expects (the audit's rule, asked at the tie)
-    const shownBefore = axis === 'x' ? at.x <= box.x + box.width / 2 : at.y <= box.y + box.height / 2;
-    const placement = flowReversed(frame, parent.id) === shownBefore ? 'after' : 'before';
-    const siblings = parent.children.filter((c) => !dragged.includes(c.id));
-    const index = siblings.findIndex((c) => c.id === refuser) + (placement === 'after' ? 1 : 0);
-    const candidate: DropProposal = { parent: parent.id, index, placement, reference: refuser, refused: false };
-    if (accepts(candidate)) return candidate;
-  }
-  return null;
-}
-
-// whether a node lies inside another (below it in the tree)
-function isInside(document: DocumentJson, node: NodeId, ancestor: NodeId): boolean {
-  for (let at = locate(document, node)?.parent ?? null; at !== null; at = locate(document, at.id)?.parent ?? null) if (at.id === ancestor) return true;
-  return false;
-}
-
-// The Layers row under a pointer position, where the pointer is down it (a fraction of its height) and whether its
-// branch is folded; null off the rows.
-function rowUnder(at: Point): { readonly node: NodeId; readonly at: number; readonly folded: boolean } | null {
-  if (ROW_SELECT === null) return null;
-  const row = document.elementFromPoint(at.x, at.y)?.closest(`[data-door="${ROW_SELECT.ref}"]`);
-  if (!row) return null;
-  const stands: unknown = JSON.parse(row.getAttribute('data-args') ?? '{}');
-  const node = stands !== null && typeof stands === 'object' ? (stands as Record<string, unknown>).target : undefined;
-  if (typeof node !== 'string') return null;
-  const box = row.getBoundingClientRect();
-  return { node: node as NodeId, at: box.height > 0 ? (at.y - box.top) / box.height : 0.5, folded: row.getAttribute('aria-expanded') === 'false' };
-}
-
-// The side drop a pointer position offers now, measured on the page. Where the drop there is before or after an
-// ancestor of the offer's element (its escape band: a card's side edge in a grid, whose title fills it), the drop
-// wins and nothing is offered (spec drag-reorder-canvas, Problems in Pager 5).
-function sideAt(document: DocumentJson, dragged: readonly NodeId[], at: Point): SideOffer | null {
-  const frame = canvasFrame();
-  if (!frame) return null;
-  const offer = offerSide(document, dragged, nodesUnder(frame, at), at, { box: (id) => nodeBox(frame, id), flow: (id) => sideFlow(frame, id) });
-  if (offer === null) return null;
-  const proposal = proposalAt(document, dragged, at);
-  return proposal !== null && proposal.placement !== 'inside' && proposal.reference !== offer.target && isInside(document, offer.target, proposal.reference) ? null : offer;
-}
-
 // While a gesture is open the keys belong to it: they are read in the drag key context and their doors run through
 // the gesture's transaction (keymap.ts).
 let open: Gesture | null = null;
@@ -696,7 +580,6 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     return () => undefined;
   }
   pointerOwner = store;
-  editing = store;
   let machine: Machine = IDLE;
   let buttons: { button: Button; count: number; modifier: string | null } | null = null;
   // an element drag, or a palette tile's creation drag: what it moves (nothing for a tile), the palette entry it
@@ -2012,6 +1895,12 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     sessionDispatch = null;
     onCancel();
     panDispatch = null;
+    // the window's own transient state goes with the owner: a test that unmounts in the middle of a pan or with Space
+    // held leaves nothing behind for the next editor installed over it
+    panning = null;
+    spaceDown = false;
+    overStage = false;
+    setPanView('idle');
     // the document is free again: another editor (a new document, a test that unmounts and mounts) may take the pointer
     if (pointerOwner === store) pointerOwner = null;
     target.removeEventListener('wheel', onWheel, { capture: true });
@@ -2029,136 +1918,5 @@ export function installPointer(store: EditorStore, target: Window = window): () 
   };
 }
 
-
-
-// the element type a drop that lands on one replaces the source of
-const IMAGE_TYPE = 'image';
-
-function overCanvas(event: DragEvent, inside: boolean): Point | null {
-  const frame = canvasFrame();
-  if (frame === null) return null;
-  if (inside) return framePointOnScreen(frame, { x: event.clientX, y: event.clientY });
-  const g = geometryOf(frame);
-  if (g === null) return null;
-  const rect = frame.getBoundingClientRect();
-  if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) return null;
-  return { x: event.clientX, y: event.clientY };
-}
-
-function carriesImage(event: DragEvent): boolean {
-  const items = event.dataTransfer?.items;
-  if (items === undefined || items === null) return false;
-  return [...items].some((item) => item.kind === 'file' && item.type.startsWith('image/'));
-}
-
-// The image the pointer is over: the one a release would replace the source of.
-function imageUnder(at: Point): string | null {
-  const frame = canvasFrame();
-  if (frame === null) return null;
-  const document = editing?.getState().document;
-  if (document === undefined) return null;
-  for (const id of nodesUnder(frame, at)) {
-    const found = locate(document, id as NodeId);
-    if (found !== null && found.node.type === IMAGE_TYPE) return found.node.id;
-  }
-  return null;
-}
-
-// An image file dropped onto the Explorer's Files region uploads (spec explorer-assets; the door files.upload's folder
-// drop). The drop zone is the region the sidebar marks (data-drop-zone), read here so no control holds a drag handler.
-function installFolderDrop(win: Window): () => void {
-  const door = folderDoor;
-  if (door === null) return () => {};
-  const over = (event: DragEvent): void => {
-    const zone = zoneOf(event.target);
-    if (zone === null || !carriesFiles(event)) return;
-    event.preventDefault();
-    if (event.dataTransfer !== null) event.dataTransfer.dropEffect = 'copy';
-  };
-  const drop = (event: DragEvent): void => {
-    const zone = zoneOf(event.target);
-    if (zone === null) return;
-    event.preventDefault();
-    const dropped = [...(event.dataTransfer?.files ?? [])];
-    if (dropped.length === 0) return;
-    void Promise.all(dropped.map((one) => readUploadFile(one))).then((stored) => {
-      (editing as EditorStore).dispatch(door.command.id, { ...door.door.args, files: stored } as never);
-    });
-  };
-  win.addEventListener('dragover', over as EventListener);
-  win.addEventListener('drop', drop as EventListener);
-  return () => {
-    win.removeEventListener('dragover', over as EventListener);
-    win.removeEventListener('drop', drop as EventListener);
-  };
-}
-const folderDoor = manifest.doors.find((d) => d.door.kind === 'panel-drag' && d.door.source === 'os-file') ?? null;
-function zoneOf(target: EventTarget | null): Element | null {
-  return target instanceof Element ? target.closest('[data-drop-zone="explorer-folder"]') : null;
-}
-function carriesFiles(event: DragEvent): boolean {
-  const items = event.dataTransfer?.items;
-  return items !== undefined && items !== null && [...items].some((item) => item.kind === 'file');
-}
-
-export function installOsFileDrop(win: Window, inside: boolean): () => void {
-  const stopFolder = installFolderDrop(win);
-  const door = osImageDoor;
-  if (door === null) return stopFolder;
-  const inserting: Inserting = { tile: door, args: {}, drop: door };
-  const over = (event: DragEvent): void => {
-    if (!carriesImage(event)) return;
-    event.preventDefault();
-    const at = overCanvas(event, inside);
-    if (at === null) {
-      hideFileDrag();
-      return;
-    }
-    if (event.dataTransfer !== null) event.dataTransfer.dropEffect = 'copy';
-    const target = imageUnder(at);
-    if (target !== null) showFileTarget(target);
-    else showFileDrag(inserting, at);
-  };
-  const leave = (): void => hideFileDrag();
-  const drop = (event: DragEvent): void => {
-    if (!carriesImage(event)) return;
-    event.preventDefault();
-    const at = overCanvas(event, inside);
-    hideFileDrag();
-    if (at === null) return;
-    const file = event.dataTransfer?.files?.[0];
-    if (file === undefined) return;
-    const target = imageUnder(at);
-    const place = target === null ? fileDropProposal(at) : null;
-    if (target === null && place === null) return;
-    // The image is decoded asynchronously, and the place and the target were computed before the wait: they are
-    // re-checked against the document as it is now, so a target that is gone — or a parent that is — refuses the drop
-    // with a word instead of landing where the person never saw it (plan T3; a plain revision comparison would refuse
-    // on any other command that landed meanwhile, which is not the same thing).
-    void readUploadFile(file).then((payload: UploadedFile) => {
-      const store = editing as EditorStore;
-      const document = store.getState().document;
-      const parent = target === null && place !== null ? locate(document, place.parent as NodeId) : null;
-      const stillThere = target !== null ? locate(document, target as NodeId) !== null : parent !== null;
-      if (!stillThere) {
-        store.notice(message('status.stale'));
-        return;
-      }
-      const args = target === null
-        ? { ...door.door.args, file: payload, parent: place?.parent, index: Math.min(place?.index ?? 0, parent?.node.children.length ?? 0) }
-        : { ...door.door.args, file: payload, parent: locate(document, target as NodeId)?.parent?.id, index: 0, replace: target };
-      store.dispatch(door.command.id, args as never);
-    });
-  };
-  const listeners: readonly [string, EventListener][] = [
-    ['dragenter', over as EventListener],
-    ['dragover', over as EventListener],
-    ['dragleave', leave as EventListener],
-    ['drop', drop as EventListener],
-  ];
-  for (const [name, listener] of listeners) win.addEventListener(name, listener);
-  return () => {
-    for (const [name, listener] of listeners) win.removeEventListener(name, listener);
-    stopFolder();
-  };
-}
+// The OS file drop (the frame's own window included) lives in input/file-drop.ts, re-exported here as its entry.
+export { installOsFileDrop } from './file-drop.ts';

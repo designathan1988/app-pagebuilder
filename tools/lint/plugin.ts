@@ -363,8 +363,8 @@ type TsRuleDefinition<MessageIds extends string> = RuleDefinition<{
   ExtRuleDocs: unknown;
 }>;
 
-// builder/pointer-owner: pointer, mouse and drag input belongs to the pointer owner (src/editor/input/pointer.ts),
-// the one file the configuration exempts. A listener of such an event (addEventListener, removeEventListener, an
+// builder/pointer-owner: pointer, mouse and drag input belongs to the pointer owner (src/editor/input/pointer.ts and
+// the OS file drop it owns, input/file-drop.ts), the files the configuration exempts. A listener of such an event (addEventListener, removeEventListener, an
 // on… property) and a React prop of one (onPointer…, onMouse…, onDrag…, onDrop, the pointer capture props) are
 // refused anywhere else; a control's onClick is not a gesture on the canvas and stays with the control.
 const POINTER_EVENT = /^(pointer|mouse|drag|drop|gotpointercapture|lostpointercapture)/i;

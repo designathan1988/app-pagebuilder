@@ -48,9 +48,10 @@ export default defineConfig(
     rules: { 'builder/use-ports': 'error' },
   },
   {
-    // Pointer, mouse and drag input belongs to the pointer owner (ARCHITECTURE.md, Pointer input).
+    // Pointer, mouse and drag input belongs to the pointer owner (ARCHITECTURE.md, Pointer input): the pointer
+    // machine and the OS file drop it owns (input/file-drop.ts, split out of it).
     files: ['src/**/*.{ts,tsx}'],
-    ignores: ['src/editor/input/pointer.ts'],
+    ignores: ['src/editor/input/pointer.ts', 'src/editor/input/file-drop.ts'],
     plugins: { builder },
     rules: { 'builder/pointer-owner': 'error' },
   },

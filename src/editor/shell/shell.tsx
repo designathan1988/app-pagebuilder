@@ -111,7 +111,7 @@ export function Shell() {
   useEffect(() => installPointer(store), [store]);
   // an image file dragged in from the operating system: here for the editor's window (the canvas and the Explorer's
   // folder drop), in canvas/frame.tsx for the frame's own
-  useEffect(() => installOsFileDrop(window, false), [store]);
+  useEffect(() => installOsFileDrop(store, window, false), [store]);
   useEffect(() => installFocus(store), [store]);
   const classes = ['shell', sidebar ? '' : 'shell--no-sidebar', inspector ? '' : 'shell--no-inspector', `shell--dock-${dock}`].filter((c) => c !== '').join(' ');
   // while previewing, the preview bar and the exported page over the editor (spec preview-mode): the editor stays as it
