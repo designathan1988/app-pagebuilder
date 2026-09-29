@@ -6,7 +6,7 @@
     "doors": 998,
     "scenarios": 1333,
     "modules": 249,
-    "lines": 47936
+    "lines": 47946
   },
   "features": [
     {
@@ -4388,7 +4388,7 @@
     },
     {
       "path": "src/editor/inspector/sections.ts",
-      "lines": 303,
+      "lines": 308,
       "commands": [
         "inspector.toggleSection",
         "inspector.setMode",
@@ -5037,7 +5037,7 @@
     },
     {
       "path": "src/generated/ids.ts",
-      "lines": 4510,
+      "lines": 4515,
       "commands": [],
       "features": []
     },

@@ -210,6 +210,9 @@ function sides(values: Item): string {
 }
 // a colour whose alpha is zero: rgba(…, 0), or a colour function's "/ 0"
 const isTransparent = (colour: string) => colour === 'transparent' || /^rgba\([^)]*,\s*0(?:\.0+)?\)$/.test(colour) || /\/\s*0(?:\.0+)?\)$/.test(colour);
+// a value that says nothing about the advanced properties: the writing mode, the containment and the hyphenation are
+// each left out of the header while they stand at their initial value
+const NEUTRAL_ADVANCED = new Set(['horizontal-tb', 'visible', 'manual']);
 // a value that is none, or the number 1 (opacity, scale), does nothing
 const isNoEffect = (value: string) => value === 'none' || value === '1' || value === '';
 const first = (item: Item | undefined) => item?.[0] ?? '';
@@ -217,8 +220,10 @@ const first = (item: Item | undefined) => item?.[0] ?? '';
 // How each section writes what it reads (the items, in its manifest order); null: the section has no summary.
 const SUMMARIES: Readonly<Record<SectionId, ((items: readonly Item[], words: Words, locale: Locale) => string) | null>> = {
   content: null,
-  // the advanced section reads nothing for its header: its properties are the rare ones, and a count would only add noise
-  advanced: null,
+  // the advanced values that say something, in the summary's own order (writing mode, containment, hyphenation), and
+  // None while all of them stand at their initial value — the section's properties are rare, so the values themselves
+  // are what the header tells, and the fields' own count is already on the badge (the owner's call, the dogfooding pass)
+  advanced: (items, words) => joined(items.map(first).filter((value) => value !== '' && !NEUTRAL_ADVANCED.has(value)), words),
   // the display, and the direction of a flex layout
   layout: ([display, direction], words) => (first(display).includes('flex') ? words('inspector.summary.pair', { first: first(display), second: first(direction) }) : first(display)),
   // M margin · P padding, each left out when it is zero on every side
