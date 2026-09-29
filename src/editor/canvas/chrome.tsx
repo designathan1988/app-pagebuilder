@@ -922,7 +922,7 @@ export function CanvasChrome() {
     };
     request = requestAnimationFrame(measure);
     return () => cancelAnimationFrame(request);
-  }, [selection, targets, hovered, node, drawnBand, editing, altHeld, resizing, documentNow]);
+  }, [selection, targets, hovered, node, drawnBand, editing, altHeld, resizing, documentNow, mode]);
 
   const at = (b: Box): CSSProperties => ({ left: b.x, top: b.y, width: b.width, height: b.height });
   const shown = selection.length === 0 && hovered === null && drawnBand === null ? EMPTY : layout;
