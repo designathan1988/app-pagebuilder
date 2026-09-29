@@ -82,11 +82,13 @@ describe('a declaration address that names a project file (spec explorer-assets-
     expect(siteFiles(WITH_IMAGES, RULES).pages[0]?.html).toContain('src="img/hero.png"');
   });
 
-  it('leaves an image with no address out of the page: a draft draws a broken image in a browser', () => {
+  it('writes an image with no address: its own alternative text is what a browser falls back to', () => {
     const html = siteFiles(WITH_IMAGES, RULES).pages[0]?.html ?? '';
-    expect(html).not.toContain('A cup');
+    // a media part with no address is a draft (writesNode); an image is not: a decorative one carries alt="", which a
+    // browser draws as nothing (tests/e2e/media-parts.spec.ts pins the contract)
+    expect(html).toContain('<img alt="A cup"');
     expect(html).not.toContain('src=""');
-    expect(previewPage(WITH_IMAGES, RULES)).not.toContain('A cup');
+    expect(previewPage(WITH_IMAGES, RULES)).toContain('alt="A cup"');
   });
 
   it('draws from the stored bytes in the preview, which has no folder to serve it from', () => {
