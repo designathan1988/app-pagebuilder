@@ -1716,6 +1716,7 @@
   "status.layout.notFlex": "Alignment applies to flex and grid containers.",
   "status.link.asking": "Type the link address, then press Enter. An empty address removes the link.",
   "status.link.newTab": "{name} opens in a new tab.",
+  "status.link.noSection": "No element of this page is named {name}.",
   "status.link.removed": "{name} has no link now.",
   "status.link.sameTab": "{name} opens in the same tab.",
   "status.link.set": "Link of {name}: {href}.",

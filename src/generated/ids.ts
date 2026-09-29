@@ -4166,6 +4166,7 @@ export const MESSAGE_IDS = [
   "status.layout.notFlex",
   "status.link.asking",
   "status.link.newTab",
+  "status.link.noSection",
   "status.link.removed",
   "status.link.sameTab",
   "status.link.set",

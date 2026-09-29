@@ -108,7 +108,7 @@ for (const ref of ['workspace.setPanelOpen#menu-view-canvas-tools', 'workspace.s
 
 test('the dock strip closes the tab it shows and shows the next one; closing the last tab hides the workbench', runs('workspace.setWorkbenchState#toolbar-workbench-strip-toggle', 'workspace.setPanelOpen#workbench-tab-close'), async ({ page }) => {
   const tabs = () => page.locator('[data-region="tab-strip"] [role="tab"]').evaluateAll((els) => els.map((el) => el.textContent));
-  const shown = () => page.getByRole('tabpanel').getAttribute('aria-label');
+  const shown = () => page.locator('.dock [role="tabpanel"]').getAttribute('aria-label');
   // with no tab left, a shown and a hidden workbench take the same room; the show/hide toggle says which it is
   const toggle = page.locator('[data-door="workspace.setWorkbenchState#toolbar-workbench-strip-toggle"]');
   const canvas = await box(page, '.centre');
@@ -126,7 +126,7 @@ test('the dock strip closes the tab it shows and shows the next one; closing the
 
   await runDoor(page, 'workspace.setPanelOpen#workbench-tab-close');
   expect(await tabs()).toEqual([]);
-  await expect(page.getByRole('tabpanel')).toHaveCount(0);
+  await expect(page.locator('.dock [role="tabpanel"]')).toHaveCount(0);
   expect(await box(page, '.centre')).toEqual(canvas);
   // folded, the dock draws no strip at all (the audit's A3.18)
   await expect(toggle).toHaveCount(0);

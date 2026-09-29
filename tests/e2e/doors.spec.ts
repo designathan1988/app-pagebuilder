@@ -21,7 +21,13 @@ const catalogue = (locale: string) => JSON.parse(fs.readFileSync(`src/i18n/local
 test('a door with a face label shows its face text and keeps its label as its accessible name, in English and Portuguese', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await openEditor(page);
-  // the inspector's selector bar draws Apply a class: the check cannot pass on nothing
+  // an element selected: the inspector draws its selector bar and Apply a class with it (with nothing selected the
+  // Style tab is the guidance alone, drawing neither), and the check cannot pass on nothing
+  const chooser = page.waitForEvent('filechooser');
+  await page.locator('.menu-button[data-menu="file"]').click();
+  await page.locator('[data-door="project.open#menu-file"]').click();
+  await (await chooser).setFiles('manifest/features/fixtures/aurora.json');
+  await page.locator('[data-door="selection.select#layers-row"][data-args*="n-title"]').first().click();
   await expect(page.locator('[data-door="classes.apply#inspector-class-add"]')).toHaveCount(1);
   for (const locale of ['en', 'pt-BR']) {
     if (locale === 'pt-BR') {

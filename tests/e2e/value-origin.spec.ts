@@ -7,7 +7,7 @@
 import fs from 'node:fs';
 import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
-import { control, runDoor, runs } from './door.ts';
+import { control, openEverySection, runDoor, runs } from './door.ts';
 
 const FIXTURE = 'manifest/features/fixtures/aurora.json';
 const OPEN = 'project.open#menu-file';
@@ -52,7 +52,11 @@ async function open(page: Page): Promise<void> {
   await runDoor(page, OPEN);
   await (await chooser).setFiles({ name: 'aurora.json', mimeType: 'application/json', buffer: fs.readFileSync(FIXTURE) });
   await expect(page.frameLocator('.frame__page').locator('[data-node="n-grid"]')).toHaveCount(1);
+  // every section drawn open and the mode on All, both once an element is selected: with nothing selected the Style
+  // tab is the guidance alone, drawing no section header and no mode switch (spec inspector-empty-style)
+  await control(page, ROW, { args: { target: 'n-card-b' } }).click();
   await runDoor(page, ALL);
+  await openEverySection(page);
 }
 async function typeInto(page: Page, ref: string, text: string): Promise<void> {
   await control(page, ref).locator('input').first().click();

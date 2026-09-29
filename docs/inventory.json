@@ -6,7 +6,7 @@
     "doors": 998,
     "scenarios": 1333,
     "modules": 246,
-    "lines": 47807
+    "lines": 47817
   },
   "features": [
     {
@@ -2997,7 +2997,7 @@
     },
     {
       "path": "src/core/elements/link.ts",
-      "lines": 88,
+      "lines": 97,
       "commands": [
         "element.setLink"
       ],
@@ -5019,7 +5019,7 @@
     },
     {
       "path": "src/generated/ids.ts",
-      "lines": 4509,
+      "lines": 4510,
       "commands": [],
       "features": []
     },

@@ -1716,6 +1716,7 @@
   "status.layout.notFlex": "O alinhamento se aplica a contêineres flex e grid.",
   "status.link.asking": "Digite o endereço do link e pressione Enter. Um endereço vazio remove o link.",
   "status.link.newTab": "{name} abre em uma nova aba.",
+  "status.link.noSection": "Nenhum elemento desta página se chama {name}.",
   "status.link.removed": "{name} agora não tem link.",
   "status.link.sameTab": "{name} abre na mesma aba.",
   "status.link.set": "Link de {name}: {href}.",

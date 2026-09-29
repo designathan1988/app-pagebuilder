@@ -43,7 +43,7 @@ test('the bar offers a command only while it applies to the selection', runs(CTR
   await control(page, ROW, { args: { target: 'n-intro' } }).click();
   await runDoor(page, CTRL_K);
   await page.keyboard.type('wrap in a');
-  expect(await options(page)).toEqual(['Wrap in a row', 'Wrap in a column']);
+  expect(await options(page)).toEqual(['Wrap in a row', 'Wrap in a column', 'Wrap in a container', 'Wrap in a grid']);
 });
 
 test('the entry run last comes first on an empty query', runs(CTRL_K, ROW, WRAP), async ({ page }) => {

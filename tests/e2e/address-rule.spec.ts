@@ -1,6 +1,7 @@
 // The one rule of an address (core/elements/address.ts; the user's real-use audit, A3.2): every address field takes
-// a relative path, a #section, https:, mailto: and tel:, refuses what runs code (javascript:, data:) with its reason,
-// and stores a bare domain as https://… — the acceptance being /about in a Link and a Form, "nope" refused in a
+// a relative path, https:, mailto: and tel:, refuses what runs code (javascript:, data:) with its reason, and refuses a
+// #section that names no element of the page as well as a bare domain stored as https://… — the acceptance being
+// /about in a Link and a Form, "nope" refused in a
 // video's Poster, and url("javascript:…") refused in a free declaration. The document is read through the read-only
 // test port, the refusal from beside the field.
 import { expect, test, type Page } from '../support/test.ts';
@@ -45,11 +46,18 @@ test('a Link and a Form take a relative path, a #section and a bare domain (stor
   await runDoor(page, SETTINGS);
   const link = find(await tree(page), 'link');
   if (link === null) throw new Error('the Link was not inserted');
-  const addresses: readonly (readonly [string, string])[] = [['/about', '/about'], ['#inicio', '#inicio'], ['mailto:ana@example.com', 'mailto:ana@example.com'], ['tel:+55 11 99999-0000', 'tel:+55 11 99999-0000']];
+  const addresses: readonly (readonly [string, string])[] = [['/about', '/about'], ['mailto:ana@example.com', 'mailto:ana@example.com'], ['tel:+55 11 99999-0000', 'tel:+55 11 99999-0000']];
   for (const [typed, stored] of addresses) {
     await typeInto(page, HREF, typed);
     await expect.poll(async () => find(await tree(page), 'link')?.attributes.href).toBe(stored);
   }
+  // A fragment names an element of the page — the link picker's own case (the scenario of link-picker: a link points
+  // at a section of the page and follows its id, A3.4). One that names nothing is refused here with its reason, and
+  // the document keeps its link: the validator refuses a document holding a reference to nothing, and the field says
+  // why instead of the write going missing in silence.
+  await typeInto(page, HREF, '#inicio');
+  await expect(control(page, HREF).locator('.field-row__refusal')).toContainText('inicio');
+  expect(find(await tree(page), 'link')?.attributes.href).toBe('tel:+55 11 99999-0000');
   // a domain typed without its scheme is stored as the browser would open it, and the status says so
   await typeInto(page, HREF, 'example.com/about');
   await expect.poll(async () => find(await tree(page), 'link')?.attributes.href).toBe('https://example.com/about');

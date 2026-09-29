@@ -17,15 +17,16 @@ test('Settings groups a link and shows the unstored button default before a real
   await control(page, INSERT).click();
   await control(page, TILE, { args: { entry: 'link' } }).click();
   await control(page, SETTINGS).click();
-  expect(await page.locator('[data-settings-section] h3').allTextContents()).toEqual(['General', 'Link', 'Attributes']);
+  expect(await page.locator('[data-settings-section] h3').allTextContents()).toEqual(['General', 'Link', 'Accessibility', 'Attributes']);
   expect(await page.locator('[data-settings-section] p').allTextContents()).toEqual([
     'Identity, content and element type',
     'Destination and browser behaviour',
+    'How assistive technology reads this element',
     'HTML attributes and custom data',
   ]);
 
   await control(page, TILE, { args: { entry: 'button' } }).click();
-  expect(await page.locator('[data-settings-section] h3').allTextContents()).toEqual(['General', 'Attributes']);
+  expect(await page.locator('[data-settings-section] h3').allTextContents()).toEqual(['General', 'Accessibility', 'Attributes']);
   const input = control(page, BUTTON_TYPE).locator('input');
   await expect(input).toHaveValue('');
   await expect(input).toHaveAttribute('placeholder', 'submit');

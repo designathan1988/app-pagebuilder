@@ -11,7 +11,7 @@ const INSERT_PANEL = 'workspace.setPanelOpen#toolbar-activity-bar-insert';
 const TILE = 'element.insert#elements-tile';
 
 const portDocument = (page: Page) => page.evaluate(() => (window as unknown as Record<string, { document: () => unknown }>).__builderTestPort?.document());
-const shownJson = async (page: Page): Promise<unknown> => JSON.parse((await page.getByRole('tabpanel').locator('pre').textContent()) ?? 'null');
+const shownJson = async (page: Page): Promise<unknown> => JSON.parse((await page.locator('.dock [role="tabpanel"]').locator('pre').textContent()) ?? 'null');
 const tabs = (page: Page) => page.locator('[data-region="tab-strip"] [role="tab"]').evaluateAll((els) => els.map((el) => el.textContent));
 
 test.beforeEach(async ({ page }) => {
@@ -22,7 +22,7 @@ test.beforeEach(async ({ page }) => {
 
 test('the Document tab shows the live document as JSON, read-only, drawn again after every command', runs(DEVELOPER, INSERT_PANEL, TILE), async ({ page }) => {
   await runDoor(page, DEVELOPER);
-  await expect(page.getByRole('tabpanel')).toHaveAttribute('aria-label', 'Document');
+  await expect(page.locator('.dock [role="tabpanel"]')).toHaveAttribute('aria-label', 'Document');
   const before = await portDocument(page);
   expect(await shownJson(page)).toEqual(before);
 
@@ -34,7 +34,7 @@ test('the Document tab shows the live document as JSON, read-only, drawn again a
   await expect.poll(() => shownJson(page)).toEqual(after);
 
   // read-only: typing into it changes neither what it shows nor the document
-  const pre = page.getByRole('tabpanel').locator('pre');
+  const pre = page.locator('.dock [role="tabpanel"]').locator('pre');
   await pre.click();
   await page.keyboard.type('x');
   expect(await shownJson(page)).toEqual(after);

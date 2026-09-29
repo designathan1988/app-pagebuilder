@@ -14,7 +14,7 @@
 //    features: no door hands them yet.
 import { message, registerHandler } from '../commands/registry.ts';
 import type { NodeId } from '../document/model.ts';
-import { locate } from '../document/model.ts';
+import { locate, walk } from '../document/model.ts';
 import type { Patch } from '../history/transaction.ts';
 import { freshId } from './inputs.ts';
 import { lockRefusal } from '../nodes/flags.ts';
@@ -80,6 +80,15 @@ export const setLinkCommand = registerHandler('element.setLink', ({ state, rules
   // page, https:, mailto: and tel: are taken; a bare domain is stored as https://…; javascript: and data: are refused
   const read = readAddress(typed);
   if (!read.ok) return { kind: 'refused', message: read.refusal };
+  // A fragment names an element of the page — by its id attribute, or by the node itself (the picker writes these, and
+  // A3.4 makes the page follow the target's id attribute). One that names nothing is refused here, with its reason: the
+  // document's own validator would drop the write without a word, since a reference to nothing is invalid.
+  if (read.value.startsWith('#')) {
+    const named = read.value.slice(1);
+    const ids = new Set<string>();
+    for (const page of state.document.pages) for (const node of walk(page.tree)) if (typeof node.attributes.id === 'string') ids.add(node.attributes.id);
+    if (locate(state.document, named as NodeId) === null && !ids.has(named)) return { kind: 'refused', message: message('status.link.noSection', { name: named }) };
+  }
   // what was typed and what is stored differ when the rule normalised it (a bare domain): the status says so
   const set = read.value === typed ? message('status.link.set', { name: found.node.name, href: read.value }) : message('status.url.normalized', { url: typed, value: read.value });
   if (stored === read.value) return { kind: 'change', message: set };

@@ -39,6 +39,10 @@ test.beforeEach(async ({ page }) => {
   await (await chooser).setFiles({ name: 'aurora.json', mimeType: 'application/json', buffer: fs.readFileSync(FIXTURE) });
   await expect(page.frameLocator('.frame__page').locator('[data-node="n-card-a-title"]')).toHaveCount(1);
   await control(page, ROW, { args: { target: 'n-title' } }).click();
+  // the Border section is drawn collapsed for an element that holds no border (item 5.1): the fields this spec reads
+  // live in it, so it is opened, as a person opens it
+  const border = page.locator('[data-door="inspector.toggleSection#inspector-section-header"][data-args*=\'"section":"border"\']').first();
+  if ((await border.getAttribute('aria-expanded')) !== 'true') await border.click();
 });
 
 test('a heading with no border: the Border fields are empty, their placeholder none, in the Style tab and the quick panel', runs(OPEN, ROW, BORDER, QUICK_BORDER), async ({ page }) => {
