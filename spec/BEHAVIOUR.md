@@ -2036,7 +2036,10 @@ None in Pager.
   (`parent` + `index`), as element.insert places an element; dropped on an image, the file becomes that image's source
   (`replace`) — the acceptance of item 7.3. The proposal the palette draws is drawn for it too (the pointer owner).
 - **The export carries every file of the tree** at its path (feature export-assets), so the exported page shows its
-  images, and the preview draws them from the stored bytes.
+  images, and the preview draws them from the stored bytes. An address a declaration names inside the stylesheet is
+  written relative to it (`css/styles.css` stands one folder below the files), the way an attribute's address is
+  written relative to the page that holds it, so `background-image: url("img/hero.png")` is written
+  `url("../img/hero.png")` and loads.
 
 ## explorer-assets
 

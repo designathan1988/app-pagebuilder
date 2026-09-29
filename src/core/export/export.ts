@@ -25,9 +25,9 @@ import { walk, type Animation, type DocNode, type DocumentJson } from '../docume
 import type { ModelRules } from '../document/validate.ts';
 import { zip } from '../project/zip.ts';
 import { baseCss } from '../render/base.ts';
-import { classesCss, elementAttributes, nodeCss, writesNode } from '../render/output.ts';
+import { classesCss, elementAttributes, fileUrlsIn, nodeCss, writesNode } from '../render/output.ts';
 import { svgMarkupOf } from '../elements/svg.ts';
-import { fileAt, fileBytes, filesOf, objectUrl, relativePath } from '../files/files.ts';
+import { fileAt, fileBytes, filesOf, objectUrl, relativePath, resolvedSource } from '../files/files.ts';
 import { fontFaceCss, fontFiles } from '../files/fonts.ts';
 import { exportValue } from '../files/values.ts';
 import { rootCss } from '../design/tokens.ts';
@@ -172,6 +172,14 @@ export function exportPage(document: DocumentJson, pageIndex: number, rules: Mod
 // A page's CSS as text: one blank line between rules, a line's end at the end, as the export writes it.
 export const pageCss = (css: readonly CodeLine[]): string => (css.length === 0 ? '' : `${css.map((line) => line.text).join('\n')}\n`);
 
+// An address a declaration names, as the file it sits in resolves it: an address naming a file or a page of the project
+// is written relative to the stylesheet that holds it (css/styles.css), which is what the browser that loads it does —
+// the same rule exportValue asks for an attribute, so `background-image: url("img/hero.png")` is written
+// `url("../img/hero.png")` and the exported page draws it. Everything else (an https:, data: or fragment address, an
+// already relative one) stands. The preview writes the stored paths (relative = false) and draws them from the bytes
+// itself (previewPage), as the canvas does.
+const writtenCss = (document: DocumentJson, text: string, from: string): string => fileUrlsIn(text, (address) => exportValue(document, 'src', address, from) ?? address);
+
 // One page's HTML and CSS as lines, each with the node it was written for.
 export function pageLines(document: DocumentJson, pageIndex: number, rules: ModelRules, shared: SharedClasses = newShared(), relative = true): PageCode {
   const page = document.pages[pageIndex];
@@ -277,7 +285,9 @@ export function pageLines(document: DocumentJson, pageIndex: number, rules: Mode
     '</head>',
   ].map((text) => ({ text, node: null }));
   const html: CodeLine[] = [...head, ...body, { text: '</html>', node: null }, { text: '', node: null }];
-  return { html, css, classes };
+  // the stylesheet's own addresses, written as the stylesheet resolves them (the archive holds it at css/styles.css)
+  const sheet = relative ? css.map((line) => ({ text: writtenCss(document, line.text, STYLESHEET), node: line.node })) : css;
+  return { html, css: sheet, classes };
 }
 
 // the time every entry of the archive carries: the ZIP format's first day, so the same document gives the same bytes
@@ -298,7 +308,7 @@ export function siteFiles(
   // export at the path its file holds, relative to the stylesheet that names it)
   // each block ends with its line's end, as a page's rules do, so a blank line parts every rule from the next
   const fonts = fontFaceCss(filesOf(document), (file) => relativePath(STYLESHEET, file.path));
-  const shared = [baseCss(), rootCss(document.tokens ?? []), fonts === '' ? '' : `${fonts}\n`, classesCss(document.classes ?? [], rules.output, 'block')].filter((c) => c !== '').map((c) => `${c}\n`);
+  const shared = [baseCss(), rootCss(document.tokens ?? []), fonts === '' ? '' : `${fonts}\n`, classesCss(document.classes ?? [], rules.output, 'block')].filter((c) => c !== '').map((c) => `${relative ? writtenCss(document, c, STYLESHEET) : c}\n`);
   const files = pages.map((p) => pageCss(p.code.css));
   const css = [...shared, ...files].filter((c) => c !== '').join('\n');
   // the same text, line by line: every part's own lines, and the blank line the join writes between two parts
@@ -346,6 +356,10 @@ export function previewPage(document: DocumentJson, rules: ModelRules, pageIndex
   // no folder to serve css/styles.css's relative paths from)
   let css = site.css;
   for (const file of fontFiles(document)) css = css.replaceAll(`"${relativePath(STYLESHEET, file.path)}"`, `"${objectUrl(file)}"`);
+  // A declaration's address that names a project file draws from the stored bytes, the way the canvas draws it
+  // (resolvedSource): the preview has no folder to serve the paths the stylesheet keeps, so a background image of the
+  // project reaches it here — the same rule the page's own sources take above.
+  css = fileUrlsIn(css, (address) => resolvedSource(document, address) ?? address);
   // The interactions script runs in the preview exactly as the exported page runs it (spec export-events-js): the file
   // has no address the preview could load, so its text is written in, and it waits for the page as its `defer` does —
   // an inline script is never deferred.

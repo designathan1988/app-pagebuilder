@@ -9,7 +9,7 @@ import { manualClock } from '../ports/clock.ts';
 import { anyCss } from '../ports/css.ts';
 import { sequentialIds } from '../ports/ids.ts';
 import { noLayout } from '../ports/layout.ts';
-import { exportPage, exportProject } from './export.ts';
+import { exportPage, exportProject, previewPage, siteFiles } from './export.ts';
 
 const RULES = rulesFromManifest(manifest.elements, manifest.properties, manifest.html);
 const styled = (declarations: Record<string, string>) => ({ desktop: { base: declarations } }) as DocNode['styles'];
@@ -52,5 +52,46 @@ describe('the export (specs export-zip, export-bem-css)', () => {
     const second = exportProject.run(contextOf(DOC, 9_000_000_000), {} as never);
     if (first.kind !== 'change' || second.kind !== 'change') throw new Error('the export did not run');
     expect(first.download?.bytes).toEqual(second.download?.bytes);
+  });
+});
+
+// The stylesheet stands at css/styles.css, one folder below the images the archive carries at img/: an address a
+// declaration names must be written as the browser resolves it from there, or the exported page asks for a file that
+// is not where it looks (spec explorer-assets-use: "the export carries every file of the tree at its path ... so the
+// exported page shows its images").
+describe('a declaration address that names a project file (spec explorer-assets-use)', () => {
+  const WITH_IMAGES: DocumentJson = {
+    ...page([
+      node('hero', 'Hero', 'section', 'section', { styles: styled({ 'background-image': 'url("img/hero.png")' }), children: [node('shot', 'Shot', 'image', 'img', { attributes: { src: 'img/hero.png' } })] }),
+      node('wide', 'Wide', 'div', 'div', { styles: styled({ 'background-image': 'url(https://example.com/remote.png)' }) }),
+      node('inline', 'Inline', 'div', 'div', { styles: styled({ 'background-image': 'url("data:image/png;base64,AAAA")' }) }),
+    ]),
+    files: [{ path: 'img/hero.png', type: 'image/png', bytes: 'AAAA' }],
+    classes: [{ name: 'painted', styles: styled({ 'background-image': 'url("img/hero.png")' }) }],
+  };
+
+  it('is written relative to the stylesheet, while every other address stands', () => {
+    const { css, cssLines } = siteFiles(WITH_IMAGES, RULES);
+    expect(css).toContain('background-image: url("../img/hero.png")');
+    expect(css).not.toContain('url("img/hero.png")');
+    expect(css).toContain('background-image: url(https://example.com/remote.png)');
+    expect(css).toContain('background-image: url("data:image/png;base64,AAAA")');
+    // the code pane's line view reads the same text the file holds
+    expect(cssLines.some((line) => line.text.includes('url("../img/hero.png")'))).toBe(true);
+    // the HTML resolves against the page at the root: the path stands there
+    expect(siteFiles(WITH_IMAGES, RULES).pages[0]?.html).toContain('src="img/hero.png"');
+  });
+
+  it('draws from the stored bytes in the preview, which has no folder to serve it from', () => {
+    const created = URL.createObjectURL;
+    URL.createObjectURL = () => 'blob:preview/0';
+    try {
+      const html = previewPage(WITH_IMAGES, RULES);
+      expect(html).toContain('url("blob:preview/0")');
+      expect(html).not.toContain('url("img/hero.png")');
+      expect(html).toContain('url(https://example.com/remote.png)');
+    } finally {
+      URL.createObjectURL = created;
+    }
   });
 });
