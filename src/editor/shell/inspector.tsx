@@ -1043,6 +1043,14 @@ function ComponentNotice() {
 function StyleTab() {
   const t = useT();
   const none = useEditorState((s) => s.selection.length === 0);
+  if (none) return (
+    <>
+      <SelectorBar />
+      <div className="inspector-style" data-region="inspector-style">
+        <div className="inspector-body inspector-body--empty"><Hints /></div>
+      </div>
+    </>
+  );
   return (
     <>
       <SelectorBar />
@@ -1064,7 +1072,6 @@ function StyleTab() {
           </div>
         <div className="inspector-scroll">
         <div className="inspector-body">
-          {none ? <Hints /> : null}
           <ComponentNotice />
           <div className="inspector-sections">
             <StyleSections />
@@ -1111,10 +1118,12 @@ export function Inspector() {
 // the active breakpoint.
 function SelectorBar() {
   const t = useT();
+  const none = useEditorState((s) => s.selection.length === 0);
   // the state and the breakpoint the editor edits (view/style-state.ts, view/breakpoints.ts)
   const state = useEditorState((s) => activeState(s.ui));
   const breakpoint = useEditorState((s) => activeBreakpoint(s.ui));
   const breakpointIcon = doorSlots('canvas-breakpoints').find((d) => d.door.args.breakpoint === breakpoint.id)?.door.icon ?? null;
+  if (none) return <div className="selector-bar selector-bar--empty" data-region="inspector-selector-bar"><SelectedElement /></div>;
   return (
     <div className="selector-bar" data-region="inspector-selector-bar">
       <SelectedElement />

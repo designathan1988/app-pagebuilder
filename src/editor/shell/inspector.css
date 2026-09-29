@@ -360,6 +360,7 @@
   gap: 0;
   padding: 0;
 }
+.inspector-body--empty { padding: var(--space-6); }
 
 
 .settings-section {
