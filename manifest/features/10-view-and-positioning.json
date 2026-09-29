@@ -1578,14 +1578,14 @@
                   "node": "/Page/Hero",
                   "measure": "y",
                   "relation": "less-than",
-                  "value": -320,
+                  "value": -260,
                   "reference": null
                 },
                 {
                   "node": "/Page/Hero",
                   "measure": "y",
                   "relation": "greater-than",
-                  "value": -340,
+                  "value": -320,
                   "reference": null
                 }
               ],
@@ -1869,14 +1869,14 @@
                   "region": "ruler-selection",
                   "measure": "width",
                   "relation": "greater-than",
-                  "value": 2687,
+                  "value": 2719,
                   "reference": null
                 },
                 {
                   "region": "ruler-selection",
                   "measure": "width",
                   "relation": "less-than",
-                  "value": 2689,
+                  "value": 2721,
                   "reference": null
                 },
                 {
@@ -1950,14 +1950,14 @@
                   "region": "ruler-selection",
                   "measure": "width",
                   "relation": "greater-than",
-                  "value": 1343,
+                  "value": 1359,
                   "reference": null
                 },
                 {
                   "region": "ruler-selection",
                   "measure": "width",
                   "relation": "less-than",
-                  "value": 1345,
+                  "value": 1361,
                   "reference": null
                 },
                 {

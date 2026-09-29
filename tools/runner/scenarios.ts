@@ -617,6 +617,32 @@ async function nodePoint(page: Page, id: string, root: boolean, nodePath: string
   return found;
 }
 
+// A screen point inside a node's box that the canvas shows, whichever element lies under it: what a pan needs, since
+// the middle button pans wherever it presses. The page's own free band (its root's only own point) lies below what a
+// zoomed canvas shows, and a pan over a child travels exactly the same way.
+async function nodeInsidePoint(page: Page, id: string): Promise<Point | string> {
+  return page.evaluate((nodeId) => {
+    const iframe = document.querySelector<HTMLIFrameElement>('.frame__page');
+    const doc = iframe?.contentDocument;
+    if (!iframe || !doc || !(iframe.currentCSSZoom > 0)) return 'the canvas has no page';
+    const zoom = iframe.currentCSSZoom;
+    const box = iframe.getBoundingClientRect();
+    const style = getComputedStyle(iframe);
+    const left = box.left + (parseFloat(style.borderLeftWidth) + parseFloat(style.paddingLeft)) * zoom;
+    const top = box.top + (parseFloat(style.borderTopWidth) + parseFloat(style.paddingTop)) * zoom;
+    const screen = (x: number, y: number) => ({ x: left + x * zoom, y: top + y * zoom });
+    const el = doc.querySelector(`[data-node="${CSS.escape(nodeId)}"]`);
+    if (!el) return 'the canvas does not draw it';
+    const vw = doc.documentElement.clientWidth;
+    const vh = doc.documentElement.clientHeight;
+    const r = el.getBoundingClientRect();
+    const [x0, x1, y0, y1] = [Math.max(r.left, 0), Math.min(r.right, vw), Math.max(r.top, 0), Math.min(r.bottom, vh)];
+    if (x1 - x0 < 1 || y1 - y0 < 1) return 'it is outside the visible page';
+    const at = screen((x0 + x1) / 2, (y0 + y1) / 2);
+    return document.elementFromPoint(at.x, at.y)?.closest('.frame__overlay') != null ? at : 'the canvas does not show it';
+  }, id);
+}
+
 // A screen point of the stage outside the page: in the gap around the frame, where the stage itself is hit.
 async function stagePoint(page: Page): Promise<Point> {
   const found = await page.evaluate(() => {
@@ -1102,7 +1128,11 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
     // exp(−deltaY × zoom.wheelFactor) gives; a pan's travel (dx, dy) is the page's, so the wheel turns the other way
     // (Shift turns it down, as a mouse without a horizontal wheel does)
     if (target === null || step.target === null) throw new Error(`step ${ref}: a wheel acts over the node it names`);
-    const at = await nodePoint(page, target.id, isRoot(document, step.target), step.target);
+    // the node's own point where it has one; else a point of its box the canvas shows (a wheel over a zoomed page has
+    // to land on the stage for the canvas to hear it, and the page's own free band lies below what the canvas shows)
+    const ownPoint = await canvasPoint(page, { kind: 'node', id: target.id, root: isRoot(document, step.target), near: 'centre' });
+    const at = typeof ownPoint === 'string' ? await nodeInsidePoint(page, target.id) : ownPoint;
+    if (typeof at === 'string') throw new Error(`${step.target}: ${at}`);
     const factor = typeof args.factor === 'number' ? args.factor : null;
     const dx = typeof args.dx === 'number' ? args.dx : 0;
     const dy = typeof args.dy === 'number' ? args.dy : 0;
@@ -1263,7 +1293,10 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
   } else if (d.kind === 'canvas-drag' && d.gesture === 'space-pan') {
     // a pan: pressed over the step's node with Space held (or with the middle button) and moved by the page's travel
     if (target === null || step.target === null) throw new Error(`step ${ref}: a pan starts over the node it names`);
-    const from = await nodePoint(page, target.id, isRoot(document, step.target), step.target);
+    // the node's own point where it has one; else a point of its box the canvas shows (a pan need not hit the node)
+    const own = await canvasPoint(page, { kind: 'node', id: target.id, root: isRoot(document, step.target), near: 'centre' });
+    const from = typeof own === 'string' ? await nodeInsidePoint(page, target.id) : own;
+    if (typeof from === 'string') throw new Error(`${step.target}: ${from}`);
     const dx = typeof args.dx === 'number' ? args.dx : 0;
     const dy = typeof args.dy === 'number' ? args.dy : 0;
     const button = d.source === 'middle-button' ? 'middle' : 'left';
