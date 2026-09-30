@@ -56,29 +56,11 @@ const FUNCTION_CONTROLS = new Set(FUNCTION_DOORS.map((d) => (d.door.kind === 'in
 const FUNCTION_PROPERTIES = new Set(FUNCTION_DOORS.map((d) => (d.door.kind === 'inspector-field' ? d.door.property : null)));
 const CHIP = { width: 24, height: 24 };
 
-// The compact panel follows the visual groups of the final design. The manifest
-// still supplies each control and its order within a group.
-const QUICK_GROUPS = [
-  { name: 'inspector.section.size', first: 4, last: 5, extra: -1 },
-  // the align and distribute doors (6 to 13): where the element sits inside its parent, drawn under the name the
-  // manifest's own position commands carry
-  { name: 'inspector.section.position', first: 6, last: 13, extra: -1 },
-  { name: 'inspector.section.paint', first: 14, last: 17, extra: 37 },
-  { name: 'inspector.section.effects', first: 18, last: 19, extra: -1 },
-  { name: 'inspector.section.text', first: 20, last: 26, extra: -1 },
-  { name: 'inspector.group.transform', first: 27, last: 31, extra: -1 },
-  { name: 'inspector.section.layout', first: 32, last: 35, extra: -1 },
-  { name: 'inspector.tab.settings', first: 38, last: 100, extra: 36 },
-] as const;
-
-const quickOrder = (entry: DoorEntry): number => {
-  const place = entry.door.placement;
-  return entry.door.kind === 'quick-panel' && typeof place === 'object' ? place.order : -1;
-};
-const inQuickGroup = (entry: DoorEntry, group: typeof QUICK_GROUPS[number]): boolean => {
-  const order = quickOrder(entry);
-  return (order >= group.first && order <= group.last) || order === group.extra;
-};
+// The panel's groups, in the order it draws them, each under its name: layout.json's quickPanelGroups, which each
+// quick-panel door names (its `group`; the audit's U-044: they were ranges of placement orders here). The manifest
+// supplies each field and its order within its group.
+const QUICK_GROUPS = manifest.layout.quickPanelGroups;
+const inQuickGroup = (entry: DoorEntry, group: (typeof QUICK_GROUPS)[number]): boolean => entry.door.kind === 'quick-panel' && entry.door.group === group.id;
 
 // What an Effects field typed means for style.setFilter's functions: none for nothing, every function typed set and
 // every one held but not typed taken away; a text that is no list of functions goes as it is, which the command
@@ -444,7 +426,7 @@ export function QuickPanel({ stage }: { readonly stage: RefObject<HTMLDivElement
   });
   const tag = fields.find(isTag);
   const grouped = QUICK_GROUPS.map((group) => ({
-    ...group,
+    name: group.labelKey,
     fields: fields.filter((entry) => !isTag(entry) && inQuickGroup(entry, group)),
   })).filter((group) => group.fields.length > 0);
   const other = fields.filter((entry) => !isTag(entry) && !QUICK_GROUPS.some((group) => inQuickGroup(entry, group)));

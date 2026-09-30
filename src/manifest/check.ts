@@ -111,6 +111,7 @@ export const RULES = [
   'pressed',
   'style-door-section',
   'concept-row',
+  'quick-panel-group',
 ] as const;
 
 export type RuleId = (typeof RULES)[number];
@@ -756,6 +757,23 @@ export function checkManifest(input: ManifestInput): CheckResult {
     const own = derived(c.door, entry.door as StyleDoor);
     if (own === c.section) report('style-door-section', 'properties.json', at, `${c.door} is placed in "${own ?? ''}" by what it edits or the entry that lists it: it needs no control entry`);
   }
+  // ---- quick-panel-group: a quick panel field names a group of layout.json's quickPanelGroups, the panel's head none
+  // (the audit's U-044: the groups were ranges of placement orders in the code); each group holds a field
+  const quickGroups = new Set(p.layout.quickPanelGroups.map((g) => g.id));
+  const quickHeld = new Set<string>();
+  for (const { file, data } of p.commandFiles) {
+    data.commands.forEach((c, ci) =>
+      c.entryPoints.forEach((d, di) => {
+        if (d.kind !== 'quick-panel' || d.group === null) return;
+        if (!quickGroups.has(d.group)) report('quick-panel-group', file, `commands[${ci}].entryPoints[${di}].group`, `${c.id}#${d.id} names the quick panel group "${d.group}", which layout.json's quickPanelGroups does not list`);
+        quickHeld.add(d.group);
+      }),
+    );
+  }
+  p.layout.quickPanelGroups.forEach((g, i) => {
+    if (!quickHeld.has(g.id)) report('quick-panel-group', 'layout.json', `quickPanelGroups[${i}]`, `the quick panel group "${g.id}" holds no field`);
+  });
+
   // ---- concept-row: a concept row (plan item 2.D) names items of its own section — a Style door or a pair row — each
   // standing in one row only; a row without a head is a summary row, which says what it is (its labelKey)
   const pairSections = new Map(p.properties.rows.map((r) => [r.id, r.section] as const));

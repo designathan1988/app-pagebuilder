@@ -487,6 +487,40 @@
       ]
     }
   ],
+  "quickPanelGroups": [
+    {
+      "id": "size",
+      "labelKey": "inspector.section.size"
+    },
+    {
+      "id": "position",
+      "labelKey": "inspector.section.position"
+    },
+    {
+      "id": "paint",
+      "labelKey": "inspector.section.paint"
+    },
+    {
+      "id": "effects",
+      "labelKey": "inspector.section.effects"
+    },
+    {
+      "id": "text",
+      "labelKey": "inspector.section.text"
+    },
+    {
+      "id": "transform",
+      "labelKey": "inspector.group.transform"
+    },
+    {
+      "id": "layout",
+      "labelKey": "inspector.section.layout"
+    },
+    {
+      "id": "settings",
+      "labelKey": "inspector.tab.settings"
+    }
+  ],
   "glyphs": {
     "dropdown": "chevron-down",
     "submenu": "chevron-right",

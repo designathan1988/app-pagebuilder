@@ -496,6 +496,15 @@ export const PLANTS: Plant[] = [
     },
   },
   {
+    id: 'quick-panel-unknown-group',
+    rule: 'quick-panel-group',
+    description: 'the quick panel Width field names a group the layout does not list',
+    apply: (m) => {
+      const door = list(command(m, 'style.set').entryPoints).find((d) => obj(d).id === 'quick-panel-width');
+      obj(door).group = 'dimensions';
+    },
+  },
+  {
     id: 'field-holds-expression',
     rule: 'no-logic',
     description: 'the availability of Undo is written as the expression "canUndo && !editingText"',

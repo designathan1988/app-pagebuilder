@@ -989,6 +989,10 @@
       "reader": "src/editor/shell/inspector-settings.tsx"
     },
     {
+      "field": "commands:commands[].entryPoints[].group",
+      "reader": "src/editor/canvas/quick-panel.tsx"
+    },
+    {
       "field": "commands:commands[].entryPoints[].source",
       "reader": "src/editor/input/pointer.ts"
     },
@@ -1967,6 +1971,18 @@
     {
       "field": "layout:glyphs.sizeVariable",
       "reader": "src/editor/doors/door.tsx"
+    },
+    {
+      "field": "layout:quickPanelGroups",
+      "reader": "src/editor/canvas/quick-panel.tsx"
+    },
+    {
+      "field": "layout:quickPanelGroups[].id",
+      "reader": "src/editor/canvas/quick-panel.tsx"
+    },
+    {
+      "field": "layout:quickPanelGroups[].labelKey",
+      "reader": "src/editor/canvas/quick-panel.tsx"
     },
     {
       "field": "layout:panels",

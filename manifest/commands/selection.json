@@ -833,7 +833,8 @@
             "fields": []
           },
           "args": {},
-          "attribute": null
+          "attribute": null,
+          "group": null
         }
       ]
     }

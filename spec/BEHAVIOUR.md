@@ -5808,6 +5808,7 @@ The panel's controls have `tabindex="-1"` (sealed out of the Tab order, `quick-p
 - **Closing the panel cancels what a field held unkept**: the panel's fields are drawn with `keepOnLeave={false}`, so a
   value typed and not kept with Enter is dropped when the panel closes, as Escape in an inspector field drops it; the
   inspector's own fields keep the rule that leaving a field keeps what was typed.
+11. **The panel's groups were ranges of placement orders in the code** (the audit's U-044: object-fit landed in Settings, the radius in Paint by a magic order). Required: the groups are manifest data — layout.json's `quickPanelGroups` (id and name, in the order the panel draws them) — and each quick panel field names its group (`group`; null for the panel's head: the tag, More actions, Edit on canvas); manifest:check refuses a group the layout does not list and a group that holds no field (rule `quick-panel-group`).
 
 ## radius-border-gap-handles
 

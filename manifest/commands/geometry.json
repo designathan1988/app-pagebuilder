@@ -857,7 +857,8 @@
           "args": {
             "edge": "left"
           },
-          "attribute": null
+          "attribute": null,
+          "group": "position"
         },
         {
           "id": "menu-arrange-left",
@@ -928,7 +929,8 @@
           "args": {
             "edge": "horizontal-center"
           },
-          "attribute": null
+          "attribute": null,
+          "group": "position"
         },
         {
           "id": "menu-arrange-horizontal-center",
@@ -999,7 +1001,8 @@
           "args": {
             "edge": "right"
           },
-          "attribute": null
+          "attribute": null,
+          "group": "position"
         },
         {
           "id": "menu-arrange-right",
@@ -1070,7 +1073,8 @@
           "args": {
             "edge": "top"
           },
-          "attribute": null
+          "attribute": null,
+          "group": "position"
         },
         {
           "id": "menu-arrange-top",
@@ -1141,7 +1145,8 @@
           "args": {
             "edge": "vertical-center"
           },
-          "attribute": null
+          "attribute": null,
+          "group": "position"
         },
         {
           "id": "menu-arrange-vertical-center",
@@ -1212,7 +1217,8 @@
           "args": {
             "edge": "bottom"
           },
-          "attribute": null
+          "attribute": null,
+          "group": "position"
         },
         {
           "id": "menu-arrange-bottom",
@@ -1317,7 +1323,8 @@
           "args": {
             "axis": "horizontal"
           },
-          "attribute": null
+          "attribute": null,
+          "group": "position"
         },
         {
           "id": "menu-arrange-horizontal",
@@ -1388,7 +1395,8 @@
           "args": {
             "axis": "vertical"
           },
-          "attribute": null
+          "attribute": null,
+          "group": "position"
         },
         {
           "id": "menu-arrange-vertical",
@@ -1619,7 +1627,8 @@
             "fields": []
           },
           "args": {},
-          "attribute": null
+          "attribute": null,
+          "group": null
         },
         {
           "id": "key-escape-in-canvas-edit-mode",

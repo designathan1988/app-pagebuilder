@@ -89,7 +89,8 @@
           "args": {
             "tag": ""
           },
-          "attribute": null
+          "attribute": null,
+          "group": null
         }
       ]
     },
@@ -1457,7 +1458,8 @@
             "attribute": "src"
           },
           "control": "attribute-field",
-          "attribute": "src"
+          "attribute": "src",
+          "group": "settings"
         },
         {
           "id": "quick-panel-alt",
@@ -1481,7 +1483,8 @@
             "attribute": "alt"
           },
           "control": "attribute-field",
-          "attribute": "alt"
+          "attribute": "alt",
+          "group": "settings"
         },
         {
           "id": "quick-panel-button-type",
@@ -1505,7 +1508,8 @@
             "attribute": "buttonType"
           },
           "control": "attribute-field",
-          "attribute": "buttonType"
+          "attribute": "buttonType",
+          "group": "settings"
         },
         {
           "id": "inspector-role",
@@ -1948,7 +1952,8 @@
           },
           "args": {},
           "control": "attribute-field",
-          "attribute": "href"
+          "attribute": "href",
+          "group": "settings"
         },
         {
           "id": "quick-panel-new-tab",
@@ -1970,7 +1975,8 @@
           },
           "args": {},
           "control": "attribute-field",
-          "attribute": "newTab"
+          "attribute": "newTab",
+          "group": "settings"
         },
         {
           "id": "link-picker-page-item",

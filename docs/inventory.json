@@ -6,7 +6,7 @@
     "doors": 1002,
     "scenarios": 1340,
     "modules": 259,
-    "lines": 49809
+    "lines": 49814
   },
   "features": [
     {
@@ -4092,7 +4092,7 @@
     },
     {
       "path": "src/editor/canvas/quick-panel.tsx",
-      "lines": 494,
+      "lines": 476,
       "commands": [],
       "features": []
     },
@@ -5127,7 +5127,7 @@
     },
     {
       "path": "src/manifest/check.ts",
-      "lines": 2306,
+      "lines": 2324,
       "commands": [],
       "features": []
     },
@@ -5163,7 +5163,7 @@
     },
     {
       "path": "src/manifest/schema.ts",
-      "lines": 1291,
+      "lines": 1296,
       "commands": [],
       "features": []
     },

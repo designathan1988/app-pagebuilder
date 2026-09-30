@@ -4270,7 +4270,8 @@
             "fields": []
           },
           "args": {},
-          "attribute": null
+          "attribute": null,
+          "group": "size"
         },
         {
           "id": "quick-panel-height",
@@ -4299,7 +4300,8 @@
             "fields": []
           },
           "args": {},
-          "attribute": null
+          "attribute": null,
+          "group": "size"
         },
         {
           "id": "quick-panel-background",
@@ -4323,7 +4325,8 @@
             "fields": []
           },
           "args": {},
-          "attribute": null
+          "attribute": null,
+          "group": "paint"
         },
         {
           "id": "quick-panel-fill",
@@ -4347,7 +4350,8 @@
             "fields": []
           },
           "args": {},
-          "attribute": null
+          "attribute": null,
+          "group": "paint"
         },
         {
           "id": "quick-panel-text-colour",
@@ -4371,7 +4375,8 @@
             "fields": []
           },
           "args": {},
-          "attribute": null
+          "attribute": null,
+          "group": "text"
         },
         {
           "id": "quick-panel-font-size",
@@ -4400,7 +4405,8 @@
             "fields": []
           },
           "args": {},
-          "attribute": null
+          "attribute": null,
+          "group": "text"
         },
         {
           "id": "quick-panel-font-family",
@@ -4429,7 +4435,8 @@
             "fields": []
           },
           "args": {},
-          "attribute": null
+          "attribute": null,
+          "group": "text"
         },
         {
           "id": "quick-panel-font-weight",
@@ -4458,7 +4465,8 @@
             "fields": []
           },
           "args": {},
-          "attribute": null
+          "attribute": null,
+          "group": "text"
         },
         {
           "id": "quick-panel-line-height",
@@ -4487,7 +4495,8 @@
             "fields": []
           },
           "args": {},
-          "attribute": null
+          "attribute": null,
+          "group": "text"
         },
         {
           "id": "quick-panel-letter-spacing",
@@ -4516,7 +4525,8 @@
             "fields": []
           },
           "args": {},
-          "attribute": null
+          "attribute": null,
+          "group": "text"
         },
         {
           "id": "quick-panel-text-align",
@@ -4545,7 +4555,8 @@
             "fields": []
           },
           "args": {},
-          "attribute": null
+          "attribute": null,
+          "group": "text"
         },
         {
           "id": "quick-panel-opacity",
@@ -4569,7 +4580,8 @@
             "fields": []
           },
           "args": {},
-          "attribute": null
+          "attribute": null,
+          "group": "effects"
         },
         {
           "id": "command-bar-set-property",
@@ -4815,7 +4827,8 @@
             "fields": []
           },
           "args": {},
-          "attribute": null
+          "attribute": null,
+          "group": "transform"
         },
         {
           "id": "quick-panel-rotate",
@@ -4844,7 +4857,8 @@
             "fields": []
           },
           "args": {},
-          "attribute": null
+          "attribute": null,
+          "group": "transform"
         },
         {
           "id": "quick-panel-scale",
@@ -4873,7 +4887,8 @@
             "fields": []
           },
           "args": {},
-          "attribute": null
+          "attribute": null,
+          "group": "transform"
         },
         {
           "id": "handle-rotate",
@@ -5184,7 +5199,8 @@
           "args": {
             "property": "flex-direction"
           },
-          "attribute": null
+          "attribute": null,
+          "group": "layout"
         },
         {
           "id": "quick-panel-gap",
@@ -5211,7 +5227,8 @@
           "args": {
             "property": "gap"
           },
-          "attribute": null
+          "attribute": null,
+          "group": "layout"
         },
         {
           "id": "quick-panel-align-items",
@@ -5237,7 +5254,8 @@
           "args": {
             "property": "align-items"
           },
-          "attribute": null
+          "attribute": null,
+          "group": "layout"
         },
         {
           "id": "quick-panel-padding",
@@ -5266,7 +5284,8 @@
           "args": {
             "property": "padding"
           },
-          "attribute": null
+          "attribute": null,
+          "group": "layout"
         },
         {
           "id": "quick-panel-object-fit",
@@ -5292,7 +5311,8 @@
           "args": {
             "property": "object-fit"
           },
-          "attribute": null
+          "attribute": null,
+          "group": "settings"
         },
         {
           "id": "quick-panel-radius",
@@ -5321,7 +5341,8 @@
           "args": {
             "property": "border-radius"
           },
-          "attribute": null
+          "attribute": null,
+          "group": "paint"
         }
       ]
     },
@@ -6493,7 +6514,8 @@
             "fields": []
           },
           "args": {},
-          "attribute": null
+          "attribute": null,
+          "group": "paint"
         },
         {
           "id": "command-bar-set-property",
@@ -7519,7 +7541,8 @@
             "fields": []
           },
           "args": {},
-          "attribute": null
+          "attribute": null,
+          "group": "paint"
         },
         {
           "id": "command-bar-set-property",
@@ -8909,7 +8932,8 @@
             "fields": []
           },
           "args": {},
-          "attribute": null
+          "attribute": null,
+          "group": "effects"
         },
         {
           "id": "command-bar-set-property",
@@ -9028,7 +9052,8 @@
             "fields": []
           },
           "args": {},
-          "attribute": null
+          "attribute": null,
+          "group": "transform"
         },
         {
           "id": "inspector-transform-transform-skew-y",
@@ -9090,7 +9115,8 @@
             "fields": []
           },
           "args": {},
-          "attribute": null
+          "attribute": null,
+          "group": "transform"
         },
         {
           "id": "command-bar-set-property",

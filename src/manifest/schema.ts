@@ -648,7 +648,10 @@ export const doorSchema = z.discriminatedUnion('kind', [
   z.strictObject({ ...doorCommon, kind: z.literal('toolbar'), drawnAs: z.enum(DRAWN_AS), pressed: pressedSchema, toolbar: kebabId }),
   // a quick panel field, drawn by its control: an attribute field names the attribute it edits (the Settings fields'
   // vocabulary), a value field names the property through its command's arguments
-  z.strictObject({ ...doorCommon, kind: z.literal('quick-panel'), control: kebabId, attribute: camelId.nullable() }),
+  // its group: one of layout.json's quickPanelGroups, under whose name the panel draws it (the audit's U-044: the
+  // groups were ranges of placement orders in the code); null for the panel's head (the tag, More actions, Edit on
+  // canvas)
+  z.strictObject({ ...doorCommon, kind: z.literal('quick-panel'), control: kebabId, attribute: camelId.nullable(), group: kebabId.nullable() }),
   z.strictObject({
     ...doorCommon,
     kind: z.literal('command-bar'),
@@ -827,6 +830,8 @@ export const layoutFileSchema = z.strictObject({
   // list, the arrow of an item that opens a submenu, the disclosure of an expanded and of a collapsed section or tree
   // row, the mark of a checked item, a folder of the Explorer, a size variable of the Styles view. The shell draws no
   // other icon than these, the panels', the elements', the keywords' and the ones the doors name.
+  // the quick panel's groups, in the order it draws them, each under its name (a quick-panel door names its group)
+  quickPanelGroups: z.array(z.strictObject({ id: kebabId, labelKey: i18nKey })).min(1),
   glyphs: z.strictObject({ dropdown: iconName, submenu: iconName, expanded: iconName, collapsed: iconName, checked: iconName, folder: iconName, sizeVariable: iconName, sideRow: iconName, sideColumn: iconName, quickPanel: iconName, grip: iconName, rotate: iconName }),
   // Each panel (the panel values of workspace.setPanelOpen): its icon (on its dock tab and its palette entry), its
   // name, where it lives, the sidebar view a section belongs to ("in", a section only; null: the stack under every

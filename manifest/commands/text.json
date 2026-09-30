@@ -229,7 +229,8 @@
           },
           "args": {},
           "control": "attribute-field",
-          "attribute": "text"
+          "attribute": "text",
+          "group": "settings"
         }
       ]
     },
