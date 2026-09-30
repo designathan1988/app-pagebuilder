@@ -4,9 +4,9 @@
     "built": 185,
     "commands": 258,
     "doors": 1002,
-    "scenarios": 1340,
+    "scenarios": 1341,
     "modules": 259,
-    "lines": 49814
+    "lines": 49866
   },
   "features": [
     {
@@ -2557,7 +2557,7 @@
         "workspace.setPanelOpen"
       ],
       "doors": 26,
-      "scenarios": 9,
+      "scenarios": 10,
       "modules": [
         "src/core/project/pages.ts",
         "src/editor/workspace/panels.ts"
@@ -4850,7 +4850,7 @@
     },
     {
       "path": "src/editor/shell/top-bar.tsx",
-      "lines": 67,
+      "lines": 119,
       "commands": [],
       "features": []
     },

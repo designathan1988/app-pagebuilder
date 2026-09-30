@@ -7,21 +7,73 @@ import { useEditorState } from '../store.ts';
 import { pageShown } from '../../core/project/pages.ts';
 import { Slots } from './slots.tsx';
 import { Icon } from '../doors/door.tsx';
-import { MenuGroup } from '../doors/menu.tsx';
+import { MenuGroup, useMenuLayer } from '../doors/menu.tsx';
+import { useRef } from 'react';
 import type { DoorEntry } from '../../manifest/runtime.ts';
 
 const BREAKS = breaksIn('top-bar');
 
+// The page switcher (the audit's U-011: its chevron opened nothing): the page shown, and a press opens the list of the
+// project's pages, each item the switcher's own door standing for its page (pages.switch), the page shown checked;
+// choosing one shows it and closes the list, whose Escape and backdrop close it as every menu's do.
 function PageSwitcher({ entry }: { readonly entry: DoorEntry }) {
   const page = useEditorState((s) => pageShown(s));
-  // it stands for the page it shows: the door's own reading marks it current, and running it opens that page (the
-  // door's declared argument is the current item's, as a file tab's is)
+  const pages = useEditorState((s) => s.document.pages);
+  const button = useRef<HTMLButtonElement>(null);
+  const list = useRef<HTMLDivElement>(null);
+  const layer = useMenuLayer(button, list);
+  const door = useDoor(entry);
   return (
-    <DoorControl entry={entry} args={page === null ? {} : { page: page.tree.id }} className="top-bar__page">
-      <b>{page?.name}</b>
-      <span className="top-bar__file">{page?.file}</span>
-      <Icon name={GLYPHS.dropdown} size="xs" />
-    </DoorControl>
+    <span className="menu-anchor top-bar__pages">
+      <button
+        ref={button}
+        type="button"
+        className={`door door--item top-bar__page${door.available ? '' : ' is-unavailable'}`}
+        data-door={entry.ref}
+        aria-haspopup="menu"
+        aria-expanded={layer.open}
+        aria-label={door.label}
+        title={door.title}
+        aria-disabled={door.available ? undefined : true}
+        onClick={() => {
+          if (door.available) layer.toggle();
+        }}
+      >
+        <b>{page?.name}</b>
+        <span className="top-bar__file">{page?.file}</span>
+        <Icon name={GLYPHS.dropdown} size="xs" />
+      </button>
+      {layer.backdrop}
+      {layer.open ? (
+        <div className="menu top-bar__page-menu" role="menu" ref={list} aria-label={door.label} data-key-context="menu">
+          {pages.map((one) => (
+            <PageItem key={one.tree.id} entry={entry} page={one.tree.id} name={one.name} file={one.file} shown={one.tree.id === page?.tree.id} onDone={layer.close} />
+          ))}
+        </div>
+      ) : null}
+    </span>
+  );
+}
+
+function PageItem({ entry, page, name, file, shown, onDone }: { readonly entry: DoorEntry; readonly page: string; readonly name: string; readonly file: string; readonly shown: boolean; readonly onDone: () => void }) {
+  const door = useDoor(entry, { page });
+  return (
+    <button
+      type="button"
+      role="menuitemradio"
+      aria-checked={shown}
+      className="menu__item"
+      data-door={entry.ref}
+      data-args={JSON.stringify({ page })}
+      onClick={() => {
+        onDone();
+        door.run();
+      }}
+    >
+      <span className="menu__icon">{shown ? <Icon name={GLYPHS.checked} size="sm" /> : null}</span>
+      <span className="menu__label">{name}</span>
+      <span className="menu__chord top-bar__file">{file}</span>
+    </button>
   );
 }
 

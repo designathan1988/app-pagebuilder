@@ -1599,8 +1599,8 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
     } else {
       // A control that opens the list of its values (a number field's unit menu) stands for fewer arguments than its
       // step names: while no control stands for them all, the one that opens a list and stands for part of them is
-      // clicked first, then the item that stands for them all.
-      if ((d.kind === 'panel-control' || d.kind === 'quick-panel') && (await control(page, clicked, { args: standsFor }).count()) === 0) {
+      // clicked first, then the item that stands for them all (the top bar's page switcher opens its list of pages).
+      if ((d.kind === 'panel-control' || d.kind === 'quick-panel' || d.kind === 'toolbar') && (await control(page, clicked, { args: standsFor }).count()) === 0) {
         const openers = page.locator(`[data-door="${clicked}"][aria-haspopup]`);
         const at = await openers.evaluateAll(
           (els, want) => els.findIndex((el) => Object.entries(JSON.parse(el.getAttribute('data-args') ?? '{}') as Record<string, unknown>).every(([name, value]) => JSON.stringify(want[name]) === JSON.stringify(value))),

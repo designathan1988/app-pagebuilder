@@ -14,7 +14,7 @@
         "workspace.setPanelOpen"
       ],
       "dependsOn": [],
-      "spec": null,
+      "spec": "spec/BEHAVIOUR.md#explorer-pages",
       "intent": {
         "title": "File explorer: add, rename, duplicate, delete and switch pages",
         "steps": [
@@ -661,6 +661,115 @@
                   "key": "status.pages.opened",
                   "params": {
                     "name": "Page"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-top-bars-switcher-lists-the-pages-and-opens-the-one-chosen",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "pages.add#explorer-add-page",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "pages.switch#toolbar-top-bar-page-switcher",
+              "args": {
+                "page": "/Page"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "pages.switch#toolbar-top-bar-page-switcher"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@pages",
+                "value": [
+                  {
+                    "name": "Home",
+                    "file": "index.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page",
+                      "tag": "body",
+                      "attributes": {},
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": []
+                    }
+                  },
+                  {
+                    "name": "Page",
+                    "file": "page.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page 2",
+                      "tag": "body",
+                      "attributes": {},
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": []
+                    }
+                  }
+                ]
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page",
+                  "property": "display",
+                  "value": "block"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.pages.opened",
+                  "params": {
+                    "name": "Home"
                   }
                 }
               ]

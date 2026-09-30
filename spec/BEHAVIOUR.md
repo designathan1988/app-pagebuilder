@@ -2168,6 +2168,15 @@ None in Pager.
    - The product is new, so there is no earlier saved format to open. The saved format carries a schema version from the first save (project.json in the archive and the IndexedDB record alike), and every future migration is tested on the real loading path: Open project, and the autosaved project and its saved versions when the app loads them.
 5. **A file row said nothing of what the file is, nor that the editor writes it** (the audit's U-016, jornada02 pairing 4.2: an icon for every file, the generated page file like any other). Required: a code file's row shows its kind as a tag in place of the icon (HTML, CSS, JS), an image its thumbnail, any other file its icon; a file the editor writes (a page's file, the stylesheet, the interactions' script) shows a "generated" pill whose tooltip says why it cannot be deleted; a file's name is drawn in the mono type, a path.
 
+
+## explorer-pages
+
+The project's pages: the Explorer's Pages list (add, rename, duplicate, delete, switch) and the top bar's page switcher.
+The manifest's feature `explorer-pages` holds the scenarios; this section holds what the switcher must do.
+
+### Problems in Pager
+
+1. **The top bar's page switcher drew a chevron that opened nothing** (the audit's U-011). Required: the switcher shows the page on the canvas, and a press opens the list of the project's pages (its name and its file), the page shown checked; choosing one runs `pages.switch` for it and closes the list; Escape and a press outside close it as every menu's do.
 ## export-bem-css
 
 How Pager behaves, read from its source (`reference/Pager`). Source references are `path:line` inside Pager.
