@@ -7854,6 +7854,7 @@ The chords above.
 1. **The range is 40-200 %.** Required: zoom stays between 10 % and 800 % (manifest feature `zoom-keyboard-buttons`).
 2. **The percentage is not a menu.** Required: clicking it opens a menu with 25 %, 50 %, 100 %, 200 %, 400 % and Fit.
 3. **Zoom and Fit mode are not restored after a reload.** Required: the zoom (or Fit mode) is restored after a reload, as a workspace preference.
+4. **Fit enlarged a page narrower than the canvas** (the formula has no upper bound but the zoom range): at 1920 px with the sidebar hidden, the Desktop page was drawn at 108 %, its text and borders bigger than the site shows them. Required: Fit never zooms above 100 % (the owner's decision D-4, the pattern of Webflow's canvas and Chrome's responsive view): a page narrower than the canvas is drawn at its own size, centred; the zoom menu and the keys still go above 100 %.
 
 ## zoom-wheel-pan
 
