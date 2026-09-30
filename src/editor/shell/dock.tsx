@@ -31,10 +31,16 @@ function Timeline() {
 
 // The Document tab of Developer tools (spec workbench-panel, Problems in Pager 2): the document as it is now, as JSON,
 // read-only, drawn again after every command that changes it.
+// A string longer than this (a file's bytes, base64) is shown as its start and its length: one image made a line of a
+// million characters, five million pixels wide (the audit's U-027)
+const LONGEST_SHOWN = 200;
 function DocumentJson() {
   const t = useT();
   const document = useEditorState((s) => s.document);
-  const text = useMemo(() => JSON.stringify(document, null, 2), [document]);
+  const text = useMemo(
+    () => JSON.stringify(document, (_key, value: unknown) => (typeof value === 'string' && value.length > LONGEST_SHOWN ? t('dock.document.long', { start: value.slice(0, 48), count: value.length }) : value), 2),
+    [document, t],
+  );
   return (
     <pre className="dock-document" tabIndex={0} aria-readonly="true" aria-label={t(panelName('document'))}>
       {text}

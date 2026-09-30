@@ -2112,6 +2112,7 @@
   "status.gridEdit.nothingToSplit": "{name} covers one cell.",
   "feature.canvasGridEditor": "Edit a grid on the canvas: its tracks, its cells and the items in them",
   "command.layers.cancelRename": "Cancel the rename",
+  "dock.document.long": "{start}… ({count} characters)",
   "keyContext.renameField": "Rename field",
   "keyContext.componentPrompt": "Component name prompt"
 }

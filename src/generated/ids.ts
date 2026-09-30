@@ -4580,6 +4580,7 @@ export const MESSAGE_IDS = [
   "status.gridEdit.nothingToSplit",
   "feature.canvasGridEditor",
   "command.layers.cancelRename",
+  "dock.document.long",
   "keyContext.renameField",
   "keyContext.componentPrompt",
 ] as const;

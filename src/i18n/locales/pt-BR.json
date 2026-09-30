@@ -2112,6 +2112,7 @@
   "status.gridEdit.nothingToSplit": "{name} cobre uma célula só.",
   "feature.canvasGridEditor": "Editar uma grade no canvas: as trilhas, as células e os itens nelas",
   "command.layers.cancelRename": "Cancelar a renomeação",
+  "dock.document.long": "{start}… ({count} caracteres)",
   "keyContext.renameField": "Campo de renomear",
   "keyContext.componentPrompt": "Nome do componente"
 }

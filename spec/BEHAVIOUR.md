@@ -7702,6 +7702,7 @@ Tab strip arrows/Home/End; no shortcut for show/hide or maximise.
 1. **Tabs cannot be closed.** Required: each tab has a close button; closing the last tab collapses the workbench (manifest feature `workbench-panel`).
 2. **Developer tools add no Document tab.** Required: Developer tools adds a `Document` tab showing the live document JSON read-only, updated after every command; the choice is stored in preferences.
 3. **Maximised covers only part of the canvas area.** Required: maximise covers the whole canvas area, then restores.
+4. **One image made the Document tab a single line of a million characters** (the audit's U-027: a file's bytes, base64, 5.5 million pixels wide). Required: the tab shows the JSON indented, and a string longer than 200 characters as its first 48 characters and its length (`iVBORw0KGgo…(1182065 characters)`); the document itself is unchanged.
 
 ## workspace-settings-dialog
 

@@ -57,3 +57,18 @@ test('Developer tools is kept after a reload with its Document tab; turned off, 
   await expect(page.locator('.workbench')).toBeVisible();
   expect(await tabs(page)).toEqual(['Timeline', 'Checks']);
 });
+
+// A file's bytes do not make one line of the whole file (spec workbench-panel, Problems in Pager 4; the audit's U-027):
+// a string longer than 200 characters shows its start and its length, and the document keeps every byte.
+test('the Document tab shows a long string as its start and its length', runs(DEVELOPER, 'project.open#menu-file'), async ({ page }) => {
+  const bytes = 'A'.repeat(5000);
+  const project = { version: 1, pages: [{ id: 'p', name: 'Home', file: 'index.html', tree: { id: 'n-page', type: 'page', name: 'Page', tag: 'body', attributes: {}, classes: [], styles: {}, text: null, children: [] } }], files: [{ path: 'notes.txt', type: 'text/plain', bytes }] };
+  const chooser = page.waitForEvent('filechooser');
+  await runDoor(page, 'project.open#menu-file');
+  await (await chooser).setFiles({ name: 'long.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(project)) });
+  await expect.poll(async () => ((await portDocument(page)) as { files?: { bytes: string }[] }).files?.[0]?.bytes.length ?? 0).toBe(5000);
+  await runDoor(page, DEVELOPER);
+  const pre = page.locator('.dock [role="tabpanel"]').locator('pre');
+  await expect(pre).toContainText(`"${'A'.repeat(48)}… (5000 characters)"`);
+  expect(await pre.evaluate((el) => el.scrollWidth)).toBeLessThan(2000);
+});

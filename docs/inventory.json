@@ -6,7 +6,7 @@
     "doors": 1002,
     "scenarios": 1340,
     "modules": 259,
-    "lines": 49792
+    "lines": 49799
   },
   "features": [
     {
@@ -4688,7 +4688,7 @@
     },
     {
       "path": "src/editor/shell/dock.tsx",
-      "lines": 129,
+      "lines": 135,
       "commands": [],
       "features": []
     },
@@ -5103,7 +5103,7 @@
     },
     {
       "path": "src/generated/ids.ts",
-      "lines": 4587,
+      "lines": 4588,
       "commands": [],
       "features": []
     },
