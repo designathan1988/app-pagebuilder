@@ -85,8 +85,9 @@ a concept that has an owner is a defect.
   its origin; the real input retains its complete CSS text and existing commands. Pair membership, short prefixes
   and optional measured width/height hints are data in `properties.json` `rows`. Change those entries to rearrange
   a pair; change the shared CSS primitives to adjust density. Compare real Chrome captures after each visual change.
-- The shell stylesheet is split by region (`shell.css` imports `window.css`, `doors.css`, … `window-overlays.css` in
-  that order; the imports come first).
+- The shell's stylesheets load once each, from `src/main.tsx`, in this order: the tokens, `shell.css` (the base and
+  the one focus ring), `primitives.css` (one owner per primitive: the door, the segmented control, the swatch, the
+  matrix), then one stylesheet per region (`window.css` … `window-overlays.css`), which places and sizes them.
 
 ## The development loop
 

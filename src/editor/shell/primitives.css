@@ -1,3 +1,8 @@
+/* The primitives of the interface (the audit's CSS-2: one owner stylesheet per primitive): the door and its variants,
+   the segmented control, the colour swatch and the alignment matrix. A region's stylesheet places them and sizes them
+   for its region; how a primitive looks at rest, hovered, pressed, current and disabled is written here once.
+   src/main.tsx loads this file right after shell.css, before every region's stylesheet. */
+
 /* ---------------------------------------------------------------- doors */
 
 .door {
@@ -162,4 +167,70 @@
 
 .segmented--hug .door {
   flex: none;
+}
+
+/* ---------------------------------------------------------------- the colour swatch */
+
+/* a colour field's swatch (color-picker): the colour over a checkerboard, which shows through a translucent one */
+.swatch {
+  width: calc(var(--space-7) - var(--space-1));
+  height: calc(var(--space-7) - var(--space-1));
+  flex: none;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-xs);
+}
+
+.swatch,
+.picker__swatch {
+  --swatch-colour: var(--color-surface);
+  background:
+    linear-gradient(var(--swatch-colour), var(--swatch-colour)),
+    repeating-conic-gradient(var(--color-border) 0 25%, var(--color-surface) 0 50%) 0 0 / var(--space-4) var(--space-4);
+}
+
+/* ---------------------------------------------------------------- the alignment matrix */
+
+.matrix {
+  display: grid;
+  grid-template-columns: repeat(3, var(--size-target-min));
+  grid-auto-rows: var(--size-target-min);
+  width: fit-content;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-sunken);
+}
+
+.matrix__cell {
+  display: grid;
+  place-items: center;
+}
+
+.matrix__cell::before {
+  content: '';
+  width: var(--space-2);
+  height: var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--color-border-strong);
+}
+
+/* a cell of the matrix (props-flex-container): a button, its dot accented while it stands for what the element
+   holds */
+.matrix__cell.door {
+  padding: var(--space-0);
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: none;
+}
+
+.matrix__cell.door:not(.is-unavailable) {
+  cursor: pointer;
+}
+
+.matrix__cell.door:not(.is-unavailable):hover::before {
+  background: var(--color-text-muted);
+}
+
+.matrix__cell.door.is-current::before {
+  width: var(--space-3);
+  height: var(--space-3);
+  background: var(--color-accent);
 }

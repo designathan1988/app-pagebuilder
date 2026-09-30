@@ -1,19 +1,8 @@
-/* The editor shell (DESIGN.md). Every colour, type style, spacing, size, radius and shadow is a token of
-   src/ui/tokens.css (lint rule builder-css/use-tokens). */
+/* The editor shell's base: the page, the controls' defaults, the one focus ring. Every colour, type style, spacing,
+   size, radius and shadow is a token of src/ui/tokens.css (lint rule builder-css/use-tokens). src/main.tsx loads this
+   file first and each region's stylesheet after it, once (the audit's CSS-1: they were loaded twice, through @import
+   here and again from main.tsx, and the later copy won every tie). */
 
-@import './window.css';
-@import './doors.css';
-@import './menus.css';
-@import './top-bar.css';
-@import './sidebar.css';
-@import './canvas.css';
-@import './inspector.css';
-@import './panels.css';
-@import './dock.css';
-@import './status-bar.css';
-@import './panel-editors.css';
-@import './canvas-editing.css';
-@import './window-overlays.css';
 *,
 *::before,
 *::after {

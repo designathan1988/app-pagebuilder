@@ -19,13 +19,11 @@
   translate: -50% 0;
 }
 
-/* a colour field's swatch (color-picker): the colour over a checkerboard, which shows through a translucent one */
-.swatch,
-.picker__swatch {
-  --swatch-colour: var(--color-surface);
-  background:
-    linear-gradient(var(--swatch-colour), var(--swatch-colour)),
-    repeating-conic-gradient(var(--color-border) 0 25%, var(--color-surface) 0 50%) 0 0 / var(--space-4) var(--space-4);
+/* a saved colour's chip and a shadow layer's swatch wear the colour the editor sets on them (--swatch-colour, the
+   swatch primitive's variable: primitives.css); none set, they are empty */
+.picker__chip,
+.shadow__swatch {
+  --swatch-colour: transparent;
 }
 
 .picker__saved {
@@ -42,7 +40,6 @@
   background: var(--swatch-colour);
   cursor: pointer;
 }
-
 
 .field__swatch.door {
   flex: none;
@@ -191,29 +188,6 @@ button.picker__swatch {
   gap: var(--space-2);
 }
 
-/* a cell of the alignment matrix (props-flex-container): a button, its dot accented while it stands for what the
-   element holds */
-.matrix__cell.door {
-  padding: var(--space-0);
-  border: 0;
-  border-radius: var(--radius-xs);
-  background: none;
-}
-
-.matrix__cell.door:not(.is-unavailable) {
-  cursor: pointer;
-}
-
-.matrix__cell.door:not(.is-unavailable):hover::before {
-  background: var(--color-text-muted);
-}
-
-.matrix__cell.door.is-current::before {
-  width: var(--space-3);
-  height: var(--space-3);
-  background: var(--color-accent);
-}
-
 /* the gradient editor (spec gradient-editor): the bar paints the gradient over a checkerboard, its stops under it */
 .gradient__track {
   padding-bottom: var(--space-7);
@@ -295,7 +269,7 @@ button.picker__swatch {
   height: var(--space-4);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xs);
-  background: var(--swatch-colour, transparent);
+  background: var(--swatch-colour);
 }
 
 .shadow__summary {

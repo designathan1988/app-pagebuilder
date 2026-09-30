@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import './ui/tokens.css';
 import './editor/shell/shell.css';
 import './editor/shell/window.css';
-import './editor/shell/doors.css';
+import './editor/shell/primitives.css';
 import './editor/shell/menus.css';
 import './editor/shell/top-bar.css';
 import './editor/shell/sidebar.css';
