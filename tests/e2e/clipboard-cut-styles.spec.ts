@@ -59,12 +59,11 @@ const clipboard = async (page: Page): Promise<{ readonly text: string; readonly 
       }
       return { text: text.join('\n'), html: html.join('\n'), css: css.join('\n') };
     });
-  let held = await read();
-  for (let tries = 0; tries < 50 && held.text === ''; tries += 1) {
-    await page.waitForTimeout(100);
-    held = await read();
-  }
-  return held;
+  // the clipboard arrives when the browser hands it over: a poll that returns the moment it has text, instead of a
+  // loop of hundred-millisecond naps that spent five seconds every time it did (the user's direction: assert state,
+  // never wait for the clock)
+  await expect.poll(async () => (await read()).text !== '').toBe(true);
+  return read();
 };
 
 async function openAurora(page: Page): Promise<void> {
