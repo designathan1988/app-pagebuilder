@@ -2,7 +2,7 @@
 // start of a word, anywhere or as initials; a scope prefix keeps one kind of entry; with no words the recently run
 // entries come first; at most commandBar.maxResults are shown.
 import { describe, expect, it } from 'vitest';
-import { BAR_DOORS, MAX_RESULTS, entryKey, kindOf, matchScore, shownEntries, type BarEntry } from './command-bar.ts';
+import { BAR_DOORS, MAX_RESULTS, entryKey, kindOf, matchScore, shownEntries, type BarEntry, scopeOf } from './command-bar.ts';
 
 const command = BAR_DOORS.find((d) => kindOf(d) === 'command');
 const insert = BAR_DOORS.find((d) => kindOf(d) === 'insert');
@@ -50,5 +50,10 @@ describe('shownEntries', () => {
     const many = Array.from({ length: MAX_RESULTS + 5 }, (_, i) => entry(`Wrap ${i}`));
     expect(shownEntries('wrap', many, [])).toHaveLength(MAX_RESULTS);
     expect(shownEntries('', many, [])).toHaveLength(MAX_RESULTS);
+  });
+  it('reads the scope a query is in, All when it has no prefix', () => {
+    expect(scopeOf('>wrap')).toEqual({ prefix: '>', words: 'wrap' });
+    expect(scopeOf('  #color red')).toEqual({ prefix: '#', words: 'color red' });
+    expect(scopeOf('wrap')).toEqual({ prefix: '', words: 'wrap' });
   });
 });

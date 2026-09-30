@@ -8,7 +8,7 @@ import { isFeatureBuilt } from '../../app/features.ts';
 import type { CommandId, FeatureId, MessageId } from '../../generated/ids.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
 import { elementIcon, manifest } from '../../manifest/runtime.ts';
-import { BAR_DOORS, askedSet, entryKey, kindOf, namedProperties, recentEntries, remember, setEntryFor, shownEntries, type BarEntry, type NamedProperty } from '../command-bar/command-bar.ts';
+import { BAR_DOORS, SCOPE_PILLS, askedSet, entryKey, scopeOf, kindOf, namedProperties, recentEntries, remember, setEntryFor, shownEntries, type BarEntry, type NamedProperty } from '../command-bar/command-bar.ts';
 import { labelParamsOf } from '../doors/current.ts';
 import { DoorControl, appliesNow, isDoorBuilt } from '../doors/door.tsx';
 import { doorSlots } from '../doors/placement.ts';
@@ -131,6 +131,24 @@ function CommandBarDialog() {
           value={query}
           onChange={(event) => setQuery(event.target.value)}
         />
+        {/* the scope pills (the canonical palette): the scope the query's prefix keeps is pressed; a press puts its
+            prefix before the words typed, All takes it away */}
+        <div className="command-bar__scopes" role="group" aria-label={t('commandBar.hint.filter')}>
+          {SCOPE_PILLS.map((pill) => (
+            <button
+              key={pill.labelKey}
+              type="button"
+              className={`command-bar__scope${scopeOf(query).prefix === pill.prefix ? ' is-current' : ''}`}
+              aria-pressed={scopeOf(query).prefix === pill.prefix}
+              onClick={() => {
+                setQuery(`${pill.prefix}${scopeOf(query).words}`);
+                field.current?.focus();
+              }}
+            >
+              {t(pill.labelKey as MessageId)}
+            </button>
+          ))}
+        </div>
         {shown.length === 0 && query.trim() !== '' ? <p className="command-bar__none" role="status">{t('commandBar.none', { query: query.trim() })}</p> : null}
         <ul className="command-bar__list" role="listbox" id={LIST_ID} ref={list} aria-label={t('command.commandBar')}>
           {shown.map((e, i) => (
@@ -145,9 +163,6 @@ function CommandBarDialog() {
               <kbd>{chordHint(d.command.id, 'command-bar')}</kbd> {t(d.door.labelKey as MessageId)}
             </span>
           ))}
-          <span className="command-bar__key">
-            {t('commandBar.hint.filter')}: {t('commandBar.scope.commands')} · {t('commandBar.scope.insert')} · {t('commandBar.scope.panels')} · {t('commandBar.scope.properties')}
-          </span>
         </p>
       </div>
     </div>

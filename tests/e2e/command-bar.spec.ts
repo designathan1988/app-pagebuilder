@@ -107,3 +107,21 @@ test('a press anywhere outside the bar closes it, and each entry shows one icon'
   await page.keyboard.press('Escape');
   await expect(bar(page)).toHaveCount(0);
 });
+
+// The scope pills (spec command-bar, Problems in Pager 5; the canonical palette): All is pressed with no prefix; a press
+// on Insert puts its prefix before the words, keeping only insert entries; All takes the prefix away.
+test('the scope pills show the scope in force and change it, keeping the words typed', runs(CTRL_K), async ({ page }) => {
+  await openEditor(page);
+  await runDoor(page, CTRL_K);
+  const field = bar(page).locator('input[role="combobox"]');
+  await page.keyboard.type('hero');
+  const pill = (name: string) => bar(page).locator('.command-bar__scope', { hasText: name });
+  await expect(pill('All')).toHaveAttribute('aria-pressed', 'true');
+  await pill('Insert +').click();
+  await expect(field).toHaveValue('+hero');
+  await expect(pill('Insert +')).toHaveAttribute('aria-pressed', 'true');
+  expect((await options(page)).every((text) => /insert/i.test(text)), (await options(page)).join(' | ')).toBe(true);
+  await expect(field).toBeFocused();
+  await pill('All').click();
+  await expect(field).toHaveValue('hero');
+});

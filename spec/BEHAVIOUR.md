@@ -1077,6 +1077,7 @@ This is the keyboard feature.
 2. **Commands that cannot apply are not always filtered:** `Edit property …` is offered for every property, including properties that do not apply to the selected element. Required: commands that cannot apply to the current selection are not offered.
 3. **Fuzzy search is substring-only.** Required: fuzzy matching (initials and out-of-order words, e.g. `insert hero`, `ins hero`).
 4. **The bar was a narrow box of the inspector's width, its rows the height of a toolbar button, the keyboard's row told apart from a hovered one only by the same fill, and a search nothing matched showed an empty box.** Required: the canonical palette — 640 px wide (never wider than the window less 32 px on each side), 72 px from the window's top, centred; its input 48 px high in the input type role with a line under it; entries 32 px; the keyboard's entry in the accent's soft fill with a 1 px accent ring, a hovered one in the hover surface; a search no entry matches says so in the bar (manifest feature `command-bar`: at a 1440 px window the palette is 640 wide at x 400).
+5. **The scopes were only a line of hints to type** (jornada02 pairing 5.1). Required: under the field the palette draws its scope pills — All, Commands >, Insert +, Panels /, Properties # — the one the query's prefix keeps pressed (All with no prefix); a press puts that scope's prefix before the words typed (All takes it away) and gives the field the focus back.
 
 ## context-menu
 

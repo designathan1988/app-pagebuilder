@@ -2963,6 +2963,7 @@ export const MESSAGE_IDS = [
   "command.zoomTo",
   "commandBar.hint.filter",
   "commandBar.none",
+  "commandBar.scope.all",
   "commandBar.scope.commands",
   "commandBar.scope.insert",
   "commandBar.scope.panels",

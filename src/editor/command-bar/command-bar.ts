@@ -28,6 +28,20 @@ const KIND_ORDER: readonly EntryKind[] = ['command', 'insert', 'open-panel', 'se
 // a scope typed before the query keeps one kind of entry (DESIGN.md: Commands >, Insert +, Panels /, Properties #)
 const SCOPES: Readonly<Record<string, readonly EntryKind[]>> = { '>': ['command'], '+': ['insert'], '/': ['open-panel'], '#': ['set-property', 'edit-property'] };
 export const SCOPE_PREFIXES = Object.keys(SCOPES);
+// the scopes as the bar's pills name them (the canonical palette's scope pills), All first: no prefix
+export const SCOPE_PILLS: readonly { readonly prefix: string; readonly labelKey: string }[] = [
+  { prefix: '', labelKey: 'commandBar.scope.all' },
+  { prefix: '>', labelKey: 'commandBar.scope.commands' },
+  { prefix: '+', labelKey: 'commandBar.scope.insert' },
+  { prefix: '/', labelKey: 'commandBar.scope.panels' },
+  { prefix: '#', labelKey: 'commandBar.scope.properties' },
+];
+// the scope a query is in (its prefix, '' for All), and its words
+export function scopeOf(query: string): { readonly prefix: string; readonly words: string } {
+  const trimmed = query.trimStart();
+  const first = trimmed.charAt(0);
+  return SCOPES[first] !== undefined ? { prefix: first, words: trimmed.slice(1) } : { prefix: '', words: trimmed };
+}
 
 // the command-bar doors, grouped by kind in the bar's order, each group in the order of the command files
 export const BAR_DOORS: readonly DoorEntry[] = KIND_ORDER.flatMap((kind) => manifest.doors.filter((d) => d.door.kind === 'command-bar' && d.door.entry === kind));

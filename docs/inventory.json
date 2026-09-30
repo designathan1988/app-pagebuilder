@@ -6,7 +6,7 @@
     "doors": 1002,
     "scenarios": 1341,
     "modules": 259,
-    "lines": 49855
+    "lines": 49885
   },
   "features": [
     {
@@ -4182,7 +4182,7 @@
     },
     {
       "path": "src/editor/command-bar/command-bar.ts",
-      "lines": 184,
+      "lines": 198,
       "commands": [
         "commandBar.open"
       ],
@@ -4646,7 +4646,7 @@
     },
     {
       "path": "src/editor/shell/command-bar.tsx",
-      "lines": 171,
+      "lines": 186,
       "commands": [],
       "features": []
     },
@@ -5103,7 +5103,7 @@
     },
     {
       "path": "src/generated/ids.ts",
-      "lines": 4554,
+      "lines": 4555,
       "commands": [],
       "features": []
     },

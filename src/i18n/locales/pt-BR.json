@@ -494,6 +494,7 @@
   "command.zoomTo": "Zoom em {percent}%",
   "commandBar.hint.filter": "filtrar",
   "commandBar.none": "Nenhum comando, elemento ou painel corresponde a “{query}”.",
+  "commandBar.scope.all": "Tudo",
   "commandBar.scope.commands": "Comandos >",
   "commandBar.scope.insert": "Inserir +",
   "commandBar.scope.panels": "Painéis /",
