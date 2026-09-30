@@ -1,5 +1,5 @@
 // Escape closes what it opened, keeping nothing (the code audit's S-002, U-009, U-019, U-025): the + Class and Save as
-// class popups — which also stay inside the window —, a Layers rename, and a component's name prompt. The document is
+// class popups — which also stay inside the window —, a Layers rename, a component's name prompt and a confirmation. The document is
 // read through the read-only test port.
 import fs from 'node:fs';
 import { expect, test, type Page } from '../support/test.ts';
@@ -13,6 +13,9 @@ const STYLE = 'workspace.setActiveTab#inspector-tab-style';
 const ADD_CLASS = 'classes.apply#inspector-class-add';
 const SAVE_AS = 'classes.create#inspector-class-save-as';
 const RENAME = 'layers.startRename#key-f2-in-layers-tree';
+const EXPLORER = 'workspace.setPanelOpen#toolbar-activity-bar-explorer';
+const ADD_PAGE = 'pages.add#explorer-add-page';
+const DELETE_PAGE = 'pages.delete#explorer-page-delete';
 
 const documentJson = (page: Page) => page.evaluate(() => JSON.stringify((window as unknown as { __builderTestPort: { document: () => unknown } }).__builderTestPort.document()));
 
@@ -54,4 +57,28 @@ test('Escape ends a Layers rename and keeps the name', runs(OPEN, ROW, RENAME), 
   await page.keyboard.press('Escape');
   await expect(field).toHaveCount(0);
   expect(await documentJson(page)).toBe(before);
+});
+
+// A confirmation is a modal dialog (docs/PROJECT.md, The interface): the focus starts on Cancel and stays inside it,
+// Escape answers Cancel and keeps everything, and the focus goes back to the control that asked.
+test('Escape answers a confirmation with Cancel, and the focus stays inside it until then', runs(OPEN, ROW, EXPLORER, ADD_PAGE, DELETE_PAGE), async ({ page }) => {
+  if (!(await control(page, ADD_PAGE).isVisible())) await runDoor(page, EXPLORER);
+  await control(page, ADD_PAGE).click();
+  const before = await documentJson(page);
+  const remove = control(page, DELETE_PAGE).last();
+  await remove.click();
+  const dialog = page.locator('[role="alertdialog"]');
+  await expect(dialog).toBeVisible();
+  await expect(dialog.locator('[data-confirmation="cancel"]')).toBeFocused();
+  // Tab past the last answer comes back to the first; Shift+Tab before the first goes to the last
+  await page.keyboard.press('Tab');
+  await expect(dialog.locator('[data-confirmation="confirm"]')).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(dialog.locator('[data-confirmation="cancel"]')).toBeFocused();
+  await page.keyboard.press('Shift+Tab');
+  await expect(dialog.locator('[data-confirmation="confirm"]')).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(dialog).toHaveCount(0);
+  expect(await documentJson(page), 'Escape deletes nothing').toBe(before);
+  await expect(remove, 'the focus goes back to the control that asked').toBeFocused();
 });

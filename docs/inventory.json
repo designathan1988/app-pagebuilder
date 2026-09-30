@@ -6,7 +6,7 @@
     "doors": 1000,
     "scenarios": 1338,
     "modules": 256,
-    "lines": 49112
+    "lines": 49140
   },
   "features": [
     {
@@ -4654,7 +4654,7 @@
     },
     {
       "path": "src/editor/shell/confirmation.tsx",
-      "lines": 46,
+      "lines": 74,
       "commands": [],
       "features": []
     },
