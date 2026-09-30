@@ -198,3 +198,4 @@ describe('the opacity field (S-020)', () => {
     expect(runHandler(setStyleCommand, document, { property: 'opacity', value: '140' }, { selection: ['Box'] }).outcome.kind).toBe('refused');
   });
 });
+

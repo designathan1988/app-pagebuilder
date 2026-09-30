@@ -758,7 +758,9 @@ interface SheetSource {
 // A rule whose selector is one class name alone (`.card`, `.card:hover`, `.card` inside a @media) is the class's own:
 // it becomes a definition of the project's style classes (core/design/classes.ts), not a value written on each element
 // that lists it — that is what a class is for, and it is what makes an exported page import back as it was.
-function applyStyles(tree: DocNode, builder: Builder, sources: readonly SheetSource[]): void {
+// `authors`: the classes of the person's own (authorClasses): their rules are the project's class definitions, never
+// values of the elements that list them; `definitions`, when given empty, receives those definitions (one pass).
+function applyStyles(tree: DocNode, builder: Builder, sources: readonly SheetSource[], authors: ReadonlySet<string> = new Set(), definitions: Map<string, Styles> | null = null): void {
   const { rules } = builder;
   // One pass over every source: the rules the importer cannot map are reported here (once each, with their line) and
   // the rest are kept with the layer (breakpoint and state) and the rank (specificity and order) CSS gives them.
@@ -834,7 +836,7 @@ function applyStyles(tree: DocNode, builder: Builder, sources: readonly SheetSou
     // the last of the element's classes a rule of the sheet is written for: the export's own class, which does not
     // stand among the element's (the export makes it again from the name); the others the element keeps as its own
     let at = node.classes.length - 1;
-    while (at >= 0 && !classNames.has(node.classes[at] as string)) at -= 1;
+    while (at >= 0 && (!classNames.has(node.classes[at] as string) || authors.has(node.classes[at] as string))) at -= 1;
     const generated = at < 0 ? null : (node.classes[at] as string);
     const classes = node.classes.filter((_one, i) => i !== at);
     kept.set(node.id, classes);
@@ -855,6 +857,8 @@ function applyStyles(tree: DocNode, builder: Builder, sources: readonly SheetSou
       return held;
     };
     for (const one of ready) {
+      // a rule of a class of the person's own is that class's definition (below), which the element takes by listing it
+      if (one.classRule !== null && authors.has(one.classRule)) continue;
       // the rule of the class the element's own rule is written with applies to the element (the class left its class
       // list); every other rule applies where the matcher says it does
       const ownRule = one.classRule !== null && one.classRule === generated;
@@ -881,6 +885,35 @@ function applyStyles(tree: DocNode, builder: Builder, sources: readonly SheetSou
     for (const child of node.children) walk(child, [facts, ...ancestors]);
   };
   walk(tree, []);
+  // the definitions of the person's own classes: each class's rules, by breakpoint and state, the later or !important
+  // declaration winning as CSS has it (the audit's B-04: they were copied onto every element and the class was lost)
+  if (definitions !== null && definitions.size === 0) {
+    const ranked = new Map<string, Map<string, Map<string, Candidate>>>();
+    for (const one of ready) {
+      if (one.classRule === null || !authors.has(one.classRule)) continue;
+      const layerKey = `${one.media.breakpoint ?? rules.baseLayer.breakpoint}\u0000${one.state}`;
+      const byLayer = ranked.get(one.classRule) ?? new Map<string, Map<string, Candidate>>();
+      ranked.set(one.classRule, byLayer);
+      const own = byLayer.get(layerKey) ?? new Map<string, Candidate>();
+      byLayer.set(layerKey, own);
+      for (const declaration of one.rule.declarations) {
+        for (const [property, value] of storedDeclarations(builder, declaration.text, declaration.line, one.source)) {
+          const rank = [declaration.important ? 1 : 0, 0, 0, 0, one.order];
+          const held = own.get(property);
+          if (held === undefined || higher(rank, held.rank)) own.set(property, { value, rank });
+        }
+      }
+    }
+    for (const [name, byLayer] of ranked) {
+      const styles: Record<string, Record<string, Record<string, StoredValue>>> = {};
+      for (const [layerKey, own] of byLayer) {
+        const [breakpoint = '', state = ''] = layerKey.split('\u0000');
+        const declarations = ((styles[breakpoint] ??= {})[state] ??= {});
+        for (const [property, candidate] of own) declarations[property] = candidate.value;
+      }
+      definitions.set(name, styles as Styles);
+    }
+  }
   const write = (node: DocNode): void => {
     const own = winners.get(node.id);
     if (own !== undefined) {
@@ -915,6 +948,32 @@ function isBaseRule(rule: CssRule): boolean {
 }
 
 // the class name a selector is the rule of (`.card`, `.card:hover`), or null when it is no single class
+// The classes of the person's own among the ones a stylesheet has a rule of its own for (`.card`): a class listed by
+// two elements or more, or not the last of an element's classes. The class the export makes for an element's own
+// styles is the element's alone and the last of its list ("hero", "card__title", "card--featured"); a class of the
+// person's is shared and comes first. Their rules become the project's class definitions, not element values.
+function authorClasses(pages: readonly Page[], sources: readonly SheetSource[]): ReadonlySet<string> {
+  const ruled = new Set<string>();
+  for (const source of sources) {
+    for (const rule of source.css.rules) {
+      const selector = readSelector(rule.selector);
+      const name = selector === null ? null : classRuleOf(selector);
+      if (name !== null && validClassName(name)) ruled.add(name);
+    }
+  }
+  const uses = new Map<string, number>();
+  const notLast = new Set<string>();
+  for (const page of pages) {
+    for (const node of walkNodes(page.tree)) {
+      node.classes.forEach((name, i) => {
+        uses.set(name, (uses.get(name) ?? 0) + 1);
+        if (i < node.classes.length - 1) notLast.add(name);
+      });
+    }
+  }
+  return new Set([...ruled].filter((name) => (uses.get(name) ?? 0) >= 2 || notLast.has(name)));
+}
+
 function classRuleOf(selector: Selector): string | null {
   if (selector.compounds.length !== 1) return null;
   const only = selector.compounds[0] as Compound;
@@ -1116,7 +1175,9 @@ export const importHtmlCommand = registerHandler('project.importHtml', (context,
     built.push({ page, builder });
     for (const sheet of builder.sheets) sources.push(sheet);
   }
-  for (const one of built) applyStyles(one.page.tree, one.builder, sources);
+  const authors = authorClasses(pages, sources);
+  const definitions = new Map<string, Styles>();
+  for (const one of built) applyStyles(one.page.tree, one.builder, sources, authors, definitions);
   // The files the import keeps: everything picked that is no page (a stylesheet's rules are in the document now) and no
   // file a script already kept. A file an address of a page names is kept at that address's path — a src written
   // img/logo.png with the file picked as logo.png draws on the canvas — and the others at their own path.
@@ -1138,8 +1199,14 @@ export const importHtmlCommand = registerHandler('project.importHtml', (context,
     if (referenced !== undefined && held.some((one) => one.path === referenced[0])) continue;
     held.push(referenced === undefined ? recordOf(file) : { ...recordOf(file), path: referenced[0] });
   }
-  // the patches: the pages as a whole, and the files the import keeps beside the ones the project holds
+  // the patches: the pages as a whole, the classes the pages' stylesheets define (a class of the same name the project
+  // held is replaced by the imported one), and the files the import keeps beside the ones the project holds
   const patches: Patch[] = [{ op: 'replace', path: ['pages'], value: pages }];
+  if (definitions.size > 0) {
+    const kept = (state.document.classes ?? []).filter((one) => !definitions.has(one.name));
+    const imported = [...definitions].map(([name, styles]) => ({ name, styles }));
+    patches.push({ op: state.document.classes === undefined ? 'add' : 'replace', path: ['classes'], value: [...kept, ...imported] });
+  }
   if (held.length > 0) {
     const current = (state.document.files ?? []).filter((file) => !held.some((one) => one.path === file.path));
     patches.push({ op: state.document.files === undefined && current.length === 0 ? 'add' : 'replace', path: ['files'], value: [...current, ...held] });
