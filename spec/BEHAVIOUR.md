@@ -261,6 +261,7 @@ How Pager behaves, observed by running it from `.cache/pager-run` (Chrome, windo
 ### Trigger
 
 - Click the logo button (`#appBtn`): the app menu opens with **File, Edit, Arrange, View, Help, Theme**, each opening a submenu to its right (`src/features/workspace/dock.js:298-364`, `:375-387`).
+- In this editor's top bar, a single click on a neighbouring application menu replaces the one already open; the backdrop still closes it when pressed elsewhere.
 - Keyboard (`dock.js:318-340`, `:352-363`): Enter or ArrowDown on the logo button opens the menu with focus on its first enabled item; ArrowDown/ArrowUp move (wrapping), Home/End jump; Enter on a row that opens a submenu opens it with focus on its first item; `Escape` closes every open menu and returns focus to the logo button (observed). A click outside closes.
 - Menu rows run commands (`dock.js:446-493`): rows bound to key rows call `runKey`; Duplicate, Copy and Paste **dispatch a synthetic keydown** (`:474-479`).
 

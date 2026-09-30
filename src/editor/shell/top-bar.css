@@ -24,6 +24,12 @@
   display: flex;
 }
 
+/* A neighbouring application menu remains pressable above an open menu's full-window backdrop. */
+.top-bar__menus .menu-button {
+  position: relative;
+  z-index: 51;
+}
+
 .top-bar__page {
   padding: 0 var(--space-5);
   border: 1px solid var(--color-border);
@@ -51,4 +57,3 @@
 .top-bar__search kbd {
   margin-left: auto;
 }
-

@@ -7,6 +7,7 @@ import { useEditorState } from '../store.ts';
 import { pageShown } from '../../core/project/pages.ts';
 import { Slots } from './slots.tsx';
 import { Icon } from '../doors/door.tsx';
+import { MenuGroup } from '../doors/menu.tsx';
 import type { DoorEntry } from '../../manifest/runtime.ts';
 
 const BREAKS = breaksIn('top-bar');
@@ -46,7 +47,7 @@ export function TopBar() {
         <span className="visually-hidden">{PRODUCT_NAME}</span>
       </h1>
       <nav className="top-bar__menus" aria-label={PRODUCT_NAME}>
-        <Slots region="top-bar" to={5} />
+        <MenuGroup><Slots region="top-bar" to={5} /></MenuGroup>
       </nav>
       <Slots
         region="top-bar"

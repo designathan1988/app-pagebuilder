@@ -101,6 +101,23 @@ test('a press outside an open menu lands on its backdrop and closes it; a press 
   await expect(page.getByRole('menu', { name: 'View' })).toHaveCount(0);
 });
 
+test('one click switches directly between neighbouring application menus', async ({ page }) => {
+  const file = page.locator('.menu-button[data-menu="file"]');
+  const edit = page.locator('.menu-button[data-menu="edit"]');
+  const arrange = page.locator('.menu-button[data-menu="arrange"]');
+  await file.click();
+  await expect(page.getByRole('menu', { name: 'File' })).toBeVisible();
+  await edit.click();
+  await expect(page.getByRole('menu', { name: 'File' })).toHaveCount(0);
+  await expect(page.getByRole('menu', { name: 'Edit' })).toBeVisible();
+  await arrange.click();
+  await expect(page.getByRole('menu', { name: 'Edit' })).toHaveCount(0);
+  await expect(page.getByRole('menu', { name: 'Arrange' })).toBeVisible();
+  await file.click();
+  await expect(page.getByRole('menu', { name: 'Arrange' })).toHaveCount(0);
+  await expect(page.getByRole('menu', { name: 'File' })).toBeVisible();
+});
+
 test('a submenu shows while the pointer is over its item and hides when the pointer leaves it', async ({ page }) => {
   await openMenu(page, 'view');
   const theme = page.getByRole('menu', { name: 'Theme' });

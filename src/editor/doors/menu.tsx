@@ -7,7 +7,7 @@
 // under an open menu. A dismissal closes the menus open when it arrives (menus/overlays.ts), and a dismissed menu
 // gives the focus back to its button. The context menu (ContextMenu, at the end) is drawn here too, from the doors the
 // manifest places in the context-menu region; its opening is a command (menus/context-menu.ts).
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from 'react';
+import { createContext, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from 'react';
 import { locate } from '../../core/document/model.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
 import type { CommandId, KeyContextId, MenuId, MessageId } from '../../generated/ids.ts';
@@ -134,12 +134,34 @@ export interface MenuLayer {
   readonly toggle: () => void;
   readonly close: () => void;
 }
-export function useMenuLayer(button: RefObject<HTMLButtonElement | null>, list?: RefObject<HTMLElement | null>): MenuLayer {
+
+interface MenuGroupState {
+  readonly active: MenuId | null;
+  readonly dismissed: MenuId | null;
+  readonly toggle: (menu: MenuId) => void;
+  readonly close: () => void;
+}
+const MenuGroupContext = createContext<MenuGroupState | null>(null);
+
+// The application menus are peers: a single press on another button replaces the open menu in the same render.
+// Other dropdowns keep their independent layer state (a values menu must not switch the application menu).
+export function MenuGroup({ children }: { readonly children: ReactNode }) {
+  const dismissals = useEditorState((s) => s.ui.overlays.dismissals);
+  const [opened, setOpened] = useState<{ readonly menu: MenuId; readonly at: number } | null>(null);
+  const active = opened !== null && opened.at === dismissals ? opened.menu : null;
+  const dismissed = opened !== null && opened.at !== dismissals ? opened.menu : null;
+  const toggle = (menu: MenuId) => setOpened((current) => current?.menu === menu && current.at === dismissals ? null : { menu, at: dismissals });
+  return <MenuGroupContext.Provider value={{ active, dismissed, toggle, close: () => setOpened(null) }}>{children}</MenuGroupContext.Provider>;
+}
+
+export function useMenuLayer(button: RefObject<HTMLButtonElement | null>, list?: RefObject<HTMLElement | null>, menu?: MenuId): MenuLayer {
+  const group = useContext(MenuGroupContext);
+  const grouped = group !== null && menu !== undefined;
   // the number of dismissals when the layer was opened, or null while it is closed: a later dismissal closes it
   const dismissals = useEditorState((s) => s.ui.overlays.dismissals);
   const [openedAt, setOpenedAt] = useState<number | null>(null);
-  const open = openedAt !== null && openedAt === dismissals;
-  const dismissed = openedAt !== null && !open;
+  const open = grouped ? group.active === menu : openedAt !== null && openedAt === dismissals;
+  const dismissed = grouped ? group.dismissed === menu : openedAt !== null && !open;
   useEffect(() => {
     if (dismissed && (document.activeElement === null || document.activeElement === document.body)) button.current?.focus();
   }, [dismissed, button]);
@@ -151,14 +173,14 @@ export function useMenuLayer(button: RefObject<HTMLButtonElement | null>, list?:
   return {
     open,
     backdrop: open && BACKDROP ? <DoorControl key="backdrop" entry={BACKDROP} className="overlay-backdrop" /> : null,
-    toggle: () => setOpenedAt(open ? null : dismissals),
-    close: () => setOpenedAt(null),
+    toggle: grouped ? () => group.toggle(menu) : () => setOpenedAt(open ? null : dismissals),
+    close: grouped ? group.close : () => setOpenedAt(null),
   };
 }
 
 export function MenuButton({ menu, anchor, children, indicator = false, className }: MenuButtonProps) {
   const button = useRef<HTMLButtonElement>(null);
-  const layer = useMenuLayer(button);
+  const layer = useMenuLayer(button, undefined, menu);
   const t = useT();
   const label = t(menuOf(menu).labelKey as MessageId);
   const icon = anchor.icon !== null ? <Icon name={anchor.icon} size={anchor.drawnAs === 'icon-button' ? 'md' : 'sm'} /> : null;
