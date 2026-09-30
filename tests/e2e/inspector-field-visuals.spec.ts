@@ -8,7 +8,7 @@ const ROW = 'selection.select#layers-row';
 const SECTION = 'inspector.toggleSection#inspector-section-header';
 const FONT = 'style.set#inspector-font-size';
 const SPACING = 'style.set#inspector-letter-spacing';
-const STEP = 'field.step#inspector-step-up';
+const STEP = 'field.step#key-arrow-up-in-number-field';
 const RESET = 'style.reset#inspector-property-reset';
 
 test.beforeEach(async ({ page }) => {
@@ -43,7 +43,7 @@ test('paired resting values remain readable and editing keeps full units, steppi
   await expect(font.locator('.field__rest-value')).toBeHidden();
   const after = await font.locator('.input-wrap').boundingBox();
   expect(after?.width).toBe(before?.width);
-  await font.locator(`[data-door="${STEP}"]`).click();
+  await font.locator('input').press('ArrowUp');
   await expect(font.locator('input')).toHaveValue('61px');
   await expect.poll(() => page.frameLocator('.frame__page').locator('[data-node="n-title"]').evaluate(el => getComputedStyle(el).fontSize)).toBe('61px');
   await font.locator('input').click();

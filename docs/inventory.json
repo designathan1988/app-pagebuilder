@@ -3,10 +3,10 @@
     "features": 187,
     "built": 185,
     "commands": 257,
-    "doors": 1000,
-    "scenarios": 1338,
+    "doors": 998,
+    "scenarios": 1336,
     "modules": 256,
-    "lines": 49140
+    "lines": 49112
   },
   "features": [
     {
@@ -646,8 +646,8 @@
         "field.setUnit",
         "field.cancel"
       ],
-      "doors": 178,
-      "scenarios": 21,
+      "doors": 176,
+      "scenarios": 19,
       "modules": [
         "src/core/style/set.ts",
         "src/editor/inspector/number-field.ts"
@@ -4684,7 +4684,7 @@
     },
     {
       "path": "src/editor/shell/field.tsx",
-      "lines": 1297,
+      "lines": 1271,
       "commands": [],
       "features": []
     },
@@ -5081,7 +5081,7 @@
     },
     {
       "path": "src/generated/ids.ts",
-      "lines": 4529,
+      "lines": 4527,
       "commands": [],
       "features": []
     },

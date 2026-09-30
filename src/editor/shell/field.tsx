@@ -17,7 +17,7 @@
 //  - The unit menu lists the units and keywords the property offers (the generated lists, All properties) and runs
 //    field.setUnit with the one chosen; like any menu it closes on a dismissal (Escape, its backdrop).
 // A field whose door is not available (its feature not registered yet, or nothing selected) draws every part disabled.
-import { useEffect, useId, useMemo, useRef, useState, type CSSProperties, type FormEvent, type MouseEvent } from 'react';
+import { useEffect, useId, useMemo, useRef, useState, type CSSProperties, type FormEvent } from 'react';
 import type { DispatchResult } from '../../core/store/store.ts';
 import { locate, type DocNode, type NodeId } from '../../core/document/model.ts';
 import { DEFAULT_UNIT, codecOf } from '../../core/style/codecs.ts';
@@ -42,7 +42,7 @@ import { GLYPHS, doorSlots } from '../doors/placement.ts';
 import { quickPanelOpen } from '../quick-panel/quick-panel.ts';
 import { unitMenu } from '../../core/style/units.ts';
 import { cssFamily, familyOf, isFontFile } from '../../core/files/fonts.ts';
-import { afterGesture, modifierOf, registerSlider } from '../input/pointer.ts';
+import { afterGesture, registerSlider } from '../input/pointer.ts';
 import { MODEL_RULES, useEditorState, useStore, type EditorStore, layeredRules } from '../store.ts';
 import { styleClassOf, styleSource } from '../inspector/style-target.ts';
 import { useMenuLayer } from '../doors/menu.tsx';
@@ -67,7 +67,9 @@ const RESET = doorSlots('field').find((p) => p.door.kind === 'panel-control' && 
 // 2 step up · 3 step down · 4 reset this value). The region also carries the doors other components draw beside a
 // field — the colour swatch (a colour field, color.tsx) and the choose buttons of a field that names a file or a
 // link (inspector.tsx) — and those are no parts of it: drawing them here put a stray item button inside every field.
-const PART_CONTROLS = new Set(['unit-menu', 'step-up', 'step-down', 'property-reset']);
+// the parts a lean field draws beside its value (spec inspector-number-fields, Problem 5): its unit menu and its Reset;
+// it steps with its keys and its label's scrub, never with buttons of its own
+const PART_CONTROLS = new Set(['unit-menu', 'property-reset']);
 const PARTS = doorSlots('field').filter((p) => p.door.kind === 'panel-control' && PART_CONTROLS.has(p.door.control));
 // the label's scrub: the panel drag pressed on a field's label
 const SCRUB = manifest.doors.find((d) => d.door.kind === 'panel-drag' && d.door.source === 'field-label') ?? null;
@@ -219,33 +221,6 @@ function unitShown(property: string, text: string): string {
   const codec = codecOf(MODEL_RULES.propertyFacts.get(property)?.codec ?? '');
   const value = codec?.read(text, { units: offered?.units ?? [], keywords: offered?.keywords ?? [], defaultUnit: DEFAULT_UNIT }) ?? null;
   return value?.kind === 'length' ? value.unit : value?.kind === 'keyword' ? value.keyword : '';
-}
-
-// A step button: field.step with the text the field holds and the key the click holds, when the command takes it.
-function StepButton({ entry, property, shown, input, ready }: { readonly entry: DoorEntry; readonly property: string; readonly shown: string; readonly input: { readonly current: HTMLInputElement | null }; readonly ready: boolean }) {
-  const store = useStore();
-  const door = useDoor(entry, { property }, undefined, ready);
-  const onClick = (event: MouseEvent) => {
-    if (!door.available) return;
-    const held = modifierOf(event);
-    const modifier = held !== null && entry.command.args.modifier?.values.includes(held) === true ? { modifier: held } : {};
-    (store.dispatch as Dispatch)(entry.command.id, { ...entry.door.args, property, value: input.current?.value || shown, ...modifier });
-  };
-  return (
-    <button
-      type="button"
-      className={`door door--icon-button field__step${door.available ? '' : ' is-unavailable'}`}
-      data-door={entry.ref}
-      data-args={JSON.stringify({ property, value: shown })}
-      tabIndex={-1}
-      aria-label={door.label}
-      title={door.title}
-      aria-disabled={door.available ? undefined : true}
-      onClick={onClick}
-    >
-      {entry.door.icon !== null ? <Icon name={entry.door.icon} size="sm" /> : null}
-    </button>
-  );
 }
 
 // The unit menu: its button shows the unit (or keyword) of the value, and opens the list of what the property offers;
@@ -501,7 +476,6 @@ export function NumberField({ entry, door, property, label, bare = false, labell
         {bare ? null : <FieldOriginBadge label={appearance.label} />}
         {measurement !== undefined && measured !== null && base === 'auto' ? <span className="field__measurement" aria-hidden="true">{measured[measurement]}</span> : null}
         <span className="field__actions">{PARTS.filter((part) => !(part.door.kind === 'panel-control' && part.door.control === 'unit-menu')).map((part) => {
-          if ('value' in part.command.args) return <StepButton key={part.ref} entry={part} property={property} shown={base} input={input} ready={available} />;
           // Reset this value: drawn only while the element holds a value of its own (spec inspector-provenance-reset,
           // Problems in Pager 5): with nothing to reset there is no control
           if (part === RESET && !anyStored) return null;

@@ -1017,8 +1017,6 @@ export const DOOR_IDS = [
   "field.step#key-arrow-down-in-number-field",
   "field.step#key-page-up-in-number-field",
   "field.step#key-page-down-in-number-field",
-  "field.step#inspector-step-up",
-  "field.step#inspector-step-down",
   "field.scrub#panel-drag-field-label-horizontal",
   "field.setUnit#inspector-unit-menu",
   "field.cancel#key-escape-in-number-field",

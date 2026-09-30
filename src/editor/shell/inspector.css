@@ -981,7 +981,6 @@
 [data-region='inspector-style'] .input-wrap:focus-within .field__actions:not(:empty),
 [data-region='inspector-style'] .field-choice:hover .field__actions:not(:empty),
 [data-region='inspector-style'] .field-choice:focus-within .field__actions:not(:empty) { display: flex; }
-[data-region='inspector-style'] .field__actions .field__step { display: inline-flex; }
 [data-region='inspector-style'] .field__unit-button .field__unit-value:not(:empty) + .icon { display: none; }
 [data-region='inspector-style'] .field__unit-button,
 [data-region='inspector-style'] .field__values-button { padding: 0; }
@@ -1079,21 +1078,11 @@
   flex: none;
 }
 
-/* Step controls are exposed by the active field's action strip and retain their original command targets. */
-.field__step {
-  display: none;
-}
-
 .field__values { display: none; }
 [data-region='inspector-style'] .field__values { display: inline-flex; }
 
 .field-row:hover .field__values,
 .field-row:focus-within .field__values {
-  display: inline-flex;
-}
-
-.field-row:hover .field__step,
-.field-row:focus-within .field__step {
   display: inline-flex;
 }
 

@@ -1,5 +1,5 @@
 // inspector-number-fields beyond its scenarios (spec/BEHAVIOUR.md#inspector-number-fields): the multipliers of the
-// arrows and of the step buttons in one run, PageUp/PageDown, the scrub following the pointer live and being one undo
+// arrows in one run, PageUp/PageDown, the scrub following the pointer live and being one undo
 // step, Escape during a scrub, Escape in the field then leaving it, leaving the field with Tab, the keys a field keeps
 // (Delete, Backspace, letters, Ctrl+Z never reach the canvas nor the history), the unit menu's list, and a length field
 // of a feature not registered yet. The document, the selection and the history are read through the read-only test
@@ -20,8 +20,6 @@ const UP = 'field.step#key-arrow-up-in-number-field';
 const DOWN = 'field.step#key-arrow-down-in-number-field';
 const PAGE_UP = 'field.step#key-page-up-in-number-field';
 const PAGE_DOWN = 'field.step#key-page-down-in-number-field';
-const STEP_UP = 'field.step#inspector-step-up';
-const STEP_DOWN = 'field.step#inspector-step-down';
 const SCRUB = 'field.scrub#panel-drag-field-label-horizontal';
 const UNIT = 'field.setUnit#inspector-unit-menu';
 const DRAG_ESCAPE = 'drag.cancel#key-escape-in-drag';
@@ -152,22 +150,13 @@ test('the arrows step by 1, with Shift by 10, with Alt by 0.1, PageUp and PageDo
   await expect.poll(() => stored(page)).toEqual({ width: '240px', undoSteps: 1, present: true });
 });
 
-test('the step buttons step by 1, with Shift by 10 and with Alt by 0.1; clicks in a row are one undo step, one after a pause starts another', runs(OPEN, SELECT, WIDTH, ENTER, STEP_UP, STEP_DOWN), async ({ page }) => {
+test('a field is lean: its value, its unit and no step buttons (spec inspector-number-fields, Problem 5)', runs(OPEN, SELECT, WIDTH, ENTER), async ({ page }) => {
   await typeWidth(page, '240');
   await expect.poll(() => stored(page)).toEqual({ width: '240px', undoSteps: 1, present: true });
-  const pause = await burstClock(page);
-  const button = (ref: string) => control(page, ref, { args: { property: 'width' } });
-  await button(STEP_UP).click();
-  await expect.poll(() => stored(page)).toEqual({ width: '241px', undoSteps: 2, present: true });
-  await button(STEP_UP).click({ modifiers: ['Shift'] });
-  await expect.poll(() => stored(page)).toEqual({ width: '251px', undoSteps: 2, present: true });
-  await button(STEP_DOWN).click({ modifiers: ['Alt'] });
-  await expect.poll(() => stored(page)).toEqual({ width: '250.9px', undoSteps: 2, present: true });
-  await pause();
-  await button(STEP_DOWN).click();
-  await expect.poll(() => stored(page)).toEqual({ width: '249.9px', undoSteps: 3, present: true });
-  // the page draws 249.9px to Chrome's layout unit (1/64 px): 249.890625px
-  await expect.poll(async () => Math.abs(parseFloat(await computedWidth(page)) - 249.9)).toBeLessThanOrEqual(1 / 64);
+  const row = control(page, WIDTH);
+  await row.hover();
+  await row.locator('input').focus();
+  expect(await row.locator('[data-door^="field.step#"]').count(), 'no step button, hovered or focused').toBe(0);
 });
 
 test('the scrub follows the pointer live and the whole drag is one undo step; Shift and Alt read on every move', runs(OPEN, SELECT, WIDTH, ENTER, SCRUB, UNDO), async ({ page }) => {
@@ -272,7 +261,7 @@ test('a length field of a feature not registered yet stays not available, its st
     return;
   }
   await expect(row.locator('input')).toBeDisabled();
-  await expect(row.locator(`[data-door="${STEP_UP}"]`)).toHaveAttribute('aria-disabled', 'true');
+  await expect(row.locator(`[data-door="${UNIT}"]`)).toHaveAttribute('aria-disabled', 'true');
   await expect(row.locator(`[data-door="${SCRUB}"]`)).toHaveAttribute('aria-disabled', 'true');
   // a drag on its label writes nothing
   const label = await row.locator(`[data-door="${SCRUB}"]`).boundingBox();
