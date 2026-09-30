@@ -51,7 +51,7 @@ async function typeInto(page: Page, property: string, value: string): Promise<vo
 }
 async function makeAbsolute(page: Page, node: string, place: Record<string, string>): Promise<void> {
   await control(page, ROW, { args: { target: node } }).click();
-  await control(page, POSITION, { args: { mode: 'absolute' } }).click();
+  await runDoor(page, POSITION, { args: { mode: 'absolute' } });
   for (const [property, value] of Object.entries(place)) await typeInto(page, property, value);
 }
 // pressed on a node, taken past the threshold, and held at this travel on the screen

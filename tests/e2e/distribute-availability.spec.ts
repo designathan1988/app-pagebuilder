@@ -30,7 +30,7 @@ async function select(page: Page, ids: readonly string[]): Promise<void> {
 }
 async function positionAbsolute(page: Page, id: string): Promise<void> {
   await control(page, ROW, { args: { target: id } }).click();
-  await control(page, POSITION, { args: { mode: 'absolute' } }).click();
+  await runDoor(page, POSITION, { args: { mode: 'absolute' } });
 }
 
 test('Distribute waits for three positioned elements, saying its own reason, and a click on it changes nothing', runs(OPEN, ROW, ADD, POSITION), async ({ page }) => {

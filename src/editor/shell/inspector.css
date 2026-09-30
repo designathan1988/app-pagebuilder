@@ -1305,3 +1305,28 @@
 [data-region='inspector-style'] .field-row:has(> .matrix) > .field-row__label {
   line-height: var(--size-row);
 }
+
+/* The unseen copy of a row of worded buttons, measured against the row's value column (field.tsx useFits) */
+.field-choice__measure {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: max-content;
+  flex-wrap: nowrap;
+  visibility: hidden;
+  pointer-events: none;
+}
+/* Keyword buttons whose words do not fit are a keyword menu: the value on a field-like button with the menu's chevron at
+   its end (jornada02 GENERALISATION "Keyword buttons") */
+.field-choice--menu { display: flex; justify-self: stretch; }
+[data-region='inspector-style'] .field__keyword {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  width: 100%;
+  text-align: left;
+  cursor: default;
+}
+.field__keyword-value { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.field__keyword .icon { flex: none; color: var(--color-text-subtle); }

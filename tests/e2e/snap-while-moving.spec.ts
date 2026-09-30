@@ -35,7 +35,7 @@ test('a snapping drag draws the line from the element to the edge it snapped to 
   await runDoor(page, OPEN);
   await (await chooser).setFiles({ name: 'aurora.json', mimeType: 'application/json', buffer: fs.readFileSync(FIXTURE) });
   await control(page, ROW, { args: { target: 'n-title' } }).click();
-  await control(page, POSITION, { args: { mode: 'absolute' } }).click();
+  await runDoor(page, POSITION, { args: { mode: 'absolute' } });
   await runDoor(page, SNAP);
   const title = await screenBox(page, 'n-title');
   const intro = await screenBox(page, 'n-intro');

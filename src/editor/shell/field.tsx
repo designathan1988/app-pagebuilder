@@ -17,7 +17,7 @@
 //  - The unit menu lists the units and keywords the property offers (the generated lists, All properties) and runs
 //    field.setUnit with the one chosen; like any menu it closes on a dismissal (Escape, its backdrop).
 // A field whose door is not available (its feature not registered yet, or nothing selected) draws every part disabled.
-import { useEffect, useId, useMemo, useRef, useState, type CSSProperties, type FormEvent } from 'react';
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent, type RefObject } from 'react';
 import type { DispatchResult } from '../../core/store/store.ts';
 import { locate, type DocNode, type NodeId } from '../../core/document/model.ts';
 import { DEFAULT_UNIT, codecOf } from '../../core/style/codecs.ts';
@@ -864,8 +864,11 @@ export function TextStyleField({
     </div>
   );
 }
-// field's door standing for its value; a click keeps that value with style.set (one undo step), and the button of the
-// value the primary selected element holds (else the page computes) is pressed.
+// Keyword buttons: one button per value, each the field's door standing for its value; a click keeps that value with
+// its command (one undo step), and the button of the value the primary selected element holds (else the page computes)
+// is pressed. The buttons never wrap: when their words do not fit the row's value column (Position's five), the field is
+// drawn as a keyword menu — its value on a button that opens the list of the values, each item the same door standing
+// for its value (jornada02 GENERALISATION "Keyword buttons"; the audit's S-015).
 export function KeywordButtons({ entry, door, property, values, icons, label }: { readonly entry: DoorEntry; readonly door: DoorState; readonly property: string; readonly values: readonly string[]; readonly icons: Readonly<Record<string, string>>; readonly label: string }) {
   const store = useStore();
   const primary = useEditorState((s) => s.selection[0] ?? null);
@@ -888,12 +891,90 @@ export function KeywordButtons({ entry, door, property, values, icons, label }: 
   const command = entry.command.id;
   // the argument the value goes in: style.set's value, position.setMode's mode
   const valueArg = Object.keys(entry.command.args).find((name) => name !== 'property') ?? 'value';
+  const choose = (value: string) => {
+    if (available) (store.dispatch as Dispatch)(command, { property, [valueArg]: value });
+  };
+  // whether the buttons' words fit the room the row gives them: an unseen copy of the buttons is measured against it
+  const room = useRef<HTMLSpanElement>(null);
+  const measure = useRef<HTMLSpanElement>(null);
+  const worded = values.some((value) => icons[value] === undefined);
+  const fits = useFits(room, measure, worded);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const menuList = useRef<HTMLDivElement>(null);
+  const layer = useMenuLayer(menuButton, menuList);
+  const words = worded ? (
+    <span ref={measure} className="segmented segmented--values field-choice__measure" aria-hidden="true">
+      {values.map((value) => (
+        <span key={value} className="door door--segment">
+          <span className="door__label">{value}</span>
+        </span>
+      ))}
+    </span>
+  ) : null;
+  if (!fits) {
+    const current = shown || muted;
+    return (
+      <div className={`field-row${available ? '' : ' is-unavailable'}`} data-origin={appearance.kind} title={door.title}>
+        <span className="field-row__label" data-origin={appearance.kind} title={property}>
+          {label}
+        </span>
+        <span ref={room} className="field-choice field-choice--menu menu-anchor">
+          {words}
+          <button
+            ref={menuButton}
+            type="button"
+            className={`input-wrap field__keyword${mixed ? ' is-mixed' : ''}`}
+            data-face=""
+            data-origin={appearance.kind}
+            data-door={entry.ref}
+            data-args={JSON.stringify({ property })}
+            aria-haspopup="menu"
+            aria-expanded={layer.open}
+            aria-label={label}
+            aria-disabled={available ? undefined : true}
+            onClick={() => {
+              if (available) layer.toggle();
+            }}
+          >
+            <span className="field__keyword-value">{mixed ? t('inspector.mixedValue') : current}</span>
+            <Icon name={GLYPHS.dropdown} size="xs" />
+          </button>
+          {layer.backdrop}
+          {layer.open && available ? (
+            <div className="menu field__menu" role="menu" ref={menuList} aria-label={label} data-key-context="menu">
+              {values.map((value) => (
+                <button
+                  key={value}
+                  type="button"
+                  role="menuitemradio"
+                  aria-checked={shown === value}
+                  className="menu__item"
+                  data-door={entry.ref}
+                  data-args={JSON.stringify({ property, [valueArg]: value })}
+                  onClick={() => {
+                    layer.close();
+                    choose(value);
+                    menuButton.current?.focus();
+                  }}
+                >
+                  <span className="menu__icon">{shown === value ? <Icon name={GLYPHS.checked} size="sm" /> : null}</span>
+                  <span className="menu__label">{value}</span>
+                </button>
+              ))}
+            </div>
+          ) : null}
+          {RESET !== undefined && anyStored ? <span className="field__actions"><DoorControl entry={RESET} args={{ property }} ready={available} label={t('field.reset.of', { property: propertyWord(t, property) })} /></span> : null}
+        </span>
+      </div>
+    );
+  }
   return (
     <div className={`field-row${available ? '' : ' is-unavailable'}`} data-origin={appearance.kind} title={door.title}>
       <span className="field-row__label" data-origin={appearance.kind} title={property}>
         {label}
       </span>
-      <span className="field-choice">
+      <span ref={room} className="field-choice">
+      {words}
       <span className={`segmented segmented--values${mixed ? ' is-mixed' : ''}`} role="group" aria-label={label} data-mixed={mixed ? '' : undefined}>
         {values.map((value) => {
           const icon = icons[value];
@@ -912,9 +993,7 @@ export function KeywordButtons({ entry, door, property, values, icons, label }: 
               // audit's S-016: the arrows did nothing)
               data-key-context="roving-group"
               tabIndex={shown === value || (shown === '' && values.indexOf(value) === 0) ? undefined : -1}
-              onClick={() => {
-                if (available) (store.dispatch as Dispatch)(command, { property, [valueArg]: value });
-              }}
+              onClick={() => choose(value)}
             >
               {icon !== undefined ? <Icon name={icon} size="sm" /> : <span className="door__label">{value}</span>}
             </button>
@@ -927,6 +1006,28 @@ export function KeywordButtons({ entry, door, property, values, icons, label }: 
       {mixed ? <span className="field-row__mixed">{t('inspector.mixedValue')}</span> : null}
     </div>
   );
+}
+
+// Whether a row of words fits its room: the unseen copy's width against the width the room may take (its row's value
+// column), measured before the paint and again whenever the room changes size. Icons always fit.
+function useFits(room: RefObject<HTMLElement | null>, measure: RefObject<HTMLElement | null>, worded: boolean): boolean {
+  const [fits, setFits] = useState(true);
+  useLayoutEffect(() => {
+    const cell = room.current?.parentElement ?? null;
+    if (!worded || cell === null) return undefined;
+    const check = () => {
+      const copy = measure.current;
+      if (copy === null) return;
+      // the row's value column: the last track of its grid, as the browser resolves it
+      const available = parseFloat(getComputedStyle(cell).gridTemplateColumns.split(' ').at(-1) ?? '');
+      if (Number.isFinite(available)) setFits(copy.offsetWidth <= available + 0.5);
+    };
+    check();
+    const observer = new ResizeObserver(check);
+    observer.observe(cell);
+    return () => observer.disconnect();
+  }, [room, measure, worded]);
+  return fits;
 }
 
 // The field's label, the handle its scrub is pressed on (the pointer owner runs the drag); its tooltip is the CSS

@@ -589,3 +589,30 @@ test('the mode switch holds exactly its two segments, within the panel', runs(OP
   await expect(mode.locator('[data-door]')).toHaveCount(2);
   expect(await mode.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
 });
+
+// Keyword buttons never wrap (spec props-position, Problems in Pager 3; the audit's S-015): Position's five words do not
+// fit the value column, so it is a keyword menu — its value on a button, the values in the list it opens — while the
+// buttons drawn as icons (Text align) stay buttons on one line.
+test('Position is a keyword menu when its words do not fit, and choosing an item sets the mode', runs(OPEN, ROW, SECTION, 'position.setMode#inspector-position'), async ({ page }) => {
+  await openAurora(page);
+  await control(page, ROW, { args: { target: 'n-hero' } }).click();
+  await openEverySection(page);
+  const POSITION = 'position.setMode#inspector-position';
+  const opener = page.locator(`[data-door="${POSITION}"][aria-haspopup="menu"]`);
+  await expect(opener).toHaveCount(1);
+  await expect(opener).toHaveText('static');
+  await expect(control(page, POSITION, { args: { mode: 'absolute' } })).toHaveCount(0);
+  // one line: the row is as tall as its neighbours
+  const row = opener.locator('xpath=ancestor::div[contains(@class,"field-row")][1]');
+  expect((await row.boundingBox())?.height ?? 0).toBeLessThan(32);
+  await opener.click();
+  const items = page.locator(`[role="menuitemradio"][data-door="${POSITION}"]`);
+  await expect(items).toHaveCount(5);
+  await expect(page.locator(`[role="menuitemradio"][data-door="${POSITION}"][aria-checked="true"]`)).toHaveCount(0);
+  await control(page, POSITION, { args: { mode: 'absolute' } }).click();
+  await expect(items).toHaveCount(0);
+  await expect(opener).toHaveText('absolute');
+  await expect(opener).toBeFocused();
+  // the icon buttons fit and stay buttons
+  await expect(page.locator('[data-door="style.set#inspector-text-align"][aria-pressed]')).not.toHaveCount(0);
+});

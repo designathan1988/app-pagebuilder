@@ -32,7 +32,7 @@ test('the top anchor tab of a narrow element is not covered by its label nor the
   await width.click();
   await page.keyboard.press('Control+A');
   await page.keyboard.type('40\n');
-  await control(page, POSITION, { args: { mode: 'absolute' } }).click();
+  await runDoor(page, POSITION, { args: { mode: 'absolute' } });
   const tab = page.locator(`[data-door="${TOP_TAB}"]`);
   await expect(tab).toBeVisible();
   const label = page.locator('[data-chrome="label"][data-label-for="n-intro"]');

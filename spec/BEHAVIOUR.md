@@ -5370,6 +5370,7 @@ The fields and menus are keyboard-operable like every inspector field.
 
 1. **Z-index is a number field of any number** (`kind: "num"`, `catalogue.js:415`): a decimal is stored and the browser drops it. Required: z-index takes a whole number or `auto`; anything else is refused with a message and nothing is written.
 2. **The offsets and z-index disappear while the element is static** (`when: positioned`), so a person cannot prepare them before switching the mode. Required: they stay drawn; the mode is its own control, one button per mode, and its command (`position.setMode`) is the one writer of the mode.
+3. **The five mode buttons wrapped onto two lines in the value column** (static relative absolute / sticky fixed; the audit's S-015), so the row was twice as tall as its neighbours and its buttons moved when the column narrowed. Required: keyword buttons never wrap. While their words do not fit the row's value column, the control is a keyword menu instead: a field-like button showing the value (the computed one muted while the element holds none; Mixed for several different values) that opens the list of the values, one item per value, the one held checked; choosing an item runs the same command as the button did (`position.setMode`, one undo step) and the focus returns to the button. Buttons drawn as icons (Direction, Text align) always fit and stay buttons.
 
 ### Our rule (the user's real-use audit, item A3.31)
 

@@ -24,7 +24,7 @@ import { isFeatureBuilt } from '../../src/app/features.ts';
 import { shortcutRuns } from '../../src/editor/input/shortcut-rule.ts';
 import type { FeatureId } from '../../src/generated/ids.ts';
 import { EMPTY_FIXTURE, applyDiff, matchDocument, refusalCheck, resolveNode, type DiffOp } from '../../src/manifest/scenario.ts';
-import { barLabel, control, door as doorData, inQuickPanel, keys, modifiedControl, openCommandBar, openMenu, openQuickPanel, openStyleControl, runDoor, standingControl, type Door } from '../../tests/e2e/door.ts';
+import { barLabel, control, door as doorData, inQuickPanel, keys, modifiedControl, openCommandBar, openMenu, openQuickPanel, openStyleControl, openValueMenu, runDoor, standingControl, type Door } from '../../tests/e2e/door.ts';
 import { openEditor } from '../../tests/support/editor.ts';
 import { unzip } from './unzip.ts';
 
@@ -1509,6 +1509,8 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
     // an inspector field drawn as one button per value (keyword buttons: text-align) with nothing to type: the button
     // that stands for the step's value is clicked
     const valueButton = d.kind === 'inspector-field' && typeof step.type !== 'string' ? control(page, ref, { args: own }) : null;
+    // (keyword buttons drawn as a keyword menu, their words too long for the row: the menu is opened first)
+    if (valueButton !== null) await openValueMenu(page, ref, own);
     if (valueButton !== null && (await valueButton.count()) === 1) {
       await valueButton.click();
       return;

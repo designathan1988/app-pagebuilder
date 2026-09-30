@@ -304,6 +304,7 @@ export async function runDoor(page: Page, ref: string, options: { readonly args?
   }
   if (inQuickPanel(d)) await openQuickPanel(page);
   await scrollToControl(page, ref, options);
+  await openValueMenu(page, ref, options.args);
   // a door drawn as an area (the backdrop under a menu, a Layers row's name) is pressed where nothing drawn over it
   // lies, near its top-left corner, as a person clicks away from a menu; any other control at its centre — or, where
   // another control is drawn over that centre (a resize handle over the end of a spacing band, item 4.2), at a point
@@ -322,6 +323,15 @@ export async function runDoor(page: Page, ref: string, options: { readonly args?
     return;
   }
   await control(page, ref, options).click(at);
+}
+
+// Keyword buttons whose words do not fit their row are a keyword menu (spec inspector-panel, "Keyword buttons"): the
+// item standing for a value is drawn only while the menu is open, so a door pressed for a value it has no drawn control
+// for opens the menu first — the one button of the door that opens a list — as a person does.
+export async function openValueMenu(page: Page, ref: string, args: Readonly<Record<string, unknown>> | undefined): Promise<void> {
+  if (door(ref).kind !== 'inspector-field' || args === undefined || (await control(page, ref, { args }).count()) > 0) return;
+  const opener = page.locator(`[data-door="${ref}"][aria-haspopup="menu"]`);
+  if ((await opener.count()) === 1 && (await opener.getAttribute('aria-expanded')) !== 'true') await opener.click();
 }
 
 // A point inside the door's control that the control itself takes, or undefined for its centre: the points of a grid
