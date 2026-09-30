@@ -379,12 +379,16 @@ function slidNumber(text: string, fallbackUnit: string): { readonly value: numbe
   return { value, unit: (match[2] ?? '') === '' ? fallbackUnit : (match[2] as string) };
 }
 
-// Keeps what a field holds with its door's command (style.set), once no gesture is open; nothing for a selection that
-// is gone.
-function keepValue(store: EditorStore, command: CommandId, property: string, value: string): void {
+// Keeps what a field holds with its door's command (style.set), once no gesture is open, on the elements that were
+// selected when the field was left (`targets`): the press that left it may select another element before the value is
+// kept (a click on the canvas, a Layers row), and the value belongs to the element it was typed for. Nothing for a
+// selection that was empty.
+function keepValue(store: EditorStore, command: CommandId, property: string, value: string, targets: readonly string[]): void {
+  if (targets.length === 0) return;
   afterGesture(() => {
-    if (store.getState().selection.length === 0) return;
-    (store.dispatch as Dispatch)(command, { property, value });
+    const now = store.getState().selection;
+    const same = now.length === targets.length && now.every((id, i) => id === targets[i]);
+    (store.dispatch as Dispatch)(command, same ? { property, value } : { property, value, targets: [...targets] });
   });
 }
 
@@ -452,7 +456,9 @@ export function NumberField({ entry, door, property, label, bare = false, labell
       // one task later: a press on a control of this same field (its unit menu, its reset) must not see the layout the
       // commit makes (the reset appearing, the field narrowing) change what lies under the pointer
       const text = element.value;
-      window.setTimeout(() => keepValue(store, command, property, text), 0);
+      // the elements the value was typed for, read now: the press that left the field may change the selection
+      const targets = store.getState().selection;
+      window.setTimeout(() => keepValue(store, command, property, text, targets), 0);
     };
     const onInput = () => {
       typing.typed = true;
@@ -613,16 +619,18 @@ export function TextStyleField({
   const said = useEditorState((s) => s.message);
   // Enter in a field of its own form (a command of its own, or a part) and leaving any field keep the text the same way
   const own = ownCommand || part !== null;
-  const keepText = useRef<(text: string) => void>(() => undefined);
+  const keepText = useRef<(text: string, targets: readonly string[]) => void>(() => undefined);
   useEffect(() => {
-    keepText.current = (text: string) => {
+    keepText.current = (text: string, targets: readonly string[]) => {
       if (!own) {
-        keepValue(store, entry.command.id, property, text);
+        keepValue(store, entry.command.id, property, text, targets);
         return;
       }
       const args = part !== null ? { ...entry.door.args, ...part.args(text, held) } : ownArgs(entry, property, text, extra);
       afterGesture(() => {
-        if (store.getState().selection.length === 0) return;
+        const now = store.getState().selection;
+        // a command of its own writes to the selection: kept only while it is still the one the value was typed for
+        if (now.length === 0 || now.length !== targets.length || now.some((id, i) => id !== targets[i])) return;
         (store.dispatch as Dispatch)(entry.command.id, args);
       });
     };
@@ -680,9 +688,10 @@ export function TextStyleField({
       // a quick panel field keeps what it holds only while the panel is open: the panel's dismissal cancels the draft
       // as an Escape in an inspector field does (spec quick-panel)
       if (!keepOnLeave && !quickPanelOpen(store.getState().ui)) return;
-      // one task later, as the number field's keep above
+      // one task later, as the number field's keep above, for the elements selected now
       const text = element.value;
-      window.setTimeout(() => keepText.current(text), 0);
+      const targets = store.getState().selection;
+      window.setTimeout(() => keepText.current(text, targets), 0);
     };
     const onInput = () => {
       typing.typed = true;
@@ -704,7 +713,7 @@ export function TextStyleField({
     // nothing is written when the value holds no number to slide (the thumb sits at the range's start without a value
     // behind it) or when the thumb never left the value the field shows
     if (element === null || !available || slid === null || element.value === String(slid.value)) return;
-    keepText.current(`${element.value}${slidUnit.current}`);
+    keepText.current(`${element.value}${slidUnit.current}`, store.getState().selection);
   };
   useEffect(() => {
     const element = sliderInput.current;
@@ -718,7 +727,7 @@ export function TextStyleField({
     const element = input.current;
     if (element === null || !draft.current.typed) return;
     draft.current.typed = false;
-    keepText.current(element.value);
+    keepText.current(element.value, store.getState().selection);
   };
   const state = `${available ? '' : ' is-unavailable'}${set ? ' is-set' : ''}${refused.text !== null ? ' is-invalid' : ''}`;
   const visible = mixed ? t('inspector.mixedValue') : shown || placeholder || '';
@@ -779,7 +788,7 @@ export function TextStyleField({
                     data-args={JSON.stringify({ property, value })}
                     onClick={() => {
                       valuesLayer.close();
-                      keepText.current(value);
+                      keepText.current(value, store.getState().selection);
                     }}
                   >
                     <span className="menu__icon">{value === shown ? <Icon name={GLYPHS.checked} size="sm" /> : null}</span>

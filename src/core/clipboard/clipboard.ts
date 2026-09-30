@@ -28,6 +28,7 @@ import { message, registerHandler, type HandlerContext, type Message, type Outco
 import { allNodes, locate, type DocNode, type DocumentJson, type Location, type Styles } from '../document/model.ts';
 import type { ModelRules } from '../document/validate.ts';
 import { placementRefusal } from '../elements/content-model.ts';
+import { referenceHtmlOf } from '../elements/references.ts';
 import { pageCss, pageLines } from '../export/export.ts';
 import { deepEqual, type Patch } from '../history/transaction.ts';
 import { nodesFromExternal, reportNotes } from '../import/import.ts';
@@ -41,10 +42,12 @@ import { deleteCommand, selectionRoots } from '../structure/remove.ts';
 // the name of the app's element format, the first field of its JSON text
 export const ELEMENTS_FORMAT = 'builder/elements';
 
-type Copied = Omit<DocNode, 'id' | 'children'> & { readonly children: readonly Copied[] };
+// A copied node: its fields without its id, and the id it had (`copiedFrom`), so a paste can point what the copy's
+// elements pointed at among themselves (a label's for, an anchor link, an interaction's target) at their new ids.
+type Copied = Omit<DocNode, 'id' | 'children'> & { readonly copiedFrom?: string; readonly children: readonly Copied[] };
 
 const withoutIds = (node: DocNode): Copied => {
-  const copy: Record<string, unknown> = { ...node, children: node.children.map(withoutIds) };
+  const copy: Record<string, unknown> = { ...node, copiedFrom: node.id, children: node.children.map(withoutIds) };
   delete copy.id;
   return copy as Copied;
 };
@@ -122,8 +125,9 @@ function copiedNodes(text: string | null): Copied[] | null {
   }
 }
 
-// a copied subtree given new ids and names no node has (numbered from the copied name: "Title 2")
-function fresh(copied: Copied, ids: IdGenerator, taken: Set<string>): DocNode {
+// a copied subtree given new ids and names no node has (numbered from the copied name: "Title 2"); `renamed` learns
+// which new id each copied id took
+function fresh(copied: Copied, ids: IdGenerator, taken: Set<string>, renamed: Map<string, NodeId>): DocNode {
   let name = copied.name;
   if (taken.has(name)) {
     const base = name.replace(/ \d+$/, '');
@@ -132,7 +136,61 @@ function fresh(copied: Copied, ids: IdGenerator, taken: Set<string>): DocNode {
     name = `${base} ${n}`;
   }
   taken.add(name);
-  return { ...copied, id: ids.next(), name, children: copied.children.map((child) => fresh(child, ids, taken)) } as DocNode;
+  const id = ids.next();
+  const { copiedFrom, ...fields } = copied;
+  if (copiedFrom !== undefined) renamed.set(copiedFrom, id);
+  return { ...fields, id, name, children: copied.children.map((child) => fresh(child, ids, taken, renamed)) } as DocNode;
+}
+
+// Pasted nodes made whole for the document they land in (the rules duplicate follows, clone.ts): what they pointed at
+// among themselves points at the copies; what they pointed at elsewhere stays when it is still in the document and
+// goes when it is not (a cut element's label, a copy from another project); an HTML id the document already uses takes
+// a "-copy" of its own; an instance of a component the project does not hold becomes plain elements.
+function settled(document: DocumentJson, nodes: readonly DocNode[], renamed: ReadonlyMap<string, NodeId>): DocNode[] {
+  const present = new Set<string>([...allNodes(document)].map((node) => node.id));
+  const occupied = new Set([...allNodes(document)].map((node) => node.attributes.id).filter((id): id is string => typeof id === 'string' && id !== ''));
+  const components = new Set((document.components ?? []).map((one) => one.name));
+  const pointed = (value: string): string | null => {
+    const fragment = value.startsWith('#');
+    const named = fragment ? value.slice(1) : value;
+    const now = renamed.get(named) ?? (present.has(named) ? named : null);
+    return now === null ? null : fragment ? `#${now}` : now;
+  };
+  const repair = (node: DocNode, detached = false): DocNode => {
+    const attributes: Record<string, unknown> = {};
+    for (const [name, value] of Object.entries(node.attributes)) {
+      if (name === 'id' && typeof value === 'string' && occupied.has(value)) {
+        let candidate = `${value}-copy`;
+        for (let n = 2; occupied.has(candidate); n += 1) candidate = `${value}-copy-${n}`;
+        occupied.add(candidate);
+        attributes[name] = candidate;
+        continue;
+      }
+      if (name === 'id' && typeof value === 'string') occupied.add(value);
+      if (typeof value === 'string' && referenceHtmlOf(name) !== undefined && (referenceHtmlOf(name) !== 'href' || value.startsWith('#'))) {
+        const now = pointed(value);
+        if (now !== null) attributes[name] = now;
+        continue;
+      }
+      attributes[name] = value;
+    }
+    const interactions = node.interactions
+      ?.map((one) => (one.target === undefined ? one : { ...one, target: (renamed.get(one.target) ?? (present.has(one.target) ? one.target : undefined)) as NodeId | undefined }))
+      .filter((one) => !('target' in one) || one.target !== undefined);
+    const { component, componentPart, ...rest } = node;
+    delete (rest as { interactions?: unknown }).interactions;
+    // an instance root of a component the project does not hold is detached, and every part under it with it
+    const detaching = detached || (component !== undefined && !components.has(component));
+    const instance = detaching ? {} : { ...(component === undefined ? {} : { component }), ...(componentPart === undefined ? {} : { componentPart }) };
+    return {
+      ...rest,
+      ...instance,
+      attributes: attributes as DocNode['attributes'],
+      ...(interactions === undefined || interactions.length === 0 ? {} : { interactions }),
+      children: node.children.map((child) => repair(child, detaching)),
+    } as DocNode;
+  };
+  return nodes.map((node) => repair(node));
 }
 
 // where pasted nodes go: into a selected container, after a selected leaf, else at the end of the root of the page
@@ -174,7 +232,8 @@ export const pasteCommand = registerHandler('clipboard.paste', (context, { clipb
   let said: Message | null = null;
   if (copied !== null) {
     const taken = new Set([...allNodes(state.document)].map((n) => n.name));
-    nodes = copied.map((node) => fresh(node, ids, taken));
+    const renamed = new Map<string, NodeId>();
+    nodes = settled(state.document, copied.map((node) => fresh(node, ids, taken, renamed)), renamed);
     const first = nodes[0] as DocNode;
     const count = receiver.children.length + nodes.length;
     said =

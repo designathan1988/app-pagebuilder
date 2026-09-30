@@ -51,8 +51,11 @@ export function translate(locale: Locale, key: MessageId, params: MessageParams 
   return formatMessage(text, params);
 }
 
-// Which of a key's plural forms (key.one, key.other) a count takes in a locale, by the locale's plural rules.
+// Which of a key's plural forms (key.one, key.other) a count takes in a locale, by the locale's plural rules — except
+// zero, which every catalogue writes with the plural ("0 elementos", "0 tracks"): Portuguese's rules file 0 under
+// "one", which read "1 trilha" for a grid with no track.
 export function pluralForm(locale: Locale, count: number): 'one' | 'other' {
+  if (count === 0) return 'other';
   return new Intl.PluralRules(locale).select(count) === 'one' ? 'one' : 'other';
 }
 

@@ -5,8 +5,8 @@
     "commands": 256,
     "doors": 998,
     "scenarios": 1333,
-    "modules": 250,
-    "lines": 48274
+    "modules": 253,
+    "lines": 48698
   },
   "features": [
     {
@@ -2833,7 +2833,7 @@
     },
     {
       "path": "src/core/clipboard/clipboard.ts",
-      "lines": 294,
+      "lines": 353,
       "commands": [
         "clipboard.copy",
         "clipboard.cut",
@@ -2853,7 +2853,7 @@
     },
     {
       "path": "src/core/commands/registry.ts",
-      "lines": 194,
+      "lines": 195,
       "commands": [
         "<id>"
       ],
@@ -2901,7 +2901,7 @@
     },
     {
       "path": "src/core/design/tokens.ts",
-      "lines": 231,
+      "lines": 232,
       "commands": [
         "tokens.create",
         "tokens.update",
@@ -2932,13 +2932,13 @@
     },
     {
       "path": "src/core/document/tree.ts",
-      "lines": 74,
+      "lines": 90,
       "commands": [],
       "features": []
     },
     {
       "path": "src/core/document/validate.ts",
-      "lines": 567,
+      "lines": 568,
       "commands": [],
       "features": []
     },
@@ -2991,7 +2991,7 @@
     },
     {
       "path": "src/core/elements/inputs.ts",
-      "lines": 121,
+      "lines": 122,
       "commands": [
         "element.setInputType",
         "element.setLabelTarget"
@@ -3033,7 +3033,7 @@
     },
     {
       "path": "src/core/elements/references.ts",
-      "lines": 104,
+      "lines": 108,
       "commands": [],
       "features": []
     },
@@ -3103,7 +3103,7 @@
     },
     {
       "path": "src/core/export/export.ts",
-      "lines": 389,
+      "lines": 396,
       "commands": [
         "project.export"
       ],
@@ -3136,7 +3136,7 @@
     },
     {
       "path": "src/core/files/files.ts",
-      "lines": 480,
+      "lines": 533,
       "commands": [
         "files.upload",
         "files.createFolder",
@@ -3159,6 +3159,12 @@
     {
       "path": "src/core/files/fonts.ts",
       "lines": 73,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/files/references.ts",
+      "lines": 126,
       "commands": [],
       "features": []
     },
@@ -3262,7 +3268,7 @@
     },
     {
       "path": "src/core/import/css.ts",
-      "lines": 264,
+      "lines": 265,
       "commands": [],
       "features": []
     },
@@ -3311,7 +3317,7 @@
     },
     {
       "path": "src/core/incidents.ts",
-      "lines": 57,
+      "lines": 66,
       "commands": [],
       "features": []
     },
@@ -3444,7 +3450,7 @@
     },
     {
       "path": "src/core/project/pages.ts",
-      "lines": 161,
+      "lines": 168,
       "commands": [
         "pages.add",
         "pages.rename",
@@ -3551,13 +3557,13 @@
     },
     {
       "path": "src/core/store/store.ts",
-      "lines": 449,
+      "lines": 456,
       "commands": [],
       "features": []
     },
     {
       "path": "src/core/structure/duplicate.ts",
-      "lines": 110,
+      "lines": 111,
       "commands": [
         "element.duplicate"
       ],
@@ -3665,7 +3671,7 @@
     },
     {
       "path": "src/core/structure/wrap.ts",
-      "lines": 249,
+      "lines": 278,
       "commands": [
         "element.wrapRow",
         "element.wrapColumn",
@@ -3853,7 +3859,7 @@
     },
     {
       "path": "src/core/style/set.ts",
-      "lines": 361,
+      "lines": 367,
       "commands": [
         "style.set"
       ],
@@ -3942,8 +3948,20 @@
       "features": []
     },
     {
+      "path": "src/core/testing/handlers.ts",
+      "lines": 64,
+      "commands": [],
+      "features": []
+    },
+    {
       "path": "src/core/text/fold.ts",
-      "lines": 5,
+      "lines": 10,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/core/text/identifier.ts",
+      "lines": 7,
       "commands": [],
       "features": []
     },
@@ -4628,7 +4646,7 @@
     },
     {
       "path": "src/editor/shell/confirmation.tsx",
-      "lines": 42,
+      "lines": 46,
       "commands": [],
       "features": []
     },
@@ -4658,7 +4676,7 @@
     },
     {
       "path": "src/editor/shell/field.tsx",
-      "lines": 1226,
+      "lines": 1235,
       "commands": [],
       "features": []
     },
@@ -5043,7 +5061,7 @@
     },
     {
       "path": "src/generated/ids.ts",
-      "lines": 4515,
+      "lines": 4518,
       "commands": [],
       "features": []
     },
@@ -5055,7 +5073,7 @@
     },
     {
       "path": "src/i18n/index.ts",
-      "lines": 63,
+      "lines": 66,
       "commands": [],
       "features": []
     },

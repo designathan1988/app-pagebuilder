@@ -17,16 +17,15 @@ import { message, registerHandler } from '../commands/registry.ts';
 import type { DocNode, Page } from '../document/model.ts';
 import { refreshCopiedIdentities } from '../document/clone.ts';
 import type { Patch } from '../history/transaction.ts';
+import { walk, type NodeId } from '../document/model.ts';
+import { releaseReferencesPatch } from '../document/tree.ts';
+import { followPaths, movedPath } from '../files/references.ts';
+import { slug } from '../text/fold.ts';
 
 // A page's name as a file name: lower case, no accent, its words joined by one dash (spec explorer-pages).
 export function pageFile(name: string): string {
-  const slug = name
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-  return `${slug === '' ? 'page' : slug}.html`;
+  const words = slug(name);
+  return `${words === '' ? 'page' : words}.html`;
 }
 
 // The home page: a page the project cannot lose, and the file a rename never hands to another page.
@@ -98,7 +97,8 @@ export const renamePageCommand = registerHandler('pages.rename', ({ state }, { p
   // while nothing else holds it, so a file a link points at is never taken silently
   const free = held.file !== HOME && wanted !== HOME && !document.pages.some((p, i) => i !== at && p.file === wanted);
   const patches: Patch[] = [{ op: 'replace', path: ['pages', at, 'name'], value: typed }];
-  if (free && held.file !== wanted) patches.push({ op: 'replace', path: ['pages', at, 'file'], value: wanted });
+  // the links to the page follow its file (references.ts): a link written "about.html" becomes "sobre.html"
+  if (free && held.file !== wanted) patches.push({ op: 'replace', path: ['pages', at, 'file'], value: wanted }, ...followPaths(document, movedPath(held.file, wanted)));
   return { kind: 'change' as const, patches, message: message('status.pages.renamed', { name: typed }) };
 });
 
@@ -109,7 +109,8 @@ export const duplicatePageCommand = registerHandler('pages.duplicate', ({ state,
   if (source === undefined) throw new Error(`pages.duplicate: the document has no page ${String(page)}`);
   // every node of the copy gets an id of its own and its own styles record; the rest of the node is data
   const copy = (node: DocNode): DocNode => ({ ...node, id: ids.next(), classes: [...node.classes], styles: structuredClone(node.styles), children: node.children.map(copy) });
-  const { name, file } = fresh(document.pages.map((p) => p.name), document.pages.map((p) => p.file), source.name);
+  // a copy of "About 2" is "About 3", never "About 2 2": the number a copy took is not part of the name
+  const { name, file } = fresh(document.pages.map((p) => p.name), document.pages.map((p) => p.file), source.name.replace(/ \d+$/, ''));
   const plainCopy = copy(source.tree);
   const tree = refreshCopiedIdentities(document, [{ source: source.tree, copy: plainCopy }])[0];
   if (tree === undefined) throw new Error('pages.duplicate: the copied tree is missing');
@@ -117,15 +118,21 @@ export const duplicatePageCommand = registerHandler('pages.duplicate', ({ state,
   return { kind: 'change' as const, patches: [{ op: 'add', path: ['pages', at + 1], value: made }], message: message('status.pages.duplicated', { name: source.name, copy: name }) };
 });
 
-export const deletePageCommand = registerHandler('pages.delete', ({ state }, { page }) => {
+export const deletePageCommand = registerHandler('pages.delete', ({ state, confirmed }, { page }) => {
   const document = state.document;
   const at = pageIndex(document.pages, page);
   const held = document.pages[at];
   if (held === undefined) throw new Error(`pages.delete: the document has no page ${String(page)}`);
   if (held.file === HOME) return { kind: 'refused' as const, message: message('status.pages.homeUndeletable') };
+  // a whole page goes: the person is asked first (the manifest's dialog.deletePage), with the page's name
+  if (confirmed !== true) return { kind: 'confirm' as const, params: { name: held.name } };
+  // what other pages point at in it goes with it, in the same undo step: a link to one of its elements, an
+  // interaction that acts on one (element delete's rule, tree.ts)
+  const leaving = new Set([...walk(held.tree)].map((node) => node.id as NodeId));
+  const released = releaseReferencesPatch(document, leaving);
   // the selection goes with the page: a node of a page that is not open is not on the canvas (the store reads the
   // open page through openedPage, which falls back to the first while ui.page names a page that is gone)
-  return { kind: 'change' as const, patches: [{ op: 'remove', path: ['pages', at] }], selection: [], message: message('status.pages.deleted', { name: held.name }) };
+  return { kind: 'change' as const, patches: [...released, { op: 'remove', path: ['pages', at] }], selection: [], message: message('status.pages.deleted', { name: held.name }) };
 });
 
 // the editor state's part pages.switch owns: the page the editor shows (the editor's EditorUi is wider)

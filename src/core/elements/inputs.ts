@@ -7,6 +7,7 @@
 //    step (status.label.target).
 //  - A locked element, or one inside a locked element, keeps its values (spec lock-element).
 import type { NodeId } from '../../generated/commands.ts';
+import { slug } from '../text/fold.ts';
 import { message, registerHandler, type Outcome } from '../commands/registry.ts';
 import { allNodes, locate, type DocNode, type DocumentJson, type Location } from '../document/model.ts';
 import type { Patch } from '../history/transaction.ts';
@@ -82,7 +83,7 @@ export const setInputTypeCommand = registerHandler('element.setInputType', ({ st
 
 // an id no node has, from a name: lower case, words joined by "-", numbered from 2 when taken
 export function freshId(document: DocumentJson, name: string): string {
-  const base = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').replace(/^(?![a-z])/, 'field-') || 'field';
+  const base = slug(name).replace(/^(?![a-z])/, 'field-') || 'field';
   const taken = new Set([...allNodes(document)].map((n) => n.attributes.id).filter((id) => id !== undefined));
   let id = base;
   for (let n = 2; taken.has(id); n += 1) id = `${base}-${n}`;

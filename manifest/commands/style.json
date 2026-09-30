@@ -16,6 +16,11 @@
           "type": "string",
           "values": [],
           "optional": false
+        },
+        "targets": {
+          "type": "json",
+          "values": [],
+          "optional": true
         }
       },
       "availability": {

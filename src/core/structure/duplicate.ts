@@ -60,11 +60,12 @@ function offsetStyles(node: DocNode, rules: ModelRules): Styles {
 
 // A deep copy of a node with a fresh id and a new name for every node, in document order; each new name is taken as
 // soon as it is given, so no two nodes of the copies share one. The copy of a positioned node is offset, so it does
-// not stand exactly over its original.
-function copyOf(node: DocNode, ids: IdGenerator, taken: Set<string>, rules: ModelRules): DocNode {
+// not stand exactly over its original — the copied root only: a positioned element inside it keeps its place in its
+// own (copied) parent.
+function copyOf(node: DocNode, ids: IdGenerator, taken: Set<string>, rules: ModelRules, root = true): DocNode {
   const name = copyName(node.name, taken);
   taken.add(name);
-  return { ...node, styles: offsetStyles(node, rules), id: ids.next(), name, children: node.children.map((child) => copyOf(child, ids, taken, rules)) };
+  return { ...node, styles: root ? offsetStyles(node, rules) : node.styles, id: ids.next(), name, children: node.children.map((child) => copyOf(child, ids, taken, rules, false)) };
 }
 
 export const duplicateCommand = registerHandler('element.duplicate', ({ state, ids, rules }): Outcome<never> => {

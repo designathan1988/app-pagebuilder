@@ -99,5 +99,9 @@ export function referencesTo(document: DocumentJson, id: NodeId): number {
   const target = locate(document, id);
   if (target === null) return 0;
   const inside = new Set([...walk(target.node)].map((node) => node.id));
-  return referencesOf(document).filter((reference) => !inside.has(reference.node.id) && inside.has(reference.value.startsWith('#') ? reference.value.slice(1) : reference.value)).length;
+  const attributes = referencesOf(document).filter((reference) => !inside.has(reference.node.id) && inside.has(reference.value.startsWith('#') ? reference.value.slice(1) : reference.value)).length;
+  // an interaction of another element that acts on it is a reference too
+  let interactions = 0;
+  for (const page of document.pages) for (const node of walk(page.tree)) if (!inside.has(node.id)) interactions += (node.interactions ?? []).filter((one) => one.target !== undefined && inside.has(one.target)).length;
+  return attributes + interactions;
 }

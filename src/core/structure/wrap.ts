@@ -40,6 +40,32 @@ const withChildStyles = (rules: ModelRules, children: readonly DocNode[], childS
     return { ...child, styles: written as Styles };
   });
 };
+// The child styles of the wrapper definition a node was made by: a wrapper of that element type whose own styles the node
+// still holds at the base layer; none for any other node.
+function wrapperChildStyles(rules: ModelRules, node: DocNode): Readonly<Record<string, string>> {
+  const { breakpoint, state } = rules.baseLayer;
+  const own = (node.styles as Record<string, Record<string, Record<string, StoredValue>> | undefined>)[breakpoint]?.[state] ?? {};
+  for (const definition of rules.wrappers.values()) {
+    if (definition.element !== node.type || Object.keys(definition.childStyles).length === 0) continue;
+    if (Object.entries(definition.styles).every(([property, value]) => own[property] === value)) return definition.childStyles;
+  }
+  return {};
+}
+
+// A child without the declarations a wrapper gave it, where it still holds them as given.
+function withoutChildStyles(rules: ModelRules, child: DocNode, given: Readonly<Record<string, string>>): DocNode {
+  if (Object.keys(given).length === 0) return child;
+  const { breakpoint, state } = rules.baseLayer;
+  const styles = child.styles as Record<string, Record<string, Record<string, StoredValue>>>;
+  const layer = styles[breakpoint]?.[state];
+  if (layer === undefined) return child;
+  const rest = Object.fromEntries(Object.entries(layer).filter(([property, value]) => given[property] !== value));
+  if (Object.keys(rest).length === Object.keys(layer).length) return child;
+  const byBreakpoint = Object.fromEntries(Object.entries(styles[breakpoint] ?? {}).filter(([one]) => one !== state || Object.keys(rest).length > 0).map(([one, declarations]) => [one, one === state ? rest : declarations]));
+  const next = Object.fromEntries(Object.entries(styles).filter(([one]) => one !== breakpoint || Object.keys(byBreakpoint).length > 0).map(([one, layers]) => [one, one === breakpoint ? byBreakpoint : layers]));
+  return { ...child, styles: next as Styles };
+}
+
 // the selected nodes no other selected node contains, in the order they sit in their parent
 function roots(selection: readonly NodeId[], at: (id: NodeId) => Location): Location[] {
   const chosen = new Set(selection);
@@ -173,7 +199,10 @@ export const unwrapCommand = registerHandler('element.unwrap', ({ state, rules }
   // a reference inside the children the wrapper held goes with them (they are written back, so a patch would not reach
   // it), and every other reference to the wrapper is released by its own patch
   const released = releaseReferencesPatch(state.document, leaving);
-  const kept = wrapper.node.children.map((child) => withoutReferencesTo(child, leaving));
+  // what a Row or a Column gave its children (their growing alike, elements.json wrappers childStyles) goes with it,
+  // when the child still holds exactly that: unwrap undoes what wrap did, and a value the person changed since stays
+  const given = wrapperChildStyles(rules, wrapper.node);
+  const kept = wrapper.node.children.map((child) => withoutChildStyles(rules, withoutReferencesTo(child, leaving), given));
   // the wrapper's own place (`…/children/<i>`) gives way to its children, at the wrapper's index on
   const parentPath = wrapper.path.slice(0, -2);
   const patches: Patch[] = [

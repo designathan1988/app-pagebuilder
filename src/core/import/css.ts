@@ -10,6 +10,7 @@
 // of an address, and a property the model does not edit is refused — dropped, never invented. What the reader cannot
 // place is dropped and counted, and the import report lists the count: an at-rule (@media, @supports, @font-face), a
 // selector it does not understand (a pseudo-class, an attribute selector), and a declaration the model refuses.
+import { IDENTIFIER_SOURCE } from '../text/identifier.ts';
 import type { HandlerContext } from '../commands/registry.ts';
 import type { DocumentJson, DocNode } from '../document/model.ts';
 import { parseDeclarations } from '../style/custom.ts';
@@ -26,7 +27,7 @@ interface Part {
   readonly compound: Compound;
 }
 
-const CLASS = /^\.(-?[a-zA-Z_][\w-]*)$/;
+const CLASS = new RegExp(`^\\.(${IDENTIFIER_SOURCE})$`, 'u');
 const ID = /^#([\w-]+)$/;
 
 // One compound of a selector ("h1.card#hero", "*"): its type, its id and its classes; null when it holds anything the

@@ -17,6 +17,7 @@
 // Where they are written (styleHolders, spec shared-style-classes): the selected elements' styles, or, while a class
 // every selected element lists is the editor's style target, that class's alone (core/design/classes.ts targetClass);
 // the status bar then names the class as .name.
+import { IDENTIFIER_SOURCE } from '../text/identifier.ts';
 import type { StyleTargetId } from '../../generated/ids.ts';
 import { GENERATED_VALUES } from '../../generated/value-lists.ts';
 import { message, registerHandler, type HandlerContext, type MessageParam, type Outcome } from '../commands/registry.ts';
@@ -229,7 +230,7 @@ export function readValue<Ui>(context: HandlerContext<Ui>, property: string, tex
   const { state, rules, css } = context;
   // a design token of the project, named as a CSS variable, is kept as written (spec css-variables-tokens, Problems in
   // Pager 4); one the project does not have is no value
-  const token = /^\s*var\(\s*--([a-z][a-z0-9-]*)\s*\)\s*$/i.exec(text);
+  const token = new RegExp(`^\\s*var\\(\\s*--(${IDENTIFIER_SOURCE})\\s*\\)\\s*$`, 'u').exec(text);
   if (token !== null) return (state.document.tokens ?? []).some((t) => t.name === token[1]) ? { value: { kind: 'expression', text: text.trim() }, css: text.trim() } : null;
   const codec = codecFor(property, rules);
   if (codec === null) return null;
@@ -346,8 +347,13 @@ export function writePropertyText<Ui>(context: HandlerContext<Ui>, property: str
   return writeStyle(context, property, read.css, longhandValues(property, read.value, context.rules));
 }
 
-export const setStyleCommand = registerHandler('style.set', (context, { property, value }) => {
+export const setStyleCommand = registerHandler('style.set', (given, { property, value, targets }) => {
   if (typeof property !== 'string' || typeof value !== 'string') throw new Error('style.set: a door hands a property and the text of its value');
+  // a field left by a press that selected another element names the elements its value was typed for: the value goes
+  // to them, those still in the document, never to what the press selected
+  const named = Array.isArray(targets) ? targets.filter((id): id is string => typeof id === 'string' && locate(given.state.document, id as NodeId) !== null) : null;
+  if (named !== null && named.length === 0) return { kind: 'change' as const };
+  const context = named === null ? given : { ...given, state: { ...given.state, selection: named as NodeId[] } };
   // a recipe (line-clamp) writes its own declarations (display, overflow): one the element already holds as its own
   // would be drawn twice, so the write is refused naming it (the user's real-use audit, item A3.31)
   const recipe = context.rules.recipeFacts.get(property);

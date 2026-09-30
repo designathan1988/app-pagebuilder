@@ -57,8 +57,9 @@ export type Outcome<Ui> =
   // project.open: another project replaces the document; the selection and the history start empty
   | { readonly kind: 'load'; readonly document: DocumentJson; readonly message?: Message }
   // the person is asked first (a command whose manifest entry has a confirmation): the store holds the dispatch
-  // until the answer, and runs it again with `confirmed` once the person confirms
-  | { readonly kind: 'confirm' };
+  // until the answer, and runs it again with `confirmed` once the person confirms; `params` fill the placeholders of
+  // the manifest's question (the page's name, how many elements use a class)
+  | { readonly kind: 'confirm'; readonly params?: Readonly<Record<string, string | number>> };
 
 export interface HandlerContext<Ui> {
   readonly state: StoreState<Ui>;

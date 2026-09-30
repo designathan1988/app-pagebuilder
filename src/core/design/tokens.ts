@@ -12,6 +12,7 @@
 //  - tokenKindOf: the kind of variable a property's field offers (Problems in Pager 4): the kind the property is (a
 //    font size), else the kind whose value is read as the property's is (a colour field: a colour; a length field: a
 //    length); none for any other.
+import { IDENTIFIER_SOURCE } from '../text/identifier.ts';
 import type { Message } from '../commands/registry.ts';
 import { message, registerHandler, type HandlerContext, type Outcome } from '../commands/registry.ts';
 import { walk, type DocNode, type DocumentJson, type StoredValue } from '../document/model.ts';
@@ -26,14 +27,14 @@ export interface Token {
 
 const NONE: readonly Token[] = [];
 export const tokensOf = (document: DocumentJson): readonly Token[] => document.tokens ?? NONE;
-const NAME = /^[a-z][a-z0-9-]*$/i;
+const NAME = new RegExp(`^${IDENTIFIER_SOURCE}$`, 'u');
 const escaped = (name: string) => name.replace(/[-]/g, '\\-');
 // a style value's reference to a variable: var(--name), with or without a fallback
 const referenceTo = (name: string) => new RegExp(`var\\(\\s*--${escaped(name)}\\s*([,)])`, 'g');
 
 // the variable a style value names first, or null
 export function tokenReferenceOf(value: string): string | null {
-  return /var\(\s*--([a-z][a-z0-9-]*)/i.exec(value)?.[1] ?? null;
+  return new RegExp(`var\\(\\s*--(${IDENTIFIER_SOURCE})`, 'u').exec(value)?.[1] ?? null;
 }
 
 type Path = readonly (string | number)[];

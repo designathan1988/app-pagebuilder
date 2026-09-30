@@ -29,9 +29,10 @@ describe('formatMessage', () => {
 });
 
 describe('the i18n runtime', () => {
-  it('chooses the plural form of a count by the rules of the locale', () => {
+  it('chooses the plural form of a count by the rules of the locale, zero in the plural', () => {
     expect([0, 1, 2].map((n) => translate('en', `status.elementCount.${pluralForm('en', n)}`, { count: n }))).toEqual(['0 elements', '1 element', '2 elements']);
-    expect([1, 2].map((n) => translate('pt-BR', `status.elementCount.${pluralForm('pt-BR', n)}`, { count: n }))).toEqual(['1 elemento', '2 elementos']);
+    expect([0, 1, 2].map((n) => translate('pt-BR', `status.elementCount.${pluralForm('pt-BR', n)}`, { count: n }))).toEqual(['0 elementos', '1 elemento', '2 elementos']);
+    expect(translate('pt-BR', `inspector.grid.trackCount.${pluralForm('pt-BR', 0)}`, { count: 0 })).toBe('0 trilhas');
   });
 
   it('has English as the default UI language', () => {

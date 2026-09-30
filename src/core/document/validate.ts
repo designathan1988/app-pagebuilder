@@ -4,6 +4,7 @@
 // It never repairs or changes anything. The HTML content model (which element may sit in which) is owned by
 // src/core/elements/content-model.ts; the rules carry it for the commands that place an element, and validation
 // checks it once nesting-grammar completes it.
+import { IDENTIFIER_SOURCE, isIdentifier } from '../text/identifier.ts';
 import type { ElementType, MessageId } from '../../generated/ids.ts';
 import { boxSizeOf, outputModelFromManifest, type OutputModel } from '../render/output.ts';
 import type { Attribute, Coupling, ElementsFile, GeneratedHtml, PropertiesFile, TemplateNode } from '../../manifest/schema.ts';
@@ -190,7 +191,7 @@ function layersProblem(value: unknown, fields: readonly StructureField[]): strin
 
 // the subset of a longhand that lists the keywords of its axis (properties.json)
 const AXIS_KEYWORDS = 'keywords';
-const CLASS_NAME = /^-?[_a-zA-Z][_a-zA-Z0-9-]*$/;
+const CLASS_NAME = new RegExp(`^${IDENTIFIER_SOURCE}$`, 'u');
 // A page's file: a path of segments ending in .html, no segment empty and none holding a separator of its own (a
 // renamed or imported file keeps its exact name — "Contact Us.html" stays as it is; spec explorer-file-system).
 const PAGE_FILE = /^([^/\\]+\/)*[^/\\]+\.html$/;
@@ -327,7 +328,7 @@ export function validateDocument(doc: DocumentJson, selection: Selection, rules:
     const tokenOk = (t: unknown) => {
       if (t === null || typeof t !== 'object') return false;
       const { name, kind, value } = t as Record<string, unknown>;
-      if (typeof name !== 'string' || !/^[a-z][a-z0-9-]*$/i.test(name) || names.has(name) || typeof kind !== 'string' || kind === '' || typeof value !== 'string' || value.trim() === '') return false;
+      if (typeof name !== 'string' || !isIdentifier(name) || names.has(name) || typeof kind !== 'string' || kind === '' || typeof value !== 'string' || value.trim() === '') return false;
       names.add(name);
       return true;
     };

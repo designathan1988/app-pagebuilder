@@ -14,7 +14,10 @@ import type { DocumentJson, Page, ProjectFile } from '../document/model.ts';
 import type { Message } from '../commands/registry.ts';
 import type { MessageId } from '../../generated/ids.ts';
 import type { Patch } from '../history/transaction.ts';
+import type { ModelRules } from '../document/validate.ts';
 import { walk } from '../document/model.ts';
+import { familyOf, fontFiles } from './fonts.ts';
+import { followPaths, movedPath } from './references.ts';
 
 export type { ProjectFile };
 
@@ -307,11 +310,12 @@ export function pathTaken(document: DocumentJson, path: string): boolean {
 // the page whose file is this path, if one is
 export const pageAtPath = (document: DocumentJson, path: string): Page | null => document.pages.find((page) => page.file === path) ?? null;
 
-// the pages that link a file among their linked scripts: deleting it would leave them pointing at nothing
+// the pages that link a file (or, for a folder, a file under it) among their linked scripts: deleting it would leave
+// them pointing at nothing
 export function linkedBy(document: DocumentJson, path: string): readonly Page[] {
   return document.pages.filter((page) => {
     const held = (page.tree.attributes as Readonly<Record<string, unknown>>).pageScripts;
-    return typeof held === 'string' && held.split(/\s+/).includes(path);
+    return typeof held === 'string' && held.split(/\s+/).some((one) => one === path || one.startsWith(`${path}/`));
   });
 }
 
@@ -341,10 +345,29 @@ function renameRefusal(document: DocumentJson, from: string, to: string): Messag
   for (const folder of moves.folders) if (folder !== to && clashes(folder)) return message('status.files.nameTaken', { path: folder, name: nameOfPath(folder) });
   for (const file of moves.files) if (file.path !== to && clashes(file.path)) return message('status.files.nameTaken', { path: file.path, name: nameOfPath(file.path) });
   for (const page of moves.pages) if (page.file !== to && clashes(page.file)) return message('status.files.nameTaken', { path: page.file, name: nameOfPath(page.file) });
+  // a page's file stays an HTML file: the page is what the export writes there
+  for (const page of moves.pages) if (!/\.html?$/i.test(page.file)) return message('status.files.pageNeedsHtml', { name: nameOfPath(page.file) });
   const home = document.pages.findIndex((page) => page.file === 'index.html');
   if (home >= 0 && moves.pages.some((one) => one.index === home && one.file !== 'index.html')) return message('status.pages.homeUndeletable');
   return null;
 }
+
+// the patches that take every user of a moved path with it (references.ts): attributes, url()s, linked scripts, and the
+// family of a font whose file name changed
+function followMove(document: DocumentJson, rules: ModelRules, from: string, to: string): Patch[] {
+  const rewrite = movedPath(from, to);
+  const names = new Map<string, string>();
+  for (const file of fontFiles(document)) {
+    const was = familyOf(file);
+    const now = familyOf({ ...file, path: rewrite(file.path) });
+    if (was !== now) names.set(was, now);
+  }
+  const properties = new Set([...rules.propertyFacts].filter(([, facts]) => facts.codec === FAMILY_LIST_CODEC).map(([property]) => property));
+  return followPaths(document, rewrite, { names, properties });
+}
+
+// the codec of a property whose value lists font families (properties.json)
+const FAMILY_LIST_CODEC = 'font-family-list';
 
 // the patches that write the moved paths back, one per part of the document that changed
 function patchesForMoves(document: DocumentJson, moves: ReturnType<typeof movedPaths>): Patch[] {
@@ -389,7 +412,7 @@ export const createFileCommand = registerHandler('files.createFile', ({ state },
 });
 
 // files.rename: the file, folder or page file at `path` takes `name` in its own folder. One undo step.
-export const renameFileCommand = registerHandler('files.rename', ({ state }, { path, name }) => {
+export const renameFileCommand = registerHandler('files.rename', ({ state, rules }, { path, name }) => {
   const from = String(path ?? '');
   const typed = String(name ?? '').trim();
   if (from === '' || typed === '') throw new Error('files.rename: a door hands a path and a name');
@@ -397,11 +420,11 @@ export const renameFileCommand = registerHandler('files.rename', ({ state }, { p
   const refusal = renameRefusal(state.document, from, to);
   if (refusal !== null) return { kind: 'refused' as const, message: refusal };
   const moves = movedPaths(state.document, from, to);
-  return { kind: 'change' as const, patches: patchesForMoves(state.document, moves), message: message('status.files.renamed', { name: typed }) };
+  return { kind: 'change' as const, patches: [...patchesForMoves(state.document, moves), ...followMove(state.document, rules, from, to)], message: message('status.files.renamed', { name: typed }) };
 });
 
 // files.move: the file, folder or page file at `path` moves under `to` (a folder), keeping its name. One undo step.
-export const moveFileCommand = registerHandler('files.move', ({ state }, { path, to }) => {
+export const moveFileCommand = registerHandler('files.move', ({ state, rules }, { path, to }) => {
   const from = String(path ?? '');
   const folder = String(to ?? '').replace(/^\/+|\/+$/g, '');
   if (from === '') throw new Error('files.move: a door hands the path it moves');
@@ -410,7 +433,7 @@ export const moveFileCommand = registerHandler('files.move', ({ state }, { path,
   const refusal = renameRefusal(state.document, from, wanted);
   if (refusal !== null) return { kind: 'refused' as const, message: refusal };
   const moves = movedPaths(state.document, from, wanted);
-  const patches = patchesForMoves(state.document, moves);
+  const patches = [...patchesForMoves(state.document, moves), ...followMove(state.document, rules, from, wanted)];
   // a move that changes nothing (the row is already in that folder, which is what opening the folder list does)
   // says nothing
   if (patches.length === 0) return { kind: 'change' as const };
@@ -426,12 +449,13 @@ export const deleteFileCommand = registerHandler('files.delete', ({ state, confi
   if (pathGenerated(wanted) || holdsGenerated(wanted)) return { kind: 'refused' as const, message: message('status.files.generatedPath', { path: wanted }) };
   const isFolder = folderPaths(state.document).includes(wanted);
   if (!isFolder && fileAt(state.document, wanted) === null) return { kind: 'refused' as const, message: message('status.files.missing', { path: wanted }) };
-  const inside = (one: string): boolean => isFolder && (one === wanted || one.startsWith(`${wanted}/`));
+  // the path itself, and for a folder everything under it
+  const inside = (one: string): boolean => one === wanted || (isFolder && one.startsWith(`${wanted}/`));
   if (isFolder && state.document.pages.some((page) => inside(page.file))) return { kind: 'refused' as const, message: message('status.files.holdsPage') };
   const linked = linkedBy(state.document, wanted);
   if (linked.length > 0) return { kind: 'refused' as const, message: message('status.files.linkedBy', { path: wanted, pages: linked.map((page) => page.name).join(', ') }) };
   // a folder that holds something asks first (spec explorer-file-system, Problems 3): what it holds goes with it
-  const holds = filesOf(state.document).some((file) => inside(file.path));
+  const holds = isFolder && filesOf(state.document).some((file) => inside(file.path));
   if (holds && confirmed !== true) return { kind: 'confirm' as const };
   const files = filesOf(state.document).filter((file) => !inside(file.path));
   const folders = (state.document.folders ?? []).filter((folder) => !inside(folder));
@@ -465,15 +489,44 @@ function base64Of(text: string): string {
 }
 
 // What a JavaScript text is wrong about, or null: the browser's own parser reads it (the app's runtime is the truth,
-// as the CSS support check takes Chrome's word for CSS), and its message names the line.
+// as the CSS support check takes Chrome's word for CSS). A module's import and export statements are read as the plain
+// statements they introduce (their lines kept, so the numbering holds), since a function body cannot hold them.
 export function javascriptProblem(text: string): { readonly line: number; readonly key: MessageId } | null {
+  const body = asScript(text);
+  if (parses(body)) return null;
+  // V8 names no line for a function body: the line is the first one whose prefix fails for another reason than
+  // ending too early ("Unexpected end of input" while a brace or a call is still open)
+  const lines = body.split('\n');
+  for (let n = 1; n <= lines.length; n += 1) {
+    const error = parseError(lines.slice(0, n).join('\n'));
+    if (error !== null && !/end of input|unterminated/i.test(error)) return { line: n, key: 'status.js.syntaxError' };
+  }
+  return { line: lines.length, key: 'status.js.syntaxError' };
+}
+
+// a module's text as a script with the same lines: `import … from '…';` and `export { … };` become nothing,
+// `export default x` becomes the expression `void x` (a function, a class, an object or a value alike), `export const`
+// becomes `const`
+function asScript(text: string): string {
+  return text
+    .split('\n')
+    .map((line) =>
+      line
+        .replace(/^(\s*)import\s+(?:[^'";]+\s+from\s+)?(['"])[^'"]*\2\s*;?/, '$1')
+        .replace(/^(\s*)export\s+\{[^}]*\}(?:\s+from\s+(['"])[^'"]*\2)?\s*;?/, '$1')
+        .replace(/^(\s*)export\s+default\s+/, '$1void ')
+        .replace(/^(\s*)export\s+/, '$1'),
+    )
+    .join('\n');
+}
+
+function parseError(text: string): string | null {
   try {
     new Function(text);
     return null;
   } catch (error) {
-    // the line the browser's own message names, when it names one ("<anonymous>:3:5")
-    const said = error instanceof Error ? error.message : '';
-    const found = /<anonymous>:(d+)/.exec(said) ?? /line (d+)/i.exec(said);
-    return { line: found === null ? 1 : Number(found[1]), key: 'status.js.syntaxError' };
+    return error instanceof Error ? error.message : String(error);
   }
 }
+
+const parses = (text: string): boolean => parseError(text) === null;

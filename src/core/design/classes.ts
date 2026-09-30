@@ -10,6 +10,7 @@
 //    locked element, or one inside one, is refused (status.locked.edit). One undo step each.
 //  - targetClass: the class a style write goes to (core/style/set.ts styleHolders): the class the editor names as the
 //    style target (HandlerContext.styleClass), while the project has it and every selected element lists it.
+import { isIdentifier } from '../text/identifier.ts';
 import { message, registerHandler, type HandlerContext, type Outcome } from '../commands/registry.ts';
 import { locate, walk, type DocumentJson, type NodeId, type Selection, type StyleClass } from '../document/model.ts';
 import type { Patch } from '../history/transaction.ts';
@@ -17,9 +18,8 @@ import { firstLockRefusal } from '../nodes/flags.ts';
 
 const NONE: readonly StyleClass[] = [];
 export const classesOf = (document: DocumentJson): readonly StyleClass[] => document.classes ?? NONE;
-// a CSS class name, as an element's classes take it (validate.ts)
-const CLASS_NAME = /^-?[_a-zA-Z][_a-zA-Z0-9-]*$/;
-export const validClassName = (name: string): boolean => CLASS_NAME.test(name);
+// a CSS class name, as an element's classes take it (validate.ts): any language's letters (text/identifier.ts)
+export const validClassName = (name: string): boolean => isIdentifier(name);
 
 // Settings Classes uses the same project registry as + Class. A new word is defined once,
 // before the element lists it, so its Style chip is immediately a writable target.
@@ -72,7 +72,7 @@ export const createClassCommand = registerHandler('classes.create', (context, { 
   const typed = name.trim();
   const found = selectedNodes(context)[0];
   if (found === undefined) return { kind: 'change' };
-  if (!CLASS_NAME.test(typed)) return { kind: 'refused', message: message('status.classes.badName', { name: typed }) };
+  if (!isIdentifier(typed)) return { kind: 'refused', message: message('status.classes.badName', { name: typed }) };
   if (classesOf(state.document).some((c) => c.name === typed)) return { kind: 'refused', message: message('status.classes.nameTaken', { name: typed }) };
   const locked = firstLockRefusal(state.document, [found.node.id as NodeId], 'status.locked.edit');
   if (locked !== null) return { kind: 'refused', message: locked };
@@ -87,7 +87,7 @@ export const applyClassCommand = registerHandler('classes.apply', (context, { cl
   const typed = className.trim();
   const nodes = selectedNodes(context);
   if (nodes.length === 0) return { kind: 'change' };
-  if (!CLASS_NAME.test(typed)) return { kind: 'refused', message: message('status.classes.badName', { name: typed }) };
+  if (!isIdentifier(typed)) return { kind: 'refused', message: message('status.classes.badName', { name: typed }) };
   const without = nodes.filter((found) => !found.node.classes.includes(typed));
   const locked = firstLockRefusal(state.document, without.map((found) => found.node.id as NodeId), 'status.locked.edit');
   if (locked !== null) return { kind: 'refused', message: locked };
@@ -121,7 +121,7 @@ export const renameClassCommand = registerHandler('classes.rename', ({ state }, 
   const typed = nextName.trim();
   const index = classesOf(state.document).findIndex((c) => c.name === className);
   if (index < 0 || className === typed) return { kind: 'change' };
-  if (!CLASS_NAME.test(typed)) return { kind: 'refused', message: message('status.classes.badName', { name: typed }) };
+  if (!isIdentifier(typed)) return { kind: 'refused', message: message('status.classes.badName', { name: typed }) };
   if (classesOf(state.document).some((c) => c.name === typed)) return { kind: 'refused', message: message('status.classes.nameTaken', { name: typed }) };
   const uses = classUses(state.document, className);
   const locked = firstLockRefusal(state.document, uses.map((at) => at.node.id as NodeId), 'status.locked.edit');
@@ -140,7 +140,7 @@ export const deleteClassCommand = registerHandler('classes.delete', ({ state, co
   const uses = classUses(state.document, className);
   const locked = firstLockRefusal(state.document, uses.map((at) => at.node.id as NodeId), 'status.locked.edit');
   if (locked !== null) return { kind: 'refused', message: locked };
-  if (!confirmed) return { kind: 'confirm' };
+  if (!confirmed) return { kind: 'confirm', params: { count: uses.length } };
   const patches: Patch[] = [
     ...uses.map((at): Patch => ({ op: 'replace', path: [...at.path, 'classes'], value: at.node.classes.filter((name) => name !== className) })),
     classes.length === 1 ? { op: 'remove', path: ['classes'] } : { op: 'remove', path: ['classes', index] },

@@ -5,27 +5,31 @@
 // nothing. Its two buttons are that door's run going on, not doors of their own (data-local).
 import { useEffect, useRef } from 'react';
 import { useEditorState, useStore } from '../store.ts';
-import { usesOfClass } from '../../core/design/classes.ts';
-import { useT } from '../text.ts';
+import { MESSAGE_IDS, type MessageId } from '../../generated/ids.ts';
+import { pluralForm } from '../../i18n/index.ts';
+import { useLocale, useT } from '../text.ts';
 
 export function Confirmation() {
   const t = useT();
   const store = useStore();
   const waiting = useEditorState((s) => s.confirmation ?? null);
-  const document = useEditorState((s) => s.document);
+  const locale = useLocale();
   const cancel = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     if (waiting !== null) cancel.current?.focus();
   }, [waiting]);
   if (waiting === null) return null;
-  const className = (waiting.args as { readonly className?: unknown }).className;
-  const params = waiting.message === 'dialog.classes.delete' && typeof className === 'string' ? { count: usesOfClass(document, className) } : {};
+  // the question in the command's words, its placeholders filled by the command, in its plural form when it has one
+  const params = waiting.params ?? {};
+  const count = params.count;
+  const plural = typeof count === 'number' ? (`${waiting.message}.${pluralForm(locale, count)}` as MessageId) : null;
+  const question = plural !== null && (MESSAGE_IDS as readonly string[]).includes(plural) ? plural : waiting.message;
   return (
     <div className="confirmation" data-confirmation-dialog>
       <div className="confirmation__scrim" />
       <div className="confirmation__box" role="alertdialog" aria-modal="true" aria-labelledby="confirmation-message">
         <p id="confirmation-message" className="confirmation__message">
-          {t(waiting.message, params)}
+          {t(question, params)}
         </p>
         <div className="confirmation__actions">
           <button ref={cancel} type="button" className="door door--button" data-local="confirmation" data-confirmation="cancel" onClick={() => store.answer(false)}>

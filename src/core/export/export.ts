@@ -20,6 +20,7 @@
 //    in an @media block and a state's under its pseudo-class (render.ts nodeCss, the canvas's).
 // Exporting changes nothing in the document and records nothing; the status bar names the file.
 import { message, registerHandler } from '../commands/registry.ts';
+import { slug } from '../text/fold.ts';
 import type { NodeId } from '../../generated/commands.ts';
 import { walk, type Animation, type DocNode, type DocumentJson } from '../document/model.ts';
 import type { ModelRules } from '../document/validate.ts';
@@ -86,10 +87,8 @@ const hasStyles = (node: DocNode): boolean => Object.values(node.styles).some((b
 
 // a layer name as a class: lower case, every run of other characters one "-", none at either end
 function classOf(name: string, fallback: string): string {
-  const words = name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+  // "Seção" -> "secao", "Título" -> "titulo": accents are dropped, never turned into dashes (text/fold.ts slug)
+  const words = slug(name);
   return words === '' || /^[0-9]/.test(words) ? fallback : words;
 }
 
@@ -99,8 +98,16 @@ function classOf(name: string, fallback: string): string {
 interface SharedClasses {
   readonly parts: Map<string, { readonly name: string; readonly styles: string }>;
   readonly reused: Set<string>;
+  // every class name the export has given or the project holds: one stylesheet serves every page, so a generated
+  // name is unique across the pages and never one of the project's own classes ("card" of a class and "Card" of an
+  // element would otherwise share one rule)
+  readonly taken: Set<string>;
 }
-const newShared = (): SharedClasses => ({ parts: new Map(), reused: new Set() });
+const newShared = (document: DocumentJson): SharedClasses => {
+  const taken = new Set<string>((document.classes ?? []).map((one) => one.name));
+  for (const page of document.pages) for (const node of walk(page.tree)) for (const own of node.classes) taken.add(own);
+  return { parts: new Map(), reused: new Set(), taken };
+};
 
 // The generated class of every styled node of a tree, in document order, unique within it: a block, an element of
 // its block (the outermost styled ancestor below the page), or a modifier of its first author class. An element of an
@@ -108,7 +115,7 @@ const newShared = (): SharedClasses => ({ parts: new Map(), reused: new Set() })
 // interaction addresses (the one that holds one, or one an interaction acts on) takes a class too, so the script can
 // select it (spec export-events-js): it carries the class in the HTML, and writes a rule only when it holds styles.
 function generatedClasses(tree: DocNode, shared: SharedClasses, addressed: ReadonlySet<NodeId> = new Set()): Map<string, string> {
-  const taken = new Set<string>();
+  const taken = shared.taken;
   const classes = new Map<string, string>();
   const unique = (base: string) => {
     let name = base;
@@ -164,7 +171,7 @@ export interface PageCode {
 }
 
 // One page of the document as its HTML file and its CSS.
-export function exportPage(document: DocumentJson, pageIndex: number, rules: ModelRules, shared: SharedClasses = newShared()): { readonly html: string; readonly css: string } {
+export function exportPage(document: DocumentJson, pageIndex: number, rules: ModelRules, shared: SharedClasses = newShared(document)): { readonly html: string; readonly css: string } {
   const code = pageLines(document, pageIndex, rules, shared);
   return { html: code.html.map((line) => line.text).join('\n'), css: pageCss(code.css) };
 }
@@ -181,7 +188,7 @@ export const pageCss = (css: readonly CodeLine[]): string => (css.length === 0 ?
 const writtenCss = (document: DocumentJson, text: string, from: string): string => fileUrlsIn(text, (address) => exportValue(document, 'src', address, from) ?? address);
 
 // One page's HTML and CSS as lines, each with the node it was written for.
-export function pageLines(document: DocumentJson, pageIndex: number, rules: ModelRules, shared: SharedClasses = newShared(), relative = true): PageCode {
+export function pageLines(document: DocumentJson, pageIndex: number, rules: ModelRules, shared: SharedClasses = newShared(document), relative = true): PageCode {
   const page = document.pages[pageIndex];
   if (page === undefined) throw new Error(`export: the document has no page ${pageIndex}`);
   // the elements an interaction addresses, and every element that holds an animation: both take a class, so the script
@@ -301,7 +308,7 @@ export function siteFiles(
   rules: ModelRules,
   relative = true,
 ): { readonly pages: readonly { readonly file: string; readonly html: string }[]; readonly css: string; readonly cssLines: readonly CodeLine[]; readonly interactions: string | null } {
-  const classes = newShared();
+  const classes = newShared(document);
   const pages = document.pages.map((page, i) => ({ page, code: pageLines(document, i, rules, classes, relative) }));
   // the project's base style first (core/render/base.ts: the same text the canvas writes), then the design tokens'
   // :root rule (core/design/tokens.ts), then the project's fonts (core/files/fonts.ts: a custom font draws in the

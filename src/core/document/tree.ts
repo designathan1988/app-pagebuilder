@@ -51,6 +51,17 @@ export function releaseReferencesPatch(document: DocumentJson, leaving: Readonly
     const at = locate(document, reference.node.id);
     if (at !== null) patches.push({ op: 'remove', path: [...at.path, 'attributes', reference.attribute] });
   }
+  // an interaction that acts on a node that is leaving goes with it: its script would select nothing (the export wrote
+  // querySelector(".") for it, which throws)
+  for (const page of document.pages) {
+    for (const node of walk(page.tree)) {
+      if (leaving.has(node.id) || node.interactions === undefined) continue;
+      const kept = node.interactions.filter((one) => one.target === undefined || !leaving.has(one.target));
+      if (kept.length === node.interactions.length) continue;
+      const at = locate(document, node.id);
+      if (at !== null) patches.push(kept.length === 0 ? { op: 'remove', path: [...at.path, 'interactions'] } : { op: 'replace', path: [...at.path, 'interactions'], value: kept });
+    }
+  }
   return patches;
 }
 
@@ -68,6 +79,11 @@ export function withoutReferencesTo(node: DocNode, leaving: ReadonlySet<NodeId>)
   const attributes = Object.fromEntries(Object.entries(node.attributes).filter(([attribute, value]) => !referenceNamesLeaving(attribute, value, leaving)));
   const children = node.children.map((child) => withoutReferencesTo(child, leaving));
   const changed = children.some((child, i) => child !== node.children[i]);
-  if (Object.keys(attributes).length === Object.keys(node.attributes).length && !changed) return node;
-  return { ...node, attributes, children };
+  const interactions = node.interactions?.filter((one) => one.target === undefined || !leaving.has(one.target));
+  const interactionsChanged = interactions !== undefined && interactions.length !== node.interactions?.length;
+  if (Object.keys(attributes).length === Object.keys(node.attributes).length && !changed && !interactionsChanged) return node;
+  if (!interactionsChanged) return { ...node, attributes, children };
+  const rest: Record<string, unknown> = { ...node };
+  delete rest.interactions;
+  return (interactions.length === 0 ? { ...rest, attributes, children } : { ...rest, attributes, children, interactions }) as unknown as DocNode;
 }

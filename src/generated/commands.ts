@@ -187,7 +187,7 @@ export interface CommandArgs {
   "hand.drop": Record<string, never>;
   "element.wrapContainer": Record<string, never>;
   "element.wrapGrid": Record<string, never>;
-  "style.set": { readonly property: StyleTargetId; readonly value: string };
+  "style.set": { readonly property: StyleTargetId; readonly value: string; readonly targets?: JsonValue };
   "style.setSpacing": { readonly box: "padding" | "margin"; readonly sides: "all" | "top" | "right" | "bottom" | "left"; readonly value: string; readonly modifier?: "Shift" | "Alt" };
   "inspector.toggleSpacingLink": { readonly box: "padding" | "margin" };
   "style.setBorder": { readonly sides: "all" | "top" | "right" | "bottom" | "left"; readonly width?: string; readonly style?: string; readonly color?: string };
