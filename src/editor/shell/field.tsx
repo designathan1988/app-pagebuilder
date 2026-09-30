@@ -600,7 +600,9 @@ export function TextStyleField({
   const t = useT();
   // the document's value, else nothing: the effective value is the placeholder (spec inspector-provenance-reset, P4)
   const shown = mixed ? '' : part !== null ? part.show(held) : (storedText ?? '');
-  const placeholder = mixed ? t('inspector.mixedValue') : part === null && effective !== '' ? effective : undefined;
+  // a part of a function (a filter's Blur, a translate's axis) shows the property's effective value too: with no
+  // function set, "none" is what a browser applies, and a row that showed nothing said less than its siblings did
+  const placeholder = mixed ? t('inspector.mixedValue') : effective !== '' ? effective : undefined;
   // the element holds a value of its own for what the field edits (the row shows it; Reset this value takes it away)
   const set = part !== null ? held !== undefined || storedLayersOf !== 0 : storedText !== undefined || storedLayersOf !== 0;
   // another selected element holds one: Reset takes it away from them all (A3.35)
