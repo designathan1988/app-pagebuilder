@@ -6,7 +6,7 @@
     "doors": 1000,
     "scenarios": 1335,
     "modules": 254,
-    "lines": 48977
+    "lines": 48983
   },
   "features": [
     {
@@ -3324,7 +3324,7 @@
     },
     {
       "path": "src/core/nodes/flags.ts",
-      "lines": 143,
+      "lines": 149,
       "commands": [
         "element.toggleHidden",
         "element.toggleLock",

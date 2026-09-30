@@ -55,10 +55,16 @@ export function firstLockRefusal(document: DocumentJson, ids: readonly NodeId[],
 // The style fields' doors are usable only while no selected element is locked or inside a locked element (the audit's
 // A3.11; spec lock-element, Problems in Pager 3): drawn disabled, their reason is the lock's refusal (naming the lock),
 // before anything is typed. With nothing selected nothing is locked.
+// the elements a command edits: the one its door names (`args.target`: custom declarations of the element the field
+// stands for), else the selection — the lock that matters is theirs (the audit's M-02: the selection's was read)
+const edited = (selection: readonly NodeId[], args: unknown): readonly NodeId[] => {
+  const target = args !== null && typeof args === 'object' ? (args as { readonly target?: unknown }).target : undefined;
+  return typeof target === 'string' ? [target as NodeId] : selection;
+};
 export const editableSelection = registerPredicate(
   'editableSelection',
-  (state) => firstLockRefusal(state.document, state.selection, 'status.locked.edit') === null,
-  (state) => firstLockRefusal(state.document, state.selection, 'status.locked.edit') ?? message('status.locked.edit', { name: '' }),
+  (state, _rules, args) => firstLockRefusal(state.document, edited(state.selection, args), 'status.locked.edit') === null,
+  (state, _rules, args) => firstLockRefusal(state.document, edited(state.selection, args), 'status.locked.edit') ?? message('status.locked.edit', { name: '' }),
 );
 
 // Why a node's own flag may not be toggled: a locked element above it (status.locked.byAncestor), or null.

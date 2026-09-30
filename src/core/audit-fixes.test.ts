@@ -13,6 +13,7 @@ import { unwrapCommand, wrapRowCommand } from './structure/wrap.ts';
 import { RULES, documentOf, node, runHandler } from './testing/handlers.ts';
 import { slug } from './text/fold.ts';
 import { setStyleCommand } from './style/set.ts';
+import { editableSelection } from './nodes/flags.ts';
 import { setGridItemCommand, storedPlace } from './style/grid-item.ts';
 import { isIdentifier } from './text/identifier.ts';
 import type { DocumentJson } from './document/model.ts';
@@ -199,3 +200,13 @@ describe('the opacity field (S-020)', () => {
   });
 });
 
+
+describe('a door that names its element reads that element’s lock (M-02)', () => {
+  it('custom declarations of a locked element are not available, whatever is selected', () => {
+    const document = documentOf({ pages: [page('p', 'Home', 'index.html', [node('Locked', 'section', 'section', { locked: true }), node('Free', 'section', 'section')])] });
+    const state = { document, selection: ['Free'], history: { past: [], future: [] }, message: null, ui: undefined } as never;
+    expect(editableSelection.test(state, RULES, { target: 'Locked' })).toBe(false);
+    expect(editableSelection.test(state, RULES, { target: 'Free' })).toBe(true);
+    expect(editableSelection.test(state, RULES)).toBe(true);
+  });
+});
