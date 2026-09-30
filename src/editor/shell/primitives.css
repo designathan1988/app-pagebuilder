@@ -212,6 +212,7 @@
   grid-template-columns: repeat(3, var(--size-target-min));
   grid-auto-rows: var(--size-target-min);
   width: fit-content;
+  padding: var(--space-1);
   border-radius: var(--radius-sm);
   background: var(--color-surface-sunken);
 }
@@ -221,12 +222,14 @@
   place-items: center;
 }
 
+/* a place the content can take: a 4 px dot in the subtle ink, which reads on the plate (3:1; the audit's P-S33: the
+   border-strong dot read 1.7:1) */
 .matrix__cell::before {
   content: '';
   width: var(--space-2);
   height: var(--space-2);
   border-radius: var(--radius-pill);
-  background: var(--color-border-strong);
+  background: var(--color-text-subtle);
 }
 
 /* a cell of the matrix (props-flex-container): a button, its dot accented while it stands for what the element
@@ -246,8 +249,9 @@
   background: var(--color-text-muted);
 }
 
+/* the place the content takes now: a bar of the value's own ink, as the canonical matrix draws it (jornada02 R-29) */
 .matrix__cell.door.is-current::before {
-  width: var(--space-3);
-  height: var(--space-3);
-  background: var(--color-accent);
+  width: calc(var(--space-6) + var(--space-1));
+  height: var(--space-2);
+  background: var(--color-origin-here);
 }

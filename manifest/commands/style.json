@@ -9158,7 +9158,7 @@
           "control": "alignment-matrix",
           "modifier": null,
           "gesture": null,
-          "labelKey": "command.setAlignment",
+          "labelKey": "inspector.row.alignment",
           "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "status.layout.notFlex",

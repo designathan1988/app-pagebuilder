@@ -1296,3 +1296,12 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* the alignment row: its label on its first line, beside the plate's top, as every other label (the audit's P-S33: it
+   stood centred in the plate's 76 px) */
+[data-region='inspector-style'] .field-row:has(> .matrix) {
+  align-items: start;
+}
+[data-region='inspector-style'] .field-row:has(> .matrix) > .field-row__label {
+  line-height: var(--size-row);
+}
