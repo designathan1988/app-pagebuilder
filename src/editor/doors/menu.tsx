@@ -134,7 +134,7 @@ export interface MenuLayer {
   readonly toggle: () => void;
   readonly close: () => void;
 }
-export function useMenuLayer(button: RefObject<HTMLButtonElement | null>): MenuLayer {
+export function useMenuLayer(button: RefObject<HTMLButtonElement | null>, list?: RefObject<HTMLElement | null>): MenuLayer {
   // the number of dismissals when the layer was opened, or null while it is closed: a later dismissal closes it
   const dismissals = useEditorState((s) => s.ui.overlays.dismissals);
   const [openedAt, setOpenedAt] = useState<number | null>(null);
@@ -143,6 +143,11 @@ export function useMenuLayer(button: RefObject<HTMLButtonElement | null>): MenuL
   useEffect(() => {
     if (dismissed && (document.activeElement === null || document.activeElement === document.body)) button.current?.focus();
   }, [dismissed, button]);
+  // The focus goes into the layer's first item: the menu key context lives there, so Escape reaches it. A layer opened
+  // by a press alone left the focus on its trigger, and Escape went to another context and closed nothing.
+  useEffect(() => {
+    if (open) list?.current?.querySelector<HTMLElement>('[role^="menuitem"]')?.focus();
+  }, [open, list]);
   return {
     open,
     backdrop: open && BACKDROP ? <DoorControl key="backdrop" entry={BACKDROP} className="overlay-backdrop" /> : null,

@@ -263,7 +263,8 @@ function UnitMenu({ entry, property, shown, input, ready }: { readonly entry: Do
   const door = useDoor(entry, { property }, undefined, ready);
   // the same layer owner the menu buttons and the values menu stand on (doors/menu.tsx)
   const unitButton = useRef<HTMLButtonElement>(null);
-  const layer = useMenuLayer(unitButton);
+  const unitList = useRef<HTMLDivElement>(null);
+  const layer = useMenuLayer(unitButton, unitList);
   // the rest of the units and the keywords are drawn only while the menu is expanded (More units)
   const [expanded, setExpanded] = useState(false);
   const open = layer.open && door.available;
@@ -303,7 +304,7 @@ function UnitMenu({ entry, property, shown, input, ready }: { readonly entry: Do
       </button>
       {layer.backdrop}
       {open ? (
-        <div className="menu field__menu" role="menu" ref={list} aria-label={door.label} data-key-context="menu">
+        <div className="menu field__menu" role="menu" ref={(element) => { list.current = element; unitList.current = element; }} aria-label={door.label} data-key-context="menu">
           {shownUnits.map((unit) => (
             <button
               key={unit}
@@ -640,7 +641,8 @@ export function TextStyleField({
   // the list of every value the field offers, opened by its own button (A3.33): all of them, whatever the field holds
   // the layer contract of the field values menu: the same owner the menu buttons stand on (doors/menu.tsx)
   const valuesButton = useRef<HTMLButtonElement>(null);
-  const valuesLayer = useMenuLayer(valuesButton);
+  const valuesList = useRef<HTMLDivElement>(null);
+  const valuesLayer = useMenuLayer(valuesButton, valuesList);
   const valueLabel = useValueLabel();
   const command = entry.command.id;
   // the list of its suggestions, one per field (the inspector and the quick panel may draw the same property)
@@ -765,7 +767,7 @@ export function TextStyleField({
             </button>
             {valuesLayer.backdrop}
             {valuesLayer.open ? (
-              <div className="menu field__menu" role="menu" aria-label={door.label} data-key-context="menu">
+              <div className="menu field__menu" role="menu" ref={valuesList} aria-label={door.label} data-key-context="menu">
                 {suggestions.map((value) => (
                   <button
                     key={value}
