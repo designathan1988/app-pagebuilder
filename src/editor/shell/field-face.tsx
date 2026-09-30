@@ -24,9 +24,12 @@ export function useFieldAppearance(properties: readonly string[], mixed = false)
 }
 
 export function compactFieldValue(text: string, numeric = false, colour = false): { value: string; unit: string } {
+  // a colour's face (the audit's S-026: Background read rgba(0, 0, 0, 0)): its hex, a colour not fully opaque with its
+  // opacity after it in the unit's place (#1A1A1A 50%), one fully clear the word transparent
   if (colour) {
     const parsed = parseColor(text);
-    if (parsed !== null && parsed.a === 1) return { value: formatColor(parsed).toUpperCase(), unit: '' };
+    if (parsed !== null && parsed.a === 0) return { value: 'transparent', unit: '' };
+    if (parsed !== null) return { value: formatColor({ ...parsed, a: 1 }).toUpperCase(), unit: parsed.a === 1 ? '' : `${Math.round(parsed.a * 100)}%` };
   }
   const token = /^var\((--[^,)]+)\)$/.exec(text.trim());
   if (token !== null) return { value: token[1] ?? text, unit: '' };
