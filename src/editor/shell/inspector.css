@@ -634,12 +634,12 @@
   container-type: inline-size;
 }
 
-/* design/final .prop.two: the same 100 px label column as a single row, then two compact value cells. */
+/* design/final .prop.two: the same label column as a row of one control — 100 px, the token formula the single row
+   already uses — and then two compact value cells. The column this replaces took the label's own width, so each pair
+   started at a different x: the six pairs measured between 1363.05 and 1389.81 px, and the panel's own rows stopped
+   forming a column. The canonical model proves the two 77.5 px cells keep a caret inside them. */
 .field-row--pair {
-  /* the label column takes the label's own width (Width, Height: a short word), so both cells keep the room a whole
-     field needs — its prefix, its value, its unit button and its reset. The fixed column this replaces left each cell
-     ~78 px and the input inside it ~30, and an input that narrow takes no caret: it refuses what is typed into it */
-  grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: calc(var(--space-10) * 3 + var(--space-2)) minmax(0, 1fr) minmax(0, 1fr);
 }
 
 /* A shorthand that writes both cells of a pair is a small linked edit control,
