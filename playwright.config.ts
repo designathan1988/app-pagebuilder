@@ -1,3 +1,4 @@
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from '@playwright/test';
@@ -13,9 +14,12 @@ const root = path.dirname(fileURLToPath(import.meta.url));
 const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const under = (dir: string) => new RegExp(`^${[...root.split(/[\\/]/), dir].map(escape).join('[\\\\/]')}[\\\\/]`, 'i');
 
-// E2E_WORKERS must be a whole number of at least 1; a typo fails the run instead of silently using every core.
+// E2E_WORKERS must be a whole number of at least 1; a typo fails the run instead of silently using every core. By
+// default, half the machine's cores, from 4 to 12: each worker drives a Chrome that renders, so more than half the cores
+// only slows every test down (90 scenario tests, build included: 54 s with 4 workers, 35 s with 8, 31 s with 12, on 24
+// cores).
 function workerCount(value: string | undefined): number {
-  if (value === undefined || value === '') return 4;
+  if (value === undefined || value === '') return Math.max(4, Math.min(12, Math.floor(os.availableParallelism() / 2)));
   const count = Number(value);
   if (!Number.isInteger(count) || count < 1) throw new Error(`E2E_WORKERS must be a whole number >= 1, got "${value}"`);
   return count;

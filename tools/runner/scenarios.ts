@@ -106,6 +106,10 @@ const COMMANDS = fs
 // The commands that replace the whole document, the only actions whose page and root ids are not compared (the user's
 // order of 2026-09-26): File › Open, File › New blank page, the recovery dialog's Restore (each loads a document:
 // outcome `load`), and Open folder, which replaces the project with a folder's files.
+// How often a poll asks again: every frame or two, not Playwright's 100, 250, 500 then 1000 ms, which made a setup
+// that waits for File › Open or the canvas wait a quarter of a second more than the editor took (the timeout still
+// bounds every poll)
+const POLL = [16, 32, 64, 100];
 const DOCUMENT_REPLACING: ReadonlySet<string> = new Set(['project.open', 'project.newBlankPage', 'project.restoreVersion', 'project.openFolder']);
 
 // a document with its pages' and their roots' ids left out, so a match does not compare them
@@ -377,7 +381,7 @@ async function canvasProblems(page: Page, document: unknown): Promise<string[]> 
 }
 async function expectCanvasDraws(page: Page, when: string): Promise<void> {
   const { document } = await port(page);
-  await expect.poll(() => canvasProblems(page, document), { message: `${when}, the canvas draws the document the test port reads`, timeout: 5000 }).toEqual([]);
+  await expect.poll(() => canvasProblems(page, document), { message: `${when}, the canvas draws the document the test port reads`, timeout: 5000, intervals: POLL }).toEqual([]);
 }
 
 // the page element of a node, once the canvas draws it
@@ -1055,7 +1059,7 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
   // a key of the quick panel needs the focus inside it, which the chip or the shortcut before it gave (the context
   // absorbs the fields inside it, so a field's focus counts too: keymap.ts). The drawn panel is measured a frame
   // before it is placed, and a hidden panel can take no focus, so the focus arrives a frame after it opens.
-  if (d.kind === 'shortcut' && d.context === QUICK_PANEL_CONTEXT) await expect.poll(async () => (await focusedContexts(page)).includes(QUICK_PANEL_CONTEXT), { message: `step ${ref}: the focus is in the quick panel` }).toBe(true);
+  if (d.kind === 'shortcut' && d.context === QUICK_PANEL_CONTEXT) await expect.poll(async () => (await focusedContexts(page)).includes(QUICK_PANEL_CONTEXT), { message: `step ${ref}: the focus is in the quick panel`, intervals: POLL }).toBe(true);
   // a key of the hand needs the focus on the canvas and an element in the hand, whose aim the canvas draws as a drop
   if (d.kind === 'shortcut' && d.context === HAND_CONTEXT) {
     expect((await focusedContexts(page))[0], `step ${ref}: the focus is on the canvas`).toBe('canvas');
@@ -1295,7 +1299,7 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
     // once the status bar says something else (the drop itself only hands the events over)
     const saidBeforeDrop = await page.getByRole('status').textContent();
     await dropOsFile(page, carried, at);
-    await expect.poll(() => page.getByRole('status').textContent(), { message: `step ${ref}: the dropped file is stored` }).not.toBe(saidBeforeDrop);
+    await expect.poll(() => page.getByRole('status').textContent(), { message: `step ${ref}: the dropped file is stored`, intervals: POLL }).not.toBe(saidBeforeDrop);
   } else if (d.kind === 'canvas-drag' && d.gesture === 'space-pan') {
     // a pan: pressed over the step's node with Space held (or with the middle button) and moved by the page's travel
     if (target === null || step.target === null) throw new Error(`step ${ref}: a pan starts over the node it names`);
@@ -1700,11 +1704,11 @@ async function setUp(page: Page, s: Scenario): Promise<unknown> {
   }
   if (s.setup.locale !== environment.locales.default) await runDoor(page, settingDoor('preferences.setLanguage', 'locale', s.setup.locale));
   // the editor shows the setup's language, whether a door switched it or it is the default
-  await expect.poll(() => uiLocale(page), { message: `setup locale ${s.setup.locale}` }).toBe(s.setup.locale);
+  await expect.poll(() => uiLocale(page), { message: `setup locale ${s.setup.locale}`, intervals: POLL }).toBe(s.setup.locale);
   if (s.setup.fixture !== EMPTY_FIXTURE && s.setup.tabs === 'another-tab-editing') {
     // the fixture the other tab opened and saved, which this tab reads
     const fixture = read(path.join('manifest/features/fixtures', `${s.setup.fixture}.json`));
-    await expect.poll(async () => (await port(page)).document, { message: `this tab reads ${s.setup.fixture}, saved by the other tab` }).toEqual(fixture);
+    await expect.poll(async () => (await port(page)).document, { message: `this tab reads ${s.setup.fixture}, saved by the other tab`, intervals: POLL }).toEqual(fixture);
   } else if (s.setup.fixture !== EMPTY_FIXTURE) {
     // File › Open, with the browser's file chooser, as a user opens a project
     await openMenu(page, 'file');
@@ -1712,7 +1716,7 @@ async function setUp(page: Page, s: Scenario): Promise<unknown> {
     await page.locator('[data-door="project.open#menu-file"]').click();
     await (await chooser).setFiles(path.join('manifest/features/fixtures', `${s.setup.fixture}.json`));
     const fixture = read(path.join('manifest/features/fixtures', `${s.setup.fixture}.json`));
-    await expect.poll(async () => (await port(page)).document, { message: `File › Open loads ${s.setup.fixture}` }).toEqual(fixture);
+    await expect.poll(async () => (await port(page)).document, { message: `File › Open loads ${s.setup.fixture}`, intervals: POLL }).toEqual(fixture);
   }
   await expectCanvasDraws(page, s.setup.fixture === EMPTY_FIXTURE ? 'at the start' : 'after File › Open');
   // the saved record made unreadable once autosave has saved the fixture, and the editor started again on it (spec
@@ -1813,7 +1817,7 @@ export function registerScenarioTests(): void {
             const said = readsClipboard(ref) ? await page.getByRole('status').textContent() : null;
             await runStep(page, step, ref, held, step.action, downloads);
             if (step.wait !== undefined) await page.waitForTimeout(step.wait);
-            if (said !== null) await expect.poll(() => page.getByRole('status').textContent(), { message: `step ${ref}: the command runs once the clipboard is read` }).not.toBe(said);
+            if (said !== null) await expect.poll(() => page.getByRole('status').textContent(), { message: `step ${ref}: the command runs once the clipboard is read`, intervals: POLL }).not.toBe(said);
             // a refusal names its key; the words it fills in ("No next sibling in {parent}.") are those of the feedback
             // of the same key
             for (const { refusal, unchangedFrom } of refusalsAt.filter((r) => r.after === index)) {
@@ -1888,7 +1892,7 @@ export function registerScenarioTests(): void {
           // tool reads them: the first download after the action began, never one a step before it made
           const exported = s.expect.export;
           if (exported !== null) {
-            await expect.poll(() => downloads.length, 'the action downloaded a file').toBeGreaterThan(downloadsBeforeAction);
+            await expect.poll(() => downloads.length, { message: 'the action downloaded a file', intervals: POLL }).toBeGreaterThan(downloadsBeforeAction);
             const saved = await (downloads[downloadsBeforeAction] as Download).path();
             const files = unzip(fs.readFileSync(saved));
             for (const f of exported.files) {
@@ -1927,7 +1931,7 @@ export function registerScenarioTests(): void {
             if (persistence.preferences === 'same') {
               expect(await page.evaluate(() => window.localStorage.getItem('preferences')), 'preferences after reload').toBe(stored);
               // the reloaded editor applies them: the same language, theme and collapsed sections as before the reload
-              await expect.poll(() => appliedAgain(page, applied), { message: 'the editor applies after the reload the preferences it had before' }).toEqual(applied);
+              await expect.poll(() => appliedAgain(page, applied), { message: 'the editor applies after the reload the preferences it had before', intervals: POLL }).toEqual(applied);
             }
             if (persistence.selection === 'same') expect((await port(page)).selection, 'selection after reload').toEqual(after.selection);
           }
