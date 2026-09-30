@@ -47,21 +47,45 @@ function toggleArgOf(entry: DoorEntry, attribute: AttributeId): { readonly args:
   return own === undefined ? null : { args: {}, filled: own[0] };
 }
 
-// A boolean attribute of the Settings tab (Open in a new tab, Required, Disabled…): a checkbox standing for its node,
-// checked while the node stores the attribute; a click runs the door's command with the other state, one undo step.
+// A boolean attribute of the Settings tab (Open in a new tab, Required, Disabled…): a two-option segmented control,
+// Off | On (jornada02 GENERALISATION 1.3: the canonical has no checkbox), each option the door standing for its state of
+// the node, the one the node stores pressed; a press on the other runs the door's command with it, one undo step. One
+// Tab stop, the arrows between the two (a roving group).
+const TOGGLE_STATES = [false, true] as const;
 function ToggleField({ entry, node, attribute, label }: { readonly entry: DoorEntry; readonly node: DocNode; readonly attribute: AttributeId; readonly label: string }) {
   const store = useStore();
+  const t = useT();
   const toggle = toggleArgOf(entry, attribute);
   const target = 'target' in entry.command.args ? node.id : undefined;
   const json = JSON.stringify({ ...(toggle?.args ?? {}), ...(target === undefined ? {} : { target }) });
   const args = useMemo(() => JSON.parse(json) as Readonly<Record<string, string>>, [json]);
   const door = useDoor(entry, args, label, isFeatureBuilt(entry.door.feature as FeatureId));
   const on = node.attributes[attribute] === true;
-  const flip = () => (store.dispatch as (id: CommandId, args: unknown) => DispatchResult)(entry.command.id, { ...args, [toggle?.filled ?? attribute]: !on });
+  const filled = toggle?.filled ?? attribute;
+  const off = door.available ? '' : ' is-unavailable';
   return (
-    <div className={`field-row${door.available ? '' : ' is-unavailable'}`} data-door={entry.ref} data-args={JSON.stringify(args)} title={door.title}>
+    <div className={`field-row${off}`} title={door.title}>
       <span className="field-row__label">{label}</span>
-      <input type="checkbox" checked={on} disabled={!door.available} aria-label={label} onChange={flip} />
+      <span className="segmented segmented--values field-toggle" role="group" aria-label={label}>
+        {TOGGLE_STATES.map((state) => (
+          <button
+            key={String(state)}
+            type="button"
+            className={`door door--segment${off}${on === state ? ' is-current' : ''}`}
+            aria-pressed={on === state}
+            aria-disabled={door.available ? undefined : true}
+            data-door={entry.ref}
+            data-args={JSON.stringify({ ...args, [filled]: state })}
+            data-key-context="roving-group"
+            tabIndex={on === state ? undefined : -1}
+            onClick={() => {
+              if (door.available && on !== state) (store.dispatch as (id: CommandId, a: unknown) => DispatchResult)(entry.command.id, { ...args, [filled]: state });
+            }}
+          >
+            <span className="door__label">{t(state ? 'field.toggle.on' : 'field.toggle.off')}</span>
+          </button>
+        ))}
+      </span>
     </div>
   );
 }
@@ -248,11 +272,22 @@ function LabelTargetField({ entry, node, label }: { readonly entry: DoorEntry; r
 // An attribute field of the Settings tab whose command, or whose door's feature, arrives later (Open in a new tab
 // shares element.setLink with the Link address and comes with elements-text): drawn disabled, "not available yet".
 function AttributeField({ entry, label, toggle }: { readonly entry: DoorEntry; readonly label: string; readonly toggle: boolean }) {
+  const t = useT();
   const door = useDoor(entry, {}, label, isFeatureBuilt(entry.door.feature as FeatureId));
   return (
     <div className={`field-row${door.available ? '' : ' is-unavailable'}`} data-door={entry.ref} title={door.title}>
       <span className="field-row__label">{label}</span>
-      {toggle ? <input type="checkbox" disabled={!door.available} aria-label={label} /> : <input className="input" disabled={!door.available} aria-label={label} />}
+      {toggle ? (
+        <span className="segmented segmented--values field-toggle" role="group" aria-label={label}>
+          {TOGGLE_STATES.map((state) => (
+            <button key={String(state)} type="button" className="door door--segment is-unavailable" aria-disabled>
+              <span className="door__label">{t(state ? 'field.toggle.on' : 'field.toggle.off')}</span>
+            </button>
+          ))}
+        </span>
+      ) : (
+        <input className="input" disabled={!door.available} aria-label={label} />
+      )}
     </div>
   );
 }

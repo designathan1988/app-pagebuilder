@@ -195,8 +195,32 @@ test('an embedded frame, a textarea and a video draw the fields their type needs
   for (const ref of ['element.setAttribute#inspector-cols', 'element.setAttribute#inspector-max-length', 'element.setAttribute#inspector-min-length'])
     await expect(control(page, ref), ref + ' is drawn for a textarea').toHaveCount(1);
   await insertNext(page, 'video');
-  for (const ref of ['element.setAttribute#inspector-plays-inline', 'element.setAttribute#inspector-preload'])
-    await expect(control(page, ref), ref + ' is drawn for a video').toHaveCount(1);
+  await expect(control(page, 'element.setAttribute#inspector-preload'), 'Preload is drawn for a video').toHaveCount(1);
+  // a boolean attribute is its Off | On pair, one control per state (spec settings-audit)
+  await expect(control(page, 'element.setAttribute#inspector-plays-inline'), 'Plays inline is drawn for a video, Off and On').toHaveCount(2);
 
 });
 
+
+// A boolean attribute is an Off | On pair (spec settings-audit, "Settings layout"; jornada02 GENERALISATION 1.3): the
+// stored state pressed, a press on the other writes it in one step, and a press on the pressed one writes nothing.
+test('a boolean attribute is an Off | On pair: the stored state is pressed and a press on the other writes it', runs(INSERT, TILE, SETTINGS, 'element.setAttribute#inspector-plays-inline'), async ({ page }) => {
+  await openInput(page, 'video');
+  const REF = 'element.setAttribute#inspector-plays-inline';
+  const onButton = control(page, REF, { args: { value: true } });
+  const offButton = control(page, REF, { args: { value: false } });
+  await expect(offButton).toHaveAttribute('aria-pressed', 'true');
+  await expect(onButton).toHaveAttribute('aria-pressed', 'false');
+  await expect(page.locator('.inspector input[type="checkbox"]')).toHaveCount(0);
+  await onButton.click();
+  await expect(onButton).toHaveAttribute('aria-pressed', 'true');
+  const stored = () =>
+    page.evaluate(() => {
+      const port = (window as unknown as { __builderTestPort: { document: () => { pages: { tree: { tag: string | null; attributes: Record<string, unknown>; children: unknown[] } }[] } } }).__builderTestPort;
+      const find = (n: { tag: string | null; attributes: Record<string, unknown>; children: unknown[] }): { tag: string | null; attributes: Record<string, unknown>; children: unknown[] } | undefined => (n.tag === 'video' ? n : (n.children as { tag: string | null; attributes: Record<string, unknown>; children: unknown[] }[]).map(find).find((x) => x !== undefined));
+      return find(port.document().pages[0]?.tree as { tag: string | null; attributes: Record<string, unknown>; children: unknown[] })?.attributes.playsInline ?? null;
+    });
+  expect(await stored()).toBe(true);
+  await offButton.click();
+  await expect.poll(stored).toBe(null);
+});

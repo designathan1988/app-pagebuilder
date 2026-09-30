@@ -5695,6 +5695,11 @@ Tab moves between the fields; Enter keeps a typed value; the number field keys a
   context). A value the catalogue names (the font weights: "Thin 100" … "Black 900", `value.font-weight.<n>`) reads by
   its name; every other value reads as itself. **Text align** offers the four a text block takes (left, centre, right,
   justified) in Essentials, one row of buttons, and every value the browser data allows in All properties.
+- A field whose door declares its Essentials list (`adapter.offers.essentials`: Display's nine of the 22 the browser
+  takes) opens with that list first; in All properties the rest wait behind **More values** (Fewer values folds them
+  again), in Essentials only the list is all it offers (the audit's S-027: the menu listed 22 raw keywords at once).
+  The item checked is the value the element holds, else the one the page computes (no item was checked while the
+  element held none).
 - A blur that commits a field's text waits one task (`window.setTimeout(…, 0)`): committing inside the press on a
   control of the same field changed the row's layout under the pointer — the reset appears and the field narrows — so
   the release landed on another element and the control's click was swallowed.
@@ -6347,6 +6352,8 @@ This extends the Inspector, form, class and inline-text specs for audit 7.1 and 
 ### Settings layout
 
 Settings shows the manifest's General, Link, Image, Accessibility, SEO and Attributes sections in that order. A section is shown when the selected element has a field assigned to it; Attributes also holds the custom-attribute editor. Every shown section has its description. General identifies the element and its content. Link appears only for links, Image only for images, and SEO only for the page. A link shows General, Link and Attributes. The page's editor-grid controls live in Guides & Grids, not in Settings. A button whose type is not stored displays the HTML default `submit` as a muted default, while the document remains without an explicit type.
+
+A boolean attribute (Open in a new tab, Required, Disabled, Hidden from assistive readers, Autoplay…) is a two-option segmented control, **Off | On**, never a checkbox (jornada02 GENERALISATION 1.3; the canonical has no checkbox): the option the element stores is pressed, a press on the other writes it through the attribute's command in one undo step, and the pair is one Tab stop with the arrows between its options. Every label keeps the shared 100 px column, wrapping to a second line when it is longer.
 
 ### Attribute rules
 

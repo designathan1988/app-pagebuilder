@@ -9120,13 +9120,13 @@
               "door": "element.setAttribute#inspector-aria-hidden",
               "args": {
                 "attribute": "ariaHidden",
-                "value": ""
+                "value": true
               },
               "target": null,
               "drop": null,
               "action": true,
               "hold": false,
-              "type": "true\n"
+              "type": null
             }
           ],
           "doors": [

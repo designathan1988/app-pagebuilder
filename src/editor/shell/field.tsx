@@ -32,7 +32,7 @@ import { holdsExecutableCode } from '../../core/elements/embed.ts';
 import { equivalentTags } from '../../core/elements/tag.ts';
 import { elementPredicate, type ElementContext } from '../../core/style/applies.ts';
 import { ATTRIBUTES, inputValueEditorOf } from '../inspector/attributes.ts';
-import { editedProperties } from '../inspector/sections.ts';
+import { editedProperties, inspectorMode } from '../inspector/sections.ts';
 import { useSettingsRefusal } from '../inspector/attribute-feedback.ts';
 import { GENERATED_VALUES } from '../../generated/value-lists.ts';
 import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
@@ -357,6 +357,15 @@ export function presetsOf(entry: DoorEntry): readonly string[] {
   return SUBSETS.get(offers.property)?.find((s) => s.id === offers.presets)?.values ?? [];
 }
 
+// The values a field's door offers in Essentials only (its offers' essentials: the Display menu's nine of the 22 the
+// browser takes), or null when it offers the same values in both modes. All properties lists them first and the rest
+// behind More values (the audit's S-027: the menu listed the 22 raw keywords).
+export function essentialsOf(entry: DoorEntry): readonly string[] | null {
+  const offers = entry.door.adapter.offers;
+  if (!offers || offers.essentials === null) return null;
+  return SUBSETS.get(offers.property)?.find((s) => s.id === offers.essentials)?.values ?? null;
+}
+
 // The arguments a field whose door is a command of its own runs it with: its door's (a border field's sides), the
 // property it edits and the text typed as the command takes them (the background image: property and value; a
 // radius: the value; a border: its width, style and colour, parted by core/style/border.ts).
@@ -677,6 +686,14 @@ export function TextStyleField({
   const families = useProjectFontFamilies();
   const projectFonts = useMemo(() => (fontMenu ? families : []), [fontMenu, families]);
   const suggestions = useMemo(() => [...projectFonts, ...new Set([...tokenSuggestions, ...(keywords ?? []), ...presetsOf(entry)])], [projectFonts, tokenSuggestions, keywords, entry]);
+  // the values menu: the door's essentials first (the only ones in Essentials only), the rest behind More values
+  const essentials = essentialsOf(entry);
+  const essentialsMode = useEditorState((s) => inspectorMode(s.ui) === 'essentials');
+  const [moreValues, setMoreValues] = useState(false);
+  const menuValues = essentials === null ? suggestions : [...essentials.filter((v) => suggestions.includes(v)), ...(moreValues && !essentialsMode ? suggestions.filter((v) => !essentials.includes(v)) : [])];
+  const hasMoreValues = essentials !== null && !essentialsMode && suggestions.some((v) => !essentials.includes(v));
+  // the item checked: the value the element holds, else the one the page computes (the audit's S-027: no mark at all)
+  const checkedValue = shown !== '' ? shown : mixed ? '' : effective.trim();
   useEffect(() => {
     const element = input.current;
     if (element === null) return;
@@ -797,12 +814,12 @@ export function TextStyleField({
             {valuesLayer.backdrop}
             {valuesLayer.open ? (
               <div className="menu field__menu" role="menu" ref={valuesList} aria-label={door.label} data-key-context="menu">
-                {suggestions.map((value) => (
+                {menuValues.map((value) => (
                   <button
                     key={value}
                     type="button"
                     role="menuitemradio"
-                    aria-checked={value === shown}
+                    aria-checked={value === checkedValue}
                     className="menu__item"
                     data-door={entry.ref}
                     data-args={JSON.stringify({ property, value })}
@@ -811,13 +828,19 @@ export function TextStyleField({
                       keepText.current(value, store.getState().selection);
                     }}
                   >
-                    <span className="menu__icon">{value === shown ? <Icon name={GLYPHS.checked} size="sm" /> : null}</span>
+                    <span className="menu__icon">{value === checkedValue ? <Icon name={GLYPHS.checked} size="sm" /> : null}</span>
                     {/* a project font's item is drawn in its own face (the manifest's custom-fonts) */}
                     <span className={projectFonts.includes(value) ? 'menu__label menu__label--face' : 'menu__label'} style={projectFonts.includes(value) ? ({ '--font-face': cssFamily(value) } as CSSProperties) : undefined}>
                       {valueLabel(property, value)}
                     </span>
                   </button>
                 ))}
+                {hasMoreValues ? (
+                  <button type="button" className="menu__item" data-menu-more="" aria-label={t(moreValues ? 'field.values.fewer' : 'field.values.more')} onClick={() => setMoreValues(!moreValues)}>
+                    <span className="menu__icon">{moreValues ? <Icon name={GLYPHS.collapsed} size="sm" /> : null}</span>
+                    <span className="menu__label">{t(moreValues ? 'field.values.fewer' : 'field.values.more')}</span>
+                  </button>
+                ) : null}
               </div>
             ) : null}
           </span>

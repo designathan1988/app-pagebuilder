@@ -10,31 +10,31 @@
     },
     {
       "field": "environment:viewports",
-      "reader": "tools/runner/environment.ts"
+      "reader": "tools/runner/scenarios.ts"
     },
     {
       "field": "environment:viewports[].id",
-      "reader": "tools/runner/environment.ts"
+      "reader": "tools/runner/scenarios.ts"
     },
     {
       "field": "environment:viewports[].width",
-      "reader": "tools/runner/environment.ts"
+      "reader": "tools/runner/scenarios.ts"
     },
     {
       "field": "environment:viewports[].height",
-      "reader": "tools/runner/environment.ts"
+      "reader": "tools/runner/scenarios.ts"
     },
     {
       "field": "environment:locales",
-      "reader": "tools/runner/environment.ts"
+      "reader": "tools/gen/types.ts"
     },
     {
       "field": "environment:locales.default",
-      "reader": "tools/runner/environment.ts"
+      "reader": "tools/gen/types.ts"
     },
     {
       "field": "environment:locales.available",
-      "reader": "tools/runner/environment.ts"
+      "reader": "tools/gen/types.ts"
     },
     {
       "field": "environment:theme",
@@ -306,31 +306,31 @@
     },
     {
       "field": "properties:properties",
-      "reader": "src/core/style/properties.ts"
+      "reader": "src/core/document/validate.ts"
     },
     {
       "field": "properties:properties[].id",
-      "reader": "src/core/style/properties.ts"
+      "reader": "src/core/document/validate.ts"
     },
     {
       "field": "properties:properties[].labelKey",
-      "reader": "src/editor/inspector/fields.ts"
+      "reader": "src/core/document/validate.ts"
     },
     {
       "field": "properties:properties[].section",
-      "reader": "src/editor/inspector/fields.ts"
+      "reader": "src/manifest/style-places.ts"
     },
     {
       "field": "properties:properties[].group",
-      "reader": "src/editor/inspector/fields.ts"
+      "reader": "src/editor/inspector/rows.ts"
     },
     {
       "field": "properties:properties[].control",
-      "reader": "src/editor/inspector/fields.ts"
+      "reader": "src/editor/shell/inspector-controls.tsx"
     },
     {
       "field": "properties:properties[].valueType",
-      "reader": "src/core/style/properties.ts"
+      "reader": "src/core/document/validate.ts"
     },
     {
       "field": "properties:properties[].codec",
@@ -338,27 +338,27 @@
     },
     {
       "field": "properties:properties[].appliesTo",
-      "reader": "src/core/style/applies-to.ts"
+      "reader": "src/core/document/validate.ts"
     },
     {
       "field": "properties:properties[].essential",
-      "reader": "src/editor/inspector/fields.ts"
+      "reader": "src/editor/inspector/sections.ts"
     },
     {
       "field": "properties:properties[].doors",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/editor/inspector/rows.ts"
     },
     {
       "field": "properties:properties[].subsets",
-      "reader": "src/editor/inspector/value-lists.ts"
+      "reader": "src/editor/shell/field.tsx"
     },
     {
       "field": "properties:properties[].subsets[].id",
-      "reader": "src/editor/inspector/value-lists.ts"
+      "reader": "src/editor/shell/field.tsx"
     },
     {
       "field": "properties:properties[].subsets[].values",
-      "reader": "src/editor/inspector/value-lists.ts"
+      "reader": "src/editor/shell/field.tsx"
     },
     {
       "field": "properties:properties[].subsets[].units",
@@ -366,35 +366,35 @@
     },
     {
       "field": "properties:properties[].subsets[].reason",
-      "reader": "src/editor/inspector/value-lists.ts"
+      "reader": "CLAUDE.md"
     },
     {
       "field": "properties:composites",
-      "reader": "src/core/style/composites.ts"
+      "reader": "src/core/document/validate.ts"
     },
     {
       "field": "properties:composites[].id",
-      "reader": "src/core/style/composites.ts"
+      "reader": "src/core/document/validate.ts"
     },
     {
       "field": "properties:composites[].shorthand",
-      "reader": "src/core/style/composites.ts"
+      "reader": "tools/gen/types.ts"
     },
     {
       "field": "properties:composites[].labelKey",
-      "reader": "src/editor/inspector/fields.ts"
+      "reader": "src/core/document/validate.ts"
     },
     {
       "field": "properties:composites[].section",
-      "reader": "src/editor/inspector/fields.ts"
+      "reader": "src/manifest/style-places.ts"
     },
     {
       "field": "properties:composites[].group",
-      "reader": "src/editor/inspector/fields.ts"
+      "reader": "src/editor/inspector/rows.ts"
     },
     {
       "field": "properties:composites[].control",
-      "reader": "src/editor/inspector/fields.ts"
+      "reader": "src/editor/shell/inspector-controls.tsx"
     },
     {
       "field": "properties:composites[].codec",
@@ -406,35 +406,35 @@
     },
     {
       "field": "properties:composites[].longhands",
-      "reader": "src/core/style/composites.ts"
+      "reader": "src/core/document/validate.ts"
     },
     {
       "field": "properties:composites[].omits",
-      "reader": "src/core/style/composites.ts"
+      "reader": "src/manifest/check.ts"
     },
     {
       "field": "properties:composites[].omits.longhands",
-      "reader": "src/core/style/composites.ts"
+      "reader": "src/manifest/check.ts"
     },
     {
       "field": "properties:composites[].omits.reason",
-      "reader": "src/core/style/composites.ts"
+      "reader": "CLAUDE.md"
     },
     {
       "field": "properties:composites[].doors",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/editor/inspector/rows.ts"
     },
     {
       "field": "properties:composites[].subsets",
-      "reader": "src/editor/inspector/value-lists.ts"
+      "reader": "src/editor/shell/field.tsx"
     },
     {
       "field": "properties:composites[].subsets[].id",
-      "reader": "src/editor/inspector/value-lists.ts"
+      "reader": "src/editor/shell/field.tsx"
     },
     {
       "field": "properties:composites[].subsets[].values",
-      "reader": "src/editor/inspector/value-lists.ts"
+      "reader": "src/editor/shell/field.tsx"
     },
     {
       "field": "properties:composites[].subsets[].units",
@@ -442,15 +442,15 @@
     },
     {
       "field": "properties:composites[].subsets[].reason",
-      "reader": "src/editor/inspector/value-lists.ts"
+      "reader": "CLAUDE.md"
     },
     {
       "field": "properties:structures",
-      "reader": "src/core/style/structures.ts"
+      "reader": "src/core/document/validate.ts"
     },
     {
       "field": "properties:structures[].id",
-      "reader": "src/core/style/structures.ts"
+      "reader": "src/core/document/validate.ts"
     },
     {
       "field": "properties:structures[].codec",
@@ -462,23 +462,23 @@
     },
     {
       "field": "properties:structures[].fields",
-      "reader": "src/core/style/structures.ts"
+      "reader": "src/core/document/validate.ts"
     },
     {
       "field": "properties:structures[].fields[].id",
-      "reader": "src/core/style/structures.ts"
+      "reader": "src/core/document/validate.ts"
     },
     {
       "field": "properties:structures[].fields[].type",
-      "reader": "src/core/style/structures.ts"
+      "reader": "src/core/document/validate.ts"
     },
     {
       "field": "properties:structures[].fields[].css",
-      "reader": "src/core/style/structures.ts"
+      "reader": "src/core/document/validate.ts"
     },
     {
       "field": "properties:structures[].fields[].keyword",
-      "reader": "src/core/style/structures.ts"
+      "reader": "src/core/document/validate.ts"
     },
     {
       "field": "properties:structures[].fields[].units",
@@ -498,19 +498,19 @@
     },
     {
       "field": "properties:recipes[].labelKey",
-      "reader": "src/editor/inspector/fields.ts"
+      "reader": "src/core/document/validate.ts"
     },
     {
       "field": "properties:recipes[].section",
-      "reader": "src/editor/inspector/fields.ts"
+      "reader": "src/manifest/style-places.ts"
     },
     {
       "field": "properties:recipes[].group",
-      "reader": "src/editor/inspector/fields.ts"
+      "reader": "src/editor/inspector/rows.ts"
     },
     {
       "field": "properties:recipes[].control",
-      "reader": "src/editor/inspector/fields.ts"
+      "reader": "src/editor/shell/inspector-controls.tsx"
     },
     {
       "field": "properties:recipes[].codec",
@@ -550,7 +550,7 @@
     },
     {
       "field": "properties:recipes[].doors",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/editor/inspector/rows.ts"
     },
     {
       "field": "properties:recipes[].source",
@@ -706,51 +706,51 @@
     },
     {
       "field": "interactions:constants",
-      "reader": "src/editor/input/constants.ts"
+      "reader": "src/manifest/runtime.ts"
     },
     {
       "field": "interactions:constants[].id",
-      "reader": "src/editor/input/constants.ts"
+      "reader": "src/manifest/runtime.ts"
     },
     {
       "field": "interactions:constants[].value",
-      "reader": "src/editor/input/constants.ts"
+      "reader": "src/manifest/runtime.ts"
     },
     {
       "field": "interactions:constants[].unit",
-      "reader": "src/editor/input/constants.ts"
+      "reader": "CLAUDE.md"
     },
     {
       "field": "interactions:constants[].source",
-      "reader": "src/editor/input/constants.ts"
+      "reader": "CLAUDE.md"
     },
     {
       "field": "interactions:constants[].note",
-      "reader": "src/editor/input/constants.ts"
+      "reader": "CLAUDE.md"
     },
     {
       "field": "interactions:gestures",
-      "reader": "src/editor/input/gestures.ts"
+      "reader": "src/editor/input/pointer.ts"
     },
     {
       "field": "interactions:gestures[].id",
-      "reader": "src/editor/input/gestures.ts"
+      "reader": "src/editor/input/pointer.ts"
     },
     {
       "field": "interactions:gestures[].source",
-      "reader": "src/editor/input/gestures.ts"
+      "reader": "CLAUDE.md"
     },
     {
       "field": "interactions:gestures[].modifiers",
-      "reader": "src/editor/input/gestures.ts"
+      "reader": "src/editor/input/pointer.ts"
     },
     {
       "field": "interactions:gestures[].modifiers[].key",
-      "reader": "src/editor/input/gestures.ts"
+      "reader": "src/editor/input/pointer.ts"
     },
     {
       "field": "interactions:gestures[].modifiers[].meaning",
-      "reader": "src/editor/input/gestures.ts"
+      "reader": "src/editor/input/pointer.ts"
     },
     {
       "field": "commands:domain",
@@ -766,7 +766,7 @@
     },
     {
       "field": "commands:commands[].labelKey",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/editor/shell/component-prompt.tsx"
     },
     {
       "field": "commands:commands[].owner",
@@ -774,7 +774,7 @@
     },
     {
       "field": "commands:commands[].introducedBy",
-      "reader": "src/core/features/registry.ts"
+      "reader": "src/editor/input/keymap.ts"
     },
     {
       "field": "commands:commands[].args",
@@ -858,19 +858,19 @@
     },
     {
       "field": "commands:commands[].entryPoints",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/manifest/runtime.ts"
     },
     {
       "field": "commands:commands[].entryPoints[].id",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/manifest/runtime.ts"
     },
     {
       "field": "commands:commands[].entryPoints[].feature",
-      "reader": "src/core/features/registry.ts"
+      "reader": "src/editor/doors/door.tsx"
     },
     {
       "field": "commands:commands[].entryPoints[].labelKey",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/editor/doors/door.tsx"
     },
     {
       "field": "commands:commands[].entryPoints[].faceLabelKey",
@@ -886,7 +886,7 @@
     },
     {
       "field": "commands:commands[].entryPoints[].disabledReasonKey",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/editor/doors/door.tsx"
     },
     {
       "field": "commands:commands[].entryPoints[].placement",
@@ -902,63 +902,63 @@
     },
     {
       "field": "commands:commands[].entryPoints[].adapter",
-      "reader": "src/editor/doors/adapter.ts"
+      "reader": "src/editor/doors/door.tsx"
     },
     {
       "field": "commands:commands[].entryPoints[].adapter.selection",
-      "reader": "src/editor/doors/adapter.ts"
+      "reader": "src/editor/input/pointer/press.ts"
     },
     {
       "field": "commands:commands[].entryPoints[].adapter.offers",
-      "reader": "src/editor/doors/adapter.ts"
+      "reader": "src/editor/shell/inspector-controls.tsx"
     },
     {
       "field": "commands:commands[].entryPoints[].adapter.offers.property",
-      "reader": "src/editor/doors/adapter.ts"
+      "reader": "src/editor/shell/inspector-controls.tsx"
     },
     {
       "field": "commands:commands[].entryPoints[].adapter.offers.list",
-      "reader": "src/editor/doors/adapter.ts"
+      "reader": "src/editor/shell/inspector-controls.tsx"
     },
     {
       "field": "commands:commands[].entryPoints[].adapter.offers.presets",
-      "reader": "src/editor/doors/adapter.ts"
+      "reader": "src/editor/shell/field.tsx"
     },
     {
       "field": "commands:commands[].entryPoints[].adapter.offers.essentials",
-      "reader": "src/editor/doors/adapter.ts"
+      "reader": "src/editor/shell/field.tsx"
     },
     {
       "field": "commands:commands[].entryPoints[].adapter.writes",
-      "reader": "src/editor/doors/adapter.ts"
+      "reader": "src/editor/canvas/handles.ts"
     },
     {
       "field": "commands:commands[].entryPoints[].adapter.fields",
-      "reader": "src/editor/doors/adapter.ts"
+      "reader": "src/editor/canvas/handles.ts"
     },
     {
       "field": "commands:commands[].entryPoints[].args",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/editor/doors/door.tsx"
     },
     {
       "field": "commands:commands[].entryPoints[].kind",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/editor/doors/door.tsx"
     },
     {
       "field": "commands:commands[].entryPoints[].chord",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/editor/input/keymap.ts"
     },
     {
       "field": "commands:commands[].entryPoints[].context",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/editor/input/keymap.ts"
     },
     {
       "field": "commands:commands[].entryPoints[].gesture",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/editor/input/pointer.ts"
     },
     {
       "field": "commands:commands[].entryPoints[].menu",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/manifest/check.ts"
     },
     {
       "field": "commands:commands[].entryPoints[].toolbar",
@@ -966,59 +966,59 @@
     },
     {
       "field": "commands:commands[].entryPoints[].control",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/editor/shell/field.tsx"
     },
     {
       "field": "commands:commands[].entryPoints[].entry",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/editor/command-bar/command-bar.ts"
     },
     {
       "field": "commands:commands[].entryPoints[].property",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/editor/shell/inspector-controls.tsx"
     },
     {
       "field": "commands:commands[].entryPoints[].composite",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/editor/shell/inspector-controls.tsx"
     },
     {
       "field": "commands:commands[].entryPoints[].recipe",
-      "reader": "src/editor/doors/adapter.ts"
+      "reader": "src/editor/shell/inspector-controls.tsx"
     },
     {
       "field": "commands:commands[].entryPoints[].attribute",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/editor/shell/inspector-settings.tsx"
     },
     {
       "field": "commands:commands[].entryPoints[].source",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/editor/input/pointer.ts"
     },
     {
       "field": "commands:commands[].entryPoints[].zone",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/editor/input/pointer.ts"
     },
     {
       "field": "commands:commands[].entryPoints[].target",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/editor/input/pointer/press.ts"
     },
     {
       "field": "commands:commands[].entryPoints[].button",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/editor/input/pointer/press.ts"
     },
     {
       "field": "commands:commands[].entryPoints[].count",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/editor/input/pointer/press.ts"
     },
     {
       "field": "commands:commands[].entryPoints[].modifier",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/editor/input/pointer/press.ts"
     },
     {
       "field": "commands:commands[].entryPoints[].handle",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/editor/canvas/chrome.tsx"
     },
     {
       "field": "commands:commands[].entryPoints[].panel",
-      "reader": "src/editor/doors/registry.ts"
+      "reader": "src/editor/shell/interactions.tsx"
     },
     {
       "field": "layout:regions",
@@ -1066,15 +1066,15 @@
     },
     {
       "field": "checks:categories",
-      "reader": "src/editor/checks/checks.ts"
+      "reader": "src/editor/shell/dock.tsx"
     },
     {
       "field": "checks:categories[].id",
-      "reader": "src/editor/checks/checks.ts"
+      "reader": "src/editor/shell/dock.tsx"
     },
     {
       "field": "checks:categories[].labelKey",
-      "reader": "src/editor/checks/checks.ts"
+      "reader": "src/editor/shell/dock.tsx"
     },
     {
       "field": "checks:categories[].feature",
@@ -1082,31 +1082,31 @@
     },
     {
       "field": "features:group",
-      "reader": "src/core/features/registry.ts"
+      "reader": "src/manifest/check.ts"
     },
     {
       "field": "features:titleKey",
-      "reader": "src/core/features/registry.ts"
+      "reader": "src/manifest/check.ts"
     },
     {
       "field": "features:features",
-      "reader": "src/core/features/registry.ts"
+      "reader": "tools/gen/types.ts"
     },
     {
       "field": "features:features[].id",
-      "reader": "src/core/features/registry.ts"
+      "reader": "tools/gen/types.ts"
     },
     {
       "field": "features:features[].titleKey",
-      "reader": "src/core/features/registry.ts"
+      "reader": "src/manifest/check.ts"
     },
     {
       "field": "features:features[].commands",
-      "reader": "src/core/features/registry.ts"
+      "reader": "tools/runner/scenarios.ts"
     },
     {
       "field": "features:features[].dependsOn",
-      "reader": "src/core/features/registry.ts"
+      "reader": "src/manifest/check.ts"
     },
     {
       "field": "features:features[].spec",
@@ -1494,7 +1494,7 @@
     },
     {
       "field": "generated/css-properties:units",
-      "reader": "src/editor/inspector/value-lists.ts"
+      "reader": "src/manifest/check.ts"
     },
     {
       "field": "generated/css-properties:properties",
@@ -1506,15 +1506,15 @@
     },
     {
       "field": "generated/css-properties:properties{}.initial",
-      "reader": "src/core/style/cascade.ts"
+      "reader": "tools/gen/types.ts"
     },
     {
       "field": "generated/css-properties:properties{}.inherited",
-      "reader": "src/core/style/cascade.ts"
+      "reader": "tools/gen/types.ts"
     },
     {
       "field": "generated/css-properties:properties{}.longhands",
-      "reader": "src/core/style/composites.ts"
+      "reader": "src/manifest/check.ts"
     },
     {
       "field": "generated/css-properties:properties{}.legacyAliasOf",
@@ -1522,11 +1522,11 @@
     },
     {
       "field": "generated/css-properties:properties{}.keywords",
-      "reader": "src/editor/inspector/value-lists.ts"
+      "reader": "tools/gen/types.ts"
     },
     {
       "field": "generated/css-properties:properties{}.units",
-      "reader": "src/editor/inspector/value-lists.ts"
+      "reader": "tools/gen/types.ts"
     },
     {
       "field": "generated/css-properties:properties{}.numeric",
@@ -1598,7 +1598,7 @@
     },
     {
       "field": "generated/css-compat:units",
-      "reader": "src/editor/inspector/value-lists.ts"
+      "reader": "tools/gen/types.ts"
     },
     {
       "field": "generated/css-compat:units{}.bcd",
@@ -1650,27 +1650,27 @@
     },
     {
       "field": "generated/css-compat:properties{}.keywords",
-      "reader": "src/editor/inspector/value-lists.ts"
+      "reader": "tools/gen/types.ts"
     },
     {
       "field": "generated/css-compat:properties{}.keywords{}.bcd",
-      "reader": "src/editor/inspector/value-lists.ts"
+      "reader": "src/manifest/check.ts"
     },
     {
       "field": "generated/css-compat:properties{}.keywords{}.chrome",
-      "reader": "src/editor/inspector/value-lists.ts"
+      "reader": "tools/gen/types.ts"
     },
     {
       "field": "generated/css-compat:properties{}.keywords{}.firefox",
-      "reader": "src/editor/inspector/value-lists.ts"
+      "reader": "tools/gen/types.ts"
     },
     {
       "field": "generated/css-compat:properties{}.keywords{}.safari",
-      "reader": "src/editor/inspector/value-lists.ts"
+      "reader": "tools/gen/types.ts"
     },
     {
       "field": "generated/css-compat:properties{}.keywords{}.why",
-      "reader": "src/editor/inspector/value-lists.ts"
+      "reader": "src/manifest/check.ts"
     },
     {
       "field": "generated/css-compat:properties{}.keywords{}.inFunctions",
@@ -1878,7 +1878,7 @@
     },
     {
       "field": "properties:properties[].icons",
-      "reader": "src/editor/inspector/fields.ts"
+      "reader": "src/editor/shell/inspector-controls.tsx"
     },
     {
       "field": "commands:commands[].entryPoints[].icon",

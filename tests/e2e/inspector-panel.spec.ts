@@ -568,6 +568,12 @@ test('the unit menu keeps its list short, and a value field opens every value', 
   const shown = await values.locator('[role="menuitemradio"]').evaluateAll((els) => els.map((e) => (e.textContent ?? '').trim()));
   expect(shown, 'every value is offered while the field holds one').toContain('flex');
   expect(shown).toContain('flex');
+  // the door's essentials come first, the rest behind More values (the audit's S-027: 22 raw keywords at once); the
+  // value the page computes is checked
+  expect(shown, 'the essentials alone before More values').not.toContain('table-cell');
+  await expect(values.locator('[role="menuitemradio"][aria-checked="true"]')).toHaveText('block');
+  await values.locator('[data-menu-more]').click();
+  await expect(values.locator('[role="menuitemradio"]', { hasText: 'table-cell' })).toHaveCount(1);
   await values.locator('[role="menuitemradio"]', { hasText: 'flex' }).first().click();
   await expect.poll(async () => (await nodeOf(page, 'n-card-a-title'))?.styles?.desktop?.base?.['display'] ?? null).toBe('flex');
   // Font weight names its values

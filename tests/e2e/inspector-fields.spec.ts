@@ -22,12 +22,16 @@ test('every inspector field on screen is a button exactly when its door is drawn
   await runDoor(page, 'workspace.setPanelOpen#toolbar-activity-bar-insert');
   await runDoor(page, 'element.insert#elements-tile', { args: { entry: 'paragraph' } });
   await openEverySection(page);
-  const rows = await page.locator('.inspector .field-row[data-door]').evaluateAll((els) =>
-    els.map((el) => ({ ref: el.getAttribute('data-door') ?? '', button: el.querySelector(':scope > button.door--button') !== null })),
+  // a door is drawn by its row (a field, a fixed-value button in its row) or, in a row it shares with words, by its own
+  // button (Add a shadow: the + at the end of the shadow editor's head row, spec shadow-editor Problems 5); a keyword
+  // button stands for one value of its field's door, drawn as the field
+  const rows = await page.locator('.inspector .field-row[data-door], .inspector .field-row button.door:not(.door--segment)[data-door]').evaluateAll((els) =>
+    els.map((el) => ({ ref: el.getAttribute('data-door') ?? '', button: el.matches('button.door') || el.querySelector(':scope > button.door--button') !== null })),
   );
   const drawn = rows.filter((r) => DRAWN.has(r.ref));
-  // the Style tab draws its fields, among them editors' actions and fixed-value buttons
-  expect(drawn.length).toBeGreaterThan(100);
+  // the Style tab draws its fields, among them editors' actions and fixed-value buttons (two fewer than the 101 it drew
+  // before: Remove every shadow is drawn only once there is a shadow, spec shadow-editor Problems in Pager 5)
+  expect(drawn.length).toBeGreaterThan(95);
   expect(drawn.filter((r) => DRAWN.get(r.ref) === 'button').length).toBeGreaterThan(3);
   expect(drawn.filter((r) => r.button !== (DRAWN.get(r.ref) === 'button')).map((r) => `${r.ref} drawn ${r.button ? 'as a button' : 'as a field'}`)).toEqual([]);
 });
