@@ -86,12 +86,17 @@ test('every layer of the Style panel closes on its trigger, outside and Escape',
     }
   }
   // the panel scrolls in its own box: each trigger is brought into view before it is pressed
-  const keys = await page.evaluate(() => [...document.querySelector('[data-region="inspector-style"]').querySelectorAll('[aria-haspopup]')].map((el) => `${el.tagName}.${String(el.className).slice(0, 30)}[${el.getAttribute('data-door') ?? '?'}]`));
+  const keys = await page.evaluate(() => {
+    const region = document.querySelector('[data-region="inspector-style"]');
+    if (region === null) return [];
+    return [...region.querySelectorAll('[aria-haspopup]')].map((el) => `${el.tagName}.${String(el.className).slice(0, 30)}[${el.getAttribute('data-door') ?? '?'}]`);
+  });
   expect(keys.length, 'the Style panel draws field dropdowns').toBeGreaterThan(4);
   for (const key of keys) {
     const visible = await page.evaluate((wanted) => {
       const region = document.querySelector('[data-region="inspector-style"]');
-      const scroller = region.querySelector('.inspector-scroll');
+      const scroller = region?.querySelector('.inspector-scroll');
+      if (region === null || scroller === null || scroller === undefined) return null;
       const field = [...region.querySelectorAll('[aria-haspopup]')].find((el) => `${el.tagName}.${String(el.className).slice(0, 30)}[${el.getAttribute('data-door') ?? '?'}]` === wanted);
       if (field === undefined) return null;
       const box = scroller.getBoundingClientRect();
