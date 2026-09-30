@@ -54,10 +54,11 @@ test('the Theme and Language items are one choice of a set and say which is chos
   await expect(item('preferences.setLanguage#menu-language-pt-br')).toHaveAttribute('aria-checked', 'false');
   await page.keyboard.press('Escape');
 
-  // the zoom levels are choices too, and none is chosen while view.zoomTo is not built
+  // the zoom levels are choices too, and Fit is one of them: the canvas opens in Fit mode, so Fit is the one chosen
+  // (spec zoom-keyboard-buttons, Problem 5)
   await openMenu(page, 'zoom');
   await expect(item('view.zoomTo#menu-zoom-100')).toHaveAttribute('aria-checked', 'false');
-  await expect(page.locator(door('view.zoomFit#menu-zoom'))).toHaveAttribute('role', 'menuitem');
+  await expect(item('view.zoomFit#menu-zoom')).toHaveAttribute('aria-checked', 'true');
   await page.keyboard.press('Escape');
 
   // a command item of the same menu bar is no choice; a toggle of it says what it shows (the audit's A3.23: the left

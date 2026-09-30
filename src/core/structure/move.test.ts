@@ -74,6 +74,12 @@ describe('element.moveTo (src/core/structure/move.ts)', () => {
     expect(outcome.kind === 'change' && outcome.message).toEqual({ key: 'status.moved', params: { name: 'Intro', position: 1, count: 4, parent: 'Hero' } });
   });
 
+  it('changes nothing and says nothing when every node lands where it already stands (a drop on its own place)', () => {
+    // Intro stands second in Hero: moved to index 1 of the siblings without it, it is where it was
+    const outcome = moveTo(['Intro'], 'Hero', 1);
+    expect(outcome).toEqual({ kind: 'change', selection: ['Intro'] });
+  });
+
   it('moves after the last sibling', () => {
     const outcome = moveTo(['Title'], 'Hero', 3);
     expect(childrenOf(applied(outcome), 'Hero')).toEqual(['Intro', 'Actions', 'Note', 'Title']);

@@ -8,6 +8,8 @@ export default defineConfig({
     environment: 'node',
     // the transformed modules are kept between runs: a run re-transforms only what changed
     fsModuleCache: true,
+    // half the cores at most: the machine stays usable while the tests run
+    maxWorkers: '50%',
     // What the unit tests and the fast scenario runner reach of the document core and the editor's modules, line by line
     // and branch by branch (.cache/coverage/index.html; the summary in the terminal). npm run unit measures it on every
     // check:fast and fails when it falls under the floors, which are raised as tests are added, never lowered.

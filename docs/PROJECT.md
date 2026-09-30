@@ -139,7 +139,7 @@ npm run inventory         # regenerate docs/INVENTORY.md and docs/inventory.json
   computed style or geometry inside the frame, storage after an immediate reload, the files inside the exported ZIP.
   Never a proxy such as "it appeared on screen", and never only that something exists.
 - Time budgets, measured: the static gate ~1 minute; one flow ≤ 30 seconds; the complete suite ≤ 10 minutes
-  (Playwright uses half the machine's cores, from 4 to 12 workers). The census (`tests/e2e/census.spec.ts`) is
+  (Playwright uses a quarter of the machine's cores, from 2 to 6 workers, so the machine stays usable). The census (`tests/e2e/census.spec.ts`) is
   static: 256 built commands, 998 doors, every door of a built command run by a test — 6 seconds.
 
 ### Adding a feature

@@ -6,7 +6,7 @@
     "doors": 998,
     "scenarios": 1336,
     "modules": 257,
-    "lines": 49218
+    "lines": 49221
   },
   "features": [
     {
@@ -3629,7 +3629,7 @@
     },
     {
       "path": "src/core/structure/move.ts",
-      "lines": 251,
+      "lines": 254,
       "commands": [
         "element.moveTo",
         "element.nestIntoPrevious",

@@ -144,6 +144,9 @@ export function moveSelectionTo(
     patches.push(...writeDeclarations(at.node, [...target.path, 'children', start + i], rules.base, values));
   }
 
+  // a move that lands every node where it already stands (a drop on the dragged element's own place) changes nothing
+  // and says nothing: patches that leave the document as it was are no change (the store's empty-change incident)
+  if (JSON.stringify(applyPatches(state.document, patches).document) === JSON.stringify(state.document)) return { kind: 'change', selection: roots };
   const count = target.node.children.length + moved.length;
   const first = moved[0];
   // one node: moved among its siblings or out to an ancestor ("to position … in"), or into another parent (spec
