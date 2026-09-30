@@ -45,6 +45,7 @@ import { InteractionsTab } from './interactions.tsx';
 import { SettingsTab } from './inspector-settings.tsx';
 import { Hints, useSingleNode } from '../inspector/selection.tsx';
 import { Affects, TargetChips, classBarControl } from './class-bar.tsx';
+import { Popover, usePopover } from './popover.tsx';
 
 const SECTIONS = manifest.properties.sections;
 
@@ -346,30 +347,17 @@ function shownForSelection(entry: DoorEntry, kinds: readonly string[], contexts:
 // every menu does (Problems in Pager 4): a dismissal newer than its opening (Escape in its filter or on an item, a press
 // on the backdrop drawn under it) closes it, and the focus goes back to the button.
 const REVEAL = doorSlots('inspector-style').find((d) => d.door.kind === 'panel-control' && d.door.control === 'add-property-item');
-const ADD_PROPERTY_BACKDROP = doorSlots('overlay')[0];
 function AddProperty() {
   const t = useT();
   const context = useSelectionContext();
   const several = useSelectionContexts();
   const contexts = several ?? (context === null ? null : [context]);
-  // the number of dismissals when the list was opened, or null while it is closed
-  const dismissals = useEditorState((s) => s.ui.overlays.dismissals);
-  const [openedAt, setOpenedAt] = useState<number | null>(null);
-  const open = openedAt !== null && openedAt === dismissals;
-  const dismissed = openedAt !== null && !open;
-  const setOpen = (next: boolean) => setOpenedAt(next ? dismissals : null);
-  const [query, setQuery] = useState('');
-  // opened, the list's filter takes the focus (spec inspector-add-property, Problems in Pager 3)
-  const filter = useRef<HTMLInputElement>(null);
-  const list = useRef<HTMLDivElement>(null);
+  // the list is a popover (popover.tsx): opened by "+", closed by a choice, the backdrop or Escape; opened, its filter
+  // takes the focus (spec inspector-add-property, Problems in Pager 3), and dismissed, the focus goes back to "+"
   const button = useRef<HTMLButtonElement>(null);
-  useEffect(() => {
-    if (open) filter.current?.focus();
-  }, [open]);
-  // dismissed, the focus that went down with the list goes back to its button
-  useEffect(() => {
-    if (dismissed && (document.activeElement === null || document.activeElement === document.body)) button.current?.focus();
-  }, [dismissed]);
+  const { open, setOpen } = usePopover(button);
+  const [query, setQuery] = useState('');
+  const filter = useRef<HTMLInputElement>(null);
   const listId = useId();
   const mode = useEditorState((s) => inspectorMode(s.ui));
   const revealed = useEditorState((s) => s.ui.revealed?.field ?? null);
@@ -383,7 +371,8 @@ function AddProperty() {
   const kindsKey = kinds.join(' ');
   useLayoutEffect(() => {
     const input = filter.current;
-    const options = [...(list.current?.querySelectorAll<HTMLElement>('[role="option"]') ?? [])];
+    // the options of the list the filter stands in (the popover it opened with)
+    const options = [...(input?.closest('.add-property__menu')?.querySelectorAll<HTMLElement>('[role="option"]') ?? [])];
     if (open && input) setActiveOption(input, options, options.length > 0 ? 0 : null);
   }, [open, query, mode, revealed, node, kindsKey]);
   const door = useDoor(REVEAL ?? (manifest.doors[0] as DoorEntry), {}, t('inspector.addProperty'), REVEAL !== undefined && isFeatureBuilt(REVEAL.door.feature as FeatureId));
@@ -412,15 +401,9 @@ function AddProperty() {
       <button ref={button} type="button" className={`door door--icon-button${door.available ? '' : ' is-unavailable'}`} data-door={REVEAL.ref} data-args="{}" aria-haspopup="dialog" aria-expanded={open} aria-label={door.label} title={door.title} aria-disabled={door.available ? undefined : true} onClick={() => (door.available ? setOpen(!open) : undefined)}>
         {REVEAL.door.icon !== null ? <Icon name={REVEAL.door.icon} size="md" /> : null}
       </button>
-      {/* the backdrop lies under the list and under "+", which closes the list as it opened it */}
-      {open && ADD_PROPERTY_BACKDROP ? (
-        <div className="add-property__backdrop">
-          <DoorControl entry={ADD_PROPERTY_BACKDROP} className="overlay-backdrop" />
-        </div>
-      ) : null}
       {open ? (
         // a property chosen closes the list; its field takes the focus (inspector.reveal)
-        <div ref={list} className="add-property__menu" role="dialog" aria-label={door.label} onClick={(event) => (event.target instanceof Element && event.target.closest('[data-door]') ? setOpen(false) : undefined)}>
+        <Popover anchor={button} className="add-property__menu" label={door.label} onClick={(event) => (event.target instanceof Element && event.target.closest('[data-door]') ? setOpen(false) : undefined)}>
           {/* the filter is a combobox of the menu key context: the arrows move the marked property, Enter chooses it */}
           <input
             ref={filter}
@@ -436,6 +419,7 @@ function AddProperty() {
             onChange={(event) => setQuery(event.currentTarget.value)}
             data-local="add-property-filter"
             data-key-context="menu"
+            data-autofocus
           />
           {hidden.length === 0 ? <p className="add-property__none">{t('inspector.addProperty.none')}</p> : null}
           <div id={listId} role="listbox" aria-label={door.label} className="add-property__list">
@@ -445,7 +429,7 @@ function AddProperty() {
               </div>
             ))}
           </div>
-        </div>
+        </Popover>
       ) : null}
     </div>
   );

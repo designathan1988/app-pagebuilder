@@ -362,21 +362,14 @@ button.picker__swatch {
   position: relative;
 }
 
-/* the backdrop under the open list takes no place; "+" stays over it, so a press on it closes the list */
-.add-property__backdrop {
-  display: contents;
-}
-
+/* "+" stays over the popover's backdrop, so a press on it closes the list as it opened it */
 .add-property > .door[aria-expanded='true'] {
   position: relative;
   z-index: var(--z-menu);
 }
 
+/* the list: a popover (popover.tsx) under "+" */
 .add-property__menu {
-  position: absolute;
-  top: calc(100% + var(--space-2));
-  right: 0;
-  z-index: var(--z-menu);
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
@@ -384,10 +377,6 @@ button.picker__swatch {
   max-height: calc(var(--space-10) * 10);
   padding: var(--space-3);
   overflow-y: auto;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-surface-raised);
-  box-shadow: var(--shadow-2);
 }
 
 .add-property__none {

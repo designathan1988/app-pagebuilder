@@ -9,22 +9,20 @@
 // Typing there is not a command (DESIGN.md: data-local); Enter answers text.editLink with the address typed. An
 // address the command refuses shows its refusal under the field, as the status bar does, and the prompt stays open;
 // the backdrop door under it (ui.dismiss) closes it. It is drawn over the whole window, never on the canvas overlay.
-import { useId, useLayoutEffect, useRef, useState, type CSSProperties, type FormEvent, type RefObject } from 'react';
-import { createPortal } from 'react-dom';
+import { useId, useRef, useState, type CSSProperties, type FormEvent, type RefObject } from 'react';
 import type { DispatchResult } from '../../core/store/store.ts';
 import type { CommandId, KeyContextId } from '../../generated/ids.ts';
 import type { DoorEntry } from '../../manifest/runtime.ts';
 import { DoorControl } from '../doors/door.tsx';
 import { doorSlots } from '../doors/placement.ts';
 import { useEditorState, useStore } from '../store.ts';
+import { Popover } from '../shell/popover.tsx';
 import { useT } from '../text.ts';
 import { TEXT_EDITING, TEXT_TOOLBAR, editedLinkAddress, openLinkPrompt } from './text-edit.ts';
 
 const DOORS = doorSlots(TEXT_TOOLBAR);
 // the door of the toolbar whose command takes the address the prompt asks for (its argument href)
 const LINK = DOORS.find((entry) => 'href' in entry.command.args) ?? null;
-// the backdrop under what floats over the editor: the door the manifest places in the overlay region
-const BACKDROP = doorSlots('overlay')[0];
 const KEYS: KeyContextId = TEXT_EDITING;
 
 // `bar` is the toolbar's element, which the chrome measures to place it and the link prompt is drawn under.
@@ -48,35 +46,16 @@ function LinkPrompt({ entry, anchor }: { readonly entry: DoorEntry; readonly anc
   const field = useRef<HTMLInputElement>(null);
   // what is typed in the field before Enter answers the prompt: the field's own text, not the editor's state
   const [address, setAddress] = useState(() => editedLinkAddress() ?? '');
-  // where the panel is drawn: under the toolbar, once its box is known (a layout measure)
-  const [at, setAt] = useState<{ readonly left: number; readonly top: number } | null>(null);
   // the refusal of the address typed last: the store's message while it is one the command declares
   const refusal = useEditorState((s) => (s.message !== null && (entry.command.refusals as readonly string[]).includes(s.message.key) ? s.message : null));
-  useLayoutEffect(() => {
-    const box = anchor.current?.getBoundingClientRect();
-    const panel = field.current?.closest('form');
-    if (!box || !panel) return;
-    const gap = parseFloat(getComputedStyle(panel).getPropertyValue('--space-2')) || 0;
-    // inside the window: a toolbar near its right edge opens the prompt leftwards, never over the inspector's edge
-    const width = panel.getBoundingClientRect().width;
-    setAt({ left: Math.max(gap, Math.min(box.left, window.innerWidth - width - gap)), top: box.bottom + gap });
-  }, [anchor]);
-  // the field takes the focus once the panel is placed (hidden while it is measured, it could take none), still before
-  // the next key arrives: what is typed goes there
-  const placed = at !== null;
-  useLayoutEffect(() => {
-    if (!placed) return;
-    field.current?.focus();
-    field.current?.select();
-  }, [placed]);
   const answer = (event: FormEvent) => {
     event.preventDefault();
     (store.dispatch as (command: CommandId, args: unknown) => DispatchResult)(entry.command.id, { ...entry.door.args, href: address });
   };
-  return createPortal(
-    <div className="link-prompt" data-link-prompt>
-      {BACKDROP ? <DoorControl entry={BACKDROP} className="overlay-backdrop" /> : null}
-      <form className={`link-prompt__panel${at === null ? ' is-measuring' : ''}`} style={at === null ? undefined : { left: at.left, top: at.top }} onSubmit={answer}>
+  // a popover under the toolbar (popover.tsx): inside the window, over its backdrop; the field takes the focus once it
+  // is placed, before the next key arrives, with what it holds selected
+  return (
+    <Popover anchor={anchor} as="form" className="link-prompt__panel" label={t('textEdit.linkPrompt.label')} onSubmit={answer}>
         <label className="link-prompt__label" htmlFor={`${id}-address`}>
           {t('textEdit.linkPrompt.label')}
         </label>
@@ -96,12 +75,12 @@ function LinkPrompt({ entry, anchor }: { readonly entry: DoorEntry; readonly anc
           aria-describedby={`${id}-hint`}
           data-local="link-address"
           onChange={(event) => setAddress(event.target.value)}
+          onFocus={(event) => event.currentTarget.select()}
+          data-autofocus
         />
         <p id={`${id}-hint`} className={`link-prompt__hint${refusal !== null ? ' is-refused' : ''}`}>
           {refusal !== null ? t(refusal.key, refusal.params) : t('textEdit.linkPrompt.hint')}
         </p>
-      </form>
-    </div>,
-    document.body,
+    </Popover>
   );
 }

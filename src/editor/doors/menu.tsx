@@ -18,6 +18,7 @@ import { useEditorState, useStore } from '../store.ts';
 import { useT } from '../text.ts';
 import { stateOf } from '../view/style-state.ts';
 import { DoorControl, Icon, useDoor, isDoorBuilt } from './door.tsx';
+import { floatBelow, pointAnchor } from '../shell/float.ts';
 import { GLYPHS, doorSlots, menuOf, slotsIn, type Anchor } from './placement.ts';
 
 // the backdrop under an open menu: the door the manifest places in the overlay region
@@ -71,13 +72,9 @@ function MenuList({ menu, onDone, focusFirst, anchor }: { readonly menu: MenuId;
     const own = list.current;
     if (!button || !own) return;
     const edge = parseFloat(getComputedStyle(own).getPropertyValue('--space-4')) || 0;
-    const from = button.getBoundingClientRect();
     const { width, height } = own.getBoundingClientRect();
-    // under the button from its left edge, or ending at its right edge when that would leave the window; above it when
-    // there is no room below (a menu of the status bar)
-    const left = from.left + width + edge <= window.innerWidth ? from.left : from.right - width;
-    const top = from.bottom + height + edge <= window.innerHeight ? from.bottom : from.top - height;
-    setAt({ left: Math.max(edge, Math.min(left, window.innerWidth - width - edge)), top: Math.max(edge, top) });
+    // under the button, inside the window, above it when there is no room below (a menu of the status bar): float.ts
+    setAt(floatBelow(button.getBoundingClientRect(), { width, height }, { width: window.innerWidth, height: window.innerHeight }, edge));
   }, [anchor]);
   // the first item takes the focus once the menu shows (a menu opened from a button, once it is placed)
   const shown = anchor === undefined || at !== null;
@@ -238,7 +235,7 @@ function OpenContextMenu() {
     if (!menu) return;
     const edge = parseFloat(getComputedStyle(menu).getPropertyValue('--space-4')) || 0;
     const { width, height } = menu.getBoundingClientRect();
-    setAt({ left: Math.max(0, Math.min(start.x, window.innerWidth - width - edge)), top: Math.max(0, Math.min(start.y, window.innerHeight - height - edge)) });
+    setAt(floatBelow(pointAnchor(start.x, start.y), { width, height }, { width: window.innerWidth, height: window.innerHeight }, edge));
   }, [start.x, start.y]);
   useEffect(() => {
     const before = document.activeElement;

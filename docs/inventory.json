@@ -5,8 +5,8 @@
     "commands": 257,
     "doors": 1000,
     "scenarios": 1338,
-    "modules": 254,
-    "lines": 49024
+    "modules": 256,
+    "lines": 49112
   },
   "features": [
     {
@@ -4140,7 +4140,7 @@
     },
     {
       "path": "src/editor/canvas/text-toolbar.tsx",
-      "lines": 108,
+      "lines": 87,
       "commands": [],
       "features": []
     },
@@ -4205,7 +4205,7 @@
     },
     {
       "path": "src/editor/doors/menu.tsx",
-      "lines": 265,
+      "lines": 262,
       "commands": [],
       "features": []
     },
@@ -4612,7 +4612,7 @@
     },
     {
       "path": "src/editor/shell/class-bar.tsx",
-      "lines": 202,
+      "lines": 189,
       "commands": [],
       "features": []
     },
@@ -4689,6 +4689,12 @@
       "features": []
     },
     {
+      "path": "src/editor/shell/float.ts",
+      "lines": 36,
+      "commands": [],
+      "features": []
+    },
+    {
       "path": "src/editor/shell/gradient.tsx",
       "lines": 195,
       "commands": [],
@@ -4714,7 +4720,7 @@
     },
     {
       "path": "src/editor/shell/inspector.tsx",
-      "lines": 743,
+      "lines": 727,
       "commands": [],
       "features": []
     },
@@ -4745,6 +4751,12 @@
     {
       "path": "src/editor/shell/panel-field.tsx",
       "lines": 150,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/shell/popover.tsx",
+      "lines": 105,
       "commands": [],
       "features": []
     },

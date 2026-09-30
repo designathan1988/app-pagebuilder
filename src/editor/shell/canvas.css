@@ -916,28 +916,13 @@
   height: var(--size-target-min);
 }
 
-/* the link prompt under the text toolbar, over its backdrop, over every region of the window */
-.link-prompt {
-  display: contents;
-}
-
+/* the link prompt under the text toolbar: a popover (popover.tsx) of its label, its field and its hint */
 .link-prompt__panel {
-  position: fixed;
-  z-index: var(--z-menu);
   display: grid;
   gap: var(--space-2);
   width: calc(var(--size-inspector) - var(--space-8));
   padding: var(--space-3);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-surface-raised);
-  box-shadow: var(--shadow-2);
-  color: var(--color-text);
   font: var(--fw-body) var(--fs-body) / var(--lh-body) var(--font-ui);
-}
-
-.link-prompt__panel.is-measuring {
-  visibility: hidden;
 }
 
 .link-prompt__label {

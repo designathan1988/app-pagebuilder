@@ -7,7 +7,7 @@
 //  - Save the styles as a class (classes.create): it opens a name field; Enter keeps the name, leaving the field closes it;
 //  - below them, while a class is the target, how many elements the edit reaches (".card affects 3 elements").
 // The lists and fields are the doors' own popups: opening one is not a command (DESIGN.md "What is not a command").
-import { useState, type FormEvent, type ReactNode } from 'react';
+import { useRef, type FormEvent, type ReactNode } from 'react';
 import { isFeatureBuilt } from '../../app/features.ts';
 import { classesOf, usesOfClass } from '../../core/design/classes.ts';
 import { locate } from '../../core/document/model.ts';
@@ -20,6 +20,7 @@ import { afterGesture } from '../input/pointer.ts';
 import { styleClassOf } from '../inspector/style-target.ts';
 import { useEditorState, useStore } from '../store.ts';
 import { useT } from '../text.ts';
+import { Popover, usePopover } from './popover.tsx';
 
 const DOORS = doorSlots('inspector-selector-bar');
 // the target chip, the × drawn inside a class chip, + Class and Save the styles as a class (their commands' arguments)
@@ -71,27 +72,11 @@ export function TargetChips() {
   );
 }
 
-// The open state of a class popup: open until a choice, a press outside it (the overlay backdrop, ui.dismiss) or Escape
-// in it (its key context, dialog: ui.dismiss) — a dismissal newer than its opening closes it, as a menu (menu.tsx)
-function usePopup(): readonly [boolean, (next: boolean | ((was: boolean) => boolean)) => void] {
-  const dismissals = useEditorState((s) => s.ui.overlays.dismissals);
-  const [openedAt, setOpenedAt] = useState<number | null>(null);
-  const open = openedAt !== null && openedAt === dismissals;
-  const setOpen = (next: boolean | ((was: boolean) => boolean)) => {
-    const value = typeof next === 'function' ? next(open) : next;
-    setOpenedAt(value ? dismissals : null);
-  };
-  return [open, setOpen] as const;
-}
-
-// the backdrop under an open popup: a press on it is ui.dismiss, which closes it
-const BACKDROP = doorSlots('overlay')[0];
-const Backdrop = () => (BACKDROP === undefined ? null : <DoorControl entry={BACKDROP} className="overlay-backdrop" />);
-
 // + Class: the list of the classes to apply and the field of a new name
 export function ApplyClass() {
   const t = useT();
-  const [open, setOpen] = usePopup();
+  const trigger = useRef<HTMLButtonElement>(null);
+  const { open, setOpen } = usePopover(trigger);
   const run = useTyped(APPLY, 'className');
   const shared = useSharedClasses();
   const offered = useEditorState((s) => classesOf(s.document).map((c) => c.name).filter((name) => !shared.includes(name)).join(SEPARATOR));
@@ -106,6 +91,7 @@ export function ApplyClass() {
   return (
     <span className="class-popup">
       <button
+        ref={trigger}
         type="button"
         className={`door door--button target-chip target-chip--add${door.available ? '' : ' is-unavailable'}`}
         data-door={APPLY.ref}
@@ -119,9 +105,9 @@ export function ApplyClass() {
       >
         <span className="door__label">{door.face}</span>
       </button>
-      {open ? <Backdrop /> : null}
       {open ? (
-        <span className="class-popup__panel" role="dialog" aria-label={door.label} data-key-context="dialog">
+        // the popover: under the chip, inside the window, closed by a choice, the backdrop or Escape (popover.tsx)
+        <Popover anchor={trigger} className="class-popup__panel" label={door.label}>
           {offered === ''
             ? null
             : offered.split(SEPARATOR).map((name) => (
@@ -134,9 +120,9 @@ export function ApplyClass() {
               ))}
           <form className="class-popup__form" onSubmit={submit}>
             {/* the field takes the focus as the list opens: the person types a new name at once */}
-            <input className="input" name="name" autoFocus spellCheck={false} placeholder={t('inspector.className')} aria-label={t('inspector.className')} data-local="class-name" data-key-context="dialog" />
+            <input className="input" name="name" data-autofocus spellCheck={false} placeholder={t('inspector.className')} aria-label={t('inspector.className')} data-local="class-name" data-key-context="dialog" />
           </form>
-        </span>
+        </Popover>
       ) : null}
     </span>
   );
@@ -145,7 +131,8 @@ export function ApplyClass() {
 // Save the styles as a class: the name field
 export function SaveAsClass() {
   const t = useT();
-  const [open, setOpen] = usePopup();
+  const trigger = useRef<HTMLButtonElement>(null);
+  const { open, setOpen } = usePopover(trigger);
   const run = useTyped(SAVE, 'name');
   const door = useDoor(SAVE ?? (DOORS[0] as DoorEntry), {}, undefined, SAVE !== undefined && ready(SAVE));
   if (SAVE === undefined) return null;
@@ -158,6 +145,7 @@ export function SaveAsClass() {
   return (
     <span className="class-popup">
       <button
+        ref={trigger}
         type="button"
         className={`door door--icon-button${door.available ? '' : ' is-unavailable'}`}
         data-door={SAVE.ref}
@@ -171,13 +159,12 @@ export function SaveAsClass() {
       >
         {SAVE.door.icon !== null ? <Icon name={SAVE.door.icon} size="md" /> : null}
       </button>
-      {open ? <Backdrop /> : null}
       {open ? (
-        <span className="class-popup__panel" role="dialog" aria-label={door.label} data-key-context="dialog">
+        <Popover anchor={trigger} className="class-popup__panel" label={door.label}>
           <form className="class-popup__form" onSubmit={submit}>
-            <input className="input" name="name" autoFocus spellCheck={false} placeholder={t('inspector.className')} aria-label={t('inspector.className')} data-local="class-name" data-key-context="dialog" />
+            <input className="input" name="name" data-autofocus spellCheck={false} placeholder={t('inspector.className')} aria-label={t('inspector.className')} data-local="class-name" data-key-context="dialog" />
           </form>
-        </span>
+        </Popover>
       ) : null}
     </span>
   );
