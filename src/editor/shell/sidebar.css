@@ -682,3 +682,11 @@
   height: auto;
   padding: 0;
 }
+
+/* a tile's name longer than its tile is cut with an ellipsis, its tooltip holding it whole (the viewport and language
+   sweep: "Formulário com campos" spilled out of its tile in pt-BR) */
+.tile .tile__label {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
