@@ -642,6 +642,18 @@
   grid-template-columns: calc(var(--space-10) * 3 + var(--space-2)) minmax(0, 1fr) minmax(0, 1fr);
 }
 
+/* A longhand of a concept another row already draws (rows.ts isDetailRow: border's twelve, border-radius's four):
+   it follows its concept, set in from it and quieter, so eleven rows of one border read as one border and its parts.
+   The panel keeps every field — All properties is a contract — and gains a hierarchy to read them by. */
+.field-row--detail {
+  padding-left: var(--space-6);
+}
+.field-row--detail > .field-row__label,
+[data-region='inspector-style'] .field-row--detail > .field-row__label {
+  color: var(--color-text-subtle);
+  font-size: var(--fs-caption);
+}
+
 /* A shorthand that writes both cells of a pair is a small linked edit control,
    placed on that line. Focusing it opens its full CSS value for typing. */
 [data-region='inspector-style'] .field-row-pair-wrap {

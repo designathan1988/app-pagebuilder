@@ -27,7 +27,7 @@ import { MenuButton } from '../doors/menu.tsx';
 import { GLYPHS, doorSlots, drawnAsOf, partOf, slotsIn } from '../doors/placement.ts';
 import { setActiveOption } from '../focus/focus.ts';
 import { authoredProperties, editedProperties, editedPropertiesByDoor, inspectorMode, inspectorSearchOf, isEssential, searchMatches, sectionClosed, sectionProperties, summaryOf, summaryProperties } from '../inspector/sections.ts';
-import { PAIR_ROWS, orderByGroup, pairRowOf, rowPrefixKey, type PairRow } from '../inspector/rows.ts';
+import { PAIR_ROWS, detailOwner, orderByGroup, pairRowOf, rowPrefixKey, type PairRow } from '../inspector/rows.ts';
 import { valueOrigin } from '../inspector/origin.ts';
 import { MODEL_RULES, useEditorState, useStore, layeredRules } from '../store.ts';
 import { FieldOrigin } from './field-origin.tsx';
@@ -167,6 +167,8 @@ function StyleSections() {
         const boxDoors = doors.filter((d) => targetOf(d)?.control === 'box-model');
         // The manifest orders the fields by group; the design draws the fields without subgroup headings.
         const units: ReactNode[] = [];
+        // the property each unit draws, beside the unit, so the pass below can order a concept before its details
+        const unitTarget: (string | null)[] = [];
         const rowDrawn = new Set<string>();
         const shorthandDrawn = new Set<string>();
         // the fields of a pair row this section draws, in the row's own order; a row with one field left keeps a field
@@ -211,19 +213,20 @@ function StyleSections() {
         };
         for (const d of doors) {
           if (shorthand.has(d.ref)) {
-            if (!shorthandDrawn.has(d.ref)) units.push(<Fragment key={d.ref}>{drawer(d)}</Fragment>);
+            if (!shorthandDrawn.has(d.ref)) { units.push(<Fragment key={d.ref}>{drawer(d)}</Fragment>); unitTarget.push(editedTarget(d)); }
             continue;
           }
           const target = editedTarget(d);
           const row = searching || target === null ? null : pairRowOf(target);
           if (row === null || rowDrawn.has(d.ref)) {
-            if (row === null) units.push(<Fragment key={d.ref}>{drawer(d)}</Fragment>);
+            if (row === null) { units.push(<Fragment key={d.ref}>{drawer(d)}</Fragment>); unitTarget.push(editedTarget(d)); }
             continue;
           }
           // the fields of the row this section draws, in the row's own order; a row with one field left keeps a row
           const members = pairMembers(row);
           if (members.length < 2) {
             units.push(<Fragment key={d.ref}>{drawer(d)}</Fragment>);
+            unitTarget.push(editedTarget(d));
             continue;
           }
           for (const m of members) rowDrawn.add(m.ref);
@@ -244,7 +247,22 @@ function StyleSections() {
               {members.map((m) => <FieldOrigin key={`${m.ref}-origin`} entry={m} target={editedTarget(m)} />)}
             </Fragment>,
           );
+          unitTarget.push(target);
         }
+        // The concept before its details, whatever order the manifest lists the doors in: each unit is ranked by the
+        // unit that draws the concept it belongs to (itself, when it is one), and a detail follows its concept. The
+        // units keep their keys, so React moves the nodes and no field changes its state (rows.ts detailOwner).
+        const ranked = units.map((node, index) => {
+          const target = unitTarget[index] ?? null;
+          const owner = target === null ? null : detailOwner(target);
+          return { node, index, anchor: owner ?? target, detail: owner !== null };
+        });
+        const anchorAt = new Map<string, number>();
+        for (const unit of ranked) if (unit.anchor !== null && !unit.detail && !anchorAt.has(unit.anchor)) anchorAt.set(unit.anchor, unit.index);
+        const ordered = [...ranked].sort((a, b) => {
+          const rank = (u: typeof a) => (u.anchor === null ? u.index : anchorAt.get(u.anchor) ?? u.index);
+          return rank(a) - rank(b) || Number(a.detail) - Number(b.detail) || a.index - b.index;
+        });
         return (
           <section key={s.id} className="inspector-section" data-section={section} aria-label={t(s.labelKey as MessageId)}>
             {SECTION_HEADER ? (
@@ -255,7 +273,7 @@ function StyleSections() {
                 {set > 0 ? <span className="inspector-section__count">{t('inspector.valuesSet', { count: set })}</span> : null}
               </DoorControl>
             ) : null}
-            {closed ? null : units}
+            {closed ? null : ordered.map((unit) => unit.node)}
           </section>
         );
       })}

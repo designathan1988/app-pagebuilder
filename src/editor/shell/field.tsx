@@ -45,6 +45,7 @@ import { cssFamily, familyOf, isFontFile } from '../../core/files/fonts.ts';
 import { afterGesture, modifierOf, registerSlider } from '../input/pointer.ts';
 import { MODEL_RULES, useEditorState, useStore, type EditorStore, layeredRules } from '../store.ts';
 import { styleClassOf, styleSource } from '../inspector/style-target.ts';
+import { isDetailRow } from '../inspector/rows.ts';
 import { useT, useValueLabel } from '../text.ts';
 import { createToken, tokenKindOf, tokensOf } from '../../core/design/tokens.ts';
 import { compactFieldValue, FieldOriginBadge, FieldValueSlot, useFieldAppearance } from './field-face.tsx';
@@ -510,7 +511,7 @@ export function NumberField({ entry, door, property, label, bare = false, labell
     );
   }
   return (
-    <div className={`field-row${state}`} data-origin={appearance.kind} data-door={entry.ref} data-args={JSON.stringify({ property })} data-number-field title={door.title}>
+    <div className={`field-row${state}${isDetailRow(property) ? ' field-row--detail' : ''}`} data-origin={appearance.kind} data-door={entry.ref} data-args={JSON.stringify({ property })} data-number-field title={door.title}>
       {scrub ?? <span className="field-row__label">{label}</span>}
       {cell}
       {refusedText}
@@ -824,7 +825,7 @@ export function TextStyleField({
     );
   }
   return (
-    <div className={`field-row${state}`} data-origin={appearance.kind} data-door={entry.ref} data-args={JSON.stringify({ property })} title={door.title}>
+    <div className={`field-row${state}${isDetailRow(property) ? ' field-row--detail' : ''}`} data-origin={appearance.kind} data-door={entry.ref} data-args={JSON.stringify({ property })} title={door.title}>
       <span className="field-row__label" data-origin={appearance.kind} title={property}>
         {label}
       </span>
