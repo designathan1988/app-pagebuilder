@@ -4444,7 +4444,7 @@
           "feature": "quick-panel",
           "control": "font-weight",
           "labelKey": "property.fontWeight",
-          "faceLabelKey": null,
+          "faceLabelKey": "quickPanel.key.weight",
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4474,7 +4474,7 @@
           "feature": "quick-panel",
           "control": "line-height",
           "labelKey": "property.lineHeight",
-          "faceLabelKey": null,
+          "faceLabelKey": "quickPanel.key.lineHeight",
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4504,7 +4504,7 @@
           "feature": "quick-panel",
           "control": "letter-spacing",
           "labelKey": "property.letterSpacing",
-          "faceLabelKey": null,
+          "faceLabelKey": "quickPanel.key.letterSpacing",
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4534,7 +4534,7 @@
           "feature": "quick-panel",
           "control": "text-align",
           "labelKey": "property.textAlign",
-          "faceLabelKey": null,
+          "faceLabelKey": "quickPanel.key.textAlign",
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -5236,7 +5236,7 @@
           "feature": "quick-panel",
           "control": "align-items",
           "labelKey": "property.alignItems",
-          "faceLabelKey": null,
+          "faceLabelKey": "quickPanel.key.alignItems",
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {

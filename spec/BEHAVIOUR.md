@@ -5818,6 +5818,7 @@ The panel's controls have `tabindex="-1"` (sealed out of the Tab order, `quick-p
   value typed and not kept with Enter is dropped when the panel closes, as Escape in an inspector field drops it; the
   inspector's own fields keep the rule that leaving a field keeps what was typed.
 11. **The panel's groups were ranges of placement orders in the code** (the audit's U-044: object-fit landed in Settings, the radius in Paint by a magic order). Required: the groups are manifest data — layout.json's `quickPanelGroups` (id and name, in the order the panel draws them) — and each quick panel field names its group (`group`; null for the panel's head: the tag, More actions, Edit on canvas); manifest:check refuses a group the layout does not list and a group that holds no field (rule `quick-panel-group`).
+12. **The Effects, Text, Transform and Layout fields had no visible name, and the values read the browser's text** (the audit's U-008: `rgba(0, 0, 0, 0)`, `1 · none · 32px · 700 · normal`). Required: every style field of the panel names itself inside, before its value (the canonical `.qp-f` key): its door's short face label (`faceLabelKey`: Weight, ↕ line height, ↔ letter spacing, Align, Items), else its label (W, H, Opacity, Size, Move X…); a field whose door has an icon (Effects) shows the icon; a colour field in a two-column group shows its swatch as its key. At rest a field shows the inspector's face (a colour's hex or `transparent`, a length's number and unit); focused, its text.
 
 ## radius-border-gap-handles
 

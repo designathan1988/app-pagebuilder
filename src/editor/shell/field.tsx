@@ -772,7 +772,7 @@ export function TextStyleField({
   const cell = (
     <span className="input-wrap" data-face="" data-origin={appearance.kind}>
         {prefix !== null ? <span className="field__prefix">{prefix}</span> : null}
-        {!colour && !sample && entry.door.kind === 'inspector-field' && entry.door.icon !== null ? <Icon name={entry.door.icon} size="sm" /> : null}
+        {!colour && !sample && (entry.door.kind === 'inspector-field' || entry.door.kind === 'quick-panel') && entry.door.icon !== null ? <Icon name={entry.door.icon} size="sm" /> : null}
         {sample ? <span className="field__sample swatch" style={{ '--swatch-colour': shown || effective } as CSSProperties} title={shown || effective} /> : null}
         {colour && COLOR_SWATCH !== undefined ? (
           // each swatch names the field it opens the picker for (three of them read the same, the audit's accessible names)

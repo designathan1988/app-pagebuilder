@@ -196,8 +196,8 @@
   white-space: nowrap;
 }
 
-.quick-panel__group[data-quick-group='inspector.section.size'] .field-row__label,
-.quick-panel__group[data-quick-group='inspector.section.paint'] .field-row__label,
+/* every style field names itself inside (its key, quick-panel.tsx keyOf); the Settings group's attribute fields keep
+   their label beside them */
 .quick-panel__group[data-quick-group='inspector.tab.settings'] .field-row__label {
   position: static;
   width: auto;
@@ -207,8 +207,6 @@
   line-height: var(--lh-micro);
 }
 
-.quick-panel__group[data-quick-group='inspector.section.size'] .field-row,
-.quick-panel__group[data-quick-group='inspector.section.paint'] .field-row,
 .quick-panel__group[data-quick-group='inspector.tab.settings'] .field-row {
   grid-template-columns: auto minmax(0, 1fr);
   gap: var(--space-1);
@@ -414,3 +412,36 @@
 .chrome__direct:focus-visible {
   opacity: 1;
 }
+
+/* a quick field's key (the canonical .qp-f .k): muted caption type before the value */
+.quick-panel .field__prefix {
+  flex: none;
+  color: var(--color-text-subtle);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-ui);
+}
+
+/* a quick field at rest shows the same face as the inspector's (field-face.tsx: a colour's hex or transparent, a
+   length's number with its unit after it); focused, the field's own text */
+.quick-panel .field__rest-value {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  pointer-events: none;
+  font: inherit;
+  line-height: calc(var(--size-control) - var(--space-1));
+  text-overflow: ellipsis;
+}
+.quick-panel .input-wrap[data-face]:not(:focus-within) .field__value-slot .input,
+.quick-panel .input-wrap[data-face]:not(:focus-within) .field__value-slot .input::placeholder {
+  color: transparent;
+}
+.quick-panel .input-wrap:focus-within .field__rest-value { visibility: hidden; }
+.quick-panel .field__suffix {
+  display: inline;
+  flex: none;
+  color: var(--color-text-subtle);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-ui);
+}
+.quick-panel .input-wrap:focus-within .field__suffix { display: none; }

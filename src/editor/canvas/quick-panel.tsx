@@ -60,6 +60,8 @@ const CHIP = { width: 24, height: 24 };
 // quick-panel door names (its `group`; the audit's U-044: they were ranges of placement orders here). The manifest
 // supplies each field and its order within its group.
 const QUICK_GROUPS = manifest.layout.quickPanelGroups;
+// the groups laid out in one column (their fields' values are long: a colour, an image, a border, the attributes)
+const ONE_COLUMN: ReadonlySet<string> = new Set(['paint', 'settings']);
 const inQuickGroup = (entry: DoorEntry, group: (typeof QUICK_GROUPS)[number]): boolean => entry.door.kind === 'quick-panel' && entry.door.group === group.id;
 
 // What an Effects field typed means for style.setFilter's functions: none for nothing, every function typed set and
@@ -172,8 +174,17 @@ function ChoiceMenu({ entry, name, node, context }: { readonly entry: DoorEntry;
   );
 }
 
-function QuickField({ entry, node, context }: { readonly entry: DoorEntry; readonly node: DocNode; readonly context: ElementContext | null }) {
+// Every quick field says what it is inside itself (the canonical .qp-f's key; the audit's U-008: the Effects, Text,
+// Transform and Layout fields had no visible name): its door's short face label, else its label; a field that shows its
+// door's icon shows that instead, and a colour field in a two-column group its swatch.
+function keyOf(t: (key: MessageId) => string, entry: DoorEntry, swatchIsKey: boolean): string | null {
+  if (entry.door.icon !== null || swatchIsKey) return null;
+  return t((entry.door.faceLabelKey ?? entry.door.labelKey) as MessageId);
+}
+
+function QuickField({ entry, node, context, twoColumn }: { readonly entry: DoorEntry; readonly node: DocNode; readonly context: ElementContext | null; readonly twoColumn: boolean }) {
   const store = useStore();
+  const t = useT();
   const ready = isFeatureBuilt(entry.door.feature as FeatureId);
   const door = useDoor(entry, {}, undefined, ready);
   const args = entry.command.args;
@@ -227,14 +238,14 @@ function QuickField({ entry, node, context }: { readonly entry: DoorEntry; reado
   const composite = manifest.properties.composites.find((c) => sameList(c.longhands, writes));
   if (composite !== undefined) {
     const side = args.sides?.values[0];
-    return <TextStyleField entry={entry} door={door} property={composite.id} longhands={composite.longhands} label={door.label} ownCommand extra={side === undefined ? {} : { sides: side }} keepOnLeave={false} />;
+    return <TextStyleField entry={entry} door={door} property={composite.id} longhands={composite.longhands} label={door.label} ownCommand extra={side === undefined ? {} : { sides: side }} keepOnLeave={false} prefix={keyOf(t, entry, false)} />;
   }
   if (!('property' in args)) return null;
   const property = writes[0] ?? '';
   const part = partOf(entry, property);
-  if (part !== null) return <TextStyleField entry={entry} door={door} property={property} longhands={null} label={door.label} part={part} keepOnLeave={false} />;
+  if (part !== null) return <TextStyleField entry={entry} door={door} property={property} longhands={null} label={door.label} part={part} keepOnLeave={false} prefix={keyOf(t, entry, false)} />;
   // a command of its own that takes the value (Gradient: style.setBackgroundImage) keeps it with its own form
-  return <TextStyleField entry={entry} door={door} property={property} longhands={null} label={door.label} colour={COLOUR.has(property)} ownCommand={!keptByFieldEnter(entry)} keepOnLeave={false} />;
+  return <TextStyleField entry={entry} door={door} property={property} longhands={null} label={door.label} colour={COLOUR.has(property)} ownCommand={!keptByFieldEnter(entry)} keepOnLeave={false} prefix={keyOf(t, entry, twoColumn && COLOUR.has(property))} />;
 }
 
 // The chip: the panel's own control (manifest, the region's chip door). Collapsed it stands beside the selection's
@@ -426,6 +437,7 @@ export function QuickPanel({ stage }: { readonly stage: RefObject<HTMLDivElement
   });
   const tag = fields.find(isTag);
   const grouped = QUICK_GROUPS.map((group) => ({
+    id: group.id,
     name: group.labelKey,
     fields: fields.filter((entry) => !isTag(entry) && inQuickGroup(entry, group)),
   })).filter((group) => group.fields.length > 0);
@@ -446,10 +458,10 @@ export function QuickPanel({ stage }: { readonly stage: RefObject<HTMLDivElement
         {/* the context the writes land in (A3.8): the class target, the state and the breakpoint, when they differ from
             the plain element at Base */}
         {contextLabel === '' ? null : <span className="quick-panel__context" title={contextLabel}>{contextLabel}</span>}
-        {tag === undefined ? null : <span className="quick-panel__tag"><QuickField entry={tag} node={node} context={context} /></span>}
+        {tag === undefined ? null : <span className="quick-panel__tag"><QuickField entry={tag} node={node} context={context} twoColumn={false} /></span>}
         <div className="quick-panel__actions">
           {actions.map((entry) => (
-            <QuickField key={entry.ref} entry={entry} node={node} context={context} />
+            <QuickField key={entry.ref} entry={entry} node={node} context={context} twoColumn={false} />
           ))}
         </div>
         {CHIP_DOOR === null ? null : <Chip entry={CHIP_DOOR} open={true} measuring={measuring} buttonRef={chip} />}
@@ -459,14 +471,14 @@ export function QuickPanel({ stage }: { readonly stage: RefObject<HTMLDivElement
           <section className="quick-panel__group" data-quick-group={group.name} key={group.name}>
             <h3>{t(group.name as MessageId)}</h3>
             <div className="quick-panel__group-fields">
-              {group.fields.map((entry) => <QuickField key={entry.ref} entry={entry} node={node} context={context} />)}
+              {group.fields.map((entry) => <QuickField key={entry.ref} entry={entry} node={node} context={context} twoColumn={!ONE_COLUMN.has(group.id)} />)}
             </div>
           </section>
         ))}
         {other.length > 0 ? <section className="quick-panel__group" data-quick-group="inspector.group.more">
           <h3>{t('inspector.group.more')}</h3>
           <div className="quick-panel__group-fields">
-            {other.map((entry) => <QuickField key={entry.ref} entry={entry} node={node} context={context} />)}
+            {other.map((entry) => <QuickField key={entry.ref} entry={entry} node={node} context={context} twoColumn />)}
           </div>
         </section> : null}
       </div>
