@@ -1788,6 +1788,16 @@ export function checkManifest(input: ManifestInput): CheckResult {
   for (const [mi, m] of p.layout.menus.entries()) {
     for (const [ai, a] of m.anchors.entries()) claim(a.region, a.order, `the button of menu "${m.id}"`, 'layout.json', `menus[${mi}].anchors[${ai}].order`);
   }
+  // one name per item of a menu: two items of one menu (or of the context menu) never read the same (the audit's zoom
+  // menu drew "100%" three times)
+  const menuLabels = new Map<string, string>();
+  for (const { file, path, door, ref: doorRef } of doors) {
+    if ((door.kind !== 'menu' && door.kind !== 'context-menu') || typeof door.placement !== 'object') continue;
+    const label = `${door.placement.region}|${door.labelKey}`;
+    const first = menuLabels.get(label);
+    if (first !== undefined) report('placement', file, `${path}.labelKey`, `${doorRef} reads "${door.labelKey}" in region "${door.placement.region}", as ${first} does: each item of a menu has its own name`);
+    else menuLabels.set(label, doorRef);
+  }
 
   // ---- state-placement: a state belongs to the element's class selector, never to the page, so no
   // control that chooses a state is drawn on the canvas frame or the canvas toolbar

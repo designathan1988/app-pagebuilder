@@ -97,7 +97,7 @@ scripts.run('builder/frame-owner', builder.rules['frame-owner'], {
 });
 
 tsx.run('builder/keyboard-owner', builder.rules['keyboard-owner'], {
-  valid: ['input.addEventListener("change", pick);', 'const i = <input onChange={type} onFocus={f} />;', 'const b = <button onClick={run} />;'],
+  valid: ['input.addEventListener("change", pick);', 'const i = <input onChange={type} onFocus={f} />;', 'const b = <button onClick={run} />;', 'const d = <div data-key-context="dialog" />;', 'const d = <div data-key-context={CONTEXT} />;'],
   invalid: [
     { code: 'document.addEventListener("keydown", escape);', errors: [{ messageId: 'listener' }] },
     { code: 'window.removeEventListener(`keyup`, up);', errors: [{ messageId: 'listener' }] },
@@ -105,6 +105,8 @@ tsx.run('builder/keyboard-owner', builder.rules['keyboard-owner'], {
     { code: 'el.onkeydown = handle;', errors: [{ messageId: 'listener' }] },
     { code: 'const m = <div onKeyDown={arrows} />;', errors: [{ messageId: 'prop' }] },
     { code: 'const m = <div onKeyUpCapture={u} onKeyPress={p} />;', errors: [{ messageId: 'prop' }, { messageId: 'prop' }] },
+    { code: 'const d = <div data-key-context="interactions" />;', errors: [{ messageId: 'context' }] },
+    { code: 'const d = <div data-key-context={"nowhere"} />;', errors: [{ messageId: 'context' }] },
   ],
 });
 

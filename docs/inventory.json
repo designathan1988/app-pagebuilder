@@ -6,7 +6,7 @@
     "doors": 1000,
     "scenarios": 1335,
     "modules": 254,
-    "lines": 49014
+    "lines": 49024
   },
   "features": [
     {
@@ -5093,7 +5093,7 @@
     },
     {
       "path": "src/manifest/check.ts",
-      "lines": 2240,
+      "lines": 2250,
       "commands": [],
       "features": []
     },

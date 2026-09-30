@@ -9,7 +9,7 @@ import type { RuleDefinition, RuleVisitor } from '@eslint/core';
 import type { CSSRuleDefinition } from '@eslint/css';
 import type { TSESTree } from '@typescript-eslint/utils';
 import type { Linter, Rule, SourceCode } from 'eslint';
-import { COMMAND_IDS, DOOR_IDS, PROPERTY_IDS } from '../../src/generated/ids.ts';
+import { COMMAND_IDS, DOOR_IDS, KEY_CONTEXT_IDS, PROPERTY_IDS } from '../../src/generated/ids.ts';
 import { cssPropertyName, DEFAULT_TOKENS_FILE, numberLiteral, styleLiterals, tokenNames, type StyleLiteral } from './style-values.ts';
 
 type Node = Rule.Node;
@@ -503,16 +503,20 @@ const frameOwner: TsRuleDefinition<'reach' | 'write' | 'element'> = {
 
 // builder/keyboard-owner: keys belong to the keymap (src/editor/input/keymap.ts), the one file the configuration
 // exempts, which runs them as the manifest's shortcut doors. A keydown, keyup or keypress listener and an onKeyDown,
-// onKeyUp or onKeyPress prop are refused anywhere else; a native text field still takes its typing.
+// onKeyUp or onKeyPress prop are refused anywhere else; a native text field still takes its typing. A region names the
+// key context the keymap runs in it (data-key-context): a name interactions.json does not declare is refused, since the
+// keymap would run no key of its own there (the audit's E-09).
 const KEY_EVENT = /^key(down|up|press)$/i;
 const KEY_PROP = /^onKey(Down|Up|Press)(Capture)?$/;
-const keyboardOwner: TsRuleDefinition<'listener' | 'prop'> = {
+const KEY_CONTEXTS: ReadonlySet<string> = new Set(KEY_CONTEXT_IDS);
+const keyboardOwner: TsRuleDefinition<'listener' | 'prop' | 'context'> = {
   meta: {
     type: 'problem',
     docs: { description: 'Keys are handled only by the keymap' },
     messages: {
       listener: '{{what}}: keys belong to the keymap (src/editor/input/keymap.ts), which runs them as the manifest\'s shortcut doors.',
       prop: '{{what}}: keys belong to the keymap (src/editor/input/keymap.ts), which runs them as the manifest\'s shortcut doors.',
+      context: 'data-key-context="{{what}}" is no key context of manifest/interactions.json: declare it there, with the keys it takes.',
     },
     schema: [],
   },
@@ -533,6 +537,8 @@ const keyboardOwner: TsRuleDefinition<'listener' | 'prop'> = {
       JSXAttribute(node) {
         const name = node.name.type === 'JSXIdentifier' ? node.name.name : null;
         if (name !== null && KEY_PROP.test(name)) context.report({ node, messageId: 'prop', data: { what: name } });
+        const value = node.value?.type === 'Literal' ? node.value.value : node.value?.type === 'JSXExpressionContainer' && node.value.expression.type === 'Literal' ? node.value.expression.value : null;
+        if (name === 'data-key-context' && typeof value === 'string' && !KEY_CONTEXTS.has(value)) context.report({ node, messageId: 'context', data: { what: value } });
       },
     };
   },

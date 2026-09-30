@@ -831,6 +831,17 @@ PLANTS.push(
     },
   },
   {
+    id: 'menu-label-twice',
+    rule: 'placement',
+    description: 'two items of the zoom menu read the same',
+    apply: (m) => {
+      const items = list(command(m, 'view.zoomTo').entryPoints).filter((d) => d.kind === 'menu');
+      const [first, second] = items;
+      if (first === undefined || second === undefined) throw new Error('plant menu-label-twice: the zoom menu has fewer than two items');
+      second.labelKey = first.labelKey;
+    },
+  },
+  {
     id: 'state-door-on-canvas-toolbar',
     rule: 'state-placement',
     description: 'a Hover state button is drawn on the canvas toolbar (a state belongs to the class, not the page)',
