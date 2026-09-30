@@ -2117,6 +2117,18 @@
       "reader": "src/editor/inspector/sections.ts"
     },
     {
+      "field": "properties:controls",
+      "reader": "src/manifest/style-places.ts"
+    },
+    {
+      "field": "properties:controls[].door",
+      "reader": "src/manifest/style-places.ts"
+    },
+    {
+      "field": "properties:controls[].section",
+      "reader": "src/manifest/style-places.ts"
+    },
+    {
       "field": "properties:rows",
       "reader": "src/editor/inspector/rows.ts"
     },

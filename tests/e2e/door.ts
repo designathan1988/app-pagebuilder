@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type { Locator, Page, TestDetails } from '@playwright/test';
 import { withFunction } from '../../src/core/style/functions.ts';
+import { styleSections, type StyleDoor } from '../../src/manifest/style-places.ts';
 import { expect } from '../support/test.ts';
 
 export interface Door {
@@ -57,40 +58,16 @@ const PROPERTIES = JSON.parse(fs.readFileSync('manifest/properties.json', 'utf8'
   properties: { id: string; section: string; doors: string[] }[];
   composites: { id: string; section: string; doors: string[] }[];
   recipes: { id: string; section: string; doors: string[] }[];
+  controls: { door: string; section: string | null }[];
 };
-const SECTIONS_OF = new Map<string, string>([
-  ...PROPERTIES.properties.map((p) => [p.id, p.section] as const),
-  ...PROPERTIES.composites.map((c) => [c.id, c.section] as const),
-  ...PROPERTIES.recipes.map((r) => [r.id, r.section] as const),
-]);
-// the section of the Style tab a door's field is drawn in, or null when the door is no Style field. A part of a field
-// (its unit menu, its steps, its reset) names the property it edits among its door's arguments. A control that edits no
-// property of its own (the grid's tracks, the custom declarations) sits in the section of the field before it in the
-// panel's order — the rule the inspector itself draws by (src/editor/shell/inspector.tsx).
-const SECTIONS_OF_DOOR = (() => {
-  // the section of the property, composite or recipe whose own entry lists the door (properties.json) — the rule the
-  // inspector draws by, so a control the manifest files under a property (the grid's track editor) sits in its section
-  const listed = new Map<string, string>();
-  for (const entry of [...PROPERTIES.properties, ...PROPERTIES.composites, ...PROPERTIES.recipes]) {
-    for (const ref of entry.doors) if (!listed.has(ref)) listed.set(ref, entry.section);
-  }
-  const slots = [...DOORS.entries()]
-    .filter(([, d]) => d.kind === 'inspector-field' || d.kind === 'panel-control')
-    .map(([ref, d]) => ({ ref, d, placement: typeof d.placement === 'object' ? d.placement : null }))
-    .filter((s) => s.placement !== null && s.placement.region.startsWith('inspector'))
-    .sort((a, b) => (a.placement?.order ?? 0) - (b.placement?.order ?? 0));
-  const found = new Map<string, string>();
-  let carried: string | null = null;
-  for (const slot of slots) {
-    const named = typeof slot.d.args.property === 'string' ? (slot.d.args.property as string) : null;
-    const target: string | null = slot.d.property ?? slot.d.composite ?? slot.d.recipe ?? named;
-    const own: string | null = (target === null ? null : SECTIONS_OF.get(target)) ?? listed.get(slot.ref) ?? null;
-    if (own !== null) carried = own;
-    if (carried !== null) found.set(slot.ref, carried);
-  }
-  return found;
-})();
-export const sectionOfDoor = (ref: string): string | null => SECTIONS_OF_DOOR.get(ref) ?? null;
+// the section of the Style tab a door's field is drawn in, or null when the door is no Style field: the one answer the
+// inspector draws by (src/manifest/style-places.ts), read from the JSON this helper reads itself
+const PLACE = styleSections(PROPERTIES);
+export const sectionOfDoor = (ref: string): string | null => {
+  const d = DOORS.get(ref);
+  if (d === undefined || typeof d.placement !== 'object' || d.placement.region !== 'inspector-style') return null;
+  return PLACE(ref, d as StyleDoor) ?? null;
+};
 const EN = JSON.parse(fs.readFileSync('src/i18n/locales/en.json', 'utf8')) as Record<string, string>;
 
 export const DOOR_ANNOTATION = 'door';

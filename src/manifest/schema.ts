@@ -438,6 +438,11 @@ export const propertiesFileSchema = z.strictObject({
         fields: z.array(z.strictObject({ target: z.union([cssName, kebabId]), prefixKey: i18nKey.nullable(), measurement: z.enum(['width', 'height']).optional() })).min(2).max(2),
       }),
     ),
+  // The Style tab's controls that edit no property of their own, and the section each is drawn in (null: above the
+  // sections — the modes, Find a property). Every other Style door is placed by the property, composite or recipe its
+  // field edits (src/manifest/style-places.ts); manifest:check refuses a Style door with no place (rule
+  // style-door-section).
+  controls: z.array(z.strictObject({ door: doorRef, section: kebabId.nullable() })),
   // Shorthands stored whole: an engine lacks one of their longhands, and the reason says why the
   // manifest stores the shorthand instead of a composite that omits the missing longhands.
   storedWhole: z.array(z.strictObject({ property: cssName, reason: z.string().min(1) })),

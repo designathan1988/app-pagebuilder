@@ -2,6 +2,7 @@
 // schema, then the rules that tie the files together and to the generated web data. Pure: the
 // caller supplies the parsed files, the i18n catalogues, a way to ask whether a repository path
 // exists and the ids code has registered.
+import { styleSections, type StyleDoor } from './style-places.ts';
 import type { z } from 'zod';
 import { createCssMatcher, valueShape, type CssAnalysis, type CssMatcher } from './css.ts';
 import { normaliseChord } from './chord.ts';
@@ -108,6 +109,7 @@ export const RULES = [
   'tooth-proof',
   'zoom',
   'pressed',
+  'style-door-section',
 ] as const;
 
 export type RuleId = (typeof RULES)[number];
@@ -728,6 +730,31 @@ export function checkManifest(input: ManifestInput): CheckResult {
     }
   }
   unique('pair row', 'properties.json', p.properties.rows.map((r, i) => ({ id: r.id, path: `rows[${i}]` })));
+
+  // ---- style-door-section: every door the Style tab draws has its section (src/manifest/style-places.ts): the one of
+  // what its field edits, of the entry that lists it, or the one `controls` gives a control that edits no property —
+  // never "the section of the field before it" by an accident of the placement order (the audit's S-013, S-023). A
+  // control `controls` places is a Style door that has no other place, in a section that exists.
+  const places = { properties: p.properties.properties, composites: p.properties.composites, recipes: p.properties.recipes, controls: [] };
+  const derived = styleSections(places);
+  const placed = styleSections({ ...places, controls: p.properties.controls });
+  const sectionIds = new Set(p.properties.sections.map((s) => s.id));
+  for (const { file, path, door, ref: doorRef } of doors) {
+    if (typeof door.placement !== 'object' || door.placement.region !== 'inspector-style') continue;
+    if (placed(doorRef, door as StyleDoor) === undefined) report('style-door-section', file, `${path}.placement`, `${doorRef} is drawn in the Style tab in no section: its field edits no property, composite or recipe, no entry of properties.json lists it, and properties.json controls does not place it`);
+  }
+  for (const [i, c] of p.properties.controls.entries()) {
+    const at = `controls[${i}]`;
+    const entry = doorByRef.get(c.door);
+    if (entry === undefined) {
+      report('style-door-section', 'properties.json', `${at}.door`, `unknown door "${c.door}"`);
+      continue;
+    }
+    if (typeof entry.door.placement !== 'object' || entry.door.placement.region !== 'inspector-style') report('style-door-section', 'properties.json', `${at}.door`, `${c.door} is not drawn in the Style tab (inspector-style)`);
+    if (c.section !== null && !sectionIds.has(c.section)) report('style-door-section', 'properties.json', `${at}.section`, `unknown section "${c.section}"`);
+    const own = derived(c.door, entry.door as StyleDoor);
+    if (own !== undefined) report('style-door-section', 'properties.json', at, `${c.door} is placed by what it edits, in "${own}": it needs no control entry`);
+  }
   for (const [i, c] of p.properties.composites.entries()) {
     checkPlace('properties.json', `composites[${i}]`, c);
     for (const [di, d] of c.doors.entries()) ref(doorByRef.has(d), 'properties.json', `composites[${i}].doors[${di}]`, `unknown door "${d}"`);

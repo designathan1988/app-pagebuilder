@@ -5194,5 +5194,35 @@
         }
       ]
     }
+  ],
+  "controls": [
+    {
+      "door": "inspector.setMode#inspector-mode-essentials",
+      "section": null
+    },
+    {
+      "door": "inspector.setMode#inspector-mode-all",
+      "section": null
+    },
+    {
+      "door": "inspector.reveal#inspector-add-property-item",
+      "section": null
+    },
+    {
+      "door": "inspector.toggleSection#inspector-section-header",
+      "section": null
+    },
+    {
+      "door": "inspector.search#inspector-search-field",
+      "section": null
+    },
+    {
+      "door": "inspector.toggleSpacingLink#inspector-spacing-link",
+      "section": "space"
+    },
+    {
+      "door": "style.setCustomDeclarations#inspector-custom-declarations",
+      "section": "advanced"
+    }
   ]
 }

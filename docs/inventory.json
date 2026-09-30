@@ -5,8 +5,8 @@
     "commands": 257,
     "doors": 998,
     "scenarios": 1336,
-    "modules": 256,
-    "lines": 49115
+    "modules": 257,
+    "lines": 49194
   },
   "features": [
     {
@@ -4708,7 +4708,7 @@
     },
     {
       "path": "src/editor/shell/inspector-controls.tsx",
-      "lines": 592,
+      "lines": 589,
       "commands": [],
       "features": []
     },
@@ -4720,7 +4720,7 @@
     },
     {
       "path": "src/editor/shell/inspector.tsx",
-      "lines": 727,
+      "lines": 726,
       "commands": [],
       "features": []
     },
@@ -5105,7 +5105,7 @@
     },
     {
       "path": "src/manifest/check.ts",
-      "lines": 2250,
+      "lines": 2277,
       "commands": [],
       "features": []
     },
@@ -5141,7 +5141,13 @@
     },
     {
       "path": "src/manifest/schema.ts",
-      "lines": 1262,
+      "lines": 1267,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/manifest/style-places.ts",
+      "lines": 51,
       "commands": [],
       "features": []
     }

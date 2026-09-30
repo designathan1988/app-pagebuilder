@@ -183,3 +183,23 @@ test('Essentials draws the Border as its composite rows, not as its per-side fie
   await runDoor(page, ALL);
   await expect(border.locator('[data-door="style.setBorder#inspector-border-top-width-border-editor"]')).toHaveCount(1);
 });
+
+// A control that edits no property of its own is drawn in the section properties.json's controls gives it, never in
+// whichever section happened to come before it (the audit's S-013, S-023; src/manifest/style-places.ts): the spacing
+// link in Space, the custom declarations in Advanced; and each field in its property's section.
+test('each Style control is drawn in its own section', runs(OPEN, ROW, SECTION, ALL), async ({ page }) => {
+  await control(page, ROW, { args: { target: 'n-hero' } }).click();
+  await openEverySection(page);
+  await runDoor(page, ALL);
+  const PLACED: readonly (readonly [string, string])[] = [
+    ['inspector.toggleSpacingLink#inspector-spacing-link', 'space'],
+    ['style.setCustomDeclarations#inspector-custom-declarations', 'advanced'],
+    [WIDTH, 'size'],
+    [LETTER_SPACING, 'text'],
+  ];
+  for (const [ref, section] of PLACED) {
+    const drawn = page.locator(`[data-door="${ref}"]`).first();
+    await expect(drawn, `${ref} is drawn`).toHaveCount(1);
+    expect(await drawn.evaluate((el) => el.closest('[data-section]')?.getAttribute('data-section') ?? null), ref).toBe(section);
+  }
+});

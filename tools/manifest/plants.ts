@@ -831,6 +831,15 @@ PLANTS.push(
     },
   },
   {
+    id: 'style-control-unplaced',
+    rule: 'style-door-section',
+    description: 'the custom declarations lose their place in properties.json controls',
+    apply: (m) => {
+      const props = obj(m.files['properties.json']);
+      props.controls = list(props.controls).filter((c) => c.door !== 'style.setCustomDeclarations#inspector-custom-declarations');
+    },
+  },
+  {
     id: 'menu-label-twice',
     rule: 'placement',
     description: 'two items of the zoom menu read the same',

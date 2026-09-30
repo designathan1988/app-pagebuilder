@@ -77,13 +77,12 @@ const cssNamesOf = (entry: DoorEntry): readonly string[] => {
 // mode segments, Add a property), the ones after it belong to the sections.
 const HEADER_ORDER = SECTION_HEADER && typeof SECTION_HEADER.door.placement === 'object' ? SECTION_HEADER.door.placement.order : 0;
 const SECTION_DOORS = (() => {
-  const headerOrder = HEADER_ORDER;
   const bySection = new Map<string, DoorEntry[]>();
-  let section: string = SECTIONS[0]?.id ?? '';
   for (const slot of slotsIn('inspector-style')) {
-    // Find a property is drawn above the sections, not in one
-    if (slot.kind !== 'door' || slot.order <= headerOrder || slot.entry === PROPERTY_SEARCH) continue;
-    section = sectionOf(slot.entry) ?? section;
+    if (slot.kind !== 'door') continue;
+    // each door in its own section (style-places.ts); a control above the sections (the modes, Find a property) in none
+    const section = sectionOf(slot.entry);
+    if (section === null) continue;
     const list = bySection.get(section) ?? [];
     list.push(slot.entry);
     bySection.set(section, list);

@@ -1,3 +1,4 @@
+import { styleSections, type StyleDoor } from '../../manifest/style-places.ts';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import type { CommandId, FeatureId, KeyContextId, MessageId, StyleTargetId } from '../../generated/ids.ts';
 import { GENERATED_VALUES } from '../../generated/value-lists.ts';
@@ -7,7 +8,7 @@ import type { DispatchResult } from '../../core/store/store.ts';
 import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
 import { DoorControl, Icon, useDoor } from '../doors/door.tsx';
 import { GLYPHS, doorSlots } from '../doors/placement.ts';
-import { editedPropertiesByDoor, isColourValue } from '../inspector/sections.ts';
+import { isColourValue } from '../inspector/sections.ts';
 import { MODEL_RULES, useEditorState, useStore, layeredRules } from '../store.ts';
 import { styleSource } from '../inspector/style-target.ts';
 import { pluralForm } from '../../i18n/index.ts';
@@ -52,17 +53,13 @@ export const targetOf = (entry: DoorEntry): Target | null => {
   return id !== null ? (TARGETS.get(id) ?? null) : null;
 };
 
-// The section of the Style tab a door is drawn in: the property, composite or recipe its own field names; else the one
-// a control of its own edits (the grid's track editor: properties.json lists its doors among grid-template-columns's,
-// so it is drawn in the Layout section like the property it writes, never in whichever section happens to precede it);
-// null for a control that edits no property (the custom declarations), drawn in the section of the field before it.
-export const sectionOf = (entry: DoorEntry): string | null => {
-  const own = targetOf(entry)?.section;
-  if (own !== undefined) return own;
-  const edited = editedPropertiesByDoor(entry.ref);
-  const first = edited === null ? undefined : edited[0];
-  return first === undefined ? null : (TARGETS.get(first)?.section ?? null);
-};
+// The section of the Style tab a door is drawn in (src/manifest/style-places.ts): the one of the property, composite
+// or recipe its field edits, of the entry of properties.json that lists it (the grid's track editor, filed under
+// grid-template-columns), or the one properties.json's controls gives a control that edits no property (the spacing
+// link, the custom declarations); null for a control drawn above the sections. manifest:check proves every Style door
+// has one.
+const PLACE = styleSections(manifest.properties);
+export const sectionOf = (entry: DoorEntry): string | null => PLACE(entry.ref, entry.door as StyleDoor) ?? null;
 
 // The values a field offers in All properties: the generated list of its property and its presets.
 function offered(entry: DoorEntry): readonly string[] {
