@@ -4,8 +4,9 @@ import { sequentialIds } from '../../core/ports/ids.ts';
 import type { MessageId } from '../../generated/ids.ts';
 import { translate } from '../../i18n/index.ts';
 import type { PreferenceStorage } from '../preferences/preferences.ts';
-import { createEditorStore } from '../store.ts';
-import { collapsedSections, sectionClosed, summaryOf, summaryProperties } from './sections.ts';
+import { createEditorStore, MODEL_RULES } from '../store.ts';
+import type { Declarations, DocNode, DocumentJson } from '../../core/document/model.ts';
+import { collapsedSections, declaredBorderValues, sectionClosed, summaryOf, summaryProperties } from './sections.ts';
 
 function memory(text: string | null = null): PreferenceStorage & { text: string | null } {
   const box = {
@@ -112,5 +113,19 @@ describe('the summary of a collapsed section (inspector/sections.ts)', () => {
   it('has none for a section without a summary, or when the page draws no element', () => {
     expect(summaryOf('content', {}, words, 'en')).toBeNull();
     expect(summaryOf('size', null, words, 'en')).toBeNull();
+  });
+
+  it('reads authored border widths and class values without measuring the canvas', () => {
+    const base = store().getState().document;
+    const page = base.pages[0];
+    if (page === undefined) throw new Error('the test project has no page');
+    const declarations = Object.fromEntries(summaryProperties('border').map((property) => [property,
+      property.endsWith('-width') ? '4px' : property.endsWith('-style') ? 'solid' : '0px',
+    ])) as Declarations;
+    const node: DocNode = { ...page.tree, classes: ['frame'], styles: {} };
+    const document: DocumentJson = { ...base, pages: [{ ...page, tree: node }], classes: [{ name: 'frame', styles: { desktop: { base: declarations } } }] };
+    expect(summaryOf('border', declaredBorderValues(document, node, MODEL_RULES), words, 'en')).toBe('4px solid');
+    const withOwn: DocNode = { ...node, styles: { desktop: { base: { 'border-top-width': '6px' } } } };
+    expect(summaryOf('border', declaredBorderValues(document, withOwn, MODEL_RULES), words, 'en')).toBe('6px 4px 4px solid');
   });
 });

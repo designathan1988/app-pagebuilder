@@ -26,7 +26,7 @@ import { DoorControl, Icon, useDoor } from '../doors/door.tsx';
 import { MenuButton } from '../doors/menu.tsx';
 import { GLYPHS, doorSlots, drawnAsOf, partOf, slotsIn } from '../doors/placement.ts';
 import { setActiveOption } from '../focus/focus.ts';
-import { authoredProperties, editedProperties, editedPropertiesByDoor, inspectorMode, inspectorSearchOf, isEssential, searchMatches, sectionClosed, sectionProperties, summaryOf, summaryProperties } from '../inspector/sections.ts';
+import { authoredProperties, declaredBorderValues, editedProperties, editedPropertiesByDoor, inspectorMode, inspectorSearchOf, isEssential, searchMatches, sectionClosed, sectionProperties, summaryOf, summaryProperties } from '../inspector/sections.ts';
 import { PAIR_ROWS, detailOwner, orderByGroup, pairRowOf, rowPrefixKey, type PairRow } from '../inspector/rows.ts';
 import { valueOrigin } from '../inspector/origin.ts';
 import { MODEL_RULES, useEditorState, useStore, layeredRules } from '../store.ts';
@@ -116,6 +116,12 @@ function StyleSections() {
   const only = useEditorState((s) => (s.selection.length === 1 ? (s.selection[0] ?? null) : null));
   const properties = useMemo(() => collapsed.flatMap((section) => summaryProperties(section)), [collapsed]);
   const values = usePageValues(only, properties);
+  const borderValuesText = useEditorState((state) => {
+    const id = state.selection.length === 1 ? state.selection[0] : undefined;
+    const selected = id === undefined ? null : locate(state.document, id)?.node ?? null;
+    return selected === null ? null : JSON.stringify(declaredBorderValues(state.document, selected, layeredRules(state.ui)));
+  });
+  const borderValues = useMemo(() => borderValuesText === null ? null : JSON.parse(borderValuesText) as Readonly<Record<string, string>>, [borderValuesText]);
   const node = useSingleNode();
   const mode = useEditorState((s) => inspectorMode(s.ui));
   const revealed = useEditorState((s) => s.ui.revealed?.field ?? null);
@@ -163,7 +169,7 @@ function StyleSections() {
           return target === revealed || (target !== null && editedProperties(target).includes(revealed));
         });
         const closed = !searching && collapsed.includes(section) && !holdsRevealed;
-        const summary = closed ? summaryOf(section, values, t, locale) : null;
+        const summary = closed ? summaryOf(section, section === 'border' ? borderValues : values, t, locale) : null;
         const boxDoors = doors.filter((d) => targetOf(d)?.control === 'box-model');
         // The manifest orders the fields by group; the design draws the fields without subgroup headings.
         const units: ReactNode[] = [];

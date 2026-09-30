@@ -7,13 +7,15 @@
 // Toggling records nothing in the history and never touches the document.
 //
 // A collapsed section's header summarises the values in force of the properties and composites its manifest entry
-// names (properties.json sections[].summary), read on the page the canvas draws (the CSS computed values, whatever
-// sets them: the element's own styles or the browser's defaults; spec, Problems in Pager 2). How each section writes
-// them is below (SUMMARIES); the words come from the catalogue.
+// names (properties.json sections[].summary). Most read CSS computed values; Border reads the document's declarations
+// because the scaled canvas changes CSSOM border widths. How each section writes them is below (SUMMARIES); the words
+// come from the catalogue.
 import { message, registerHandler, type RegisteredHandler } from '../../core/commands/registry.ts';
 import { classesOf } from '../../core/design/classes.ts';
-import { locate, type DocNode } from '../../core/document/model.ts';
+import { locate, type DocNode, type DocumentJson } from '../../core/document/model.ts';
+import type { ModelRules } from '../../core/document/validate.ts';
 import type { StoreState } from '../../core/store/store.ts';
+import { shownText } from '../../core/style/set.ts';
 import { fold } from '../../core/text/fold.ts';
 import type { CommandArgs } from '../../generated/commands.ts';
 import { SECTION_IDS, type MessageId, type SectionId } from '../../generated/ids.ts';
@@ -192,6 +194,32 @@ const READS = new Map<SectionId, readonly (readonly string[])[]>(
 // The CSS properties a section's summary reads on the page, for the page reader (coordinates.ts computedValues).
 export function summaryProperties(section: SectionId): readonly string[] {
   return (READS.get(section) ?? []).flat();
+}
+
+// A border's CSSOM width is rounded to device pixels in the scaled canvas frame. The inspector must instead report
+// the declarations in force: an element's own layer first, then its classes in stylesheet order. Missing longhands
+// take their CSS initial value, without measuring the page or its zoom.
+export function declaredBorderValues(document: DocumentJson, node: DocNode, rules: ModelRules): Readonly<Record<string, string>> {
+  const declared = (property: string): string | undefined => {
+    const own = shownText(node, property, rules);
+    if (own !== undefined) return own;
+    for (const styleClass of [...classesOf(document)].reverse()) {
+      if (!node.classes.includes(styleClass.name)) continue;
+      const value = shownText({ ...node, styles: styleClass.styles }, property, rules);
+      if (value !== undefined) return value;
+    }
+    return undefined;
+  };
+  return Object.fromEntries(summaryProperties('border').map((property) => {
+    const value = declared(property);
+    if (value !== undefined) return [property, value];
+    if (property.endsWith('-style')) return [property, 'none'];
+    if (property.endsWith('-width')) {
+      const style = declared(property.slice(0, -'-width'.length) + '-style');
+      return [property, style === undefined || style === 'none' || style === 'hidden' ? '0px' : 'medium'];
+    }
+    return [property, '0px'];
+  }));
 }
 
 type Words = (key: MessageId, params?: Readonly<Record<string, string | number>>) => string;

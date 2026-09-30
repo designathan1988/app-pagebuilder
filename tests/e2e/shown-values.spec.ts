@@ -13,6 +13,7 @@ const ROW = 'selection.select#layers-row';
 const BORDER = 'style.setBorder#inspector-border-border-editor';
 const QUICK_BORDER = 'style.setBorder#quick-panel-border';
 const ZOOM_200 = 'view.zoomTo#menu-zoom-200';
+const ZOOM_50 = 'view.zoomTo#menu-zoom-50';
 
 const field = (page: Page, ref: string) => control(page, ref).locator('input').first();
 // every style field the inspector and the quick panel draw, with what it holds and its placeholder
@@ -79,4 +80,18 @@ test('a border written as one value is stored as its longhands and shown as it w
   await expect(field(page, BORDER)).toHaveValue('2px solid #00aa00');
   await openQuickPanel(page);
   await expect(field(page, QUICK_BORDER)).toHaveValue('2px solid #00aa00');
+});
+
+test('the collapsed Border summary keeps the declared width across canvas zoom levels', runs(OPEN, ROW, BORDER, 'inspector.toggleSection#inspector-section-header', ZOOM_200, ZOOM_50), async ({ page }) => {
+  await field(page, BORDER).click();
+  await page.keyboard.type('4px solid #00aa00');
+  await page.keyboard.press('Enter');
+  const header = page.locator('[data-door="inspector.toggleSection#inspector-section-header"][data-args*=\'"section":"border"\']').first();
+  await header.click();
+  const summary = header.locator('.inspector-section__summary');
+  await expect(summary).toHaveText('4px solid');
+  await runDoor(page, ZOOM_200);
+  await expect(summary).toHaveText('4px solid');
+  await runDoor(page, ZOOM_50);
+  await expect(summary).toHaveText('4px solid');
 });
