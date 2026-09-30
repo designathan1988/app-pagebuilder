@@ -6,7 +6,7 @@
     "doors": 998,
     "scenarios": 1336,
     "modules": 257,
-    "lines": 49194
+    "lines": 49218
   },
   "features": [
     {
@@ -4684,7 +4684,7 @@
     },
     {
       "path": "src/editor/shell/field.tsx",
-      "lines": 1273,
+      "lines": 1296,
       "commands": [],
       "features": []
     },
@@ -5147,7 +5147,7 @@
     },
     {
       "path": "src/manifest/style-places.ts",
-      "lines": 51,
+      "lines": 52,
       "commands": [],
       "features": []
     }

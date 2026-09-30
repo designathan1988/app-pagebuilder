@@ -71,6 +71,12 @@
   cursor: not-allowed;
 }
 
+/* the line between the groups of a menu (jornada02 G-18): the values a field suggests, then its units */
+.menu__separator {
+  margin: var(--space-2) 0;
+  border-top: 1px solid var(--color-border);
+}
+
 .menu__reason {
   font-size: var(--fs-caption);
   line-height: var(--lh-caption);

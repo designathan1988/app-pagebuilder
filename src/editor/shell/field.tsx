@@ -232,7 +232,17 @@ export function propertyWord(t: ReturnType<typeof useT>, property: string): stri
   if (typeof said === 'number') return String(said);
   return 'key' in said ? t(said.key) : '';
 }
-function UnitMenu({ entry, property, shown, input, ready }: { readonly entry: DoorEntry; readonly property: string; readonly shown: string; readonly input: { readonly current: HTMLInputElement | null }; readonly ready: boolean }) {
+// The values the field suggests (the project's variables of its kind, the presets its door declares: Height's Screen
+// height) head the unit menu, each named as the catalogue names it and written with the field's own door: a number
+// field draws no datalist, whose arrow Chrome reserved inside a narrow value until it took no typed character at all (a
+// pair's Height kept "").
+interface Suggestions {
+  readonly field: DoorEntry;
+  readonly values: readonly string[];
+  readonly labelOf: (value: string) => string;
+  readonly keep: (value: string) => void;
+}
+function UnitMenu({ entry, property, shown, input, ready, suggestions }: { readonly entry: DoorEntry; readonly property: string; readonly shown: string; readonly input: { readonly current: HTMLInputElement | null }; readonly ready: boolean; readonly suggestions: Suggestions }) {
   const store = useStore();
   const t = useT();
   const door = useDoor(entry, { property }, undefined, ready);
@@ -280,6 +290,25 @@ function UnitMenu({ entry, property, shown, input, ready }: { readonly entry: Do
       {layer.backdrop}
       {open ? (
         <div className="menu field__menu" role="menu" ref={(element) => { list.current = element; unitList.current = element; }} aria-label={door.label} data-key-context="menu">
+          {suggestions.values.map((value) => (
+            <button
+              key={value}
+              type="button"
+              role="menuitem"
+              className="menu__item"
+              data-door={suggestions.field.ref}
+              data-args={JSON.stringify({ property, value })}
+              onClick={() => {
+                layer.close();
+                suggestions.keep(value);
+                input.current?.focus();
+              }}
+            >
+              <span className="menu__icon" />
+              <span className="menu__label">{suggestions.labelOf(value) === value ? value : `${suggestions.labelOf(value)} · ${value}`}</span>
+            </button>
+          ))}
+          {suggestions.values.length > 0 ? <div className="menu__separator" role="separator" /> : null}
           {shownUnits.map((unit) => (
             <button
               key={unit}
@@ -409,7 +438,6 @@ export function NumberField({ entry, door, property, label, bare = false, labell
   const valueLabel = useValueLabel();
   const variables = useTokenSuggestions(property);
   const tokens = [...variables, ...presetsOf(entry)];
-  const listId = useId();
   const said = useEditorState((s) => s.message);
   const available = door.available && primary !== null;
   const input = useRef<HTMLInputElement>(null);
@@ -463,16 +491,11 @@ export function NumberField({ entry, door, property, label, bare = false, labell
     <span className="input-wrap input-wrap--number" data-face="" data-origin={appearance.kind}>
       {prefix !== null ? <span className="field__prefix">{prefix}</span> : null}
       <FieldValueSlot value={mixed ? t('inspector.mixedValue') : compactFieldValue(base, true).value}>
-        <input ref={input} className="input" role="spinbutton" disabled={!available} aria-label={label} inputMode="decimal" spellCheck={false} data-key-context={NUMBER_FIELD_CONTEXT} placeholder={mixed ? t('inspector.mixedValue') : effective || undefined} list={tokens.length > 0 ? listId : undefined} aria-invalid={refused.text !== null ? true : undefined} onInput={refused.dismiss} />
+        <input ref={input} className="input" role="spinbutton" disabled={!available} aria-label={label} inputMode="decimal" spellCheck={false} data-key-context={NUMBER_FIELD_CONTEXT} placeholder={mixed ? t('inspector.mixedValue') : effective || undefined} aria-invalid={refused.text !== null ? true : undefined} onInput={refused.dismiss} />
       </FieldValueSlot>
-        {tokens.length > 0 ? (
-          <datalist id={listId}>
-            {tokens.map((value) => (
-              <option key={value} value={value} label={valueLabel(property, value) === value ? undefined : valueLabel(property, value)} />
-            ))}
-          </datalist>
-        ) : null}
-        {PARTS.filter((part) => part.door.kind === 'panel-control' && part.door.control === 'unit-menu').map((part) => <UnitMenu key={part.ref} entry={part} property={property} shown={base} input={input} ready={available} />)}
+        {PARTS.filter((part) => part.door.kind === 'panel-control' && part.door.control === 'unit-menu').map((part) => (
+          <UnitMenu key={part.ref} entry={part} property={property} shown={base} input={input} ready={available} suggestions={{ field: entry, values: tokens, labelOf: (value) => valueLabel(property, value), keep: (value) => keepValue(store, command, property, value, store.getState().selection) }} />
+        ))}
         {bare ? null : <FieldOriginBadge label={appearance.label} />}
         {measurement !== undefined && measured !== null && base === 'auto' ? <span className="field__measurement" aria-hidden="true">{measured[measurement]}</span> : null}
         <span className="field__actions">{PARTS.filter((part) => !(part.door.kind === 'panel-control' && part.door.control === 'unit-menu')).map((part) => {

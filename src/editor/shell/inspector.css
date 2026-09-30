@@ -902,7 +902,9 @@
   white-space: nowrap;
 }
 [data-region='inspector-style'] .field__origin-badge { margin-left: auto; }
-[data-region='inspector-style'] .input-wrap:focus-within .field__measurement { visibility: hidden; }
+/* the measured hint leaves the field while it holds the focus, and leaves its place too: an input that suggests values
+   (a datalist) took no typed character while a hint stood beside it, hidden or not (Chrome; a pair's Height kept "") */
+[data-region='inspector-style'] .input-wrap:focus-within .field__measurement { display: none; }
 [data-region='inspector-style'] .input-wrap[data-origin='here'] {
   color: var(--color-origin-here);
   background: var(--color-origin-here-soft);

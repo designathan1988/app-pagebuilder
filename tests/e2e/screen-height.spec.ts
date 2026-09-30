@@ -12,6 +12,7 @@ const FIXTURE = 'manifest/features/fixtures/aurora.json';
 const OPEN = 'project.open#menu-file';
 const EXPORT = 'project.export#toolbar-top-bar-export';
 const HEIGHT = 'style.set#inspector-height';
+const UNIT = 'field.setUnit#inspector-unit-menu';
 const FOLDS = 'grid.toggleFolds#guides-grids-fold-lines';
 
 async function openProject(page: Page): Promise<void> {
@@ -60,14 +61,17 @@ test('the canvas draws a fold line at each whole screen, named with its fold and
   expect((first - facts.top) / facts.zoom - pageTop).toBeLessThan(901);
 });
 
-test('the Height field suggests the Screen height preset and writing it keeps 100vh', runs(OPEN, HEIGHT), async ({ page }) => {
+test('the Height field suggests the Screen height preset and writing it keeps 100vh', runs(OPEN, HEIGHT, UNIT), async ({ page }) => {
   await openProject(page);
   await control(page, 'selection.select#layers-row', { args: { target: 'n-hero' } }).click();
-  // the field suggests the preset, named: the datalist option carries the label the catalogue gives the value
-  const option = control(page, HEIGHT).locator('datalist option[value="100vh"]');
+  // the field suggests the preset, named as the catalogue names the value: the first item of its unit menu
+  const field = control(page, HEIGHT);
+  await field.hover();
+  await control(page, UNIT, { args: { property: 'height' } }).first().click();
+  const option = page.locator(`[role="menu"] [data-door="${HEIGHT}"][data-args*='"value":"100vh"']`);
   await expect(option, 'the field suggests 100vh').toHaveCount(1);
-  await expect(option, 'named Screen height').toHaveAttribute('label', 'Screen height');
-  await type(page, HEIGHT, '100vh');
+  await expect(option, 'named Screen height').toHaveText('Screen height · 100vh');
+  await option.click();
   const stored = await page.evaluate(() => {
     type Node = { readonly name: string; readonly styles?: Record<string, Record<string, Record<string, string>>>; readonly children?: readonly Node[] };
     const port = (window as unknown as { __builderTestPort: { document: () => { pages: readonly { tree: Node }[] } } }).__builderTestPort;

@@ -1,8 +1,8 @@
 // Where a door of the Style tab is drawn (the audit's S-013 and S-023; plan item 2.C): the section of the property,
-// composite or recipe its field edits; else the section of the entry of properties.json whose doors list it (the
-// grid's track editor, filed under grid-template-columns); else the section properties.json's `controls` gives a
-// control that edits no property of its own (the spacing link, the custom declarations), or none for a control drawn
-// above the sections (the modes, Find a property). One answer for the panel (src/editor/shell/inspector.tsx), the
+// composite or recipe its field edits; else the section properties.json's `controls` gives a control (the spacing
+// link, the custom declarations, the anchor control), or none for a control drawn above the sections (the modes, Find
+// a property); else the section of the entry of properties.json whose doors list it first (the grid's track editor,
+// filed under grid-template-columns). One answer for the panel (src/editor/shell/inspector.tsx), the
 // manifest's check (a Style door with no answer is refused) and the browser tests (tests/e2e/door.ts): a control is
 // never drawn "in the section of the field before it" by an accident of the placement order.
 //
@@ -43,8 +43,9 @@ export function styleSections(data: StylePlacesData): (ref: string, door: StyleD
     const target = door.property ?? door.composite ?? door.recipe ?? named;
     const own = target === null ? undefined : ofTarget.get(target);
     if (own !== undefined) return own;
-    const filed = listed.get(ref);
-    if (filed !== undefined) return filed;
-    return controls.has(ref) ? (controls.get(ref) ?? null) : undefined;
+    // a control given a section (the anchor control, which several entries list for the insets and sizes it writes,
+    // the first of them a margin) takes it before the first entry that lists it
+    if (controls.has(ref)) return controls.get(ref) ?? null;
+    return listed.get(ref);
   };
 }

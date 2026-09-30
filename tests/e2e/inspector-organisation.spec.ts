@@ -186,7 +186,8 @@ test('Essentials draws the Border as its composite rows, not as its per-side fie
 
 // A control that edits no property of its own is drawn in the section properties.json's controls gives it, never in
 // whichever section happened to come before it (the audit's S-013, S-023; src/manifest/style-places.ts): the spacing
-// link in Space, the custom declarations in Advanced; and each field in its property's section.
+// link in Space, the custom declarations in Advanced, the anchor control in Position (a margin listed it first); and
+// each field in its property's section.
 test('each Style control is drawn in its own section', runs(OPEN, ROW, SECTION, ALL), async ({ page }) => {
   await control(page, ROW, { args: { target: 'n-hero' } }).click();
   await openEverySection(page);
@@ -194,6 +195,7 @@ test('each Style control is drawn in its own section', runs(OPEN, ROW, SECTION, 
   const PLACED: readonly (readonly [string, string])[] = [
     ['inspector.toggleSpacingLink#inspector-spacing-link', 'space'],
     ['style.setCustomDeclarations#inspector-custom-declarations', 'advanced'],
+    ['position.setAnchors#inspector-anchor-control', 'position'],
     [WIDTH, 'size'],
     [LETTER_SPACING, 'text'],
   ];
@@ -201,5 +203,29 @@ test('each Style control is drawn in its own section', runs(OPEN, ROW, SECTION, 
     const drawn = page.locator(`[data-door="${ref}"]`).first();
     await expect(drawn, `${ref} is drawn`).toHaveCount(1);
     expect(await drawn.evaluate((el) => el.closest('[data-section]')?.getAttribute('data-section') ?? null), ref).toBe(section);
+  }
+});
+
+// Every field of a pair row takes what is typed into it, the narrowest included (a pair's Height beside its H and its
+// measured hint took no character while it suggested values through a datalist, and Enter kept ""): typed, it holds
+// the text; Escape gives the document's value back.
+test('every field of a pair row takes what is typed into it', runs(OPEN, ROW, SECTION, ALL), async ({ page }) => {
+  for (const target of ['n-hero', 'n-title']) {
+    await control(page, ROW, { args: { target } }).click();
+    await openEverySection(page);
+    await runDoor(page, ALL);
+    const fields = page.locator('[data-region="inspector-style"] .field-row--pair .field-cell input');
+    const count = await fields.count();
+    expect(count, `${target}: pair fields are drawn`).toBeGreaterThan(4);
+    for (let i = 0; i < count; i += 1) {
+      const field = fields.nth(i);
+      if (!(await field.isEnabled())) continue;
+      await field.scrollIntoViewIfNeeded();
+      await field.click();
+      await page.keyboard.press('Control+A');
+      await page.keyboard.type('12');
+      expect(await field.inputValue(), `${target}: ${await field.getAttribute('aria-label')} holds what was typed`).toBe('12');
+      await page.keyboard.press('Escape');
+    }
   }
 });

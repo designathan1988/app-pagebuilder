@@ -753,7 +753,7 @@ export function checkManifest(input: ManifestInput): CheckResult {
     if (typeof entry.door.placement !== 'object' || entry.door.placement.region !== 'inspector-style') report('style-door-section', 'properties.json', `${at}.door`, `${c.door} is not drawn in the Style tab (inspector-style)`);
     if (c.section !== null && !sectionIds.has(c.section)) report('style-door-section', 'properties.json', `${at}.section`, `unknown section "${c.section}"`);
     const own = derived(c.door, entry.door as StyleDoor);
-    if (own !== undefined) report('style-door-section', 'properties.json', at, `${c.door} is placed by what it edits, in "${own}": it needs no control entry`);
+    if (own === c.section) report('style-door-section', 'properties.json', at, `${c.door} is placed in "${own ?? ''}" by what it edits or the entry that lists it: it needs no control entry`);
   }
   for (const [i, c] of p.properties.composites.entries()) {
     checkPlace('properties.json', `composites[${i}]`, c);

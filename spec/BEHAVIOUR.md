@@ -535,7 +535,10 @@ Not affected: switching the breakpoint records nothing.
   Tablet 834 × 1194, Phone 390 × 844). The canvas gives the page inside the frame that height as its viewport, so
   `vh`, `svh` and `dvh` measure the screen whatever the zoom — a hero at Height 100vh measures 900 px on Desktop and
   844 px on Phone, at 100 %, at Fit and at 25 % — and the **export keeps 100vh**, which the site resolves to its own
-  window the same way ("Screen height" is the name the Height field's list gives the value).
+  window the same way ("Screen height" is the name the Height field gives the value: the first item of its unit menu,
+  "Screen height · 100vh", which a number field's suggestions head — the project's variables of its kind, then its
+  door's presets — instead of a list under its text, whose arrow Chrome reserved inside a narrow value until it took
+  no typed character at all).
 - **The fold lines** mark where each screen ends: one at every whole screen (a 3000 px page on a 900 px screen has
   three, at 900, 1800 and 2700), each labelled "Fold 2 · 1800 px", drawn in the canvas chrome and never exported. They
   are a page setting (`foldLines` on the page root, like the layout grids), turned on and off in Guides & Grids, saved

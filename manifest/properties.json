@@ -5223,6 +5223,10 @@
     {
       "door": "style.setCustomDeclarations#inspector-custom-declarations",
       "section": "advanced"
+    },
+    {
+      "door": "position.setAnchors#inspector-anchor-control",
+      "section": "position"
     }
   ]
 }
