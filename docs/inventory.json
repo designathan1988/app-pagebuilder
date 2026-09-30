@@ -5,8 +5,8 @@
     "commands": 256,
     "doors": 998,
     "scenarios": 1333,
-    "modules": 249,
-    "lines": 48029
+    "modules": 250,
+    "lines": 48109
   },
   "features": [
     {
@@ -2888,7 +2888,7 @@
     },
     {
       "path": "src/core/design/components.ts",
-      "lines": 167,
+      "lines": 173,
       "commands": [
         "components.create",
         "components.insertInstance",
@@ -2911,6 +2911,12 @@
       "features": [
         "css-variables-tokens"
       ]
+    },
+    {
+      "path": "src/core/document/clone.ts",
+      "lines": 63,
+      "commands": [],
+      "features": []
     },
     {
       "path": "src/core/document/migrations.ts",
@@ -3438,7 +3444,7 @@
     },
     {
       "path": "src/core/project/pages.ts",
-      "lines": 157,
+      "lines": 161,
       "commands": [
         "pages.add",
         "pages.rename",
@@ -3551,7 +3557,7 @@
     },
     {
       "path": "src/core/structure/duplicate.ts",
-      "lines": 103,
+      "lines": 110,
       "commands": [
         "element.duplicate"
       ],

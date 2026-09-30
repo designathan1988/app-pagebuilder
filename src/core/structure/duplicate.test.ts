@@ -37,9 +37,9 @@ const DOC: DocumentJson = {
   ],
 };
 
-function run(selection: string[]) {
+function run(selection: string[], document = DOC) {
   const context = {
-    state: { document: DOC, selection: selection as NodeId[], history: EMPTY_HISTORY, message: null, ui: undefined as never },
+    state: { document, selection: selection as NodeId[], history: EMPTY_HISTORY, message: null, ui: undefined as never },
     clock: manualClock(),
     ids: sequentialIds('new'),
     rules: RULES,
@@ -51,10 +51,10 @@ function run(selection: string[]) {
   return duplicateCommand.run(context, {} as never);
 }
 const outline = (n: DocNode): string => (n.children.length === 0 ? n.name : `${n.name}(${n.children.map(outline).join(' ')})`);
-const after = (selection: string[]) => {
-  const outcome = run(selection);
+const after = (selection: string[], document = DOC) => {
+  const outcome = run(selection, document);
   if (outcome.kind !== 'change') throw new Error(`not a change: ${JSON.stringify(outcome)}`);
-  const applied = applyPatches(DOC, outcome.patches ?? []);
+  const applied = applyPatches(document, outcome.patches ?? []);
   return { document: applied.document, tree: outline(applied.document.pages[0]?.tree as DocNode), selection: outcome.selection, message: outcome.message, restored: applyPatches(applied.document, applied.inverses).document };
 };
 
@@ -97,6 +97,28 @@ describe('element.duplicate (src/core/structure/duplicate.ts)', () => {
     const perksCopy = result.document.pages[0]?.tree.children[2] as DocNode;
     expect(result.selection).toEqual([perksCopy.id, hero.children[2]?.id]);
     expect(result.restored).toEqual(DOC);
+  });
+
+  it('regenerates HTML ids and redirects internal references and interaction targets', () => {
+    const group = node('Group', 'container', 'div', { attributes: { id: 'group' }, children: [
+      node('Control', 'input', 'input', { attributes: { id: 'control' } }),
+      node('Label', 'label', 'label', { attributes: { labelFor: 'Control' } }),
+      node('Anchor', 'link', 'a', { attributes: { href: '#Control' } }),
+      node('Raw anchor', 'link', 'a', { attributes: { href: '#control' } }),
+      node('Trigger', 'button', 'button', { interactions: [{ trigger: 'click', action: 'show', target: 'Control' as NodeId }] }),
+    ] });
+    const document: DocumentJson = { version: 1, pages: [{ id: 'p', name: 'Home', file: 'index.html', tree: node('Page', 'page', 'body', { children: [group] }) }] };
+    const result = after(['Group'], document);
+    const copy = result.document.pages[0]?.tree.children[1];
+    expect(copy?.attributes.id).toBe('group-copy');
+    expect(copy?.children[0]?.attributes.id).toBe('control-copy');
+    expect(copy?.children[1]?.attributes.labelFor).toBe(copy?.children[0]?.id);
+    expect(copy?.children[2]?.attributes.href).toBe(`#${copy?.children[0]?.id}`);
+    expect(copy?.children[3]?.attributes.href).toBe('#control-copy');
+    expect(copy?.children[4]?.interactions?.[0]?.target).toBe(copy?.children[0]?.id);
+    const htmlIds = [...allNodes(result.document)].map((n) => n.attributes.id).filter((id) => id !== undefined);
+    expect(new Set(htmlIds).size).toBe(htmlIds.length);
+    expect(result.restored).toEqual(document);
   });
 
   it('refuses the page root and changes nothing', () => {

@@ -15,6 +15,7 @@
 // keeps at least one page.
 import { message, registerHandler } from '../commands/registry.ts';
 import type { DocNode, Page } from '../document/model.ts';
+import { refreshCopiedIdentities } from '../document/clone.ts';
 import type { Patch } from '../history/transaction.ts';
 
 // A page's name as a file name: lower case, no accent, its words joined by one dash (spec explorer-pages).
@@ -109,7 +110,10 @@ export const duplicatePageCommand = registerHandler('pages.duplicate', ({ state,
   // every node of the copy gets an id of its own and its own styles record; the rest of the node is data
   const copy = (node: DocNode): DocNode => ({ ...node, id: ids.next(), classes: [...node.classes], styles: structuredClone(node.styles), children: node.children.map(copy) });
   const { name, file } = fresh(document.pages.map((p) => p.name), document.pages.map((p) => p.file), source.name);
-  const made: Page = { id: ids.next(), name, file, tree: { ...copy(source.tree), name: rootName(document.pages, name) } };
+  const plainCopy = copy(source.tree);
+  const tree = refreshCopiedIdentities(document, [{ source: source.tree, copy: plainCopy }])[0];
+  if (tree === undefined) throw new Error('pages.duplicate: the copied tree is missing');
+  const made: Page = { id: ids.next(), name, file, tree: { ...tree, name: rootName(document.pages, name) } };
   return { kind: 'change' as const, patches: [{ op: 'add', path: ['pages', at + 1], value: made }], message: message('status.pages.duplicated', { name: source.name, copy: name }) };
 });
 

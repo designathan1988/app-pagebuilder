@@ -12,6 +12,7 @@ import type { StoredValue, Styles } from '../document/model.ts';
 import { storedValue, writeDeclarations } from '../style/set.ts';
 import { valuePredicateHolds } from '../style/couplings.ts';
 import { allNodes, walk, type DocNode, type Location } from '../document/model.ts';
+import { refreshCopiedIdentities } from '../document/clone.ts';
 import type { Patch } from '../history/transaction.ts';
 import { firstLockRefusal } from '../nodes/flags.ts';
 import type { IdGenerator } from '../ports/ids.ts';
@@ -79,7 +80,13 @@ export const duplicateCommand = registerHandler('element.duplicate', ({ state, i
   const taken = new Set<string>();
   for (const node of allNodes(state.document)) taken.add(node.name);
   // named in document order, so the first root's copy takes the first free number
-  const copies = roots.map((r) => ({ root: r, copy: copyOf(r.node, ids, taken, rules) }));
+  const raw = roots.map((r) => ({ source: r.node, copy: copyOf(r.node, ids, taken, rules) }));
+  const repaired = refreshCopiedIdentities(state.document, raw);
+  const copies = roots.map((root, index) => {
+    const copy = repaired[index];
+    if (copy === undefined) throw new Error('element.duplicate: a copied root is missing');
+    return { root, copy };
+  });
   // the last root first, so every path taken from the document before the duplicate still points at its node: a copy
   // shifts only the nodes after its original in document order
   const patches: Patch[] = copies

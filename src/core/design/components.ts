@@ -15,6 +15,7 @@
 import type { NodeId } from '../../generated/commands.ts';
 import { message, registerHandler, registerPredicate, type Message, type Outcome } from '../commands/registry.ts';
 import { lineage, locate, type ComponentDefinition, type DocNode, type DocumentJson } from '../document/model.ts';
+import { refreshCopiedIdentities } from '../document/clone.ts';
 import { placementRefusal } from '../elements/content-model.ts';
 import type { Patch } from '../history/transaction.ts';
 import { deepEqual } from '../history/transaction.ts';
@@ -87,7 +88,10 @@ export const createComponentCommand = registerHandler('components.create', ({ st
   // the name the prompt asked for (the audit's A3.12), the element's own when it asked for none or typed none
   const asked = typeof typed === 'string' ? typed.trim() : '';
   const name = componentName(state.document, asked === '' ? found.node.name : asked);
-  const definition: ComponentDefinition = { name, tree: copied(found.node, () => ids.next() as NodeId, null) };
+  const plainCopy = copied(found.node, () => ids.next() as NodeId, null);
+  const definitionTree = refreshCopiedIdentities(state.document, [{ source: found.node, copy: plainCopy }], false)[0];
+  if (definitionTree === undefined) throw new Error('components.create: the definition copy is missing');
+  const definition: ComponentDefinition = { name, tree: definitionTree };
   const added: Patch = state.document.components === undefined ? { op: 'add', path: ['components'], value: [definition] } : { op: 'add', path: ['components', componentsOf(state.document).length], value: definition };
   return { kind: 'change', patches: [added, { op: 'replace', path: found.path, value: marked(found.node, [], name) }], message: message('status.components.created', { name }) };
 });
@@ -105,7 +109,9 @@ export const insertInstanceCommand = registerHandler('components.insertInstance'
   // the instance is named after its component, with a simple number (the audit's A3.12): "Card", "Card 2", "Card 3"
   const name = copyName(definition.name, make.taken);
   make.taken.add(name);
-  const copiedTree = copied(definition.tree, () => ids.next() as NodeId, make, true);
+  const plainCopy = copied(definition.tree, () => ids.next() as NodeId, make, true);
+  const copiedTree = refreshCopiedIdentities(state.document, [{ source: definition.tree, copy: plainCopy }])[0];
+  if (copiedTree === undefined) throw new Error('components.insertInstance: the instance copy is missing');
   const node = marked({ ...copiedTree, name }, [], definition.name);
   // an instance lies inside no other instance
   const host = instanceRootOf(state.document, receiver.id);

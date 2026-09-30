@@ -1673,6 +1673,7 @@ Not affected.
 ### Problems in Pager
 
 1. **Descendants of a duplicated element keep their original names,** so the document has several `Heading` nodes that the BEM export must disambiguate later. Required: every node of the copy gets a new unique id **and** a unique name (manifest feature `duplicate`).
+   The copy also gets fresh HTML `id` attributes across the project; `for` and fragment references within the copied group follow their copied targets.
 2. **The Edit menu item dispatches a fake keyboard event** instead of calling the command. Required: every door calls the one duplicate command directly.
 3. **Duplicating could not be part of a drag.** Required (spec drag-duplicate): element.duplicate records its step per gesture, as element.moveTo does: alone (Ctrl+D, the menus) it is one step, and inside a drag's gesture (Alt at the release) it makes one step with the move of its copies.
 
@@ -6028,6 +6029,7 @@ Read from Pager's source (`reference/Pager`, run from `.cache/pager-run`); refer
   - The Insert view shows a tile per component, in a Components group after the element groups (DESIGN.md `insert` 7).
   - The tile's click places it where element.insert places a tile: into the selected container, after a selected leaf, else at the end of the page. The tile's drag places it where it is dropped, as a palette tile's creation drag does.
   - The instance's elements take the definition's elements, each with a new id and a name no other element has.
+  - HTML `id` attributes in the new instance take fresh values, and references to targets inside the instance follow its new nodes. The definition keeps the first instance's declared HTML ids.
   - The content model and locks refuse it as they refuse an element (`placementRefusal`). One undo step. The instance becomes the selection.
 - **Detach from the component** (`components.detach`: the context menu's item, the command bar; predicate `instanceSelected`, an instance's root selected alone) turns the instance into an ordinary subtree: its elements forget their component and their parts. One undo step, `status.components.detached`.
 

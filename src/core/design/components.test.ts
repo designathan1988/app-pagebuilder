@@ -68,6 +68,22 @@ describe('components.insertInstance and detach', () => {
     expect(insertInstanceCommand.run(context(first, ['Card']), { component: 'Card' })).toMatchObject({ kind: 'refused', message: { key: 'status.components.inInstance' } });
   });
 
+  it('gives each instance fresh HTML ids while preserving references within it', () => {
+    const source = node('Card', 'article', 'article', { attributes: { id: 'card' }, children: [
+      node('Control', 'input', 'input', { attributes: { id: 'control' } }),
+      node('Label', 'label', 'label', { attributes: { labelFor: 'Control' } }),
+    ] });
+    const initial = doc([source]);
+    const first = after(initial, createComponentCommand.run(context(initial, ['Card']), {}));
+    const second = after(first, insertInstanceCommand.run(context(first, ['Page']), { component: 'Card' }));
+    const original = second.pages[0]?.tree.children[0];
+    const placed = second.pages[0]?.tree.children[1];
+    expect(original?.attributes.id).toBe('card');
+    expect(placed?.attributes.id).toBe('card-copy');
+    expect(placed?.children[0]?.attributes.id).toBe('control-copy');
+    expect(placed?.children[1]?.attributes.labelFor).toBe(placed?.children[0]?.id);
+  });
+
   it('detaching forgets the component and the parts', () => {
     const next = after(made(), detachInstanceCommand.run(context(made(), ['Card']), {}));
     const plain = next.pages[0]?.tree.children[0];
