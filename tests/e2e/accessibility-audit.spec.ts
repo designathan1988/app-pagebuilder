@@ -162,3 +162,28 @@ test('every control of the Style tab has a name of its own', runs(OPEN, ROW, ALL
     expect(twice, `${target}: names two controls share`).toEqual([]);
   }
 });
+
+// A selected Layers row's detail (its tag) keeps 4.5:1 on the selected fill in the dark theme too (the audit's U-047:
+// the subtle ink fell to 3.9:1 there).
+test('a selected Layers row keeps its detail readable in the dark theme', runs(OPEN, ROW), async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await openAurora(page, 'n-card-a');
+  const ratio = await page.locator(`[data-door="${ROW}"][aria-selected="true"]`).first().evaluate((row) => {
+    const meta = row.closest('.row')?.querySelector('.row__meta') ?? row.querySelector('.row__meta');
+    const rgb = (text: string) => (text.match(/\d+(\.\d+)?/g) ?? []).slice(0, 3).map(Number);
+    const lum = ([r, g, b]: number[]) => {
+      const c = [r, g, b].map((v) => {
+        const s = (v ?? 0) / 255;
+        return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+      });
+      return 0.2126 * (c[0] ?? 0) + 0.7152 * (c[1] ?? 0) + 0.0722 * (c[2] ?? 0);
+    };
+    let surface: Element | null = row;
+    while (surface !== null && (getComputedStyle(surface).backgroundColor === 'rgba(0, 0, 0, 0)' || getComputedStyle(surface).backgroundColor === 'transparent')) surface = surface.parentElement;
+    if (meta === null || meta === undefined || surface === null) return 0;
+    const a = lum(rgb(getComputedStyle(meta).color));
+    const b = lum(rgb(getComputedStyle(surface).backgroundColor));
+    return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+  });
+  expect(ratio).toBeGreaterThanOrEqual(4.5);
+});

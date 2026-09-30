@@ -291,6 +291,14 @@
   background: var(--color-surface-selected);
 }
 
+/* on the selected fill the subtle ink falls to 3.9:1 in the dark theme (the audit's U-047): a selected row's detail
+   takes the muted ink, which holds 4.5:1 there */
+.row.is-selected .row__meta,
+.row[aria-selected='true'] .row__meta,
+.row:has(> .door.is-current) .row__meta {
+  color: var(--color-text-muted);
+}
+
 /* a row's main area lays its icon, name (or name field) and meta out on one line, whether it is a door (a file,
    which drags) or not (a folder) */
 .row__main {

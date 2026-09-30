@@ -3405,6 +3405,7 @@ See `layers-keyboard-navigation.md` (ArrowUp/ArrowDown move and select, ArrowRig
 2. **Selecting a node inside a folded branch leaves the branch folded,** so the selection is invisible in Layers. Required: selecting a hidden descendant unfolds its ancestors and scrolls its row into view (manifest feature `layers-expand-collapse-all`).
 3. **The header badge counts visible rows, not nodes** (32 → 2 after folding one branch). Required: the badge shows the number of nodes in the document and updates after every insert and delete, regardless of folding.
 4. **The Page row's tooltip and canvas chip say `<div>`** although the Page renders as `<body>`. Required: show the exported tag.
+5. **A selected row's tag fell to 3.9:1 on the selected fill in the dark theme** (the audit's U-047). Required: a selected row's detail takes the muted ink, which keeps at least 4.5:1 on the selected fill in both themes.
 
 ## layout-actions
 
