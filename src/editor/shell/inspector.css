@@ -31,11 +31,13 @@
   position: relative;
   min-width: 0;
   height: var(--size-control-lg);
-  padding: 0 var(--space-2);
+  /* design/final's inspector tabs: the body size and 8 px of side padding, not the caption size and 4 — measured
+     there at 12 px/600 in a 42 px tab against this panel's 11 px/600 in 32 px */
+  padding: 0 var(--space-4);
   border: 0;
   border-radius: 0;
   color: var(--color-text-muted);
-  font-size: var(--fs-caption);
+  font-size: var(--fs-body);
   white-space: nowrap;
 }
 
