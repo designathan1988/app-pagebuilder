@@ -16,7 +16,8 @@
 // there), level with it (DESIGN.md "Canvas": the label, its size chip and the quick panel chip beside it), so it covers
 // no more of the page than the label does. Where the open panel goes (placeQuickPanel): a remembered offset, held inside the stage, whichever part of the element it covers — the person dragged it there; otherwise the side of the
 // element with the most free space where the panel fits (above, below, right, left, in that order on a tie), clear of
-// the element's label above it; with no side free, at the top of the stage. The stage keeps an inset free all round.
+// the element's label above it; with no side free, the side where, held inside the stage, it covers the least of the
+// element. The stage keeps an inset free all round.
 //
 // Which fields it shows (appliesTo): a field shows only when its property applies to the selected element, by the
 // element predicates of core/style/applies.ts: the text properties on an element that holds text, the SVG fill on an
@@ -101,7 +102,15 @@ export function placeQuickPanel(element: Box, size: { readonly width: number; re
   ];
   const fits = (b: Box) => b.x >= inner.x && b.y >= inner.y && b.x + b.width <= right && b.y + b.height <= bottom;
   const best = sides.filter((s) => fits(s.box)).reduce<(typeof sides)[number] | null>((most, s) => (most === null || s.free > most.free ? s : most), null);
-  return best?.box ?? { x: centreX, y: inner.y, ...size };
+  if (best !== null) return best.box;
+  // No side holds it whole: each side's place, held inside the stage, and the one that covers the least of the element
+  // wins (on a tie the first of above, below, right, left: centred over the element, its side edges and their handles
+  // stay free) — the panel pinned at the stage's top covered a text near the top whole, and the
+  // handles Edit on canvas draws on it with it (spec quick-panel, Problems in Pager 9)
+  const held = sides.map((s) => ({ ...s, box: { ...s.box, x: heldX(s.box.x), y: heldY(s.box.y) } }));
+  const covered = (b: Box) => Math.max(0, Math.min(b.x + b.width, element.x + element.width) - Math.max(b.x, element.x)) * Math.max(0, Math.min(b.y + b.height, element.y + element.height) - Math.max(b.y, element.y));
+  const least = held.reduce((most, s) => (covered(s.box) < covered(most.box) ? s : most));
+  return least.box;
 }
 
 export function placeChip(label: Box, size: { readonly width: number; readonly height: number }, stage: Box, gap: number): Box {

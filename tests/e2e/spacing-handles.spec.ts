@@ -50,7 +50,9 @@ test('padding and margin bands are drawn with their values; the mode pins them a
   await expect(page.locator('[data-canvas-overlay] [data-door="style.setSpacing#handle-margin-top-band"]')).toHaveCount(1);
   expect(await tint(page.locator('[data-canvas-overlay] [data-door="style.setSpacing#handle-margin-top-band"]'))).not.toBe(padding);
   // Escape on the canvas leaves the mode, and only the mode: the selection stays (the canvas's own Escape waits)
-  await page.locator('[data-quick-panel-chip][aria-expanded="true"]').click();
+  // choosing the mode folded the quick panel to its chip: its handles are never under it (spec quick-panel, Problems
+  // in Pager 10)
+  await expect(page.locator('[data-quick-panel-chip]')).toHaveAttribute('aria-expanded', 'false');
   await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
   await runDoor(page, ESCAPE);
   await expect(bands(page), 'the bands stay, unpinned').toHaveCount(8);

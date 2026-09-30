@@ -315,6 +315,10 @@
           "drawnAs": "button",
           "icon": null
         }
+      ],
+      "breaks": [
+        5,
+        7
       ]
     },
     {
@@ -327,6 +331,11 @@
           "drawnAs": "button",
           "icon": null
         }
+      ],
+      "breaks": [
+        3,
+        8,
+        10
       ]
     },
     {
@@ -339,6 +348,15 @@
           "drawnAs": "button",
           "icon": null
         }
+      ],
+      "breaks": [
+        3,
+        6,
+        9,
+        10,
+        16,
+        18,
+        23
       ]
     },
     {
@@ -351,6 +369,13 @@
           "drawnAs": "button",
           "icon": null
         }
+      ],
+      "breaks": [
+        10,
+        12,
+        15,
+        16,
+        17
       ]
     },
     {

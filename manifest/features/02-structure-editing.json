@@ -4345,6 +4345,25 @@
                     ]
                   },
                   {
+                    "type": "section",
+                    "name": "Section",
+                    "tag": "section",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "padding-top": "56px",
+                          "padding-right": "40px",
+                          "padding-bottom": "56px",
+                          "padding-left": "40px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": []
+                  },
+                  {
                     "type": "list",
                     "name": "Perks",
                     "tag": "ul",
@@ -4396,25 +4415,6 @@
                         ]
                       }
                     ]
-                  },
-                  {
-                    "type": "section",
-                    "name": "Section",
-                    "tag": "section",
-                    "attributes": {},
-                    "classes": [],
-                    "styles": {
-                      "desktop": {
-                        "base": {
-                          "padding-top": "56px",
-                          "padding-right": "40px",
-                          "padding-bottom": "56px",
-                          "padding-left": "40px"
-                        }
-                      }
-                    },
-                    "text": null,
-                    "children": []
                   }
                 ]
               }
@@ -4433,7 +4433,7 @@
                 {
                   "node": "/Page/Plans/Section",
                   "measure": "y",
-                  "relation": "greater-than",
+                  "relation": "less-than",
                   "value": 0,
                   "reference": "/Page/Plans/Perks"
                 }
@@ -4444,7 +4444,7 @@
                   "params": {
                     "element": "Section",
                     "parent": "Plans",
-                    "position": 3,
+                    "position": 2,
                     "count": 3
                   }
                 }

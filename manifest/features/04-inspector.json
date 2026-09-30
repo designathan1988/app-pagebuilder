@@ -486,7 +486,7 @@
                   "region": "inspector-sections",
                   "measure": "height",
                   "relation": "less-than",
-                  "value": 600,
+                  "value": 360,
                   "reference": null
                 }
               ],
@@ -625,7 +625,7 @@
                   "region": "inspector-sections",
                   "measure": "height",
                   "relation": "greater-than",
-                  "value": 600,
+                  "value": 360,
                   "reference": null
                 },
                 {

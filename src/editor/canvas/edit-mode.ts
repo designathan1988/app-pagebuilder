@@ -32,7 +32,11 @@ export const setEditMode = registerHandler<'canvas.setEditMode', EditorUi>(
     if (editMode(state.ui) === mode) return { kind: 'change' };
     const { editMode: _dropped, ...rest } = state.ui;
     void _dropped;
-    return { kind: 'change', ui: mode === NO_MODE ? rest : { ...rest, editMode: mode } };
+    // a mode hands the canvas to its handles: the quick panel folds to its chip, so no handle is ever under it (spec
+    // quick-panel, Problems in Pager 10); the chip opens it again, the mode still on
+    const { quickPanelOpen: _folded, ...clear } = rest;
+    void _folded;
+    return { kind: 'change', ui: mode === NO_MODE ? rest : { ...clear, editMode: mode } };
   },
   (state, args) => editMode(state.ui) === args.mode,
 );

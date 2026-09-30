@@ -304,6 +304,13 @@
       "note": "Slop added to the escape ladder band."
     },
     {
+      "id": "drop.middleTie",
+      "value": 2,
+      "unit": "screen-px",
+      "source": "spec/BEHAVIOUR.md#drag-layout",
+      "note": "How near the middle of an element that refuses a drop the pointer still counts as on its near side: a hand aimed at the middle lands before it."
+    },
+    {
       "id": "drop.escapeBandFloor",
       "value": 6,
       "unit": "screen-px",

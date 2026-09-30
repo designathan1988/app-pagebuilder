@@ -1127,6 +1127,11 @@
     },
     {
       "kind": "handler",
+      "id": "inspector.toggleRow",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
       "id": "inspector.setMode",
       "status": "registered"
     },

@@ -6,7 +6,7 @@
     "doors": 1000,
     "scenarios": 1338,
     "modules": 259,
-    "lines": 49511
+    "lines": 49552
   },
   "features": [
     {
@@ -4025,7 +4025,7 @@
     },
     {
       "path": "src/editor/canvas/edit-mode.ts",
-      "lines": 82,
+      "lines": 86,
       "commands": [
         "canvas.setEditMode"
       ],
@@ -4209,7 +4209,7 @@
     },
     {
       "path": "src/editor/doors/menu.tsx",
-      "lines": 262,
+      "lines": 269,
       "commands": [],
       "features": []
     },
@@ -4293,7 +4293,7 @@
     },
     {
       "path": "src/editor/input/drop-proposals.ts",
-      "lines": 104,
+      "lines": 109,
       "commands": [],
       "features": []
     },
@@ -4587,7 +4587,7 @@
     },
     {
       "path": "src/editor/quick-panel/quick-panel.ts",
-      "lines": 128,
+      "lines": 137,
       "commands": [
         "quickPanel.setOpen",
         "quickPanel.setOffset"
@@ -4645,7 +4645,7 @@
     },
     {
       "path": "src/editor/shell/command-bar.tsx",
-      "lines": 170,
+      "lines": 171,
       "commands": [],
       "features": []
     },
@@ -4735,13 +4735,13 @@
     },
     {
       "path": "src/editor/shell/inspector-settings.tsx",
-      "lines": 318,
+      "lines": 324,
       "commands": [],
       "features": []
     },
     {
       "path": "src/editor/shell/inspector.tsx",
-      "lines": 752,
+      "lines": 753,
       "commands": [],
       "features": []
     },
@@ -4813,7 +4813,7 @@
     },
     {
       "path": "src/editor/shell/sidebar.tsx",
-      "lines": 1043,
+      "lines": 1045,
       "commands": [],
       "features": []
     },
@@ -5102,7 +5102,7 @@
     },
     {
       "path": "src/generated/ids.ts",
-      "lines": 4577,
+      "lines": 4580,
       "commands": [],
       "features": []
     },
@@ -5162,7 +5162,7 @@
     },
     {
       "path": "src/manifest/schema.ts",
-      "lines": 1283,
+      "lines": 1286,
       "commands": [],
       "features": []
     },

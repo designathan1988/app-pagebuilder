@@ -150,7 +150,11 @@
 .splitter:hover,
 .splitter:focus-visible {
   background: color-mix(in srgb, var(--color-accent) 35%, transparent);
-  outline: none;
+}
+
+/* the keyboard's focus on a splitter wears the one ring, drawn inside its 6 px (the audit's U-030: it had none) */
+.splitter:focus-visible {
+  outline-offset: -2px;
 }
 
 .view__title {
@@ -492,7 +496,9 @@
   pointer-events: auto;
 }
 
-.row__actions > .door {
+/* a row's actions show while the row is hovered or one of them holds the keyboard's focus, over the row's meta (a
+   file's Move sat on its folder and size, wrapped in a span the child rule missed) */
+.row__actions .door {
   opacity: 0;
 }
 
@@ -500,12 +506,13 @@
   background: var(--color-surface-hover);
 }
 
-.row:hover .row__actions > .door,
-.row__actions > .door:focus-visible {
+.row:hover .row__actions .door,
+.row__actions .door:focus-visible {
   opacity: 1;
 }
 
-.row:hover .row__meta {
+.row:hover .row__meta,
+.row:has(.row__actions .door:focus-visible) .row__meta {
   visibility: hidden;
 }
 
@@ -623,4 +630,12 @@
   color: var(--color-text-subtle);
   font-size: var(--fs-caption);
   line-height: var(--lh-caption);
+}
+
+/* the note of a Layers search that matches nothing (the audit's U-020), in the note recipe (jornada02 G-22) */
+.layers-search__none {
+  margin: 0;
+  padding: var(--space-3) var(--space-6);
+  color: var(--color-text-subtle);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-ui);
 }

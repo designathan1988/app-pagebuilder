@@ -813,6 +813,9 @@ export const layoutFileSchema = z.strictObject({
       anchors: z
         .array(z.strictObject({ region: regionId, order: z.number().int().positive(), drawnAs: z.enum(['icon-button', 'button', 'item']), icon: iconName.nullable() }))
         .min(1),
+      // the orders of the items a line stands before: the menu's groups (jornada02 G-18; the audit's U-033: Arrange's
+      // 23 items read as one run). Optional: absent, the menu is one group.
+      breaks: z.array(z.number().int().positive()).optional(),
     }),
   ),
   // The icons every control or item of a kind draws besides a door's own: the arrow of a button or field that opens a

@@ -682,7 +682,8 @@ export function Inspector() {
   return (
     <aside className="inspector" aria-label={t(panelName('inspector'))}>
       <div className="inspector-header" data-region="inspector-header">
-        <div className="inspector-header__tabs" role="tablist">
+        {/* its tabs rove with the arrows (the tab-strip key context; the audit's U-034) */}
+        <div className="inspector-header__tabs" role="tablist" data-key-context="tab-strip">
           <Slots
             region="inspector-header"
             render={(slot) => {

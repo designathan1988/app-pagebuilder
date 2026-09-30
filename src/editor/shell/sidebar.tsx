@@ -774,6 +774,8 @@ function LayersSection() {
         // the rows' region holds the search field above the tree (manifest: its door is placed in layers-row)
         <div data-region="layers-row">
           <LayersSearch />
+          {/* a search that matches no layer says so, instead of an empty tree (the audit's U-020) */}
+          {view !== null && view.matches.size === 0 ? <p className="layers-search__none">{t('layers.searchNoMatch', { query })}</p> : null}
           <div role="tree" aria-label={t(panelName('layers'))} data-region="layers-tree" data-key-context="layers-tree" className="layers-tree" ref={scroller} onFocusCapture={onFocusIn}>
             {/* only the rows the scroll shows are drawn (A3.28: a page of 1205 elements drew 17 160 nodes); the
                 board is as tall as every row, so the scrollbar tells the truth */}

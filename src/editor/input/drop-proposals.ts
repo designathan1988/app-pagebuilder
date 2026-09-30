@@ -9,6 +9,10 @@ import { isFeatureBuilt } from '../../app/features.ts';
 import type { FeatureId } from '../../generated/ids.ts';
 import { canvasFrame, flowAxis, flowReversed, geometryOf, laysOut, nodeBox, nodesUnder, sideFlow, type Point } from '../canvas/coordinates.ts';
 import { offerSide, proposeDrop, sideBand, SIDE_ZONES, type DropProposal, type SideOffer } from '../drag/drop.ts';
+import { numberConstant } from '../../manifest/runtime.ts';
+
+// how near the middle of a refusing element still counts as its near side (interactions.json)
+const MIDDLE_TIE = numberConstant('drop.middleTie');
 
 // the element types that hold children (elements.json content): what a proposal may insert into
 export const CONTAINERS = new Set(manifest.elements.elements.filter((e) => e.content === 'children').map((e) => e.id));
@@ -59,9 +63,10 @@ export function nearestAccepted(document: DocumentJson, dragged: readonly NodeId
     const box = nodeBox(frame, refuser);
     if (box === null) return null;
     const axis = flowAxis(frame, parent.id);
-    // the pointer exactly on the refusing element's middle counts as on its near side: a drag aimed at the middle of
-    // what refuses it lands before it, the side a person reading the list expects (the audit's rule, asked at the tie)
-    const shownBefore = axis === 'x' ? at.x <= box.x + box.width / 2 : at.y <= box.y + box.height / 2;
+    // the pointer on the refusing element's middle, within drop.middleTie screen pixels past it, counts as on its near
+    // side: a drag aimed at the middle of what refuses it lands before it, the side a person reading the list expects
+    // (the audit's rule, asked at the tie; a pointer is whole pixels, a middle rarely is)
+    const shownBefore = axis === 'x' ? at.x <= box.x + box.width / 2 + MIDDLE_TIE : at.y <= box.y + box.height / 2 + MIDDLE_TIE;
     const placement = flowReversed(frame, parent.id) === shownBefore ? 'after' : 'before';
     const siblings = parent.children.filter((c) => !dragged.includes(c.id));
     const index = siblings.findIndex((c) => c.id === refuser) + (placement === 'after' ? 1 : 0);

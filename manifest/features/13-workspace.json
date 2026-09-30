@@ -9422,14 +9422,14 @@
                   "region": "command-palette",
                   "measure": "width",
                   "relation": "equals",
-                  "value": 576,
+                  "value": 640,
                   "reference": null
                 },
                 {
                   "region": "command-palette",
                   "measure": "x",
                   "relation": "equals",
-                  "value": 432,
+                  "value": 400,
                   "reference": null
                 }
               ],
@@ -9494,14 +9494,14 @@
                   "region": "command-palette",
                   "measure": "width",
                   "relation": "equals",
-                  "value": 576,
+                  "value": 640,
                   "reference": null
                 },
                 {
                   "region": "command-palette",
                   "measure": "x",
                   "relation": "equals",
-                  "value": 432,
+                  "value": 400,
                   "reference": null
                 }
               ],

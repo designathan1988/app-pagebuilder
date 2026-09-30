@@ -689,6 +689,31 @@ async function controlPoint(page: Page, ref: string, args: Record<string, unknow
   return { x: box.x + box.width / 2, y: box.y + box.height * at };
 }
 
+// Scrolls the canvas page so a node stands clear of the band along the frame's top and bottom edges where a held drag
+// scrolls it (interactions.json drop.autoscrollZone, in screen pixels), when it lies in that band; nothing otherwise.
+// how far above its slot a tile's drop into a container starts its last approach, in screen pixels
+const APPROACH = 24;
+
+async function keepAwayFromEdges(page: Page, id: string): Promise<void> {
+  const zone = Number(interactions.constants.find((c) => c.id === 'drop.autoscrollZone')?.value ?? 0);
+  const moved = await page.evaluate(
+    ({ node, band }) => {
+      const iframe = window.document.querySelector<HTMLIFrameElement>('.frame__page');
+      const el = iframe?.contentDocument?.querySelector(`[data-node="${node}"]`);
+      const view = iframe?.contentWindow;
+      if (!iframe || !el || !view) return false;
+      const inPage = band / iframe.currentCSSZoom;
+      const r = el.getBoundingClientRect();
+      if (r.top >= inPage && r.bottom <= view.innerHeight - inPage) return false;
+      if (r.height >= view.innerHeight - 2 * inPage) return false;
+      el.scrollIntoView({ block: 'center', behavior: 'instant' });
+      return true;
+    },
+    { node: id, band: zone },
+  );
+  if (moved) await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
+}
+
 async function canvasDropPoint(page: Page, document: unknown, drop: Drop, index: number | null): Promise<Point> {
   const reference = nodeAt(document, drop.reference);
   await frameElement(page, reference.id, drop.reference);
@@ -1160,6 +1185,8 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
     // opposite too), and released. A step that types (and names no value to drag to) clicks the band, which opens its
     // typed field, and types there.
     if (step.hold === true || step.drop !== null) throw new Error(`step ${ref}: a band's drag is whole: it neither drops nor holds`);
+    // the element is scrolled clear of the frame's edge bands first, where a held drag scrolls the page from under it
+    if (target !== null) await keepAwayFromEdges(page, target.id);
     // (a gap band is drawn once per gap: the first)
     const band = page.locator(`[data-canvas-overlay] [data-door="${ref}"]`).first();
     await expect(band, `step ${ref}: the band is drawn`).toBeVisible();
@@ -1246,6 +1273,7 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
     // a handle of the one selected element, dragged by the travel that gives the size the step asks: its width and
     // height are the element's declared size (its content under content-box), so the travel is the difference between
     // that border box and the one drawn now, on the handle's sides, times the zoom
+    if (target !== null) await keepAwayFromEdges(page, target.id);
     const handle = page.locator(`[data-canvas-overlay] [data-door="${ref}"]`);
     await expect(handle, `step ${ref}: the handle is drawn`).toBeVisible();
     // the chrome redraws the handles every frame (a selection that moved, a canvas that panned): the box is read once
@@ -1391,6 +1419,10 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
       if (key !== undefined) await page.keyboard.up(key);
     } else {
       if (step.drop === null) throw new Error(`step ${ref}: a drag names its drop`);
+      // a drop onto the canvas is aimed as a person aims it: the place it lands is scrolled into view first when it lies
+      // in the band along the frame's top or bottom edge where a held drag scrolls the page (drop.autoscrollZone), so
+      // the drag does not scroll the page from under the pointer; a step that waits at an edge wants that scroll
+      if (step.drop.on !== 'layers-row' && d.kind !== 'layers-drag' && step.wait === undefined) await keepAwayFromEdges(page, nodeAt(document, step.drop.reference).id);
       const from =
         d.source === 'palette-tile'
           ? await controlPoint(page, paletteTileDoor(ref), { entry: args.entry })
@@ -1434,7 +1466,11 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
       // way before the drop's place
       await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
       if (leaves) await page.keyboard.down(leaves);
-      await page.mouse.move(to.x, to.y, { steps: 12 });
+      // a tile dropped into a container's slot comes down onto it from just above, as a hand aims at a gap: a straight
+      // line from the sidebar grazes the side band of the container on the way (drag-layout: a side offer met on the
+      // way stays while the pointer is near its pill), which the drop is not about
+      if (d.source === 'palette-tile' && step.drop.placement === 'inside' && step.drop.on !== 'layers-row') await page.mouse.move(to.x, to.y - APPROACH, { steps: 12 });
+      await page.mouse.move(to.x, to.y, { steps: d.source === 'palette-tile' && step.drop.placement === 'inside' && step.drop.on !== 'layers-row' ? 4 : 12 });
       if (step.hold === true) held.current = { door: ref };
       else await page.mouse.up();
       if (leaves) await page.keyboard.up(leaves);

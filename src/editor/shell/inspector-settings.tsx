@@ -285,9 +285,15 @@ export function SettingsTab() {
           if (owned.length === 0 && section.id !== 'attributes') return null;
           return (
             <section key={section.id} className="settings-section" data-settings-section={section.id} aria-label={t(section.labelKey as MessageId)}>
+              {/* the section's title, and what it is for in its tooltip and its description (jornada02 GENERALISATION 1.3:
+                  the permanent line under every title cost a row per section) */}
               <div className="settings-section__header">
-                <h3>{t(section.labelKey as MessageId)}</h3>
-                <p>{t(section.descriptionKey as MessageId)}</p>
+                <h3 title={t(section.descriptionKey as MessageId)} aria-describedby={`settings-${section.id}-about`}>
+                  {t(section.labelKey as MessageId)}
+                </h3>
+                <p id={`settings-${section.id}-about`} className="visually-hidden">
+                  {t(section.descriptionKey as MessageId)}
+                </p>
               </div>
               {owned.map((entry) => {
                 const attribute = entry.door.kind === 'inspector-field' && entry.door.attribute !== null ? ATTRIBUTES.get(entry.door.attribute) : undefined;

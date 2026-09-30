@@ -31,6 +31,7 @@
   color: var(--color-text-muted);
 }
 
+/* a menu (jornada02 G-18, the audit's U-035): 240 px at the least, its items 26 px, radius lg, the floating shadow */
 .menu {
   position: absolute;
   top: 100%;
@@ -38,12 +39,12 @@
   z-index: var(--z-menu);
   display: flex;
   flex-direction: column;
-  min-width: var(--size-inspector);
+  min-width: var(--size-menu-min);
   padding: var(--space-2);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   background: var(--color-surface-raised);
-  box-shadow: var(--shadow-2);
+  box-shadow: var(--shadow-3);
 }
 
 .menu__item {
@@ -51,7 +52,7 @@
   grid-template-columns: var(--space-7) minmax(max-content, 1fr) auto auto;
   align-items: center;
   gap: var(--space-4);
-  height: var(--size-control-lg);
+  height: var(--size-chip);
   padding: 0 var(--space-4);
   border: 0;
   border-radius: var(--radius-sm);

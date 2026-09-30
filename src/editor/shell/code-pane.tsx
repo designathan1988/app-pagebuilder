@@ -113,7 +113,7 @@ export function CodePane() {
   return (
     <section className="code-pane" data-region="code-view" aria-label={t('panel.code')}>
       <header className="code-pane__head">
-        <div className="code-pane__tabs" role="tablist">
+        <div className="code-pane__tabs" role="tablist" data-key-context="tab-strip">
           {TABS.map((entry) => (
             <DoorControl key={entry.ref} entry={entry} className="code-pane__tab" />
           ))}

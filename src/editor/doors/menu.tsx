@@ -11,7 +11,7 @@ import { createContext, useContext, useEffect, useLayoutEffect, useMemo, useRef,
 import { locate } from '../../core/document/model.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
 import type { CommandId, KeyContextId, MenuId, MessageId } from '../../generated/ids.ts';
-import type { DoorEntry } from '../../manifest/runtime.ts';
+import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
 import { pressPoint } from '../input/pointer.ts';
 import { openContextMenu } from '../menus/context-menu.ts';
 import { useEditorState, useStore } from '../store.ts';
@@ -20,6 +20,9 @@ import { stateOf } from '../view/style-state.ts';
 import { DoorControl, Icon, useDoor, isDoorBuilt } from './door.tsx';
 import { floatBelow, pointAnchor } from '../shell/float.ts';
 import { GLYPHS, doorSlots, menuOf, slotsIn, type Anchor } from './placement.ts';
+
+// the orders of the items a line stands before, by menu (layout.json breaks)
+const BREAKS = new Map<string, readonly number[]>(manifest.layout.menus.map((m) => [m.id, m.breaks ?? []] as const));
 
 // the backdrop under an open menu: the door the manifest places in the overlay region
 const BACKDROP = doorSlots('overlay')[0];
@@ -92,7 +95,11 @@ function MenuList({ menu, onDone, focusFirst, anchor }: { readonly menu: MenuId;
           const state = stateOf(slot.entry.door.args);
           return state === null || state.elements === null || state.elements.includes(stateType);
         })
-        .map((slot) => (slot.kind === 'door' ? <MenuItem key={slot.entry.ref} entry={slot.entry} onDone={onDone} /> : <SubMenu key={slot.menu} menu={slot.menu} onDone={onDone} />))}
+        .flatMap((slot) => [
+          // a line between the menu's groups (layout.json breaks)
+          ...(BREAKS.get(menu)?.includes(slot.order) === true ? [<div key={`break-${slot.order}`} className="menu__separator" role="separator" />] : []),
+          slot.kind === 'door' ? <MenuItem key={slot.entry.ref} entry={slot.entry} onDone={onDone} /> : <SubMenu key={slot.menu} menu={slot.menu} onDone={onDone} />,
+        ])}
     </div>
   );
 }

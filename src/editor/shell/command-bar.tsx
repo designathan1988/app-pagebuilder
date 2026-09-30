@@ -131,6 +131,7 @@ function CommandBarDialog() {
           value={query}
           onChange={(event) => setQuery(event.target.value)}
         />
+        {shown.length === 0 && query.trim() !== '' ? <p className="command-bar__none" role="status">{t('commandBar.none', { query: query.trim() })}</p> : null}
         <ul className="command-bar__list" role="listbox" id={LIST_ID} ref={list} aria-label={t('command.commandBar')}>
           {shown.map((e, i) => (
             <li key={e.key} id={`${LIST_ID}-${i}`} role="option" aria-selected="false" className="command-bar__option" onClick={() => { remember(e.key); close(); }}>
