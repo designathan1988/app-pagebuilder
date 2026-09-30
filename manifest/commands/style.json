@@ -9225,7 +9225,7 @@
           "control": "custom-declarations",
           "modifier": null,
           "gesture": null,
-          "labelKey": "command.setCustomDeclarations",
+          "labelKey": "inspector.customCss",
           "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",

@@ -2141,6 +2141,10 @@
       "reader": "src/editor/inspector/concept-rows.ts"
     },
     {
+      "field": "properties:conceptRows[].shortLabels",
+      "reader": "src/editor/inspector/concept-rows.ts"
+    },
+    {
       "field": "properties:controls",
       "reader": "src/manifest/style-places.ts"
     },

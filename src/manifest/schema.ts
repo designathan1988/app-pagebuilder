@@ -449,6 +449,9 @@ export const propertiesFileSchema = z.strictObject({
       labelKey: i18nKey.nullable(),
       head: z.array(z.string().min(1)),
       details: z.array(z.string().min(1)).min(1),
+      // the shorter name a detail takes under the row that already names the concept ("Repeat" under Background), so
+      // no label wraps in the 100 px column; a detail not listed keeps its own
+      shortLabels: z.record(z.string(), i18nKey).optional(),
     }),
   ),
   // The Style tab's controls that edit no property of their own, and the section each is drawn in (null: above the

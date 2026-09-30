@@ -6,7 +6,7 @@
     "doors": 1000,
     "scenarios": 1338,
     "modules": 259,
-    "lines": 49479
+    "lines": 49506
   },
   "features": [
     {
@@ -4368,7 +4368,7 @@
     },
     {
       "path": "src/editor/inspector/concept-rows.ts",
-      "lines": 91,
+      "lines": 98,
       "commands": [
         "inspector.toggleRow"
       ],
@@ -5102,7 +5102,7 @@
     },
     {
       "path": "src/generated/ids.ts",
-      "lines": 4560,
+      "lines": 4577,
       "commands": [],
       "features": []
     },
@@ -5162,7 +5162,7 @@
     },
     {
       "path": "src/manifest/schema.ts",
-      "lines": 1280,
+      "lines": 1283,
       "commands": [],
       "features": []
     },

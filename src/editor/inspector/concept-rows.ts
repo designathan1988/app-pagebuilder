@@ -21,9 +21,15 @@ export interface ConceptRow {
   readonly labelKey: MessageId | null;
   readonly head: readonly string[];
   readonly details: readonly string[];
+  readonly shortLabels: Readonly<Record<string, MessageId>>;
 }
 
-export const CONCEPT_ROWS: readonly ConceptRow[] = manifest.properties.conceptRows.map((r) => ({ ...r, labelKey: r.labelKey as MessageId | null }));
+export const CONCEPT_ROWS: readonly ConceptRow[] = manifest.properties.conceptRows.map((r) => ({ ...r, labelKey: r.labelKey as MessageId | null, shortLabels: (r.shortLabels ?? {}) as Readonly<Record<string, MessageId>> }));
+// the shorter name a detail takes under its row (properties.json shortLabels), or null
+export const shortLabelOf = (item: string): MessageId | null => {
+  const found = ROW_OF_ITEM(item);
+  return found === null ? null : (found.row.shortLabels[item] ?? null);
+};
 export const CONCEPT_ROW_IDS: readonly string[] = CONCEPT_ROWS.map((r) => r.id);
 const ROW_OF = new Map<string, { readonly row: ConceptRow; readonly part: 'head' | 'details' }>();
 for (const row of CONCEPT_ROWS) {
@@ -31,6 +37,7 @@ for (const row of CONCEPT_ROWS) {
   for (const item of row.details) ROW_OF.set(item, { row, part: 'details' });
 }
 
+const ROW_OF_ITEM = (item: string) => ROW_OF.get(item) ?? null;
 // the row an item of the panel stands in (a door ref, or "pair:<id>"), and whether in its head or its details
 export const rowOfItem = (item: string): { readonly row: ConceptRow; readonly part: 'head' | 'details' } | null => ROW_OF.get(item) ?? null;
 export const pairItem = (pairId: string): string => `pair:${pairId}`;

@@ -5388,7 +5388,16 @@
         "style.set#inspector-background-clip",
         "style.set#inspector-background-blend-mode",
         "style.set#inspector-background-position"
-      ]
+      ],
+      "shortLabels": {
+        "style.set#inspector-background-size": "inspector.row.backgroundLayers.size",
+        "style.set#inspector-background-repeat": "inspector.row.backgroundLayers.repeat",
+        "style.set#inspector-background-attachment": "inspector.row.backgroundLayers.attachment",
+        "style.set#inspector-background-origin": "inspector.row.backgroundLayers.origin",
+        "style.set#inspector-background-clip": "inspector.row.backgroundLayers.clip",
+        "style.set#inspector-background-blend-mode": "inspector.row.backgroundLayers.blendMode",
+        "style.set#inspector-background-position": "inspector.row.backgroundLayers.position"
+      }
     },
     {
       "id": "svg-paint",
@@ -5420,7 +5429,13 @@
         "style.setBorder#inspector-border-right-width-border-editor",
         "style.setBorder#inspector-border-bottom-width-border-editor",
         "style.setBorder#inspector-border-left-width-border-editor"
-      ]
+      ],
+      "shortLabels": {
+        "style.setBorder#inspector-border-top-width-border-editor": "inspector.row.border.topWidth",
+        "style.setBorder#inspector-border-right-width-border-editor": "inspector.row.border.rightWidth",
+        "style.setBorder#inspector-border-bottom-width-border-editor": "inspector.row.border.bottomWidth",
+        "style.setBorder#inspector-border-left-width-border-editor": "inspector.row.border.leftWidth"
+      }
     },
     {
       "id": "radius",
@@ -5434,7 +5449,13 @@
         "style.setRadius#inspector-border-top-right-radius-radius-editor",
         "style.setRadius#inspector-border-bottom-right-radius-radius-editor",
         "style.setRadius#inspector-border-bottom-left-radius-radius-editor"
-      ]
+      ],
+      "shortLabels": {
+        "style.setRadius#inspector-border-top-left-radius-radius-editor": "inspector.row.radius.topLeft",
+        "style.setRadius#inspector-border-top-right-radius-radius-editor": "inspector.row.radius.topRight",
+        "style.setRadius#inspector-border-bottom-right-radius-radius-editor": "inspector.row.radius.bottomRight",
+        "style.setRadius#inspector-border-bottom-left-radius-radius-editor": "inspector.row.radius.bottomLeft"
+      }
     },
     {
       "id": "outline",
@@ -5549,7 +5570,10 @@
         "style.set#inspector-transform-style",
         "style.set#inspector-backface-visibility",
         "style.set#inspector-transform-box"
-      ]
+      ],
+      "shortLabels": {
+        "style.set#inspector-perspective-origin": "inspector.row.transform.perspectiveOrigin"
+      }
     },
     {
       "id": "more-effects",

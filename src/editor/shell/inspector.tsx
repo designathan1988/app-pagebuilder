@@ -28,7 +28,7 @@ import { GLYPHS, doorSlots, drawnAsOf, partOf, slotsIn } from '../doors/placemen
 import { setActiveOption } from '../focus/focus.ts';
 import { authoredProperties, declaredBorderValues, editedProperties, editedPropertiesByDoor, inspectorMode, inspectorSearchOf, isEssential, searchMatches, sectionClosed, sectionProperties, summaryOf, summaryProperties } from '../inspector/sections.ts';
 import { PAIR_ROWS, orderByGroup, pairRowOf, rowPrefixKey, type PairRow } from '../inspector/rows.ts';
-import { CONCEPT_ROWS, pairItem, rowClosed, rowOfItem } from '../inspector/concept-rows.ts';
+import { CONCEPT_ROWS, pairItem, rowClosed, rowOfItem, shortLabelOf } from '../inspector/concept-rows.ts';
 import { ConceptRowView } from './concept-row.tsx';
 import { valueOrigin } from '../inspector/origin.ts';
 import { MODEL_RULES, useEditorState, useStore, layeredRules } from '../store.ts';
@@ -227,7 +227,7 @@ function StyleSections() {
           if (d.door.kind === 'panel-control') return <Fragment key={d.ref}>{d.door.drawnAs === 'icon-button' ? <DoorControl entry={d} /> : <PanelField entry={d} />}</Fragment>;
           return (
             <Fragment key={d.ref}>
-              <Field entry={d} />
+              <Field entry={d} rowLabel={shortLabelOf(d.ref)} />
               <FieldOrigin entry={d} target={editedTarget(d)} />
             </Fragment>
           );
