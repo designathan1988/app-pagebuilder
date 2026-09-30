@@ -143,19 +143,27 @@
 .guides-grids__fields {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-3);
+  gap: var(--space-2) var(--space-6);
   width: 100%;
 }
 
+/* a setting is a field row of a dialog (jornada02 pairing 5.2): its label in the card's 72 px column, its field beside
+   it, 24 px high — never its label stacked over a 28 px box */
 .guides-grids__field {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
+  display: grid;
+  grid-template-columns: var(--size-label-column-card) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-3);
 }
 
+.guides-grids__field .input {
+  height: var(--size-control);
+}
+
+/* the label reads as the inspector's field labels do: the body type in the muted ink */
 .guides-grids__label {
   color: var(--color-text-muted);
-  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-ui);
+  line-height: var(--lh-label);
 }
 
 .dialog__footer {

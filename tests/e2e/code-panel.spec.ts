@@ -242,3 +242,20 @@ test('Delete on the code pane keeps the selected element', runs(VIEW('code'), RO
   expect(await page.evaluate(() => JSON.stringify((window as unknown as { __builderTestPort: { document: () => unknown } }).__builderTestPort.document()))).toBe(before);
   expect(await page.evaluate(() => (window as unknown as { __builderTestPort: { selection: () => string[] } }).__builderTestPort.selection())).toEqual(['n-title']);
 });
+
+// A text file shows one tab of its own and a named editor (spec code-panel-selection-sync; the audit's U-053: the HTML,
+// CSS and JS tabs with none selected, the editor named for the selected element's markup).
+test('a text file shows its own tab, its extension, and an editor named after it', runs(NEW_FILE, ROW_ICON), async ({ page }) => {
+  await openEditor(page);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await control(page, NEW_FILE).fill('notes.txt');
+  await control(page, NEW_FILE).press('Enter');
+  const row = page.locator('[data-file="notes.txt"]');
+  await row.hover();
+  await control(page, ROW_ICON, { args: { path: 'notes.txt' } }).click();
+  const tabs = page.locator('.code-pane__tabs [role="tab"]');
+  await expect(tabs).toHaveCount(1);
+  await expect(tabs.first()).toHaveText('TXT');
+  await expect(tabs.first()).toHaveAttribute('aria-selected', 'true');
+  await expect(page.locator('[data-code-editor]')).toHaveAttribute('aria-label', 'The text of notes.txt');
+});

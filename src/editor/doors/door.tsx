@@ -229,6 +229,9 @@ export interface DoorControlProps {
   readonly roving?: boolean;
   // whether it is current, instead of its door's own reading (a value several selected elements do not share: false)
   readonly current?: boolean | undefined;
+  // true: the control turns its state on and off (a canvas anchor tab: its door toggles an edge), so it says whether it
+  // is on (aria-pressed), as a toolbar door the manifest marks pressed does
+  readonly toggle?: boolean;
   // the icon of what the control stands for (an insert entry's element), instead of the door's own; null for none
   readonly icon?: string | null;
 }
@@ -237,7 +240,7 @@ export interface DoorControlProps {
 // the key context of a group whose controls rove (interactions.json; the arrows move the focus in keymap.ts)
 const ROVING_CONTEXT = 'roving-group';
 
-export function DoorControl({ entry, args = {}, children, expanded, className, label, ready = true, keysIn = 'global', tabbable = true, current, roving = false, icon: ownIcon }: DoorControlProps) {
+export function DoorControl({ entry, args = {}, children, expanded, className, label, ready = true, keysIn = 'global', tabbable = true, current, roving = false, icon: ownIcon, toggle = false }: DoorControlProps) {
   const found = useDoor(entry, args, label, ready, keysIn);
   // a control that stands for a value several selected elements do not share is not current (A3.35)
   const door = current === undefined ? found : { ...found, current };
@@ -245,7 +248,7 @@ export function DoorControl({ entry, args = {}, children, expanded, className, l
   const pointerRuns = pressedByPointer(entry);
   const drawnAs = d.kind === 'toolbar' || d.kind === 'panel-control' ? d.drawnAs : 'button';
   // a toggle button says whether its state is on (the door's pressed, manifest data)
-  const pressed = (d.kind === 'toolbar' || d.kind === 'panel-control') && d.pressed;
+  const pressed = toggle || ((d.kind === 'toolbar' || d.kind === 'panel-control') && d.pressed);
   const iconName = ownIcon !== undefined ? ownIcon : d.icon;
   const icon = iconName !== null ? <Icon name={iconName} size={drawnAs === 'icon-button' ? 'md' : 'sm'} /> : null;
   const common = {

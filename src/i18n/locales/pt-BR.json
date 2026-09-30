@@ -203,6 +203,7 @@
   "codePanel.copyPane": "Copiar este painel",
   "codePanel.downloadPane": "Baixar este painel",
   "codePanel.empty": "Nenhum arquivo de código aberto. Abra um no Explorador.",
+  "codePanel.fileAria": "O texto de {name}",
   "codePanel.line": "Linha {line}",
   "codePanel.locked": "Gerado: aplicar transforma a edição em comandos no documento.",
   "codePanel.markupAria": "A marcação do elemento selecionado",

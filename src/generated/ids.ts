@@ -2672,6 +2672,7 @@ export const MESSAGE_IDS = [
   "codePanel.copyPane",
   "codePanel.downloadPane",
   "codePanel.empty",
+  "codePanel.fileAria",
   "codePanel.line",
   "codePanel.locked",
   "codePanel.markupAria",

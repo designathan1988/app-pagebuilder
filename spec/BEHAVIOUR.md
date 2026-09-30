@@ -61,6 +61,7 @@ Values are CSS px; tabs keep their screen size.
 2. **Centre anchors have no key and no tab.** Required: the Inspector's anchor control offers left / centre / right / both and top / centre / bottom / both, running the same command as the keys (manifest intent: "Use the anchor control in the inspector to anchor horizontally to the centre").
 3. **The top tab is hidden under the selection chip.** Required: anchor tabs are never covered by other canvas chrome.
 4. **`height: 19px` is frozen when anchoring left and right,** turning an auto-height text box into a fixed height. Required: toggling a horizontal anchor never changes the vertical size mode, and vice versa.
+5. **A tab said nothing of its state to assistive technology** (the audit's U-051: "Anchor left" on an element anchored left by default answered "anchored right · top", with no pressed state to warn). Required: each tab is a toggle that says whether its edge is anchored (`aria-pressed`, the filled tab), the start edges of an element that holds no inset reading as anchored.
 
 ## absolute-free-drag
 
@@ -209,6 +210,7 @@ None in Pager.
    - Clicking an issue selects the element on the canvas and in Layers.
    - The list updates after every command.
    - Checks never block editing or export.
+2. **An issue's row was a button centred in a 28 px box** (the audit's U-037). Required: an issue's row (the door that selects its element) is laid out from its start, as tall as what it says, its words wrapping.
 
 ## align-distribute
 
@@ -832,6 +834,7 @@ None in Pager.
    - Selecting an element on the canvas or in Layers highlights its markup lines in the HTML tab and its rules in the CSS tab, and scrolls them into view.
    - Clicking a line inside an element's markup in the HTML tab selects that element on the canvas and in Layers, through the same selection command as a canvas click. For nested markup, the innermost element whose markup contains the clicked line is selected.
 2. **The lines that select their element stood 28 px among 18 px ones, and every one was named "Select"** (the audit's U-023). Required: every line of the pane is as tall as the others (a line that is a door keeps a line's height, padding and type), and a line that selects its element is named after its number ("Select line 12").
+3. **A text file showed the HTML, CSS and JS tabs with none selected, its editor named "the markup of the selected element"** (the audit's U-053). Required: a file that is none of the page's three parts shows one tab of its own, its extension (TXT), selected, and its editor is named after the file ("The text of notes.txt").
 
 ## color-picker-oklch
 
@@ -3584,6 +3587,7 @@ The overlay is in page px and scales with the page.
 
 1. **The column bands are opaque and cover the page content** (dark theme). Required: overlays are translucent (design token for overlay colour) and never hide the content beneath.
 2. **Turning the grid on also turns on element outlines.** Required: the grid overlay is independent of element outlines; `Ctrl+'` toggles only the column grid.
+3. **The Guides & Grids settings stacked each label over a 28 px box** (jornada02 pairing 5.2). Required: each setting of the dialog is a field row: its label in the card's 72 px column, its 24 px field beside it, two settings to a line.
 
 ## lock-element
 
@@ -7115,6 +7119,7 @@ The status bar is a Tab stop (`data-region="status"`), but its breadcrumb button
 
 1. **Messages go stale:** the last message stays until another command writes one (e.g. `Text edit cancelled — …` remained while other things happened), with no time or fading. Required: the message line shows the last command's message in an aria-live region and is cleared or replaced when the context changes (manifest feature `status-bar`).
 2. **The breadcrumb is not reachable by keyboard.** Required: breadcrumb items are buttons reachable with Tab/arrow keys inside the status region.
+3. **The breadcrumb's buttons stood 26 and 28 px tall in the 24 px bar** (the audit's U-038). Required: every control of the bar is as tall as the bar.
 
 ## table-commands
 

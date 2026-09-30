@@ -283,9 +283,10 @@ test('the Link address keeps the link on Enter, with Tab and with a click elsewh
   const section = await named(page, 'Section');
   await runDoor(page, SETTINGS_TAB);
   await expect(hrefInput(page)).toBeEnabled();
-  // elements-text is built: its toggle is usable, and what it does is proven by that feature's scenarios
-  await expect(control(page, NEW_TAB).locator('input')).toBeEnabled();
-  await expect(control(page, NEW_TAB).locator('input')).not.toBeChecked();
+  // elements-text is built: its toggle is usable, and what it does is proven by that feature's scenarios — an Off | On
+  // pair (spec settings-audit), Off pressed while the link opens in the same tab
+  await expect(control(page, NEW_TAB, { args: { newTab: true } })).not.toHaveAttribute('aria-disabled', 'true');
+  await expect(control(page, NEW_TAB, { args: { newTab: false } })).toHaveAttribute('aria-pressed', 'true');
 
   // Enter keeps it: one undo step, on the document and on the canvas's <a>
   await typeLink(page, 'https://example.com');

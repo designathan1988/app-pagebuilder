@@ -1101,7 +1101,8 @@
 [data-region='inspector-style'] .field-choice .door.is-default:not(:focus-visible) {
   outline: none;
 }
-[data-region='inspector-style'] .field-choice .door {
+/* (the buttons, never the backdrop an open keyword menu lays over the window) */
+[data-region='inspector-style'] .field-choice .door:not(.overlay-backdrop) {
   width: var(--size-control);
   height: var(--size-control);
   padding: 0 var(--space-1);

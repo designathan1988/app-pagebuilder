@@ -23,6 +23,9 @@ const PART = (control: string): DoorEntry | undefined => PARTS.find((p) => p.doo
 const EDITOR_DOOR = PART('editor');
 // The pane's tabs: the code-view region's pane-tab doors, in their placement order (their door stands for the part it
 // shows, so the tab in force is marked).
+// the kinds of file the pane's three tabs stand for; another file (a text file) is its own tab, named by its extension
+const PANE_KINDS: ReadonlySet<string> = new Set(['html', 'css', 'js']);
+const extensionOf = (path: string): string => (path.includes('.') ? (path.split('.').at(-1) ?? '') : path).toUpperCase();
 const TABS = PARTS.filter((p) => p.door.kind === 'panel-control' && p.door.control === 'pane-tab');
 
 function Line({ text, kind, node, selected, number, plain = false }: { readonly text: string; readonly kind: PaneKind; readonly node: string | null; readonly selected: boolean; readonly number: number; readonly plain?: boolean }) {
@@ -116,9 +119,15 @@ export function CodePane() {
     <section className="code-pane" data-region="code-view" aria-label={t('panel.code')}>
       <header className="code-pane__head">
         <div className="code-pane__tabs" role="tablist" data-key-context="tab-strip">
-          {TABS.map((entry) => (
-            <DoorControl key={entry.ref} entry={entry} className="code-pane__tab" />
-          ))}
+          {/* a file that is none of the page's three parts (a text file) shows its own tab, its extension, selected:
+              HTML, CSS and JS with none selected said nothing of it (the audit's U-053) */}
+          {info !== null && !PANE_KINDS.has(info.kind) ? (
+            <span className="door door--tab code-pane__tab is-current" role="tab" aria-selected="true">
+              {extensionOf(info.path)}
+            </span>
+          ) : (
+            TABS.map((entry) => <DoorControl key={entry.ref} entry={entry} className="code-pane__tab" />)
+          )}
         </div>
         <div className="code-pane__file">
           <span className="code-pane__name">{info?.path ?? ''}</span>
@@ -138,7 +147,7 @@ export function CodePane() {
             data-args={JSON.stringify({ path: info?.path ?? '' })}
             data-key-context={CODE_EDITOR_CONTEXT}
             data-code-editor
-            aria-label={kind === 'css' ? t('codePanel.ruleAria') : t('codePanel.markupAria')}
+            aria-label={fileText !== null && info !== null ? t('codePanel.fileAria', { name: info.path }) : kind === 'css' ? t('codePanel.ruleAria') : t('codePanel.markupAria')}
             spellCheck={false}
             value={shown ?? ''}
             onChange={(event) => setDraft({ over: edited ?? '', text: event.target.value })}

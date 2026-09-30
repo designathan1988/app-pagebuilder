@@ -203,6 +203,7 @@
   "codePanel.copyPane": "Copy this pane",
   "codePanel.downloadPane": "Download this pane",
   "codePanel.empty": "No code file is open. Open one from the Explorer.",
+  "codePanel.fileAria": "The text of {name}",
   "codePanel.line": "Line {line}",
   "codePanel.locked": "Generated: applying turns the edit into commands on the document.",
   "codePanel.markupAria": "The markup of the selected element",

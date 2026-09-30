@@ -83,7 +83,9 @@ export function AnchorTabs({ stage }: { readonly stage: RefObject<HTMLDivElement
         const box = placed[i];
         return box === undefined ? null : (
           <span key={entry.ref} className="anchor-tab-place" style={{ left: box.x, top: box.y, width: SIZE, height: SIZE }}>
-            <DoorControl entry={entry} className="anchor-tab">
+            {/* a toggle: it says whether its edge is anchored (the audit's U-051: no pressed state, so "Anchor left" on an
+                edge anchored by default turned it to the right unannounced) */}
+            <DoorControl entry={entry} className="anchor-tab" toggle>
               <span className="anchor-tab__dot" />
             </DoorControl>
           </span>

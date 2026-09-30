@@ -45,3 +45,21 @@ test('the top anchor tab of a narrow element is not covered by its label nor the
   const chip = page.locator('.quick-panel-chip');
   if ((await chip.count()) > 0) expect(meet(tabBox, await boxOf(chip)), 'the top tab meets the quick panel chip').toBe(false);
 });
+
+// Each tab is a toggle that says whether its edge is anchored (spec absolute-anchors; the audit's U-051): an element
+// that holds no inset reads anchored at its start edges, and a press turns the tab over.
+test('an anchor tab says whether its edge is anchored, and a press turns it over', runs(OPEN, ROW, POSITION, 'position.setAnchors#handle-anchor-right'), async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await openEditor(page);
+  const chooser = page.waitForEvent('filechooser');
+  await runDoor(page, OPEN);
+  await (await chooser).setFiles({ name: 'aurora.json', mimeType: 'application/json', buffer: fs.readFileSync(FIXTURE) });
+  await control(page, ROW, { args: { target: 'n-intro' } }).click();
+  await runDoor(page, POSITION, { args: { mode: 'absolute' } });
+  const left = page.locator('[data-door="position.setAnchors#handle-anchor-left"]');
+  const right = page.locator('[data-door="position.setAnchors#handle-anchor-right"]');
+  await expect(left).toHaveAttribute('aria-pressed', 'true');
+  await expect(right).toHaveAttribute('aria-pressed', 'false');
+  await right.click();
+  await expect(right).toHaveAttribute('aria-pressed', 'true');
+});

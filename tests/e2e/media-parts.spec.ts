@@ -80,7 +80,8 @@ test('Autoplay switches Muted on in the same undo step', runs(INSERT, TILE, SETT
   await runDoor(page, INSERT);
   await runDoor(page, TILE, { args: { entry: 'video' } });
   await runDoor(page, SETTINGS);
-  await runDoor(page, AUTOPLAY);
+  // Autoplay is an Off | On pair (spec settings-audit): its On
+  await runDoor(page, AUTOPLAY, { args: { value: true } });
   await expect.poll(async () => find(await tree(page), 'video')?.attributes).toEqual({ autoplay: true, muted: true });
   const steps = await undoSteps(page);
   await runDoor(page, 'history.undo#toolbar-top-bar');

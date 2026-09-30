@@ -261,6 +261,8 @@ const text = (page: Page, locale: string, key: string, params: Record<string, st
     ['/proofs.js', locale, key, params] as const,
   );
 
+// the region whose door starts the tab again (layout.json: the tab guard's notice)
+const TAB_GUARD_REGION = 'tab-guard';
 // what the read-only test port reads (src/editor/test-port.ts)
 const port = (page: Page) =>
   page.evaluate(() => {
@@ -1853,7 +1855,16 @@ export function registerScenarioTests(): void {
             // status bar (pasted, nothing to paste, the clipboard denied)
             const ref = step.action ? door : step.door;
             const said = readsClipboard(ref) ? await page.getByRole('status').textContent() : null;
+            // the tab guard's door starts the tab again (Take over editing reloads it once the lock is stolen, spec
+            // multi-tab-guard): the next step waits for the editor to be back, never reading the page as it goes
+            const placed = doorData(ref).placement;
+            const restarts = typeof placed === 'object' && placed !== null && placed.region === TAB_GUARD_REGION;
+            const navigated = restarts ? page.waitForEvent('framenavigated', { predicate: (frame) => frame === page.mainFrame() }) : null;
             await runStep(page, step, ref, held, step.action, downloads);
+            if (navigated !== null) {
+              await navigated;
+              await page.locator('.workbench').waitFor();
+            }
             if (step.wait !== undefined) await page.waitForTimeout(step.wait);
             if (said !== null) await expect.poll(() => page.getByRole('status').textContent(), { message: `step ${ref}: the command runs once the clipboard is read`, intervals: POLL }).not.toBe(said);
             // a refusal names its key; the words it fills in ("No next sibling in {parent}.") are those of the feedback

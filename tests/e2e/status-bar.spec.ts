@@ -95,3 +95,15 @@ test('the size and the context follow the commands', runs(OPEN, CLICK, WIDTH, PH
   await runDoor(page, HOVER);
   await expect(page.locator('.status-bar .status-bar__context')).toHaveText('Phone / Hover');
 });
+
+// The bar's controls are as tall as the bar (the audit's U-038: 26 and 28 px buttons in a 24 px bar).
+test('every control of the status bar is as tall as the bar', runs(OPEN, CLICK), async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await openEditor(page);
+  // a press on the page selects it: the breadcrumb draws its button
+  await page.mouse.click(700, 400);
+  await expect(page.locator(`[data-door="${CRUMB}"]`)).not.toHaveCount(0);
+  const heights = await page.locator('footer.status-bar').evaluate((bar) => ({ bar: Math.round(bar.getBoundingClientRect().height), controls: [...bar.querySelectorAll('button')].filter((b) => b.getClientRects().length > 0).map((b) => Math.round(b.getBoundingClientRect().height)) }));
+  expect(heights.controls.length).toBeGreaterThan(2);
+  expect(heights.controls.every((h) => h <= heights.bar), JSON.stringify(heights)).toBe(true);
+});
