@@ -89,3 +89,21 @@ test('while a text is edited, Ctrl+K opens no bar', runs(CLICK, START_EDIT, CTRL
   await page.keyboard.press('Control+K');
   await expect(bar(page)).toHaveCount(0);
 });
+
+// The backdrop is the whole window: a press anywhere outside the panel closes the bar, and Escape still closes it after
+// (the audit's U-002: the backdrop was a 28 px strip); every entry shows one icon (U-003: it showed two).
+test('a press anywhere outside the bar closes it, and each entry shows one icon', runs(CTRL_K, BACKDROP), async ({ page }) => {
+  await runDoor(page, CTRL_K);
+  await page.keyboard.type('ins');
+  const icons = await bar(page).locator('[role="option"]').evaluateAll((els) => els.map((el) => el.querySelectorAll('svg').length));
+  expect(icons.length).toBeGreaterThan(0);
+  expect(icons.every((count) => count <= 1)).toBe(true);
+  await control(page, BACKDROP).click({ position: { x: 720, y: 850 } });
+  await expect(bar(page)).toHaveCount(0);
+  await runDoor(page, CTRL_K);
+  await page.mouse.click(40, 850);
+  await expect(bar(page)).toHaveCount(0);
+  await runDoor(page, CTRL_K);
+  await page.keyboard.press('Escape');
+  await expect(bar(page)).toHaveCount(0);
+});

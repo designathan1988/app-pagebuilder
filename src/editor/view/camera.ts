@@ -52,8 +52,9 @@ function measure(): Stage {
 }
 
 // the zoom that fits a page this wide (the active breakpoint's width: view/breakpoints.ts) in a stage this wide, within
-// the camera's range
-export const fitZoom = (width: number, page: number = BASE_BREAKPOINT.width): number => (width > 0 && page > 0 ? Math.min(ZOOM_MAX / 100, Math.max(ZOOM_MIN / 100, (width - 2 * FIT_MARGIN) / page)) : 1);
+// the camera's range — and never above 100 %: Fit shows a page at most at its real size, a phone frame is not blown up
+// (the owner's decision D-4, the page builders' and the browsers' responsive views alike; the zoom menu goes further)
+export const fitZoom = (width: number, page: number = BASE_BREAKPOINT.width): number => (width > 0 && page > 0 ? Math.min(1, ZOOM_MAX / 100, Math.max(ZOOM_MIN / 100, (width - 2 * FIT_MARGIN) / page)) : 1);
 
 // the zoom the canvas shows, as a factor: the chosen one, or the one that fits the stage
 export const zoomOf = (ui: EditorUi, width: number = measure().width): number => (ui.preferences.zoom !== undefined ? ui.preferences.zoom / 100 : fitZoom(width, activeBreakpoint(ui).width));

@@ -811,6 +811,12 @@
   background: color-mix(in srgb, var(--color-accent) 16%, transparent);
 }
 
+/* the selection's size inside its label, after the name: the label's own ink, in the code face */
+.chrome__label-size {
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
 .chrome__label {
   position: absolute;
   display: inline-flex;

@@ -383,9 +383,14 @@
   padding-top: calc(var(--space-10) * 3);
 }
 
+/* the whole window: a control's own height and padding (.door) must not shrink it to a strip (the audit's U-002, a
+   press on the scrim landed on nothing and Escape stopped closing the bar) */
 .command-bar__backdrop {
   position: absolute;
   inset: 0;
+  min-width: 0;
+  height: auto;
+  padding: 0;
   border: 0;
   background: var(--color-scrim);
 }

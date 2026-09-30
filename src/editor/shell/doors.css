@@ -154,3 +154,12 @@
   color: var(--color-text-subtle);
 }
 
+
+/* a segmented group whose segments keep their own width and wrap onto another line when the room runs out */
+.segmented--hug {
+  flex-wrap: wrap;
+}
+
+.segmented--hug .door {
+  flex: none;
+}

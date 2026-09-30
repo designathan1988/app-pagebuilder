@@ -917,7 +917,8 @@ export function CanvasChrome() {
               ) : null}
               {/* the element's own size, live while a resize drag goes on (item 4.2) */}
               {shown.size !== null ? (
-                <small className="chrome__size" data-chrome="label-size">
+                // a part of the label, after the name (the audit's U-004: the hover's absolutely placed size chip covered the name)
+                <small className="chrome__label-size" data-chrome="label-size">
                   {t('canvas.measure.size', { width: shown.size.width, height: shown.size.height })}
                 </small>
               ) : null}

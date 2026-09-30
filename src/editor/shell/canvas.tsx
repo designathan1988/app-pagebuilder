@@ -180,6 +180,9 @@ function StateBadge() {
 export function CanvasColumn() {
   const stage = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ width: 0, height: 0 });
+  // whether the stage is drawn: the Code view draws none, and coming back draws a new one, which the measure, the
+  // observer and the camera must follow (the audit's U-005: Fit stayed at 100 % after the Code view)
+  const stageShown = useEditorState((s) => editorView(s.ui) !== 'code');
   // measured before the first paint, so the canvas never shows an unfitted frame (at zoom 1) before it fits: a layout
   // read right after the editor appears must see the fitted canvas; the observer then follows every later resize
   useLayoutEffect(() => {
@@ -195,7 +198,7 @@ export function CanvasColumn() {
     });
     observer.observe(element);
     return () => observer.disconnect();
-  }, []);
+  }, [stageShown]);
   // the camera's zoom: the chosen one, or the one that fits the base breakpoint's width with the fit margin on both
   // sides; the stage's width is reported to the camera, whose handlers pivot and fit on it
   const chosen = useEditorState((s) => s.ui.preferences.zoom);
@@ -205,7 +208,7 @@ export function CanvasColumn() {
   const pageHeight = useEditorState((s) => activeBreakpoint(s.ui).height);
   const zoom = chosen !== undefined ? chosen / 100 : fitZoom(size.width, pageWidth);
   const pan = useEditorState((s) => panOf(s.ui, zoom, size.width));
-  useLayoutEffect(() => registerStage(stage.current), []);
+  useLayoutEffect(() => registerStage(stage.current), [stageShown]);
   const report = useContext(ReportFitZoom);
   useLayoutEffect(() => report(zoom), [report, zoom]);
   // Space held over the stage, or a pan in progress: the grab cursor (spec zoom-wheel-pan)

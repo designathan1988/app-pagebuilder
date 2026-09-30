@@ -6,7 +6,7 @@
     "doors": 998,
     "scenarios": 1333,
     "modules": 254,
-    "lines": 48751
+    "lines": 48764
   },
   "features": [
     {
@@ -4002,7 +4002,7 @@
     },
     {
       "path": "src/editor/canvas/chrome.tsx",
-      "lines": 934,
+      "lines": 935,
       "commands": [],
       "features": []
     },
@@ -4198,7 +4198,7 @@
     },
     {
       "path": "src/editor/doors/door.tsx",
-      "lines": 304,
+      "lines": 307,
       "commands": [],
       "features": []
     },
@@ -4604,7 +4604,7 @@
     },
     {
       "path": "src/editor/shell/canvas.tsx",
-      "lines": 251,
+      "lines": 254,
       "commands": [],
       "features": []
     },
@@ -4628,7 +4628,7 @@
     },
     {
       "path": "src/editor/shell/command-bar.tsx",
-      "lines": 169,
+      "lines": 170,
       "commands": [],
       "features": []
     },
@@ -4736,7 +4736,7 @@
     },
     {
       "path": "src/editor/shell/link-picker.tsx",
-      "lines": 119,
+      "lines": 121,
       "commands": [],
       "features": []
     },
@@ -4895,7 +4895,7 @@
     },
     {
       "path": "src/editor/view/camera.ts",
-      "lines": 131,
+      "lines": 132,
       "commands": [
         "view.zoomIn",
         "view.zoomOut",
@@ -5067,7 +5067,7 @@
     },
     {
       "path": "src/generated/ids.ts",
-      "lines": 4518,
+      "lines": 4520,
       "commands": [],
       "features": []
     },

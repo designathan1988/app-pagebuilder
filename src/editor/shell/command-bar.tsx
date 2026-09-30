@@ -10,7 +10,7 @@ import type { DispatchResult } from '../../core/store/store.ts';
 import { elementIcon, manifest } from '../../manifest/runtime.ts';
 import { BAR_DOORS, askedSet, entryKey, kindOf, namedProperties, recentEntries, remember, setEntryFor, shownEntries, type BarEntry, type NamedProperty } from '../command-bar/command-bar.ts';
 import { labelParamsOf } from '../doors/current.ts';
-import { DoorControl, Icon, appliesNow, isDoorBuilt } from '../doors/door.tsx';
+import { DoorControl, appliesNow, isDoorBuilt } from '../doors/door.tsx';
 import { doorSlots } from '../doors/placement.ts';
 import { setActiveOption } from '../focus/focus.ts';
 import { chordHint } from '../input/keymap.ts';
@@ -159,8 +159,9 @@ function Entry({ e }: { readonly e: BarEntry }) {
   const element = kindOf(e.entry) === 'insert' ? PALETTE.find((p) => p.id === e.args.entry)?.element : undefined;
   const icon = element !== undefined ? elementIcon(element) : e.entry.door.icon;
   return (
-    <DoorControl entry={e.entry} args={e.args} label={e.label} className="command-bar__entry" tabbable={false}>
-      {icon !== null && icon !== undefined ? <Icon name={icon} size="sm" /> : <span className="command-bar__no-icon" />}
+    // one icon, drawn by the control itself (the audit's U-003: the entry drew its icon a second time)
+    <DoorControl entry={e.entry} args={e.args} label={e.label} className="command-bar__entry" tabbable={false} icon={icon ?? null}>
+      {icon !== null && icon !== undefined ? null : <span className="command-bar__no-icon" />}
       <span className="command-bar__label">{e.label}</span>
       {chord !== null && kindOf(e.entry) === 'command' ? <kbd className="command-bar__chord">{chord}</kbd> : null}
     </DoorControl>

@@ -75,7 +75,9 @@ export function LinkPicker() {
         onClick={(event) => event.stopPropagation()}
       >
         <p className="picker__label">{t('linkPicker.title')}</p>
-        <span className="segmented segmented--wide" role="group" aria-label={t('command.linkPicker.setKind')}>
+        {/* the kinds hug their words and wrap to a second line when the picker is narrower than them all (the audit's
+            U-007: stretched to equal widths they overprinted each other) */}
+        <span className="segmented segmented--hug" role="group" aria-label={t('command.linkPicker.setKind')}>
           {kinds.map(({ entry }) => (
             <DoorControl key={entry.ref} entry={entry} current={String(entry.door.args.kind ?? '') === kind} />
           ))}

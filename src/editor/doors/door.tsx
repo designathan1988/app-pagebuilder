@@ -227,13 +227,15 @@ export interface DoorControlProps {
   readonly roving?: boolean;
   // whether it is current, instead of its door's own reading (a value several selected elements do not share: false)
   readonly current?: boolean | undefined;
+  // the icon of what the control stands for (an insert entry's element), instead of the door's own; null for none
+  readonly icon?: string | null;
 }
 
 // A toolbar or panel control, drawn as its door's drawnAs says.
 // the key context of a group whose controls rove (interactions.json; the arrows move the focus in keymap.ts)
 const ROVING_CONTEXT = 'roving-group';
 
-export function DoorControl({ entry, args = {}, children, expanded, className, label, ready = true, keysIn = 'global', tabbable = true, current, roving = false }: DoorControlProps) {
+export function DoorControl({ entry, args = {}, children, expanded, className, label, ready = true, keysIn = 'global', tabbable = true, current, roving = false, icon: ownIcon }: DoorControlProps) {
   const found = useDoor(entry, args, label, ready, keysIn);
   // a control that stands for a value several selected elements do not share is not current (A3.35)
   const door = current === undefined ? found : { ...found, current };
@@ -242,7 +244,8 @@ export function DoorControl({ entry, args = {}, children, expanded, className, l
   const drawnAs = d.kind === 'toolbar' || d.kind === 'panel-control' ? d.drawnAs : 'button';
   // a toggle button says whether its state is on (the door's pressed, manifest data)
   const pressed = (d.kind === 'toolbar' || d.kind === 'panel-control') && d.pressed;
-  const icon = d.icon !== null ? <Icon name={d.icon} size={drawnAs === 'icon-button' ? 'md' : 'sm'} /> : null;
+  const iconName = ownIcon !== undefined ? ownIcon : d.icon;
+  const icon = iconName !== null ? <Icon name={iconName} size={drawnAs === 'icon-button' ? 'md' : 'sm'} /> : null;
   const common = {
     type: 'button' as const,
     className: ['door', `door--${drawnAs}`, door.current ? 'is-current' : '', door.available ? '' : 'is-unavailable', className ?? ''].filter((c) => c !== '').join(' '),
