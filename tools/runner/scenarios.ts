@@ -23,7 +23,7 @@ import { expect, test, type Download, type Locator, type Page } from '../../test
 import { isFeatureBuilt } from '../../src/app/features.ts';
 import { shortcutRuns } from '../../src/editor/input/shortcut-rule.ts';
 import type { FeatureId } from '../../src/generated/ids.ts';
-import { EMPTY_FIXTURE, applyDiff, matchDocument, resolveNode, type DiffOp } from '../../src/manifest/scenario.ts';
+import { EMPTY_FIXTURE, applyDiff, matchDocument, refusalCheck, resolveNode, type DiffOp } from '../../src/manifest/scenario.ts';
 import { barLabel, control, door as doorData, inQuickPanel, keys, modifiedControl, openCommandBar, openMenu, openQuickPanel, runDoor, sectionOfDoor, standingControl, type Door } from '../../tests/e2e/door.ts';
 import { openEditor } from '../../tests/support/editor.ts';
 import { unzip } from './unzip.ts';
@@ -189,22 +189,6 @@ const UNDO_DOOR = 'history.undo#toolbar-top-bar';
 const REDO_DOOR = 'history.redo#toolbar-top-bar';
 // a modal dialog's close button (DESIGN.md "Regions": dialog)
 const DIALOG_CLOSE_DOOR = 'ui.dismiss#dialog-close';
-
-// When a refusal is checked: right after its refused step, the action step when its command can refuse with that key
-// (its manifest refusals or its availability's refusal key), else the last step after it whose command can (a Delete
-// refused after the action locked the element); that step leaves the document as it was just before it, and the
-// status bar shows the refusal right after it, whatever steps follow (a held drag released after a refused level
-// key). When no step's command declares the key, once the steps are over, against the document before the action.
-function refusalCheck(s: Scenario, key: string): { readonly after: number; readonly unchangedFrom: number } {
-  const refuses = (step: Step | undefined) => {
-    const command = step === undefined ? undefined : COMMANDS.find((c) => c.id === commandOf(step.door));
-    return command !== undefined && (command.refusals.includes(key) || command.availability.refusalKey === key);
-  };
-  const action = s.steps.findIndex((step) => step.action);
-  if (refuses(s.steps[action])) return { after: action, unchangedFrom: action };
-  const last = s.steps.findLastIndex((step, index) => index > action && refuses(step));
-  return last >= 0 ? { after: last, unchangedFrom: last } : { after: s.steps.length - 1, unchangedFrom: action };
-}
 
 // The doors a scenario's setup runs, in order: File › Open for a fixture, the language, the selection (the first node
 // clicked, the others added, on the canvas; a node its children cover whole is reached through ArrowUp or its Layers
@@ -1816,7 +1800,7 @@ export function registerScenarioTests(): void {
           const fixture = await setUp(page, s);
           const held = { current: null as Held | null };
           // each refusal is checked right after its refused step (refusalCheck), against the document just before it
-          const refusalsAt = s.refusals.map((refusal) => ({ refusal, ...refusalCheck(s, refusal.key) }));
+          const refusalsAt = s.refusals.map((refusal) => ({ refusal, ...refusalCheck(s.steps, refusal.key, COMMANDS) }));
           const before = new Map<number, unknown>();
           // the downloads the steps before the action made: the export terminal reads the archive the action hands out
           let downloadsBeforeAction = 0;

@@ -18,6 +18,10 @@ import { pageLayout } from './canvas/coordinates.ts';
 import { browserClipboard } from './clipboard.ts';
 import { browserCss } from './css-support.ts';
 import { browserDownloads } from './download.ts';
+import type { ClipboardWriter } from '../core/ports/clipboard.ts';
+import type { CssSupport } from '../core/ports/css.ts';
+import type { Downloads } from '../core/ports/download.ts';
+import type { Layout } from '../core/ports/layout.ts';
 import { endOffSelection, endOnUndoable } from './canvas/text-edit.ts';
 import { endRenameOffSelection, endRenameOnUndoable } from './layers/rename.ts';
 import { revealSelection } from './layers/tree.ts';
@@ -43,6 +47,11 @@ export interface EditorStoreOptions {
   // the saved versions, when the saved work could not be read: the recovery dialog opens with them (spec
   // autosave-corruption-recovery), and project.restoreVersion reads their documents
   readonly recovery?: readonly { readonly revision: number; readonly time: number; readonly document: unknown }[] | null;
+  // the ports to the page and the browser, the editor's own by default: a run outside a browser (the scenarios' fast
+  // runner, tools/runner/headless.test.ts) hands its own — no layout, every CSS value taken, nothing downloaded
+  readonly ports?: { readonly layout?: Layout; readonly css?: CssSupport; readonly downloads?: Downloads; readonly clipboard?: ClipboardWriter; readonly readOnly?: () => boolean };
+  // deep-freeze every committed state: development's default, and tests
+  readonly freeze?: boolean;
 }
 
 // the model every document must satisfy, from the manifest
@@ -89,20 +98,20 @@ export function createEditorStore(options: EditorStoreOptions = {}): EditorStore
     clock: options.clock ?? systemClock,
     ids,
     words: (ui, key, params) => translate(ui.preferences.locale, key, params),
-    layout: pageLayout,
-    downloads: browserDownloads,
-    clipboard: browserClipboard,
-    css: browserCss,
+    layout: options.ports?.layout ?? pageLayout,
+    downloads: options.ports?.downloads ?? browserDownloads,
+    clipboard: options.ports?.clipboard ?? browserClipboard,
+    css: options.ports?.css ?? browserCss,
     // the class the Style tab targets, whose styles the style writes go to (inspector/style-target.ts)
     styleClass: (ui) => ui.styleTarget ?? null,
     // the keyframe the playhead sits on, whose declarations a style write goes to (timeline/playhead.ts)
     keyframe: keyframeTarget,
     version: (revision) => options.recovery?.find((v) => String(v.revision) === revision)?.document,
-    readOnly: () => !isEditing(),
+    readOnly: options.ports?.readOnly ?? (() => !isEditing()),
     layer: activeLayer,
     editing: { takeOver },
     initial: { document, selection: options.restored?.selection ?? [], ui: recoveryUi(initialEditorUi(preferences, workspace), options.recovery ?? null), message: options.restored?.recovered === true ? message('status.save.recovered') : null },
-    freeze: import.meta.env.DEV,
+    freeze: options.freeze ?? import.meta.env.DEV,
     // the page of a selected node opens (an undo on another page); Layers unfolds what hides a selected node; a text
     // edit and a rename end once their node is not the selection
     // alone, and when an undoable command runs

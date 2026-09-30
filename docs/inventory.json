@@ -6,7 +6,7 @@
     "doors": 1000,
     "scenarios": 1335,
     "modules": 254,
-    "lines": 48983
+    "lines": 49014
   },
   "features": [
     {
@@ -4834,7 +4834,7 @@
     },
     {
       "path": "src/editor/store.ts",
-      "lines": 137,
+      "lines": 146,
       "commands": [],
       "features": []
     },
@@ -5123,7 +5123,7 @@
     },
     {
       "path": "src/manifest/scenario.ts",
-      "lines": 242,
+      "lines": 264,
       "commands": [],
       "features": []
     },

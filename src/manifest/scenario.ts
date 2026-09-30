@@ -239,3 +239,25 @@ export function matchDocument(actual: unknown, expected: unknown, at = ''): stri
   }
   return Object.is(actual, expected) ? [] : [`${at || '/'}: expected ${JSON.stringify(expected)}, found ${JSON.stringify(actual)}`];
 }
+
+// When a scenario's refusal is checked (both scenario runners, tools/runner/scenarios.ts and headless.test.ts): right
+// after its refused step, the action step when its command can refuse with that key (its manifest refusals or its
+// availability's refusal key), else the last step after it whose command can (a Delete refused after the action locked
+// the element); that step leaves the document as it was just before it, and the status bar shows the refusal right
+// after it, whatever steps follow (a held drag released after a refused level key). When no step's command declares
+// the key, once the steps are over, against the document before the action.
+export interface RefusingCommand {
+  readonly id: string;
+  readonly refusals: readonly string[];
+  readonly availability: { readonly refusalKey: string | null };
+}
+export function refusalCheck(steps: readonly { readonly door: string; readonly action: boolean }[], key: string, commands: readonly RefusingCommand[]): { readonly after: number; readonly unchangedFrom: number } {
+  const refuses = (step: { readonly door: string } | undefined) => {
+    const command = step === undefined ? undefined : commands.find((c) => c.id === step.door.split('#')[0]);
+    return command !== undefined && (command.refusals.includes(key) || command.availability.refusalKey === key);
+  };
+  const action = steps.findIndex((step) => step.action);
+  if (refuses(steps[action])) return { after: action, unchangedFrom: action };
+  const last = steps.findLastIndex((step, index) => index > action && refuses(step));
+  return last >= 0 ? { after: last, unchangedFrom: last } : { after: steps.length - 1, unchangedFrom: action };
+}
