@@ -7688,6 +7688,7 @@ Read from Pager's source (`reference/Pager`, run from `.cache/pager-run`); refer
 
 - **View › Guides & Grids** (`workspace.openDialog`, dialog `guides-grids`) opens a modal dialog. Opening it changes nothing in the document and records nothing.
   - It closes with Escape (`ui.dismiss`, the dialog key context) or its close button (`ui.dismiss`, the `dialog` region). The focus then goes back to where it was.
+  - Escape belongs to the open dialog even after a click on its shield moves focus away from a field. It closes the dialog without clearing the canvas selection behind it.
 - The dialog shows its sections, each titled with an info tooltip (its hint):
   - **Visibility:** the rulers (`view.toggleRulers`) and the manual guides (`guides.toggleVisible`). These are preferences, restored after a reload, not recorded in the history. Smart guides and equal spacing (`view.toggleSmartGuides`, `view.toggleEqualSpacing`) belong to smart-guides and are not available until it is built.
   - **Manual guides:** each guide of the page with its place and its remove button (`guides.delete`). Then Add a guide, one button per axis (`guides.create`), which opens a field where the place is typed; Enter adds the guide.

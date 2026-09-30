@@ -6,7 +6,7 @@
     "doors": 998,
     "scenarios": 1333,
     "modules": 250,
-    "lines": 48109
+    "lines": 48120
   },
   "features": [
     {
@@ -4282,7 +4282,7 @@
     },
     {
       "path": "src/editor/input/keymap.ts",
-      "lines": 392,
+      "lines": 403,
       "commands": [],
       "features": []
     },

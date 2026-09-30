@@ -295,6 +295,17 @@ export function installKeymap(store: EditorStore, target: Window = window): () =
   };
 
   const onKeyDown = (event: KeyboardEvent) => {
+    // A modal owns Escape even when a press on its shield has left focus on the page body. Resolve its manifest door
+    // before the canvas/global context can clear the selection, and do not let another key listener see that Escape.
+    if (event.key === 'Escape' && store.getState().ui.dialog !== undefined && store.getState().confirmation === null) {
+      const modal = bindingFor('dialog', chordOf(event));
+      if (modal !== null) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (shortcutRunsNow(modal)) store.dispatch(modal.command.id, withDoorArgs({}, modal.door.args));
+        return;
+      }
+    }
     // Alt held: the canvas measures distances while it is (spec hover-measure); it binds nothing alone
     if (event.key === ALT) holdAlt(true);
     // during a pointer gesture the keys are the gesture's (pointer.ts)

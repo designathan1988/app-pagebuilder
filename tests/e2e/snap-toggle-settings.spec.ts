@@ -70,3 +70,17 @@ test('Cancel drops what was ticked and typed', runs(OPEN, CLOSE), async ({ page 
   await expect(box(page, 'guides')).toBeChecked();
   await expect(distance(page)).toHaveValue('6');
 });
+
+test('Escape after a press on the modal shield closes Snap settings without clearing the selection', runs('workspace.setPanelOpen#toolbar-activity-bar-insert', 'element.insert#elements-tile', OPEN, 'ui.dismiss#key-escape-in-dialog'), async ({ page }) => {
+  await openEditor(page);
+  await runDoor(page, 'workspace.setPanelOpen#toolbar-activity-bar-insert');
+  await runDoor(page, 'element.insert#elements-tile', { args: { entry: 'container' } });
+  const selected = await page.evaluate(() => (window as unknown as { __builderTestPort: { selection: () => string[] } }).__builderTestPort.selection());
+  expect(selected).toHaveLength(1);
+  await runDoor(page, OPEN);
+  await expect(page.locator(DIALOG)).toBeVisible();
+  await page.locator('.dialog-shield').click({ position: { x: 5, y: 5 } });
+  await page.keyboard.press('Escape');
+  await expect(page.locator(DIALOG)).toHaveCount(0);
+  await expect.poll(() => page.evaluate(() => (window as unknown as { __builderTestPort: { selection: () => string[] } }).__builderTestPort.selection())).toEqual(selected);
+});
