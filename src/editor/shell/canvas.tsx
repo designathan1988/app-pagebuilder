@@ -130,9 +130,6 @@ function CanvasToolbar() {
       />
       <DragHint />
       <ModeHint />
-      {/* the breakpoints, in the toolbar with a width of their own (the audit's A3.18: over the frame they were cut
-          and overlapped at a small zoom, and the information stood in three places) */}
-      <BreakpointTabs />
     </div>
   );
 }
@@ -232,6 +229,10 @@ export function CanvasColumn() {
                 {/* the stage around the page: a press here is on no node (pointer.ts) */}
                 <div className={`stage${panning !== 'idle' ? ` stage--${panning}` : ''}`} ref={stage} data-canvas-stage data-region="canvas-stage">
                   <div className="frame" data-region="canvas-frame" style={{ width: pageWidth * zoom, left: FIT_MARGIN + pan }}>
+                    {/* the breakpoints, a row of tabs attached to the frame they switch (the owner's decision D-1; the
+                        canonical frame): their row takes its own width, so at a small zoom the tabs run past the
+                        frame's edge instead of being cut or overlapping (the audit's A3.18) */}
+                    <BreakpointTabs />
                     <StateBadge />
                     <CanvasFrame width={pageWidth} screen={pageHeight} zoom={zoom} />
                   </div>

@@ -7,7 +7,7 @@
 import fs from 'node:fs';
 import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
-import { control, runDoor, runs } from './door.ts';
+import { control, runDoor, runs, openStyleControl } from './door.ts';
 
 const FIXTURE = 'manifest/features/fixtures/aurora.json';
 const OPEN = 'project.open#menu-file';
@@ -34,6 +34,8 @@ interface Tree {
 }
 
 async function type(page: Page, ref: string, text: string): Promise<void> {
+  // a field in a concept row's details is reached by opening the row (spec inspector-panel, item 4a)
+  await openStyleControl(page, ref);
   await control(page, ref).locator('input').click();
   await page.keyboard.press('Control+A');
   await page.keyboard.type(text);

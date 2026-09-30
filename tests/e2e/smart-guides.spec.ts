@@ -5,7 +5,7 @@
 import fs from 'node:fs';
 import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
-import { control, runDoor, runs } from './door.ts';
+import { control, runDoor, runs, openStyleControl } from './door.ts';
 
 const FIXTURE = 'manifest/features/fixtures/aurora.json';
 const OPEN = 'project.open#menu-file';
@@ -42,6 +42,8 @@ async function openAurora(page: Page): Promise<void> {
   await (await chooser).setFiles({ name: 'aurora.json', mimeType: 'application/json', buffer: fs.readFileSync(FIXTURE) });
 }
 async function typeInto(page: Page, property: string, value: string): Promise<void> {
+  // a field in a concept row's details is reached by opening the row (spec inspector-panel, item 4a)
+  await openStyleControl(page, `style.set#inspector-${property}`);
   const field = control(page, `style.set#inspector-${property}`).locator('input').first();
   await field.click();
   await page.keyboard.press('Control+A');

@@ -6,7 +6,7 @@
 import fs from 'node:fs';
 import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
-import { control, openMenu, runDoor, runs } from './door.ts';
+import { control, openMenu, runDoor, runs, openStyleControl } from './door.ts';
 
 const FIXTURE = 'manifest/features/fixtures/aurora.json';
 const interactions = JSON.parse(fs.readFileSync('manifest/interactions.json', 'utf8')) as { constants: { id: string; value: unknown }[] };
@@ -191,6 +191,8 @@ const COLUMNS = 'style.set#inspector-grid-template-columns';
 const WIDTH = 'style.set#inspector-width';
 
 async function typeField(page: Page, ref: string, text: string): Promise<void> {
+  // a field in a concept row's details is reached by opening the row (spec inspector-panel, item 4a)
+  await openStyleControl(page, ref);
   const input = control(page, ref).locator('input').first();
   await input.click();
   await page.keyboard.press('Control+A');

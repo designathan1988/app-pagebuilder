@@ -271,7 +271,9 @@ test('a tile dragged where its element is refused draws the list refused with th
   // inside the list, between its two items: a Section there would be a child of <ul>, which accepts only <li>; the
   // nearest place that takes it is beside the list, on the pointer's side of its middle (spec drag-layout, Problems in
   // Pager 4)
-  const between = { x: centre(one).x, y: (one.y + one.height + two.y) / 2 };
+  // the gap's middle is the list's own middle for two items of one height, where the app's tie rule and this test's
+  // comparison meet to the hundredth of a pixel: the point stands 2 px below it, still in the gap
+  const between = { x: centre(one).x, y: (one.y + one.height + two.y) / 2 + 2 };
   expect(two.y - (one.y + one.height), 'the list leaves a gap between its items').toBeGreaterThan(2);
   const beforeList = between.y < perks.y + perks.height / 2;
   const said = `Refused. <ul> only accepts <li>. · Insert Section · ${beforeList ? 'between Grid and Perks' : 'after Perks'} · Page › Plans`;

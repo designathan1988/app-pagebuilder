@@ -1058,7 +1058,11 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     if (dragging === null || live === null) return;
     const state = store.getState();
     const { proposal, level } = drawnProposal(state.ui.drag, live, state.document);
-    const changed = level !== dragging.levels || JSON.stringify(proposal) !== JSON.stringify(dragging.raw);
+    // a proposal redirected beside what refuses it is asked again on every move: its side follows the pointer across
+    // the refusing element's middle, which never changes the raw proposal inside it (a tile dragged down a list that
+    // refuses it kept the side it entered by)
+    const redirected = dragging.redirect !== null;
+    const changed = level !== dragging.levels || JSON.stringify(proposal) !== JSON.stringify(dragging.raw) || redirected;
     if (changed) {
       dragging.raw = proposal;
       dragging.levels = level;
