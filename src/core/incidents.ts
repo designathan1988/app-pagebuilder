@@ -4,6 +4,7 @@
 //    bug — a rule the operation should have refused before producing anything — so the state is not published, the
 //    incident is recorded here, and in development and tests the commit throws so the defect is loud. Predictable
 //    invalid operations are refused by the operation itself, with a message; they never reach this feed.
+//  - 'empty-change': a command answered with structural patches that left the document as it was (reportEmptyChange).
 //  - 'error': an error the page threw (a render error, an unhandled rejection): recorded by the editor side, so the
 //    person and the browser checks see it instead of a console nobody reads.
 //
@@ -13,7 +14,7 @@
 import type { Invalid } from './document/validate.ts';
 
 export interface Incident {
-  readonly kind: 'invariant' | 'error';
+  readonly kind: 'invariant' | 'empty-change' | 'error';
   // one line naming what happened: the command and its source, or where the error came from
   readonly what: string;
   // what the validator or the thrower said, in full
@@ -32,6 +33,14 @@ function record(incident: Incident): void {
 // A document the validator refused after a command's patches: a bug, never a normal refusal.
 export function reportInvariantBreach(source: string, problems: readonly Invalid[]): void {
   record({ kind: 'invariant', what: `commit "${source}" left a document the model refuses`, detail: problems.map((p) => `${p.path}: ${p.message}`).join('\n') });
+}
+
+// A command that answered with structural patches (an addition, a removal, a collection replaced) that left the document
+// exactly as it was: it claims a change it did not make (a delete that deleted nothing, a move that moved nothing) — a
+// bug the person cannot see, since the status says it happened. Setting a value to the one already held is not this:
+// only structural patches count.
+export function reportEmptyChange(command: string, said: string | null): void {
+  record({ kind: 'empty-change', what: `command "${command}" claimed a structural change and the document is unchanged`, detail: said ?? '(no message)' });
 }
 
 // An error the page threw, recorded by the editor side.

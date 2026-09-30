@@ -440,6 +440,31 @@ describe('the store', () => {
     expect(incidents().length).toBe(1);
   });
 
+  it('records an incident when a command answers with structural patches that leave the document as it was', () => {
+    clearIncidents();
+    // a delete that "removes" the root's children by replacing them with the same list: nothing changes, yet it says so
+    const hollowDelete = registerHandler('element.delete', ({ state }) => {
+      const root = state.document.pages[0]?.tree;
+      const at = root === undefined ? null : locate(state.document, root.id);
+      if (at === null || root === undefined) return { kind: 'refused', message: message('status.delete.root') };
+      return { kind: 'change', patches: [{ op: 'replace', path: [...at.path, 'children'], value: root.children }], message: message('status.delete.root') };
+    });
+    const s = testStore({ ...TEST_COMMANDS, 'element.delete': hollowDelete });
+    insertInto(s);
+    s.store.dispatch('element.delete', {});
+    const recorded = incidents();
+    expect(recorded.map((i) => i.kind)).toEqual(['empty-change']);
+    expect(recorded[0]?.what).toContain('element.delete');
+    // a value written in place that equals the one held is not structural: no incident
+    clearIncidents();
+    const t = testStore();
+    const made = insertInto(t);
+    expect(made.status).toBe('done');
+    const id = t.store.getState().selection[0] ?? '';
+    t.store.dispatch('element.rename', { target: id, name: nameOf(t.store.getState().document, id) ?? '' });
+    expect(incidents()).toEqual([]);
+  });
+
   it('says something in the status bar without running a command (notice: the stale drop)', () => {
     const s = testStore();
     const before = s.store.getState();

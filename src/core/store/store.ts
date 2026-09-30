@@ -16,7 +16,7 @@ import type { Clock } from '../ports/clock.ts';
 import type { ClipboardWriter } from '../ports/clipboard.ts';
 import { anyCss, type CssSupport } from '../ports/css.ts';
 import type { Downloads } from '../ports/download.ts';
-import { reportInvariantBreach } from '../incidents.ts';
+import { reportEmptyChange, reportInvariantBreach } from '../incidents.ts';
 import type { IdGenerator } from '../ports/ids.ts';
 import { noLayout, type Layout } from '../ports/layout.ts';
 
@@ -49,6 +49,8 @@ export interface PendingConfirmation {
   readonly command: CommandId;
   readonly args: unknown;
   readonly message: MessageId;
+  // the values of the question's placeholders, from the command that asks
+  readonly params?: Readonly<Record<string, string | number>>;
   readonly confirm: MessageId;
   readonly cancel: MessageId;
 }
@@ -169,6 +171,10 @@ export function deepFreeze<T>(value: T): T {
   }
   return value;
 }
+
+// A patch that adds, removes, or replaces a whole collection: the shape of a structural change, as opposed to a value
+// written in place (which may equal the one already held).
+const structural = (patch: Patch): boolean => patch.op === 'add' || patch.op === 'remove' || (patch.op === 'replace' && Array.isArray(patch.value));
 
 interface OpenGesture {
   readonly before: StoreState<unknown>;
@@ -301,7 +307,7 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
       if (gesture) throw new Error(`${id} cannot ask a confirmation inside a gesture`);
       const asked = command.confirmation;
       if (asked === null) throw new Error(`${id} asks a confirmation the manifest does not declare`);
-      const confirmation: PendingConfirmation = { command: id, args, message: asked.messageKey as MessageId, confirm: asked.confirmKey as MessageId, cancel: asked.cancelKey as MessageId };
+      const confirmation: PendingConfirmation = { command: id, args, message: asked.messageKey as MessageId, confirm: asked.confirmKey as MessageId, cancel: asked.cancelKey as MessageId, ...(outcome.params === undefined ? {} : { params: outcome.params }) };
       publish(commit({ ...state, confirmation }, id));
       return { status: 'confirm' };
     }
@@ -329,6 +335,7 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
     const before = state;
     const applied = applyPatches(before.document, outcome.patches ?? []);
     const documentChanged = applied.applied.length > 0 && !deepEqual(before.document, applied.document);
+    if (!documentChanged && (outcome.patches ?? []).some(structural)) reportEmptyChange(id, outcome.message === undefined ? null : JSON.stringify(outcome.message));
     if (documentChanged && !command.history.undoable) throw new Error(`${id} is not undoable in the manifest but changed the document`);
     const selection = outcome.selection ?? before.selection;
     let history = before.history;
