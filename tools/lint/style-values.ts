@@ -6,7 +6,7 @@ import { lexer, parse, toPlainObject, walk, type CssNodePlain, type Declaration 
 
 export const DEFAULT_TOKENS_FILE = 'src/ui/tokens.css';
 
-export type LiteralKind = 'colour' | 'length' | 'font' | 'variable';
+export type LiteralKind = 'colour' | 'length' | 'font' | 'layer' | 'variable';
 
 export interface StyleLiteral {
   kind: LiteralKind;
@@ -27,7 +27,7 @@ export interface Position {
 }
 
 // The kinds of property whose lengths or font values must come from tokens, with the tokens that replace them.
-type Category = 'spacing' | 'position' | 'size' | 'radius' | 'shadow' | 'font' | 'custom';
+type Category = 'spacing' | 'position' | 'size' | 'radius' | 'shadow' | 'font' | 'layer' | 'custom';
 
 const LENGTH_HINTS: Readonly<Record<Exclude<Category, 'font'>, string>> = {
   spacing: '--space-*',
@@ -35,6 +35,7 @@ const LENGTH_HINTS: Readonly<Record<Exclude<Category, 'font'>, string>> = {
   size: '--size-* or --space-*',
   radius: '--radius-*',
   shadow: '--shadow-*',
+  layer: '--z-*',
   custom: '--space-*, --size-* or --radius-*',
 };
 
@@ -56,6 +57,7 @@ const CATEGORY_PATTERNS: ReadonlyArray<readonly [RegExp, Category]> = [
   [/^(flex|flex-basis|grid-template-(columns|rows)|grid-auto-(columns|rows))$/, 'size'],
   [/^border(-(top|bottom|start|end)-(left|right|start|end))?-radius$/, 'radius'],
   [/^(box|text)-shadow$/, 'shadow'],
+  [/^z-index$/, 'layer'],
 ];
 
 // The property a style applies to, without a vendor prefix: -webkit-box-shadow is checked as box-shadow.
@@ -107,6 +109,8 @@ const CSS_WIDE_KEYWORDS: ReadonlySet<string> = new Set(['inherit', 'initial', 'u
 const ALWAYS_ALLOWED_KEYWORDS: ReadonlySet<string> = new Set([...CSS_WIDE_KEYWORDS, 'auto', 'none']);
 // The font shorthand also packs the style and variant, which have no tokens.
 const FONT_SHORTHAND_KEYWORDS: ReadonlySet<string> = new Set(['normal', 'italic', 'oblique', 'small-caps']);
+
+const LOCAL_LAYERS = 9;
 
 function isZero(value: string): boolean {
   return Number(value) === 0;
@@ -166,6 +170,9 @@ export function styleLiterals(property: string, value: string, at: Position = { 
         return;
       case 'Number':
         if (category === 'font' && !inMath && !isZero(node.value)) add('font', node);
+        // a layer of the interface (a menu, a dialog, the palette) comes from the z scale; 0 to 9 order the parts of
+        // one component inside its own stacking
+        if (category === 'layer' && Math.abs(Number(node.value)) > LOCAL_LAYERS) add('layer', node);
         return;
       case 'Percentage':
       case 'String':
@@ -185,6 +192,7 @@ export function styleLiterals(property: string, value: string, at: Position = { 
 export function numberLiteral(property: string, value: number): Omit<StyleLiteral, 'start' | 'end'> | null {
   const category = categoryOf(property);
   if (value === 0 || category === null || category === 'custom' || property === 'flex') return null;
+  if (category === 'layer') return Math.abs(value) > LOCAL_LAYERS ? { kind: 'layer', text: String(value), property, hint: hintOf(property, category) } : null;
   return { kind: category === 'font' ? 'font' : 'length', text: String(value), property, hint: hintOf(property, category) };
 }
 

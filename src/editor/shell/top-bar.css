@@ -27,7 +27,7 @@
 /* A neighbouring application menu remains pressable above an open menu's full-window backdrop. */
 .top-bar__menus .menu-button {
   position: relative;
-  z-index: 51;
+  z-index: var(--z-menu-anchor);
 }
 
 .top-bar__page {

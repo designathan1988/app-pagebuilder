@@ -192,6 +192,7 @@ const STYLE_MESSAGES = {
   length:
     '{{value}} is a literal length in {{property}}: use a {{hint}} token of {{tokens}} (0, auto, percentages and viewport units are allowed).',
   font: '{{value}} is a literal font value in {{property}}: use a {{hint}} token of {{tokens}}.',
+  layer: '{{value}} is a literal layer in {{property}}: use a --z-* token of {{tokens}} (0 to 9 order the parts of one component).',
 };
 
 function literalData(literal: Omit<StyleLiteral, 'start' | 'end'>, tokens: string): Record<string, string> {
@@ -225,7 +226,7 @@ function styleKey(property: TSESTree.Property): string | null {
 // builder/use-tokens: a React style object takes its colours, spacing, sizes, radii, shadows and font values from the
 // tokens, like the stylesheets. A dynamic value (a variable, a template with expressions) is not a literal; the
 // literal parts of a template are still checked.
-const useTokensInStyle: JsxRuleDefinition<'colour' | 'length' | 'font' | 'variable', [TokensOptions?]> = {
+const useTokensInStyle: JsxRuleDefinition<'colour' | 'length' | 'font' | 'layer' | 'variable', [TokensOptions?]> = {
   meta: {
     type: 'problem',
     docs: { description: 'Take every colour, spacing, size, radius, shadow and font value of a style object from the tokens' },
@@ -249,7 +250,7 @@ const useTokensInStyle: JsxRuleDefinition<'colour' | 'length' | 'font' | 'variab
         for (const node of styleValueNodes(property.value)) {
           if (node.type === 'Literal' && typeof node.value === 'number') {
             const literal = numberLiteral(name, node.value);
-            if (literal) context.report({ node, messageId: literal.kind === 'font' ? 'font' : 'length', data: literalData(literal, tokensFile) });
+            if (literal) context.report({ node, messageId: literal.kind === 'font' || literal.kind === 'layer' ? literal.kind : 'length', data: literalData(literal, tokensFile) });
             continue;
           }
           const dynamic = node.type === 'TemplateLiteral' && node.expressions.length > 0;
@@ -285,7 +286,7 @@ const useTokensInStyle: JsxRuleDefinition<'colour' | 'length' | 'font' | 'variab
 // the one stylesheet the configuration exempts. Descriptors of @font-face name a font, and are not checked.
 const useTokensInStylesheet: CSSRuleDefinition<{
   RuleOptions: [TokensOptions?];
-  MessageIds: 'colour' | 'length' | 'font' | 'variable';
+  MessageIds: 'colour' | 'length' | 'font' | 'layer' | 'variable';
 }> = {
   meta: {
     type: 'problem',

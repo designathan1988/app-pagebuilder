@@ -74,6 +74,7 @@ function declarations(token: TransformedToken): [string, string][] {
     case 'fontFamily':
       return [[name, family(value as string[])]];
     case 'fontWeight':
+    case 'number':
       return [[name, String(value)]];
     case 'typography': {
       const t = value as Typography;

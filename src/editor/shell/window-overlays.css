@@ -45,7 +45,7 @@
 .dialog-shield {
   position: fixed;
   inset: 0;
-  z-index: 80;
+  z-index: var(--z-dialog);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -263,7 +263,7 @@
 .confirmation {
   position: fixed;
   inset: 0;
-  z-index: 85;
+  z-index: var(--z-confirm);
   display: grid;
   place-items: center;
 }
@@ -309,7 +309,7 @@
   position: fixed;
   top: 0;
   left: 50%;
-  z-index: 90;
+  z-index: var(--z-guard);
   display: flex;
   align-items: center;
   gap: var(--space-4);
@@ -340,7 +340,7 @@
 .preview {
   position: fixed;
   inset: 0 0 var(--size-status-bar) 0;
-  z-index: 60;
+  z-index: var(--z-preview);
   display: flex;
   flex-direction: column;
   background: var(--color-canvas);
@@ -376,7 +376,7 @@
 .command-bar {
   position: fixed;
   inset: 0;
-  z-index: 85;
+  z-index: var(--z-palette);
   display: flex;
   justify-content: center;
   align-items: flex-start;

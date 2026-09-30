@@ -918,7 +918,7 @@
 
 .link-prompt__panel {
   position: fixed;
-  z-index: 50;
+  z-index: var(--z-menu);
   display: grid;
   gap: var(--space-2);
   width: calc(var(--size-inspector) - var(--space-8));
@@ -1139,7 +1139,7 @@
 /* the ghost and, under it, what it says about a side drop, together beside the pointer */
 .chrome-ghost-stack {
   position: fixed;
-  z-index: 60;
+  z-index: var(--z-drag);
   display: flex;
   flex-direction: column;
   align-items: flex-start;

@@ -35,7 +35,7 @@
   position: absolute;
   top: 100%;
   left: 0;
-  z-index: 50;
+  z-index: var(--z-menu);
   display: flex;
   flex-direction: column;
   min-width: var(--size-inspector);
@@ -89,7 +89,7 @@
 .overlay-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 49;
+  z-index: var(--z-backdrop);
   min-width: 0;
   height: auto;
   padding: 0;

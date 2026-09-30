@@ -99,7 +99,7 @@
 /* a floating window: a panel over the editor, at the point it was dropped (spec floating-panels) */
 .panel-window {
   position: fixed;
-  z-index: 44;
+  z-index: var(--z-floating);
   display: flex;
   flex-direction: column;
   width: var(--size-panel-window-width);
@@ -115,7 +115,7 @@
    combine with, with the words of the door the release would run */
 .panel-hint {
   position: fixed;
-  z-index: 46;
+  z-index: var(--z-floating-hint);
   display: flex;
   align-items: flex-start;
   justify-content: center;

@@ -162,8 +162,13 @@ stylesheets.run('builder-css/use-tokens', builderCss.rules['use-tokens'], {
     '@font-face { font-family: Inter; src: url(inter.woff2); font-weight: 400; }',
     '@media (max-width: 800px) { .a { color: var(--color-text); } }',
     '.a { font-size: inherit; line-height: unset; width: auto; box-shadow: none; }',
+    '.a { z-index: var(--z-menu); } .b { z-index: 3; } .c { z-index: -1; }',
   ],
   invalid: [
+    {
+      code: '.a { z-index: 50; }',
+      errors: [{ messageId: 'layer', data: { value: '50', property: 'z-index', hint: '--z-*', tokens: 'src/ui/tokens.css' } }],
+    },
     {
       code: '.a {\n  color: #ff0000;\n}',
       errors: [
@@ -251,6 +256,10 @@ tsx.run('builder/use-tokens', builder.rules['use-tokens'], {
     '<div style={style} className="a" />',
   ],
   invalid: [
+    {
+      code: '<div style={{ zIndex: 50 }} />',
+      errors: [{ messageId: 'layer', data: { value: '50', property: 'z-index', hint: '--z-*', tokens: 'src/ui/tokens.css' } }],
+    },
     {
       code: "<div style={{ color: '#fff' }} />",
       errors: [{ messageId: 'colour', data: { value: '#fff', property: 'color', hint: '--color-*', tokens: 'src/ui/tokens.css' } }],

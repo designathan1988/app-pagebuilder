@@ -5,7 +5,7 @@
   position: fixed;
   left: 50%;
   bottom: calc(var(--size-status-bar) + var(--space-6));
-  z-index: 40;
+  z-index: var(--z-toast);
   display: flex;
   align-items: center;
   gap: var(--space-4);
@@ -65,7 +65,7 @@
 .picker-shield {
   position: fixed;
   inset: 0;
-  z-index: 70;
+  z-index: var(--z-picker);
 }
 
 .picker {
@@ -400,14 +400,14 @@ button.picker__swatch {
 
 .add-property > .door[aria-expanded='true'] {
   position: relative;
-  z-index: 50;
+  z-index: var(--z-menu);
 }
 
 .add-property__menu {
   position: absolute;
   top: calc(100% + var(--space-2));
   right: 0;
-  z-index: 50;
+  z-index: var(--z-menu);
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
