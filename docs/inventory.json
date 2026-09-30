@@ -4,7 +4,7 @@
     "built": 185,
     "commands": 257,
     "doors": 1000,
-    "scenarios": 1335,
+    "scenarios": 1338,
     "modules": 254,
     "lines": 49024
   },
@@ -2552,7 +2552,7 @@
         "workspace.setPanelOpen"
       ],
       "doors": 26,
-      "scenarios": 7,
+      "scenarios": 9,
       "modules": [
         "src/core/project/pages.ts",
         "src/editor/workspace/panels.ts"
@@ -2572,7 +2572,7 @@
         "files.startRename"
       ],
       "doors": 11,
-      "scenarios": 12,
+      "scenarios": 13,
       "modules": [
         "src/core/files/files.ts",
         "src/editor/explorer/explorer.ts",

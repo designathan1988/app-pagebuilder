@@ -287,8 +287,13 @@
   background: var(--color-surface-selected);
 }
 
+/* a row's main area lays its icon, name (or name field) and meta out on one line, whether it is a door (a file,
+   which drags) or not (a folder) */
 .row__main {
+  display: flex;
+  align-items: center;
   flex: 1;
+  min-width: 0;
   justify-content: flex-start;
   height: var(--size-row);
   padding: 0 var(--space-4);

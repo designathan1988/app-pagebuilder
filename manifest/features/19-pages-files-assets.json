@@ -732,6 +732,167 @@
               "document": "unchanged"
             }
           ]
+        },
+        {
+          "id": "a-page-is-deleted-after-the-confirmation",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "pages.add#explorer-add-page",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "pages.delete#explorer-page-delete",
+              "args": {
+                "page": "/Page 2"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null,
+              "answer": "confirm"
+            }
+          ],
+          "doors": [
+            "pages.delete#explorer-page-delete"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.pages.deleted",
+                  "params": {
+                    "name": "Page"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "cancelling-the-page-delete-keeps-the-page",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "pages.add#explorer-add-page",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "pages.delete#explorer-page-delete",
+              "args": {
+                "page": "/Page 2"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null,
+              "answer": "cancel"
+            }
+          ],
+          "doors": [
+            "pages.delete#explorer-page-delete"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@pages",
+                "value": [
+                  {
+                    "name": "Home",
+                    "file": "index.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page",
+                      "tag": "body",
+                      "attributes": {},
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": []
+                    }
+                  },
+                  {
+                    "name": "Page",
+                    "file": "page.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page 2",
+                      "tag": "body",
+                      "attributes": {},
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": []
+                    }
+                  }
+                ]
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.confirmation.cancelled",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
         }
       ]
     },
@@ -1776,6 +1937,113 @@
               "preferences": null,
               "selection": null
             },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-folders-name-is-kept-and-its-files-go-with-it",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "files.createFolder#explorer-new-folder",
+              "args": {
+                "path": "docs"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.createFile#explorer-new-file",
+              "args": {
+                "path": "docs/a.txt"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.startRename#explorer-file-name",
+              "args": {
+                "path": "docs"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "files.rename#explorer-file-name-field",
+              "args": {
+                "path": "docs",
+                "name": "notes"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "files.rename#explorer-file-name-field"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@folders",
+                "value": [
+                  "notes"
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/@files",
+                "value": [
+                  {
+                    "path": "notes/a.txt",
+                    "type": "text/plain",
+                    "bytes": ""
+                  }
+                ]
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 3,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.files.renamed",
+                  "params": {
+                    "name": "notes"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
             "export": null
           },
           "refusals": []

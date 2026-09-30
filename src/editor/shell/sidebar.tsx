@@ -613,7 +613,7 @@ function TreeRow({ row, doors }: { readonly row: TreeRow; readonly doors: TreeDo
         </DoorControl>
       )}
       {renaming && doors.rename !== undefined ? (
-        <form onSubmit={(event) => { event.preventDefault(); keepName(String(new FormData(event.currentTarget).get('name') ?? '')); }}>
+        <form className="row__rename" onSubmit={(event) => { event.preventDefault(); keepName(String(new FormData(event.currentTarget).get('name') ?? '')); }}>
           <input
             className="input row__name-field"
             type="text"
