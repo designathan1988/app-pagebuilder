@@ -634,12 +634,14 @@
   container-type: inline-size;
 }
 
-/* design/final .prop.two: the same label column as a row of one control — 100 px, the token formula the single row
-   already uses — and then two compact value cells. The column this replaces took the label's own width, so each pair
-   started at a different x: the six pairs measured between 1363.05 and 1389.81 px, and the panel's own rows stopped
-   forming a column. The canonical model proves the two 77.5 px cells keep a caret inside them. */
+/* A pair's label column takes the label's own width (the canonical's .prop.two fixes it at 100 px, which its lean
+   cell — a value and a unit — fits inside 77.5 px). This application's cell carries more: the value, the values
+   dropdown and the unit button. Measured with the canonical's fixed column: the Height cell's input came out 30 px
+   wide and a typed "600px" arrived as the empty string — the field refused it ("is not a value this field takes"),
+   while "320", four characters, fitted. The alignment the fixed column buys is worth having and must wait for a
+   section-level grid (subgrid) that shares one label column without squeezing the cells. */
 .field-row--pair {
-  grid-template-columns: calc(var(--space-10) * 3 + var(--space-2)) minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr);
 }
 
 /* A longhand of a concept another row already draws (rows.ts isDetailRow: border's twelve, border-radius's four):
