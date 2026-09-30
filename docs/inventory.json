@@ -6,7 +6,7 @@
     "doors": 1002,
     "scenarios": 1340,
     "modules": 259,
-    "lines": 49713
+    "lines": 49724
   },
   "features": [
     {
@@ -4706,7 +4706,7 @@
     },
     {
       "path": "src/editor/shell/field.tsx",
-      "lines": 1403,
+      "lines": 1409,
       "commands": [],
       "features": []
     },
@@ -5163,7 +5163,7 @@
     },
     {
       "path": "src/manifest/schema.ts",
-      "lines": 1286,
+      "lines": 1291,
       "commands": [],
       "features": []
     },

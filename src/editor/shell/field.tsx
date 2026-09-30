@@ -387,6 +387,12 @@ function slidNumber(text: string, fallbackUnit: string): { readonly value: numbe
   return { value, unit: (match[2] ?? '') === '' ? fallbackUnit : (match[2] as string) };
 }
 
+// What a slider stands on: the number the text holds, else — a value with no number to slide, a filter function absent —
+// the neutral the slider declares, else nothing (the slider is then disabled)
+function slidValue(text: string, range: { readonly unit: string; readonly neutral?: number | undefined }): { readonly value: number; readonly unit: string } | null {
+  return slidNumber(text, range.unit) ?? (range.neutral === undefined ? null : { value: range.neutral, unit: range.unit });
+}
+
 // Keeps what a field holds with its door's command (style.set), once no gesture is open, on the elements that were
 // selected when the field was left (`targets`): the press that left it may select another element before the value is
 // kept (a click on the canvas, a Layers row), and the value belongs to the element it was typed for. Nothing for a
@@ -651,7 +657,7 @@ export function TextStyleField({
   const sliderInput = useRef<HTMLInputElement>(null);
   // the unit the release writes with: the one the value carries, read with the value and kept for the release
   const slidUnit = useRef('');
-  const slid = sliderRange === undefined ? null : slidNumber(shown !== '' ? shown : (effective ?? ''), sliderRange.unit);
+  const slid = sliderRange === undefined ? null : slidValue(shown !== '' ? shown : (effective ?? ''), sliderRange);
   const draft = useRef({ typed: false });
   // the list of every value the field offers, opened by its own button (A3.33): all of them, whatever the field holds
   // the layer contract of the field values menu: the same owner the menu buttons stand on (doors/menu.tsx)

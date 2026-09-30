@@ -2085,6 +2085,10 @@
       "reader": "src/editor/shell/field.tsx"
     },
     {
+      "field": "commands:commands[].entryPoints[].slider.neutral",
+      "reader": "src/editor/shell/field.tsx"
+    },
+    {
       "field": "properties:states[].elements",
       "reader": "src/editor/view/style-state.ts"
     },

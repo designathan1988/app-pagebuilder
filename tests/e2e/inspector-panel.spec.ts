@@ -636,3 +636,24 @@ test('an empty shadow editor is one row, and Remove every shadow comes with the 
   await expect(head).not.toContainText('No shadow yet.');
   await expect(control(page, RESET_SHADOWS)).toHaveCount(1);
 });
+
+// A filter function the element does not hold slides from its identity (spec props-filters-clip, Problems in Pager 4; the
+// audit's S-024: the eight sliders stayed disabled until a value existed): Brightness sits at 100 and a drag writes it.
+test('a filter slider with no value sits at its neutral and a drag writes the function', runs(OPEN, ROW, SECTION, 'style.setFilter#inspector-filter-filter-brightness'), async ({ page }) => {
+  await openAurora(page);
+  await runDoor(page, ROW, { args: { target: 'n-hero' } });
+  const BRIGHTNESS = 'style.setFilter#inspector-filter-filter-brightness';
+  await openStyleControl(page, BRIGHTNESS);
+  const slider = control(page, BRIGHTNESS).first().locator('.field__slider');
+  await slider.scrollIntoViewIfNeeded();
+  await expect(slider).toBeEnabled();
+  await expect(slider).toHaveValue('100');
+  const box = await slider.boundingBox();
+  if (box === null) throw new Error('the slider is not laid out');
+  await page.mouse.move(box.x + box.width * 0.5, box.y + box.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(box.x + box.width * 0.75, box.y + box.height / 2, { steps: 8 });
+  const held = await slider.inputValue();
+  await page.mouse.up();
+  await expect.poll(async () => String((await nodeOf(page, 'n-hero'))?.styles?.desktop?.base?.filter ?? '')).toBe(`brightness(${held}%)`);
+});

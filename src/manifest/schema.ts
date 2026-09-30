@@ -614,8 +614,13 @@ const sliderSchema = z
     max: z.number(),
     step: z.number().positive(),
     unit: z.string(),
+    // the number the value means while the element holds none of it (a filter function absent is its identity:
+    // brightness 100 %, blur 0): the thumb sits there and a slide from it writes (the audit's S-024: the sliders stayed
+    // disabled until a value existed). Absent: a value with no number to slide leaves the slider disabled.
+    neutral: z.number().optional(),
   })
-  .refine((s) => s.min < s.max, { message: 'a slider covers a range: min below max' });
+  .refine((s) => s.min < s.max, { message: 'a slider covers a range: min below max' })
+  .refine((s) => s.neutral === undefined || (s.neutral >= s.min && s.neutral <= s.max), { message: "a slider's neutral lies inside its range" });
 
 // Where a panel lives: a view of the sidebar (the activity bar switches them), a section of a sidebar view, the
 // inspector column, the tools of the canvas toolbar, the workbench (the dock itself) or a tab of the dock.

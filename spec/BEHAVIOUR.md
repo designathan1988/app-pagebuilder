@@ -5084,6 +5084,7 @@ The fields are keyboard-operable like every inspector field.
   inspector's own transform fields: the bare unit of each function comes from one owner
   (`src/core/style/functions.ts` `withBareUnit`: blur px, grayscale %, skew deg, scale a factor), so no door demands
   raw CSS syntax from a person.
+4. **The eight filter sliders stayed disabled until the element held a filter** (the audit's S-024: Brightness could not be dragged, eight rows read none). Required: a filter function the element does not hold slides from its identity, which the slider declares (`slider.neutral`: blur 0 px, brightness, contrast and saturation 100 %, hue rotation 0 deg, grayscale, invert and sepia 0 %): the thumb sits there, and releasing it elsewhere writes the function (`brightness(150%)`) in one undo step; releasing it where it started writes nothing.
 
 ## props-flex-container
 
