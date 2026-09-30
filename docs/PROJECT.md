@@ -105,6 +105,10 @@ npm run inventory         # regenerate docs/INVENTORY.md and docs/inventory.json
   gesture, a drop, a field that shapes typed text, a control that fills its arguments, the colour picker's session,
   and a run whose outcome depends on the page's layout or on the values the browser takes, which the fast runner
   reports as skipped with the reason.
+- `npm run unit` measures what the unit tests and the fast runner reach of `src/core` and `src/editor`, line by line
+  and branch by branch (`.cache/coverage/index.html`), and fails under the floors of `vitest.config.ts`, which are
+  raised as tests are added and never lowered. What only the browser runner reaches (a gesture, the layout) counts
+  there as unreached.
 - `npm run e2e:affected [--since <ref>] [--list]` follows the imports of `src/` from each changed module to the
   modules the inventory names for each feature; a change to what every test stands on (tests/support, the runners,
   the Playwright configuration, the manifest's commands or layout) runs the whole suite, and a changed component that

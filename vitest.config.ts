@@ -8,5 +8,16 @@ export default defineConfig({
     environment: 'node',
     // the transformed modules are kept between runs: a run re-transforms only what changed
     fsModuleCache: true,
+    // What the unit tests and the fast scenario runner reach of the document core and the editor's modules, line by line
+    // and branch by branch (.cache/coverage/index.html; the summary in the terminal). npm run unit measures it on every
+    // check:fast and fails when it falls under the floors, which are raised as tests are added, never lowered.
+    coverage: {
+      provider: 'v8',
+      include: ['src/core/**/*.ts', 'src/editor/**/*.ts'],
+      exclude: ['**/*.test.ts', 'src/core/testing/**'],
+      reporter: ['text-summary', 'html', 'json-summary'],
+      reportsDirectory: '.cache/coverage',
+      thresholds: { statements: 56, branches: 44, functions: 60, lines: 60 },
+    },
   },
 });
