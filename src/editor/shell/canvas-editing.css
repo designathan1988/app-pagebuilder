@@ -340,6 +340,11 @@
   pointer-events: none;
 }
 
+/* a band too thin for its number keeps it for the pointer and the keyboard's focus (constant spacing.valueMinBand) */
+.chrome__band--thin:not(:hover):not(:focus-visible) .chrome__handle-value {
+  visibility: hidden;
+}
+
 .chrome__band-field {
   position: absolute;
   width: calc(var(--space-10) * 2);

@@ -49,6 +49,8 @@ interface Box {
   readonly height: number;
 }
 const MIN_BAND = numberConstant('spacing.minBand');
+// a band thinner than this keeps its number for the pointer and the focus (the audit's U-036: 4 to 6 px bands spilled it)
+const VALUE_MIN_BAND = numberConstant('spacing.valueMinBand');
 // the room an element wants before a control of the screen may cover it: the same the resize handles ask for
 const ROOM = numberConstant('resize.handleRoom');
 const DIRECT = numberConstant('handle.directSize');
@@ -181,7 +183,7 @@ function Handle({ drawn, mode }: { readonly drawn: Drawn; readonly mode: EditMod
   const style: CSSProperties = { left: box.x, top: box.y, width: box.width, height: box.height };
   return (
     <div
-      className={`chrome__${kind} ${band === undefined ? `chrome__${kind}--${mode}` : `chrome__band--${band}${pinned ? '' : ' chrome__band--auto'}`}${door.available ? '' : ' is-unavailable'}`}
+      className={`chrome__${kind} ${band === undefined ? `chrome__${kind}--${mode}` : `chrome__band--${band}${pinned ? '' : ' chrome__band--auto'}${Math.min(box.width, box.height) < VALUE_MIN_BAND ? ' chrome__band--thin' : ''}`}${door.available ? '' : ' is-unavailable'}`}
       data-door={entry.ref}
       data-args={JSON.stringify({ ...stands, ...(args ?? {}), handle: entry.ref })}
       data-edit-handle=""

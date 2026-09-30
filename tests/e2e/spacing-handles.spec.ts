@@ -49,6 +49,15 @@ test('padding and margin bands are drawn with their values; the mode pins them a
   await expect(page.locator('[data-canvas-overlay] .chrome__band--margin:not(.chrome__band--auto)'), 'the margin mode pins its own').toHaveCount(4);
   await expect(page.locator('[data-canvas-overlay] [data-door="style.setSpacing#handle-margin-top-band"]')).toHaveCount(1);
   expect(await tint(page.locator('[data-canvas-overlay] [data-door="style.setSpacing#handle-margin-top-band"]'))).not.toBe(padding);
+  // Hero's margin is 0: its bands are drawn thinner than a number (spacing.valueMinBand), which shows only under the
+  // pointer (spec spacing-handles, Problems in Pager 6; the audit's U-036), while the padding's 56 always shows
+  const marginBottom = page.locator('[data-canvas-overlay] [data-door="style.setSpacing#handle-margin-bottom-band"]');
+  await expect(marginBottom).toHaveClass(/chrome__band--thin/);
+  await expect(marginBottom.locator('.chrome__handle-value')).toBeHidden();
+  await expect(top.locator('.chrome__handle-value')).toBeVisible();
+  await marginBottom.hover();
+  await expect(marginBottom.locator('.chrome__handle-value')).toBeVisible();
+  await page.mouse.move(5, 5);
   // Escape on the canvas leaves the mode, and only the mode: the selection stays (the canvas's own Escape waits)
   // choosing the mode folded the quick panel to its chip: its handles are never under it (spec quick-panel, Problems
   // in Pager 10)

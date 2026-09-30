@@ -2200,6 +2200,7 @@ export const CONSTANT_IDS = [
   "resize.minBox",
   "resize.compactBelow",
   "spacing.minBand",
+  "spacing.valueMinBand",
   "spacing.keyStep",
   "spacing.keyShiftStep",
   "handle.directSize",

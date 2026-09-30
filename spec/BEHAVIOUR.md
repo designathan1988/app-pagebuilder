@@ -7011,6 +7011,7 @@ Focus a band (it is focusable) and press Enter to type a value; the Inspector's 
 3. **Ctrl both pairs sides and disables snapping** in the same gesture. Required: one modifier per meaning, declared once in the `spacing-band` gesture of `manifest/interactions.json`: **Shift** changes all four sides, **Alt** changes the opposite side by the same amount, **Ctrl** suspends snapping.
 4. **The drag writes longhands next to an existing shorthand** (`padding: 56px 40px` plus `paddingTop: 76px`), so the Inspector and export must resolve two sources. Required: the written result is one coherent value per side: the document stores only the four longhands, never the `padding` or `margin` shorthand, and the band writes its side's longhand.
 5. **A click on a band does not reliably open the typed field** (observed: no field after a click in the middle of the top band). Required: a click without drag opens the typed field; Enter commits, Escape cancels.
+6. **A thin band's number spilled out of it** (the audit's U-036: numbers drawn in 4 to 6 px bands). Required: a band thinner than `spacing.valueMinBand` (12 screen px) shows its number only while the pointer is over it or the keyboard's focus is on it; a wider band shows it always.
 
 ## state-styles
 

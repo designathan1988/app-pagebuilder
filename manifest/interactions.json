@@ -778,6 +778,13 @@
       "note": "A padding or margin band is never thinner than this, however small the value."
     },
     {
+      "id": "spacing.valueMinBand",
+      "value": 12,
+      "unit": "screen-px",
+      "source": "spec/BEHAVIOUR.md#spacing-handles",
+      "note": "A band thinner than this shows its number only under the pointer or the keyboard's focus: a number does not fit in it."
+    },
+    {
       "id": "spacing.keyStep",
       "value": 1,
       "unit": "css-px",
