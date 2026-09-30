@@ -57,7 +57,9 @@ function LinkPrompt({ entry, anchor }: { readonly entry: DoorEntry; readonly anc
     const panel = field.current?.closest('form');
     if (!box || !panel) return;
     const gap = parseFloat(getComputedStyle(panel).getPropertyValue('--space-2')) || 0;
-    setAt({ left: box.left, top: box.bottom + gap });
+    // inside the window: a toolbar near its right edge opens the prompt leftwards, never over the inspector's edge
+    const width = panel.getBoundingClientRect().width;
+    setAt({ left: Math.max(gap, Math.min(box.left, window.innerWidth - width - gap)), top: box.bottom + gap });
   }, [anchor]);
   // the field takes the focus once the panel is placed (hidden while it is measured, it could take none), still before
   // the next key arrives: what is typed goes there
@@ -82,6 +84,8 @@ function LinkPrompt({ entry, anchor }: { readonly entry: DoorEntry; readonly anc
           ref={field}
           id={`${id}-address`}
           className="link-prompt__field"
+          // Escape closes the prompt (ui.dismiss, the dismissal it listens to) and keeps nothing (the audit's U-009)
+          data-key-context="dialog"
           type="text"
           inputMode="url"
           autoComplete="off"

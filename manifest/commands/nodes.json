@@ -154,6 +154,44 @@
       ]
     },
     {
+      "id": "layers.cancelRename",
+      "labelKey": "command.layers.cancelRename",
+      "owner": "src/editor/layers/rename.ts",
+      "introducedBy": "rename-element",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "key-escape-in-rename-field",
+          "kind": "shortcut",
+          "context": "rename-field",
+          "chord": "Escape",
+          "feature": "rename-element",
+          "labelKey": "command.layers.cancelRename",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {},
+          "gesture": null
+        }
+      ]
+    },
+    {
       "id": "element.rename",
       "labelKey": "command.renameCommit",
       "owner": "src/core/nodes/names.ts",

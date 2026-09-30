@@ -138,6 +138,7 @@ export interface CommandArgs {
   "history.undo": Record<string, never>;
   "history.redo": Record<string, never>;
   "layers.startRename": Record<string, never>;
+  "layers.cancelRename": Record<string, never>;
   "element.rename": { readonly target: NodeId; readonly name: string };
   "element.toggleLock": { readonly target?: NodeId };
   "element.toggleHidden": { readonly target?: NodeId };
@@ -325,7 +326,7 @@ export const FEATURE_COMMANDS: Readonly<Record<FeatureId, readonly CommandId[]>>
   "hand-keyboard-move": ["element.moveTo","hand.take","hand.aimNext","hand.aimPrevious","hand.climb","hand.descend","hand.drop"],
   "text-edit-inline": ["text.startEdit","text.set","text.cancelEdit","text.insertLineBreak"],
   "text-inline-formatting": ["text.toggleBold","text.toggleItalic","text.editLink","text.paste"],
-  "rename-element": ["layers.startRename","element.rename"],
+  "rename-element": ["layers.startRename","element.rename","layers.cancelRename"],
   "multi-select-click": ["selection.add","selection.toggle"],
   "unwrap": ["element.unwrap"],
   "marquee-select": ["selection.marquee"],

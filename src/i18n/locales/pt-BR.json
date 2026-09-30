@@ -2057,5 +2057,8 @@
   "status.gridEdit.notGrid": "{name} não é um contêiner de grade.",
   "status.gridEdit.cellTaken": "A próxima célula contém {name}.",
   "status.gridEdit.nothingToSplit": "{name} cobre uma célula só.",
-  "feature.canvasGridEditor": "Editar uma grade no canvas: as trilhas, as células e os itens nelas"
+  "feature.canvasGridEditor": "Editar uma grade no canvas: as trilhas, as células e os itens nelas",
+  "command.layers.cancelRename": "Cancelar a renomeação",
+  "keyContext.renameField": "Campo de renomear",
+  "keyContext.componentPrompt": "Nome do componente"
 }

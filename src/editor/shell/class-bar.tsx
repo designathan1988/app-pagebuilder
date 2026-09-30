@@ -71,10 +71,27 @@ export function TargetChips() {
   );
 }
 
+// The open state of a class popup: open until a choice, a press outside it (the overlay backdrop, ui.dismiss) or Escape
+// in it (its key context, dialog: ui.dismiss) — a dismissal newer than its opening closes it, as a menu (menu.tsx)
+function usePopup(): readonly [boolean, (next: boolean | ((was: boolean) => boolean)) => void] {
+  const dismissals = useEditorState((s) => s.ui.overlays.dismissals);
+  const [openedAt, setOpenedAt] = useState<number | null>(null);
+  const open = openedAt !== null && openedAt === dismissals;
+  const setOpen = (next: boolean | ((was: boolean) => boolean)) => {
+    const value = typeof next === 'function' ? next(open) : next;
+    setOpenedAt(value ? dismissals : null);
+  };
+  return [open, setOpen] as const;
+}
+
+// the backdrop under an open popup: a press on it is ui.dismiss, which closes it
+const BACKDROP = doorSlots('overlay')[0];
+const Backdrop = () => (BACKDROP === undefined ? null : <DoorControl entry={BACKDROP} className="overlay-backdrop" />);
+
 // + Class: the list of the classes to apply and the field of a new name
 export function ApplyClass() {
   const t = useT();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = usePopup();
   const run = useTyped(APPLY, 'className');
   const shared = useSharedClasses();
   const offered = useEditorState((s) => classesOf(s.document).map((c) => c.name).filter((name) => !shared.includes(name)).join(SEPARATOR));
@@ -102,8 +119,9 @@ export function ApplyClass() {
       >
         <span className="door__label">{door.face}</span>
       </button>
+      {open ? <Backdrop /> : null}
       {open ? (
-        <span className="class-popup__panel" role="dialog" aria-label={door.label}>
+        <span className="class-popup__panel" role="dialog" aria-label={door.label} data-key-context="dialog">
           {offered === ''
             ? null
             : offered.split(SEPARATOR).map((name) => (
@@ -116,7 +134,7 @@ export function ApplyClass() {
               ))}
           <form className="class-popup__form" onSubmit={submit}>
             {/* the field takes the focus as the list opens: the person types a new name at once */}
-            <input className="input" name="name" autoFocus spellCheck={false} placeholder={t('inspector.className')} aria-label={t('inspector.className')} data-local="class-name" />
+            <input className="input" name="name" autoFocus spellCheck={false} placeholder={t('inspector.className')} aria-label={t('inspector.className')} data-local="class-name" data-key-context="dialog" />
           </form>
         </span>
       ) : null}
@@ -127,7 +145,7 @@ export function ApplyClass() {
 // Save the styles as a class: the name field
 export function SaveAsClass() {
   const t = useT();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = usePopup();
   const run = useTyped(SAVE, 'name');
   const door = useDoor(SAVE ?? (DOORS[0] as DoorEntry), {}, undefined, SAVE !== undefined && ready(SAVE));
   if (SAVE === undefined) return null;
@@ -153,10 +171,11 @@ export function SaveAsClass() {
       >
         {SAVE.door.icon !== null ? <Icon name={SAVE.door.icon} size="md" /> : null}
       </button>
+      {open ? <Backdrop /> : null}
       {open ? (
-        <span className="class-popup__panel" role="dialog" aria-label={door.label}>
+        <span className="class-popup__panel" role="dialog" aria-label={door.label} data-key-context="dialog">
           <form className="class-popup__form" onSubmit={submit}>
-            <input className="input" name="name" autoFocus spellCheck={false} placeholder={t('inspector.className')} aria-label={t('inspector.className')} data-local="class-name" onBlur={() => setOpen(false)} />
+            <input className="input" name="name" autoFocus spellCheck={false} placeholder={t('inspector.className')} aria-label={t('inspector.className')} data-local="class-name" data-key-context="dialog" />
           </form>
         </span>
       ) : null}

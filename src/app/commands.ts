@@ -87,7 +87,7 @@ import { setTextCommand } from '../core/text/text.ts';
 import { cancelEdit, editLink, insertLineBreak, pasteText, selectAllText, singleTextSelection, startEdit, toggleBold, toggleItalic } from '../editor/canvas/text-edit.ts';
 import { cancelDrag, levelDown, levelUp } from '../editor/drag/drag-session.ts';
 import { focusActivate, focusCanvas, focusFirst, focusLast, focusNext, focusNextRegion, focusPrevious, focusPreviousRegion } from '../editor/focus/focus.ts';
-import { startRename } from '../editor/layers/rename.ts';
+import { cancelRename, startRename } from '../editor/layers/rename.ts';
 import { collapseAll, collapseOrFocusParent, expandAll, expandOrFocusChild, search, setExpanded, setRowDetails } from '../editor/layers/tree.ts';
 import { pan, zoomAt, zoomFit, zoomIn, zoomOut, zoomReset, zoomToLevel } from '../editor/view/camera.ts';
 import { resizeCommand } from '../core/geometry/resize.ts';
@@ -221,6 +221,7 @@ export const COMMANDS = {
   'history.undo': undoCommand,
   'history.redo': redoCommand,
   'layers.startRename': startRename,
+  'layers.cancelRename': cancelRename,
   'element.rename': renameCommand,
   'element.toggleLock': toggleLockCommand,
   'element.toggleHidden': toggleHiddenCommand,

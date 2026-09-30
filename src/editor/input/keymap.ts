@@ -287,7 +287,10 @@ export function installKeymap(store: EditorStore, target: Window = window): () =
     const controls = [...group.querySelectorAll<HTMLElement>(`${marker}:not([disabled]):not([aria-disabled="true"])`)];
     const at = controls.indexOf(cell as HTMLElement);
     if (at < 0 || controls.length === 0) return false;
-    const step = key === 'ArrowRight' || key === 'ArrowDown' ? 1 : key === 'ArrowLeft' || key === 'ArrowUp' ? -1 : 0;
+    // a group laid out in rows (the alignment matrix: data-columns) moves down and up a row with the vertical arrows
+    const columns = Number(group.getAttribute('data-columns') ?? '0');
+    const down = columns > 1 ? columns : 1;
+    const step = key === 'ArrowRight' ? 1 : key === 'ArrowDown' ? down : key === 'ArrowLeft' ? -1 : key === 'ArrowUp' ? -down : 0;
     const next = key === 'Home' ? 0 : key === 'End' ? controls.length - 1 : step === 0 ? null : (at + step + controls.length) % controls.length;
     if (next === null) return false;
     controls[next]?.focus();

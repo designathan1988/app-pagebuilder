@@ -26,9 +26,10 @@ export const focusLast = registerHandler<'focus.last', EditorUi>('focus.last', (
 export const focusActivate = registerHandler<'focus.activate', EditorUi>('focus.activate', ({ state }) => ({ kind: 'change', ui: asking(state.ui, 'activate') }));
 
 // The editor's regions, in the order F6 walks them (spec keyboard-panel-navigation): the top bar, the left dock (the
-// activity bar and the panel it shows), the canvas, the workbench's dock, the inspector and the status bar. Regions a
-// window does not draw (a closed dock, the sidebar when it is collapsed) are skipped.
-const REGION_ROOTS: readonly string[] = ['header.top-bar', 'nav.activity-bar', 'aside.sidebar', '.stage', '.dock-strip', 'aside.inspector', 'footer.status-bar'];
+// activity bar and the panel it shows), the canvas, the code pane, the workbench's dock, the panels docked right or
+// floating, the inspector and the status bar. Regions a window does not draw (a closed dock, the sidebar when it is
+// collapsed, the canvas in the Code view) are skipped.
+const REGION_ROOTS: readonly string[] = ['header.top-bar', 'nav.activity-bar', 'aside.sidebar', '.stage', 'section.code-pane', '.dock-strip', 'aside.right-dock', 'section.panel-window', 'aside.inspector', 'footer.status-bar'];
 
 // the region roots the window draws, in that order
 const drawnRegions = (): Element[] => REGION_ROOTS.map((one) => document.querySelector(one)).filter((one): one is Element => one !== null);
@@ -36,7 +37,9 @@ const drawnRegions = (): Element[] => REGION_ROOTS.map((one) => document.querySe
 // The keyboard focus goes into a region: its first enabled control takes it, or the region itself when it holds none
 // (a region that takes the focus keeps the focus ring of its own).
 function focusRegion(region: Element): void {
-  const first = [...region.querySelectorAll<HTMLElement>(FOCUSABLE)].find((el) => el.getClientRects().length > 0 && !el.hasAttribute('disabled') && el.tabIndex >= 0);
+  // a control that is a key context of its own (a canvas handle, a guide) is not where a region is entered: F6 is no key
+  // of it, and the walk would stop there (the audit's U-029)
+  const first = [...region.querySelectorAll<HTMLElement>(FOCUSABLE)].find((el) => el.getClientRects().length > 0 && !el.hasAttribute('disabled') && el.tabIndex >= 0 && !el.hasAttribute('data-key-context'));
   if (first !== undefined) {
     first.focus();
     return;

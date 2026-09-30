@@ -885,6 +885,26 @@
           "control": "close",
           "modifier": null,
           "gesture": null
+        },
+        {
+          "id": "key-escape-in-component-prompt",
+          "kind": "shortcut",
+          "context": "component-prompt",
+          "chord": "Escape",
+          "feature": "reusable-components",
+          "labelKey": "command.components.closePrompt",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {},
+          "gesture": null
         }
       ]
     },

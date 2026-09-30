@@ -2,11 +2,11 @@
   "totals": {
     "features": 187,
     "built": 185,
-    "commands": 256,
-    "doors": 998,
-    "scenarios": 1333,
+    "commands": 257,
+    "doors": 1000,
+    "scenarios": 1334,
     "modules": 254,
-    "lines": 48764
+    "lines": 48823
   },
   "features": [
     {
@@ -362,10 +362,11 @@
       "built": true,
       "commands": [
         "layers.startRename",
-        "element.rename"
+        "element.rename",
+        "layers.cancelRename"
       ],
-      "doors": 7,
-      "scenarios": 3,
+      "doors": 8,
+      "scenarios": 4,
       "modules": [
         "src/core/nodes/names.ts",
         "src/editor/layers/rename.ts"
@@ -1557,7 +1558,7 @@
         "components.startCreate",
         "components.closePrompt"
       ],
-      "doors": 8,
+      "doors": 9,
       "scenarios": 10,
       "modules": [
         "src/core/design/components.ts",
@@ -2784,7 +2785,7 @@
   "modules": [
     {
       "path": "src/app/commands.ts",
-      "lines": 388,
+      "lines": 389,
       "commands": [],
       "features": []
     },
@@ -4139,7 +4140,7 @@
     },
     {
       "path": "src/editor/canvas/text-toolbar.tsx",
-      "lines": 104,
+      "lines": 108,
       "commands": [],
       "features": []
     },
@@ -4204,7 +4205,7 @@
     },
     {
       "path": "src/editor/doors/menu.tsx",
-      "lines": 263,
+      "lines": 265,
       "commands": [],
       "features": []
     },
@@ -4268,7 +4269,7 @@
     },
     {
       "path": "src/editor/focus/focus.ts",
-      "lines": 160,
+      "lines": 163,
       "commands": [
         "focus.next",
         "focus.previous",
@@ -4300,7 +4301,7 @@
     },
     {
       "path": "src/editor/input/keymap.ts",
-      "lines": 403,
+      "lines": 406,
       "commands": [],
       "features": []
     },
@@ -4464,8 +4465,9 @@
     },
     {
       "path": "src/editor/layers/rename.ts",
-      "lines": 60,
+      "lines": 64,
       "commands": [
+        "layers.cancelRename",
         "layers.startRename"
       ],
       "features": [
@@ -4610,7 +4612,7 @@
     },
     {
       "path": "src/editor/shell/class-bar.tsx",
-      "lines": 183,
+      "lines": 202,
       "commands": [],
       "features": []
     },
@@ -4682,7 +4684,7 @@
     },
     {
       "path": "src/editor/shell/field.tsx",
-      "lines": 1237,
+      "lines": 1240,
       "commands": [],
       "features": []
     },
@@ -4712,7 +4714,7 @@
     },
     {
       "path": "src/editor/shell/inspector.tsx",
-      "lines": 727,
+      "lines": 736,
       "commands": [],
       "features": []
     },
@@ -4778,7 +4780,7 @@
     },
     {
       "path": "src/editor/shell/sidebar.tsx",
-      "lines": 1041,
+      "lines": 1043,
       "commands": [],
       "features": []
     },
@@ -5061,13 +5063,13 @@
     },
     {
       "path": "src/generated/commands.ts",
-      "lines": 491,
+      "lines": 492,
       "commands": [],
       "features": []
     },
     {
       "path": "src/generated/ids.ts",
-      "lines": 4520,
+      "lines": 4528,
       "commands": [],
       "features": []
     },

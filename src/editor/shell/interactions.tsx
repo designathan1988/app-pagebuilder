@@ -143,7 +143,7 @@ export function InteractionsTab() {
     (store.dispatch as (id: CommandId, a: unknown) => DispatchResult)(ADD.command.id as CommandId, { ...ADD.door.args });
   };
   return (
-    <div className="inspector-tab inspector-tab--interactions" data-region="inspector-interactions" data-key-context="interactions">
+    <div className="inspector-tab inspector-tab--interactions" data-region="inspector-interactions">
       <div className="interactions__head">
         <span className="interactions__element">{node === null ? t('inspector.nothingSelected') : `${node.name} · ${node.tag ?? ''}`}</span>
         <button

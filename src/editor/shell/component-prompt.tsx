@@ -51,7 +51,7 @@ export function ComponentPrompt() {
             }}
           >
             <span className="field-row__label">{t('components.prompt.name')}</span>
-            <input ref={field} className="input" aria-label={t('components.prompt.name')} defaultValue={node.node.name} spellCheck={false} />
+            <input ref={field} className="input" aria-label={t('components.prompt.name')} defaultValue={node.node.name} spellCheck={false} data-key-context="component-prompt" />
           </form>
         )}
         <div className="picker__actions">

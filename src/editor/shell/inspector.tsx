@@ -533,9 +533,18 @@ function MatrixCell({ entry, x, y, mixed }: { readonly entry: DoorEntry; readonl
 function AlignmentMatrix({ entry, label }: { readonly entry: DoorEntry; readonly label: string }) {
   const t = useT();
   const mixed = useMixed(entry.door.adapter.writes);
+  // the group's one Tab stop: the pressed cell, else the first — with no cell pressed (a value no cell stands for,
+  // "normal") every cell was out of the Tab order (the audit's S-006)
+  const group = useRef<HTMLSpanElement>(null);
+  useLayoutEffect(() => {
+    const cells = [...(group.current?.querySelectorAll<HTMLElement>('.matrix__cell') ?? [])];
+    const first = cells[0];
+    if (first !== undefined && !cells.some((cell) => cell.tabIndex === 0)) first.tabIndex = 0;
+  });
   return (
     <>
-      <span className={`matrix${mixed ? ' is-mixed' : ''}`} role="group" aria-label={label} data-mixed={mixed ? '' : undefined}>
+      {/* three columns: the arrows move across and down the grid (keymap.ts, data-columns) */}
+      <span ref={group} className={`matrix${mixed ? ' is-mixed' : ''}`} role="group" aria-label={label} data-mixed={mixed ? '' : undefined} data-columns={MATRIX_PLACES.length}>
         {MATRIX_PLACES.flatMap((y) => MATRIX_PLACES.map((x) => <MatrixCell key={`${x}-${y}`} entry={entry} x={x} y={y} mixed={mixed} />))}
       </span>
       {mixed ? <span className="field-row__mixed">{t('inspector.mixedValue')}</span> : null}

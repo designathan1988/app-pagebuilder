@@ -30,6 +30,10 @@ export const renamedNode = (ui: EditorUi): NodeId | null => ui.rename.node;
 
 const ended = (ui: EditorUi): EditorUi => (ui.rename.node === null ? ui : { ...ui, rename: INITIAL_RENAME });
 
+// layers.cancelRename: Escape in the name field (its key context, rename-field) ends the rename keeping the name the
+// node holds; nothing is recorded (spec rename-element: "Escape cancels")
+export const cancelRename = registerHandler<'layers.cancelRename', EditorUi>('layers.cancelRename', ({ state }) => ({ kind: 'change', ui: ended(state.ui) }));
+
 export const startRename = registerHandler<'layers.startRename', EditorUi>('layers.startRename', ({ state }) => {
   const [only, ...others] = state.selection;
   // the availability predicate (singleSelection) lets no door run with none or several selected

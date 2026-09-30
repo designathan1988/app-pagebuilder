@@ -44,8 +44,10 @@ function MenuItem({ entry, onDone, keysIn = 'global' }: { readonly entry: DoorEn
       title={door.title}
       onClick={() => {
         if (!door.available) return;
-        door.run();
+        // the menu closes first, then the item runs: what the item opens (a rename, a name prompt, a dialog) is newer
+        // than the menu's own dismissal, which would otherwise close it at once
         onDone();
+        door.run();
       }}
     >
       <span className="menu__icon">{icon !== null ? <Icon name={icon} size="sm" /> : null}</span>

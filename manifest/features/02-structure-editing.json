@@ -13135,7 +13135,8 @@
       "titleKey": "feature.renameElement",
       "commands": [
         "layers.startRename",
-        "element.rename"
+        "element.rename",
+        "layers.cancelRename"
       ],
       "dependsOn": [],
       "spec": "spec/BEHAVIOUR.md#rename-element",
@@ -13387,6 +13388,68 @@
               "document": "unchanged"
             }
           ]
+        },
+        {
+          "id": "escape-cancels-the-rename",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "layers.startRename#key-f2-in-canvas",
+              "args": {},
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "layers.cancelRename#key-escape-in-rename-field",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "layers.cancelRename#key-escape-in-rename-field"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null
+            },
+            "export": null
+          },
+          "refusals": []
         }
       ]
     },

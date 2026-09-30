@@ -74,3 +74,30 @@ test('the cells are buttons the keyboard reaches and presses', runs(OPEN, ROW, D
   await page.keyboard.press('Enter');
   await expect.poll(async () => declared(page, 'n-grid')).toMatchObject({ 'justify-content': 'center', 'align-items': 'flex-start' });
 });
+
+// With no cell pressed (a value no cell stands for) the matrix still holds its Tab stop, and the vertical arrows move a
+// row down and up (the audit's S-006: every cell was out of the Tab order and the arrows moved in reading order).
+test('Tab reaches the matrix with no cell pressed, and ArrowDown moves a row down', runs(OPEN, ROW, DISPLAY, MATRIX), async ({ page }) => {
+  await type(page, DISPLAY, 'flex');
+  await expect.poll(async () => (await declared(page, 'n-grid')).display).toBe('flex');
+  const stops = await page.locator(`[data-door="${MATRIX}"]`).evaluateAll((els) => els.filter((el) => (el as HTMLElement).tabIndex === 0).length);
+  expect(stops).toBe(1);
+  await control(page, MATRIX, { args: { x: 'start', y: 'start' } }).focus();
+  await page.keyboard.press('ArrowDown');
+  await expect(control(page, MATRIX, { args: { x: 'start', y: 'center' } })).toBeFocused();
+  await page.keyboard.press('ArrowUp');
+  await expect(control(page, MATRIX, { args: { x: 'start', y: 'start' } })).toBeFocused();
+});
+
+// The direction buttons are one Tab stop whose arrows move between them (the audit's S-016: the arrows did nothing).
+test('the arrows move between the direction buttons', runs(OPEN, ROW, DISPLAY), async ({ page }) => {
+  await type(page, DISPLAY, 'flex');
+  const buttons = page.locator('[data-door="style.set#inspector-flex-direction"]');
+  await expect(buttons.first()).toBeVisible();
+  const first = buttons.first();
+  await first.focus();
+  await page.keyboard.press('ArrowRight');
+  await expect(buttons.nth(1)).toBeFocused();
+  await page.keyboard.press('ArrowLeft');
+  await expect(first).toBeFocused();
+});

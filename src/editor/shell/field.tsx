@@ -895,7 +895,10 @@ export function KeywordButtons({ entry, door, property, values, icons, label }: 
               aria-label={value}
               data-door={entry.ref}
               data-args={JSON.stringify({ property, [valueArg]: value })}
-              tabIndex={shown === value || (shown === '' && !mixed && values.indexOf(value) === 0) ? undefined : -1}
+              // one Tab stop for the group, and the arrows move among its buttons (keymap.ts roving groups; the
+              // audit's S-016: the arrows did nothing)
+              data-key-context="roving-group"
+              tabIndex={shown === value || (shown === '' && values.indexOf(value) === 0) ? undefined : -1}
               onClick={() => {
                 if (available) (store.dispatch as Dispatch)(command, { property, [valueArg]: value });
               }}

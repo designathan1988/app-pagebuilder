@@ -104,6 +104,7 @@ export const COMMAND_IDS = [
   "history.undo",
   "history.redo",
   "layers.startRename",
+  "layers.cancelRename",
   "element.rename",
   "element.toggleLock",
   "element.toggleHidden",
@@ -321,6 +322,7 @@ export const DOOR_IDS = [
   "components.startCreate#command-bar",
   "components.create#prompt-name",
   "components.closePrompt#close",
+  "components.closePrompt#key-escape-in-component-prompt",
   "components.insertInstance#elements-component-tile",
   "components.insertInstance#canvas-drag-component-tile-drop-proposal",
   "components.detach#context-menu",
@@ -586,6 +588,7 @@ export const DOOR_IDS = [
   "layers.startRename#menu-arrange",
   "layers.startRename#key-f2-in-layers-tree",
   "layers.startRename#command-bar",
+  "layers.cancelRename#key-escape-in-rename-field",
   "element.rename#layers-row-name-field",
   "element.toggleLock#layers-row-lock",
   "element.toggleLock#context-menu",
@@ -2107,6 +2110,8 @@ export const KEY_CONTEXT_IDS = [
   "quick-panel",
   "asset-picker",
   "link-picker",
+  "rename-field",
+  "component-prompt",
 ] as const;
 export type KeyContextId = (typeof KEY_CONTEXT_IDS)[number];
 
@@ -4515,5 +4520,8 @@ export const MESSAGE_IDS = [
   "status.gridEdit.cellTaken",
   "status.gridEdit.nothingToSplit",
   "feature.canvasGridEditor",
+  "command.layers.cancelRename",
+  "keyContext.renameField",
+  "keyContext.componentPrompt",
 ] as const;
 export type MessageId = (typeof MESSAGE_IDS)[number];

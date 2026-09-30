@@ -215,6 +215,8 @@ function NameField({ node }: { readonly node: DocNode }) {
         autoComplete="off"
         data-door={LAYERS_NAME_FIELD.ref}
         data-args={JSON.stringify({ target: node.id })}
+        // Escape cancels the rename, keeping the name (layers.cancelRename, its key context; the audit's U-019)
+        data-key-context="rename-field"
         onBlur={(event) => keep(event.currentTarget.value)}
       />
     </form>

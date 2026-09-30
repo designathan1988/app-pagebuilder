@@ -191,6 +191,18 @@
       "labelKey": "keyContext.linkPicker",
       "inherits": null,
       "absorbsFields": false
+    },
+    {
+      "id": "rename-field",
+      "labelKey": "keyContext.renameField",
+      "inherits": null,
+      "absorbsFields": false
+    },
+    {
+      "id": "component-prompt",
+      "labelKey": "keyContext.componentPrompt",
+      "inherits": null,
+      "absorbsFields": false
     }
   ],
   "constants": [

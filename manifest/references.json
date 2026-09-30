@@ -467,6 +467,11 @@
     },
     {
       "kind": "handler",
+      "id": "layers.cancelRename",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
       "id": "element.rename",
       "status": "registered"
     },

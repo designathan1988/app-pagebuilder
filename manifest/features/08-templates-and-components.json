@@ -4196,7 +4196,8 @@
             }
           ],
           "doors": [
-            "components.closePrompt#close"
+            "components.closePrompt#close",
+            "components.closePrompt#key-escape-in-component-prompt"
           ],
           "expect": {
             "document": [],
