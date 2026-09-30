@@ -59,15 +59,61 @@ const PROPERTIES = JSON.parse(fs.readFileSync('manifest/properties.json', 'utf8'
   composites: { id: string; section: string; doors: string[] }[];
   recipes: { id: string; section: string; doors: string[] }[];
   controls: { door: string; section: string | null }[];
+  conceptRows: { id: string; section: string; head: string[]; details: string[] }[];
+  rows: { id: string; fields: { target: string }[] }[];
 };
 // the section of the Style tab a door's field is drawn in, or null when the door is no Style field: the one answer the
 // inspector draws by (src/manifest/style-places.ts), read from the JSON this helper reads itself
 const PLACE = styleSections(PROPERTIES);
-export const sectionOfDoor = (ref: string): string | null => {
+// The concept row a door's control is drawn in the details of (properties.json conceptRows; the inspector's
+// concept-rows.ts): its own item, or the pair row its field stands in. null for a door drawn in no row's details.
+const ROW_TOGGLE = 'inspector.toggleRow#inspector-row-disclosure';
+const PAIR_OF = new Map(PROPERTIES.rows.flatMap((r) => r.fields.map((f) => [f.target, `pair:${r.id}`] as const)));
+export const rowOfDoor = (ref: string): string | null => {
+  const d = DOORS.get(ref) as (Door & { property?: string | null; composite?: string | null }) | undefined;
+  const target = d === undefined ? null : (d.property ?? d.composite ?? null);
+  const pair = target === null ? undefined : PAIR_OF.get(target);
+  return PROPERTIES.conceptRows.find((row) => row.details.includes(ref) || (pair !== undefined && row.details.includes(pair)))?.id ?? null;
+};
+export const sectionOfDoor = (ref: string, args: Readonly<Record<string, unknown>> = {}): string | null => {
+  // a row's disclosure is drawn in the section of the row it stands for
+  if (ref === ROW_TOGGLE && typeof args.row === 'string') return PROPERTIES.conceptRows.find((row) => row.id === args.row)?.section ?? null;
   const d = DOORS.get(ref);
   if (d === undefined || typeof d.placement !== 'object' || d.placement.region !== 'inspector-style') return null;
   return PLACE(ref, d as StyleDoor) ?? null;
 };
+// Opens what a Style door's control is drawn in, as a person does — its section's header, then its concept row's
+// disclosure — when either is drawn closed. True when it pressed one.
+export async function openStyleControl(page: Page, ref: string, args: Readonly<Record<string, unknown>> = {}): Promise<boolean> {
+  let opened = false;
+  const section = sectionOfDoor(ref, args);
+  if (section !== null) {
+    const header = control(page, 'inspector.toggleSection#inspector-section-header', { args: { section } }).first();
+    if ((await header.count()) > 0 && (await header.getAttribute('aria-expanded')) === 'false') {
+      await header.click();
+      await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => resolve())));
+      opened = true;
+    }
+  }
+  const row = rowOfDoor(ref);
+  if (row !== null) {
+    const toggle = control(page, ROW_TOGGLE, { args: { row } }).first();
+    if ((await toggle.count()) > 0 && (await toggle.getAttribute('aria-expanded')) === 'false') {
+      await toggle.click();
+      await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => resolve())));
+      opened = true;
+    }
+  }
+  return opened;
+}
+// Every concept row of the Style tab drawn open: a spec that reads every field presses each closed row's disclosure.
+export async function openEveryRow(page: Page): Promise<void> {
+  for (let i = 0; i < 40; i += 1) {
+    const closed = page.locator(`[data-door="${ROW_TOGGLE}"][aria-expanded="false"]`);
+    if ((await closed.count()) === 0) return;
+    await closed.first().click();
+  }
+}
 const EN = JSON.parse(fs.readFileSync('src/i18n/locales/en.json', 'utf8')) as Record<string, string>;
 
 export const DOOR_ANNOTATION = 'door';
@@ -349,14 +395,7 @@ export async function ensurePanel(page: Page, ref: string): Promise<void> {
 // reached through the real mouse and keyboard. What the header's door records is the section's state only: nothing in
 // the document, the selection or the history changes.
 async function openSectionOfControl(page: Page, ref: string): Promise<boolean> {
-  const section = sectionOfDoor(ref);
-  if (section === null) return false;
-  const header = control(page, 'inspector.toggleSection#inspector-section-header', { args: { section } });
-  if ((await header.count()) === 0) return false;
-  if ((await header.first().getAttribute('aria-expanded')) === 'true') return false;
-  await header.first().click();
-  await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => resolve())));
-  return true;
+  return openStyleControl(page, ref);
 }
 
 // The Style tab draws a section the selected element holds no value in collapsed (the user's real-use audit, item
@@ -380,6 +419,8 @@ export async function openEverySection(page: Page): Promise<void> {
     .locator('[data-door="inspector.toggleSection#inspector-section-header"]')
     .evaluateAll((els) => els.map((el) => (JSON.parse(el.getAttribute('data-args') ?? '{}') as { section?: string }).section ?? ''));
   for (const section of sections) if (section !== '') await setSectionOpen(page, section, true);
+  // every field drawn: the concept rows' details too
+  await openEveryRow(page);
 }
 
 export async function scrollToControl(page: Page, ref: string, options: { readonly args?: Readonly<Record<string, unknown>> } = {}): Promise<void> {

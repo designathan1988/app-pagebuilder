@@ -438,6 +438,19 @@ export const propertiesFileSchema = z.strictObject({
         fields: z.array(z.strictObject({ target: z.union([cssName, kebabId]), prefixKey: i18nKey.nullable(), measurement: z.enum(['width', 'height']).optional() })).min(2).max(2),
       }),
     ),
+  // The concept rows of the Style tab (plan item 2.D; jornada02 G-S1): one row per concept, its head drawn always, its
+  // details in an in-place disclosure (inspector.toggleRow). An item is a door of the Style tab ("<command>#<door>")
+  // or a pair row ("pair:<id>"). A row with no head draws a summary head: its label (labelKey) and what its details
+  // hold. Every item stands in one row, in the row's section (manifest:check rule concept-row).
+  conceptRows: z.array(
+    z.strictObject({
+      id: kebabId,
+      section: kebabId,
+      labelKey: i18nKey.nullable(),
+      head: z.array(z.string().min(1)),
+      details: z.array(z.string().min(1)).min(1),
+    }),
+  ),
   // The Style tab's controls that edit no property of their own, and the section each is drawn in (null: above the
   // sections — the modes, Find a property). Every other Style door is placed by the property, composite or recipe its
   // field edits (src/manifest/style-places.ts); manifest:check refuses a Style door with no place (rule

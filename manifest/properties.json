@@ -5195,6 +5195,380 @@
       ]
     }
   ],
+  "conceptRows": [
+    {
+      "id": "alignment",
+      "section": "layout",
+      "labelKey": "inspector.row.alignment",
+      "head": [
+        "style.setAlignment#inspector-alignment-matrix"
+      ],
+      "details": [
+        "style.set#inspector-justify-content",
+        "style.set#inspector-justify-content-spread-button",
+        "style.set#inspector-align-items",
+        "style.set#inspector-align-items-stretch-button",
+        "style.set#inspector-align-content",
+        "style.set#inspector-justify-items"
+      ]
+    },
+    {
+      "id": "grid-columns",
+      "section": "layout",
+      "labelKey": "inspector.row.gridColumns",
+      "head": [
+        "style.setGridTracks#inspector-grid-template-columns-track",
+        "style.setGridTracks#inspector-grid-template-columns-add-track",
+        "style.setGridTracks#inspector-grid-template-columns-remove-track"
+      ],
+      "details": [
+        "style.set#inspector-grid-template-columns",
+        "style.set#inspector-grid-auto-flow"
+      ]
+    },
+    {
+      "id": "grid-rows",
+      "section": "layout",
+      "labelKey": "inspector.row.gridRows",
+      "head": [
+        "style.setGridTracks#inspector-grid-template-rows-track",
+        "style.setGridTracks#inspector-grid-template-rows-add-track",
+        "style.setGridTracks#inspector-grid-template-rows-remove-track"
+      ],
+      "details": [
+        "style.set#inspector-grid-template-rows",
+        "style.set#inspector-grid-template-areas"
+      ]
+    },
+    {
+      "id": "item",
+      "section": "layout",
+      "labelKey": "inspector.row.item",
+      "head": [],
+      "details": [
+        "style.set#inspector-flex-grow",
+        "style.set#inspector-flex-shrink",
+        "style.set#inspector-flex-basis",
+        "style.set#inspector-align-self",
+        "style.set#inspector-justify-self",
+        "style.set#inspector-order",
+        "style.setGridItem#inspector-grid-column-start",
+        "style.setGridItem#inspector-grid-column-span",
+        "style.setGridItem#inspector-grid-row-start",
+        "style.setGridItem#inspector-grid-row-span",
+        "style.set#inspector-grid-column",
+        "style.set#inspector-grid-row",
+        "style.set#inspector-grid-area"
+      ]
+    },
+    {
+      "id": "columns",
+      "section": "layout",
+      "labelKey": "inspector.row.columns",
+      "head": [
+        "style.set#inspector-columns"
+      ],
+      "details": [
+        "style.set#inspector-column-span",
+        "style.set#inspector-column-fill",
+        "style.set#inspector-column-rule-width",
+        "style.set#inspector-column-rule-style",
+        "style.set#inspector-column-rule-color"
+      ]
+    },
+    {
+      "id": "scroll",
+      "section": "layout",
+      "labelKey": "inspector.row.scroll",
+      "head": [
+        "style.set#inspector-scroll-behavior"
+      ],
+      "details": [
+        "style.set#inspector-scroll-snap-type",
+        "style.set#inspector-scroll-snap-align"
+      ]
+    },
+    {
+      "id": "table",
+      "section": "layout",
+      "labelKey": "inspector.row.table",
+      "head": [
+        "style.set#inspector-border-collapse"
+      ],
+      "details": [
+        "style.set#inspector-border-spacing",
+        "style.set#inspector-table-layout",
+        "style.set#inspector-caption-side",
+        "style.set#inspector-empty-cells"
+      ]
+    },
+    {
+      "id": "limits",
+      "section": "size",
+      "labelKey": "inspector.row.limits",
+      "head": [
+        "pair:size-min-max-width"
+      ],
+      "details": [
+        "pair:size-min-max-height"
+      ]
+    },
+    {
+      "id": "overflow",
+      "section": "size",
+      "labelKey": "inspector.row.overflow",
+      "head": [
+        "style.set#inspector-overflow"
+      ],
+      "details": [
+        "style.set#inspector-overflow-x",
+        "style.set#inspector-overflow-y",
+        "style.set#inspector-resize"
+      ]
+    },
+    {
+      "id": "object",
+      "section": "size",
+      "labelKey": "inspector.row.object",
+      "head": [
+        "style.set#inspector-object-fit"
+      ],
+      "details": [
+        "style.set#inspector-object-position"
+      ]
+    },
+    {
+      "id": "inset",
+      "section": "position",
+      "labelKey": "inspector.row.inset",
+      "head": [
+        "position.setAnchors#inspector-anchor-control"
+      ],
+      "details": [
+        "style.set#inspector-top",
+        "style.set#inspector-right",
+        "style.set#inspector-bottom",
+        "style.set#inspector-left"
+      ]
+    },
+    {
+      "id": "float",
+      "section": "position",
+      "labelKey": "inspector.row.float",
+      "head": [
+        "style.set#inspector-float"
+      ],
+      "details": [
+        "style.set#inspector-clear"
+      ]
+    },
+    {
+      "id": "background-layers",
+      "section": "paint",
+      "labelKey": "inspector.row.backgroundLayers",
+      "head": [
+        "style.setBackgroundImage#inspector-background-image",
+        "style.setBackgroundImage#inspector-background-image-gradient-type",
+        "style.setBackgroundImage#inspector-background-image-gradient-bar",
+        "style.setBackgroundImage#inspector-background-image-gradient-stop-colour",
+        "style.setBackgroundImage#inspector-background-image-gradient-stop-position",
+        "style.setBackgroundImage#inspector-background-image-gradient-angle",
+        "style.setBackgroundImage#inspector-background-image-gradient-reverse",
+        "style.setBackgroundImage#inspector-background-image-gradient-distribute",
+        "style.setBackgroundImage#inspector-background-image-gradient-add-stop",
+        "style.setBackgroundImage#inspector-background-image-gradient-remove-stop",
+        "style.setBackgroundImage#inspector-background-image-gradient-add",
+        "style.setBackgroundImage#inspector-background-image-gradient-reset"
+      ],
+      "details": [
+        "style.set#inspector-background-size",
+        "style.set#inspector-background-repeat",
+        "style.set#inspector-background-attachment",
+        "style.set#inspector-background-origin",
+        "style.set#inspector-background-clip",
+        "style.set#inspector-background-blend-mode",
+        "style.set#inspector-background-position"
+      ]
+    },
+    {
+      "id": "svg-paint",
+      "section": "paint",
+      "labelKey": "inspector.row.svgPaint",
+      "head": [
+        "style.set#inspector-fill"
+      ],
+      "details": [
+        "style.set#inspector-stroke",
+        "style.set#inspector-stroke-width"
+      ]
+    },
+    {
+      "id": "border",
+      "section": "border",
+      "labelKey": "inspector.row.border",
+      "head": [
+        "pair:border-and-colour"
+      ],
+      "details": [
+        "style.setBorder#inspector-border-width-border-editor",
+        "style.setBorder#inspector-border-style-border-editor",
+        "style.setBorder#inspector-border-top-border-editor",
+        "style.setBorder#inspector-border-right-border-editor",
+        "style.setBorder#inspector-border-bottom-border-editor",
+        "style.setBorder#inspector-border-left-border-editor",
+        "style.setBorder#inspector-border-top-width-border-editor",
+        "style.setBorder#inspector-border-right-width-border-editor",
+        "style.setBorder#inspector-border-bottom-width-border-editor",
+        "style.setBorder#inspector-border-left-width-border-editor"
+      ]
+    },
+    {
+      "id": "radius",
+      "section": "border",
+      "labelKey": "inspector.row.radius",
+      "head": [
+        "style.setRadius#inspector-border-radius-radius-editor"
+      ],
+      "details": [
+        "style.setRadius#inspector-border-top-left-radius-radius-editor",
+        "style.setRadius#inspector-border-top-right-radius-radius-editor",
+        "style.setRadius#inspector-border-bottom-right-radius-radius-editor",
+        "style.setRadius#inspector-border-bottom-left-radius-radius-editor"
+      ]
+    },
+    {
+      "id": "outline",
+      "section": "border",
+      "labelKey": "inspector.row.outline",
+      "head": [
+        "style.set#inspector-outline"
+      ],
+      "details": [
+        "style.set#inspector-outline-offset"
+      ]
+    },
+    {
+      "id": "list",
+      "section": "text",
+      "labelKey": "inspector.row.list",
+      "head": [
+        "style.set#inspector-list-style-type"
+      ],
+      "details": [
+        "style.set#inspector-list-style-position",
+        "style.set#inspector-list-style-image"
+      ]
+    },
+    {
+      "id": "more-text",
+      "section": "text",
+      "labelKey": "inspector.row.moreText",
+      "head": [],
+      "details": [
+        "style.set#inspector-word-spacing",
+        "style.set#inspector-text-indent",
+        "style.set#inspector-text-overflow",
+        "style.set#inspector-word-break",
+        "style.set#inspector-vertical-align",
+        "style.set#inspector-white-space",
+        "style.set#inspector-font-variant",
+        "style.set#inspector-line-clamp",
+        "style.set#inspector-accent-color",
+        "style.set#inspector-caret-color",
+        "style.set#inspector-appearance"
+      ]
+    },
+    {
+      "id": "text-shadow",
+      "section": "text",
+      "labelKey": "inspector.row.textShadow",
+      "head": [],
+      "details": [
+        "style.setShadows#inspector-text-shadow-shadow-add",
+        "style.setShadows#inspector-text-shadow-shadow-x",
+        "style.setShadows#inspector-text-shadow-shadow-y",
+        "style.setShadows#inspector-text-shadow-shadow-blur",
+        "style.setShadows#inspector-text-shadow-shadow-colour",
+        "style.setShadows#inspector-text-shadow-shadow-visibility",
+        "style.setShadows#inspector-text-shadow-shadow-remove",
+        "style.setShadows#inspector-text-shadow-shadow-reset",
+        "style.setShadows#inspector-text-shadow-shadow-css"
+      ]
+    },
+    {
+      "id": "box-shadow",
+      "section": "effects",
+      "labelKey": "inspector.row.boxShadow",
+      "head": [],
+      "details": [
+        "style.setShadows#inspector-box-shadow-shadow-add",
+        "style.setShadows#inspector-box-shadow-shadow-x",
+        "style.setShadows#inspector-box-shadow-shadow-y",
+        "style.setShadows#inspector-box-shadow-shadow-blur",
+        "style.setShadows#inspector-box-shadow-shadow-spread",
+        "style.setShadows#inspector-box-shadow-shadow-inset",
+        "style.setShadows#inspector-box-shadow-shadow-colour",
+        "style.setShadows#inspector-box-shadow-shadow-visibility",
+        "style.setShadows#inspector-box-shadow-shadow-remove",
+        "style.setShadows#inspector-box-shadow-shadow-reset"
+      ]
+    },
+    {
+      "id": "filter",
+      "section": "effects",
+      "labelKey": "inspector.row.filter",
+      "head": [],
+      "details": [
+        "style.setFilter#inspector-filter-filter-blur",
+        "style.setFilter#inspector-filter-filter-brightness",
+        "style.setFilter#inspector-filter-filter-contrast",
+        "style.setFilter#inspector-filter-filter-saturate",
+        "style.setFilter#inspector-filter-filter-hue-rotate",
+        "style.setFilter#inspector-filter-filter-grayscale",
+        "style.setFilter#inspector-filter-filter-invert",
+        "style.setFilter#inspector-filter-filter-sepia",
+        "style.setFilter#inspector-filter-filter-remove",
+        "style.set#inspector-backdrop-filter"
+      ]
+    },
+    {
+      "id": "transform",
+      "section": "effects",
+      "labelKey": "inspector.row.transform",
+      "head": [],
+      "details": [
+        "style.set#inspector-translate-x",
+        "style.set#inspector-translate-y",
+        "style.set#inspector-rotate",
+        "style.set#inspector-scale",
+        "style.setTransform#inspector-transform-transform-skew-x",
+        "style.setTransform#inspector-transform-transform-skew-y",
+        "style.set#inspector-transform-origin",
+        "style.set#inspector-perspective",
+        "style.set#inspector-perspective-origin",
+        "style.set#inspector-transform-style",
+        "style.set#inspector-backface-visibility",
+        "style.set#inspector-transform-box"
+      ]
+    },
+    {
+      "id": "more-effects",
+      "section": "effects",
+      "labelKey": "inspector.row.moreEffects",
+      "head": [],
+      "details": [
+        "style.set#inspector-mix-blend-mode",
+        "style.set#inspector-isolation",
+        "style.set#inspector-clip-path",
+        "style.set#inspector-mask-image",
+        "style.set#inspector-transition",
+        "style.set#inspector-cursor",
+        "style.set#inspector-pointer-events",
+        "style.set#inspector-will-change",
+        "style.set#inspector-user-select"
+      ]
+    }
+  ],
   "controls": [
     {
       "door": "inspector.setMode#inspector-mode-essentials",
@@ -5227,6 +5601,10 @@
     {
       "door": "position.setAnchors#inspector-anchor-control",
       "section": "position"
+    },
+    {
+      "door": "inspector.toggleRow#inspector-row-disclosure",
+      "section": null
     }
   ]
 }

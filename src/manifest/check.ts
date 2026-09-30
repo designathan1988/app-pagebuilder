@@ -110,6 +110,7 @@ export const RULES = [
   'zoom',
   'pressed',
   'style-door-section',
+  'concept-row',
 ] as const;
 
 export type RuleId = (typeof RULES)[number];
@@ -755,6 +756,33 @@ export function checkManifest(input: ManifestInput): CheckResult {
     const own = derived(c.door, entry.door as StyleDoor);
     if (own === c.section) report('style-door-section', 'properties.json', at, `${c.door} is placed in "${own ?? ''}" by what it edits or the entry that lists it: it needs no control entry`);
   }
+  // ---- concept-row: a concept row (plan item 2.D) names items of its own section — a Style door or a pair row — each
+  // standing in one row only; a row without a head is a summary row, which says what it is (its labelKey)
+  const pairSections = new Map(p.properties.rows.map((r) => [r.id, r.section] as const));
+  const standsIn = new Map<string, string>();
+  for (const [i, row] of p.properties.conceptRows.entries()) {
+    const where = `conceptRows[${i}]`;
+    if (!sectionIds.has(row.section)) report('concept-row', 'properties.json', `${where}.section`, `unknown section "${row.section}"`);
+    if (row.head.length === 0 && row.labelKey === null) report('concept-row', 'properties.json', `${where}.labelKey`, `the row ${row.id} has no head: it names itself with a labelKey`);
+    for (const [part, items] of [['head', row.head], ['details', row.details]] as const) {
+      for (const [j, item] of items.entries()) {
+        const at = `${where}.${part}[${j}]`;
+        let section: string | null | undefined;
+        if (item.startsWith('pair:')) section = pairSections.get(item.slice('pair:'.length));
+        else {
+          const entry = doorByRef.get(item);
+          section = entry === undefined || typeof entry.door.placement !== 'object' || entry.door.placement.region !== 'inspector-style' ? undefined : placed(item, entry.door as StyleDoor);
+        }
+        if (section === undefined) report('concept-row', 'properties.json', at, `"${item}" is no Style door and no pair row`);
+        else if (section !== row.section) report('concept-row', 'properties.json', at, `"${item}" is drawn in "${section ?? 'no section'}", not in the row's section "${row.section}"`);
+        const first = standsIn.get(item);
+        if (first !== undefined) report('concept-row', 'properties.json', at, `"${item}" already stands in ${first}`);
+        else standsIn.set(item, at);
+      }
+    }
+  }
+  unique('concept row', 'properties.json', p.properties.conceptRows.map((r, i) => ({ id: r.id, path: `conceptRows[${i}]` })));
+
   for (const [i, c] of p.properties.composites.entries()) {
     checkPlace('properties.json', `composites[${i}]`, c);
     for (const [di, d] of c.doors.entries()) ref(doorByRef.has(d), 'properties.json', `composites[${i}].doors[${di}]`, `unknown door "${d}"`);
@@ -966,6 +994,7 @@ export function checkManifest(input: ManifestInput): CheckResult {
   p.properties.states.forEach((s, i) => noteKey(s.labelKey, `properties.json states[${i}].labelKey`));
   p.properties.properties.forEach((prop, i) => noteKey(prop.labelKey, `properties.json properties[${i}].labelKey`));
   p.properties.rows.forEach((row, i) => row.fields.forEach((f, fi) => { if (f.prefixKey !== null) noteKey(f.prefixKey, `properties.json rows[${i}].fields[${fi}].prefixKey`); }));
+  p.properties.conceptRows.forEach((row, i) => { if (row.labelKey !== null) noteKey(row.labelKey, `properties.json conceptRows[${i}].labelKey`); });
   p.properties.composites.forEach((c, i) => noteKey(c.labelKey, `properties.json composites[${i}].labelKey`));
   p.properties.recipes.forEach((r, i) => noteKey(r.labelKey, `properties.json recipes[${i}].labelKey`));
   p.interactions.keyContexts.forEach((k, i) => noteKey(k.labelKey, `interactions.json keyContexts[${i}].labelKey`));

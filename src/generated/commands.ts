@@ -282,6 +282,7 @@ export interface CommandArgs {
   "layers.setRowDetails": { readonly detail: "tag" | "id" | "classes" | "attributes"; readonly shown?: boolean };
   "layers.search": { readonly query: string };
   "inspector.toggleSection": { readonly section: string };
+  "inspector.toggleRow": { readonly row: string };
   "inspector.setMode": { readonly mode: "all" | "essentials" };
   "inspector.reveal": { readonly property?: StyleTargetId; readonly attribute?: AttributeId };
   "inspector.search": { readonly query: string };
@@ -345,7 +346,7 @@ export const FEATURE_COMMANDS: Readonly<Record<FeatureId, readonly CommandId[]>>
   "multi-tab-guard": ["project.takeOverEditing"],
   "project-save-json": ["project.save"],
   "project-open-json": ["project.open"],
-  "inspector-panel": ["element.toggleLock","element.toggleHidden","text.set","text.cancelEdit","inspector.toggleSection","workspace.setActiveTab"],
+  "inspector-panel": ["element.toggleLock","element.toggleHidden","text.set","text.cancelEdit","inspector.toggleSection","inspector.toggleRow","workspace.setActiveTab"],
   "inspector-number-fields": ["style.set","field.step","field.scrub","field.setUnit","field.cancel"],
   "props-display": ["style.set"],
   "props-flex-container": ["style.set","style.setAlignment"],
@@ -361,7 +362,7 @@ export const FEATURE_COMMANDS: Readonly<Record<FeatureId, readonly CommandId[]>>
   "props-typography-advanced": ["style.set"],
   "props-background": ["style.set","style.setBackgroundImage"],
   "gradient-editor": ["style.setBackgroundImage"],
-  "props-border-outline": ["style.set","style.setBorder","style.setRadius"],
+  "props-border-outline": ["style.set","style.setBorder","style.setRadius","field.cancel"],
   "props-effects-basic": ["style.set"],
   "shadow-editor": ["style.setShadows"],
   "props-filters-clip": ["style.set","style.setFilter"],

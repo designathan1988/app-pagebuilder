@@ -17,6 +17,7 @@ const HEIGHT = 'style.set#inspector-height';
 const LETTER_SPACING = 'style.set#inspector-letter-spacing';
 const ESSENTIALS = 'inspector.setMode#inspector-mode-essentials';
 const ALL = 'inspector.setMode#inspector-mode-all';
+const POSITION = 'position.setMode#inspector-position';
 
 const PROPERTIES = JSON.parse(fs.readFileSync('manifest/properties.json', 'utf8')) as {
   sections: { id: string; groups: { id: string }[] }[];
@@ -168,7 +169,7 @@ test('the gradient editor draws its controls only while the value holds a gradie
   for (const name of controls) expect(await drawn(name), `${name} is drawn only with a gradient`).toBe(0);
 });
 
-test('Essentials draws the Border as its composite rows, not as its per-side fields', runs(OPEN, ROW, ESSENTIALS, ALL), async ({ page }) => {
+test('Essentials draws the Border as its composite rows, not as its per-side fields', runs(OPEN, ROW, ESSENTIALS, ALL, 'inspector.toggleRow#inspector-row-disclosure'), async ({ page }) => {
   await control(page, ROW, { args: { target: 'n-card-a' } }).click();
   await setSectionOpen(page, 'border', true);
   await runDoor(page, ESSENTIALS);
@@ -179,8 +180,9 @@ test('Essentials draws the Border as its composite rows, not as its per-side fie
   for (const side of ['inspector-border-top-width-border-editor', 'inspector-border-left-border-editor', 'inspector-border-top-left-radius-radius-editor']) {
     await expect(border.locator(`[data-door="style.setBorder#${side}"]`), `${side} is left out of the essentials`).toHaveCount(0);
   }
-  // All properties brings them back
+  // All properties brings them back, in the Border row's details (spec inspector-panel, item 4a)
   await runDoor(page, ALL);
+  await runDoor(page, 'inspector.toggleRow#inspector-row-disclosure', { args: { row: 'border' } });
   await expect(border.locator('[data-door="style.setBorder#inspector-border-top-width-border-editor"]')).toHaveCount(1);
 });
 
@@ -188,8 +190,11 @@ test('Essentials draws the Border as its composite rows, not as its per-side fie
 // whichever section happened to come before it (the audit's S-013, S-023; src/manifest/style-places.ts): the spacing
 // link in Space, the custom declarations in Advanced, the anchor control in Position (a margin listed it first); and
 // each field in its property's section.
-test('each Style control is drawn in its own section', runs(OPEN, ROW, SECTION, ALL), async ({ page }) => {
+test('each Style control is drawn in its own section', runs(OPEN, ROW, SECTION, ALL, POSITION), async ({ page }) => {
   await control(page, ROW, { args: { target: 'n-hero' } }).click();
+  // the anchor control stands for the insets, which only a positioned element takes
+  await openEverySection(page);
+  await runDoor(page, POSITION, { args: { property: 'position', mode: 'absolute' } });
   await openEverySection(page);
   await runDoor(page, ALL);
   const PLACED: readonly (readonly [string, string])[] = [

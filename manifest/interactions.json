@@ -133,6 +133,12 @@
       "absorbsFields": false
     },
     {
+      "id": "command-field",
+      "labelKey": "keyContext.commandField",
+      "inherits": "field",
+      "absorbsFields": false
+    },
+    {
       "id": "element-text-field",
       "labelKey": "keyContext.elementTextField",
       "inherits": "field",
@@ -171,7 +177,7 @@
     {
       "id": "roving-group",
       "labelKey": "keyContext.rovingGroup",
-      "inherits": null,
+      "inherits": "global",
       "absorbsFields": false
     },
     {

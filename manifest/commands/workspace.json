@@ -2424,6 +2424,56 @@
       ]
     },
     {
+      "id": "inspector.toggleRow",
+      "labelKey": "command.inspector.toggleRow",
+      "owner": "src/editor/inspector/concept-rows.ts",
+      "introducedBy": "inspector-panel",
+      "args": {
+        "row": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "inspector-row-disclosure",
+          "kind": "panel-control",
+          "drawnAs": "disclosure",
+          "pressed": false,
+          "feature": "inspector-panel",
+          "panel": "inspector",
+          "control": "row-disclosure",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.inspector.toggleRow",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-style",
+            "order": 213
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
       "id": "inspector.setMode",
       "labelKey": "command.inspector.mode",
       "owner": "src/editor/inspector/sections.ts",

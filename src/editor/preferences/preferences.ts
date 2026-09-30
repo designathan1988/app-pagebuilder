@@ -17,6 +17,9 @@ import { readSnapSettings, type SnapSettings } from '../view/snap.ts';
 import { readBreakpoint } from '../view/breakpoints.ts';
 import { chosen } from './said.ts';
 
+// the concept rows of the Style tab (properties.json), which the rows' lists may name
+const CONCEPT_ROW_IDS: readonly string[] = manifest.properties.conceptRows.map((r) => r.id);
+
 export type Theme = CommandArgs['preferences.setTheme']['theme'];
 
 // a language item or a theme item stands for the language or the theme the editor shows
@@ -50,6 +53,10 @@ export interface Preferences {
   // the sections the user opened although the selected element holds no value in them (inspector.toggleSection; the
   // opening rule in src/editor/inspector/sections.ts); absent while the user opened none
   readonly expandedSections?: readonly SectionId[] | undefined;
+  // the Style tab's concept rows the user closed although a detail holds more than the head shows, and those opened
+  // although none does (inspector.toggleRow; src/editor/inspector/concept-rows.ts), in the rows' order; absent while none
+  readonly collapsedRows?: readonly string[] | undefined;
+  readonly expandedRows?: readonly string[] | undefined;
   // how the Elements panel lays its tiles out (palette.setDensity); absent while it is the default, two columns
   readonly paletteDensity?: PaletteDensity | undefined;
   // the Elements panel's collapsed groups (palette.toggleGroup), in the palette's order; absent while every group is open
@@ -144,6 +151,11 @@ export function loadPreferences(storage: PreferenceStorage): Preferences {
     const collapsedSections = SECTION_IDS.filter((s) => listed.includes(s));
     const opened: readonly unknown[] = Array.isArray(stored.expandedSections) ? (stored.expandedSections as unknown[]) : [];
     const expandedSections = SECTION_IDS.filter((s) => opened.includes(s));
+    // the concept rows of properties.json each list names, in their order
+    const rowsClosed: readonly unknown[] = Array.isArray(stored.collapsedRows) ? (stored.collapsedRows as unknown[]) : [];
+    const rowsOpened: readonly unknown[] = Array.isArray(stored.expandedRows) ? (stored.expandedRows as unknown[]) : [];
+    const collapsedRows = CONCEPT_ROW_IDS.filter((r) => rowsClosed.includes(r));
+    const expandedRows = CONCEPT_ROW_IDS.filter((r) => rowsOpened.includes(r));
     const density = PALETTE_DENSITIES.includes(stored.paletteDensity as string) ? (stored.paletteDensity as PaletteDensity) : undefined;
     const groups: readonly unknown[] = Array.isArray(stored.collapsedGroups) ? (stored.collapsedGroups as unknown[]) : [];
     const collapsedGroups = GROUP_IDS.filter((g) => groups.includes(g));
@@ -160,6 +172,8 @@ export function loadPreferences(storage: PreferenceStorage): Preferences {
       theme,
       ...(collapsedSections.length > 0 ? { collapsedSections } : {}),
       ...(expandedSections.length > 0 ? { expandedSections } : {}),
+      ...(collapsedRows.length > 0 ? { collapsedRows } : {}),
+      ...(expandedRows.length > 0 ? { expandedRows } : {}),
       ...(density !== undefined ? { paletteDensity: density } : {}),
       ...(collapsedGroups.length > 0 ? { collapsedGroups } : {}),
       ...(rowDetails !== null ? { rowDetails } : {}),

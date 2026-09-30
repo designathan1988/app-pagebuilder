@@ -831,6 +831,18 @@ PLANTS.push(
     },
   },
   {
+    id: 'concept-row-twice',
+    rule: 'concept-row',
+    description: 'the outline offset stands in two concept rows',
+    apply: (m) => {
+      const props = obj(m.files['properties.json']);
+      const rows = list(props.conceptRows);
+      const radius = rows.find((r) => r.id === 'radius');
+      if (radius === undefined) throw new Error('plant concept-row-twice: no radius row');
+      radius.details = [...strings(radius.details), 'style.set#inspector-outline-offset'];
+    },
+  },
+  {
     id: 'style-control-unplaced',
     rule: 'style-door-section',
     description: 'the custom declarations lose their place in properties.json controls',

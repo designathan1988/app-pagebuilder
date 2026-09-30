@@ -24,7 +24,7 @@ import { isFeatureBuilt } from '../../src/app/features.ts';
 import { shortcutRuns } from '../../src/editor/input/shortcut-rule.ts';
 import type { FeatureId } from '../../src/generated/ids.ts';
 import { EMPTY_FIXTURE, applyDiff, matchDocument, refusalCheck, resolveNode, type DiffOp } from '../../src/manifest/scenario.ts';
-import { barLabel, control, door as doorData, inQuickPanel, keys, modifiedControl, openCommandBar, openMenu, openQuickPanel, runDoor, sectionOfDoor, standingControl, type Door } from '../../tests/e2e/door.ts';
+import { barLabel, control, door as doorData, inQuickPanel, keys, modifiedControl, openCommandBar, openMenu, openQuickPanel, openStyleControl, runDoor, standingControl, type Door } from '../../tests/e2e/door.ts';
 import { openEditor } from '../../tests/support/editor.ts';
 import { unzip } from './unzip.ts';
 
@@ -281,6 +281,8 @@ const appliedPreferences = (page: Page) =>
       locale: document.documentElement.lang,
       theme: document.documentElement.dataset.theme ?? 'system',
       collapsed: [...document.querySelectorAll(`[data-door^="${toggle}#"][aria-expanded="false"]`)].map((el) => (JSON.parse(el.getAttribute('data-args') ?? '{}') as { section?: string }).section ?? ''),
+      // the Style tab's concept rows drawn open (inspector.toggleRow)
+      openRows: [...document.querySelectorAll('[data-door="inspector.toggleRow#inspector-row-disclosure"][aria-expanded="true"]')].map((el) => (JSON.parse(el.getAttribute('data-args') ?? '{}') as { row?: string }).row ?? ''),
       // the canvas zoom: the CSS zoom of the page's frame (Fit mode refits to the same stage after the reload)
       // and the view switches the canvas draws (Outlines, Zones)
       outlines: document.querySelector('[data-region="canvas-outlines"]') !== null,
@@ -749,13 +751,8 @@ async function marqueeEndPoint(page: Page, document: unknown, drop: Drop): Promi
 async function openCollapsedSection(page: Page, ref: string, args: Record<string, unknown>): Promise<void> {
   if ((await control(page, ref, { args }).count()) > 0) return;
   if (ref.includes('layers-')) return;
-  const section = sectionOfDoor(ref);
-  if (section === null) return;
-  const header = control(page, 'inspector.toggleSection#inspector-section-header', { args: { section } });
-  if ((await header.count()) === 0) return;
-  if ((await header.first().getAttribute('aria-expanded')) === 'true') return;
-  await header.first().click();
-  await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
+  // its section's header, then its concept row's disclosure, as a person opens them (tests/e2e/door.ts)
+  if (await openStyleControl(page, ref, args)) await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
 }
 
 // The Layers row of a node and where on it a drop lands (layers-drag): a container row is "inside" in its middle
@@ -819,6 +816,8 @@ const FIELD_TEXT_CONTEXT = 'element-text-field';
 const NUMBER_FIELD_CONTEXT = 'number-field';
 // a side of the spacing box: its keys act on the side that holds the focus, as a number field's do
 const SPACING_FIELD_CONTEXT = 'spacing-field';
+// a field its own command keeps (a border, a background image): its Escape acts on the field that holds the focus
+const COMMAND_FIELD_CONTEXT = 'command-field';
 // the key context of the quick panel (interactions.json), which the open panel names and whose fields it absorbs
 // (keymap.ts): its Escape closes the panel wherever the focus inside it is (spec quick-panel)
 const QUICK_PANEL_CONTEXT = 'quick-panel';
@@ -1056,6 +1055,7 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
   // a key of a number field needs the focus in that field's input, which a step before it typed into
   if (d.kind === 'shortcut' && d.context === NUMBER_FIELD_CONTEXT) expect((await focusedContexts(page))[0], `step ${ref}: the focus is in a number field`).toBe(NUMBER_FIELD_CONTEXT);
   if (d.kind === 'shortcut' && d.context === SPACING_FIELD_CONTEXT) expect((await focusedContexts(page))[0], `step ${ref}: the focus is in a side of the spacing box`).toBe(SPACING_FIELD_CONTEXT);
+  if (d.kind === 'shortcut' && d.context === COMMAND_FIELD_CONTEXT) expect((await focusedContexts(page))[0], `step ${ref}: the focus is in a field of its own command`).toBe(COMMAND_FIELD_CONTEXT);
   // a key of the quick panel needs the focus inside it, which the chip or the shortcut before it gave (the context
   // absorbs the fields inside it, so a field's focus counts too: keymap.ts). The drawn panel is measured a frame
   // before it is placed, and a hidden panel can take no focus, so the focus arrives a frame after it opens.
@@ -1448,7 +1448,7 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
     // (asserted above) acts on the field: its arguments (the node, the text) are what the field holds
     // (a key held with it, the step's modifier, is no argument a control stands for)
     const standsFor = withoutGestureArgs(own);
-    if (d.context !== EDIT_CONTEXT && d.context !== HAND_CONTEXT && d.context !== FIELD_TEXT_CONTEXT && d.context !== NUMBER_FIELD_CONTEXT && d.context !== SPACING_FIELD_CONTEXT && Object.keys(standsFor).length > 0) {
+    if (d.context !== EDIT_CONTEXT && d.context !== HAND_CONTEXT && d.context !== FIELD_TEXT_CONTEXT && d.context !== NUMBER_FIELD_CONTEXT && d.context !== SPACING_FIELD_CONTEXT && d.context !== COMMAND_FIELD_CONTEXT && Object.keys(standsFor).length > 0) {
       await focusControlFor(page, ref, standsFor);
       // the control the key acts on lies in the door's key context (a palette tile in the palette's)
       const chain = await focusedContexts(page);

@@ -46,7 +46,6 @@ import { afterGesture, registerSlider } from '../input/pointer.ts';
 import { MODEL_RULES, useEditorState, useStore, type EditorStore, layeredRules } from '../store.ts';
 import { styleClassOf, styleSource } from '../inspector/style-target.ts';
 import { useMenuLayer } from '../doors/menu.tsx';
-import { isDetailRow } from '../inspector/rows.ts';
 import { useT, useValueLabel } from '../text.ts';
 import { createToken, tokenKindOf, tokensOf } from '../../core/design/tokens.ts';
 import { compactFieldValue, FieldOriginBadge, FieldValueSlot, useFieldAppearance } from './field-face.tsx';
@@ -54,6 +53,9 @@ import { usePrimarySize } from '../view/selection-size.ts';
 
 // the key context a number field's input names (interactions.json)
 const NUMBER_FIELD_CONTEXT: KeyContextId = 'number-field';
+// the key context of a field its own command keeps (a border, a background image: its form submits on Enter), whose
+// Escape puts the document's value back (interactions.json command-field)
+const COMMAND_FIELD_CONTEXT: KeyContextId = 'command-field';
 // the command a number field's Enter keeps its text with (its shortcut door in the number field's key context); a
 // field of another command keeps it with its own form (TextStyleField ownCommand)
 const FIELD_ENTER = manifest.doors.find((d) => d.door.kind === 'shortcut' && d.door.context === NUMBER_FIELD_CONTEXT && d.door.chord === 'Enter')?.command.id ?? null;
@@ -524,7 +526,7 @@ export function NumberField({ entry, door, property, label, bare = false, labell
     );
   }
   return (
-    <div className={`field-row${state}${isDetailRow(property) ? ' field-row--detail' : ''}`} data-origin={appearance.kind} data-door={entry.ref} data-args={JSON.stringify({ property })} data-number-field title={door.title}>
+    <div className={`field-row${state}`} data-origin={appearance.kind} data-door={entry.ref} data-args={JSON.stringify({ property })} data-number-field title={door.title}>
       {scrub ?? <span className="field-row__label">{label}</span>}
       {cell}
       {refusedText}
@@ -757,7 +759,7 @@ export function TextStyleField({
         ) : null}
         <FieldValueSlot value={face.value}>{own ? (
           <form key="input-form" className="input-wrap__form" onSubmit={submit}>
-            <input ref={input} className="input" disabled={!available} aria-label={label} spellCheck={false} placeholder={placeholder} aria-invalid={refused.text !== null ? true : undefined} onInput={refused.dismiss} />
+            <input ref={input} className="input" disabled={!available} aria-label={label} spellCheck={false} data-key-context={COMMAND_FIELD_CONTEXT} placeholder={placeholder} aria-invalid={refused.text !== null ? true : undefined} onInput={refused.dismiss} />
           </form>
         ) : (
           <input key="input" ref={input} className="input" disabled={!available} aria-label={label} spellCheck={false} list={suggestions.length > 0 ? listId : undefined} data-key-context={NUMBER_FIELD_CONTEXT} placeholder={placeholder} aria-invalid={refused.text !== null ? true : undefined} onInput={refused.dismiss} />
@@ -853,7 +855,7 @@ export function TextStyleField({
     );
   }
   return (
-    <div className={`field-row${state}${isDetailRow(property) ? ' field-row--detail' : ''}`} data-origin={appearance.kind} data-door={entry.ref} data-args={JSON.stringify({ property })} title={door.title}>
+    <div className={`field-row${state}`} data-origin={appearance.kind} data-door={entry.ref} data-args={JSON.stringify({ property })} title={door.title}>
       <span className="field-row__label" data-origin={appearance.kind} title={property}>
         {label}
       </span>

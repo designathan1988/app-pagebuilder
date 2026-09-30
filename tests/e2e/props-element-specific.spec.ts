@@ -5,7 +5,7 @@
 import fs from 'node:fs';
 import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
-import { control, runDoor, runs } from './door.ts';
+import { control, runDoor, runs, openStyleControl } from './door.ts';
 
 const FIXTURE = 'manifest/features/fixtures/aurora.json';
 const OPEN = 'project.open#menu-file';
@@ -37,6 +37,8 @@ test('a list draws its marker fields and no table, media or form field; a sectio
   await select(page, 'n-perks');
   await expect(drawn(page, WIDTH)).toHaveCount(1);
   await expect(drawn(page, LIST_TYPE)).toHaveCount(1);
+  // the marker's position and image stand in the details of List (spec inspector-panel, item 4a)
+  await openStyleControl(page, LIST_IMAGE);
   await expect(drawn(page, LIST_IMAGE)).toHaveCount(1);
   for (const ref of [COLLAPSE, FIT, ACCENT]) await expect(drawn(page, ref), ref).toHaveCount(0);
   // the list and a section together: the section is no list, so the marker fields go

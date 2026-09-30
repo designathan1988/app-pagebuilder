@@ -5,7 +5,7 @@
 import fs from 'node:fs';
 import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
-import { control, runDoor, runs } from './door.ts';
+import { control, runDoor, runs, openStyleControl } from './door.ts';
 
 const FIXTURE = 'manifest/features/fixtures/aurora.json';
 const OPEN = 'project.open#menu-file';
@@ -16,6 +16,8 @@ const CLAMP = 'style.set#inspector-line-clamp';
 const intro = (page: Page) => page.frameLocator('.frame__page').locator('[data-node="n-intro"]');
 
 async function type(page: Page, ref: string, text: string): Promise<void> {
+  // a field in a concept row's details is reached by opening the row (spec inspector-panel, item 4a)
+  await openStyleControl(page, ref);
   await control(page, ref).locator('input').first().click();
   await page.keyboard.press('Control+A');
   await page.keyboard.type(text);
@@ -61,6 +63,7 @@ test('the Line clamp field of an element with no clamp raises no error on the pa
   await (await chooser).setFiles({ name: 'aurora.json', mimeType: 'application/json', buffer: fs.readFileSync(FIXTURE) });
   await expect(intro(page)).toHaveCount(1);
   await control(page, ROW, { args: { target: 'n-intro' } }).click();
+  await openStyleControl(page, CLAMP);
   await expect(control(page, CLAMP).locator('input')).toHaveValue('');
   // a few frames of the fields' measures
   await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => requestAnimationFrame(() => resolve())))));

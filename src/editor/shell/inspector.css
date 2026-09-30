@@ -644,19 +644,6 @@
   grid-template-columns: var(--size-label-column) minmax(0, 1fr) minmax(0, 1fr);
 }
 
-/* A longhand of a concept another row already draws (rows.ts isDetailRow: border's twelve, border-radius's four):
-   it follows its concept, set in from it and quieter, so eleven rows of one border read as one border and its parts.
-   The panel keeps every field — All properties is a contract — and gains a hierarchy to read them by. */
-.field-row--detail {
-  padding-left: var(--space-6);
-}
-.field-row--detail > .field-row__label,
-[data-region='inspector-style'] .field-row--detail > .field-row__label {
-  color: var(--color-text-subtle);
-  font-size: var(--fs-caption);
-  line-height: var(--lh-caption);
-}
-
 /* A shorthand that writes both cells of a pair is a small linked edit control,
    placed on that line. Focusing it opens its full CSS value for typing. */
 [data-region='inspector-style'] .field-row-pair-wrap {
@@ -961,6 +948,14 @@
   flex: none;
   align-items: center;
 }
+/* a row of choices (the keyword buttons) keeps its lines when its Reset shows: the Reset lies over the row's end, in the
+   row's own fill, so a focus or a hover never rewraps the buttons and moves what lies under the pointer */
+[data-region='inspector-style'] .field-choice .field__actions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: var(--color-surface);
+}
 [data-region='inspector-style'] .input-wrap:hover .field__actions:not(:empty),
 [data-region='inspector-style'] .input-wrap:focus-within .field__actions:not(:empty),
 [data-region='inspector-style'] .field-choice:hover .field__actions:not(:empty),
@@ -1246,5 +1241,59 @@
   background: var(--color-surface);
   font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-mono);
   color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+/* A concept row (concept-row.tsx): its head drawn always, its disclosure in the section's gutter — a 24 px target that
+   reaches over the start of the head's label — and its details in place under it, their labels set in so they read as
+   the concept's parts, their values at the column every value starts at */
+.concept-row {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.concept-row__head {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+[data-region='inspector-style'] .concept-row__toggle.door {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: calc(var(--space-6) * -1);
+  width: var(--size-target-min);
+  min-width: 0;
+  height: var(--size-row);
+  padding: 0;
+  justify-content: flex-start;
+  padding-left: var(--space-1);
+  border: 0;
+  background: none;
+  color: var(--color-text-subtle);
+}
+
+[data-region='inspector-style'] .concept-row__toggle.door:hover {
+  color: var(--color-text);
+}
+
+.concept-row__details {
+  display: flex;
+  flex-direction: column;
+}
+
+/* a detail's label is set in and quieter; its value keeps the column every value starts at */
+.concept-row__details .field-row__label {
+  padding-left: var(--space-6);
+  color: var(--color-text-subtle);
+}
+
+.concept-row__values {
+  overflow: hidden;
+  color: var(--color-text-subtle);
+  font: var(--fw-code) var(--fs-code) / var(--lh-code) var(--font-mono);
+  text-overflow: ellipsis;
   white-space: nowrap;
 }

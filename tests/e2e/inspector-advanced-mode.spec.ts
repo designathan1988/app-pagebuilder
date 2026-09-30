@@ -5,7 +5,7 @@
 import fs from 'node:fs';
 import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
-import { control, runDoor, runs } from './door.ts';
+import { control, runDoor, runs, openStyleControl } from './door.ts';
 
 const FIXTURE = 'manifest/features/fixtures/aurora.json';
 const OPEN = 'project.open#menu-file';
@@ -30,7 +30,9 @@ test('essentials only leaves out what is no essential, keeps what holds a value,
   await runDoor(page, OPEN);
   await (await chooser).setFiles({ name: 'aurora.json', mimeType: 'application/json', buffer: fs.readFileSync(FIXTURE) });
   await selectIntro(page);
-  // a fresh profile shows every property
+  // a fresh profile shows every property; word spacing stands in the details of More text (spec inspector-panel,
+  // item 4a), opened as a person opens them
+  await openStyleControl(page, WORD_SPACING);
   await expect(drawn(page, WORD_SPACING)).toHaveCount(1);
   // a value set on letter spacing, then Essentials only: word spacing goes, letter spacing (set) and font size stay
   const field = drawn(page, LETTER_SPACING).locator('input');

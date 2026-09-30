@@ -27,7 +27,9 @@ import { MenuButton } from '../doors/menu.tsx';
 import { GLYPHS, doorSlots, drawnAsOf, partOf, slotsIn } from '../doors/placement.ts';
 import { setActiveOption } from '../focus/focus.ts';
 import { authoredProperties, declaredBorderValues, editedProperties, editedPropertiesByDoor, inspectorMode, inspectorSearchOf, isEssential, searchMatches, sectionClosed, sectionProperties, summaryOf, summaryProperties } from '../inspector/sections.ts';
-import { PAIR_ROWS, detailOwner, orderByGroup, pairRowOf, rowPrefixKey, type PairRow } from '../inspector/rows.ts';
+import { PAIR_ROWS, orderByGroup, pairRowOf, rowPrefixKey, type PairRow } from '../inspector/rows.ts';
+import { CONCEPT_ROWS, pairItem, rowClosed, rowOfItem } from '../inspector/concept-rows.ts';
+import { ConceptRowView } from './concept-row.tsx';
 import { valueOrigin } from '../inspector/origin.ts';
 import { MODEL_RULES, useEditorState, useStore, layeredRules } from '../store.ts';
 import { FieldOrigin } from './field-origin.tsx';
@@ -115,6 +117,12 @@ function StyleSections() {
       .join(' ');
   });
   const collapsed = useMemo(() => collapsedText.split(' ').filter((id) => id !== '') as readonly SectionId[], [collapsedText]);
+  // the concept rows drawn closed (concept-rows.ts rowClosed), as one text for a stable answer
+  const rowsClosedText = useEditorState((s) => {
+    const held = authoredProperties(s);
+    return CONCEPT_ROWS.filter((row) => rowClosed(s.ui, row, held)).map((row) => row.id).join(' ');
+  });
+  const rowsClosed = useMemo(() => rowsClosedText.split(' ').filter((id) => id !== ''), [rowsClosedText]);
   // the one selected element, whose values a collapsed section summarises
   const only = useEditorState((s) => (s.selection.length === 1 ? (s.selection[0] ?? null) : null));
   const properties = useMemo(() => collapsed.flatMap((section) => summaryProperties(section)), [collapsed]);
@@ -179,8 +187,9 @@ function StyleSections() {
         const boxDoors = doors.filter((d) => targetOf(d)?.control === 'box-model');
         // The manifest orders the fields by group; the design draws the fields without subgroup headings.
         const units: ReactNode[] = [];
-        // the property each unit draws, beside the unit, so the pass below can order a concept before its details
-        const unitTarget: (string | null)[] = [];
+        // the item each unit draws (its door, or its pair row: concept-rows.ts), beside the unit, so the pass below can
+        // gather a concept row's head and details
+        const unitItem: string[] = [];
         const rowDrawn = new Set<string>();
         const shorthandDrawn = new Set<string>();
         // the fields of a pair row this section draws, in the row's own order; a row with one field left keeps a field
@@ -225,20 +234,20 @@ function StyleSections() {
         };
         for (const d of doors) {
           if (shorthand.has(d.ref)) {
-            if (!shorthandDrawn.has(d.ref)) { units.push(<Fragment key={d.ref}>{drawer(d)}</Fragment>); unitTarget.push(editedTarget(d)); }
+            if (!shorthandDrawn.has(d.ref)) { units.push(<Fragment key={d.ref}>{drawer(d)}</Fragment>); unitItem.push(d.ref); }
             continue;
           }
           const target = editedTarget(d);
           const row = searching || target === null ? null : pairRowOf(target);
           if (row === null || rowDrawn.has(d.ref)) {
-            if (row === null) { units.push(<Fragment key={d.ref}>{drawer(d)}</Fragment>); unitTarget.push(editedTarget(d)); }
+            if (row === null) { units.push(<Fragment key={d.ref}>{drawer(d)}</Fragment>); unitItem.push(d.ref); }
             continue;
           }
           // the fields of the row this section draws, in the row's own order; a row with one field left keeps a row
           const members = pairMembers(row);
           if (members.length < 2) {
             units.push(<Fragment key={d.ref}>{drawer(d)}</Fragment>);
-            unitTarget.push(editedTarget(d));
+            unitItem.push(d.ref);
             continue;
           }
           for (const m of members) rowDrawn.add(m.ref);
@@ -259,21 +268,36 @@ function StyleSections() {
               {members.map((m) => <FieldOrigin key={`${m.ref}-origin`} entry={m} target={editedTarget(m)} />)}
             </Fragment>,
           );
-          unitTarget.push(target);
+          unitItem.push(pairItem(row.id));
         }
-        // The concept before its details, whatever order the manifest lists the doors in: each unit is ranked by the
-        // unit that draws the concept it belongs to (itself, when it is one), and a detail follows its concept. The
-        // units keep their keys, so React moves the nodes and no field changes its state (rows.ts detailOwner).
-        const ranked = units.map((node, index) => {
-          const target = unitTarget[index] ?? null;
-          const owner = target === null ? null : detailOwner(target);
-          return { node, index, anchor: owner ?? target, detail: owner !== null };
-        });
-        const anchorAt = new Map<string, number>();
-        for (const unit of ranked) if (unit.anchor !== null && !unit.detail && !anchorAt.has(unit.anchor)) anchorAt.set(unit.anchor, unit.index);
-        const ordered = [...ranked].sort((a, b) => {
-          const rank = (u: typeof a) => (u.anchor === null ? u.index : anchorAt.get(u.anchor) ?? u.index);
-          return rank(a) - rank(b) || Number(a.detail) - Number(b.detail) || a.index - b.index;
+        // The concept rows (concept-rows.ts): a row is drawn where its first unit stands, its head always and its details
+        // in place under it while it is open. While searching every row is drawn flat, so a match is never hidden; a row
+        // whose head the mode or the element leaves out draws its details flat too.
+        const ordered: ReactNode[] = [];
+        const rowsDrawn = new Set<string>();
+        units.forEach((node, index) => {
+          const found = searching ? null : rowOfItem(unitItem[index] ?? '');
+          if (found === null) {
+            ordered.push(node);
+            return;
+          }
+          const { row } = found;
+          if (rowsDrawn.has(row.id)) return;
+          rowsDrawn.add(row.id);
+          const head = units.filter((_, i) => rowOfItem(unitItem[i] ?? '')?.row === row && rowOfItem(unitItem[i] ?? '')?.part === 'head');
+          const details = units.filter((_, i) => rowOfItem(unitItem[i] ?? '')?.row === row && rowOfItem(unitItem[i] ?? '')?.part === 'details');
+          // a row with a head of its own that the mode or the element leaves out (the anchors of a relative element)
+          if (head.length === 0 && row.head.length > 0) {
+            ordered.push(...details);
+            return;
+          }
+          // the field just revealed opens its row for as long as it is revealed
+          const holdsRevealed = revealed !== null && row.details.some((item) => {
+            const door = doors.find((x) => x.ref === item);
+            const target = door === undefined ? null : editedTarget(door);
+            return target === revealed || (target !== null && editedProperties(target).includes(revealed));
+          });
+          ordered.push(<ConceptRowView key={`row:${row.id}`} row={row} head={head} details={details} open={!rowsClosed.includes(row.id) || holdsRevealed} />);
         });
         return (
           <section key={s.id} className="inspector-section" data-section={section} aria-label={t(s.labelKey as MessageId)}>
@@ -285,7 +309,7 @@ function StyleSections() {
                 {set > 0 ? <span className="inspector-section__count">{t('inspector.valuesSet', { count: set })}</span> : null}
               </DoorControl>
             ) : null}
-            {closed ? null : ordered.map((unit) => unit.node)}
+            {closed ? null : ordered}
           </section>
         );
       })}

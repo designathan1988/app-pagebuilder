@@ -2117,6 +2117,30 @@
       "reader": "src/editor/inspector/sections.ts"
     },
     {
+      "field": "properties:conceptRows",
+      "reader": "src/editor/inspector/concept-rows.ts"
+    },
+    {
+      "field": "properties:conceptRows[].id",
+      "reader": "src/editor/inspector/concept-rows.ts"
+    },
+    {
+      "field": "properties:conceptRows[].section",
+      "reader": "src/editor/inspector/concept-rows.ts"
+    },
+    {
+      "field": "properties:conceptRows[].labelKey",
+      "reader": "src/editor/inspector/concept-rows.ts"
+    },
+    {
+      "field": "properties:conceptRows[].head",
+      "reader": "src/editor/inspector/concept-rows.ts"
+    },
+    {
+      "field": "properties:conceptRows[].details",
+      "reader": "src/editor/inspector/concept-rows.ts"
+    },
+    {
       "field": "properties:controls",
       "reader": "src/manifest/style-places.ts"
     },

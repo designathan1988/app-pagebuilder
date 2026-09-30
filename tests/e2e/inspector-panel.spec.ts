@@ -9,7 +9,7 @@ import fs from 'node:fs';
 import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
 import { isFeatureBuilt } from '../../src/app/features.ts';
-import { control, openEverySection, openMenu, runDoor, runs, setSectionOpen } from './door.ts';
+import { control, openEverySection, openMenu, runDoor, runs, setSectionOpen, openStyleControl } from './door.ts';
 
 const FIXTURE = 'manifest/features/fixtures/aurora.json';
 const ALL = 'inspector.setMode#inspector-mode-all';
@@ -192,6 +192,8 @@ test('a card in block shows no flex or grid control until flex is chosen, and an
   await expect.poll(async () => drawn(page, 'n-card-a').evaluate((el) => getComputedStyle(el).display)).toBe('flex');
   await expect.poll(async () => (await port(page)).selection, 'the write leaves the selection').toEqual(['n-card-a']);
   await expect(panelDoor('style.set#inspector-flex-direction').first(), 'a flex container: the direction arrows').toBeVisible();
+  // justify-content stands in the details of Alignment (spec inspector-panel, item 4a)
+  await openStyleControl(page, 'style.set#inspector-justify-content');
   await expect(panelDoor('style.set#inspector-justify-content').first()).toBeVisible();
   await expect(panelDoor('style.set#inspector-grid-template-columns'), 'still no grid').toHaveCount(0);
   // the card's parent (named Grid in the fixture, but laid out as a block until grid is chosen): choosing grid there
@@ -204,11 +206,15 @@ test('a card in block shows no flex or grid control until flex is chosen, and an
   await page.keyboard.type('grid');
   await page.keyboard.press('Enter');
   await expect.poll(async () => drawn(page, 'n-grid').evaluate((el) => getComputedStyle(el).display)).toBe('grid');
+  // the raw track list stands in the details of Grid columns (spec inspector-panel, item 4a)
+  await openStyleControl(page, 'style.set#inspector-grid-template-columns');
   await expect(panelDoor('style.set#inspector-grid-template-columns').first(), 'a grid container').toBeVisible();
   await expect(panelDoor('style.set#inspector-flex-direction'), 'a grid is no flex container').toHaveCount(0);
   // and one of its cards, selected through its row, shows the grid item's controls
   await runDoor(page, ROW, { args: { target: 'n-card-a' } });
   await expect.poll(async () => (await port(page)).selection).toEqual(['n-card-a']);
+  // a grid item's column stands in the details of Item
+  await openStyleControl(page, 'style.set#inspector-grid-column');
   await expect(panelDoor('style.set#inspector-grid-column').first(), 'a card inside the grid: its column').toBeVisible();
   await expect(panelDoor('style.set#inspector-flex-grow'), 'not a flex item: the parent is a grid').toHaveCount(0);
   // the card itself is a flex container (the first choice above), never a grid one

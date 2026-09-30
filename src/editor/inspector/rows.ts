@@ -56,21 +56,6 @@ const GROUPS = new Map<string, readonly { readonly id: string; readonly labelKey
 
 export const groupsOf = (section: string): readonly { readonly id: string; readonly labelKey: MessageId }[] => GROUPS.get(section) ?? [];
 
-// The rows that are a detail of a concept another row already draws: a longhand of a composite of the same section
-// (properties.json declares every one of them — border's twelve, border-radius's four). With eleven rows of one
-// border drawn as equals, the section read as eleven truths; the row that names the concept comes first, and these
-// follow it indented and quieter, so the panel tells "the border is 1px solid …" before it tells each side.
-const DETAIL = new Map<string, string>(
-  manifest.properties.composites.flatMap((composite) =>
-    composite.longhands
-      .filter((longhand) => longhand !== composite.id && manifest.properties.properties.some((p) => p.id === longhand && p.section === composite.section))
-      .map((longhand) => [longhand, composite.id] as const),
-  ),
-);
-export const isDetailRow = (target: string): boolean => DETAIL.has(target);
-// the concept a detail row belongs to: the composite it is a longhand of. The row of a concept is drawn before its
-// details, whatever order the manifest lists the doors in (a border is a border before it is four widths).
-export const detailOwner = (target: string): string | null => DETAIL.get(target) ?? null;
 
 // the group a property, composite or recipe belongs to (properties.json), or null for a name it does not hold
 const MEMBERS = new Map<string, string>([

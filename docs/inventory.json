@@ -2,11 +2,11 @@
   "totals": {
     "features": 187,
     "built": 185,
-    "commands": 257,
-    "doors": 998,
-    "scenarios": 1336,
-    "modules": 257,
-    "lines": 49221
+    "commands": 258,
+    "doors": 1000,
+    "scenarios": 1338,
+    "modules": 259,
+    "lines": 49477
   },
   "features": [
     {
@@ -624,14 +624,16 @@
         "text.set",
         "text.cancelEdit",
         "inspector.toggleSection",
+        "inspector.toggleRow",
         "workspace.setActiveTab"
       ],
-      "doors": 21,
-      "scenarios": 15,
+      "doors": 22,
+      "scenarios": 16,
       "modules": [
         "src/core/nodes/flags.ts",
         "src/core/text/text.ts",
         "src/editor/canvas/text-edit.ts",
+        "src/editor/inspector/concept-rows.ts",
         "src/editor/inspector/sections.ts",
         "src/editor/workspace/layout.ts"
       ]
@@ -646,7 +648,7 @@
         "field.setUnit",
         "field.cancel"
       ],
-      "doors": 176,
+      "doors": 177,
       "scenarios": 19,
       "modules": [
         "src/core/style/set.ts",
@@ -715,7 +717,7 @@
         "inspector.toggleSpacingLink",
         "field.cancel"
       ],
-      "doors": 22,
+      "doors": 23,
       "scenarios": 16,
       "modules": [
         "src/core/style/spacing.ts",
@@ -853,13 +855,15 @@
       "commands": [
         "style.set",
         "style.setBorder",
-        "style.setRadius"
+        "style.setRadius",
+        "field.cancel"
       ],
-      "doors": 193,
-      "scenarios": 24,
+      "doors": 196,
+      "scenarios": 25,
       "modules": [
         "src/core/style/border.ts",
-        "src/core/style/set.ts"
+        "src/core/style/set.ts",
+        "src/editor/inspector/number-field.ts"
       ]
     },
     {
@@ -2785,7 +2789,7 @@
   "modules": [
     {
       "path": "src/app/commands.ts",
-      "lines": 390,
+      "lines": 392,
       "commands": [],
       "features": []
     },
@@ -4363,6 +4367,16 @@
       ]
     },
     {
+      "path": "src/editor/inspector/concept-rows.ts",
+      "lines": 91,
+      "commands": [
+        "inspector.toggleRow"
+      ],
+      "features": [
+        "inspector-panel"
+      ]
+    },
+    {
       "path": "src/editor/inspector/gradient-view.ts",
       "lines": 35,
       "commands": [],
@@ -4379,6 +4393,7 @@
       ],
       "features": [
         "inspector-number-fields",
+        "props-border-outline",
         "props-spacing"
       ]
     },
@@ -4407,7 +4422,7 @@
     },
     {
       "path": "src/editor/inspector/rows.ts",
-      "lines": 108,
+      "lines": 93,
       "commands": [],
       "features": []
     },
@@ -4548,7 +4563,7 @@
     },
     {
       "path": "src/editor/preferences/preferences.ts",
-      "lines": 230,
+      "lines": 244,
       "commands": [
         "preferences.setLanguage",
         "preferences.setTheme"
@@ -4653,6 +4668,12 @@
       "features": []
     },
     {
+      "path": "src/editor/shell/concept-row.tsx",
+      "lines": 63,
+      "commands": [],
+      "features": []
+    },
+    {
       "path": "src/editor/shell/confirmation.tsx",
       "lines": 74,
       "commands": [],
@@ -4684,7 +4705,7 @@
     },
     {
       "path": "src/editor/shell/field.tsx",
-      "lines": 1296,
+      "lines": 1298,
       "commands": [],
       "features": []
     },
@@ -4720,7 +4741,7 @@
     },
     {
       "path": "src/editor/shell/inspector.tsx",
-      "lines": 726,
+      "lines": 750,
       "commands": [],
       "features": []
     },
@@ -5075,13 +5096,13 @@
     },
     {
       "path": "src/generated/commands.ts",
-      "lines": 492,
+      "lines": 493,
       "commands": [],
       "features": []
     },
     {
       "path": "src/generated/ids.ts",
-      "lines": 4528,
+      "lines": 4560,
       "commands": [],
       "features": []
     },
@@ -5105,7 +5126,7 @@
     },
     {
       "path": "src/manifest/check.ts",
-      "lines": 2277,
+      "lines": 2306,
       "commands": [],
       "features": []
     },
@@ -5141,7 +5162,7 @@
     },
     {
       "path": "src/manifest/schema.ts",
-      "lines": 1267,
+      "lines": 1280,
       "commands": [],
       "features": []
     },

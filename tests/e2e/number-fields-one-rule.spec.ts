@@ -6,7 +6,7 @@
 import fs from 'node:fs';
 import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
-import { control, runDoor, runs } from './door.ts';
+import { control, runDoor, runs, openStyleControl } from './door.ts';
 
 const FIXTURE = 'manifest/features/fixtures/aurora.json';
 const OPEN = 'project.open#menu-file';
@@ -34,7 +34,9 @@ async function grid(page: Page): Promise<{ readonly styles: Record<string, strin
   return { styles: (tree ? find(tree, 'n-grid')?.styles.desktop?.base : undefined) ?? {}, undoSteps: read.undoSteps };
 }
 async function type(page: Page, ref: string, text: string): Promise<void> {
-  // the field draws its value input first, then the slider a door may declare (A3.30): the text one is typed into
+  // the field draws its value input first, then the slider a door may declare (A3.30): the text one is typed into; a
+  // field in a concept row's details is reached by opening the row (spec inspector-panel, item 4a)
+  await openStyleControl(page, ref);
   await control(page, ref).locator('input').first().click();
   await page.keyboard.press('Control+A');
   await page.keyboard.type(text);
