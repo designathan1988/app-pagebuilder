@@ -45,6 +45,7 @@ import { cssFamily, familyOf, isFontFile } from '../../core/files/fonts.ts';
 import { afterGesture, modifierOf, registerSlider } from '../input/pointer.ts';
 import { MODEL_RULES, useEditorState, useStore, type EditorStore, layeredRules } from '../store.ts';
 import { styleClassOf, styleSource } from '../inspector/style-target.ts';
+import { useMenuLayer } from '../doors/menu.tsx';
 import { isDetailRow } from '../inspector/rows.ts';
 import { useT, useValueLabel } from '../text.ts';
 import { createToken, tokenKindOf, tokensOf } from '../../core/design/tokens.ts';
@@ -70,8 +71,6 @@ const PART_CONTROLS = new Set(['unit-menu', 'step-up', 'step-down', 'property-re
 const PARTS = doorSlots('field').filter((p) => p.door.kind === 'panel-control' && PART_CONTROLS.has(p.door.control));
 // the label's scrub: the panel drag pressed on a field's label
 const SCRUB = manifest.doors.find((d) => d.door.kind === 'panel-drag' && d.door.source === 'field-label') ?? null;
-// the backdrop under an open menu
-const BACKDROP = doorSlots('overlay')[0];
 
 // The values the page computes for a node (coordinates.ts computedValues). The page changes after the store does (the
 // renderer applies each change) and loads after the inspector is drawn, so the values are read at every frame while
@@ -262,11 +261,11 @@ function UnitMenu({ entry, property, shown, input, ready }: { readonly entry: Do
   const store = useStore();
   const t = useT();
   const door = useDoor(entry, { property }, undefined, ready);
-  const dismissals = useEditorState((s) => s.ui.overlays.dismissals);
-  const [openedAt, setOpenedAt] = useState<number | null>(null);
+  // the same layer owner the menu buttons and the values menu stand on (doors/menu.tsx)
+  const layer = useMenuLayer();
   // the rest of the units and the keywords are drawn only while the menu is expanded (More units)
   const [expanded, setExpanded] = useState(false);
-  const open = openedAt !== null && openedAt === dismissals && door.available;
+  const open = layer.open && door.available;
   const list = useRef<HTMLDivElement>(null);
   const current = unitShown(property, shown);
   const menu = unitsOf(property);
@@ -276,7 +275,7 @@ function UnitMenu({ entry, property, shown, input, ready }: { readonly entry: Do
     if (open) list.current?.querySelector<HTMLElement>('[role^="menuitem"]')?.focus();
   }, [open]);
   const choose = (unit: string) => {
-    setOpenedAt(null);
+    layer.close();
     (store.dispatch as Dispatch)(entry.command.id, { ...entry.door.args, property, value: input.current?.value || shown, unit });
     input.current?.focus();
   };
@@ -288,19 +287,19 @@ function UnitMenu({ entry, property, shown, input, ready }: { readonly entry: Do
         data-door={entry.ref}
         data-args={JSON.stringify({ property, value: shown })}
         aria-haspopup="menu"
-        aria-expanded={open}
+        aria-expanded={layer.open}
         aria-label={t('field.unit.of', { property: propertyWord(t, property) })}
         title={door.title}
         aria-disabled={door.available ? undefined : true}
         onClick={() => {
-          if (door.available) setOpenedAt(open ? null : dismissals);
+          if (door.available) layer.toggle();
         }}
       >
         {/* a keyword is shown by the field itself: the button then shows only its menu's glyph, leaving the field its room */}
         <span className="field__unit-value">{current === shown.trim() ? '' : current}</span>
         <Icon name={GLYPHS.dropdown} size="xs" />
       </button>
-      {open && BACKDROP ? <DoorControl entry={BACKDROP} className="overlay-backdrop" /> : null}
+      {layer.backdrop}
       {open ? (
         <div className="menu field__menu" role="menu" ref={list} aria-label={door.label} data-key-context="menu">
           {shownUnits.map((unit) => (
@@ -637,9 +636,9 @@ export function TextStyleField({
   const slid = sliderRange === undefined ? null : slidNumber(shown !== '' ? shown : (effective ?? ''), sliderRange.unit);
   const draft = useRef({ typed: false });
   // the list of every value the field offers, opened by its own button (A3.33): all of them, whatever the field holds
-  const [listOpen, setListOpen] = useState<number | null>(null);
+  // the layer contract of the field values menu: the same owner the menu buttons stand on (doors/menu.tsx)
+  const valuesLayer = useMenuLayer();
   const valueLabel = useValueLabel();
-  const dismissals = useEditorState((s) => s.ui.overlays.dismissals);
   const command = entry.command.id;
   // the list of its suggestions, one per field (the inspector and the quick panel may draw the same property)
   const listId = useId();
@@ -753,14 +752,15 @@ export function TextStyleField({
               type="button"
               className="field__values-button"
               aria-haspopup="menu"
-              aria-expanded={listOpen !== null}
+              aria-expanded={valuesLayer.open}
               aria-label={t('field.values.of', { property: propertyWord(t, property) })}
               aria-disabled={available ? undefined : true}
-              onClick={() => setListOpen(listOpen ? null : dismissals)}
+              onClick={valuesLayer.toggle}
             >
               <Icon name={GLYPHS.dropdown} size="xs" />
             </button>
-            {listOpen !== null && listOpen === dismissals ? (
+            {valuesLayer.backdrop}
+            {valuesLayer.open ? (
               <div className="menu field__menu" role="menu" aria-label={door.label} data-key-context="menu">
                 {suggestions.map((value) => (
                   <button
@@ -772,7 +772,7 @@ export function TextStyleField({
                     data-door={entry.ref}
                     data-args={JSON.stringify({ property, value })}
                     onClick={() => {
-                      setListOpen(null);
+                      valuesLayer.close();
                       keepText.current(value);
                     }}
                   >

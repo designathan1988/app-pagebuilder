@@ -6,7 +6,7 @@
     "doors": 998,
     "scenarios": 1333,
     "modules": 249,
-    "lines": 48000
+    "lines": 48020
   },
   "features": [
     {
@@ -4180,7 +4180,7 @@
     },
     {
       "path": "src/editor/doors/menu.tsx",
-      "lines": 218,
+      "lines": 238,
       "commands": [],
       "features": []
     },

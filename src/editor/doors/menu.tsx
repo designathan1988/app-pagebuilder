@@ -7,7 +7,7 @@
 // under an open menu. A dismissal closes the menus open when it arrives (menus/overlays.ts), and a dismissed menu
 // gives the focus back to its button. The context menu (ContextMenu, at the end) is drawn here too, from the doors the
 // manifest places in the context-menu region; its opening is a command (menus/context-menu.ts).
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from 'react';
 import { locate } from '../../core/document/model.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
 import type { CommandId, KeyContextId, MenuId, MessageId } from '../../generated/ids.ts';
@@ -123,41 +123,61 @@ export interface MenuButtonProps {
   readonly className?: string;
 }
 
-export function MenuButton({ menu, anchor, children, indicator = false, className }: MenuButtonProps) {
-  // the number of dismissals when the menu was opened, or null while it is closed: a later dismissal closes it
+// The one owner of a layer's opening (a menu button and the field's own values menu both stand on it): the trigger
+// toggles it, a dismissal newer than the opening closes it — Escape, or a press on the backdrop it draws — and a
+// dismissed layer gives the focus back to its button (WAI-ARIA menu button pattern) when the focus went down with the
+// layer's items and rests on the page body. A layer drawn without this backdrop is a layer a click outside never
+// closes: the field's values menu was built that way by hand, and a person had to find Escape.
+export interface MenuLayer {
+  readonly open: boolean;
+  readonly button: RefObject<HTMLButtonElement | null>;
+  readonly backdrop: ReactNode;
+  readonly toggle: () => void;
+  readonly close: () => void;
+}
+export function useMenuLayer(): MenuLayer {
+  // the number of dismissals when the layer was opened, or null while it is closed: a later dismissal closes it
   const dismissals = useEditorState((s) => s.ui.overlays.dismissals);
   const [openedAt, setOpenedAt] = useState<number | null>(null);
   const open = openedAt !== null && openedAt === dismissals;
-  // closed by a dismissal newer than its opening (Escape in the menu, a press on the backdrop)
   const dismissed = openedAt !== null && !open;
   const button = useRef<HTMLButtonElement>(null);
-  // A dismissed menu gives the focus back to its button (WAI-ARIA menu button pattern) when the focus went down with
-  // the menu's items or its backdrop and rests on the page body, so a keyboard user is never left without focus.
   useEffect(() => {
     if (dismissed && (document.activeElement === null || document.activeElement === document.body)) button.current?.focus();
   }, [dismissed]);
+  return {
+    open,
+    button,
+    backdrop: open && BACKDROP ? <DoorControl key="backdrop" entry={BACKDROP} className="overlay-backdrop" /> : null,
+    toggle: () => setOpenedAt(open ? null : dismissals),
+    close: () => setOpenedAt(null),
+  };
+}
+
+export function MenuButton({ menu, anchor, children, indicator = false, className }: MenuButtonProps) {
+  const layer = useMenuLayer();
   const t = useT();
   const label = t(menuOf(menu).labelKey as MessageId);
   const icon = anchor.icon !== null ? <Icon name={anchor.icon} size={anchor.drawnAs === 'icon-button' ? 'md' : 'sm'} /> : null;
   return (
     <div className={['menu-anchor', className ?? ''].filter((c) => c !== '').join(' ')}>
       <button
-        ref={button}
+        ref={layer.button}
         type="button"
-        className={`menu-button menu-button--${anchor.drawnAs}${open ? ' is-open' : ''}`}
+        className={`menu-button menu-button--${anchor.drawnAs}${layer.open ? ' is-open' : ''}`}
         data-menu={menu}
         aria-haspopup="menu"
-        aria-expanded={open}
+        aria-expanded={layer.open}
         aria-label={anchor.drawnAs === 'icon-button' || children !== undefined ? label : undefined}
         title={label}
-        onClick={() => setOpenedAt(open ? null : dismissals)}
+        onClick={layer.toggle}
       >
         {icon}
         {anchor.drawnAs === 'icon-button' ? null : (children ?? <span className="door__label">{label}</span>)}
         {indicator ? <Icon name={GLYPHS.dropdown} size="xs" /> : null}
       </button>
-      {open && BACKDROP ? <DoorControl entry={BACKDROP} className="overlay-backdrop" /> : null}
-      {open ? <MenuList menu={menu} onDone={() => setOpenedAt(null)} focusFirst anchor={button} /> : null}
+      {layer.backdrop}
+      {layer.open ? <MenuList menu={menu} onDone={layer.close} focusFirst anchor={layer.button} /> : null}
     </div>
   );
 }
