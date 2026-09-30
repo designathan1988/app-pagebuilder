@@ -73,6 +73,7 @@
 
 .menu__reason {
   font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
   color: var(--color-text-subtle);
 }
 

@@ -38,6 +38,7 @@
   border-radius: 0;
   color: var(--color-text-muted);
   font-size: var(--fs-body);
+  line-height: var(--lh-body);
   white-space: nowrap;
 }
 
@@ -99,7 +100,7 @@
 }
 
 .selector-bar__tag {
-  font: var(--fw-caption) var(--fs-caption) / var(--lh-body) var(--font-mono);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-mono);
 }
 
 .selector-bar__targets,
@@ -294,6 +295,7 @@
   background: transparent;
   font-family: var(--font-mono);
   font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
 }
 
 .style-classes__field .input:focus {
@@ -308,6 +310,7 @@
 .style-classes__count {
   color: var(--color-text-muted);
   font-size: var(--fs-micro);
+  line-height: var(--lh-micro);
   white-space: nowrap;
 }
 
@@ -351,6 +354,7 @@
   gap: var(--space-2);
   color: var(--color-text-muted);
   font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
 }
 
 .inspector-style {
@@ -395,6 +399,7 @@
   padding-left: var(--space-9);
   padding-right: var(--space-9);
   font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
   background: var(--color-surface);
 }
 .inspector-searchline > .add-property {
@@ -444,6 +449,7 @@
 .settings-section__header p {
   color: var(--color-text-muted);
   font-size: var(--fs-body);
+  line-height: var(--lh-body);
 }
 
 .inspector-empty {
@@ -469,6 +475,7 @@
   padding: 0;
   list-style: none;
   font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
   color: var(--color-text-muted);
 }
 
@@ -582,7 +589,7 @@
 .inspector-section__summary {
   overflow: hidden;
   margin-left: var(--space-3);
-  font: var(--fw-caption) var(--fs-caption) / var(--lh-body) var(--font-mono);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-mono);
   letter-spacing: 0;
   text-transform: none;
   color: var(--color-text-muted);
@@ -659,6 +666,7 @@
 [data-region='inspector-style'] .field-row--detail > .field-row__label {
   color: var(--color-text-subtle);
   font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
 }
 
 /* A shorthand that writes both cells of a pair is a small linked edit control,
@@ -697,6 +705,7 @@
   place-items: center;
   color: var(--color-text-muted);
   font-size: var(--fs-micro);
+  line-height: var(--lh-micro);
   pointer-events: none;
 }
 
@@ -706,6 +715,7 @@
   padding: 0;
   color: transparent;
   font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
   cursor: text;
 }
 
@@ -835,7 +845,7 @@
   padding: 0;
   border: 0;
   background: none;
-  font: var(--fw-body) var(--fs-caption) / var(--lh-caption) var(--font-mono);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-mono);
 }
 
 /* The input of a field shares its row with the field's own affordances (the unit menu, the value list): the input
@@ -900,6 +910,7 @@
   flex: none;
   color: var(--color-text-subtle);
   font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
   white-space: nowrap;
 }
 [data-region='inspector-style'] .field__origin-badge { margin-left: auto; }
@@ -1130,6 +1141,7 @@
   height: var(--size-control);
   padding: 0 var(--space-1);
   font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
 }
 [data-region='inspector-style'] .field-choice .door:has(.door__label) { width: auto; padding: 0 var(--space-2); }
 [data-region='inspector-style'] .field-choice .door.is-current,
@@ -1192,6 +1204,7 @@
   top: var(--space-1);
   left: var(--space-3);
   font-size: var(--fs-micro);
+  line-height: var(--lh-micro);
   color: var(--color-text-subtle);
 }
 

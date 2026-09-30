@@ -124,6 +124,7 @@
 .shortcuts__reason {
   margin-left: auto;
   font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
   color: var(--color-text-subtle);
 }
 
@@ -131,7 +132,7 @@
 .dock-document {
   flex: 1 0 100%;
   margin: 0;
-  font: var(--fw-caption) var(--fs-caption) / var(--lh-body) var(--font-mono);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-mono);
   color: var(--color-text);
   white-space: pre;
 }

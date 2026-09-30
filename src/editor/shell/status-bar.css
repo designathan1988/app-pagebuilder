@@ -10,6 +10,7 @@
   padding: 0 var(--space-3);
   background: var(--color-status-bar);
   font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
   color: var(--color-on-status-bar);
   white-space: nowrap;
 }
@@ -86,6 +87,7 @@
 .status-bar .menu-button {
   height: var(--size-status-bar);
   font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
 }
 
 .status-bar .door--icon-button {

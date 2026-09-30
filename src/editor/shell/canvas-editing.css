@@ -100,6 +100,7 @@
   min-width: 0;
   overflow: hidden;
   font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -203,6 +204,7 @@
   height: auto;
   clip-path: none;
   font-size: var(--fs-micro);
+  line-height: var(--lh-micro);
 }
 
 .quick-panel__group[data-quick-group='inspector.section.size'] .field-row,
@@ -256,6 +258,7 @@
   margin: 0;
   color: var(--color-warning);
   font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
 }
 
 /* the colour picker's saved and recent colours and the eyedropper (color-swatches-eyedropper) */
@@ -333,6 +336,7 @@
   background: var(--color-surface-raised);
   color: var(--color-text);
   font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
   pointer-events: none;
 }
 

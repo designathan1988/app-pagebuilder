@@ -3,6 +3,7 @@
   padding: var(--space-2) 0;
   color: var(--color-warning);
   font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
 }
 
 .settings-field__value {
