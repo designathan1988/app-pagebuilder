@@ -130,24 +130,21 @@ export interface MenuButtonProps {
 // closes: the field's values menu was built that way by hand, and a person had to find Escape.
 export interface MenuLayer {
   readonly open: boolean;
-  readonly button: RefObject<HTMLButtonElement | null>;
   readonly backdrop: ReactNode;
   readonly toggle: () => void;
   readonly close: () => void;
 }
-export function useMenuLayer(): MenuLayer {
+export function useMenuLayer(button: RefObject<HTMLButtonElement | null>): MenuLayer {
   // the number of dismissals when the layer was opened, or null while it is closed: a later dismissal closes it
   const dismissals = useEditorState((s) => s.ui.overlays.dismissals);
   const [openedAt, setOpenedAt] = useState<number | null>(null);
   const open = openedAt !== null && openedAt === dismissals;
   const dismissed = openedAt !== null && !open;
-  const button = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     if (dismissed && (document.activeElement === null || document.activeElement === document.body)) button.current?.focus();
-  }, [dismissed]);
+  }, [dismissed, button]);
   return {
     open,
-    button,
     backdrop: open && BACKDROP ? <DoorControl key="backdrop" entry={BACKDROP} className="overlay-backdrop" /> : null,
     toggle: () => setOpenedAt(open ? null : dismissals),
     close: () => setOpenedAt(null),
@@ -155,14 +152,15 @@ export function useMenuLayer(): MenuLayer {
 }
 
 export function MenuButton({ menu, anchor, children, indicator = false, className }: MenuButtonProps) {
-  const layer = useMenuLayer();
+  const button = useRef<HTMLButtonElement>(null);
+  const layer = useMenuLayer(button);
   const t = useT();
   const label = t(menuOf(menu).labelKey as MessageId);
   const icon = anchor.icon !== null ? <Icon name={anchor.icon} size={anchor.drawnAs === 'icon-button' ? 'md' : 'sm'} /> : null;
   return (
     <div className={['menu-anchor', className ?? ''].filter((c) => c !== '').join(' ')}>
       <button
-        ref={layer.button}
+        ref={button}
         type="button"
         className={`menu-button menu-button--${anchor.drawnAs}${layer.open ? ' is-open' : ''}`}
         data-menu={menu}
@@ -177,7 +175,7 @@ export function MenuButton({ menu, anchor, children, indicator = false, classNam
         {indicator ? <Icon name={GLYPHS.dropdown} size="xs" /> : null}
       </button>
       {layer.backdrop}
-      {layer.open ? <MenuList menu={menu} onDone={layer.close} focusFirst anchor={layer.button} /> : null}
+      {layer.open ? <MenuList menu={menu} onDone={layer.close} focusFirst anchor={button} /> : null}
     </div>
   );
 }

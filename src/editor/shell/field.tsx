@@ -262,7 +262,8 @@ function UnitMenu({ entry, property, shown, input, ready }: { readonly entry: Do
   const t = useT();
   const door = useDoor(entry, { property }, undefined, ready);
   // the same layer owner the menu buttons and the values menu stand on (doors/menu.tsx)
-  const layer = useMenuLayer();
+  const unitButton = useRef<HTMLButtonElement>(null);
+  const layer = useMenuLayer(unitButton);
   // the rest of the units and the keywords are drawn only while the menu is expanded (More units)
   const [expanded, setExpanded] = useState(false);
   const open = layer.open && door.available;
@@ -282,6 +283,7 @@ function UnitMenu({ entry, property, shown, input, ready }: { readonly entry: Do
   return (
     <span className="menu-anchor field__unit">
       <button
+        ref={unitButton}
         type="button"
         className="field__unit-button"
         data-door={entry.ref}
@@ -637,7 +639,8 @@ export function TextStyleField({
   const draft = useRef({ typed: false });
   // the list of every value the field offers, opened by its own button (A3.33): all of them, whatever the field holds
   // the layer contract of the field values menu: the same owner the menu buttons stand on (doors/menu.tsx)
-  const valuesLayer = useMenuLayer();
+  const valuesButton = useRef<HTMLButtonElement>(null);
+  const valuesLayer = useMenuLayer(valuesButton);
   const valueLabel = useValueLabel();
   const command = entry.command.id;
   // the list of its suggestions, one per field (the inspector and the quick panel may draw the same property)
@@ -749,6 +752,7 @@ export function TextStyleField({
         {values && suggestions.length > 0 ? (
           <span key="values" className="menu-anchor field__values">
             <button
+              ref={valuesButton}
               type="button"
               className="field__values-button"
               aria-haspopup="menu"
