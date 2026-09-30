@@ -21,6 +21,7 @@ import { browserDownloads } from './download.ts';
 import { endOffSelection, endOnUndoable } from './canvas/text-edit.ts';
 import { endRenameOffSelection, endRenameOnUndoable } from './layers/rename.ts';
 import { revealSelection } from './layers/tree.ts';
+import { pageFollowsSelection } from './project/page-follows.ts';
 import { targetFollowsClassRename, targetOffSelection } from './inspector/style-target.ts';
 import { keyframeTarget } from './timeline/playhead.ts';
 import { browserStorage, loadPreferences, persistPreferences, type PreferenceStorage } from './preferences/preferences.ts';
@@ -102,10 +103,12 @@ export function createEditorStore(options: EditorStoreOptions = {}): EditorStore
     editing: { takeOver },
     initial: { document, selection: options.restored?.selection ?? [], ui: recoveryUi(initialEditorUi(preferences, workspace), options.recovery ?? null), message: options.restored?.recovered === true ? message('status.save.recovered') : null },
     freeze: import.meta.env.DEV,
-    // Layers unfolds what hides a selected node; a text edit and a rename end once their node is not the selection
+    // the page of a selected node opens (an undo on another page); Layers unfolds what hides a selected node; a text
+    // edit and a rename end once their node is not the selection
     // alone, and when an undoable command runs
     followSelection: (state) => {
-      const revealed = { ...state, ui: targetOffSelection({ ...state, ui: revealSelection(state) }) };
+      const opened = { ...state, ui: pageFollowsSelection(state) };
+      const revealed = { ...opened, ui: targetOffSelection({ ...opened, ui: revealSelection(opened) }) };
       return endRenameOffSelection({ ...revealed, ui: endOffSelection(revealed) });
     },
     followCommand: (state, command, args) => {

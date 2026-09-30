@@ -176,6 +176,12 @@ export function startAutosave<Ui>(store: Store<Ui>, saved: SavedWork | null | un
   let pending: SavedWork | null = null;
   let retry = 0;
   const flush = async () => {
+    // a tab that has lost the editing lock to another writes nothing: its older work would overwrite the newer one
+    // (the retry and the hidden-tab write come here too)
+    if (!canWrite()) {
+      pending = null;
+      return;
+    }
     writing = true;
     let failed: string | null = null;
     while (pending !== null) {

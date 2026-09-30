@@ -65,8 +65,9 @@ export function CanvasFrame({ width, screen, zoom }: { readonly width: number; r
       const renderer = new PageRenderer(target, MODEL, page, { height: screen }, (name, value) => canvasValue(store.getState().document, name, value));
       renderer.mount(store.getState().document);
       // an image file dragged in from the operating system lands on the frame too: its own window reports the drag
-      stopFileDrop = target.defaultView !== null ? installOsFileDrop(store, target.defaultView, true) : () => {};
+      // the previous start's listeners go first (a load after a ready start runs start twice), then this one's drop
       stop();
+      stopFileDrop = target.defaultView !== null ? installOsFileDrop(store, target.defaultView, true) : () => {};
       const stopDocument = store.subscribeDocument((change) => renderer.apply(change.before, change.after, change.patches));
       // A text edited in place (text-edit.ts): the renderer marks, focuses and reads the edited element, and while the
       // edit lasts the keymap reads the keys on the frame's window, where they arrive; once it ends, the focus leaves

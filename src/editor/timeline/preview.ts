@@ -75,6 +75,12 @@ export function installPlayingLoop(store: EditorStore): () => void {
       return;
     }
     if (at - last < numberConstant('timeline.playheadTick')) return;
+    // a gesture holds the store (a drag, an open colour picker): the playhead waits for it, and resumes from where the
+    // clock is then — a dispatch now would throw ("a gesture is open") on every frame
+    if (store.gestureOpen()) {
+      last = at;
+      return;
+    }
     const shown = shownAnimation(state);
     if (shown === null) return;
     const duration = durationMs(shown.animation);

@@ -45,7 +45,7 @@ function FileTabs() {
   const tab = doorSlots('file-tabs').find((d) => drawnAs(d) === 'item');
   if (!tab || (pages.length < 2 && code.length === 0)) return null;
   return (
-    <div className="file-tabs" data-region="file-tabs" role="tablist">
+    <div className="file-tabs" data-region="file-tabs" role="tablist" data-key-context="tab-strip">
       {pages.map((one) => (
         <div className="file-tab" key={one.id}>
           <DoorControl entry={tab} args={{ page: one.tree.id }} className="file-tab__main">
@@ -215,14 +215,16 @@ export function CanvasColumn() {
   const view = useEditorState((s) => editorView(s.ui));
   return (
     <>
-      <main className={`centre centre--${view}`} data-key-context="canvas">
+      {/* the canvas's keys belong to the stage and its rulers alone: the file tabs, the toolbar and the code pane beside
+          it are no canvas, so Delete in the code pane never deletes the selected element (spec code-panel) */}
+      <main className={`centre centre--${view}`}>
         <FileTabs />
         {/* the toolbar stands in every view: the Canvas / Split / Code segments are the way back */}
         <CanvasToolbar />
         <div className="centre__work">
           {view === 'code' ? null : (
             <div className="centre__column">
-              <div className={`stage-wrap${rulersHidden ? ' stage-wrap--no-rulers' : ''}`}>
+              <div className={`stage-wrap${rulersHidden ? ' stage-wrap--no-rulers' : ''}`} data-key-context="canvas">
                 <Rulers />
                 {/* the stage around the page: a press here is on no node (pointer.ts) */}
                 <div className={`stage${panning !== 'idle' ? ` stage--${panning}` : ''}`} ref={stage} data-canvas-stage data-region="canvas-stage">

@@ -218,3 +218,18 @@ test('a JS file is edited and saved, and the page that links it runs it in the P
   await runDoor(page, PREVIEW);
   await expect.poll(async () => page.locator('iframe.preview__page').contentFrame().locator('title').textContent().catch(() => null), { message: 'the linked script runs in the Preview' }).toBe('Ran from the script');
 });
+
+// The keys of the canvas belong to the stage: with the focus on the code pane's own controls, Delete, Backspace and the
+// arrows are no canvas keys — the element selected before stays, and so does the document (the code audit's E-01:
+// Delete in the Code view deleted the element the canvas no longer drew).
+test('Delete on the code pane keeps the selected element', runs(VIEW('code'), ROW), async ({ page }) => {
+  await open(page);
+  await runDoor(page, VIEW('split'));
+  await control(page, ROW, { args: { target: 'n-title' } }).click();
+  await expect.poll(() => page.evaluate(() => (window as unknown as { __builderTestPort: { selection: () => string[] } }).__builderTestPort.selection())).toEqual(['n-title']);
+  const before = await page.evaluate(() => JSON.stringify((window as unknown as { __builderTestPort: { document: () => unknown } }).__builderTestPort.document()));
+  await page.locator('.code-pane [data-door], .code-pane button').first().focus();
+  for (const key of ['Delete', 'Backspace', 'ArrowDown']) await page.keyboard.press(key);
+  expect(await page.evaluate(() => JSON.stringify((window as unknown as { __builderTestPort: { document: () => unknown } }).__builderTestPort.document()))).toBe(before);
+  expect(await page.evaluate(() => (window as unknown as { __builderTestPort: { selection: () => string[] } }).__builderTestPort.selection())).toEqual(['n-title']);
+});

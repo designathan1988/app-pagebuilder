@@ -5,8 +5,8 @@
     "commands": 256,
     "doors": 998,
     "scenarios": 1333,
-    "modules": 253,
-    "lines": 48698
+    "modules": 254,
+    "lines": 48744
   },
   "features": [
     {
@@ -4030,7 +4030,7 @@
     },
     {
       "path": "src/editor/canvas/frame.tsx",
-      "lines": 218,
+      "lines": 219,
       "commands": [],
       "features": []
     },
@@ -4534,7 +4534,7 @@
     },
     {
       "path": "src/editor/persistence/autosave.ts",
-      "lines": 266,
+      "lines": 272,
       "commands": [],
       "features": []
     },
@@ -4559,6 +4559,12 @@
     {
       "path": "src/editor/preferences/said.ts",
       "lines": 32,
+      "commands": [],
+      "features": []
+    },
+    {
+      "path": "src/editor/project/page-follows.ts",
+      "lines": 21,
       "commands": [],
       "features": []
     },
@@ -4598,7 +4604,7 @@
     },
     {
       "path": "src/editor/shell/canvas.tsx",
-      "lines": 249,
+      "lines": 251,
       "commands": [],
       "features": []
     },
@@ -4772,7 +4778,7 @@
     },
     {
       "path": "src/editor/shell/sidebar.tsx",
-      "lines": 1034,
+      "lines": 1041,
       "commands": [],
       "features": []
     },
@@ -4826,7 +4832,7 @@
     },
     {
       "path": "src/editor/store.ts",
-      "lines": 134,
+      "lines": 137,
       "commands": [],
       "features": []
     },
@@ -4862,7 +4868,7 @@
     },
     {
       "path": "src/editor/timeline/preview.ts",
-      "lines": 97,
+      "lines": 103,
       "commands": [
         "timeline.play",
         "timeline.pause",

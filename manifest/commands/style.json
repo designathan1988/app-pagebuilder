@@ -18,7 +18,7 @@
           "optional": false
         },
         "targets": {
-          "type": "json",
+          "type": "nodes",
           "values": [],
           "optional": true
         }

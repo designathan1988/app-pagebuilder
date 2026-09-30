@@ -147,10 +147,16 @@ function PageRow({ page }: { readonly page: Page }) {
 }
 
 // A page's name, kept by pages.rename on Enter or when the field loses the focus (one undo step): the row shows the
-// name its document holds, and typing another one keeps it.
+// name its document holds — again after an undo, a redo or a refused name (the status bar's message changes with each)
+// — and typing another one keeps it.
 function PageNameField({ page }: { readonly page: Page }) {
   const field = useDoor(PAGE_NAME, { page: page.id });
   const store = useStore();
+  const input = useRef<HTMLInputElement>(null);
+  const said = useEditorState((state) => state.message);
+  useEffect(() => {
+    if (input.current !== null && document.activeElement !== input.current) input.current.value = page.name;
+  }, [page.name, said]);
   const keep = (name: string) => {
     if (!field.built || name.trim() === page.name) return;
     (store.dispatch as (id: CommandId, args: unknown) => DispatchResult)(PAGE_NAME.command.id as CommandId, { ...PAGE_NAME.door.args, page: page.tree.id, name });
@@ -158,6 +164,7 @@ function PageNameField({ page }: { readonly page: Page }) {
   return (
     <form className="row__page-name" onSubmit={(event) => { event.preventDefault(); keep((event.currentTarget.elements.namedItem('name') as HTMLInputElement).value); }}>
       <input
+        ref={input}
         className="row__name-field"
         type="text"
         name="name"
