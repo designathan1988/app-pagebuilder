@@ -34,7 +34,7 @@ import { rootCss } from '../design/tokens.ts';
 import type { InlineRun } from '../text/inline.ts';
 import { animationsOf, keyframesCss, playedClassDeclarations, playedClassName, animationDeclarations } from '../animation/animation.ts';
 import { addressedNodes, playedAnimations } from '../events/interactions.ts';
-import { interactionsJs, isModalTemplate, pageNeedsScript } from '../events/script.ts';
+import { interactionsJs, isModalTemplate, isTabsTemplate, pageNeedsScript } from '../events/script.ts';
 
 export const SITE_ARCHIVE = 'site.zip';
 export const STYLESHEET = 'css/styles.css';
@@ -187,7 +187,7 @@ export function pageLines(document: DocumentJson, pageIndex: number, rules: Mode
   // the elements an interaction addresses, and every element that holds an animation: both take a class, so the script
   // (and the animation's own rule) can name them
   const addressed = new Set<NodeId>(addressedNodes(document));
-  for (const page of document.pages) for (const node of walk(page.tree)) if (animationsOf(node).length > 0 || isModalTemplate(node)) addressed.add(node.id as NodeId);
+  for (const page of document.pages) for (const node of walk(page.tree)) if (animationsOf(node).length > 0 || isModalTemplate(node) || isTabsTemplate(node)) addressed.add(node.id as NodeId);
   const classes = generatedClasses(page.tree, shared, addressed);
   // the file the page is written at: the base of every address it holds (the preview writes absolute paths, which it
   // then turns into object URLs of its own)

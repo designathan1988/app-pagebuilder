@@ -35,6 +35,7 @@ export function baseCss(): string {
 :where(img, video) { max-width: 100%; height: auto; }
 :where(button, input, select, textarea) { font: inherit; color: inherit; }
 :where(button, input[type="button"], input[type="submit"], input[type="reset"]) { padding: 0.625rem 1rem; border: 1px solid #cbd5e1; border-radius: 6px; background: #f1f5f9; cursor: pointer; }
+:where([role="tab"][aria-selected="true"]) { background: #dbeafe; border-color: #93c5fd; }
 :where(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]):not([type="hidden"]):not([type="image"]):not([type="button"]):not([type="submit"]):not([type="reset"]), textarea, select) { max-width: 100%; min-height: 2.5rem; padding: 0.5rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; }
 :where(button, input, select, textarea):focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
 :where(fieldset) { margin: 0 0 1rem; padding: 1rem; border: 1px solid #cbd5e1; border-radius: 6px; }

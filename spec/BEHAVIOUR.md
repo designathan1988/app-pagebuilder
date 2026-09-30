@@ -7188,6 +7188,8 @@ The template is inserted as one subtree; its inner containers are ordinary nodes
 
 The Modal template keeps its original `<dialog>` tree in the document. Preview and exported pages load the site script for a page containing it, even with no authored interactions. The script creates an opener beside the dialog using its heading text, opens it with `showModal()`, and closes it from the template's button, native Escape, or a backdrop click. A dialog whose `open` setting was enabled enters modal mode at load. The editing canvas and the saved document are not changed by these runtime actions.
 
+The Tabs template likewise keeps its original two-child tree: a three-button navigation and one authored content container. In Preview and exported pages, the runtime gives the first container a tab-panel role and creates two additional panels whose initial text comes from their tab buttons. Clicking or using Left/Right/Home/End switches the visible panel, updates `aria-selected`, and keeps `aria-controls` and `aria-labelledby` linked through unique runtime IDs. These DOM changes do not alter the document.
+
 ### Zoom other than 100 %
 
 As for palette drag.

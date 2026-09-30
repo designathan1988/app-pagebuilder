@@ -9,6 +9,7 @@ import { manualClock } from '../ports/clock.ts';
 import { anyCss } from '../ports/css.ts';
 import { sequentialIds } from '../ports/ids.ts';
 import { nodeMaker, paletteNode } from '../structure/insert.ts';
+import { interactionsJs } from '../events/script.ts';
 import { noLayout } from '../ports/layout.ts';
 import { exportPage, exportProject, previewPage, siteFiles } from './export.ts';
 
@@ -67,6 +68,27 @@ describe('the modal template runtime', () => {
     expect(site.interactions).toContain('dialog.showModal()');
     expect(site.interactions).toContain('dialog.close()');
     expect(previewPage(document, RULES)).toContain('dialog.showModal()');
+  });
+});
+
+describe('the tabs template runtime', () => {
+  it('keeps the authored tree and runs independent panels in export and Preview', () => {
+    const tabs = paletteNode(nodeMaker(page([]), RULES, sequentialIds('tabs'), (key) => key), 'template-tabs');
+    const document = page([tabs]);
+    expect(tabs.children[1]?.children).toHaveLength(1);
+    const site = siteFiles(document, RULES);
+    expect(site.pages[0]?.html).toContain('src="js/interactions.js"');
+    expect(site.interactions).toContain("panel.setAttribute('role', 'tabpanel')");
+    expect(site.interactions).toContain('panels[j].hidden = !active');
+    expect(site.interactions).toContain("event.key === 'ArrowRight'");
+    expect(previewPage(document, RULES)).toContain('panels[j].hidden = !active');
+  });
+
+  it('wires a shared component class once while addressing all matching instances', () => {
+    const make = nodeMaker(page([]), RULES, sequentialIds('tabs'), (key) => key);
+    const document = page([paletteNode(make, 'template-tabs'), paletteNode(make, 'template-tabs')]);
+    const script = interactionsJs(document, () => '.shared-tabs') ?? '';
+    expect(script.match(/each\('\.shared-tabs'/g)).toHaveLength(1);
   });
 });
 
