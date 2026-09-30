@@ -86,3 +86,8 @@
 [data-region='inspector-settings'] .custom-attributes > .field-row:not(.field-row--action) {
   grid-template-columns: minmax(0, 1fr) auto;
 }
+
+/* a custom attribute's name is code: mono, as its value (jornada02 GENERALISATION 1.3: name mono | value mono) */
+[data-region='inspector-settings'] .custom-attributes .field-row__label {
+  font-family: var(--font-mono);
+}

@@ -609,7 +609,8 @@ function TreeRow({ row, doors }: { readonly row: TreeRow; readonly doors: TreeDo
         /* the icon is the door that opens the file in the code pane (a click anywhere else on the row opens it too,
            run by the pointer owner with the row's drag) */
         <DoorControl entry={doors.open} args={{ path: row.path }} className="row__open-icon" tabbable={false}>
-          <Icon name={row.page !== null ? 'globe' : row.generated ? 'file-code' : 'file'} size="sm" />
+          {/* a code file's kind as its tag (HTML, CSS, JS: the canonical .ftag), any other file its icon */}
+          {FILE_TAGS[row.kind] !== undefined ? <span className={`ftag ftag--${row.kind}`}>{FILE_TAGS[row.kind]}</span> : <Icon name={row.page !== null ? 'globe' : row.generated ? 'file-code' : 'file'} size="sm" />}
         </DoorControl>
       )}
       {renaming && doors.rename !== undefined ? (
@@ -631,6 +632,8 @@ function TreeRow({ row, doors }: { readonly row: TreeRow; readonly doors: TreeDo
       ) : (
         <span className="row__name">{name}</span>
       )}
+      {/* a file the editor writes says so, its tooltip why it cannot be deleted (the canonical .gen pill) */}
+      {row.generated && !row.folder ? <span className="row__gen" title={t(row.kind === 'js' ? 'files.generatedJsTip' : 'files.generatedTip')}>{t('files.generated')}</span> : null}
       {/* the file's folder and its size (spec explorer-assets: "the Explorer lists it, with its path and its size") */}
       <span className="row__meta">{file === null ? '' : folderOf(row.path) === '' ? sizeLabel(file) : `${folderOf(row.path)}/ · ${sizeLabel(file)}`}</span>
     </>
@@ -667,6 +670,9 @@ function TreeRow({ row, doors }: { readonly row: TreeRow; readonly doors: TreeDo
   );
 }
 const NO_FOLDERS: readonly string[] = [];
+// the tag a code file's row shows in place of its icon: the file's kind in capitals (never translated: they are the
+// languages' own names)
+const FILE_TAGS: Partial<Record<TreeRow['kind'], string>> = { html: 'HTML', css: 'CSS', js: 'JS' };
 
 // The Layers section (spec layers-tree): its title with the node count and the panel's controls, its search field and
 // the tree. It belongs to no view (layout.json): the sidebar shows it in the stack below whatever view shows, so the

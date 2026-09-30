@@ -2165,6 +2165,7 @@ None in Pager.
    - The tree is stored with the project in IndexedDB and restored after reload.
    - File > Save project and Open project include every file of the tree.
    - The product is new, so there is no earlier saved format to open. The saved format carries a schema version from the first save (project.json in the archive and the IndexedDB record alike), and every future migration is tested on the real loading path: Open project, and the autosaved project and its saved versions when the app loads them.
+5. **A file row said nothing of what the file is, nor that the editor writes it** (the audit's U-016, jornada02 pairing 4.2: an icon for every file, the generated page file like any other). Required: a code file's row shows its kind as a tag in place of the icon (HTML, CSS, JS), an image its thumbnail, any other file its icon; a file the editor writes (a page's file, the stylesheet, the interactions' script) shows a "generated" pill whose tooltip says why it cannot be deleted; a file's name is drawn in the mono type, a path.
 
 ## export-bem-css
 

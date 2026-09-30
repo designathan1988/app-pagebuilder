@@ -107,3 +107,17 @@ test('the paths the document generates are refused, and so is a folder that hold
   await control(page, MOVE_TO, { args: { path: 'note.txt', to: '' } }).click();
   await expect(control(page, MOVE_TARGET, { args: { path: 'note.txt', to: 'css' } }), 'a folder the document generates a file in is still a folder').toHaveCount(1);
 });
+
+// A file row says what the file is (spec explorer-file-system, Problems in Pager 5): a code file its kind as a tag, a
+// file the editor writes a "generated" pill that says why it cannot be deleted, every name in the mono type.
+test('a code file shows its kind as a tag, and a file the editor writes says it is generated', runs(NEW_FILE), async ({ page }) => {
+  await make(page, NEW_FILE, 'main.js');
+  const pageRow = page.locator('[data-region="explorer-file-rows"] .row[data-file="index.html"]');
+  await expect(pageRow.locator('.ftag')).toHaveText('HTML');
+  await expect(pageRow.locator('.row__gen')).toHaveText('generated');
+  await expect(pageRow.locator('.row__gen')).toHaveAttribute('title', /cannot be deleted/);
+  const own = page.locator('[data-region="explorer-file-rows"] .row[data-file="main.js"]');
+  await expect(own.locator('.ftag')).toHaveText('JS');
+  await expect(own.locator('.row__gen')).toHaveCount(0);
+  expect(await own.locator('.row__name').evaluate((el) => getComputedStyle(el).fontFamily)).toMatch(/Cascadia|Consolas|monospace/);
+});

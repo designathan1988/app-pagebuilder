@@ -639,3 +639,38 @@
   color: var(--color-text-subtle);
   font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-ui);
 }
+
+/* a code file's kind as its tag in place of the icon (the canonical .ftag): micro mono, on-surface ink on its colour */
+.ftag {
+  flex: none;
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-xs);
+  background: var(--color-text-muted);
+  color: var(--color-surface);
+  font: var(--fw-micro) var(--fs-micro) / var(--lh-micro) var(--font-mono);
+}
+.ftag--css { background: var(--color-accent); }
+.ftag--js { background: var(--color-warning); }
+
+/* a file the editor writes (the canonical .gen pill) */
+.row__gen {
+  flex: none;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-sunken);
+  color: var(--color-text-muted);
+  font: var(--fw-micro) var(--fs-micro) / var(--lh-micro) var(--font-ui);
+}
+
+/* a file's name is a path: mono (a page's name in Pages stays in the interface's type) */
+[data-region='explorer-file-rows'] .row__name {
+  font-family: var(--font-mono);
+}
+
+/* the file row's icon (or tag) is the door that opens the file: it hugs what it shows, the row's gap after it */
+.row__main > .row__open-icon.door {
+  min-width: 0;
+  height: auto;
+  padding: 0;
+}
