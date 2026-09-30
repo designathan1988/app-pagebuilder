@@ -6,7 +6,7 @@
     "doors": 998,
     "scenarios": 1333,
     "modules": 250,
-    "lines": 48177
+    "lines": 48207
   },
   "features": [
     {
@@ -3091,7 +3091,7 @@
     },
     {
       "path": "src/core/events/script.ts",
-      "lines": 100,
+      "lines": 130,
       "commands": [],
       "features": []
     },

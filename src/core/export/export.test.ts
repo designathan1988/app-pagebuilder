@@ -8,6 +8,7 @@ import { EMPTY_HISTORY } from '../history/history.ts';
 import { manualClock } from '../ports/clock.ts';
 import { anyCss } from '../ports/css.ts';
 import { sequentialIds } from '../ports/ids.ts';
+import { nodeMaker, paletteNode } from '../structure/insert.ts';
 import { noLayout } from '../ports/layout.ts';
 import { exportPage, exportProject, previewPage, siteFiles } from './export.ts';
 
@@ -52,6 +53,20 @@ describe('the export (specs export-zip, export-bem-css)', () => {
     const second = exportProject.run(contextOf(DOC, 9_000_000_000), {} as never);
     if (first.kind !== 'change' || second.kind !== 'change') throw new Error('the export did not run');
     expect(first.download?.bytes).toEqual(second.download?.bytes);
+  });
+});
+
+describe('the modal template runtime', () => {
+  it('keeps the authored dialog tree and runs the same native dialog script in export and Preview', () => {
+    const modal = paletteNode(nodeMaker(page([]), RULES, sequentialIds('modal'), (key) => key), 'template-modal');
+    const document = page([modal]);
+    expect(modal.tag).toBe('dialog');
+    expect(modal.children).toHaveLength(3);
+    const site = siteFiles(document, RULES);
+    expect(site.pages[0]?.html).toContain('src="js/interactions.js"');
+    expect(site.interactions).toContain('dialog.showModal()');
+    expect(site.interactions).toContain('dialog.close()');
+    expect(previewPage(document, RULES)).toContain('dialog.showModal()');
   });
 });
 

@@ -13,6 +13,13 @@ import { walk, type DocNode, type DocumentJson, type Interaction, type NodeId } 
 import { interactionsOf, needsAddress, needsAnimation } from './interactions.ts';
 import { playedClassName } from '../animation/animation.ts';
 
+// The saved template trees predate runtime metadata. Recognise their semantic structure so existing projects and
+// newly inserted templates behave alike without changing the model or its palette insertion contract.
+export const isModalTemplate = (node: DocNode): boolean =>
+  node.tag === 'dialog' && node.children.some((child) => child.tag === 'button');
+export const pageNeedsScript = (tree: DocNode): boolean =>
+  [...walk(tree)].some((node) => interactionsOf(node).length > 0 || isModalTemplate(node));
+
 // One selector per node, as the export writes it: the class the export gave the element (the export gives every element
 // an interaction addresses a class of its own), or the person's own `id` attribute.
 export type SelectorOf = (node: NodeId) => string;
@@ -77,6 +84,29 @@ export function interactionsJs(document: DocumentJson, selectorOf: SelectorOf): 
   const blocks: string[] = [];
   for (const page of document.pages) {
     for (const node of walk(page.tree)) {
+      if (isModalTemplate(node)) {
+        blocks.push(`each(${quoted(selectorOf(node.id as NodeId))}, function (dialog) {
+  var closer = dialog.querySelector(':scope > button');
+  if (!closer) return;
+  var opener = document.createElement('button');
+  opener.type = 'button';
+  opener.textContent = dialog.querySelector(':scope > h2')?.textContent?.trim() || 'Open dialog';
+  dialog.before(opener);
+  opener.addEventListener('click', function () {
+    if (dialog.open) dialog.close();
+    dialog.showModal();
+  });
+  closer.addEventListener('click', function (event) {
+    event.preventDefault();
+    dialog.close();
+  });
+  dialog.addEventListener('click', function (event) {
+    var bounds = dialog.getBoundingClientRect();
+    if (event.target === dialog && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) dialog.close();
+  });
+  if (dialog.open) { dialog.close(); dialog.showModal(); }
+});`);
+      }
       for (const interaction of interactionsOf(node)) {
         const wired = wiringJs(node, interaction, () => selectorOf(node.id as NodeId), selectorOf);
         if (wired !== null) blocks.push(wired);

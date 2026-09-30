@@ -7184,6 +7184,10 @@ One insert, one undo step (observed: one Ctrl+Z removed the whole Grid; Ctrl+Shi
 
 The template is inserted as one subtree; its inner containers are ordinary nodes afterwards.
 
+### Modal runtime in Preview and export
+
+The Modal template keeps its original `<dialog>` tree in the document. Preview and exported pages load the site script for a page containing it, even with no authored interactions. The script creates an opener beside the dialog using its heading text, opens it with `showModal()`, and closes it from the template's button, native Escape, or a backdrop click. A dialog whose `open` setting was enabled enters modal mode at load. The editing canvas and the saved document are not changed by these runtime actions.
+
 ### Zoom other than 100 %
 
 As for palette drag.
