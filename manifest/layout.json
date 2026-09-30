@@ -498,7 +498,8 @@
     "sideRow": "columns-2",
     "sideColumn": "rows-2",
     "quickPanel": "sliders-horizontal",
-    "grip": "grip-vertical"
+    "grip": "grip-vertical",
+    "rotate": "rotate-ccw"
   },
   "panels": {
     "explorer": {

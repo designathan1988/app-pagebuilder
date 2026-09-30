@@ -1025,6 +1025,7 @@
   "inspector.section.space": "Space",
   "inspector.section.text": "Text",
   "inspector.shadow.add": "Add a shadow",
+  "inspector.shadow.addTo": "Add a shadow to {property}",
   "inspector.shadow.blur": "Blur",
   "inspector.shadow.colour": "Shadow colour",
   "inspector.shadow.hide": "Hide",

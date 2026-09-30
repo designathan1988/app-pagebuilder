@@ -1925,6 +1925,10 @@
       "reader": "src/editor/canvas/quick-panel.tsx"
     },
     {
+      "field": "layout:glyphs.rotate",
+      "reader": "src/editor/canvas/chrome.tsx"
+    },
+    {
       "field": "layout:glyphs.expanded",
       "reader": "src/editor/doors/door.tsx"
     },

@@ -879,7 +879,9 @@ export function CanvasChrome() {
               data-chrome="handle"
               title={t(ROTATE_HANDLE.door.labelKey as MessageId)}
               style={{ left: spot.x, top: spot.y }}
-            />
+            >
+              {ROTATE_ZONES[i] === 'ne' ? <Icon name={manifest.layout.glyphs.rotate} size="sm" /> : null}
+            </div>
           ))
         : null}
       {selection.length > 1 ? (

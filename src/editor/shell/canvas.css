@@ -534,7 +534,8 @@
   left: var(--handle-x);
   width: var(--space-4);
   height: var(--space-4);
-  border-radius: var(--radius-pill);
+  /* the canonical handle (.ov-h): an 8 px square, barely rounded, ringed in the selection colour */
+  border-radius: var(--radius-xs);
   background: var(--color-canvas-handle);
   outline: 1.5px solid var(--color-canvas-selection);
   translate: -50% -50%;
@@ -547,19 +548,26 @@
   scale: 1.25;
 }
 
-/* the rotation handle (spec rotation-handle): a round handle outside the selection's top-right corner, at a fixed
-   screen distance, whose cursor says it turns the element; drawn over the selection's label, which a narrow element's
-   label reaches */
+/* the rotation zones (spec rotation-handle): a hit area outside each corner, at a fixed screen distance, whose cursor
+   says it turns the element; no circle is drawn (the audit's U-015: four white circles on every selection swamped a
+   small element) — the north-east zone alone shows the rotate glyph (the canonical .ov-rot); drawn over the selection's
+   label, which a narrow element's label reaches */
 .chrome__rotate {
   position: absolute;
   z-index: 6;
+  display: grid;
+  place-items: center;
   width: var(--space-6);
   height: var(--space-6);
-  border: 1.5px solid var(--color-canvas-selection);
   border-radius: var(--radius-pill);
-  background: var(--color-canvas-handle);
+  color: var(--color-canvas-selection);
   cursor: grab;
   pointer-events: auto;
+}
+
+/* the glyph is drawn, never pressed: the press is the zone's */
+.chrome__rotate > .icon {
+  pointer-events: none;
 }
 
 .chrome__rotate:active {

@@ -97,7 +97,8 @@ function AddRow({ entry, door, property, empty, ready, onDone }: { readonly entr
           data-door={entry.ref}
           data-args={JSON.stringify(args)}
           aria-disabled={ready ? undefined : true}
-          aria-label={door.label}
+          // each editor's + names its property: the box's and the text's shared "Add a shadow"
+          aria-label={t('inspector.shadow.addTo', { property: propertyWord(t, property) })}
           title={door.title}
           onClick={() => {
             if (ready && run(store, entry, args).status === 'done') onDone();

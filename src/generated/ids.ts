@@ -3493,6 +3493,7 @@ export const MESSAGE_IDS = [
   "inspector.section.space",
   "inspector.section.text",
   "inspector.shadow.add",
+  "inspector.shadow.addTo",
   "inspector.shadow.blur",
   "inspector.shadow.colour",
   "inspector.shadow.hide",

@@ -6,7 +6,7 @@
     "doors": 1002,
     "scenarios": 1340,
     "modules": 259,
-    "lines": 49802
+    "lines": 49806
   },
   "features": [
     {
@@ -4008,7 +4008,7 @@
     },
     {
       "path": "src/editor/canvas/chrome.tsx",
-      "lines": 935,
+      "lines": 937,
       "commands": [],
       "features": []
     },
@@ -4796,7 +4796,7 @@
     },
     {
       "path": "src/editor/shell/shadow.tsx",
-      "lines": 229,
+      "lines": 230,
       "commands": [],
       "features": []
     },
@@ -5103,7 +5103,7 @@
     },
     {
       "path": "src/generated/ids.ts",
-      "lines": 4589,
+      "lines": 4590,
       "commands": [],
       "features": []
     },

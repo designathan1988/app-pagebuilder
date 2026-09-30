@@ -632,7 +632,7 @@ test('an empty shadow editor is one row, and Remove every shadow comes with the 
   const RESET_SHADOWS = 'style.setShadows#inspector-box-shadow-shadow-reset';
   await openStyleControl(page, ADD_SHADOW);
   const add = control(page, ADD_SHADOW);
-  await expect(add).toHaveAttribute('aria-label', 'Add a shadow');
+  await expect(add).toHaveAttribute('aria-label', 'Add a shadow to Box shadow');
   const head = add.locator('xpath=ancestor::div[contains(@class,"field-row")][1]');
   await expect(head).toContainText('Box shadow');
   await expect(head).toContainText('No shadow yet.');

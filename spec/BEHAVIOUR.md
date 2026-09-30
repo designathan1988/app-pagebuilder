@@ -6123,7 +6123,9 @@ None in Pager.
 
 - **One rotation zone outside each of the four corners** (not one handle at the north-east): each is the same door
   (`style.set#handle-rotate`), drawn `--space-4` outside its corner, `--space-6` square, round, with the grabbing
-  cursor, and held inside the canvas as the old single handle was — held *by its turned place*: the zone is round, so
+  cursor — a hit area with no circle drawn, the north-east one alone showing the rotate glyph (layout.json's `glyphs.rotate`,
+  in the selection colour; the audit's U-015: four white circles swamped a small element) — and held inside the canvas as the
+  old single handle was — held *by its turned place*: the zone is round, so
   the element's own rotation moves it along its circle rather than turning it in place, and the clamp applies after
   that move (a wide turned element's corner can lie beyond the canvas, where a CSS turn could not hold it in).
 - **The label carries the angle while the element holds a rotation** (`canvas.rotate.angle` = `{angle}°`,
@@ -6488,7 +6490,7 @@ Not affected (the pad maps screen pixels to CSS pixels regardless of canvas zoom
   property's own label), once, before the editor's first control, so two editors one after the other read as two.
 - **The controls of a layer are drawn only while the value holds one:** with no shadow the editor shows Add a shadow,
   the Text shadow's CSS field and "No shadow yet." — never a Hide or a Remove for a layer that does not exist.
-5. **An empty shadow editor cost three rows** (the audit's S-025): Add a shadow on a row of its own, "No shadow yet." in the label column, and a disabled Remove every shadow. Required: the editor's head is one row — the property's name, "No shadow yet." while it holds no shadow, and Add a shadow as the small + at the row's end (its name and tooltip "Add a shadow"); the rows of the layers follow it; Remove every shadow is drawn only while there is a shadow to remove, as a layer's own controls are.
+5. **An empty shadow editor cost three rows** (the audit's S-025): Add a shadow on a row of its own, "No shadow yet." in the label column, and a disabled Remove every shadow. Required: the editor's head is one row — the property's name, "No shadow yet." while it holds no shadow, and Add a shadow as the small + at the row's end (named after its property: "Add a shadow to Box shadow", "… to Text shadow"); the rows of the layers follow it; Remove every shadow is drawn only while there is a shadow to remove, as a layer's own controls are.
 
 ## shadow-handles
 
