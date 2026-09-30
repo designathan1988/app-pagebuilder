@@ -101,6 +101,9 @@ test('a locked element: its style fields are disabled with the lock as their rea
   await open(page);
   await prepared(page, 'n-actions');
   await lock(page, 'n-actions');
+  // the tab says it once, at its top, in the lock's words (Problems in Pager 5)
+  const notice = page.locator('.inspector-notice--lock');
+  await expect(notice).toHaveText('Unlock Actions before changing it.');
   for (const ref of [WIDTH, DISPLAY, BORDER, SHADOW_ADD]) await refusedBeforeTyping(page, ref, 'Actions');
   // the background colour's swatch, which opens the colour picker, is disabled with the same reason: no picker opens
   const swatch = control(page, SWATCH, { args: { property: 'background-color' } }).first();
@@ -114,6 +117,7 @@ test('a locked element: its style fields are disabled with the lock as their rea
   await control(page, ROW, { args: { target: 'n-actions' } }).click();
   // unlocked: every one takes input again, the picker opens, and Width writes
   await unlock(page, 'n-actions');
+  await expect(notice).toHaveCount(0);
   for (const ref of [WIDTH, DISPLAY, BORDER, SHADOW_ADD]) await usableAgain(page, ref);
   await expect(swatch).not.toHaveAttribute('aria-disabled', 'true');
   await swatch.click();
@@ -138,6 +142,7 @@ test('inside a locked section: the fields of the section and of a paragraph in i
   // Intro, inside Hero: its reason names the lock above it
   await control(page, ROW, { args: { target: 'n-intro' } }).click();
   const c = control(page, FONT_SIZE).first();
+  await expect(page.locator('.inspector-notice--lock')).toHaveText('Intro is locked by Hero; unlock Hero first.');
   await expect(c).toHaveAttribute('title', /Intro is locked by Hero; unlock Hero first\.$/);
   await expect((await operated(c)).target).toBeDisabled();
   // unlocked: usable again

@@ -36,7 +36,8 @@ import { FieldOrigin } from './field-origin.tsx';
 import './settings.css';
 import { inspectorTab } from '../workspace/layout.ts';
 import { isPanelOpen, panelName } from '../workspace/panels.ts';
-import { useLocale, useT } from '../text.ts';
+import { messageText, useLocale, useT } from '../text.ts';
+import { firstLockRefusal } from '../../core/nodes/flags.ts';
 import { activeBreakpoint } from '../view/breakpoints.ts';
 import { activeState } from '../view/style-state.ts';
 import { keepAfterGesture, useMixed, usePageValues, useSelectionContext, useSelectionContexts } from './field.tsx';
@@ -558,14 +559,15 @@ function AlignmentMatrix({ entry, label }: { readonly entry: DoorEntry; readonly
     const first = cells[0];
     if (first !== undefined && !cells.some((cell) => cell.tabIndex === 0)) first.tabIndex = 0;
   });
+  // the plate and its Mixed in one cell of the row: Mixed stays beside the plate, never on a line of its own (S-032)
   return (
-    <>
+    <span className="field-choice field-choice--plate">
       {/* three columns: the arrows move across and down the grid (keymap.ts, data-columns) */}
       <span ref={group} className={`matrix${mixed ? ' is-mixed' : ''}`} role="group" aria-label={label} data-mixed={mixed ? '' : undefined} data-columns={MATRIX_PLACES.length}>
         {MATRIX_PLACES.flatMap((y) => MATRIX_PLACES.map((x) => <MatrixCell key={`${x}-${y}`} entry={entry} x={x} y={y} mixed={mixed} />))}
       </span>
       {mixed ? <span className="field-row__mixed">{t('inspector.mixedValue')}</span> : null}
-    </>
+    </span>
   );
 }
 
@@ -623,6 +625,23 @@ function ComponentNotice() {
   );
 }
 
+// A locked selection's notice (the audit's S-030: 110 of 113 controls were disabled with nothing in the panel saying
+// why): the lock's own refusal — the element to unlock, the lock above it named (spec lock-element) — said once at the
+// top of the tab, before anything is tried.
+function LockNotice() {
+  const locale = useLocale();
+  // the store's own values (a fresh refusal per read would never compare equal)
+  const document = useEditorState((s) => s.document);
+  const selection = useEditorState((s) => s.selection);
+  const refusal = useMemo(() => firstLockRefusal(document, selection, 'status.locked.edit'), [document, selection]);
+  if (refusal === null) return null;
+  return (
+    <p className="inspector-notice inspector-notice--lock" role="note">
+      {messageText(locale, refusal)}
+    </p>
+  );
+}
+
 // The Style tab: the selector bar, then its region, as tall as what it shows inside the scrolling column.
 function StyleTab() {
   const t = useT();
@@ -660,6 +679,7 @@ function StyleTab() {
           </div>
         <div className="inspector-scroll">
         <div className="inspector-body">
+          <LockNotice />
           <ComponentNotice />
           <div className="inspector-sections" data-region="inspector-sections">
             <StyleSections />

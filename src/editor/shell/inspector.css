@@ -1088,7 +1088,7 @@
   padding: 0 var(--space-2);
 }
 
-.field-choice { position: relative; display: inline-flex; justify-self: start; min-width: 0; }
+.field-choice { position: relative; display: inline-flex; align-items: center; gap: var(--space-3); justify-self: start; min-width: 0; }
 [data-region='inspector-style'] .field-choice .segmented--values {
   border: 0;
   gap: 0;

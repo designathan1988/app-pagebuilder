@@ -69,14 +69,20 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('two titles aligned differently: Text align says Mixed with no button pressed, and Reset takes both away in one step', runs(OPEN, ROW, ALIGN, ADD, RESET), async ({ page }) => {
-  const group = page.locator(`[data-door="${ALIGN}"]`).first().locator('xpath=..');
-  await expect(group).toHaveAttribute('data-mixed', '');
-  await expect(page.locator(`[data-door="${ALIGN}"][aria-pressed="true"]`)).toHaveCount(0);
-  // the Mixed word stands beside the field's control, in the row itself (the row holds the control's cell and the marker)
-  await expect(group.locator('xpath=../..').locator('.field-row__mixed')).toHaveText('Mixed');
+  // Text align's six buttons and the word Mixed do not fit the value column together: the field is the keyword menu,
+  // its button saying Mixed inside the field and no item of its list checked (spec multi-select-edit, Problems in
+  // Pager 4; the audit's S-032: Mixed dropped to a line of its own under the label)
+  const opener = page.locator(`[data-door="${ALIGN}"][aria-haspopup="menu"]`);
+  await expect(opener).toHaveText('Mixed');
+  const row = opener.locator('xpath=ancestor::div[contains(@class,"field-row")][1]');
+  expect((await row.boundingBox())?.height ?? 0).toBeLessThan(32);
+  await opener.click();
+  await expect(page.locator(`[role="menuitemradio"][data-door="${ALIGN}"]`)).not.toHaveCount(0);
+  await expect(page.locator(`[role="menuitemradio"][data-door="${ALIGN}"][aria-checked="true"]`)).toHaveCount(0);
+  await page.keyboard.press('Escape');
   const before = (await read(page)).undoSteps;
   // the reset floats beside the active field: hovering the field draws it
-  const choice = group.locator('xpath=..');
+  const choice = opener.locator('xpath=..');
   await choice.hover();
   await choice.locator(`[data-door="${RESET}"]`).click();
   await expect.poll(() => alignOf(page, 'n-card-a-title')).toBeUndefined();

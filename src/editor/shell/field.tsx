@@ -897,7 +897,8 @@ export function KeywordButtons({ entry, door, property, values, icons, label }: 
   // whether the buttons' words fit the room the row gives them: an unseen copy of the buttons is measured against it
   const room = useRef<HTMLSpanElement>(null);
   const measure = useRef<HTMLSpanElement>(null);
-  const worded = values.some((value) => icons[value] === undefined);
+  // (Mixed is said beside the buttons, so it is measured with them)
+  const worded = mixed || values.some((value) => icons[value] === undefined);
   const fits = useFits(room, measure, worded);
   const menuButton = useRef<HTMLButtonElement>(null);
   const menuList = useRef<HTMLDivElement>(null);
@@ -906,9 +907,10 @@ export function KeywordButtons({ entry, door, property, values, icons, label }: 
     <span ref={measure} className="segmented segmented--values field-choice__measure" aria-hidden="true">
       {values.map((value) => (
         <span key={value} className="door door--segment">
-          <span className="door__label">{value}</span>
+          {icons[value] !== undefined ? <Icon name={icons[value]} size="sm" /> : <span className="door__label">{value}</span>}
         </span>
       ))}
+      {mixed ? <span className="field-row__mixed">{t('inspector.mixedValue')}</span> : null}
     </span>
   ) : null;
   if (!fits) {
@@ -958,6 +960,7 @@ export function KeywordButtons({ entry, door, property, values, icons, label }: 
                   }}
                 >
                   <span className="menu__icon">{shown === value ? <Icon name={GLYPHS.checked} size="sm" /> : null}</span>
+                  {icons[value] !== undefined ? <Icon name={icons[value]} size="sm" /> : null}
                   <span className="menu__label">{value}</span>
                 </button>
               ))}
@@ -1000,10 +1003,11 @@ export function KeywordButtons({ entry, door, property, values, icons, label }: 
           );
         })}
       </span>
+      {/* several elements with different values: said as every field says it (A3.35), beside the buttons, in the
+          field's own cell (the audit's S-032: it dropped to a line of its own under the label) */}
+      {mixed ? <span className="field-row__mixed">{t('inspector.mixedValue')}</span> : null}
       {RESET !== undefined && anyStored ? <span className="field__actions"><DoorControl entry={RESET} args={{ property }} ready={available} label={t('field.reset.of', { property: propertyWord(t, property) })} /></span> : null}
       </span>
-      {/* several elements with different values: said as every field says it (A3.35) */}
-      {mixed ? <span className="field-row__mixed">{t('inspector.mixedValue')}</span> : null}
     </div>
   );
 }
