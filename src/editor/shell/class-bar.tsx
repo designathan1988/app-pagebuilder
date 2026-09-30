@@ -147,7 +147,7 @@ export function SaveAsClass() {
       <button
         ref={trigger}
         type="button"
-        className={`door door--icon-button${door.available ? '' : ' is-unavailable'}`}
+        className={`door door--icon-button door--sm${door.available ? '' : ' is-unavailable'}`}
         data-door={SAVE.ref}
         data-args="{}"
         aria-haspopup="dialog"
@@ -157,7 +157,7 @@ export function SaveAsClass() {
         aria-disabled={door.available ? undefined : true}
         onClick={() => (door.available ? setOpen((was) => !was) : undefined)}
       >
-        {SAVE.door.icon !== null ? <Icon name={SAVE.door.icon} size="md" /> : null}
+        {SAVE.door.icon !== null ? <Icon name={SAVE.door.icon} size="sm" /> : null}
       </button>
       {open ? (
         <Popover anchor={trigger} className="class-popup__panel" label={door.label}>

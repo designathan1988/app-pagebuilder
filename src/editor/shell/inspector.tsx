@@ -446,7 +446,8 @@ function AddProperty() {
             data-key-context="menu"
             data-autofocus
           />
-          {hidden.length === 0 ? <p className="add-property__none">{t('inspector.addProperty.none')}</p> : null}
+          {/* nothing hidden (All properties), or hidden properties none of which the filter matches: two different things */}
+          {hidden.length === 0 ? <p className="add-property__none">{hiddenTargets.size === 0 || mode === 'all' ? t('inspector.addProperty.none') : t('inspector.addProperty.noMatch', { query: query.trim() })}</p> : null}
           <div id={listId} role="listbox" aria-label={door.label} className="add-property__list">
             {hidden.map((target, i) => (
               <div key={target} id={`${listId}-${i}`} role="option" aria-selected="false">

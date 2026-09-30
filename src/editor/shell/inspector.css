@@ -340,10 +340,14 @@
 .selector-bar__state[data-edited-state='variant'] .state-picker__key { color: inherit; }
 .active-breakpoint[data-variant='true'] { color: var(--color-origin-breakpoint); font-weight: var(--weight-semibold); }
 
+/* the breakpoint being edited, read-only (the canonical .ro): as tall as the State picker beside it */
 .active-breakpoint {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
+  height: var(--size-control-lg);
+  padding: 0 var(--space-3);
+  white-space: nowrap;
   color: var(--color-text-muted);
   font-size: var(--fs-caption);
   line-height: var(--lh-caption);
@@ -399,13 +403,11 @@
   right: 0;
   top: 0;
 }
+/* the + is drawn at rest, at the search line's end (the audit's S-004: it was invisible until hovered, yet took the Tab) */
 .inspector-searchline > .add-property > .door {
   width: var(--size-control);
   height: var(--size-control);
-  opacity: 0;
 }
-.inspector-searchline:hover > .add-property > .door,
-.inspector-searchline:focus-within > .add-property > .door { opacity: 1; }
 
 .inspector-body {
   display: flex;

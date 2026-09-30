@@ -877,6 +877,7 @@
   "inspector.addProperty": "Add a property",
   "inspector.addProperty.filter": "Filter the properties",
   "inspector.addProperty.none": "Every property is shown.",
+  "inspector.addProperty.noMatch": "No hidden property matches “{query}”.",
   "inspector.affects.one": "{selector} affects 1 element",
   "inspector.affects.other": "{selector} affects {count} elements",
   "inspector.alignment.cell": "{y} {x}",

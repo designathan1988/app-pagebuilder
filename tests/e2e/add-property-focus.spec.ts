@@ -122,3 +122,28 @@ test('in the filter ArrowDown marks the next property and Enter chooses it; its 
   await page.keyboard.press('Enter');
   await expect.poll(() => introStyle(page, second)).toBe('75%');
 });
+
+// The + is drawn at rest, and the list's two empty states say different things (spec inspector-add-property, Problems in
+// Pager 5; the audit's S-004): a filter that matches no hidden property names what was typed; All properties hides none.
+test('+ is drawn at rest; the list says a filter matched nothing apart from nothing being hidden', runs(OPEN, ROW, ESSENTIALS, ADD, 'inspector.setMode#inspector-mode-all'), async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await openEditor(page);
+  const chooser = page.waitForEvent('filechooser');
+  await runDoor(page, OPEN);
+  await (await chooser).setFiles({ name: 'aurora.json', mimeType: 'application/json', buffer: fs.readFileSync(FIXTURE) });
+  await control(page, ROW, { args: { target: 'n-intro' } }).click();
+  await runDoor(page, ESSENTIALS);
+  const plus = page.locator(`.add-property > [data-door="${ADD}"]`);
+  await page.mouse.move(0, 0);
+  expect(await plus.evaluate((el) => Number(getComputedStyle(el).opacity))).toBe(1);
+  await expect(plus).toBeVisible();
+
+  await plus.click();
+  await page.keyboard.type('zzz');
+  await expect(page.locator('.add-property__none')).toHaveText('No hidden property matches “zzz”.');
+  await page.keyboard.press('Escape');
+
+  await runDoor(page, 'inspector.setMode#inspector-mode-all');
+  await plus.click();
+  await expect(page.locator('.add-property__none')).toHaveText('Every property is shown.');
+});

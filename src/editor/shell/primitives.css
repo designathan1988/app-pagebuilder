@@ -41,6 +41,12 @@
   padding: 0;
 }
 
+/* the small icon button (the canonical .ib.sm): the 24 px target, an sm glyph — beside the 26 px chips of a row */
+.door--icon-button.door--sm {
+  width: var(--size-target-min);
+  height: var(--size-target-min);
+}
+
 .door--icon-button.is-current {
   background: var(--color-accent-soft);
   color: var(--color-accent);
