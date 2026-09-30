@@ -538,7 +538,6 @@
 }
 
 .inspector-section:has(.inspector-section__header[aria-expanded='false']) { padding-bottom: 0; }
-.inspector-section__count { display: none; }
 
 .inspector-section__header {
   align-self: stretch;

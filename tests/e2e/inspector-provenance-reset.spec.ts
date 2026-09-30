@@ -19,7 +19,7 @@ async function type(page: Page, ref: string, text: string): Promise<void> {
   await page.keyboard.type(text);
   await page.keyboard.press('Enter');
 }
-// the count the Text section's header shows, or null while it shows none
+// the count the Text section's header says in its name (drawn nowhere: the owner's decision D-3), or null while it says none
 const textCount = (page: Page) =>
   page
     .locator(`[data-door^="${SECTION}#"][data-args*='"section":"text"'] .inspector-section__count`)
@@ -36,6 +36,11 @@ test('the Text section counts the values set in it, and a reset takes one off', 
   await type(page, COLOR, '#ff0000');
   await type(page, FONT_SIZE, '24px');
   await expect.poll(() => textCount(page)).toBe('2 set');
+  // said in the header's name, drawn nowhere
+  const header = page.locator(`[data-door^="${SECTION}#"][data-args*='"section":"text"']`).first();
+  await expect(header).toHaveAccessibleName(/2 set/);
+  const drawn = await header.locator('.inspector-section__count').boundingBox();
+  expect((drawn?.width ?? 0) <= 1 && (drawn?.height ?? 0) <= 1, 'the count is not drawn').toBe(true);
   // the field's reset floats beside the active field: hovering the field it belongs to draws it (a keyboard tab into the
   // field draws it too, through :focus-within)
   await control(page, COLOR).first().hover();

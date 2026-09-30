@@ -6,7 +6,7 @@
     "doors": 1000,
     "scenarios": 1338,
     "modules": 259,
-    "lines": 49477
+    "lines": 49479
   },
   "features": [
     {
@@ -4741,7 +4741,7 @@
     },
     {
       "path": "src/editor/shell/inspector.tsx",
-      "lines": 750,
+      "lines": 752,
       "commands": [],
       "features": []
     },
