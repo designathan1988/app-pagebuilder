@@ -287,9 +287,9 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
     if (gesture && command.history.undoable && command.history.transaction === 'per-dispatch') throw new Error(`${id} records one transaction per dispatch: it cannot run inside a gesture`);
     if (!isBuilt(entry)) return { status: 'not-available-yet' };
     const predicate = predicates[command.availability.predicate as keyof PredicateTable<Ui>];
-    if (predicate && !predicate.test(state, layeredNow())) {
+    if (predicate && !predicate.test(state, layeredNow(), args)) {
       const declared = message((command.availability.refusalKey ?? 'common.notAvailableYet') as Message['key']);
-      const refusal = predicate.refusal?.(state, layeredNow()) ?? declared;
+      const refusal = predicate.refusal?.(state, layeredNow(), args) ?? declared;
       if (refusal.key !== declared.key && !(command.refusals as readonly string[]).includes(refusal.key)) throw new Error(`${id}: its predicate refuses with ${refusal.key}, which the manifest does not declare for it`);
       publish(commit({ ...state, message: refusal, refused: true }, id));
       return { status: 'refused', message: refusal };
@@ -380,7 +380,7 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
     if (!command) throw new Error(`unknown command ${id}`);
     if (!isBuilt(entry)) return message('common.notAvailableYet');
     const predicate = predicates[command.availability.predicate as keyof PredicateTable<Ui>];
-    if (predicate && !predicate.test(state, layeredNow())) return predicate.refusal?.(state, layeredNow()) ?? message((command.availability.refusalKey ?? 'common.notAvailableYet') as Message['key']);
+    if (predicate && !predicate.test(state, layeredNow(), args)) return predicate.refusal?.(state, layeredNow(), args) ?? message((command.availability.refusalKey ?? 'common.notAvailableYet') as Message['key']);
     const outcome = entry.run(handlerContext(), args);
     return outcome.kind === 'refused' ? outcome.message : null;
   };

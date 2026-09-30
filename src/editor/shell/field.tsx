@@ -963,6 +963,45 @@ export function useSelectionContext(): ElementContext | null {
   return { box, own: keyed(own, CONTEXT.own), parent: parent === null || above === null ? null : keyed(above, CONTEXT.parent) };
 }
 
+// The layout context of every selected element (the inspector's filter for a selection of several): a field whose
+// context predicate holds for one element and not for another does not apply to the selection (the audit's S-011:
+// two paragraphs showed every flex, grid and column field). Measured on the page in one frame loop, as usePageValues.
+export function useSelectionContexts(): readonly ElementContext[] | null {
+  const store = useStore();
+  const ids = useEditorState((s) => s.selection.join(' '));
+  const [read, setRead] = useState<{ readonly ids: string; readonly contexts: readonly ElementContext[] } | null>(null);
+  useEffect(() => {
+    const nodes = ids === '' ? [] : (ids.split(' ') as NodeId[]);
+    if (nodes.length < 2) return;
+    let request = 0;
+    let last: string | null = null;
+    const camel = (property: string): string => property.replace(/-([a-z])/g, (_, c: string) => c.toUpperCase());
+    const keyed = (values: Readonly<Record<string, string>>, names: readonly string[]): Readonly<Record<string, string | undefined>> =>
+      Object.fromEntries(names.map((property) => [camel(property), values[property]]));
+    const measure = () => {
+      const document = store.getState().document;
+      const contexts: ElementContext[] = [];
+      for (const id of nodes) {
+        const found = locate(document, id);
+        const own = computedValues(id, CONTEXT.own, lineStyles(MODEL_RULES));
+        const parentId = found?.parent?.id ?? null;
+        const above = parentId === null ? null : computedValues(parentId, CONTEXT.parent, lineStyles(MODEL_RULES));
+        const box = found === null ? false : elementPredicate('hasBox', found.node, MODEL_RULES) === true;
+        if (own !== null) contexts.push({ box, own: keyed(own, CONTEXT.own), parent: above === null ? null : keyed(above, CONTEXT.parent) });
+      }
+      const text = JSON.stringify(contexts);
+      if (text !== last) {
+        last = text;
+        setRead({ ids, contexts });
+      }
+      request = requestAnimationFrame(measure);
+    };
+    request = requestAnimationFrame(measure);
+    return () => cancelAnimationFrame(request);
+  }, [ids, store]);
+  return read !== null && read.ids === ids ? read.contexts : null;
+}
+
 // Runs what a field keeps as it loses the focus once no pointer gesture is open (afterGesture of the pointer owner): a
 // command recorded once per dispatch never joins a gesture.
 export function keepAfterGesture(run: () => void): void {

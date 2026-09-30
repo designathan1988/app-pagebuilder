@@ -37,7 +37,7 @@ import { isPanelOpen, panelName } from '../workspace/panels.ts';
 import { useLocale, useT } from '../text.ts';
 import { activeBreakpoint } from '../view/breakpoints.ts';
 import { activeState } from '../view/style-state.ts';
-import { keepAfterGesture, useMixed, usePageValues, useSelectionContext } from './field.tsx';
+import { keepAfterGesture, useMixed, usePageValues, useSelectionContext, useSelectionContexts } from './field.tsx';
 import { shownForContext, shownForKinds, type ElementContext } from '../../core/style/applies.ts';
 import { ANCHOR_CONTROL, AnchorControl, BoxModel, Field, GridItemField, GridTracks, PairShorthand, SPACING_LINK, TARGETS, TRACK_DOORS, fieldLabelKey, sectionOf, targetOf, useSelectionKinds } from './inspector-controls.tsx';
 import { Slots } from './slots.tsx';
@@ -130,6 +130,9 @@ function StyleSections() {
   const revealed = useEditorState((s) => s.ui.revealed?.field ?? null);
   const kinds = useSelectionKinds();
   const context = useSelectionContext();
+  // several selected: the context of each, so a field shows only where it applies to them all (the audit's S-011)
+  const several = useSelectionContexts();
+  const contexts = several ?? (context === null ? null : [context]);
   // Find a property's query: every section keeps only its matching fields, in either mode (spec
   // inspector-property-search)
   const query = useEditorState((s) => inspectorSearchOf(s.ui));
@@ -140,7 +143,7 @@ function StyleSections() {
   const heldText = useEditorState((s) => [...authoredProperties(s)].sort().join(' '));
   const held = useMemo(() => new Set(heldText.split(' ').filter((property) => property !== '')), [heldText]);
   const shownDoors = (section: string) =>
-    (SECTION_DOORS.get(section) ?? []).filter((d) => shownForSelection(d, kinds, context) && (searching ? searchMatches(query, t(fieldLabelKey(d)), cssNamesOf(d)) : mode === 'all' || shownInEssentials(d, held, revealed)));
+    (SECTION_DOORS.get(section) ?? []).filter((d) => shownForSelection(d, kinds, contexts) && (searching ? searchMatches(query, t(fieldLabelKey(d)), cssNamesOf(d)) : mode === 'all' || shownInEssentials(d, held, revealed)));
   if (searching && STYLE_SECTIONS.every((s) => shownDoors(s.id).length === 0)) return <p className="inspector-search__none">{t('inspector.searchNoMatch', { query: query.trim() })}</p>;
   return (
     <>
@@ -325,13 +328,15 @@ function shownInEssentials(entry: DoorEntry, held: ReadonlySet<string>, revealed
 // Whether a door of the Style tab is drawn for the selection (spec props-element-specific): a field of a kind of element
 // (a table's, a list's, a form control's, a medium's) only while every selected element is of that kind, and a field of
 // a layout the element is in (a flex container's, an item's) only while the page computes that layout for it.
-function shownForSelection(entry: DoorEntry, kinds: readonly string[], context: ElementContext | null): boolean {
+function shownForSelection(entry: DoorEntry, kinds: readonly string[], contexts: readonly ElementContext[] | null): boolean {
   const target = editedTarget(entry);
   // a field names its property, composite or recipe; an editor control (the alignment matrix) is named by the manifest
   // entries whose doors list it, so the same rules read it
   const properties = target !== null ? editedProperties(target) : editedPropertiesByDoor(entry.ref);
   if (properties === null) return true;
-  return shownForKinds(properties, kinds, MODEL_RULES) && shownForContext(properties, context, MODEL_RULES);
+  if (!shownForKinds(properties, kinds, MODEL_RULES)) return false;
+  // no measured context yet: the context predicates do not hide anything (as for one element being measured)
+  return contexts === null || contexts.every((context) => shownForContext(properties, context, MODEL_RULES));
 }
 
 
@@ -345,6 +350,8 @@ const ADD_PROPERTY_BACKDROP = doorSlots('overlay')[0];
 function AddProperty() {
   const t = useT();
   const context = useSelectionContext();
+  const several = useSelectionContexts();
+  const contexts = several ?? (context === null ? null : [context]);
   // the number of dismissals when the list was opened, or null while it is closed
   const dismissals = useEditorState((s) => s.ui.overlays.dismissals);
   const [openedAt, setOpenedAt] = useState<number | null>(null);
@@ -386,7 +393,7 @@ function AddProperty() {
   // (spec add-property-focus reads the list's first two entries, font-style and font-stretch, as the catalogue has them)
   const hiddenTargets = new Set(
     SECTIONS.flatMap((s) => SECTION_DOORS.get(s.id) ?? [])
-      .filter((d) => shownForSelection(d, kinds, context) && !shownInEssentials(d, held, revealed))
+      .filter((d) => shownForSelection(d, kinds, contexts) && !shownInEssentials(d, held, revealed))
       .flatMap((d) => editedTarget(d) ?? []),
   );
   const hidden =

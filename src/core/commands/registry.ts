@@ -146,15 +146,17 @@ export function isRegistered<Id extends FeatureId>(entry: FeatureEntry<Id>): ent
 // It reads the state and the model's rules (what an element type may hold: a container, a leaf).
 export interface RegisteredPredicate<Ui> {
   readonly id: PredicateId;
-  test(state: StoreState<Ui>, rules: ModelRules): boolean;
-  refusal?(state: StoreState<Ui>, rules: ModelRules): Message;
+  // `args`: the arguments the command runs with, for a predicate that reads the element a door names (a Layers row's
+  // eye acts on its own row, whatever is selected)
+  test(state: StoreState<Ui>, rules: ModelRules, args?: unknown): boolean;
+  refusal?(state: StoreState<Ui>, rules: ModelRules, args?: unknown): Message;
 }
 
 // manifest:check reads `registerPredicate('<id>'` to mark the id registered in references.json.
 export function registerPredicate<Ui = never>(
   id: PredicateId,
-  test: (state: StoreState<Ui>, rules: ModelRules) => boolean,
-  refusal?: (state: StoreState<Ui>, rules: ModelRules) => Message,
+  test: (state: StoreState<Ui>, rules: ModelRules, args?: unknown) => boolean,
+  refusal?: (state: StoreState<Ui>, rules: ModelRules, args?: unknown) => Message,
 ): RegisteredPredicate<Ui> {
   return refusal === undefined ? { id, test } : { id, test, refusal };
 }

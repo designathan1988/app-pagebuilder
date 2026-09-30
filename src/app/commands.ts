@@ -39,6 +39,7 @@ import {
   addCommand,
   clearSelectionCommand,
   hasSelection,
+  targetOrSelection,
   marqueeCommand,
   selectAllInContainerCommand,
   selectCommand,
@@ -385,4 +386,4 @@ export const COMMANDS = {
 } as const satisfies CommandTable<EditorUi>;
 
 // The availability predicates code has registered; a built command's predicate must be here (createStore checks it).
-export const PREDICATES = { always, canUndo, canRedo, hasSelection, singleSelection, singleTextSelection, canUnwrap, canNestIntoPrevious, cellSelected, inTable, hasNaturalChild, flexOrGridContainer, instanceSelected, positionedSelection, distributableSelection, editableSelection, organizableSelection, divideableSelection } as const satisfies PredicateTable<EditorUi>;
+export const PREDICATES = { always, canUndo, canRedo, hasSelection, targetOrSelection, singleSelection, singleTextSelection, canUnwrap, canNestIntoPrevious, cellSelected, inTable, hasNaturalChild, flexOrGridContainer, instanceSelected, positionedSelection, distributableSelection, editableSelection, organizableSelection, divideableSelection } as const satisfies PredicateTable<EditorUi>;

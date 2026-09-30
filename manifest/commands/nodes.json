@@ -268,7 +268,7 @@
         }
       },
       "availability": {
-        "predicate": "hasSelection",
+        "predicate": "targetOrSelection",
         "refusalKey": "refusal.nothingSelected"
       },
       "refusals": [
@@ -388,7 +388,7 @@
         }
       },
       "availability": {
-        "predicate": "hasSelection",
+        "predicate": "targetOrSelection",
         "refusalKey": "refusal.nothingSelected"
       },
       "refusals": [

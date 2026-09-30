@@ -116,3 +116,13 @@ test('Reset this value is drawn when only another selected element holds the val
   await reset();
   await expect.poll(() => alignOf(page, 'n-card-b-title')).toBeUndefined();
 });
+
+// Two titles selected (both in normal flow, neither a flex or grid container nor a flex or grid item): no flex, grid,
+// item or column field is drawn — a field shows only where it applies to every selected element (the audit's S-011:
+// Layout grew from 8 to 39 rows for two paragraphs).
+test('two titles show no flex, grid or item field', runs(OPEN, ROW, ADD), async ({ page }) => {
+  await expect.poll(async () => (await page.evaluate(() => (window as unknown as { __builderTestPort: { selection: () => string[] } }).__builderTestPort.selection())).length).toBe(2);
+  for (const door of ['style.set#inspector-flex-direction', 'style.set#inspector-flex-grow', 'style.set#inspector-grid-template-columns', 'style.set#inspector-justify-self']) {
+    await expect.poll(() => page.locator(`[data-door="${door}"]`).count(), door).toBe(0);
+  }
+});

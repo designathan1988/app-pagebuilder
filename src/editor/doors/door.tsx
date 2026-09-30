@@ -73,10 +73,12 @@ export function useDoor(entry: DoorEntry, args: Readonly<Record<string, unknown>
   const current = useEditorState((s) => built && isCurrent(entry, s, args));
   const predicate = (PREDICATES as PredicateTable<EditorUi>)[entry.command.availability.predicate as PredicateId];
   // the predicate reads the layer the editor shows, as the store does when the command runs
-  const available = useEditorState((s) => built && (predicate?.test(s, layeredRules(s.ui)) ?? true));
+  // the door's own arguments with the ones its place adds (the row it stands for): what the command would run with
+  const runArgs = { ...entry.door.args, ...args };
+  const available = useEditorState((s) => built && (predicate?.test(s, layeredRules(s.ui), runArgs) ?? true));
   // why it is not available now: its predicate's own refusal when it names one (Distribute: three elements, or
   // positioned ones; the audit's A3.23), else the door's reason (disabledReasonKey); one JSON text, stable between renders
-  const refused = useEditorState((s) => (built && !available && predicate?.refusal !== undefined ? JSON.stringify(predicate.refusal(s, layeredRules(s.ui))) : null));
+  const refused = useEditorState((s) => (built && !available && predicate?.refusal !== undefined ? JSON.stringify(predicate.refusal(s, layeredRules(s.ui), runArgs)) : null));
   // the words the label fills in for the state now (the command's labelParams), as one JSON text so the hook's value
   // is stable between renders
   const params = useEditorState((s) => (built ? JSON.stringify(labelParamsOf(entry, s)) : '{}'));

@@ -16402,6 +16402,72 @@
             "export": null
           },
           "refusals": []
+        },
+        {
+          "id": "the-row-eye-hides-its-row-with-nothing-selected",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.toggleHidden#layers-row-eye",
+              "args": {
+                "target": "/Page/Hero/Intro"
+              },
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.toggleHidden#layers-row-eye"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Intro/@hidden",
+                "value": true
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Intro",
+                  "property": "display",
+                  "value": "none"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.hidden",
+                  "params": {
+                    "name": "Intro"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
         }
       ]
     },

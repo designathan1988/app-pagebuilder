@@ -2376,6 +2376,7 @@ export const PREDICATE_IDS = [
   "svgShape",
   "table",
   "tableOrCaption",
+  "targetOrSelection",
   "text",
   "textInput",
   "textarea",

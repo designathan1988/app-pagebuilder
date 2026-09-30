@@ -1172,6 +1172,11 @@
     },
     {
       "kind": "predicate",
+      "id": "targetOrSelection",
+      "status": "registered"
+    },
+    {
+      "kind": "predicate",
       "id": "instanceSelected",
       "status": "registered"
     },

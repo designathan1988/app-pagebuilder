@@ -4,9 +4,9 @@
     "built": 185,
     "commands": 257,
     "doors": 1000,
-    "scenarios": 1334,
+    "scenarios": 1335,
     "modules": 254,
-    "lines": 48823
+    "lines": 48883
   },
   "features": [
     {
@@ -468,7 +468,7 @@
         "element.toggleHidden"
       ],
       "doors": 4,
-      "scenarios": 3,
+      "scenarios": 4,
       "modules": [
         "src/core/nodes/flags.ts"
       ]
@@ -2785,7 +2785,7 @@
   "modules": [
     {
       "path": "src/app/commands.ts",
-      "lines": 389,
+      "lines": 390,
       "commands": [],
       "features": []
     },
@@ -2854,7 +2854,7 @@
     },
     {
       "path": "src/core/commands/registry.ts",
-      "lines": 195,
+      "lines": 197,
       "commands": [
         "<id>"
       ],
@@ -3527,7 +3527,7 @@
     },
     {
       "path": "src/core/selection/selection.ts",
-      "lines": 202,
+      "lines": 210,
       "commands": [
         "selection.select",
         "selection.clear",
@@ -4199,7 +4199,7 @@
     },
     {
       "path": "src/editor/doors/door.tsx",
-      "lines": 307,
+      "lines": 309,
       "commands": [],
       "features": []
     },
@@ -4684,7 +4684,7 @@
     },
     {
       "path": "src/editor/shell/field.tsx",
-      "lines": 1240,
+      "lines": 1279,
       "commands": [],
       "features": []
     },
@@ -4714,7 +4714,7 @@
     },
     {
       "path": "src/editor/shell/inspector.tsx",
-      "lines": 736,
+      "lines": 743,
       "commands": [],
       "features": []
     },
@@ -5069,7 +5069,7 @@
     },
     {
       "path": "src/generated/ids.ts",
-      "lines": 4528,
+      "lines": 4529,
       "commands": [],
       "features": []
     },

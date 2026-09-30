@@ -87,8 +87,8 @@ export const toggleHiddenCommand = registerHandler(
   'element.toggleHidden',
   ({ state }, { target }): Outcome<never> => {
     const at = flagged(state.document, state.selection, target);
-    // the availability predicate (hasSelection) lets no door run without a selection, and a row's eye names a node of
-    // the document; anything else is a defect of the door
+    // the availability predicate (targetOrSelection) lets no door run without a node it names or a selection, and a
+    // row's eye names a node of the document; anything else is a defect of the door
     if (at === null) throw new Error(`element.toggleHidden: the document has no node ${String(target ?? state.selection[0])}`);
     if (at.parent === null) return { kind: 'refused', message: message('status.hide.root') };
     const locked = ancestorLockRefusal(state.document, at.node.id);
@@ -103,8 +103,8 @@ export const toggleLockCommand = registerHandler(
   'element.toggleLock',
   ({ state }, { target }): Outcome<never> => {
     const at = flagged(state.document, state.selection, target);
-    // the availability predicate (hasSelection) lets no door run without a selection, and a row's lock names a node of
-    // the document; anything else is a defect of the door
+    // the availability predicate (targetOrSelection) lets no door run without a node it names or a selection, and a
+    // row's lock names a node of the document; anything else is a defect of the door
     if (at === null) throw new Error(`element.toggleLock: the document has no node ${String(target ?? state.selection[0])}`);
     if (at.parent === null) return { kind: 'refused', message: message('status.lock.root') };
     const locked = ancestorLockRefusal(state.document, at.node.id);

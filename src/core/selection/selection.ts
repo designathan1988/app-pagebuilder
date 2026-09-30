@@ -11,6 +11,14 @@ import type { Rect } from '../../generated/commands.ts';
 // selection.clear's availability: something is selected (refused with "Select an element first." otherwise)
 export const hasSelection = registerPredicate('hasSelection', (state) => state.selection.length > 0);
 
+// A command that acts on the element its door names (a Layers row's eye and lock: `args.target`), else on the
+// selection: available when the named element is in the document, or when something is selected
+export const targetOrSelection = registerPredicate('targetOrSelection', (state, _rules, args) => {
+  const target = args !== null && typeof args === 'object' ? (args as { readonly target?: unknown }).target : undefined;
+  if (typeof target === 'string') return locate(state.document, target as NodeId) !== null;
+  return state.selection.length > 0;
+});
+
 // the availability of a command that acts on one element (element.promote, hand.take): exactly one node is selected
 export const singleSelection = registerPredicate('singleSelection', (state) => state.selection.length === 1);
 
