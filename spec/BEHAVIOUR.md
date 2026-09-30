@@ -4003,6 +4003,7 @@ Pager has no guard: two tabs of the app write the same IndexedDB record in turn,
 ### Undo and redo
 
 A read-only tab records nothing: its document commands are refused.
+2. **The read-only notice covered the top bar's page switcher and Commands** (the audit's U-024). Required: the notice hangs under the top bar, centred, never over it.
 
 ## natural-child-command
 

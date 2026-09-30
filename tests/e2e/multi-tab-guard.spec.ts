@@ -35,6 +35,10 @@ test('a second tab reads, refuses and writes nothing; taking over makes the firs
   const second = await context.newPage();
   await openEditor(second, { reusedProfile: true });
   await expect(second.locator('[data-region="tab-guard"]')).toHaveText(/being edited in another tab/);
+  // the notice hangs under the top bar, never over it (spec multi-tab-guard; the audit's U-024)
+  const guard = await second.locator('[data-region="tab-guard"]').boundingBox();
+  const bar = await second.locator('header.top-bar').boundingBox();
+  expect(guard !== null && bar !== null && guard.y >= bar.y + bar.height - 0.5, 'the notice starts below the top bar').toBe(true);
   const read = await documentNow(second);
   expect(read).toBe(await documentNow(page));
   const revision = await savedRevision(second);

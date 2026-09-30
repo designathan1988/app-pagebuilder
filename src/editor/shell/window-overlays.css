@@ -302,10 +302,11 @@
   color: var(--color-text-muted);
 }
 
-/* the tab guard (tab-guard.tsx): a bar across the top of the window while this tab only reads the project */
+/* the tab guard (tab-guard.tsx): a bar hanging under the top bar while this tab only reads the project — never over the
+   top bar, whose page switcher and Commands still work (the audit's U-024) */
 .tab-guard {
   position: fixed;
-  top: 0;
+  top: var(--size-top-bar);
   left: 50%;
   z-index: var(--z-guard);
   display: flex;
