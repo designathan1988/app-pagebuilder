@@ -6,7 +6,7 @@
     "doors": 1002,
     "scenarios": 1340,
     "modules": 259,
-    "lines": 49683
+    "lines": 49713
   },
   "features": [
     {
@@ -4796,7 +4796,7 @@
     },
     {
       "path": "src/editor/shell/shadow.tsx",
-      "lines": 199,
+      "lines": 229,
       "commands": [],
       "features": []
     },

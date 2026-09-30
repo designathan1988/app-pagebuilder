@@ -6477,6 +6477,7 @@ Not affected (the pad maps screen pixels to CSS pixels regardless of canvas zoom
   property's own label), once, before the editor's first control, so two editors one after the other read as two.
 - **The controls of a layer are drawn only while the value holds one:** with no shadow the editor shows Add a shadow,
   the Text shadow's CSS field and "No shadow yet." — never a Hide or a Remove for a layer that does not exist.
+5. **An empty shadow editor cost three rows** (the audit's S-025): Add a shadow on a row of its own, "No shadow yet." in the label column, and a disabled Remove every shadow. Required: the editor's head is one row — the property's name, "No shadow yet." while it holds no shadow, and Add a shadow as the small + at the row's end (its name and tooltip "Add a shadow"); the rows of the layers follow it; Remove every shadow is drawn only while there is a shadow to remove, as a layer's own controls are.
 
 ## shadow-handles
 

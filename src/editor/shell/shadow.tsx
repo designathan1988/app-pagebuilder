@@ -57,12 +57,10 @@ function run(store: ReturnType<typeof useStore>, entry: DoorEntry, args: Record<
 // a button of the editor: its row stands for the edit it runs
 function EditButton({ entry, door, args, ready, pressed = null, onDone }: { readonly entry: DoorEntry; readonly door: DoorState; readonly args: Record<string, unknown>; readonly ready: boolean; readonly pressed?: boolean | null; readonly onDone?: () => void }) {
   const store = useStore();
-  const t = useT();
-  const add = entry.door.kind === 'inspector-field' && entry.door.control === 'shadow-add';
   const appearance = useFieldAppearance(typeof args.property === 'string' ? [args.property] : []);
   return (
     <div className={`field-row${ready ? '' : ' is-unavailable'}`} data-origin={appearance.kind} data-door={entry.ref} data-args={JSON.stringify(args)} title={door.title}>
-      <span className="field-row__label">{add && typeof args.property === 'string' ? propertyWord(t, args.property) : pressed === null ? '' : door.label}</span>
+      <span className="field-row__label">{pressed === null ? '' : door.label}</span>
       <button
         type="button"
         className={`door ${pressed === null ? 'door--button' : 'door--toggle'}${ready ? '' : ' is-unavailable'}${pressed === true ? ' is-current' : ''}`}
@@ -80,13 +78,45 @@ function EditButton({ entry, door, args, ready, pressed = null, onDone }: { read
   );
 }
 
+// The editor's head row: the property's name, "No shadow yet." while it holds none, and Add a shadow as the small +
+// at the row's end — one row for an empty editor (the audit's S-025: Add, the note in the label column and a disabled
+// Remove every shadow took three)
+function AddRow({ entry, door, property, empty, ready, onDone }: { readonly entry: DoorEntry; readonly door: DoorState; readonly property: string; readonly empty: boolean; readonly ready: boolean; readonly onDone: () => void }) {
+  const t = useT();
+  const store = useStore();
+  const args = { property, edit: entry.door.args.edit };
+  const appearance = useFieldAppearance([property]);
+  return (
+    <div className={`field-row shadow__head${ready ? '' : ' is-unavailable'}`} data-origin={appearance.kind}>
+      <span className="field-row__label">{propertyWord(t, property)}</span>
+      <span className="shadow__add">
+        {empty ? <span className="shadow__none">{t('inspector.shadow.none')}</span> : null}
+        <button
+          type="button"
+          className={`door door--icon-button door--sm${ready ? '' : ' is-unavailable'}`}
+          data-door={entry.ref}
+          data-args={JSON.stringify(args)}
+          aria-disabled={ready ? undefined : true}
+          aria-label={door.label}
+          title={door.title}
+          onClick={() => {
+            if (ready && run(store, entry, args).status === 'done') onDone();
+          }}
+        >
+          {entry.door.icon !== null ? <Icon name={entry.door.icon} size="sm" /> : <span className="door__label">{door.face}</span>}
+        </button>
+      </span>
+    </div>
+  );
+}
+
 // A layer's row (the user's real-use audit, item A3.34): its colour as a swatch and what it is in words ("0px, 4px ·
 // blur 12px · rgba(15, 23, 42, 0.24)"), never the raw CSS; Inset and hidden are said beside it. The row carries the
 // drag (the pointer owner moves the layer among the others, properties.json's door).
 function Rows({ property, layers, chosen }: { readonly property: string; readonly layers: readonly StructuredLayer[]; readonly chosen: number }) {
   const t = useT();
   const drag = layerDragOf(property);
-  if (layers.length === 0) return <p className="shadow__none">{t('inspector.shadow.none')}</p>;
+  if (layers.length === 0) return null;
   return (
     <ul className="shadow__rows" data-shadow-rows="">
       {layers.map((layer, i) => {
@@ -152,14 +182,14 @@ export function ShadowControl({ entry, door }: { readonly entry: DoorEntry; read
   const control = entry.door.kind === 'inspector-field' ? entry.door.control : '';
   const editing = door.available && selected && layer !== undefined;
   const fixedEdit = entry.door.args.edit;
-  // the controls of a layer are drawn only while the value holds one (A3.34): with no shadow the editor shows Add a
-  // shadow, the CSS field and "No shadow yet."
-  if (layer === undefined && control !== 'shadow-add' && control !== 'shadow-reset' && control !== 'shadow-css') return null;
+  // the controls of a layer are drawn only while the value holds one (A3.34), and Remove every shadow only while there is
+  // one to remove: with no shadow the editor is its head row (Add a shadow, "No shadow yet.") and the CSS field
+  if (layer === undefined && control !== 'shadow-add' && control !== 'shadow-css') return null;
   switch (control) {
     case 'shadow-add':
       return (
         <>
-          <EditButton entry={entry} door={door} args={{ property, edit: fixedEdit }} ready={door.available && selected} onDone={() => shadowView.chooseLayer(property, layers.length)} />
+          <AddRow entry={entry} door={door} property={property} empty={layers.length === 0} ready={door.available && selected} onDone={() => shadowView.chooseLayer(property, layers.length)} />
           {selected ? <Rows property={property} layers={layers} chosen={chosen} /> : null}
         </>
       );

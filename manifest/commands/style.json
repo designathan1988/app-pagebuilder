@@ -7605,7 +7605,7 @@
           "control": "shadow-add",
           "labelKey": "inspector.shadow.add",
           "faceLabelKey": null,
-          "icon": null,
+          "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-style",
@@ -7925,7 +7925,7 @@
           "control": "shadow-add",
           "labelKey": "inspector.shadow.add",
           "faceLabelKey": null,
-          "icon": null,
+          "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-style",
