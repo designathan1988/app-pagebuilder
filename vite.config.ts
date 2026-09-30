@@ -22,10 +22,11 @@ function productTitle(): Plugin {
   };
 }
 
-// The folders of the project the dev server does not watch, relative to its root: the root's own reference/, .cache/
+// The folders of the project the dev server does not watch, relative to its root: the root's own reference/, .cache/,
+// .memory/ and the audit journeys (jornada*/, evidence written while the app is open must not reload it),
 // and .playwright-mcp/, never a folder of that name above it (a working copy under .cache/wt is watched whole).
 const ROOT = fs.realpathSync(process.cwd());
-const UNWATCHED = new Set(['reference', '.cache', '.playwright-mcp']);
+const UNWATCHED = new Set(['reference', '.cache', '.playwright-mcp', '.memory', 'jornada01', 'jornada02', 'jornada03']);
 const unwatched = (file: string): boolean => UNWATCHED.has(path.relative(ROOT, file).split(path.sep)[0] ?? '');
 
 // A change to a source file reloads the whole page: the editor's store and its React context live in modules a hot

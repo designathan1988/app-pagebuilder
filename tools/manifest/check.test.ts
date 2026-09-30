@@ -4,6 +4,7 @@ import { normaliseChord } from '../../src/manifest/chord.ts';
 import { createCssMatcher } from '../../src/manifest/css.ts';
 import { generatedCompatSchema, generatedCssSchema, generatedHtmlSchema, propertiesFileSchema } from '../../src/manifest/schema.ts';
 import { loadManifest, registrationsIn } from './load.ts';
+import { SHARDS } from './plant-shard.ts';
 import { PLANTS, ownGenerated, plantDeleteScenarios, plantRenderScenario, planted, unbuildZoom, type Plant } from './plants.ts';
 
 const loaded = loadManifest();
@@ -21,13 +22,9 @@ describe('manifest:check', () => {
     expect(RULES.filter((rule) => !planted.has(rule))).toEqual([]);
   });
 
-  it.each(PLANTS.map((p) => [p.id, p] as const))('fails on the planted fixture "%s", and only on its rule', (_id, plant) => {
-    const { problems } = checkManifest(planted(loaded.input, plant));
-    expect(problems.length).toBeGreaterThan(0);
-    // its own rule fires, and no rule beyond the ones its mutation honestly implies
-    const allowed = new Set([plant.rule, ...(plant.implies ?? [])]);
-    expect(problems.map((p) => p.rule).filter((rule) => !allowed.has(rule))).toEqual([]);
-    expect(problems.map((p) => p.rule)).toContain(plant.rule);
+  it('proves every planted fixture in exactly one shard (check-plants-<n>.test.ts)', () => {
+    const shards = Array.from({ length: SHARDS }, (_s, shard) => PLANTS.filter((_p, index) => index % SHARDS === shard).length);
+    expect(shards.reduce((a, b) => a + b, 0)).toBe(PLANTS.length);
   });
 
   it('has the planted fixtures of the property model, each on its own rule', () => {

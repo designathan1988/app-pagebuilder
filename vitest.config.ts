@@ -6,5 +6,7 @@ export default defineConfig({
     // Never collect tests from the reference projects, the Pager copy or the browser tool's scratch files.
     exclude: [...configDefaults.exclude, 'reference/**', '.cache/**', '.playwright-mcp/**'],
     environment: 'node',
+    // the transformed modules are kept between runs: a run re-transforms only what changed
+    fsModuleCache: true,
   },
 });

@@ -15,6 +15,8 @@ export default defineConfig(
   // worktrees; none is project code. tests/support/folders holds the sample folders a scenario opens with File ›
   // Open folder (spec explorer-open-folder): those files are the person's own site, kept as they were written.
   globalIgnores(['dist', 'reference', '.cache', '.playwright-mcp', '.claude', 'node_modules', 'test-results', 'playwright-report', 'tests/support/folders']),
+  // The audit journeys (jornada*/) hold the auditors' capture scripts and evidence, not project code.
+  globalIgnores(['jornada01', 'jornada02', 'jornada03']),
   // worktrees; none is project code. The fixtures are the scenarios' own input (a page HTML, its stylesheet, its
   // script…), data and not source: they are never edited to suit a test.
   globalIgnores(['dist', 'reference', '.cache', '.playwright-mcp', '.claude', 'node_modules', 'test-results', 'playwright-report', 'manifest/features/fixtures']),
