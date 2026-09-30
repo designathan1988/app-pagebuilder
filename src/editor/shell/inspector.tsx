@@ -72,8 +72,11 @@ const cssNamesOf = (entry: DoorEntry): readonly string[] => {
   const target = editedTarget(entry);
   return target !== null ? [target, ...editedProperties(target)] : entry.door.adapter.writes;
 };
+// The order of the section header in the Style region: the doors placed before it are the panel's own controls (the
+// mode segments, Add a property), the ones after it belong to the sections.
+const HEADER_ORDER = SECTION_HEADER && typeof SECTION_HEADER.door.placement === 'object' ? SECTION_HEADER.door.placement.order : 0;
 const SECTION_DOORS = (() => {
-  const headerOrder = SECTION_HEADER && typeof SECTION_HEADER.door.placement === 'object' ? SECTION_HEADER.door.placement.order : 0;
+  const headerOrder = HEADER_ORDER;
   const bySection = new Map<string, DoorEntry[]>();
   let section: string = SECTIONS[0]?.id ?? '';
   for (const slot of slotsIn('inspector-style')) {
@@ -622,7 +625,9 @@ function StyleTab() {
             </ul>
             <div className="inspector-mode">
               <div className="segmented segmented--wide" role="group">
-                <Slots region="inspector-style" render={(slot) => (slot.kind === 'door' && slot.entry.door.kind === 'panel-control' && slot.entry.door.drawnAs === 'segment' ? undefined : null)} />
+                {/* the segments placed before the sections alone: a section's own segmented control (the anchor control
+                    of Position) is drawn by its section, never here (the audit's S-001) */}
+                <Slots region="inspector-style" to={HEADER_ORDER - 1} render={(slot) => (slot.kind === 'door' && slot.entry.door.kind === 'panel-control' && slot.entry.door.drawnAs === 'segment' ? undefined : null)} />
               </div>
             </div>
             <div className="inspector-searchline"><PropertySearch /><AddProperty /></div>

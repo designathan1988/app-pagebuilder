@@ -249,6 +249,9 @@ test('the unit menu offers the units and keywords of Width; a point converts the
   const items = () => page.locator(`[data-door="${UNIT}"][role="menuitemradio"]`).evaluateAll((els) => els.map((el) => (JSON.parse(el.getAttribute('data-args') ?? '{}') as { unit?: string }).unit));
   // the units a person reaches for, and no more before the menu's own More units (A3.33, item 5.2)
   expect(await items()).toEqual(['px', '%', 'em', 'rem', 'vw', 'vh', 'ch']);
+  // each item shows its unit: the menu opens from the field's focus, which hides the field's own unit slot (S-017)
+  const shownWords = await page.locator(`[data-door="${UNIT}"][role="menuitemradio"] .menu__label`).evaluateAll((els) => els.map((el) => (el.getBoundingClientRect().width > 0 ? el.textContent : '')));
+  expect(shownWords).toEqual(['px', '%', 'em', 'rem', 'vw', 'vh', 'ch']);
   await page.locator('[data-menu-more]').first().click();
   const offered = await items();
   for (const unit of ['px', '%', 'em', 'rem', 'vw', 'vh', 'pt', 'auto', 'min-content', 'max-content', 'fit-content']) expect(offered, unit).toContain(unit);

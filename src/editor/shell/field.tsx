@@ -317,7 +317,9 @@ function UnitMenu({ entry, property, shown, input, ready }: { readonly entry: Do
               onClick={() => choose(unit)}
             >
               <span className="menu__icon">{unit === current ? <Icon name={GLYPHS.checked} size="sm" /> : null}</span>
-              <span className="menu__label field__unit-value">{unit}</span>
+              {/* the menu's own label: the field's unit slot (field__unit-value) hides while the field holds the focus, and the
+                  menu opens from that focus (the audit's S-017: every unit was blank) */}
+              <span className="menu__label field__unit-option">{unit}</span>
             </button>
           ))}
           {/* the rest of the units and the keywords wait behind it (the user's real-use audit, item 5.2): the list a

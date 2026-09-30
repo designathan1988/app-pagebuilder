@@ -572,3 +572,14 @@ test('the unit menu keeps its list short, and a value field opens every value', 
   expect(weights, 'the weights read with their names').toContain('Bold 700');
   await page.keyboard.press('Escape');
 });
+
+// The mode switch holds its two segments, Essentials only and All properties, inside the panel: a segmented control a
+// section draws (the anchor control of Position) is never drawn there too (the audit's S-001: a clipped third
+// segment that threw when pressed).
+test('the mode switch holds exactly its two segments, within the panel', runs(OPEN, SELECT, ALL), async ({ page }) => {
+  await openAurora(page);
+  await select(page, 'n-title');
+  const mode = page.locator('.inspector-mode');
+  await expect(mode.locator('[data-door]')).toHaveCount(2);
+  expect(await mode.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
+});
