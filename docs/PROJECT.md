@@ -94,6 +94,16 @@ a concept that has an owner is a defect.
   trigger (24 px wide, over the cell's end only while a keyword is hovered), a measured hint where the value is
   auto, and its Reset in its flow while hovered; it steps with its keys and its label's scrub. Every row, a pair's
   included, puts its values at the same x: the 100 px label column (`--size-label-column`).
+- **A row never wraps its controls.** Keyword buttons whose words do not fit the value column become a keyword menu
+  (measured, field.tsx `useFits`), and "Mixed" stands in the control's own cell. A values menu opens with its door's
+  Essentials list (`adapter.offers.essentials`) and keeps the rest behind More values. A boolean attribute is an
+  Off | On pair, never a checkbox. The Style tab groups a concept's longhands under one row (`conceptRows`,
+  `inspector.toggleRow`) and says a lock once at its top.
+- **The quick panel** reads its groups from `layout.json` `quickPanelGroups` (each quick-panel door names its
+  `group`; rule `quick-panel-group`), names every field inside it (the door's `faceLabelKey`, else its label; its icon;
+  a colour's swatch) and shows the inspector's resting faces.
+- **The catalogue holds only what is named**: `tools/i18n/unused.test.ts` fails on a key no source names (by its text,
+  its plural stem, or a template built from one of its prefixes), as `dedupe.test.ts` does on a key written twice.
 - The shell's stylesheets load once each, from `src/main.tsx`, in this order: the tokens, `shell.css` (the base and
   the one focus ring), `primitives.css` (one owner per primitive: the door, the segmented control, the swatch, the
   matrix), then one stylesheet per region (`window.css` … `window-overlays.css`), which places and sizes them.
@@ -155,20 +165,27 @@ npm run inventory         # regenerate docs/INVENTORY.md and docs/inventory.json
 5. Prove the tooth: with the handler made a no-op the tests must fail; with it back they must pass.
 6. `npm run check:fast`, then `npm run ui` (photos), then the block's specs, then commit.
 
-## The state of the application (2026-09-29)
+## The state of the application (2026-10-01)
 
 - Every command of the manifest is built; the two features left unregistered (`hover-measure`, `shortcuts-e2e-sweep`)
-  bring no command and no door. The inventory counts 187 features (185 built), 256 commands, 998 doors, 1,333
-  scenarios, 236 modules.
-- Green at this commit: `gen:check`, `manifest:check`, `inventory:check`, both typechecks, lint, 683 unit tests, the
-  build, the seven `npm run ui` flows, and the browser tests of the features touched by the architecture pass.
-- The architecture pass (its plan: T1–T7, the inventory, the UI driver, the error feed) is done except:
-  - **T7 deferred with its reason**: the pointer's module-level singletons only matter when two editors share a page,
-    and no flow opens two; it waits for the first feature that does.
-  - **The complete `npm run e2e` has not run on this tree** — it is the gate for the next stretch, together with the
-    file splits by responsibility (`pointer.ts` 2,477 lines, `inspector.tsx` 1,458, `import.ts` 1,259, `field/`,
-    `chrome.tsx`, `sidebar.tsx`) and the folds of the specs into the manifest.
-- Open findings: the complete suite's runtime is unmeasured on this tree (it runs as the final gate).
+  bring no command and no door. The inventory counts 187 features (185 built), 258 commands, 1,002 doors, 1,341
+  scenarios, 259 modules, 49,885 lines.
+- Green at this commit: `gen:check`, `manifest:check`, `inventory:check`, both typechecks, lint, 1,653 unit tests
+  (the headless scenario runner among them) and the complete browser suite: **1,988 passed** in 11.0 minutes, no failure and no flake (at `4e1d116`).
+- The design-system chapter (the audit of jornada01/02 and its resolution plan: waves T, B/E/M, 0 to 6) is done except:
+  - **The bottom dock stays as the audit A3.18 decided** (collapsed, it draws no strip; its panels stand as icons in
+    the status bar). The plan's 5.5 would keep a strip; that trades 28 px of canvas and reverses a decision of the
+    owner's, so it waits for the owner.
+  - **Left/Right between the app menus** (4.4): a door of the menu context needs a scenario that opens an app menu
+    without choosing an item, which no step can yet.
+  - **The colour picker** keeps its own panel beside the inspector (5.3's 240 px popover with keys inside its channel
+    fields is a restyle, open); **the timeline** keeps its layout (5.6).
+  - **Fifteen manifest fields no module reads** keep a planned reader in `consumers.json` (the environment's browser,
+    channel, zoom levels and reduced motion, the subsets' units, `toolbar`, `numeric`, `cssWideKeywords`…): wire them or
+    drop them, the owner's call.
+  - **S-028** (a whole border the parser cannot read is refused naming the part it guessed) stays: the scenario
+    `a-side-colour-that-is-no-colour-is-refused` pins that message.
+  - T.2 (door-reach batched in Chrome) and T.5 (visual baselines) are not built; T7 stays deferred with its reason.
 
 ## Rules that are never broken
 
