@@ -3289,6 +3289,7 @@ export const MESSAGE_IDS = [
   "field.reset.none",
   "field.reset.of",
   "field.slider.none",
+  "field.swatch.of",
   "field.slider.of",
   "field.stepDown",
   "field.stepUp",

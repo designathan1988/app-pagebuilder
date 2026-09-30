@@ -145,3 +145,20 @@ test('a field tells its states apart, and a disabled control is not a quiet one'
   expect(bar.inactive, 'the inactive Preview is drawn').not.toBeNull();
   expect(bar.disabled, 'disabled and inactive differ').not.toBe(bar.inactive);
 });
+
+// Every control of the Style tab has a name of its own, which a screen reader reads and a person finds by: the colour
+// swatches named the field they open the picker for, and a filter's eight sliders their own function (they all read
+// "Open the colour picker" and "Slide Filter").
+test('every control of the Style tab has a name of its own', runs(OPEN, ROW, ALL), async ({ page }) => {
+  await openAurora(page, 'n-card-a');
+  for (const target of ['n-card-a', 'n-grid', 'n-title']) {
+    await control(page, ROW, { args: { target } }).click();
+    await openEverySection(page);
+    await runDoor(page, ALL);
+    const names = await page.locator('[data-region="inspector-style"]').evaluate((region) =>
+      [...region.querySelectorAll('input, button, select, textarea, [role="button"], [role="slider"]')].map((el) => el.getAttribute('aria-label') ?? '').filter((name) => name !== ''),
+    );
+    const twice = [...new Set(names.filter((name, i) => names.indexOf(name) !== i))];
+    expect(twice, `${target}: names two controls share`).toEqual([]);
+  }
+});

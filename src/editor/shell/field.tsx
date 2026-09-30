@@ -727,7 +727,8 @@ export function TextStyleField({
         {!colour && !sample && entry.door.kind === 'inspector-field' && entry.door.icon !== null ? <Icon name={entry.door.icon} size="sm" /> : null}
         {sample ? <span className="field__sample swatch" style={{ '--swatch-colour': shown || effective } as CSSProperties} title={shown || effective} /> : null}
         {colour && COLOR_SWATCH !== undefined ? (
-          <DoorControl entry={COLOR_SWATCH} args={{ property }} ready={door.built && primary !== null} className="field__swatch">
+          // each swatch names the field it opens the picker for (three of them read the same, the audit's accessible names)
+          <DoorControl entry={COLOR_SWATCH} args={{ property }} ready={door.built && primary !== null} className="field__swatch" label={t('field.swatch.of', { property: label })}>
             <span className="field__sample swatch" style={{ '--swatch-colour': shown || effective } as CSSProperties} />
           </DoorControl>
         ) : null}
@@ -801,7 +802,8 @@ export function TextStyleField({
             step={sliderRange.step}
             disabled={!available || slid === null}
             title={slid === null ? t('field.slider.none') : undefined}
-            aria-label={t('field.slider.of', { property: propertyWord(t, property) })}
+            // the field's own name: a filter's eight functions share their property, never their slider's name
+            aria-label={t('field.slider.of', { property: label })}
             onBlur={keepSlide}
           />
         ) : null}

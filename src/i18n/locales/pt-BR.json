@@ -828,6 +828,7 @@
   "field.reset.none": "Nada a redefinir.",
   "field.reset.of": "Redefinir {property}",
   "field.slider.none": "Este valor não tem número para deslizar.",
+  "field.swatch.of": "Abrir o seletor de cor de {property}",
   "field.slider.of": "Deslizar {property}",
   "field.stepDown": "Diminuir",
   "field.stepUp": "Aumentar",
