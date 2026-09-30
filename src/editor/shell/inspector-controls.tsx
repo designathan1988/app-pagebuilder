@@ -439,7 +439,8 @@ function SpacingField({ entry, box, sides, properties, where, label }: { readonl
       className={`box__side box__side--${where}`}
       data-origin={appearance.kind}
       data-door={entry.ref}
-      data-args={JSON.stringify({ box, sides, property: box })}
+      // a side stands for its longhand (its arrows step it: field.step, and Escape names it), the linked box for the box
+      data-args={JSON.stringify({ box, sides, property: properties.length === 1 ? properties[0] : box })}
       title={door.title}
       onSubmit={(event) => {
         event.preventDefault();
@@ -509,21 +510,19 @@ export function BoxModel({ doors }: { readonly doors: readonly DoorEntry[] }) {
         </span>
         {/* its own name: "Link the four sides of Margin", "… of Padding" (A3.35) */}
         {SPACING_LINK ? <DoorControl entry={SPACING_LINK} args={{ box: target.id }} className="box__link" label={t('inspector.spacing.linkBox', { box: { key: target.labelKey as MessageId } })} /> : null}
+        {/* the grid places each side; the document order is the Tab's: a box's four sides clockwise from the top, then
+            the box inside it (the audit's S-014: margin top and left, the padding, then margin right and bottom) */}
         {linked ? (
           <SpacingField entry={box} box={target.id} sides="all" properties={longhands} where="all" label={t(target.labelKey as MessageId)} />
         ) : (
           <>
             {side('block-start')}
+            {side('inline-end')}
+            {side('block-end')}
             {side('inline-start')}
           </>
         )}
         {draw(level + 1)}
-        {linked ? null : (
-          <>
-            {side('inline-end')}
-            {side('block-end')}
-          </>
-        )}
       </div>
     );
   };

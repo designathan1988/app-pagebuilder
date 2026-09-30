@@ -5477,6 +5477,7 @@ Tab moves between the side fields; the number field keys apply (inspector-number
 4. **Invalid text is put back without a word.** Required: text that is not a length, a percentage or (for a margin) `auto` is refused with `status.value.invalid` naming the property and the text; the document keeps its value.
 5. **Nothing says what changed.** Required: every kept value is reported by the status bar with the property's label, the element's name and the value (`status.spacing.set`, e.g. `Padding top of Hero: 32px.`); a typed unit is kept as typed (`2rem`), a bare number takes px.
 6. **A locked element's spacing can be changed** (Pager has no lock on this path). Required: a locked element, or one inside a locked element, refuses with `status.locked.edit` (spec lock-element) and keeps its values.
+7. **A side of the box took no arrow, and the Tab walked margin top and left, then the padding, then margin right and bottom** (the audit's S-014). Required: ArrowUp and ArrowDown in a side step the length it holds by one of its unit (Shift ×10, Alt ×0.1), as a number field's arrows do (`field.step` in the `spacing-field` context, one undo step per burst), the side standing for its longhand; the Tab walks each box's four sides clockwise from the top (top, right, bottom, left), the margin's before the padding's.
 
 ## props-transforms
 

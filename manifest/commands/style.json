@@ -9536,6 +9536,52 @@
           }
         },
         {
+          "id": "key-arrow-up-in-spacing-field",
+          "kind": "shortcut",
+          "feature": "props-spacing",
+          "chord": "ArrowUp",
+          "context": "spacing-field",
+          "gesture": "number-field-keys",
+          "labelKey": "field.stepUp",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {
+            "direction": "up",
+            "size": "step"
+          }
+        },
+        {
+          "id": "key-arrow-down-in-spacing-field",
+          "kind": "shortcut",
+          "feature": "props-spacing",
+          "chord": "ArrowDown",
+          "context": "spacing-field",
+          "gesture": "number-field-keys",
+          "labelKey": "field.stepDown",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {
+            "direction": "down",
+            "size": "step"
+          }
+        },
+        {
           "id": "key-page-up-in-number-field",
           "kind": "shortcut",
           "feature": "inspector-number-fields",

@@ -352,7 +352,7 @@ export const FEATURE_COMMANDS: Readonly<Record<FeatureId, readonly CommandId[]>>
   "props-flex-container": ["style.set","style.setAlignment"],
   "props-grid-container": ["style.set","style.setGridTracks","style.setGridItem"],
   "props-layout-item": ["style.set"],
-  "props-spacing": ["style.setSpacing","inspector.toggleSpacingLink","field.cancel"],
+  "props-spacing": ["style.setSpacing","inspector.toggleSpacingLink","field.cancel","field.step"],
   "props-size-overflow": ["style.set"],
   "props-position": ["style.set","position.setMode"],
   "color-picker": ["style.set","colorPicker.open","colorPicker.setFormat","colorPicker.setChannel","colorPicker.apply","colorPicker.cancel","drag.cancel"],

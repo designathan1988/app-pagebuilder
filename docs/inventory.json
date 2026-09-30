@@ -3,10 +3,10 @@
     "features": 187,
     "built": 185,
     "commands": 258,
-    "doors": 1000,
-    "scenarios": 1338,
+    "doors": 1002,
+    "scenarios": 1340,
     "modules": 259,
-    "lines": 49679
+    "lines": 49680
   },
   "features": [
     {
@@ -648,7 +648,7 @@
         "field.setUnit",
         "field.cancel"
       ],
-      "doors": 177,
+      "doors": 179,
       "scenarios": 19,
       "modules": [
         "src/core/style/set.ts",
@@ -715,10 +715,11 @@
       "commands": [
         "style.setSpacing",
         "inspector.toggleSpacingLink",
-        "field.cancel"
+        "field.cancel",
+        "field.step"
       ],
-      "doors": 23,
-      "scenarios": 16,
+      "doors": 29,
+      "scenarios": 18,
       "modules": [
         "src/core/style/spacing.ts",
         "src/editor/inspector/number-field.ts",
@@ -4729,7 +4730,7 @@
     },
     {
       "path": "src/editor/shell/inspector-controls.tsx",
-      "lines": 589,
+      "lines": 588,
       "commands": [],
       "features": []
     },
@@ -5102,7 +5103,7 @@
     },
     {
       "path": "src/generated/ids.ts",
-      "lines": 4581,
+      "lines": 4583,
       "commands": [],
       "features": []
     },

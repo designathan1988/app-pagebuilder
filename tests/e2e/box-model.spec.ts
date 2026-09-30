@@ -79,3 +79,29 @@ test('each box of the box model holds the next, and each side field sits on its 
     }
   }
 });
+
+// The Tab walks each box — its link, then its four sides clockwise from the top — the outer box before the inner (spec
+// props-spacing, Problems in Pager 7; the audit's S-014: it walked margin top and left, the padding, then margin right
+// and bottom).
+test('the Tab walks each box clockwise from the top, the margin before the padding', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await openEditor(page);
+  await page.locator('[data-door="selection.select#layers-row"]').first().click();
+  await setSectionOpen(page, 'space', true);
+  const expected = BOXES.flatMap((b) => {
+    const composite = COMPOSITES.find((c) => c.id === b.door.composite);
+    return composite === undefined ? [] : [`link ${composite.id}`, ...composite.longhands];
+  });
+  await page.locator('.box__link').first().focus();
+  const walked: string[] = [];
+  for (let i = 0; i < expected.length; i += 1) {
+    walked.push(
+      await page.evaluate(() => {
+        const args = JSON.parse(document.activeElement?.closest('[data-door]')?.getAttribute('data-args') ?? '{}') as { property?: string; box?: string };
+        return document.activeElement?.classList.contains('box__link') === true ? `link ${args.box ?? ''}` : (args.property ?? '');
+      }),
+    );
+    await page.keyboard.press('Tab');
+  }
+  expect(walked).toEqual(expected);
+});

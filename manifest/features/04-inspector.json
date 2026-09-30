@@ -9201,7 +9201,8 @@
       "commands": [
         "style.setSpacing",
         "inspector.toggleSpacingLink",
-        "field.cancel"
+        "field.cancel",
+        "field.step"
       ],
       "dependsOn": [
         "inspector-number-fields"
@@ -10468,7 +10469,7 @@
             {
               "door": "field.cancel#key-escape-in-spacing-field",
               "args": {
-                "property": "padding"
+                "property": "padding-top"
               },
               "target": null,
               "drop": null,
@@ -10526,6 +10527,178 @@
               "preferences": null,
               "selection": null
             },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "arrow-down-steps-a-padding-side-by-one",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "style.setSpacing#inspector-padding-top-box-model",
+              "args": {
+                "box": "padding",
+                "sides": "top",
+                "value": "40"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "40\n"
+            },
+            {
+              "door": "field.step#key-arrow-down-in-spacing-field",
+              "args": {
+                "property": "padding-top",
+                "value": "40px"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "field.step#key-arrow-down-in-spacing-field"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/padding-top",
+                "value": "39px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero",
+                  "property": "padding-top",
+                  "value": "39px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.style.set",
+                  "params": {
+                    "property": "Padding top",
+                    "name": "Hero",
+                    "value": "39px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "arrow-up-steps-a-padding-side-by-one",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "style.setSpacing#inspector-padding-top-box-model",
+              "args": {
+                "box": "padding",
+                "sides": "top",
+                "value": "40"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "40\n"
+            },
+            {
+              "door": "field.step#key-arrow-up-in-spacing-field",
+              "args": {
+                "property": "padding-top",
+                "value": "40px"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "field.step#key-arrow-up-in-spacing-field"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/padding-top",
+                "value": "41px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero",
+                  "property": "padding-top",
+                  "value": "41px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.style.set",
+                  "params": {
+                    "property": "Padding top",
+                    "name": "Hero",
+                    "value": "41px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
             "export": null
           },
           "refusals": []

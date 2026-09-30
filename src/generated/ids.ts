@@ -1016,6 +1016,8 @@ export const DOOR_IDS = [
   "style.resetAll#command-bar",
   "field.step#key-arrow-up-in-number-field",
   "field.step#key-arrow-down-in-number-field",
+  "field.step#key-arrow-up-in-spacing-field",
+  "field.step#key-arrow-down-in-spacing-field",
   "field.step#key-page-up-in-number-field",
   "field.step#key-page-down-in-number-field",
   "field.scrub#panel-drag-field-label-horizontal",
