@@ -831,6 +831,7 @@ None in Pager.
 1. **No Code panel, so nothing follows the selection.** Required (manifest feature `code-panel-selection-sync`):
    - Selecting an element on the canvas or in Layers highlights its markup lines in the HTML tab and its rules in the CSS tab, and scrolls them into view.
    - Clicking a line inside an element's markup in the HTML tab selects that element on the canvas and in Layers, through the same selection command as a canvas click. For nested markup, the innermost element whose markup contains the clicked line is selected.
+2. **The lines that select their element stood 28 px among 18 px ones, and every one was named "Select"** (the audit's U-023). Required: every line of the pane is as tall as the others (a line that is a door keeps a line's height, padding and type), and a line that selects its element is named after its number ("Select line 12").
 
 ## color-picker-oklch
 
