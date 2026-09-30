@@ -53,6 +53,15 @@ test('the HTML pane shows the exported page, line for line', runs(OPEN, VIEW('co
   expect(await paneText(page), 'the pane shows the stylesheet the export writes').toBe(css);
   // every line carries a number, and the file's name stands in the pane's head
   expect(await page.locator('.code-row__number').count(), 'every line is numbered').toBe((await page.locator('.code-line').count()));
+  // every line is as tall as the others, and a line that selects its element names its line (the audit's U-023:
+  // element lines stood 28 px among 18 px ones, all named "Select")
+  await runDoor(page, PANE('html'));
+  const heights = await page.locator('.code-row').evaluateAll((els) => [...new Set(els.map((el) => Math.round(el.getBoundingClientRect().height)))]);
+  expect(heights, 'one line height').toHaveLength(1);
+  const names = await page.locator(`.code-line[data-door="${LINE}"]`).evaluateAll((els) => els.map((el) => el.getAttribute('aria-label')));
+  expect(names.length).toBeGreaterThan(0);
+  expect(names.every((name) => /^Select line \d+$/.test(name ?? '')), names.slice(0, 3).join(', ')).toBe(true);
+  await runDoor(page, PANE('css'));
   await expect(control(page, PANE('html')).or(control(page, PANE('css'))).first()).toBeVisible();
   await runDoor(page, PANE('html'));
   await expect(page.locator('.code-pane__name')).toHaveText('index.html');

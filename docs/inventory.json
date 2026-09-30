@@ -6,7 +6,7 @@
     "doors": 1002,
     "scenarios": 1340,
     "modules": 259,
-    "lines": 49799
+    "lines": 49802
   },
   "features": [
     {
@@ -4634,7 +4634,7 @@
     },
     {
       "path": "src/editor/shell/code-pane.tsx",
-      "lines": 163,
+      "lines": 165,
       "commands": [],
       "features": []
     },
@@ -5103,7 +5103,7 @@
     },
     {
       "path": "src/generated/ids.ts",
-      "lines": 4588,
+      "lines": 4589,
       "commands": [],
       "features": []
     },

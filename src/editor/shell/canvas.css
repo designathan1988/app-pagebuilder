@@ -250,6 +250,18 @@
   text-align: left;
 }
 
+/* a line that is a door (the element it was written for) is a line like the others: the button's height, padding,
+   border and centring are not a line's (the audit's U-023: element lines stood 28 px among 18 px ones) */
+.code-line.door {
+  justify-content: flex-start;
+  min-width: 0;
+  height: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  font: inherit;
+}
+
 .code-line.is-selected {
   background: var(--color-accent-soft);
 }

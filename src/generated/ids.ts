@@ -2678,6 +2678,7 @@ export const MESSAGE_IDS = [
   "codePanel.pane.html",
   "codePanel.pane.js",
   "codePanel.ruleAria",
+  "codePanel.selectLine",
   "codePanel.setPane",
   "codeView.generatedNote",
   "colorPicker.alpha",

@@ -25,7 +25,8 @@ const EDITOR_DOOR = PART('editor');
 // shows, so the tab in force is marked).
 const TABS = PARTS.filter((p) => p.door.kind === 'panel-control' && p.door.control === 'pane-tab');
 
-function Line({ text, kind, node, selected, plain = false }: { readonly text: string; readonly kind: PaneKind; readonly node: string | null; readonly selected: boolean; readonly plain?: boolean }) {
+function Line({ text, kind, node, selected, number, plain = false }: { readonly text: string; readonly kind: PaneKind; readonly node: string | null; readonly selected: boolean; readonly number: number; readonly plain?: boolean }) {
+  const t = useT();
   const tokens: readonly Token[] = useMemo(() => highlight(text, kind), [text, kind]);
   const line = PART('html-line');
   // the line's tokens, and nothing else: the line's own text is what the file says, so the pane's lines joined are
@@ -43,7 +44,8 @@ function Line({ text, kind, node, selected, plain = false }: { readonly text: st
   // editing surface cannot take one. Every other line is the door that selects the element it belongs to.
   if (plain || line === undefined || node === null) return <span className={selected ? 'code-line is-selected' : 'code-line'}>{body}</span>;
   return (
-    <DoorControl entry={line} args={{ target: node }} className={`code-line${selected ? ' is-selected' : ''}`} tabbable={false}>
+    // each line names itself (the audit's U-023: all 91 lines were named "Select")
+    <DoorControl entry={line} args={{ target: node }} className={`code-line${selected ? ' is-selected' : ''}`} tabbable={false} label={t('codePanel.selectLine', { line: number })}>
       {body}
     </DoorControl>
   );
@@ -59,7 +61,7 @@ const Drawn = memo(function Drawn({ lines, kind, marked, digits, mine }: { reado
           <span className="code-row__number" aria-hidden="true">
             {String(i + 1).padStart(digits, ' ')}
           </span>
-          <Line text={line.text} kind={kind} node={line.node} selected={marked[i] === true} plain={mine.size > 0 && line.node !== null && mine.has(line.node)} />
+          <Line text={line.text} kind={kind} node={line.node} selected={marked[i] === true} number={i + 1} plain={mine.size > 0 && line.node !== null && mine.has(line.node)} />
         </span>
       ))}
     </pre>

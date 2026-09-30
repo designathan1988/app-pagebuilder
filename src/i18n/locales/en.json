@@ -210,6 +210,7 @@
   "codePanel.pane.html": "HTML",
   "codePanel.pane.js": "JS",
   "codePanel.ruleAria": "The declarations of the selected element",
+  "codePanel.selectLine": "Select line {line}",
   "codePanel.setPane": "Show this part of the code",
   "codeView.generatedNote": "Generated: applying turns the edit into commands on the document.",
   "colorPicker.alpha": "Opacity",
