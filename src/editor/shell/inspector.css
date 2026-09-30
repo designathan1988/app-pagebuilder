@@ -612,7 +612,7 @@
 
 .field-row {
   display: grid;
-  grid-template-columns: calc(var(--space-10) * 3 + var(--space-2)) minmax(0, 1fr);
+  grid-template-columns: var(--size-label-column) minmax(0, 1fr);
   align-items: center;
   gap: 0 var(--space-3);
   min-height: var(--size-row);
@@ -638,14 +638,10 @@
   container-type: inline-size;
 }
 
-/* A pair's label column takes the label's own width (the canonical's .prop.two fixes it at 100 px, which its lean
-   cell — a value and a unit — fits inside 77.5 px). This application's cell carries more: the value, the values
-   dropdown and the unit button. Measured with the canonical's fixed column: the Height cell's input came out 30 px
-   wide and a typed "600px" arrived as the empty string — the field refused it ("is not a value this field takes"),
-   while "320", four characters, fitted. The alignment the fixed column buys is worth having and must wait for a
-   section-level grid (subgrid) that shares one label column without squeezing the cells. */
+/* A pair is one label and two cells, the label in the same 100 px column as every other row (jornada02 R-06): a lean
+   cell — its value and its unit, the Reset only while hovered — fits a value such as "600px" in its half. */
 .field-row--pair {
-  grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: var(--size-label-column) minmax(0, 1fr) minmax(0, 1fr);
 }
 
 /* A longhand of a concept another row already draws (rows.ts isDetailRow: border's twelve, border-radius's four):
@@ -828,8 +824,8 @@
   border-color: var(--color-focus);
 }
 
-/* the input inside the box draws no border of its own: the box is the field, its value in the code face at the
-   caption size so a pair of them fits the column */
+/* the input inside the box draws no border of its own: the box is the field, its value in the code role (12/18 mono,
+   jornada02 R-27) — a lean field (its value, its unit, its Reset) leaves a pair's value the room for it */
 .input-wrap .input {
   flex: 1;
   min-width: 0;
@@ -837,7 +833,7 @@
   padding: 0;
   border: 0;
   background: none;
-  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-mono);
+  font: var(--fw-code) var(--fs-code) / var(--lh-code) var(--font-mono);
 }
 
 /* The input of a field shares its row with the field's own affordances (the unit menu, the value list): the input
@@ -881,7 +877,7 @@
   padding: 0 var(--space-3);
   border-color: transparent;
   color: var(--color-origin-default);
-  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-mono);
+  font: var(--fw-code) var(--fs-code) / var(--lh-code) var(--font-mono);
 }
 [data-region='inspector-style'] .input-wrap[data-face]:not(:focus-within) .field__value-slot .input,
 [data-region='inspector-style'] .input-wrap[data-face]:not(:focus-within) .field__value-slot .input::placeholder {
@@ -906,14 +902,6 @@
   white-space: nowrap;
 }
 [data-region='inspector-style'] .field__origin-badge { margin-left: auto; }
-[data-region='inspector-style'] .input-wrap:has(.field__measurement) .field__unit {
-  position: absolute;
-  right: var(--space-2);
-  opacity: 0;
-}
-[data-region='inspector-style'] .input-wrap:has(.field__measurement):hover .field__unit,
-[data-region='inspector-style'] .input-wrap:has(.field__measurement):focus-within .field__unit { opacity: 1; }
-[data-region='inspector-style'] .input-wrap:has(.field__measurement):hover .field__measurement,
 [data-region='inspector-style'] .input-wrap:focus-within .field__measurement { visibility: hidden; }
 [data-region='inspector-style'] .input-wrap[data-origin='here'] {
   color: var(--color-origin-here);
@@ -964,36 +952,40 @@
   font-weight: var(--weight-semibold);
 }
 
-/* Editing affordances float beside the active field; they never take width away from its resting value. */
+/* The field's Reset stands at its end, in its flow, while the field is hovered or holds the focus: it never floats over
+   the next row (the audit's S-018) */
 [data-region='inspector-style'] .field__actions {
-  position: absolute;
-  right: 0;
-  top: 100%;
-  z-index: 5;
   display: none;
+  flex: none;
   align-items: center;
-  background: var(--color-surface-raised);
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-1);
 }
 [data-region='inspector-style'] .input-wrap:hover .field__actions:not(:empty),
 [data-region='inspector-style'] .input-wrap:focus-within .field__actions:not(:empty),
 [data-region='inspector-style'] .field-choice:hover .field__actions:not(:empty),
 [data-region='inspector-style'] .field-choice:focus-within .field__actions:not(:empty) { display: flex; }
+/* the unit is the unit menu's trigger (jornada02 A.0): its text, 24 wide, parked at the field's end; a value that holds
+   no unit (a keyword) draws the menu's chevron in its place */
 [data-region='inspector-style'] .field__unit-button .field__unit-value:not(:empty) + .icon { display: none; }
-[data-region='inspector-style'] .field__unit-button,
-[data-region='inspector-style'] .field__values-button { padding: 0; }
-[data-region='inspector-style'] .input-wrap--number:focus-within .field__unit-value { display: none; }
-[data-region='inspector-style'] .input-wrap--number:focus-within .field__unit-button .icon { display: block; }
-[data-region='inspector-style'] .input-wrap--number:not(:hover):not(:focus-within) .field__unit-value:empty + .icon { visibility: hidden; }
+/* the trigger's 24 px take the field's end padding: its unit text stays centred in them, and the value keeps the room
+   (a pair's -1.2 beside its ↔ and its px) */
+[data-region='inspector-style'] .input-wrap--number .field__unit {
+  margin-right: calc(var(--space-3) * -1);
+}
+/* a value that holds no unit (a keyword, a value measured: auto 1440) keeps its whole cell at rest: the trigger lies over
+   the cell's end only while the field is hovered or holds the focus, in the field's own fill, and the measured hint
+   gives way to it */
 [data-region='inspector-style'] .input-wrap--number .field__unit:has(.field__unit-value:empty) {
   position: absolute;
-  right: var(--space-2);
-  opacity: 0;
+  right: 0;
+  visibility: hidden;
+  border-radius: var(--radius-xs);
+  background: inherit;
 }
 [data-region='inspector-style'] .input-wrap--number:hover .field__unit:has(.field__unit-value:empty),
-[data-region='inspector-style'] .input-wrap--number:focus-within .field__unit:has(.field__unit-value:empty) { opacity: 1; }
+[data-region='inspector-style'] .input-wrap--number:focus-within .field__unit:has(.field__unit-value:empty) { visibility: visible; }
+[data-region='inspector-style'] .input-wrap:hover .field__measurement { visibility: hidden; }
+[data-region='inspector-style'] .field__unit-button,
+[data-region='inspector-style'] .field__values-button { padding: 0; }
 [data-region='inspector-style'] .field-origin:not(.is-focused) {
   position: absolute;
   width: var(--space-1);
@@ -1019,13 +1011,15 @@
 .field__unit-button {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-1);
+  justify-content: center;
+  min-width: var(--size-target-min);
   height: var(--size-control);
-  padding: 0 var(--space-2);
+  padding: 0;
   border: 0;
   border-radius: var(--radius-xs);
   background: none;
-  color: var(--color-text-muted);
+  color: var(--color-text-subtle);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-mono);
 }
 
 .field__unit-button:not([aria-disabled="true"]):hover {

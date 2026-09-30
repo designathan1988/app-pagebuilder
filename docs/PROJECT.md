@@ -90,6 +90,10 @@ a concept that has an owner is a defect.
   its origin; the real input retains its complete CSS text and existing commands. Pair membership, short prefixes
   and optional measured width/height hints are data in `properties.json` `rows`. Change those entries to rearrange
   a pair; change the shared CSS primitives to adjust density. Compare real Chrome captures after each visual change.
+  A field is lean (jornada02 R-27, A.0): its value in the code role (12/18 mono), its unit as the unit menu's
+  trigger (24 px wide, over the cell's end only while a keyword is hovered), a measured hint where the value is
+  auto, and its Reset in its flow while hovered; it steps with its keys and its label's scrub. Every row, a pair's
+  included, puts its values at the same x: the 100 px label column (`--size-label-column`).
 - The shell's stylesheets load once each, from `src/main.tsx`, in this order: the tokens, `shell.css` (the base and
   the one focus ring), `primitives.css` (one owner per primitive: the door, the segmented control, the swatch, the
   matrix), then one stylesheet per region (`window.css` … `window-overlays.css`), which places and sizes them.
