@@ -6,7 +6,7 @@
     "doors": 1000,
     "scenarios": 1335,
     "modules": 254,
-    "lines": 48883
+    "lines": 48910
   },
   "features": [
     {
@@ -3738,7 +3738,7 @@
     },
     {
       "path": "src/core/style/codecs.ts",
-      "lines": 800,
+      "lines": 803,
       "commands": [],
       "features": []
     },
@@ -3821,7 +3821,7 @@
     },
     {
       "path": "src/core/style/grid-item.ts",
-      "lines": 56,
+      "lines": 57,
       "commands": [
         "style.setGridItem"
       ],
@@ -4684,7 +4684,7 @@
     },
     {
       "path": "src/editor/shell/field.tsx",
-      "lines": 1279,
+      "lines": 1297,
       "commands": [],
       "features": []
     },
@@ -4702,7 +4702,7 @@
     },
     {
       "path": "src/editor/shell/inspector-controls.tsx",
-      "lines": 587,
+      "lines": 592,
       "commands": [],
       "features": []
     },

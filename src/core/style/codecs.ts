@@ -540,12 +540,15 @@ export const number = registerCodec('number', {
   },
   write: (value) => (value.kind === 'keyword' ? value.keyword : value.kind === 'expression' ? value.text : ''),
 });
-// An opacity: a number from 0 to 1, or a percentage from 0 to 100 written as its number (50% is 0.5).
+// An opacity: a number from 0 to 1, or a percentage from 0 to 100 written as its number (50% is 0.5). A bare number
+// above 1 is a percentage too: the field shows an opacity as a percentage ("100 %"), so what a person types there is
+// one (the audit's S-020: "40" was refused).
 export const alpha = registerCodec('alpha', {
   read(text) {
     const typed = text.trim();
     const percent = /^(\d+(?:\.\d*)?|\.\d+)%$/.exec(typed);
-    const n = percent !== null ? Number(percent[1]) / 100 : /^(?:\d+(?:\.\d*)?|\.\d+)$/.test(typed) ? Number(typed) : Number.NaN;
+    const bare = /^(?:\d+(?:\.\d*)?|\.\d+)$/.test(typed) ? Number(typed) : Number.NaN;
+    const n = percent !== null ? Number(percent[1]) / 100 : bare > 1 ? bare / 100 : bare;
     return Number.isFinite(n) && n >= 0 && n <= 1 ? { kind: 'expression', text: writeNumber(n) } : null;
   },
   write: (value) => (value.kind === 'expression' ? value.text : ''),

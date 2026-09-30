@@ -72,6 +72,14 @@
   background: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
   white-space: nowrap;
+  /* what does not fit a narrow window scrolls inside the bar (the wheel, a focused control brought into view), never
+     widening the window: at 1024 px the whole editor scrolled sideways (the audit's U-010) */
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.canvas-toolbar > * {
+  flex-shrink: 0;
 }
 
 /* the keys of a drag, while one goes on (the user's real-use audit, item 3.3) */

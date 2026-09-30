@@ -13,6 +13,7 @@ import { unwrapCommand, wrapRowCommand } from './structure/wrap.ts';
 import { RULES, documentOf, node, runHandler } from './testing/handlers.ts';
 import { slug } from './text/fold.ts';
 import { setStyleCommand } from './style/set.ts';
+import { setGridItemCommand, storedPlace } from './style/grid-item.ts';
 import { isIdentifier } from './text/identifier.ts';
 import type { DocumentJson } from './document/model.ts';
 
@@ -173,5 +174,27 @@ describe('a field left by a press on another element (E-02)', () => {
     // elements that left the document take nothing, and nothing else is written
     const gone = runHandler(setStyleCommand, document, { property: 'width', value: '200px', targets: ['Z'] }, { selection: ['B'] });
     expect(gone.document).toBe(document);
+  });
+});
+
+describe('a grid item’s start and span (S-012)', () => {
+  it('writing one half keeps the other', () => {
+    const item = node('Item', 'section', 'section', { styles: { desktop: { base: { 'grid-column-start': '1', 'grid-column-end': 'span 2' } } } });
+    const document = documentOf({ pages: [page('p', 'Home', 'index.html', [item])] });
+    const moved = runHandler(setGridItemCommand, document, { property: 'grid-column', start: 2 }, { selection: ['Item'] });
+    expect(storedPlace(moved.document.pages[0]?.tree.children[0] as ReturnType<typeof node>, 'grid-column', RULES)).toEqual({ start: 2, span: 2 });
+    const widened = runHandler(setGridItemCommand, document, { property: 'grid-column', span: 3 }, { selection: ['Item'] });
+    expect(storedPlace(widened.document.pages[0]?.tree.children[0] as ReturnType<typeof node>, 'grid-column', RULES)).toEqual({ start: 1, span: 3 });
+  });
+});
+
+describe('the opacity field (S-020)', () => {
+  it('takes the percentage it shows, and still a fraction', () => {
+    const document = documentOf({ pages: [page('p', 'Home', 'index.html', [node('Box', 'section', 'section')])] });
+    for (const [typed, stored] of [['40', '0.4'], ['40%', '0.4'], ['0.4', '0.4'], ['100', '1']] as const) {
+      const ran = runHandler(setStyleCommand, document, { property: 'opacity', value: typed }, { selection: ['Box'] });
+      expect(ran.document.pages[0]?.tree.children[0]?.styles.desktop?.base?.opacity, typed).toBe(stored);
+    }
+    expect(runHandler(setStyleCommand, document, { property: 'opacity', value: '140' }, { selection: ['Box'] }).outcome.kind).toBe('refused');
   });
 });

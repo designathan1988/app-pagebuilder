@@ -462,7 +462,13 @@ export function NumberField({ entry, door, property, label, bare = false, labell
       const targets = store.getState().selection;
       window.setTimeout(() => keepValue(store, command, property, text, targets), 0);
     };
-    const onInput = () => {
+    const onInput = (event: Event) => {
+      // the browser's own undo and redo in the field give back what the field held: nothing typed to keep (the audit's
+      // U-022: a Ctrl+Z after Enter kept an empty value on leaving the field)
+      if (event instanceof InputEvent && event.inputType.startsWith('history')) {
+        typing.typed = false;
+        return;
+      }
       typing.typed = true;
     };
     element.addEventListener('input', onInput);
@@ -695,7 +701,13 @@ export function TextStyleField({
       const targets = store.getState().selection;
       window.setTimeout(() => keepText.current(text, targets), 0);
     };
-    const onInput = () => {
+    const onInput = (event: Event) => {
+      // the browser's own undo and redo in the field give back what the field held: nothing typed to keep (the audit's
+      // U-022: a Ctrl+Z after Enter kept an empty value on leaving the field)
+      if (event instanceof InputEvent && event.inputType.startsWith('history')) {
+        typing.typed = false;
+        return;
+      }
       typing.typed = true;
     };
     element.addEventListener('input', onInput);
@@ -1056,7 +1068,13 @@ export function TextField({ entry, node, label, keepOnLeave = true }: { readonly
       if (!keepOnLeave && !quickPanelOpen(store.getState().ui)) return;
       keepTextWith(store, command, target, element.value);
     };
-    const onInput = () => {
+    const onInput = (event: Event) => {
+      // the browser's own undo and redo in the field give back what the field held: nothing typed to keep (the audit's
+      // U-022: a Ctrl+Z after Enter kept an empty value on leaving the field)
+      if (event instanceof InputEvent && event.inputType.startsWith('history')) {
+        typing.typed = false;
+        return;
+      }
       typing.typed = true;
     };
     element.addEventListener('input', onInput);

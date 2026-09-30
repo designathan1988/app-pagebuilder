@@ -25053,7 +25053,7 @@
           "refusals": []
         },
         {
-          "id": "an-opacity-above-one-is-refused",
+          "id": "an-opacity-above-a-hundred-percent-is-refused",
           "setup": {
             "fixture": "aurora",
             "selection": [
@@ -25071,13 +25071,13 @@
               "door": "style.set#inspector-opacity",
               "args": {
                 "property": "opacity",
-                "value": "2"
+                "value": "140"
               },
               "target": null,
               "drop": null,
               "action": true,
               "hold": false,
-              "type": "2\n"
+              "type": "140\n"
             }
           ],
           "doors": [
@@ -25107,7 +25107,7 @@
                   "key": "status.value.invalid",
                   "params": {
                     "property": "Opacity",
-                    "value": "2"
+                    "value": "140"
                   }
                 }
               ]

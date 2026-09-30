@@ -26,9 +26,8 @@ export function storedPlace(node: DocNode, property: string, rules: ModelRules):
   return startAndSpan(longhands.map((longhand) => storedValue(node, longhand, rules) ?? '').join(' / '));
 }
 
-// what the door's start and span make of the value the element holds
-export function gridItemValue(held: string | undefined, start: number | undefined, span: number | undefined): string | { readonly refused: 'start' } | { readonly refused: 'span' } {
-  const now = startAndSpan(held);
+// what the door's start and span make of the place the element holds (storedPlace: its longhands)
+export function gridItemValue(now: { readonly start: number | null; readonly span: number }, start: number | undefined, span: number | undefined): string | { readonly refused: 'start' } | { readonly refused: 'span' } {
   const nextStart = start ?? now.start;
   const nextSpan = span ?? now.span;
   if (nextStart !== null && nextStart < 1) return { refused: 'start' };
@@ -45,7 +44,9 @@ export const setGridItemCommand = registerHandler('style.setGridItem', (context,
   const { state, rules } = context;
   const primary = state.selection[0] === undefined ? null : locate(state.document, state.selection[0]);
   if (primary === null) return { kind: 'change' };
-  const written = gridItemValue(storedValue(primary.node, property, rules), start, span);
+  // the half the door leaves out is the one the element holds, read from its longhands as the editor reads it (the
+  // audit's S-012: the composite's own value was read, which the document never stores, so the other half was lost)
+  const written = gridItemValue(storedPlace(primary.node, property, rules), start, span);
   if (typeof written !== 'string') {
     return { kind: 'refused', message: message(written.refused === 'start' ? 'status.gridItem.noStart' : 'status.gridItem.noSpan') };
   }

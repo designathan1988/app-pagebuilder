@@ -4943,7 +4943,7 @@ The fields and menus are keyboard-operable like every inspector field.
 
 ### Problems in Pager
 
-1. **Opacity takes a number only:** `50%`, which CSS takes, is not read as 0.5. Required: opacity takes a number from 0 to 1 or a percentage from 0 to 100 %, written as its number (50 % is 0.5); anything else is refused with a message.
+1. **Opacity takes a number only:** `50%`, which CSS takes, is not read as 0.5. Required: opacity takes a number from 0 to 1 or a percentage from 0 to 100 %, written as its number (50 % is 0.5); anything else is refused with a message. The field shows an opacity as a percentage ("100 %"), so a bare number above 1 typed in it is a percentage too ("40" is 0.4; the code audit's S-020, where the field showed 100 and refused 40); above 100 % is refused.
 2. **The menus offer a fraction of the values:** eight of the sixteen blend modes, eleven cursors (`catalogue.js:398`, `:405`). Required: each offers every value of its generated list.
 3. **User select is written without its prefix,** which Safari needs. Required: user-select is written through its recipe (`-webkit-user-select` and `user-select`, properties.json recipes).
 

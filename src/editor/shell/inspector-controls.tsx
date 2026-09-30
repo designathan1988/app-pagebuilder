@@ -220,7 +220,8 @@ export function GridItemField({ entry, half }: { readonly entry: DoorEntry; read
   const store = useStore();
   const t = useT();
   const property = typeof entry.door.args.property === 'string' ? entry.door.args.property : '';
-  const appearance = useFieldAppearance([property]);
+  // where the value comes from is read on the longhands the document stores (grid-column-start, grid-column-end)
+  const appearance = useFieldAppearance(MODEL_RULES.compositeFacts.get(property)?.longhands ?? [property]);
   const place = (s: Parameters<typeof styleSource>[0]) => {
     const node = styleSource(s);
     return node ? storedPlace(node, property, layeredRules(s.ui)) : null;
@@ -240,9 +241,12 @@ export function GridItemField({ entry, half }: { readonly entry: DoorEntry; read
     if (element === null || !draft.current) return;
     draft.current = false;
     const typed = element.value.trim();
-    if (typed === '') return;
-    const number = Number.parseInt(typed, 10);
-    if (!Number.isInteger(number)) return;
+    const number = /^-?\d+$/.test(typed) ? Number.parseInt(typed, 10) : Number.NaN;
+    // what is no whole number is not kept: the field shows the element's value again
+    if (!Number.isInteger(number)) {
+      element.value = shown;
+      return;
+    }
     (store.dispatch as (id: CommandId, args: unknown) => DispatchResult)(entry.command.id, { property, [half]: number });
   };
   return (
@@ -283,7 +287,8 @@ export function GridTracks({ entry }: { readonly entry: DoorEntry }) {
   const locale = useLocale();
   // the axis the door edits (its own argument: a panel control carries no property of its own)
   const property = typeof entry.door.args.property === 'string' ? entry.door.args.property : '';
-  const appearance = useFieldAppearance([property]);
+  // where the value comes from is read on the longhands the document stores (grid-column-start, grid-column-end)
+  const appearance = useFieldAppearance(MODEL_RULES.compositeFacts.get(property)?.longhands ?? [property]);
   const value = useEditorState((s) => {
     const node = styleSource(s);
     return node ? storedValue(node, property, layeredRules(s.ui)) : undefined;
