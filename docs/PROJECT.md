@@ -86,8 +86,10 @@ a concept that has an owner is a defect.
 ## The development loop
 
 ```
-npm run check:fast        # the static gate: gen:check, manifest:check, inventory:check, typecheck, lint, unit (~1 min)
+npm run check:fast        # the static gate: gen:check, manifest:check, inventory:check, typecheck, lint, unit (~1 min),
+                          # every scenario's logic without a browser among them (tools/runner/headless.test.ts)
 npm run ui -- <flow>      # drive the real app in Chrome with real gestures, a photo per step, failing on any error
+npm run e2e:affected      # the browser tests of what changed: the features a change reaches, and their spec files
 npm run e2e -- <spec>     # the tests of what the block built, at the end of a block
 npm run e2e               # the complete suite, once, when the application is ready
 npm run e2e:diagnose      # the failed tests again, with their trace
@@ -95,6 +97,18 @@ npm run e2e:tooth         # the tooth proof: a feature's handlers made no-ops mu
 npm run inventory         # regenerate docs/INVENTORY.md and docs/inventory.json
 ```
 
+- **Two scenario runners, one contract.** The fast runner (`tools/runner/headless.test.ts`, inside `check:fast`) runs
+  every scenario through every door as the command and arguments the door hands, on the editor's own store in Node,
+  and checks the refusals after their step, the document, the selection, the undo steps, the feedback and undo and
+  redo — about 900 runs in two seconds. What only a browser proves stays with the browser runner
+  (`tools/runner/scenarios.ts`, which remains the contract: every scenario through every door, in the real app): a
+  gesture, a drop, a field that shapes typed text, a control that fills its arguments, the colour picker's session,
+  and a run whose outcome depends on the page's layout or on the values the browser takes, which the fast runner
+  reports as skipped with the reason.
+- `npm run e2e:affected [--since <ref>] [--list]` follows the imports of `src/` from each changed module to the
+  modules the inventory names for each feature; a change to what every test stands on (tests/support, the runners,
+  the Playwright configuration, the manifest's commands or layout) runs the whole suite, and a changed component that
+  reaches no feature's module is named, for its spec files to be chosen by hand.
 - A screen is not done until a photo shows it working: `npm run ui -- <flow>` (Playwright on the installed Chrome,
   never the editor's own preview pane) drives it with real gestures and writes one screenshot per step to
   `.cache/logs/ui-<flow>-<time>/`. It fails when the page logged a console error, when the incident feed holds
@@ -105,9 +119,9 @@ npm run inventory         # regenerate docs/INVENTORY.md and docs/inventory.json
 - Tests enter through doors with the real mouse and keyboard, and assert end artifacts: the document JSON diff,
   computed style or geometry inside the frame, storage after an immediate reload, the files inside the exported ZIP.
   Never a proxy such as "it appeared on screen", and never only that something exists.
-- Time budgets, measured: the static gate ~1 minute; one flow ≤ 30 seconds; the complete suite ≤ 10 minutes at four
-  workers. The census (`tests/e2e/census.spec.ts`) is static: 256 built commands, 998 doors, every door of a built
-  command run by a test — 6 seconds.
+- Time budgets, measured: the static gate ~1 minute; one flow ≤ 30 seconds; the complete suite ≤ 10 minutes
+  (Playwright uses half the machine's cores, from 4 to 12 workers). The census (`tests/e2e/census.spec.ts`) is
+  static: 256 built commands, 998 doors, every door of a built command run by a test — 6 seconds.
 
 ### Adding a feature
 

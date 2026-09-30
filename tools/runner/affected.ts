@@ -34,7 +34,8 @@ function sourceFiles(dir: string): string[] {
     return /\.(ts|tsx|css|json)$/.test(e.name) && !/\.test\.tsx?$/.test(e.name) ? [full] : [];
   });
 }
-const IMPORT = /(?:import|export)\s[^'"]*?from\s+['"](\.{1,2}\/[^'"]+)['"]|import\s+['"](\.{1,2}\/[^'"]+)['"]/g;
+// a module's imports of code: an import of types only (`import type`, `export type`) runs nothing and carries no change
+const IMPORT = /(?:import|export)\s(?!type\s)[^'"]*?from\s+['"](\.{1,2}\/[^'"]+)['"]|import\s+['"](\.{1,2}\/[^'"]+)['"]/g;
 const importers = new Map<string, Set<string>>();
 for (const file of sourceFiles('src')) {
   if (!/\.tsx?$/.test(file)) continue;
@@ -46,17 +47,31 @@ for (const file of sourceFiles('src')) {
     importers.set(target, set);
   }
 }
-// every module a change reaches: the changed ones and, transitively, those that import them
-const reached = new Set<string>();
-const queue = changed.filter((f) => f.startsWith('src/'));
-while (queue.length > 0) {
-  const file = queue.pop() as string;
-  if (reached.has(file)) continue;
-  reached.add(file);
-  for (const importer of importers.get(file) ?? []) queue.push(importer);
+// every module a change reaches: the changed one and, transitively, those that import it. The command table
+// (src/app/commands.ts) imports every handler only to register it; through it every module that dispatches would be
+// reached by any handler, so a change stops there: a handler reaches the features whose modules import it.
+const WIRING = new Set(['src/app/commands.ts']);
+function reachOf(start: string): Set<string> {
+  const reached = new Set<string>();
+  const queue = [start];
+  while (queue.length > 0) {
+    const file = queue.pop() as string;
+    if (reached.has(file)) continue;
+    reached.add(file);
+    if (WIRING.has(file) && file !== start) continue;
+    for (const importer of importers.get(file) ?? []) queue.push(importer);
+  }
+  return reached;
 }
+const sources = changed.filter((f) => f.startsWith('src/') && /\.tsx?$/.test(f) && !/\.test\.tsx?$/.test(f));
+const reaches = new Map(sources.map((f) => [f, reachOf(f)]));
+const reached = new Set([...reaches.values()].flatMap((r) => [...r]));
 
 const inventory = JSON.parse(fs.readFileSync('docs/inventory.json', 'utf8')) as Inventory;
+const featureModules = new Set(inventory.features.flatMap((f) => f.modules));
+// a changed module that reaches no feature's module (a component that draws doors): the inventory does not say which
+// tests prove it, so the run names it and its spec files are chosen by hand
+const unmapped = sources.filter((f) => ![...(reaches.get(f) ?? [])].some((m) => featureModules.has(m)));
 const featureFiles = changed.filter((f) => /^manifest\/features\/\d{2}-.*\.json$/.test(f));
 const featuresInFiles = new Set(
   featureFiles.filter((f) => fs.existsSync(f)).flatMap((f) => (JSON.parse(fs.readFileSync(f, 'utf8')) as { features: { id: string }[] }).features.map((x) => x.id)),
@@ -77,6 +92,7 @@ else {
   console.log(`features: ${affected.length === 0 ? 'none' : affected.join(' ')}`);
   console.log(`spec files: ${specs.length === 0 ? 'none' : specs.join(' ')}`);
   if (styles.length > 0) console.log(`stylesheets changed (${styles.join(', ')}): the tests above prove behaviour; look at the screens with npm run ui`);
+  if (unmapped.length > 0) console.log(`no feature's module is reached by ${unmapped.join(', ')}: choose the spec files that prove it`);
 }
 if (listOnly) process.exit(0);
 
