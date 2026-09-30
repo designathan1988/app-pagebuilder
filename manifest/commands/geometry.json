@@ -764,7 +764,7 @@
         {
           "id": "inspector-anchor-control",
           "kind": "panel-control",
-          "drawnAs": "area",
+          "drawnAs": "segment",
           "pressed": false,
           "feature": "absolute-anchors",
           "panel": "inspector",

@@ -543,6 +543,21 @@ function anchorRows(entry: DoorEntry): readonly (readonly string[])[] {
     [top, verticalCenter, bottom, verticalStretch],
   ];
 }
+// The arrow each anchor edge wears: the manifest's door for the control is one entry drawn once per edge, so the
+// face has to come from the edge itself — and the edges' own names ("at the horizontal centre") are longer than the
+// 38 px cell. The icons the panel already draws elsewhere (the direction arrows) say it at a glance. (A door drawn
+// as an area has no face at all: the anchors used to be eight invisible boxes.)
+const EDGE_ICONS: Readonly<Record<string, string>> = {
+  left: 'arrow-left-to-line',
+  'horizontal-center': 'align-center-horizontal',
+  right: 'arrow-right-to-line',
+  'horizontal-stretch': 'arrow-left-right',
+  top: 'arrow-up-to-line',
+  'vertical-center': 'align-center-vertical',
+  bottom: 'arrow-down-to-line',
+  'vertical-stretch': 'chevrons-up-down',
+};
+
 export function AnchorControl({ entry }: { readonly entry: DoorEntry }) {
   const t = useT();
   const ready = isFeatureBuilt(entry.door.feature as FeatureId);
@@ -553,7 +568,9 @@ export function AnchorControl({ entry }: { readonly entry: DoorEntry }) {
         {anchorRows(entry).map((row, i) => (
           <div key={i} className="segmented segmented--wide">
             {row.map((edge) => (
-              <DoorControl key={edge} entry={entry} args={{ edge, mode: 'set' }} label={t(`command.anchor.${camel(edge)}` as MessageId)} className="anchor-control__item" ready={ready} />
+              <DoorControl key={edge} entry={entry} args={{ edge, mode: 'set' }} label={t(`command.anchor.${camel(edge)}` as MessageId)} className="anchor-control__item" ready={ready}>
+                {EDGE_ICONS[edge] === undefined ? undefined : <Icon name={EDGE_ICONS[edge] as Parameters<typeof Icon>[0]['name']} size="xs" />}
+              </DoorControl>
             ))}
           </div>
         ))}
