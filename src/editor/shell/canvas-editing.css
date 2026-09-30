@@ -407,6 +407,5 @@
 
 .chrome__band:focus-visible,
 .chrome__direct:focus-visible {
-  outline: 2px solid var(--color-focus);
   opacity: 1;
 }

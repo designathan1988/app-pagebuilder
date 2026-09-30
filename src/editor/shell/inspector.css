@@ -766,7 +766,7 @@
 }
 
 .field__slider:disabled {
-  opacity: 0.4;
+  accent-color: var(--color-border-strong);
 }
 
 .input,

@@ -132,17 +132,16 @@ test('a field tells its states apart, and a disabled control is not a quiet one'
   const invalid = await borders();
   expect(invalid.outline, 'a refused field wears the error colour').not.toBe(rest.outline);
   expect(invalid.outline, 'the error is not the focus').not.toBe(focused.outline);
-  // a disabled control is told apart from an inactive one: the Interactions tab (not built yet) against Settings
-  const tabs = await page.evaluate(() => {
-    const tab = (name: string) => [...document.querySelectorAll('[role="tab"]')].find((t) => (t.textContent ?? '').includes(name));
-    const style = (el: Element | undefined) => {
-      if (el === undefined) return null;
-      const s = getComputedStyle(el);
-      return { color: s.color, opacity: s.opacity };
+  // a disabled control is told apart from an inactive one: Redo, with nothing to redo, against Preview beside it in the
+  // top bar (the Interactions tab this compared before is built; and two objects compared with !== always differed)
+  const bar = await page.evaluate(() => {
+    const ink = (selector: string) => {
+      const el = document.querySelector(selector);
+      return el === null ? null : getComputedStyle(el).color;
     };
-    return { interactions: style(tab('Interactions')), settings: style(tab('Settings')) };
+    return { disabled: ink('[data-door="history.redo#toolbar-top-bar"][aria-disabled="true"]'), inactive: ink('[data-door="view.enterPreview#toolbar-top-bar-preview"]:not([aria-disabled="true"])') };
   });
-  expect(tabs.interactions, 'the disabled tab is drawn').not.toBeNull();
-  expect(tabs.settings, 'an inactive tab is drawn').not.toBeNull();
-  expect(tabs.interactions !== tabs.settings, 'disabled and inactive differ').toBe(true);
+  expect(bar.disabled, 'the disabled Redo is drawn').not.toBeNull();
+  expect(bar.inactive, 'the inactive Preview is drawn').not.toBeNull();
+  expect(bar.disabled, 'disabled and inactive differ').not.toBe(bar.inactive);
 });

@@ -25,10 +25,10 @@
 }
 
 /* a control that cannot act (its feature not built, nothing it applies to): clearly disabled, never looking like one
-   that works (the user's real-use audit, item 1.4) */
+   that works (the user's real-use audit, item 1.4) — the subtle ink on its own container, no hover plate, the
+   not-allowed pointer and its reason in the tooltip; never faded, so its words stay legible (jornada02 G-13) */
 .door.is-unavailable:not(.door--primary) {
   color: var(--color-text-subtle);
-  opacity: 0.45;
 }
 
 .door--icon-button {

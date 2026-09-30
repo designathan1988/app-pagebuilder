@@ -66,10 +66,6 @@
   font: var(--fw-body) var(--fs-body) / var(--lh-body) var(--font-ui);
 }
 
-.dialog:focus-visible {
-  outline: 2px solid var(--color-focus);
-}
-
 .dialog__header {
   display: flex;
   align-items: center;
@@ -419,10 +415,6 @@
   background: var(--color-surface);
   color: var(--color-text);
   font: inherit;
-}
-
-.command-bar__field:focus-visible {
-  outline: 2px solid var(--color-focus);
 }
 
 .command-bar__list {

@@ -61,6 +61,11 @@ a concept that has an owner is a defect.
   `manifest/commands/*.json`; there is no other keymap or button list. A door whose feature is not registered is
   drawn disabled with "not available yet" (proven by `src/editor/doors/door.test.tsx`); the context menu draws only
   what applies to the selection.
+- **Disabled and focused, one look each.** A control that cannot act is `aria-disabled`, drawn in the subtle ink on
+  its own container, with no hover plate, the not-allowed pointer and its reason in the tooltip — never faded with
+  opacity, so its words stay legible. The keyboard's focus is one ring everywhere: 2 px of the focus colour, 1 px off
+  the control; inside a strip whose edges clip it is drawn inset, and on the status bar in the bar's own ink
+  (`src/editor/shell/shell.css`; jornada02 GRAMMAR R-40, G-13 to G-15).
 - Regions are declared in `manifest/layout.json` (top bar, sidebar views, canvas, inspector, dock, status bar, the
   overlays: palette, quick panel, colour picker, dialogs, rulers, chrome). The shell draws each region from its own
   file under `src/editor/shell/`.

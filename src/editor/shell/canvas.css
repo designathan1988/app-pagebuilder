@@ -190,9 +190,9 @@
   padding: var(--space-2) 0;
 }
 
+/* the pane fills its region, whose edges clip: its ring is drawn inside them */
 .code-pane__body:focus-visible {
-  outline: 1px solid var(--color-focus);
-  outline-offset: -1px;
+  outline-offset: -2px;
 }
 
 /* The rule editor of the CSS pane (code-panel-edit-css): the selected element's declarations, typed over */

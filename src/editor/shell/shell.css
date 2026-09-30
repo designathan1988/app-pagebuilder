@@ -50,9 +50,23 @@ button[aria-disabled='true'] {
   cursor: not-allowed;
 }
 
+/* the one focus ring (jornada02 GRAMMAR R-40): 2 px of the focus colour, 1 px off the control; a control whose region clips
+   its edges moves it inside with a negative offset, and nothing else draws a ring of its own */
 :focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 1px;
+}
+
+/* on a surface filled with a strong colour the ring takes the surface's own ink, which reads on it (G-15): the status
+   bar is the focus colour itself */
+[data-region='status-bar'] :focus-visible {
+  outline-color: var(--color-on-status-bar);
+}
+
+/* in a strip whose edges clip what goes past them (the file tabs, the canvas toolbar) the ring is drawn inside (G-14) */
+.file-tabs :focus-visible,
+.canvas-toolbar :focus-visible {
+  outline-offset: -2px;
 }
 
 kbd {
