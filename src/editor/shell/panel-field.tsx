@@ -38,6 +38,8 @@ export function PanelField({
   disabled = false,
   autoFocus = false,
   placeholder,
+  display,
+  accept,
   onDone,
 }: {
   readonly entry: DoorEntry;
@@ -50,6 +52,10 @@ export function PanelField({
   readonly autoFocus?: boolean;
   // what an empty value means, said inside the field (an interaction's scope: this element)
   readonly placeholder?: string;
+  // a value shown in words (an interaction's trigger: "Click" for click), and the value a typed text stands for (the
+  // value itself, or its words, in any case); the offered values are listed in their words
+  readonly display?: (value: string) => string;
+  readonly accept?: (typed: string) => string;
   readonly onDone?: () => void;
 }) {
   const door = useDoor(entry, args, label);
@@ -66,8 +72,9 @@ export function PanelField({
     event.preventDefault();
     setEdited(false);
     const argument = textArgument(entry, args);
-    if (argument === null || draft === value) return;
-    const outcome = (store.dispatch as (id: CommandId, a: unknown) => DispatchResult)(entry.command.id as CommandId, { ...entry.door.args, ...args, [argument]: draft });
+    const chosen = accept === undefined ? draft : accept(draft);
+    if (argument === null || chosen === value) return;
+    const outcome = (store.dispatch as (id: CommandId, a: unknown) => DispatchResult)(entry.command.id as CommandId, { ...entry.door.args, ...args, [argument]: chosen });
     if (outcome.status === 'done') onDone?.();
   };
   const ready = door.built && !disabled;
@@ -82,7 +89,7 @@ export function PanelField({
           ref={input}
           className="panel-field__text"
           type="text"
-          value={edited ? draft : value}
+          value={edited ? draft : display === undefined ? value : display(value)}
           placeholder={placeholder}
           disabled={!ready}
           list={list.length > 0 ? `${id}-list` : undefined}
@@ -98,7 +105,7 @@ export function PanelField({
       {list.length > 0 ? (
         <datalist id={`${id}-list`}>
           {list.map((one) => (
-            <option key={one} value={one} />
+            <option key={one} value={display === undefined ? one : display(one)} />
           ))}
         </datalist>
       ) : null}

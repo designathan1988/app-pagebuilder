@@ -42,6 +42,15 @@ const useOptionLabel = (): ((key: string) => string) => {
   };
 };
 
+// the trigger or the action a typed text names: an offered value typed as it is, or in its words, in any case; any other
+// text goes as typed (the command says it is not one)
+const chosenOf =
+  (offered: readonly string[], words: (value: string) => string) =>
+  (typed: string): string => {
+    const text = typed.trim().toLowerCase();
+    return offered.find((value) => value.toLowerCase() === text || words(value).toLowerCase() === text) ?? typed.trim();
+  };
+
 // what an interaction's options field holds, by its action
 function optionValue(interaction: Interaction): string {
   if (needsClassName(interaction.action)) return interaction.className ?? '';
@@ -74,10 +83,10 @@ function Card({ node, interaction, index }: { readonly node: DocNode; readonly i
           <PanelField entry={SCOPE_FIELD} args={{ interaction: index }} value={interaction.scope ?? ''} label={t('inspector.interactionScope')} offered={['', ...classes]} placeholder={t('interactions.scope.element')} />
         ) : null}
         {TRIGGER_FIELD !== null ? (
-          <PanelField entry={TRIGGER_FIELD} args={{ interaction: index }} value={interaction.trigger} label={t('interactions.field.trigger')} offered={applicableTriggers(node)} />
+          <PanelField entry={TRIGGER_FIELD} args={{ interaction: index }} value={interaction.trigger} label={t('interactions.field.trigger')} offered={applicableTriggers(node)} display={(v) => label(`trigger:${v}`)} accept={chosenOf(applicableTriggers(node), (v) => label(`trigger:${v}`))} />
         ) : null}
         {ACTION_FIELD !== null ? (
-          <PanelField entry={ACTION_FIELD} args={{ interaction: index }} value={interaction.action} label={t('interactions.field.action')} offered={applicableActions(node)} />
+          <PanelField entry={ACTION_FIELD} args={{ interaction: index }} value={interaction.action} label={t('interactions.field.action')} offered={applicableActions(node)} display={(v) => label(`action:${v}`)} accept={chosenOf(applicableActions(node), (v) => label(`action:${v}`))} />
         ) : null}
         <div className="field-row interaction-card__target" data-interaction-target={index}>
           <span className="field-row__label">{t('interactions.field.target')}</span>
