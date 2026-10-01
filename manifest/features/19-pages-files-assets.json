@@ -29,7 +29,8 @@
           "The home page cannot be deleted; delete asks for confirmation; every page operation is an undo step.",
           "File > New blank page now empties only the active page; File > Open project replaces all pages.",
           "The active page is restored after reload.",
-          "The + with no name given takes the next free name (Page, Page 2…), and the new page's name field takes the focus with its name selected."
+          "The + with no name given takes the next free name (Page, Page 2…), and the new page's name field takes the focus with its name selected.",
+          "Renaming a page renames its root too (unique among the pages' roots), so the Layers, the breadcrumb and the status bar name the page as the person does."
         ]
       },
       "scenarios": [
@@ -428,7 +429,7 @@
                     "file": "index.html",
                     "tree": {
                       "type": "page",
-                      "name": "Page",
+                      "name": "About us",
                       "tag": "body",
                       "attributes": {},
                       "classes": [],
@@ -2976,7 +2977,7 @@
                     "file": "company/about-us.html",
                     "tree": {
                       "type": "page",
-                      "name": "Page 2",
+                      "name": "About us",
                       "tag": "body",
                       "attributes": {},
                       "classes": [],

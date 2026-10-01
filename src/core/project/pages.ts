@@ -3,12 +3,14 @@
 // Explorer lists them, and every command that acts on "the page" reads the first one until pages.switch arrives.
 //
 // pages.add (the Explorer's Pages section header): a page named after the text its door hands (refused when another
-// page holds it), or the next free default name ("Page", "Page 2"…; spec explorer-pages, Problems 3); its file is the name's slug ("About us" -> about-us.html), numbered when taken, and its root is the
-// root element the manifest gives every page (validate.ts ModelRules.root). The new page opens (spec
-// explorer-pages, "listing a page and opening it"): the editor shows what was just added, so the canvas, the Layers,
-// the top bar's switcher and an insert all follow it. One undo step.
-// pages.rename: the page's name; the file follows it while another page holds neither (so a file a link points at is
-// never taken silently), and a name another page already holds is refused.
+// page holds it), or the next free default name ("Page", "Page 2"…; spec explorer-pages, Problems 3); its file is the
+// name's slug ("About us" -> about-us.html), numbered when taken, and its root is the root element the manifest gives
+// every page (validate.ts ModelRules.root). The new page opens (spec explorer-pages, "listing a page and opening it"):
+// the editor shows what was just added, so the canvas, the Layers, the top bar's switcher and an insert all follow it.
+// One undo step.
+// pages.rename: the page's name, and its root's (spec explorer-pages, Problems 4); the file follows it while another
+// page holds neither (so a file a link points at is never taken silently), and a name another page already holds is
+// refused.
 // pages.duplicate: a copy right after the page, every node with an id and a styles record of its own, "About 2" when
 // "About" is taken.
 // pages.delete: the page goes; the home page (index.html, what the project opens on) cannot be deleted, and a project
@@ -102,6 +104,10 @@ export const renamePageCommand = registerHandler('pages.rename', ({ state }, { p
   // while nothing else holds it, so a file a link points at is never taken silently
   const free = held.file !== HOME && wanted !== HOME && !document.pages.some((p, i) => i !== at && p.file === wanted);
   const patches: Patch[] = [{ op: 'replace', path: ['pages', at, 'name'], value: typed }];
+  // the page's root takes its new name too (the journey "site": the page Contato's root read "Page 3" in the Layers, the
+  // breadcrumb and the status bar), unique among the pages' roots
+  const root = rootName(document.pages.filter((_, i) => i !== at), typed);
+  if (held.tree.name !== root) patches.push({ op: 'replace', path: ['pages', at, 'tree', 'name'], value: root });
   // the links to the page follow its file (references.ts): a link written "about.html" becomes "sobre.html"
   if (free && held.file !== wanted) patches.push({ op: 'replace', path: ['pages', at, 'file'], value: wanted }, ...followPaths(document, movedPath(held.file, wanted)));
   return { kind: 'change' as const, patches, message: message('status.pages.renamed', { name: typed }) };
