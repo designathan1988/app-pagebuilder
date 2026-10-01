@@ -7451,6 +7451,7 @@ None in Pager.
 2. **The Inspector cannot edit keyframe values.** Required:
    - While the playhead sits on a keyframe, the Inspector edits that keyframe's values (e.g. opacity, Move Y) and not the base styles, and a badge in the Inspector says so.
    - Keyframe offsets, values and per-keyframe easing are stored in the document JSON.
+3. **The panel was boxes floating in the dock's padding** (jornada02 pairing 5.6): 28 px transport buttons in frames, a track in a rounded well, two settings to a line squeezed to nothing in the side, an animation's delete spelled out. Required: the canonical anatomy — a 236 px side (the animations, their small trash buttons, the name and the settings one per line with their labels in the 72 px column) beside the track area: a 32 px transport bar of 24 px buttons, the ruler and the lane under it, and a bar for the keyframe's actions.
 
 ## timeline-preview
 

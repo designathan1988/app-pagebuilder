@@ -604,19 +604,29 @@
 }
 
 /* The Timeline panel (group 18): the animations of the selected element on the left, the track with its ruler,
-   playhead and keyframes on the right (src/editor/timeline/panel.tsx) */
+   playhead and keyframes on the right (src/editor/timeline/panel.tsx) — the canonical anatomy (jornada02 pairing
+   5.6): a 236 px side, a 32 px transport bar of 24 px buttons over the track, a bar under it for the keyframe's
+   actions. The dock body's padding is the panel's own. */
+.dock-body:has(> .timeline) {
+  padding: 0;
+}
+
 .timeline {
-  display: flex;
+  display: grid;
   flex: 1 0 100%;
-  gap: var(--space-7);
-  align-items: flex-start;
+  grid-template-columns: var(--size-timeline-side) minmax(0, 1fr);
+  align-self: stretch;
+  min-height: 100%;
 }
 
 .timeline__side {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-  min-width: calc(var(--size-sidebar) - var(--space-10));
+  gap: var(--space-2);
+  min-width: 0;
+  padding: var(--space-3) var(--space-4);
+  border-right: 1px solid var(--color-border);
+  overflow: auto;
 }
 
 .timeline__title {
@@ -631,6 +641,11 @@
 .timeline__hint {
   margin: 0;
   color: var(--color-text-subtle);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-ui);
+}
+
+.timeline__hint {
+  padding: var(--space-2) var(--space-4);
 }
 
 .timeline__rows {
@@ -645,6 +660,7 @@
 .timeline__rows .door {
   justify-content: flex-start;
   width: 100%;
+  height: var(--size-row);
 }
 
 .timeline__row {
@@ -653,38 +669,75 @@
   gap: var(--space-2);
 }
 
+/* an animation's delete is its row's small trash button, its name kept for assistive technology */
+.timeline__rows .timeline__row > .door:not(:first-child) {
+  flex: none;
+  width: var(--size-target-min);
+  min-width: var(--size-target-min);
+  height: var(--size-target-min);
+  padding: 0;
+}
+.timeline__rows .timeline__row > .door:not(:first-child) .door__label {
+  position: absolute;
+  width: var(--space-1);
+  height: var(--space-1);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.timeline__rows .timeline__row > .door:first-child {
+  flex: 1;
+  min-width: 0;
+}
+
+/* the name and the settings: one per line, the label in the card's 72 px column (the canonical .prop) */
 .timeline__settings {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-2) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.timeline__side .panel-field {
+  grid-template-columns: var(--size-label-column-card) minmax(0, 1fr);
+  min-height: var(--size-row);
 }
 
 .timeline__track-area {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  min-width: 0;
+  overflow: auto;
 }
 
+/* the transport bar: Play, Pause, Stop and Loop as the small icon buttons */
 .timeline__controls {
   display: flex;
+  flex: none;
+  align-items: center;
   gap: var(--space-2);
+  height: var(--space-10);
+  padding: 0 var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.timeline__controls .door {
+  width: var(--size-target-min);
+  min-width: var(--size-target-min);
+  height: var(--size-target-min);
+  padding: 0;
+  border-color: transparent;
 }
 
 .timeline__track {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
-  padding: var(--space-2) 0;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  background: var(--color-surface-sunken);
+  margin: 0 var(--space-4);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .timeline__ruler {
   position: relative;
-  height: var(--size-control);
-  margin: 0 var(--space-2);
+  height: var(--size-row);
   cursor: pointer;
   background: repeating-linear-gradient(to right, var(--color-border) 0, var(--color-border) 1px, transparent 1px, transparent 10%);
   border-bottom: 1px solid var(--color-border);
@@ -700,8 +753,7 @@
 
 .timeline__lane {
   position: relative;
-  height: var(--size-control);
-  margin: 0 var(--space-2);
+  height: var(--size-row);
 }
 
 .timeline__keyframe {
@@ -719,6 +771,13 @@
 
 .timeline__keyframe.is-current {
   color: var(--color-canvas-selection);
+}
+
+/* the keyframe's own actions, in the bar under the track */
+.timeline__track-area > .timeline__row {
+  min-height: var(--space-10);
+  padding: 0 var(--space-4);
+  border-bottom: 1px solid var(--color-border);
 }
 
 /* The inspector's Interactions tab (group 18): one card per interaction of the selected element */
