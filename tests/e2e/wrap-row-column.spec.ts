@@ -168,3 +168,17 @@ test(
     expect(await read(page)).toEqual(before);
   },
 );
+
+// Words typed on the canvas are not shortcuts (keys.typingBurst; the dogfooding pass: words typed on the canvas wrapped,
+// moved and nested elements one letter at a time): once a letter of the burst binds nothing (the "a"), the letters after
+// it do not run; shortcuts pressed in a row (R then S, scenario swapping-the-direction-of-a-row) still do; a letter on
+// its own later runs again.
+test('a typed word on the canvas runs its first letter shortcut only', runs('project.open#menu-file', 'selection.select#canvas-click-element-or-page', 'element.wrapRow#key-r-in-canvas', 'element.wrapColumn#key-c-in-canvas'), async ({ page }) => {
+  await clickNode(page, 'n-intro');
+  await page.keyboard.type('racgm');
+  await expect.poll(() => read(page)).toMatchObject({ undoSteps: 1 });
+  expect((await read(page)).tree).toContain('Row(Intro)');
+  await page.waitForTimeout(500);
+  await page.keyboard.press('c');
+  await expect.poll(() => read(page)).toMatchObject({ undoSteps: 2 });
+});

@@ -1344,6 +1344,13 @@
       "unit": "css-px",
       "source": "spec/BEHAVIOUR.md#layout-grid-overlay",
       "note": "The column grid margin of the Phone breakpoint (A1.6: a phone has no 80 px margin)."
+    },
+    {
+      "id": "keys.typingBurst",
+      "value": 350,
+      "unit": "ms",
+      "source": "spec/BEHAVIOUR.md#keyboard-panel-navigation",
+      "note": "A letter pressed this soon after another letter is typing, not a shortcut: a single-letter shortcut does not run in a burst (a person typing words on the canvas, thinking a text was being edited, wrapped and moved elements one letter at a time)."
     }
   ],
   "gestures": [

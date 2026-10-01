@@ -222,6 +222,8 @@ const STEPPED: Readonly<Record<string, { readonly step: number; readonly shiftSt
   'guide-keys': { step: numberConstant('guides.keyStep'), shiftStep: numberConstant('guides.keyShiftStep'), args: ['delta'] },
 };
 const SHIFT = 'Shift';
+// how soon after a letter another letter is typing rather than a shortcut (interactions.json)
+const TYPING_BURST = numberConstant('keys.typingBurst');
 const CANVAS: KeyContextId = 'canvas';
 function positionedContext(store: EditorStore, context: KeyContextId): KeyContextId {
   const nudge = NUDGE_DOORS[0];
@@ -297,7 +299,17 @@ export function installKeymap(store: EditorStore, target: Window = window): () =
     return true;
   };
 
+  // Words typed on the canvas are not shortcuts (the dogfooding pass: a title typed outside the text ran a wrap, a move,
+  // a grid… one letter at a time). Letters pressed within keys.typingBurst of each other are a burst; once a letter of
+  // the burst binds nothing (a vowel: the person is typing words), the single-letter shortcuts of the rest of the
+  // burst do not run. Shortcuts pressed in a row (R then S) still run; a click ends the burst.
+  let lastLetterAt = Number.NEGATIVE_INFINITY;
+  let typing = false;
   const onKeyDown = (event: KeyboardEvent) => {
+    const letter = event.key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey;
+    if (letter && event.timeStamp - lastLetterAt >= TYPING_BURST) typing = false;
+    const inBurst = letter && typing;
+    if (letter) lastLetterAt = event.timeStamp;
     // A modal owns Escape even when a press on its shield has left focus on the page body. Resolve its manifest door
     // before the canvas/global context can clear the selection, and do not let another key listener see that Escape.
     if (event.key === 'Escape' && store.getState().ui.dialog !== undefined && store.getState().confirmation === null) {
@@ -353,9 +365,14 @@ export function installKeymap(store: EditorStore, target: Window = window): () =
     const chain = gesture !== null || hand !== null || previewing(store.getState().ui) ? keyContextChain(context) : focusChain(event.target, context);
     const held = bindingIn(chain, chordOf(event)) === null ? heldKeyBindingIn(chain, event) : null;
     const binding = held?.entry ?? bindingIn(chain, chordOf(event));
+    // a letter that binds nothing outside a field marks the burst as typing
+    if (!binding && letter && !FIELDS.includes(focused) && context !== TEXT_EDITING) typing = true;
     if (!binding) return;
     // a bound chord is the editor's whether or not its door runs yet (DESIGN.md "Keyboard model")
     event.preventDefault();
+    // a letter inside a burst of letters is typing: its single-letter shortcut does not run (outside a field and the
+    // text edited in place, where letters are text already)
+    if (inBurst && binding.door.kind === 'shortcut' && binding.door.chord.length === 1 && !FIELDS.includes(focused) && context !== TEXT_EDITING) return;
     if (!shortcutRunsNow(binding)) return;
     // a key of the text edited in place acts on the edit: its node and the text it holds (text-edit.ts); a key of the
     // hand acts at its aim (hand.ts)
@@ -392,12 +409,19 @@ export function installKeymap(store: EditorStore, target: Window = window): () =
   const onFocusIn = (event: FocusEvent) => {
     pointerFocused = pointerPressing() ? event.target : null;
   };
+  // a click between two letters ends the burst: the person is not typing
+  const onClick = () => {
+    lastLetterAt = Number.NEGATIVE_INFINITY;
+    typing = false;
+  };
   target.addEventListener('focusin', onFocusIn, true);
+  target.addEventListener('click', onClick, true);
   target.addEventListener('keydown', onKeyDown);
   target.addEventListener('keyup', onKeyUp);
   target.addEventListener('blur', onBlur);
   return () => {
     target.removeEventListener('keydown', onKeyDown);
+    target.removeEventListener('click', onClick, true);
     target.removeEventListener('keyup', onKeyUp);
     target.removeEventListener('blur', onBlur);
     target.removeEventListener('focusin', onFocusIn, true);

@@ -3136,6 +3136,7 @@ This is the keyboard feature.
 2. **Controls inside panels are removed from the Tab order,** so most buttons, inputs and trees cannot be reached by keyboard. Required: an automated sweep pressing F6 and Tab reaches every enabled button, input, tab and tree of every open panel.
 3. **Escape inside a panel does not reliably return to the canvas** (only the palette handles Escape, and it goes to the palette region). Required: Escape inside a panel returns focus to the canvas with the selection intact.
 4. **Unnamed focus stops** (a bare `DIV` in the Tab order). Required: every focusable element has an accessible name.
+5. **Words typed on the canvas ran its letter shortcuts** (the dogfooding pass: a title typed outside its text — the person thought it was being edited — wrapped, nested, took into the hand… one letter at a time). Required: letters pressed within `keys.typingBurst` (350 ms) of each other are a burst; once a letter of the burst binds nothing (a vowel: words are being typed), the single-letter shortcuts of the rest of the burst do not run. Shortcuts pressed in a row (R then S) still run, a letter on its own later runs, and a click ends the burst.
 
 ## keyboard-tree-walk
 
