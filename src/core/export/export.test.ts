@@ -57,6 +57,29 @@ describe('the export (specs export-zip, export-bem-css)', () => {
   });
 });
 
+describe('the whitespace between inline neighbours (the journey "site")', () => {
+  it('writes an element whose children run on in the line on one line, so no space parts them as the canvas draws none', () => {
+    const label = node('label', 'Label', 'label', 'label', { children: [node('name', 'Name', 'paragraph', 'span', { text: 'Name' }), node('field', 'Input', 'input', 'input')] });
+    const { html } = exportPage(page([label]), 0, RULES);
+    expect(html).toContain('  <label><span>Name</span><input></label>');
+  });
+
+  it('keeps one element per line where the layout ignores the whitespace (a flex row) or the children are blocks', () => {
+    const links = [node('a1', 'One', 'link', 'a', { text: 'One' }), node('a2', 'Two', 'link', 'a', { text: 'Two' })];
+    const flex = node('nav', 'Menu', 'nav', 'nav', { styles: styled({ display: 'flex' }), children: links });
+    const { html } = exportPage(page([flex, node('box', 'Box', 'div', 'div', { children: [node('p1', 'P', 'paragraph', 'p', { text: 'a' }), node('p2', 'Q', 'paragraph', 'p', { text: 'b' })] })]), 0, RULES);
+    expect(html).toContain('  <nav class="menu">\n    <a>One</a>\n    <a>Two</a>\n  </nav>');
+    expect(html).toContain('  <div>\n    <p>a</p>\n    <p>b</p>\n  </div>');
+  });
+
+  it('writes the row on one line when one of its breakpoints stops laying it out as a flex', () => {
+    const links = [node('a1', 'One', 'link', 'a', { text: 'One' }), node('a2', 'Two', 'link', 'a', { text: 'Two' })];
+    const styles = { desktop: { base: { display: 'flex' } }, phone: { base: { display: 'block' } } } as DocNode['styles'];
+    const { html } = exportPage(page([node('nav', 'Menu', 'nav', 'nav', { styles, children: links })]), 0, RULES);
+    expect(html).toContain('  <nav class="menu"><a>One</a><a>Two</a></nav>');
+  });
+});
+
 describe('the modal template runtime', () => {
   it('keeps the authored dialog tree and runs the same native dialog script in export and Preview', () => {
     const modal = paletteNode(nodeMaker(page([]), RULES, sequentialIds('modal'), (key) => key), 'template-modal');

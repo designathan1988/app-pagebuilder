@@ -2277,6 +2277,7 @@ None beyond File › Export page HTML through the menu's keys and the command ba
 6. **Nothing tells the person the export happened** except a developer readout. Required: the status bar says the site was exported and under which file name (`status.export.done`).
 7. **Text** must survive as text: `&`, `<` and `>` in a text are written as `&amp;`, `&lt;` and `&gt;`, `"` in an attribute value as `&quot;`, and a line break kept in a text (`\n`, text-edit-inline) is written as `<br>`.
 8. **The exported page must look like the canvas.** Required: opened in Chrome, every element of the exported page has the same computed styles as on the canvas, apart from editor-only aids (the minimum height of an empty container, the selection chrome); a browser test opens the exported files and compares.
+9. **The export's line breaks drew spaces the canvas does not** (the journey "site", 2026-10-01: in the exported contact form each label's text stood 5 px further from its field, and every later field and the button moved right; the canvas, built without whitespace, drew none, and item 8's test compared styles, not places). Required: an element with two neighbouring children that run on in the line (HTML's phrasing content: a span and an input, two links, two images) is written whole on one line, `<label><span>Name</span><input></label>`, so no whitespace parts them; an element that lays its children out as a flex or a grid in every layer of its own styles, or whose children are blocks, keeps one element per line, indented.
 
 ## floating-panels
 

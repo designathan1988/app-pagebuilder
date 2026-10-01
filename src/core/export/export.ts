@@ -188,6 +188,20 @@ export const pageCss = (css: readonly CodeLine[]): string => (css.length === 0 ?
 const writtenCss = (document: DocumentJson, text: string, from: string): string => fileUrlsIn(text, (address) => exportValue(document, 'src', address, from) ?? address);
 
 // One page's HTML and CSS as lines, each with the node it was written for.
+// Whether line breaks between an element's children would show (the journey "site": in the export a form's label text
+// stood 5 px further from its field than on the canvas, which draws no space there): two neighbours that run on in the
+// line (HTML's phrasing content: a span and an input, two links, two images) are parted by a space where a line break
+// stands between them, unless the element lays its children out as a flex or a grid in every layer of its own styles
+// (its own display overrides its classes': its rule comes after theirs).
+const LAYOUTS = new Set(['flex', 'inline-flex', 'grid', 'inline-grid']);
+function runsOn(node: DocNode, inner: readonly DocNode[], rules: ModelRules): boolean {
+  const inline = (child: DocNode): boolean => child.tag !== null && rules.contentModel.phrasing(child.tag) === true;
+  if (!inner.some((child, i) => i > 0 && inline(child) && inline(inner[i - 1] as DocNode))) return false;
+  const displays = Object.values(node.styles).flatMap((byState) => Object.values(byState ?? {}).map((held) => (held as Readonly<Record<string, string>>).display)).filter((d) => d !== undefined);
+  const base = (node.styles[rules.baseLayer.breakpoint as keyof DocNode['styles']] as Readonly<Record<string, Readonly<Record<string, string>>>> | undefined)?.[rules.baseLayer.state]?.display;
+  return !(base !== undefined && LAYOUTS.has(base) && displays.every((d) => LAYOUTS.has(d as string)));
+}
+
 export function pageLines(document: DocumentJson, pageIndex: number, rules: ModelRules, shared: SharedClasses = newShared(document), relative = true): PageCode {
   const page = document.pages[pageIndex];
   if (page === undefined) throw new Error(`export: the document has no page ${pageIndex}`);
@@ -209,7 +223,9 @@ export function pageLines(document: DocumentJson, pageIndex: number, rules: Mode
   const body: CodeLine[] = [];
   const css: CodeLine[] = [];
   let pageAttributes = new Map<string, string>();
-  const write = (node: DocNode, depth: number, root: boolean): void => {
+  // The writer: each element on its own line, indented, into `lines`; an element whose children run on in the line
+  // (runsOn) is written whole on its own line, its subtree in one string (`lines` null below it).
+  const write = (node: DocNode, depth: number, root: boolean, lines: CodeLine[] | null = body): string => {
     const tag = node.tag ?? 'div';
     const own = elementAttributes(node, tag, root, output, (name, value) => exportValue(document, name, value, from));
     if (root) pageAttributes = own.page;
@@ -228,28 +244,26 @@ export function pageLines(document: DocumentJson, pageIndex: number, rules: Mode
       }
     }
     if (node.hidden === true) attributes.set('hidden', true);
-    const indent = '  '.repeat(depth);
+    const indent = lines === null ? '' : '  '.repeat(depth);
     const open = `${indent}<${tag}${attributesHtml(attributes)}>`;
-    if (contentModel.isVoid(tag)) {
-      body.push({ text: open, node: node.id });
-      return;
-    }
+    const put = (text: string): string => {
+      lines?.push({ text, node: node.id });
+      return text;
+    };
+    if (contentModel.isVoid(tag)) return put(open);
     const content = output.elements.get(node.type)?.content;
     if (content === 'text' || content === 'markup') {
-      body.push({ text: `${open}${content === 'text' ? runsHtml(node.inline ?? [node.text ?? '']) : (node.text ?? '')}</${tag}>`, node: node.id });
-      return;
+      return put(`${open}${content === 'text' ? runsHtml(node.inline ?? [node.text ?? '']) : (node.text ?? '')}</${tag}>`);
     }
     // an SVG's markup after its shapes (core/elements/svg.ts)
     const markup = svgMarkupOf(node);
     const inner = node.children.filter((child) => writesNode(child, output));
-    if (inner.length === 0 && markup === '') {
-      body.push({ text: `${open}</${tag}>`, node: node.id });
-      return;
-    }
-    body.push({ text: open, node: node.id });
-    for (const child of inner) write(child, depth + 1, false);
-    if (markup !== '') body.push({ text: `${indent}  ${markup}`, node: node.id });
-    body.push({ text: `${indent}</${tag}>`, node: node.id });
+    if (inner.length === 0 && markup === '') return put(`${open}</${tag}>`);
+    if (lines === null || runsOn(node, inner, rules)) return put(`${open}${inner.map((child) => write(child, 0, false, null)).join('')}${markup}</${tag}>`);
+    put(open);
+    for (const child of inner) write(child, depth + 1, false, lines);
+    if (markup !== '') lines.push({ text: `${indent}  ${markup}`, node: node.id });
+    return put(`${indent}</${tag}>`);
   };
   // the body first: writing it is what reads the page's own attributes, which the <html> line carries
   if (writesNode(page.tree, output)) write(page.tree, 0, true);

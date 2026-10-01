@@ -79,3 +79,44 @@ test('the exported stylesheet begins with the project\'s base style', runs(OPEN,
   const canvasBase = await page.locator('.frame__page').evaluate((el) => (el as HTMLIFrameElement).contentDocument?.head.querySelector('[data-base-style]')?.textContent ?? '');
   expect(canvasBase.includes('box-sizing: border-box'), 'the canvas writes the base too').toBe(true);
 });
+
+// Problems in Pager 9 (the journey "site"): the export's line breaks between inline elements drew spaces the canvas
+// does not, so a contact form's fields stood further right in the export. Its elements stand at the same places.
+const node = (id: string, type: string, tag: string, fields: Record<string, unknown> = {}) => ({ id, type, name: id, tag, attributes: {}, classes: [], styles: {}, text: null, children: [], ...fields });
+const FORM = {
+  version: 1,
+  pages: [{ id: 'p-home', name: 'Home', file: 'index.html', tree: node('Page', 'page', 'body', { children: [node('Form', 'form', 'form', { children: [
+    node('Label', 'label', 'label', { children: [node('Name', 'paragraph', 'span', { text: 'Name' }), node('Input', 'input', 'input', { attributes: { inputType: 'text', name: 'name' } })] }),
+    node('Label 2', 'label', 'label', { children: [node('Email', 'paragraph', 'span', { text: 'Email' }), node('Input 2', 'input', 'input', { attributes: { inputType: 'email', name: 'email' } })] }),
+    node('Send', 'button', 'button', { attributes: { buttonType: 'submit' }, text: 'Send' }),
+  ] })] }) }],
+};
+const boxes = (root: Element) => [...root.querySelectorAll('*')].map((el) => {
+  const r = el.getBoundingClientRect();
+  return `${el.localName} ${Math.round(r.left)},${Math.round(r.top)} ${Math.round(r.width)}x${Math.round(r.height)}`;
+});
+
+test('the exported elements stand where the canvas draws them: no space between inline neighbours', runs(OPEN, EXPORT), async ({ page, context }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await openEditor(page);
+  const chooser = page.waitForEvent('filechooser');
+  await runDoor(page, OPEN);
+  await (await chooser).setFiles({ name: 'form.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(FORM)) });
+  await expect(page.frameLocator('.frame__page').locator('[data-node="Send"]')).toHaveCount(1);
+  await page.keyboard.press('Control+0');
+  const canvas = await page.frameLocator('.frame__page').locator('body').evaluate(boxes);
+  const download = page.waitForEvent('download');
+  await runDoor(page, EXPORT);
+  const files = unzip(fs.readFileSync(await (await download).path()));
+  const html = files.get('index.html')?.toString('utf8') ?? '';
+  const css = files.get('css/styles.css')?.toString('utf8') ?? '';
+  const exported: Page = await context.newPage();
+  const width = await page.locator('.frame__page').evaluate((el) => (el as HTMLIFrameElement).contentDocument?.documentElement.clientWidth ?? 0);
+  await exported.setViewportSize({ width, height: 900 });
+  await exported.route('https://site.test/**', (route) =>
+    new URL(route.request().url()).pathname === '/css/styles.css' ? route.fulfill({ contentType: 'text/css', body: css }) : route.fulfill({ contentType: 'text/html', body: html }),
+  );
+  await exported.goto('https://site.test/index.html');
+  expect(await exported.locator('body').evaluate(boxes)).toEqual(canvas);
+  await exported.close();
+});
