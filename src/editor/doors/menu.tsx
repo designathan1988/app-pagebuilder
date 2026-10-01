@@ -153,10 +153,13 @@ const MenuGroupContext = createContext<MenuGroupState | null>(null);
 // Other dropdowns keep their independent layer state (a values menu must not switch the application menu).
 export function MenuGroup({ children }: { readonly children: ReactNode }) {
   const dismissals = useEditorState((s) => s.ui.overlays.dismissals);
-  const [opened, setOpened] = useState<{ readonly menu: MenuId; readonly at: number } | null>(null);
+  // how the open menu was opened: a menu the pointer opened on its way (hover) is kept by the click that follows it
+  // (the person moved there to click it), and only a click on a menu a click opened closes it
+  const [opened, setOpened] = useState<{ readonly menu: MenuId; readonly at: number; readonly hovered?: boolean } | null>(null);
   const active = opened !== null && opened.at === dismissals ? opened.menu : null;
   const dismissed = opened !== null && opened.at !== dismissals ? opened.menu : null;
-  const toggle = (menu: MenuId) => setOpened((current) => current?.menu === menu && current.at === dismissals ? null : { menu, at: dismissals });
+  const toggle = (menu: MenuId) =>
+    setOpened((current) => (current?.menu === menu && current.at === dismissals ? (current.hovered === true ? { menu, at: dismissals } : null) : { menu, at: dismissals }));
   // the pointer onto another menu's button while one is open opens that one (input/pointer.ts menuOver)
   // (adjusted while rendering, when the button under the pointer changes: React's own pattern for state that follows
   // another value, no effect)
@@ -164,7 +167,7 @@ export function MenuGroup({ children }: { readonly children: ReactNode }) {
   const [seen, setSeen] = useState(over);
   if (over !== seen) {
     setSeen(over);
-    if (active !== null && over !== null && over !== active) setOpened({ menu: over as MenuId, at: dismissals });
+    if (active !== null && over !== null && over !== active) setOpened({ menu: over as MenuId, at: dismissals, hovered: true });
   }
   return <MenuGroupContext.Provider value={{ active, dismissed, toggle, close: () => setOpened(null) }}>{children}</MenuGroupContext.Provider>;
 }

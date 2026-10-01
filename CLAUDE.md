@@ -22,6 +22,15 @@ advances; a change that is not finished stays in the working tree, never on anot
   manifest and the generated inventory stay authoritative for everything it summarises.
 - `manifest/` — the contract itself. `src/manifest/schema.ts` is its schema; `npm run manifest:check` validates it.
 - `.memory/` (ignored by git) — the brief in force and the current working memory.
+- `docs/QA-LOG.md` — every change of the dogfooding pass, one commit each, with what the user met and what changed.
+
+## Memory: read it first after a compaction
+
+The working memory is **[`.memory/builder.md`](.memory/builder.md)**: where the work stands, the mission in force, what
+is done and what to continue next. After a context compaction (or at the start of a session), read it before anything
+else, then `docs/QA-LOG.md`. Rewrite it whole (at most 60 lines) after every commit, so it always says what to do next.
+The assistant's own memory index (`~/.claude/projects/C--Codex-Shared-deepseek-builder-6/memory/MEMORY.md`) points
+at the same file.
 
 The old application (the Pager) is read-only reference material at `../builder-5/reference/`, for behavior only,
 never for code. Never write inside it.

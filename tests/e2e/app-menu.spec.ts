@@ -86,3 +86,14 @@ test('with a menu open, the pointer onto another menu button opens that one; wit
   await page.mouse.move(view.x, view.y, { steps: 6 });
   await expect(page.locator('[data-menu][aria-expanded="true"]')).toHaveCount(0);
 });
+
+test('a menu the pointer opened on its way stays open under the click that follows; a second click closes it', runs(), async ({ page }) => {
+  // the complete suite caught it: moving to Edit opened it, and the click the person moved there for closed it
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await openEditor(page);
+  await page.locator('.menu-button[data-menu="file"]').click();
+  await page.locator('.menu-button[data-menu="edit"]').click();
+  await expect(page.getByRole('menu', { name: 'Edit' })).toBeVisible();
+  await page.locator('.menu-button[data-menu="edit"]').click();
+  await expect(page.getByRole('menu', { name: 'Edit' })).toHaveCount(0);
+});
