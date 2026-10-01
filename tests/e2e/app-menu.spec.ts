@@ -97,3 +97,28 @@ test('a menu the pointer opened on its way stays open under the click that follo
   await page.locator('.menu-button[data-menu="edit"]').click();
   await expect(page.getByRole('menu', { name: 'Edit' })).toHaveCount(0);
 });
+
+test("a pointer crossing another menu's button on its way into the open menu clicks the item it went to", runs(), async ({ page }) => {
+  // the journey "site": File open, the pointer went down-right to Save project over Edit; Edit opened and the click
+  // landed on Undo, which undid the last change and saved nothing (spec app-menu; interactions.json menus.hoverSwitch)
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await openEditor(page);
+  const box = async (selector: string) => {
+    const b = await page.locator(selector).boundingBox();
+    if (b === null) throw new Error(`${selector} is not drawn`);
+    return b;
+  };
+  const file = await box('[data-menu="file"]');
+  await page.mouse.click(file.x + file.width / 2, file.y + file.height / 2);
+  const save = await box('[data-door="project.save#menu-file"]');
+  const edit = await box('[data-menu="edit"]');
+  const to = { x: save.x + save.width / 2, y: save.y + save.height / 2 };
+  // the path really crosses Edit's button
+  expect(to.x).toBeGreaterThan(edit.x);
+  const download = page.waitForEvent('download');
+  await page.mouse.move(edit.x + edit.width / 2, edit.y + edit.height - 2, { steps: 3 });
+  await page.mouse.move(to.x, to.y, { steps: 3 });
+  await page.mouse.click(to.x, to.y);
+  expect((await download).suggestedFilename()).toBe('project.zip');
+  await expect(page.locator('.status-bar__message')).not.toContainText('Undone');
+});

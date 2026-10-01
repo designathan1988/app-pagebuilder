@@ -1358,6 +1358,13 @@
       "unit": "ms",
       "source": "spec/BEHAVIOUR.md#keyboard-panel-navigation",
       "note": "A letter pressed this soon after another letter is typing, not a shortcut: a single-letter shortcut does not run in a burst (a person typing words on the canvas, thinking a text was being edited, wrapped and moved elements one letter at a time)."
+    },
+    {
+      "id": "menus.hoverSwitch",
+      "value": 150,
+      "unit": "ms",
+      "source": "spec/BEHAVIOUR.md#app-menu",
+      "note": "With an application menu open, the pointer resting this long on another menu's button opens that one: a pointer crossing a button on its way into the open menu (File to Save project, diagonally over Edit) switches nothing."
     }
   ],
   "gestures": [

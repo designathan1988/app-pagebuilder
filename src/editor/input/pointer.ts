@@ -205,6 +205,8 @@ const ROW_DWELL = layersDrag('collapsed-row-dwell');
 // the confirmed side drop's pill: where it is drawn from the pointer, and how near it the pointer keeps the offer
 const PILL_OFFSET = pairConstant('wrap.pillOffset');
 const PILL_FREEZE = numberConstant('wrap.pillFreeze');
+// a pointer resting this long on another application menu's button opens it while one is open (spec app-menu)
+const MENU_HOVER_SWITCH = numberConstant('menus.hoverSwitch');
 // autoscroll (spec drag-layout, row 8): the band along the page's visible edges, and the most it scrolls a frame
 const AUTOSCROLL_ZONE = numberConstant('drop.autoscrollZone');
 const AUTOSCROLL_MAX = numberConstant('drop.autoscrollMaxStep');
@@ -638,6 +640,10 @@ export function installPointer(store: EditorStore, target: Window = window): () 
   let spacing: SpacingDrag | null = null;
   // the timer that confirms the side drop offered after wrap.sideDwell, and the frame loop of the autoscroll
   let dwell: ReturnType<typeof setTimeout> | null = null;
+  // the menu button the pointer rests on, published after menus.hoverSwitch (spec app-menu): a pointer crossing a
+  // button on its way into the open menu switches nothing
+  let menuResting: string | null = null;
+  let menuDwell: ReturnType<typeof setTimeout> | null = null;
   let scrolling = 0;
   // whether the pointer has been inside the page's visible box since the drag began, far enough from its edges: the
   // autoscroll waits for it, so a drag that starts at an edge does not scroll at once (spec drag-layout, Problems 3)
@@ -1482,7 +1488,14 @@ export function installPointer(store: EditorStore, target: Window = window): () 
       const r = b.getBoundingClientRect();
       return event.clientX >= r.left && event.clientX <= r.right && event.clientY >= r.top && event.clientY <= r.bottom;
     });
-    setMenuOver(menuButton?.getAttribute('data-menu') ?? null);
+    const menuUnder = menuButton?.getAttribute('data-menu') ?? null;
+    if (menuUnder !== menuResting) {
+      menuResting = menuUnder;
+      if (menuDwell !== null) clearTimeout(menuDwell);
+      menuDwell = null;
+      if (menuUnder === null) setMenuOver(null);
+      else menuDwell = setTimeout(() => setMenuOver(menuUnder), MENU_HOVER_SWITCH);
+    }
     overStage = onStage(under);
     setCanvasPointer(overStage ? { x: event.clientX, y: event.clientY } : null);
     if (spacing !== null) {
@@ -1921,6 +1934,9 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     panning = null;
     spaceDown = false;
     overStage = false;
+    if (menuDwell !== null) clearTimeout(menuDwell);
+    menuDwell = null;
+    menuResting = null;
     setPanView('idle');
     // the document is free again: another editor (a new document, a test that unmounts and mounts) may take the pointer
     if (pointerOwner === store) pointerOwner = null;
