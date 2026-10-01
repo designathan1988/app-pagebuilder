@@ -5,8 +5,8 @@
     "commands": 261,
     "doors": 1006,
     "scenarios": 1343,
-    "modules": 259,
-    "lines": 50005
+    "modules": 260,
+    "lines": 50040
   },
   "features": [
     {
@@ -4343,6 +4343,12 @@
       "features": []
     },
     {
+      "path": "src/editor/input/select-on-focus.ts",
+      "lines": 33,
+      "commands": [],
+      "features": []
+    },
+    {
       "path": "src/editor/input/shortcut-rule.ts",
       "lines": 19,
       "commands": [],
@@ -4810,7 +4816,7 @@
     },
     {
       "path": "src/editor/shell/shell.tsx",
-      "lines": 171,
+      "lines": 173,
       "commands": [],
       "features": []
     },

@@ -2879,6 +2879,7 @@ The keys listed under Trigger. The glyph has no keyboard action; the arrow keys 
   out (`Layout.fontPx`, the canvas's computed font size; the root's for null), so the core still measures nothing
   itself. The value converted may itself stand on them: a length in rem becomes em through the pixels it is. A unit or
   a property the page does not measure (a width in %) is refused as before (`status.value.unitNotConverted`).
+6. **A click into a field put the caret after its value, so what was typed was appended** (the dogfooding pass: "80" typed into a padding side holding 56 wrote 5680px). Required: the click that focuses a value field of the Style tab, the Settings tab, the quick panel or the colour picker selects its whole value, and what is typed replaces it; a later click in the focused field places the caret; Tab selects the value as the browser does.
 
 ## inspector-panel
 

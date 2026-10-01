@@ -105,3 +105,24 @@ test('the Tab walks each box clockwise from the top, the margin before the paddi
   }
   expect(walked).toEqual(expected);
 });
+
+// The click that focuses a value field takes its whole value, so what is typed replaces it (the dogfooding pass: "80"
+// typed after a click on a padding side holding 56 wrote 5680px); a second click places the caret.
+test('a click into a side of the box selects its value, and typing replaces it', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await openEditor(page);
+  await page.locator('[data-door="selection.select#layers-row"]').first().click();
+  await setSectionOpen(page, 'space', true);
+  const side = page.locator('.box--margin > .box__side--block-start input');
+  await side.click();
+  await page.keyboard.type('12');
+  await page.keyboard.press('Enter');
+  await expect(side).toHaveValue('12px');
+  // the person leaves the field, then comes back to it with a click
+  await page.locator('.box__core').click();
+  await side.click();
+  expect(await side.evaluate((el) => [(el as HTMLInputElement).selectionStart, (el as HTMLInputElement).selectionEnd])).toEqual([0, 4]);
+  await page.keyboard.type('20');
+  await page.keyboard.press('Enter');
+  await expect(side).toHaveValue('20px');
+});

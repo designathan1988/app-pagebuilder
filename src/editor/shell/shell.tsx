@@ -2,6 +2,7 @@
 // bar and the sidebar, the centre column, the inspector, the dock and the status bar. The sidebar, the inspector and
 // the dock are shown or hidden by the workspace state; the theme and the language follow the preferences.
 import { useEffect, useLayoutEffect, useRef, useState, type RefObject } from 'react';
+import { installSelectOnFocus } from '../input/select-on-focus.ts';
 import { ContextMenu } from '../doors/menu.tsx';
 import { CommandBar } from './command-bar.tsx';
 import { Confirmation } from './confirmation.tsx';
@@ -113,6 +114,7 @@ export function Shell() {
   // folder drop), in canvas/frame.tsx for the frame's own
   useEffect(() => installOsFileDrop(store, window, false), [store]);
   useEffect(() => installFocus(store), [store]);
+  useEffect(() => installSelectOnFocus(), []);
   const classes = ['shell', sidebar ? '' : 'shell--no-sidebar', inspector ? '' : 'shell--no-inspector', `shell--dock-${dock}`].filter((c) => c !== '').join(' ');
   // while previewing, the preview bar and the exported page over the editor (spec preview-mode): the editor stays as it
   // is underneath, its canvas included, and the status bar below says so
