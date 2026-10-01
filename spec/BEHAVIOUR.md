@@ -6111,6 +6111,38 @@ Read from Pager's source (`reference/Pager`, run from `.cache/pager-run`); refer
 - A style write that reaches every instance is one undo step.
 - Undo restores the document and the selection.
 
+## repeat-element
+
+Our own feature (the dogfooding pass, 2026-09-30: "where are the repeaters?"). Pager had none: a list of cards was
+built by duplicating one and then styling every copy again.
+
+### Trigger
+
+- **Repeat (linked copy)** (`components.repeat`): Ctrl+Shift+D, the context menu, Arrange › Repeat, the command bar.
+  One selected element.
+
+### Result in the document
+
+- The selected element gains a linked copy right after it in its parent: a new instance of its component (spec
+  reusable-components). An element that is not an instance yet first becomes a component, named after it as
+  Create a component names one, and its first instance; an instance repeats its own component.
+- The new item becomes the selection, so the command run again adds the next one after it ("CardA", "CardA 2",
+  "CardA 3"). Wrapping the items in a row or a grid (R, G) lays them out.
+- The items share their component's styles: a style written on any of them reaches all of them (and the definition);
+  a text or an attribute set on one stays on it, so each item holds its own content.
+- The status bar says `{name} repeated: {count} items share its style.`, counting the component's items in that
+  parent. Detach from the component makes one item ordinary again.
+
+### Refusals
+
+- The page root (`status.components.root`), an element inside an instance (`status.components.inInstance`), a locked
+  element (`status.locked.edit`) or a locked parent (`status.locked.insert`), and a parent whose content model takes
+  no second element of that kind (the placement refusals of element.insert).
+
+### Undo and redo
+
+One undo step per run; undo gives back the selection from before.
+
 ## rotation-handle
 
 How Pager behaves, read from its source and observed by running it from `.cache/pager-run` (Chrome, window 1600×900). Source references are `path:line` inside Pager.

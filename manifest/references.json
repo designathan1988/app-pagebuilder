@@ -167,6 +167,11 @@
     },
     {
       "kind": "handler",
+      "id": "components.repeat",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
       "id": "element.setTag",
       "status": "registered"
     },

@@ -2086,5 +2086,8 @@
   "command.layers.cancelRename": "Cancel the rename",
   "dock.document.long": "{start}… ({count} characters)",
   "keyContext.renameField": "Rename field",
-  "keyContext.componentPrompt": "Component name prompt"
+  "keyContext.componentPrompt": "Component name prompt",
+  "command.components.repeat": "Repeat (linked copy)",
+  "status.components.repeated": "{name} repeated: {count} items share its style.",
+  "feature.repeatElement": "Repeat an element"
 }

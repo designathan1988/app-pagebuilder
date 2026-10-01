@@ -1,12 +1,12 @@
 {
   "totals": {
-    "features": 187,
-    "built": 185,
-    "commands": 261,
-    "doors": 1012,
-    "scenarios": 1346,
+    "features": 188,
+    "built": 186,
+    "commands": 262,
+    "doors": 1016,
+    "scenarios": 1351,
     "modules": 260,
-    "lines": 50126
+    "lines": 50184
   },
   "features": [
     {
@@ -1575,6 +1575,18 @@
       ]
     },
     {
+      "id": "repeat-element",
+      "built": true,
+      "commands": [
+        "components.repeat"
+      ],
+      "doors": 4,
+      "scenarios": 5,
+      "modules": [
+        "src/core/design/components.ts"
+      ]
+    },
+    {
       "id": "templates-components",
       "built": true,
       "commands": [
@@ -2794,7 +2806,7 @@
   "modules": [
     {
       "path": "src/app/commands.ts",
-      "lines": 395,
+      "lines": 396,
       "commands": [],
       "features": []
     },
@@ -2806,7 +2818,7 @@
     },
     {
       "path": "src/app/features.ts",
-      "lines": 225,
+      "lines": 226,
       "commands": [],
       "features": []
     },
@@ -2898,14 +2910,16 @@
     },
     {
       "path": "src/core/design/components.ts",
-      "lines": 173,
+      "lines": 218,
       "commands": [
         "components.create",
         "components.insertInstance",
+        "components.repeat",
         "components.detach"
       ],
       "features": [
         "command-bar",
+        "repeat-element",
         "reusable-components"
       ]
     },
@@ -5111,13 +5125,13 @@
     },
     {
       "path": "src/generated/commands.ts",
-      "lines": 496,
+      "lines": 498,
       "commands": [],
       "features": []
     },
     {
       "path": "src/generated/ids.ts",
-      "lines": 4576,
+      "lines": 4585,
       "commands": [],
       "features": []
     },

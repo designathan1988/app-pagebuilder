@@ -4753,6 +4753,943 @@
       ]
     },
     {
+      "id": "repeat-element",
+      "titleKey": "feature.repeatElement",
+      "commands": [
+        "components.repeat"
+      ],
+      "dependsOn": [
+        "reusable-components",
+        "duplicate"
+      ],
+      "spec": "spec/BEHAVIOUR.md#repeat-element",
+      "intent": {
+        "title": "Repeat an element as linked items",
+        "steps": [
+          "Select a Card and press Ctrl+Shift+D (or Arrange › Repeat) three times.",
+          "Change the width of one of the cards.",
+          "Change the title text of one of the cards."
+        ],
+        "expected": [
+          "The Card becomes a component and each press adds a linked copy right after the last one, selected, so the next press adds the next.",
+          "A style written on any item reaches every item; a text stays on its item.",
+          "The page root is refused."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "repeat-makes-a-card-a-component-and-adds-a-linked-copy-after-it",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Plans/Grid/CardA"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "components.repeat#key-ctrl-shift-d-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "components.repeat#key-ctrl-shift-d-in-global",
+            "components.repeat#menu-arrange",
+            "components.repeat#command-bar"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@components",
+                "value": [
+                  {
+                    "name": "CardA",
+                    "tree": {
+                      "type": "article",
+                      "name": "CardA",
+                      "tag": "article",
+                      "attributes": {},
+                      "classes": [
+                        "card"
+                      ],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "heading",
+                          "name": "CardATitle",
+                          "tag": "h3",
+                          "attributes": {},
+                          "classes": [],
+                          "styles": {},
+                          "text": "Monthly",
+                          "children": []
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@children",
+                "value": [
+                  {
+                    "type": "article",
+                    "name": "CardA",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardATitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Monthly",
+                        "children": [],
+                        "componentPart": [
+                          0
+                        ]
+                      }
+                    ],
+                    "component": "CardA",
+                    "componentPart": []
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardA 2",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardATitle 2",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Monthly",
+                        "children": [],
+                        "componentPart": [
+                          0
+                        ]
+                      }
+                    ],
+                    "component": "CardA",
+                    "componentPart": []
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardB",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardBTitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Weekly",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardC",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid/CardA 2"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.components.repeated",
+                  "params": {
+                    "name": "CardA",
+                    "count": 2
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "repeat-from-the-context-menu",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Plans/Grid/CardA"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "contextMenu.open#layers-row-secondary-click",
+              "args": {
+                "target": "/Page/Plans/Grid/CardA"
+              },
+              "target": "/Page/Plans/Grid/CardA",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "components.repeat#context-menu",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "components.repeat#context-menu"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@components",
+                "value": [
+                  {
+                    "name": "CardA",
+                    "tree": {
+                      "type": "article",
+                      "name": "CardA",
+                      "tag": "article",
+                      "attributes": {},
+                      "classes": [
+                        "card"
+                      ],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "heading",
+                          "name": "CardATitle",
+                          "tag": "h3",
+                          "attributes": {},
+                          "classes": [],
+                          "styles": {},
+                          "text": "Monthly",
+                          "children": []
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@children",
+                "value": [
+                  {
+                    "type": "article",
+                    "name": "CardA",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardATitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Monthly",
+                        "children": [],
+                        "componentPart": [
+                          0
+                        ]
+                      }
+                    ],
+                    "component": "CardA",
+                    "componentPart": []
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardA 2",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardATitle 2",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Monthly",
+                        "children": [],
+                        "componentPart": [
+                          0
+                        ]
+                      }
+                    ],
+                    "component": "CardA",
+                    "componentPart": []
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardB",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardBTitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Weekly",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardC",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid/CardA 2"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.components.repeated",
+                  "params": {
+                    "name": "CardA",
+                    "count": 2
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "repeating-the-new-item-again-adds-the-next",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Plans/Grid/CardA"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "components.repeat#key-ctrl-shift-d-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "components.repeat#key-ctrl-shift-d-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "components.repeat#key-ctrl-shift-d-in-global"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@components",
+                "value": [
+                  {
+                    "name": "CardA",
+                    "tree": {
+                      "type": "article",
+                      "name": "CardA",
+                      "tag": "article",
+                      "attributes": {},
+                      "classes": [
+                        "card"
+                      ],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "heading",
+                          "name": "CardATitle",
+                          "tag": "h3",
+                          "attributes": {},
+                          "classes": [],
+                          "styles": {},
+                          "text": "Monthly",
+                          "children": []
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@children",
+                "value": [
+                  {
+                    "type": "article",
+                    "name": "CardA",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardATitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Monthly",
+                        "children": [],
+                        "componentPart": [
+                          0
+                        ]
+                      }
+                    ],
+                    "component": "CardA",
+                    "componentPart": []
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardA 2",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardATitle 2",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Monthly",
+                        "children": [],
+                        "componentPart": [
+                          0
+                        ]
+                      }
+                    ],
+                    "component": "CardA",
+                    "componentPart": []
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardA 3",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardATitle 3",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Monthly",
+                        "children": [],
+                        "componentPart": [
+                          0
+                        ]
+                      }
+                    ],
+                    "component": "CardA",
+                    "componentPart": []
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardB",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardBTitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Weekly",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardC",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid/CardA 3"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.components.repeated",
+                  "params": {
+                    "name": "CardA",
+                    "count": 3
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-style-written-on-one-repeated-item-reaches-them-all",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Plans/Grid/CardA"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "components.repeat#key-ctrl-shift-d-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#inspector-width",
+              "args": {
+                "property": "width",
+                "value": "300px"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "300px\n"
+            }
+          ],
+          "doors": [
+            "style.set#inspector-width"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@components",
+                "value": [
+                  {
+                    "name": "CardA",
+                    "tree": {
+                      "type": "article",
+                      "name": "CardA",
+                      "tag": "article",
+                      "attributes": {},
+                      "classes": [
+                        "card"
+                      ],
+                      "styles": {
+                        "desktop": {
+                          "base": {
+                            "width": "300px"
+                          }
+                        }
+                      },
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "heading",
+                          "name": "CardATitle",
+                          "tag": "h3",
+                          "attributes": {},
+                          "classes": [],
+                          "styles": {},
+                          "text": "Monthly",
+                          "children": []
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@children",
+                "value": [
+                  {
+                    "type": "article",
+                    "name": "CardA",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "width": "300px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardATitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Monthly",
+                        "children": [],
+                        "componentPart": [
+                          0
+                        ]
+                      }
+                    ],
+                    "component": "CardA",
+                    "componentPart": []
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardA 2",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "width": "300px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardATitle 2",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Monthly",
+                        "children": [],
+                        "componentPart": [
+                          0
+                        ]
+                      }
+                    ],
+                    "component": "CardA",
+                    "componentPart": []
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardB",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardBTitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Weekly",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardC",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid/CardA 2"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Plans/Grid/CardA",
+                  "property": "width",
+                  "value": "300px"
+                },
+                {
+                  "node": "/Page/Plans/Grid/CardA 2",
+                  "property": "width",
+                  "value": "300px"
+                }
+              ],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-page-root-is-not-repeated",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "components.repeat#key-ctrl-shift-d-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "components.repeat#key-ctrl-shift-d-in-global"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.components.root",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.components.root",
+              "document": "unchanged"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "templates-components",
       "titleKey": "feature.templatesComponents",
       "commands": [

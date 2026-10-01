@@ -125,6 +125,7 @@ export const FEATURES = {
   'templates-content': registerFeature('templates-content'),
   'templates-sections': registerFeature('templates-sections'),
   'reusable-components': registerFeature('reusable-components'),
+  'repeat-element': registerFeature('repeat-element'),
   'templates-components': registerFeature('templates-components'),
   // 09 panels
   'palette-search-groups': registerFeature('palette-search-groups'),

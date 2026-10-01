@@ -10,6 +10,11 @@
 //    has) placed as element.insert places a tile (core/structure/insert.ts placement), refused as an element is
 //    (content-model.ts placementRefusal, a locked parent); it becomes the selection.
 //  - components.detach (predicate instanceSelected): the instance's elements forget their component and their parts.
+//  - components.repeat (spec repeat-element): the one selected element gains a linked copy right after it, a new
+//    instance of its component; an element that is not one yet first becomes a component (as components.create makes
+//    one, named after it) and its first instance. The new item becomes the selection, so the command run again adds
+//    the next. Styles are the component's, so a style written on any repeated item reaches them all; a text or an
+//    attribute stays on its item.
 //  - componentHolders: where a style write on an element of an instance goes (core/style/set.ts styleHolders): the
 //    definition's element and the same element of every instance of the component, in every page.
 import type { NodeId } from '../../generated/commands.ts';
@@ -124,6 +129,46 @@ export const insertInstanceCommand = registerHandler('components.insertInstance'
     selection: [node.id],
     message: message('status.placed', { element: node.name, parent: receiver.name, position: at.index + 1, count: receiver.children.length + 1 }),
   };
+});
+
+export const repeatCommand = registerHandler('components.repeat', ({ state, ids, rules, words }): Outcome<never> => {
+  const primary = state.selection[0];
+  const found = primary === undefined ? null : locate(state.document, primary);
+  if (found === null) return { kind: 'change' };
+  if (found.parent === null) return { kind: 'refused', message: message('status.components.root') };
+  const patches: Patch[] = [];
+  let definition = found.node.component === undefined ? undefined : componentsOf(state.document).find((c) => c.name === found.node.component);
+  if (definition === undefined) {
+    // not an instance yet: it becomes a component and its first instance, as components.create makes it
+    const refusedHere = createRefusal(state.document, found.node.id as NodeId);
+    if (refusedHere !== null) return { kind: 'refused', message: refusedHere };
+    const name = componentName(state.document, found.node.name);
+    const plainCopy = copied(found.node, () => ids.next() as NodeId, null);
+    const tree = refreshCopiedIdentities(state.document, [{ source: found.node, copy: plainCopy }], false)[0];
+    if (tree === undefined) throw new Error('components.repeat: the definition copy is missing');
+    definition = { name, tree };
+    patches.push(state.document.components === undefined ? { op: 'add', path: ['components'], value: [definition] } : { op: 'add', path: ['components', componentsOf(state.document).length], value: definition });
+    patches.push({ op: 'replace', path: found.path, value: marked(found.node, [], name) });
+  } else {
+    const locked = lockRefusal(state.document, found.node.id as NodeId, 'status.locked.edit');
+    if (locked !== null) return { kind: 'refused', message: locked };
+  }
+  const receiver = found.parent;
+  const lockedParent = lockRefusal(state.document, receiver.id, 'status.locked.insert');
+  if (lockedParent !== null) return { kind: 'refused', message: lockedParent };
+  const make = nodeMaker(state.document, rules, ids, words);
+  const name = copyName(found.node.name, make.taken);
+  make.taken.add(name);
+  const plainCopy = copied(definition.tree, () => ids.next() as NodeId, make, true);
+  const copiedTree = refreshCopiedIdentities(state.document, [{ source: definition.tree, copy: plainCopy }])[0];
+  if (copiedTree === undefined) throw new Error('components.repeat: the instance copy is missing');
+  const node = marked({ ...copiedTree, name }, [], definition.name);
+  const refused = placementRefusal(state.document, rules, receiver.id, [node]);
+  if (refused !== null) return { kind: 'refused', message: refused };
+  patches.push({ op: 'add', path: [...found.path.slice(0, -1), found.index + 1], value: node });
+  // the items the parent holds now: the instances of the component among its children, the new one with them
+  const count = receiver.children.filter((child) => child.id === found.node.id || child.component === definition.name).length + 1;
+  return { kind: 'change', patches, selection: [node.id], message: message('status.components.repeated', { name: definition.name, count }) };
 });
 
 // the one selected element is an instance's root

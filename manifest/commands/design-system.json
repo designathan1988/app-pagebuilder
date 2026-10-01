@@ -1064,6 +1064,124 @@
           "args": {}
         }
       ]
+    },
+    {
+      "id": "components.repeat",
+      "labelKey": "command.components.repeat",
+      "owner": "src/core/design/components.ts",
+      "introducedBy": "repeat-element",
+      "args": {},
+      "availability": {
+        "predicate": "singleSelection",
+        "refusalKey": "status.needsSingleSelection"
+      },
+      "refusals": [
+        "status.components.root",
+        "status.components.inInstance",
+        "status.locked.edit",
+        "status.locked.byAncestor",
+        "status.refused.onlyAccepts",
+        "status.refused.requiresParent",
+        "status.refused.interactiveInside",
+        "status.refused.formInForm",
+        "status.refused.singleChild",
+        "status.refused.labelOneControl",
+        "status.refused.noChildren",
+        "status.locked.insert"
+      ],
+      "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
+      "entryPoints": [
+        {
+          "id": "key-ctrl-shift-d-in-global",
+          "kind": "shortcut",
+          "feature": "repeat-element",
+          "chord": "Ctrl+Shift+D",
+          "context": "global",
+          "gesture": null,
+          "labelKey": "command.components.repeat",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "repeat-element",
+          "labelKey": "command.components.repeat",
+          "faceLabelKey": null,
+          "icon": "copy-plus",
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": {
+            "region": "context-menu",
+            "order": 16
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-arrange",
+          "kind": "menu",
+          "feature": "repeat-element",
+          "menu": "arrange",
+          "checked": null,
+          "labelKey": "command.components.repeat",
+          "faceLabelKey": null,
+          "icon": "copy-plus",
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": {
+            "region": "menu:arrange",
+            "order": 24
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "repeat-element",
+          "entry": "command",
+          "labelKey": "command.components.repeat",
+          "faceLabelKey": null,
+          "icon": "copy-plus",
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": {
+            "region": "command-palette",
+            "order": 71
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
     }
   ]
 }

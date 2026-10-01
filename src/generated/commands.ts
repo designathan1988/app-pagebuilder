@@ -73,6 +73,7 @@ export interface CommandArgs {
   "components.closePrompt": Record<string, never>;
   "components.insertInstance": { readonly component: string; readonly parent?: NodeId; readonly index?: number };
   "components.detach": Record<string, never>;
+  "components.repeat": Record<string, never>;
   "element.setTag": { readonly tag: string };
   "element.setAttribute": { readonly attribute: AttributeId; readonly value: JsonValue; readonly target?: NodeId };
   "assetPicker.open": { readonly attribute: string };
@@ -414,6 +415,7 @@ export const FEATURE_COMMANDS: Readonly<Record<FeatureId, readonly CommandId[]>>
   "templates-content": ["element.insert"],
   "templates-sections": ["element.insert"],
   "reusable-components": ["components.create","components.insertInstance","components.detach","components.startCreate","components.closePrompt"],
+  "repeat-element": ["components.repeat"],
   "templates-components": ["element.insert"],
   "palette-search-groups": ["element.insert","palette.toggleGroup"],
   "palette-density": ["palette.setDensity"],
