@@ -217,6 +217,12 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
+/* Justify's values are long (space-between, space-evenly): its field takes the whole line (the dogfooding pass: in half
+   a line it showed the value's last letter) */
+.quick-panel__group-fields [data-door='style.set#quick-panel-justify-content'] {
+  grid-column: 1 / -1;
+}
+
 .quick-panel__group-fields .input,
 .quick-panel__group-fields .field__values {
   min-width: 0;
