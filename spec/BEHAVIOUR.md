@@ -4658,6 +4658,7 @@ Preview always shows 100 %; the editing zoom comes back on exit.
 1. **`Ctrl+Enter` enters preview but does not leave it.** Required: `Escape` or `Ctrl+Enter` exits preview and restores the previous selection and zoom (manifest feature `preview-mode`).
 2. **Ruler pointer marks leak into preview.** Required: no editor chrome is visible in preview except the slim bar.
 3. **The preview status text is hard-coded English** (`'Preview — interact with the page. Press Esc to return to editing.'` is a literal in `camera.js:822`). Required: all preview texts go through i18n.
+- **Escape did not leave the preview once the page had the focus** (the dogfooding pass, 2026-09-30): the preview's page runs sandboxed in its own origin, so after a click in it (a button, a card) Escape and Ctrl+Enter reached the page alone while the status bar said "Press Esc to return to editing". Required: the preview's page — never the export — relays Escape and Ctrl+Enter to the editor, which runs the preview's own doors; Escape stays the page's while a modal dialog is open in it (it closes the dialog first).
 
 ## project-open-json
 

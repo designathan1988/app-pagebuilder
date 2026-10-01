@@ -52,3 +52,20 @@ test('the preview runs the exported page: hover applies, links open in a new tab
   await expect(page.locator('[data-region="preview-page"]')).toHaveCount(0);
   expect(await documentNow(page)).toBe(before);
 });
+
+test('Escape leaves the preview after a click inside its page', runs(OPEN, PREVIEW, EXIT), async ({ page }) => {
+  // the dogfooding pass: the page runs sandboxed in its own origin, so once a visitor clicked in it Escape was heard by
+  // the page alone and the preview never ended
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await openEditor(page);
+  const chooser = page.waitForEvent('filechooser');
+  await runDoor(page, OPEN);
+  await (await chooser).setFiles({ name: 'aurora.json', mimeType: 'application/json', buffer: fs.readFileSync(FIXTURE) });
+  await page.keyboard.press('Control+P');
+  const frame = page.locator('[data-region="preview-page"]');
+  await expect(frame).toBeVisible();
+  await page.frameLocator('[data-region="preview-page"]').locator('h1').click();
+  await page.keyboard.press('Escape');
+  await expect(frame).toHaveCount(0);
+  await expect(page.locator('.workbench')).toBeVisible();
+});
