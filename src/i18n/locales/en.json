@@ -1186,6 +1186,8 @@
   "menu.styleState": "State",
   "statusBar.context": "{breakpoint} / {state}",
   "statusBar.size": "{width} × {height}",
+  "statusBar.checks.one": "Checks: {count} issue",
+  "statusBar.checks.other": "Checks: {count} issues",
   "menu.theme": "Theme",
   "menu.view": "View",
   "menu.zoom": "Zoom",

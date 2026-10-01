@@ -107,3 +107,19 @@ test('every control of the status bar is as tall as the bar', runs(OPEN, CLICK),
   expect(heights.controls.length).toBeGreaterThan(2);
   expect(heights.controls.every((h) => h <= heights.bar), JSON.stringify(heights)).toBe(true);
 });
+
+// While the dock is closed the status bar draws its panels as icons (the audit's A3.18); the Checks icon carries the
+// number of issues the document has, as a badge and in its name (plan 5.5, spec dock-toggles), and opens the dock on
+// its tab.
+test('the Checks icon says how many issues the document has and opens the dock on them', runs(OPEN, 'workspace.setPanelOpen#status-bar-checks'), async ({ page }) => {
+  // (the aurora project is open: beforeEach)
+  const icon = page.locator('[data-door="workspace.setPanelOpen#status-bar-checks"]');
+  const name = (await icon.getAttribute('aria-label')) ?? '';
+  const count = Number(/(\d+)/.exec(name)?.[1] ?? 'NaN');
+  expect(name).toMatch(/^Checks: \d+ issues?$/);
+  if (count > 0) await expect(page.locator('.status-bar__badge')).toHaveText(String(count));
+  else await expect(page.locator('.status-bar__badge')).toHaveCount(0);
+  await icon.click();
+  await expect(page.locator('[data-region="tab-strip"] [role="tab"][aria-selected="true"]')).toHaveText('Checks');
+  await expect(page.locator('.dock-checks__list li, .dock-checks__none')).not.toHaveCount(0);
+});

@@ -5,7 +5,8 @@
 // words (palette-drag-insert).
 import { activeBreakpoint } from '../view/breakpoints.ts';
 import { usePrimarySize } from '../view/selection-size.ts';
-import { useState, useSyncExternalStore } from 'react';
+import { useMemo, useState, useSyncExternalStore } from 'react';
+import { checksOf } from '../../core/a11y/checks.ts';
 import type { MessageId } from '../../generated/ids.ts';
 import { saveState, type SaveState } from '../persistence/autosave.ts';
 import { incidents, onIncident } from '../../core/incidents.ts';
@@ -14,7 +15,7 @@ import type { Message } from '../../core/commands/registry.ts';
 import { pluralForm } from '../../i18n/index.ts';
 import { dragMessages } from '../canvas/chrome.tsx';
 import { DoorControl, Icon } from '../doors/door.tsx';
-import { elementIcon, type DoorEntry } from '../../manifest/runtime.ts';
+import { elementIcon, manifest, type DoorEntry } from '../../manifest/runtime.ts';
 import { MenuButton } from '../doors/menu.tsx';
 import { drag, duplicating } from '../input/pointer.ts';
 import { drawnAsOf } from '../doors/placement.ts';
@@ -77,6 +78,9 @@ export function StatusBar() {
           // the dock's panels as icons while the dock is closed (the audit's A3.18: the strip's 28 px go back to the
           // canvas; pressing one opens the dock on that panel)
           if (slot.kind === 'door' && dockClosed) {
+            // the Checks icon carries the number of issues the document has (the plan's 5.5: the issues seen without
+            // opening the dock), in its name too
+            if (slot.entry.door.args.panel === CHECKS_PANEL) return <ChecksIcon key={slot.entry.ref} entry={slot.entry} />;
             return <DoorControl key={slot.entry.ref} entry={slot.entry} />;
           }
           if (slot.kind === 'menu' && slot.menu === 'zoom') {
@@ -115,6 +119,25 @@ function IncidentCount() {
     <span className="status-bar__item status-bar__incidents" data-local="incident-count" role="status" title={detail}>
       <Icon name="triangle-alert" size="sm" />
       {t(`status.incidents.${pluralForm(locale, feed.length)}`, { count: feed.length })}
+    </span>
+  );
+}
+
+// the Checks panel's icon while the dock is closed: its door, the number of issues as a badge beside it
+const CHECKS_PANEL = 'checks';
+function ChecksIcon({ entry }: { readonly entry: DoorEntry }) {
+  const t = useT();
+  const locale = useLocale();
+  const document = useEditorState((s) => s.document);
+  const count = useMemo(() => checksOf(document, manifest.interactions.checks).length, [document]);
+  return (
+    <span className="status-bar__checks">
+      <DoorControl entry={entry} label={t(`statusBar.checks.${pluralForm(locale, count)}` as MessageId, { count })} />
+      {count > 0 ? (
+        <span className="status-bar__badge" aria-hidden="true">
+          {count}
+        </span>
+      ) : null}
     </span>
   );
 }

@@ -3,10 +3,10 @@
     "features": 187,
     "built": 185,
     "commands": 261,
-    "doors": 1005,
-    "scenarios": 1342,
+    "doors": 1006,
+    "scenarios": 1343,
     "modules": 259,
-    "lines": 49969
+    "lines": 49995
   },
   "features": [
     {
@@ -15,7 +15,7 @@
       "commands": [
         "workspace.setPanelOpen"
       ],
-      "doors": 19,
+      "doors": 20,
       "scenarios": 3,
       "modules": [
         "src/editor/workspace/panels.ts"
@@ -36,7 +36,7 @@
         "element.insert",
         "workspace.setPanelOpen"
       ],
-      "doors": 24,
+      "doors": 25,
       "scenarios": 5,
       "modules": [
         "src/core/structure/insert.ts",
@@ -64,7 +64,7 @@
         "layers.setExpanded",
         "workspace.setPanelOpen"
       ],
-      "doors": 27,
+      "doors": 28,
       "scenarios": 5,
       "modules": [
         "src/core/selection/selection.ts",
@@ -507,7 +507,7 @@
         "focus.nextMenu",
         "focus.previousMenu"
       ],
-      "doors": 98,
+      "doors": 99,
       "scenarios": 21,
       "modules": [
         "src/core/clipboard/clipboard.ts",
@@ -1164,7 +1164,7 @@
         "tokens.delete",
         "workspace.setPanelOpen"
       ],
-      "doors": 23,
+      "doors": 24,
       "scenarios": 11,
       "modules": [
         "src/core/design/tokens.ts",
@@ -1735,7 +1735,7 @@
         "view.toggleZones",
         "workspace.setPanelOpen"
       ],
-      "doors": 21,
+      "doors": 22,
       "scenarios": 3,
       "modules": [
         "src/editor/view/overlays.ts",
@@ -1987,8 +1987,8 @@
         "workspace.toggleInspector",
         "workspace.collapseDocks"
       ],
-      "doors": 25,
-      "scenarios": 11,
+      "doors": 26,
+      "scenarios": 12,
       "modules": [
         "src/editor/workspace/panels.ts"
       ]
@@ -2047,7 +2047,7 @@
         "commandBar.open",
         "components.startCreate"
       ],
-      "doors": 217,
+      "doors": 218,
       "scenarios": 56,
       "modules": [
         "src/core/clipboard/clipboard.ts",
@@ -2114,7 +2114,7 @@
       "commands": [
         "workspace.setPanelOpen"
       ],
-      "doors": 19,
+      "doors": 20,
       "scenarios": 1,
       "modules": [
         "src/editor/workspace/panels.ts"
@@ -2129,7 +2129,7 @@
         "workspace.setWorkbenchState",
         "workspace.setActiveTab"
       ],
-      "doors": 27,
+      "doors": 28,
       "scenarios": 10,
       "modules": [
         "src/editor/workspace/layout.ts",
@@ -2214,7 +2214,7 @@
         "selection.select",
         "workspace.setPanelOpen"
       ],
-      "doors": 25,
+      "doors": 26,
       "scenarios": 1,
       "modules": [
         "src/core/selection/selection.ts",
@@ -2388,7 +2388,7 @@
         "view.setEditorView",
         "codePanel.setPane"
       ],
-      "doors": 26,
+      "doors": 27,
       "scenarios": 5,
       "modules": [
         "src/editor/code-panel/code-panel.ts",
@@ -2455,7 +2455,7 @@
         "animation.delete",
         "timeline.show"
       ],
-      "doors": 23,
+      "doors": 24,
       "scenarios": 3,
       "modules": [
         "src/core/animation/animation.ts",
@@ -2560,7 +2560,7 @@
         "pages.switch",
         "workspace.setPanelOpen"
       ],
-      "doors": 26,
+      "doors": 27,
       "scenarios": 10,
       "modules": [
         "src/core/project/pages.ts",
@@ -4840,7 +4840,7 @@
     },
     {
       "path": "src/editor/shell/status-bar.tsx",
-      "lines": 171,
+      "lines": 194,
       "commands": [],
       "features": []
     },
@@ -5111,7 +5111,7 @@
     },
     {
       "path": "src/generated/ids.ts",
-      "lines": 4564,
+      "lines": 4567,
       "commands": [],
       "features": []
     },

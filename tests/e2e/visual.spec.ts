@@ -1,7 +1,8 @@
 // Visual baselines (the plan's T.5): a picture of the editor in a few fixed states, compared with the one kept beside
 // this file. A change that moves a pixel the design system draws — a token, a primitive, a region's layout — fails
 // here until it is looked at and the picture taken again on purpose (npx playwright test visual --update-snapshots).
-// Every state is still: no animation, no caret, the aurora fixture, one window size, the light and the dark theme.
+// Every state is still: no animation, no caret, the aurora fixture, one window size, the light and the dark theme; at
+// most 50 pixels may differ (enough for a glyph's antialiasing, too few for a new icon).
 import fs from 'node:fs';
 import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
@@ -10,7 +11,7 @@ import { control, runDoor, runs } from './door.ts';
 const FIXTURE = 'manifest/features/fixtures/aurora.json';
 const OPEN = 'project.open#menu-file';
 const ROW = 'selection.select#layers-row';
-const STILL = { animations: 'disabled', caret: 'hide', maxDiffPixelRatio: 0.002 } as const;
+const STILL = { animations: 'disabled', caret: 'hide', maxDiffPixels: 50 } as const;
 
 async function aurora(page: Page, scheme: 'light' | 'dark'): Promise<void> {
   await page.emulateMedia({ colorScheme: scheme });

@@ -522,6 +522,31 @@
             "panel": "timeline",
             "open": "toggle"
           }
+        },
+        {
+          "id": "status-bar-checks",
+          "kind": "toolbar",
+          "drawnAs": "icon-button",
+          "pressed": false,
+          "feature": "dock-toggles",
+          "labelKey": "panel.checks",
+          "faceLabelKey": null,
+          "icon": "check",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "status-bar",
+            "order": 91
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {
+            "panel": "checks",
+            "open": "toggle"
+          }
         }
       ]
     },
