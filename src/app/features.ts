@@ -213,7 +213,7 @@ export const FEATURES = {
   'explorer-open-folder': registerFeature('explorer-open-folder'),
   'code-panel-edit-js': registerFeature('code-panel-edit-js'),
   // 20 shortcut sweep
-  'shortcuts-e2e-sweep': NOT_AVAILABLE_YET,
+  'shortcuts-e2e-sweep': registerFeature('shortcuts-e2e-sweep'),
   // 21 layout and structure
   'layout-actions': registerFeature('layout-actions'),
   'canvas-grid-editor': registerFeature('canvas-grid-editor'),

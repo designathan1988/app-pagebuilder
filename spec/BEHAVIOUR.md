@@ -6796,6 +6796,14 @@ This is the keyboard feature.
 2. **The drag level keys act only on the next pointer move** (observed lag). Required: pressing ArrowUp/ArrowDown during a drag updates the proposal and its indicator at once.
 3. **Ctrl+Enter enters preview but does not leave it** (see `preview-mode.md`). Required: Ctrl+Enter also leaves preview (manifest feature `preview-mode`), and the sweep checks it.
 
+### Our sweep
+
+The sweep is the manifest's own rules, run every time: every shortcut door runs, with the real keyboard, in at least one
+scenario that sets its context up and checks what it changes (`door-coverage`), and no chord is bound twice in one
+context (`chord-conflict`). A row added to the keymap is a door, so it is swept without editing any test. The feature's
+own scenario, `keys-pressed-one-after-another-run-their-commands-in-their-context`, presses two keys in a row on the
+canvas (Alt+ArrowDown, then R); its tooth proof switches the keymap off (`src/editor/input/keymap.ts`).
+
 ## shortcuts-panel
 
 How Pager behaves, observed by running it from `.cache/pager-run` (Chrome, window 1600×900) and read from its source. Source references are `path:line` inside Pager.

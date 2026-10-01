@@ -21,7 +21,150 @@
           "Each keymap row declares its own context setup and check next to its binding, so rows added by any entry are swept without editing the sweep test."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "keys-pressed-one-after-another-run-their-commands-in-their-context",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.moveDown#key-alt-arrow-down-in-canvas",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.wrapRow#key-r-in-canvas",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.wrapRow#key-r-in-canvas"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@children",
+                "value": [
+                  {
+                    "type": "paragraph",
+                    "name": "Intro",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Fresh coffee, roasted every week.",
+                    "children": []
+                  },
+                  {
+                    "type": "div",
+                    "name": "Row",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "display": "flex",
+                          "flex-direction": "row",
+                          "column-gap": "16px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "Title",
+                        "tag": "h1",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "flex-grow": "1",
+                              "flex-basis": "0px"
+                            }
+                          }
+                        },
+                        "text": "Welcome to Aurora",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "div",
+                    "name": "Actions",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Row"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Row",
+                  "property": "display",
+                  "value": "flex"
+                },
+                {
+                  "node": "/Page/Hero/Row",
+                  "property": "flex-direction",
+                  "value": "row"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.wrapped",
+                  "params": {
+                    "name": "Title",
+                    "wrapper": "Row",
+                    "styles": "display: flex; flex-direction: row; column-gap: 16px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        }
+      ],
+      "toothProof": "src/editor/input/keymap.ts"
     }
   ]
 }

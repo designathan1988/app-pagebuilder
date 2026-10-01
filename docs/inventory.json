@@ -1,10 +1,10 @@
 {
   "totals": {
     "features": 188,
-    "built": 186,
+    "built": 187,
     "commands": 263,
     "doors": 1027,
-    "scenarios": 1352,
+    "scenarios": 1353,
     "modules": 261,
     "lines": 50472
   },
@@ -2757,10 +2757,10 @@
     },
     {
       "id": "shortcuts-e2e-sweep",
-      "built": false,
+      "built": true,
       "commands": [],
       "doors": 0,
-      "scenarios": 0,
+      "scenarios": 1,
       "modules": []
     },
     {
