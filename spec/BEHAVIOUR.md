@@ -2184,6 +2184,8 @@ The manifest's feature `explorer-pages` holds the scenarios; this section holds 
 ### Problems in Pager
 
 1. **The top bar's page switcher drew a chevron that opened nothing** (the audit's U-011). Required: the switcher shows the page on the canvas, and a press opens the list of the project's pages (its name and its file), the page shown checked; choosing one runs `pages.switch` for it and closes the list; Escape and a press outside close it as every menu's do.
+2. **A click on another page's name put it in edit and left the canvas where it was** (the dogfooding pass: only the small page icon switched pages). Required: in the Pages list only the page on the canvas has its name as an editable field; another page's name reads as text, and a click on it opens that page (`pages.switch`), its name then editable in place.
+
 ## export-bem-css
 
 How Pager behaves, read from its source (`reference/Pager`). Source references are `path:line` inside Pager.

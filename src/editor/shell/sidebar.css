@@ -690,3 +690,13 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* another page's name reads as text: a click opens the page (only the page on the canvas is renamed in place) */
+.row--page .row__name-field[data-opens] {
+  cursor: pointer;
+}
+.row--page .row__name-field[data-opens]:hover,
+.row--page .row__name-field[data-opens]:focus {
+  border-color: transparent;
+  background: transparent;
+}

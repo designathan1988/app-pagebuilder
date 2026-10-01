@@ -148,10 +148,13 @@ function PageRow({ page }: { readonly page: Page }) {
 
 // A page's name, kept by pages.rename on Enter or when the field loses the focus (one undo step): the row shows the
 // name its document holds — again after an undo, a redo or a refused name (the status bar's message changes with each)
-// — and typing another one keeps it.
+// — and typing another one keeps it. Only the page on the canvas is renamed in place: another page's name reads as
+// text, and a click on it opens that page (the dogfooding pass: a click on "Home" put its name in edit and left the
+// canvas on the other page; only the small icon switched).
 function PageNameField({ page }: { readonly page: Page }) {
   const field = useDoor(PAGE_NAME, { page: page.id });
   const store = useStore();
+  const shown = useEditorState((s) => pageShown(s)?.tree.id === page.tree.id);
   const input = useRef<HTMLInputElement>(null);
   const said = useEditorState((state) => state.message);
   useEffect(() => {
@@ -176,6 +179,13 @@ function PageNameField({ page }: { readonly page: Page }) {
         autoComplete="off"
         data-door={PAGE_NAME.ref}
         data-args={JSON.stringify({ page: page.tree.id })}
+        readOnly={!shown}
+        data-opens={shown ? undefined : ''}
+        onClick={(event) => {
+          if (shown) return;
+          event.currentTarget.blur();
+          (store.dispatch as (id: CommandId, args: unknown) => DispatchResult)(PAGE_ROW.command.id as CommandId, { ...PAGE_ROW.door.args, page: page.tree.id });
+        }}
         onBlur={(event) => keep(event.currentTarget.value)}
       />
     </form>

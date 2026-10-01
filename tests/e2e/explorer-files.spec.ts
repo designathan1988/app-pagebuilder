@@ -121,3 +121,17 @@ test('a code file shows its kind as a tag, and a file the editor writes says it 
   await expect(own.locator('.row__gen')).toHaveCount(0);
   expect(await own.locator('.row__name').evaluate((el) => getComputedStyle(el).fontFamily)).toMatch(/Cascadia|Consolas|monospace/);
 });
+
+// A click on another page's name opens that page; only the page on the canvas is renamed in place (spec explorer-pages,
+// Problems in Pager 2; the dogfooding pass).
+test('a click on another page name opens it, and only the shown page is renamed in place', runs('pages.add#explorer-add-page', 'pages.switch#explorer-page-row'), async ({ page }) => {
+  await control(page, 'pages.add#explorer-add-page').click();
+  const names = page.locator('.row--page .row__name-field');
+  await expect(names).toHaveCount(2);
+  await expect(names.nth(0)).toHaveAttribute('readonly', '');
+  await names.nth(0).click();
+  await expect(page.locator('.top-bar__page b')).toHaveText('Home');
+  await expect(names.nth(0)).not.toBeFocused();
+  await expect(names.nth(0)).not.toHaveAttribute('readonly', '');
+  await expect(names.nth(1)).toHaveAttribute('readonly', '');
+});
