@@ -31,8 +31,8 @@ concept that has an owner is a defect.
 
 ## What is delivered
 
-Counted by `npm run inventory` from the contract and the source: **187 features (185 built), 261 commands, 1,006
-doors, 1,343 scenarios, 259 modules, 49,995 lines.**
+Counted by `npm run inventory` from the contract and the source: **188 features (187 built), 263 commands, 1,027
+doors, 1,353 scenarios, 261 modules, 50,472 lines.**
 
 - **The canvas**: selection (click, Shift, marquee, the tree walk), drag and drop with proposals, resize and rotate
   handles, spacing handles, guides (drag from the ruler, snap, Alt measures), rulers, column/row/dot grids, outlines
@@ -53,17 +53,22 @@ doors, 1,343 scenarios, 259 modules, 49,995 lines.**
   project at its path, an optional interactions script), the preview, and the language: English and Portuguese (pt-BR)
   complete, with the theme (light, dark, system) and the workspace persisted.
 
-Two features are declared and deliberately **unregistered**: `hover-measure` (its behaviour lives in the canvas chrome)
-and `shortcuts-e2e-sweep`. Neither brings a command or a door.
+- **Repeaters** (the dogfooding pass): Repeat (linked copy) makes an element a component and adds linked items, and
+  Fill from data fills them from a project JSON or CSV file, adding items for extra rows (feature `repeat-element`).
+
+One feature is declared and deliberately **unregistered**: `hover-measure`. Its behaviour (the hover size, Alt's
+distances) is built and proven by `tests/e2e/hover-measure.spec.ts`, but no scenario can hover, so it has no honest
+tooth proof; it brings no command and no door. `shortcuts-e2e-sweep` is registered: the rules `door-coverage` and
+`chord-conflict` are the sweep, with a scenario whose tooth proof switches the keymap off.
 
 ## How it is proven
 
 - **The gate, at every commit**: `gen:check`, `manifest:check`, `inventory:check`, both typechecks, lint, and
-  **1,655 unit tests** — among them the headless scenario runner (every scenario's logic without a browser), the
+  **1,696 unit tests** — among them the headless scenario runner (every scenario's logic without a browser), the
   planted manifest fixtures, the catalogue's duplicate and unused-key checks, and coverage floors.
-- **The complete browser suite**: **2,006 tests** — every scenario through every door it names, on the installed
-  Chrome (`channel: 'chrome'`), plus the end-to-end specs. Its last complete run, on the tree this board summarises:
-  **2,006 passed** in 11.9 minutes (workers capped at a quarter of the cores), no failures and no flakes.
+- **The complete browser suite**: **2,057 tests** — every scenario through every door it names, on the installed
+  Chrome (`channel: 'chrome'`), plus the end-to-end specs. Its last complete run, on the tree this board summarises
+  (2026-10-01, after the dogfooding pass): **2,057 passed** in 12.6 minutes, no failures and no flakes.
 - **Visual baselines**: fourteen pictures of the editor (seven states, light and dark), at most 50 pixels of difference.
 - **Between commits**: `npm run e2e:affected` runs the browser tests of the features a change reaches; `npm run
   e2e:tooth` proves a feature's scenarios fail with it switched off.
@@ -86,6 +91,16 @@ Timeline on their canonical anatomy, every manifest field read by a module or ta
 mid-chapter complete runs caught what the per-block tests missed (a backdrop sized by a button rule, a runner that
 read a tab while it reloaded); both are fixed and covered.
 
+## The dogfooding pass (2026-09-30 → 10-01)
+
+The application used as its end user would, with real gestures and a photograph per step; 23 changes, one commit
+each, listed with their commits in `docs/QA-LOG.md` (each revertible alone). The blockers it found and fixed: a canvas
+text lost on Escape, letters typed on the canvas running shortcuts, a header's edge that wrote its padding, a Dialog
+that could not be placed nor opened in the export, and a preview Escape could not leave. Then the frictions: whole-edge
+resize, the dragged band kept visible, the quick panel's Layout (Display, Justify), Repeat and Fill from data, the
+Layers tree taking the structure keys, the menu bar's hover switch, the preview's own tab, message and status bar, the
+command bar saying why a command cannot run, the element count of the open page, guides thrown past their ruler.
+
 ## Open, honestly
 
 Nothing of the chapter's plan is left undone; three items were decided rather than built, each with its reason in
@@ -95,6 +110,9 @@ Nothing of the chapter's plan is left undone; three items were decided rather th
 - **S-028 stays**: the scenario `a-side-colour-that-is-no-colour-is-refused` pins naming the part the parser guessed.
 - **T.2 is not built**: the per-commit loop is already fast (headless runner, `e2e:affected`) and the complete suite
   stable in about 11 minutes; a runner rewrite would risk that for a margin.
-- `hover-measure` and `shortcuts-e2e-sweep`: unregistered by decision (no command, no door behind them).
+- `hover-measure`: unregistered by decision (built and spec-tested; no scenario can hover for a tooth proof).
+- **Decided in the dogfooding pass**: global shortcuts wait while a field has the focus; flow elements are reordered
+  (the drop line) and absolute or fixed ones placed freely, so smart guides belong to the latter; a page's root takes
+  a unique name because scenario paths name pages by it.
 - **T7 deferred with its reason**: the pointer's module-level singletons only matter when two editors share a page,
   and no flow opens two; it waits for the first feature that does.
