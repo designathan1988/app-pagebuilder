@@ -943,8 +943,18 @@
       "icon": "message-square",
       "palette": true,
       "content": "children",
-      "naturalChild": null,
-      "defaultStyles": {},
+      "naturalChild": [
+        "heading",
+        "paragraph",
+        "button"
+      ],
+      "defaultStyles": {
+        "position": "fixed",
+        "top": "0px",
+        "right": "0px",
+        "bottom": "0px",
+        "left": "0px"
+      },
       "defaultTextKey": null
     },
     {

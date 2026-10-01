@@ -20696,7 +20696,7 @@
           "refusals": []
         },
         {
-          "id": "the-dialog-tile-inserts-a-dialog",
+          "id": "the-dialog-tile-inserts-a-modal-dialog-centred-on-the-screen",
           "setup": {
             "fixture": "empty",
             "selection": [],
@@ -20744,9 +20744,50 @@
                     "tag": "dialog",
                     "attributes": {},
                     "classes": [],
-                    "styles": {},
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "position": "fixed",
+                          "top": "0px",
+                          "right": "0px",
+                          "bottom": "0px",
+                          "left": "0px"
+                        }
+                      }
+                    },
                     "text": null,
-                    "children": []
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "Heading",
+                        "tag": "h2",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "New heading",
+                        "children": []
+                      },
+                      {
+                        "type": "paragraph",
+                        "name": "Paragraph",
+                        "tag": "p",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "A freshly created paragraph.",
+                        "children": []
+                      },
+                      {
+                        "type": "button",
+                        "name": "Button",
+                        "tag": "button",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "New button",
+                        "children": []
+                      }
+                    ]
                   }
                 ]
               }
@@ -20975,9 +21016,50 @@
                       "open": true
                     },
                     "classes": [],
-                    "styles": {},
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "position": "fixed",
+                          "top": "0px",
+                          "right": "0px",
+                          "bottom": "0px",
+                          "left": "0px"
+                        }
+                      }
+                    },
                     "text": null,
-                    "children": []
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "Heading",
+                        "tag": "h2",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "New heading",
+                        "children": []
+                      },
+                      {
+                        "type": "paragraph",
+                        "name": "Paragraph",
+                        "tag": "p",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "A freshly created paragraph.",
+                        "children": []
+                      },
+                      {
+                        "type": "button",
+                        "name": "Button",
+                        "tag": "button",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "New button",
+                        "children": []
+                      }
+                    ]
                   }
                 ]
               }

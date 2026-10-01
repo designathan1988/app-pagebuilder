@@ -4,9 +4,9 @@
     "built": 185,
     "commands": 261,
     "doors": 1010,
-    "scenarios": 1343,
+    "scenarios": 1344,
     "modules": 260,
-    "lines": 50094
+    "lines": 50097
   },
   "features": [
     {
@@ -1791,7 +1791,7 @@
         "position.move"
       ],
       "doors": 5,
-      "scenarios": 4,
+      "scenarios": 5,
       "modules": [
         "src/core/geometry/position.ts"
       ]
@@ -3214,7 +3214,7 @@
     },
     {
       "path": "src/core/geometry/position.ts",
-      "lines": 112,
+      "lines": 115,
       "commands": [
         "position.setMode",
         "position.move"

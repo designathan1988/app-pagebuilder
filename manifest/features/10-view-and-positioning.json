@@ -5022,6 +5022,160 @@
           "refusals": []
         },
         {
+          "id": "a-dialog-moves-whole-and-keeps-its-size",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "dialog"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "position.move#canvas-drag-positioned-element-containing-block",
+              "args": {
+                "dx": 120,
+                "dy": -40
+              },
+              "target": "/Page/Dialog",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "position.move#canvas-drag-positioned-element-containing-block"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "dialog",
+                    "name": "Dialog",
+                    "tag": "dialog",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "position": "fixed",
+                          "top": "-40px",
+                          "right": "-120px",
+                          "bottom": "40px",
+                          "left": "120px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "Heading",
+                        "tag": "h2",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "New heading",
+                        "children": []
+                      },
+                      {
+                        "type": "paragraph",
+                        "name": "Paragraph",
+                        "tag": "p",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "A freshly created paragraph.",
+                        "children": []
+                      },
+                      {
+                        "type": "button",
+                        "name": "Button",
+                        "tag": "button",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "New button",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Dialog"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Dialog",
+                  "property": "left",
+                  "value": "120px"
+                },
+                {
+                  "node": "/Page/Dialog",
+                  "property": "right",
+                  "value": "-120px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.position.moved",
+                  "params": {
+                    "name": "Dialog",
+                    "parent": "Page",
+                    "x": 120,
+                    "y": -40
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
           "id": "a-locked-absolute-element-is-not-moved",
           "setup": {
             "fixture": "aurora",

@@ -69,8 +69,10 @@ export function measuredPlace(context: HandlerContext<unknown>, node: DocNode): 
 }
 
 // The insets that move a positioned element by dx and dy page px, each axis through the edge it is anchored to (the
-// inset composite's longhands: its start edge, left or top, unless only its end edge, right or bottom, is set), from the
-// value it holds in px, else where it lies now; and its left and top afterwards, for the status bar.
+// inset composite's longhands: its start edge, left or top, unless only its end edge, right or bottom, is set; both
+// when both are, so an element anchored on both sides — a stretched one, a dialog centred by inset 0 and auto margins —
+// moves whole and keeps its size), from the value it holds in px, else where it lies now; and its left and top
+// afterwards, for the status bar.
 export function movedInsets(node: DocNode, rules: ModelRules, place: Readonly<Record<string, number>> | null, dx: number, dy: number): { readonly writes: Record<string, string>; readonly x: number; readonly y: number } {
   const [top = '', right = '', bottom = '', left = ''] = rules.compositeFacts.get(INSET)?.longhands ?? [];
   const writes: Record<string, string> = {};
@@ -84,6 +86,7 @@ export function movedInsets(node: DocNode, rules: ModelRules, place: Readonly<Re
       writes[end] = `${Math.round(from(end) - delta)}px`;
       return Math.round((place?.[start] ?? 0) + delta);
     }
+    if (set(end)) writes[end] = `${Math.round(from(end) - delta)}px`;
     const next = Math.round(from(start) + delta);
     writes[start] = `${next}px`;
     return next;
