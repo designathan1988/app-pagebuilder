@@ -7174,6 +7174,7 @@ The status bar is a Tab stop (`data-region="status"`), but its breadcrumb button
 1. **Messages go stale:** the last message stays until another command writes one (e.g. `Text edit cancelled — …` remained while other things happened), with no time or fading. Required: the message line shows the last command's message in an aria-live region and is cleared or replaced when the context changes (manifest feature `status-bar`).
 2. **The breadcrumb is not reachable by keyboard.** Required: breadcrumb items are buttons reachable with Tab/arrow keys inside the status region.
 3. **The breadcrumb's buttons stood 26 and 28 px tall in the 24 px bar** (the audit's U-038). Required: every control of the bar is as tall as the bar.
+- **The element count summed every page** (the dogfooding pass, 2026-09-30): a new, empty page read "20 elements". Required: the count is that of the page on the canvas.
 
 ## table-commands
 

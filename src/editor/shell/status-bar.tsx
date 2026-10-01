@@ -10,7 +10,8 @@ import { checksOf } from '../../core/a11y/checks.ts';
 import type { MessageId } from '../../generated/ids.ts';
 import { saveState, type SaveState } from '../persistence/autosave.ts';
 import { incidents, onIncident } from '../../core/incidents.ts';
-import { allNodes, locate, type DocNode } from '../../core/document/model.ts';
+import { locate, walk, type DocNode } from '../../core/document/model.ts';
+import { openedPage } from '../../core/project/pages.ts';
 import type { Message } from '../../core/commands/registry.ts';
 import { pluralForm } from '../../i18n/index.ts';
 import { dragMessages } from '../canvas/chrome.tsx';
@@ -33,7 +34,11 @@ export function StatusBar() {
   const locale = useLocale();
   const message = useEditorState((s) => s.message);
   const document = useEditorState((s) => s.document);
-  const count = [...allNodes(document)].length;
+  // the elements of the page on the canvas, never the whole project's (the dogfooding pass: a new empty page read
+  // "20 elements", the count of every page)
+  const shownPage = useEditorState((s) => openedPage(s));
+  const tree = document.pages[shownPage]?.tree;
+  const count = tree === undefined ? 0 : [...walk(tree)].length;
   // the breakpoint the canvas shows and its width (spec breakpoints-switch), and the state being edited (view/setStyleState)
   const breakpoint = useEditorState((s) => activeBreakpoint(s.ui));
   const state = useEditorState((s) => activeState(s.ui));

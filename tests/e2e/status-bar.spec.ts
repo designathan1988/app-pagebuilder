@@ -57,11 +57,11 @@ test('the bar shows the path, the size, the context, the count and the zoom of w
   const intro = await boxOf(page, 'n-intro');
   expect(await size(page)).toBe(`${intro.page.width} × ${intro.page.height}`);
   await expect(page.locator('.status-bar .status-bar__context')).toHaveText('Desktop / Base');
-  // the count: the elements the document the port reads holds
+  // the count: the elements of the page on the canvas (the project has one page here)
   const nodes = await page.evaluate(() => {
     const count = (node: { children: unknown[] }): number => 1 + node.children.reduce((sum: number, child) => sum + count(child as { children: unknown[] }), 0);
     const doc = (window as unknown as { __builderTestPort: { document: () => { pages: { tree: { children: unknown[] } }[] } } }).__builderTestPort.document();
-    return doc.pages.reduce((sum, one) => sum + count(one.tree), 0);
+    return doc.pages[0] === undefined ? 0 : count(doc.pages[0].tree);
   });
   await expect(page.locator('.status-bar').getByText(nodes === 1 ? '1 element' : `${nodes} elements`)).toHaveCount(1);
   // the zoom, and the save state of the work the editor stored
@@ -122,4 +122,12 @@ test('the Checks icon says how many issues the document has and opens the dock o
   await icon.click();
   await expect(page.locator('[data-region="tab-strip"] [role="tab"][aria-selected="true"]')).toHaveText('Checks');
   await expect(page.locator('.dock-checks__list li, .dock-checks__none')).not.toHaveCount(0);
+});
+
+test('the element count is that of the open page: a new page reads one element', runs(OPEN, 'pages.add#explorer-add-page'), async ({ page }) => {
+  // the dogfooding pass: a new empty page read "20 elements", the count of every page of the project (the aurora project
+  // is open: beforeEach)
+  await expect(page.locator('.status-bar').getByText('19 elements')).toHaveCount(1);
+  await runDoor(page, 'pages.add#explorer-add-page');
+  await expect(page.locator('.status-bar').getByText('1 element', { exact: true })).toHaveCount(1);
 });
