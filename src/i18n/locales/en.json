@@ -497,6 +497,7 @@
   "command.zoomTo": "Zoom to {percent}%",
   "commandBar.hint.filter": "filter",
   "commandBar.none": "No command, element or panel matches “{query}”.",
+  "commandBar.unavailable": "“{command}” cannot run now: {reason}",
   "commandBar.scope.all": "All",
   "commandBar.scope.commands": "Commands >",
   "commandBar.scope.insert": "Insert +",

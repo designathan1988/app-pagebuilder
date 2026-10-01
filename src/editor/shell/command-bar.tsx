@@ -91,6 +91,16 @@ function CommandBarDialog() {
     });
   }, [store, drawsBody, t, query]);
   const shown = useMemo(() => shownEntries(query, offered, recentEntries()), [query, offered]);
+  // with nothing to offer, a command the query names that cannot run now says why (the dogfooding pass: "dup" with
+  // nothing selected answered only that nothing matched); it is still not offered (Problems in Pager 2)
+  const blocked = useMemo(() => {
+    if (query.trim() === '' || shown.length > 0) return null;
+    const state = store.getState();
+    const plain = BAR_DOORS.filter((entry) => kindOf(entry) === 'command' && isDoorBuilt(entry) && !appliesNow(entry, {}, store));
+    const named = plain.map((entry) => ({ entry, args: {}, label: t(entry.door.labelKey as MessageId, labelParamsOf(entry, state)), key: entryKey(entry, {}) }));
+    const first = shownEntries(query, named, [])[0];
+    return first === undefined ? null : { label: first.label, reason: t(first.entry.door.disabledReasonKey as MessageId) };
+  }, [query, shown, store, t]);
 
   // the field takes the focus while the bar is open, and gives it back to what had it
   useLayoutEffect(() => {
@@ -149,7 +159,11 @@ function CommandBarDialog() {
             </button>
           ))}
         </div>
-        {shown.length === 0 && query.trim() !== '' ? <p className="command-bar__none" role="status">{t('commandBar.none', { query: query.trim() })}</p> : null}
+        {shown.length === 0 && query.trim() !== '' ? (
+          <p className="command-bar__none" role="status">
+            {blocked === null ? t('commandBar.none', { query: query.trim() }) : t('commandBar.unavailable', { command: blocked.label, reason: blocked.reason })}
+          </p>
+        ) : null}
         <ul className="command-bar__list" role="listbox" id={LIST_ID} ref={list} aria-label={t('command.commandBar')}>
           {shown.map((e, i) => (
             <li key={e.key} id={`${LIST_ID}-${i}`} role="option" aria-selected="false" className="command-bar__option" onClick={() => { remember(e.key); close(); }}>

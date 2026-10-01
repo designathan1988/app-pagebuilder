@@ -23,4 +23,5 @@ and what changed.
 | 15 | 662218d | Quick panel | Justify showed only the last letter of space-between in half a line. | The Justify field takes the Layout group's whole line. |
 | 16 | 20be2af | App menus | With File open, moving to Edit did nothing: every menu wanted its own click. | With a menu open, the pointer onto another top-bar menu button opens it (pointer signal `menuOver`); hovering opens nothing while no menu is open. |
 | 17 | d5a9e7b | Preview | The preview kept the editor's status bar controls, said "Editing the Phone breakpoint", and its bar marked no tab. | Status bar holds only the message while previewing; "Previewing the page on the Phone screen."; the shown breakpoint's tab reads as chosen. Four preview-bar scenarios expect the new message. |
-| 18 | (this commit) | Status bar | A new, empty page read "20 elements": the count summed every page. | The count is that of the page on the canvas. |
+| 18 | 36cbda5 | Status bar | A new, empty page read "20 elements": the count summed every page. | The count is that of the page on the canvas. |
+| 19 | (this commit) | Command bar | "dup" with nothing selected said only that nothing matched. | Still not offered, but the bar names the command and why it cannot run now. |

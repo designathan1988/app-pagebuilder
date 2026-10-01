@@ -125,3 +125,17 @@ test('the scope pills show the scope in force and change it, keeping the words t
   await pill('All').click();
   await expect(field).toHaveValue('hero');
 });
+
+test('a command the query names that cannot run now is not offered, and the bar says why', runs(CTRL_K), async ({ page }) => {
+  // the dogfooding pass: "dup" with nothing selected answered only that nothing matched
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await openEditor(page);
+  await runDoor(page, CTRL_K);
+  await page.keyboard.type('dup');
+  await expect(bar(page).locator('[role="option"]')).toHaveCount(0);
+  await expect(bar(page).locator('.command-bar__none')).toContainText('Duplicate');
+  await expect(bar(page).locator('.command-bar__none')).toContainText('cannot run now');
+  await page.keyboard.press('Control+A');
+  await page.keyboard.type('zzzqqq');
+  await expect(bar(page).locator('.command-bar__none')).toContainText('No command');
+});
