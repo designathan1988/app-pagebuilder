@@ -22,7 +22,7 @@ import type { CommandId, FeatureId } from '../../generated/ids.ts';
 import { isFeatureBuilt } from '../../app/features.ts';
 import { styleSource } from '../inspector/style-target.ts';
 import { FORMAT_CHANNELS, alphaBackground, areaBackground, channelText, formatColor, hsbToRgb, hueBackground, inSrgbGamut, parseColor, parseSrgb, pickedAlpha, rgbToHsb, type Hsba, type Rgba } from '../../core/style/color.ts';
-import { CHANNEL_LABELS, recentColours } from '../inspector/color-picker.ts';
+import { CHANNEL_KEYS, CHANNEL_LABELS, recentColours } from '../inspector/color-picker.ts';
 import { swatchesOf } from '../../core/design/colors.ts';
 import { lineStyles, storedValue } from '../../core/style/set.ts';
 import type { DoorEntry } from '../../manifest/runtime.ts';
@@ -65,7 +65,7 @@ function PickerButton({ entry, className }: { readonly entry: DoorEntry; readonl
 
 // A text field of the picker (the colour text, a channel): a form of its own, so Enter keeps what it holds; leaving it
 // with typing not kept yet keeps it too. It shows `shown` again whenever that changes or a message is said.
-function PickerText({ entry, args, shown, label, keep, className }: { readonly entry: DoorEntry; readonly args: Readonly<Record<string, unknown>>; readonly shown: string; readonly label: string; readonly keep: (text: string) => void; readonly className: string }) {
+function PickerText({ entry, args, shown, label, keep, className, keyText }: { readonly entry: DoorEntry; readonly args: Readonly<Record<string, unknown>>; readonly shown: string; readonly label: string; readonly keep: (text: string) => void; readonly className: string; readonly keyText?: string }) {
   const door = useDoor(entry, args, label, isFeatureBuilt(entry.door.feature as FeatureId));
   const said = useEditorState((s) => s.message);
   const input = useRef<HTMLInputElement>(null);
@@ -84,11 +84,8 @@ function PickerText({ entry, args, shown, label, keep, className }: { readonly e
     // a value rejected changes nothing: the field shows the last valid one
     element.value = shown;
   };
-  return (
-    <form className={className} data-door={entry.ref} data-args={JSON.stringify(args)} title={door.title} onSubmit={submit}>
-      <label className="picker__label">
-        <span>{label}</span>
-        <input
+  const field = (
+    <input
           ref={input}
           className="input"
           aria-label={label}
@@ -99,7 +96,23 @@ function PickerText({ entry, args, shown, label, keep, className }: { readonly e
           }}
           onBlur={() => submit()}
         />
-      </label>
+  );
+  return (
+    <form className={className} data-door={entry.ref} data-args={JSON.stringify(args)} title={door.title} onSubmit={submit}>
+      {keyText !== undefined ? (
+        // a channel: its key inside the field, its name its accessible name and tooltip
+        <span className="input-wrap picker__field">
+          <span className="field__prefix" aria-hidden="true">
+            {keyText}
+          </span>
+          {field}
+        </span>
+      ) : (
+        <label className="picker__label">
+          <span>{label}</span>
+          {field}
+        </label>
+      )}
     </form>
   );
 }
@@ -228,9 +241,17 @@ function useAnchor(property: string): RefObject<HTMLDivElement | null> {
     const element = popover.current;
     if (COLOR_SWATCH === undefined || element === null) return;
     const swatch = document.querySelector(`[data-door="${COLOR_SWATCH.ref}"][data-args='${JSON.stringify({ property })}']`);
-    const box = swatch?.getBoundingClientRect();
-    const top = box ? Math.max(0, Math.min(box.top, window.innerHeight - element.offsetHeight)) : 0;
-    element.style.setProperty('--picker-top', `${top}px`);
+    // placed again whenever the popover changes size (a format whose channels and gamut note make it taller): it stays
+    // inside the window, its Apply reachable
+    const place = () => {
+      const box = swatch?.getBoundingClientRect();
+      const top = box ? Math.max(0, Math.min(box.top, window.innerHeight - element.offsetHeight)) : 0;
+      element.style.setProperty('--picker-top', `${top}px`);
+    };
+    place();
+    const observer = new ResizeObserver(place);
+    observer.observe(element);
+    return () => observer.disconnect();
   }, [property]);
   return popover;
 }
@@ -386,6 +407,7 @@ function Picker({ property, previous }: { readonly property: string; readonly pr
                 shown={channelText(rgba, channel, exact)}
                 label={t(CHANNEL_LABELS[channel])}
                 className="picker__channel"
+                keyText={CHANNEL_KEYS[channel]}
                 keep={(text) => run(channelPart, { property, channel, text, base: current })}
               />
             ))}

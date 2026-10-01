@@ -13821,7 +13821,7 @@
               "door": "style.set#color-picker-area",
               "args": {
                 "property": "background-color",
-                "value": "#f9f5f5"
+                "value": "#f9f4f4"
               },
               "target": null,
               "drop": null,
@@ -13847,7 +13847,7 @@
               {
                 "op": "set",
                 "path": "/Page/Hero/Actions/@styles/desktop/base/background-color",
-                "value": "#f9f5f5"
+                "value": "#f9f4f4"
               }
             ],
             "selection": [
@@ -13863,7 +13863,7 @@
                 {
                   "node": "/Page/Hero/Actions",
                   "property": "background-color",
-                  "value": "rgb(249, 245, 245)"
+                  "value": "rgb(249, 244, 244)"
                 }
               ],
               "geometry": [],
@@ -13873,7 +13873,7 @@
                   "params": {
                     "property": "Background",
                     "name": "Actions",
-                    "value": "#f9f5f5"
+                    "value": "#f9f4f4"
                   }
                 }
               ]
@@ -15202,7 +15202,7 @@
               "door": "style.set#color-picker-area",
               "args": {
                 "property": "background-color",
-                "value": "#f9f5f5"
+                "value": "#f9f4f4"
               },
               "target": null,
               "drop": null,
@@ -15228,7 +15228,7 @@
               {
                 "op": "set",
                 "path": "/Page/Hero/Actions/@styles/desktop/base/background-color",
-                "value": "#f9f5f5"
+                "value": "#f9f4f4"
               }
             ],
             "selection": [
@@ -15244,7 +15244,7 @@
                 {
                   "node": "/Page/Hero/Actions",
                   "property": "background-color",
-                  "value": "rgb(249, 245, 245)"
+                  "value": "rgb(249, 244, 244)"
                 }
               ],
               "geometry": [],
@@ -15254,7 +15254,7 @@
                   "params": {
                     "property": "Background",
                     "name": "Actions",
-                    "value": "#f9f5f5"
+                    "value": "#f9f4f4"
                   }
                 }
               ]

@@ -6,7 +6,7 @@
     "doors": 1005,
     "scenarios": 1342,
     "modules": 259,
-    "lines": 49943
+    "lines": 49969
   },
   "features": [
     {
@@ -4362,7 +4362,7 @@
     },
     {
       "path": "src/editor/inspector/color-picker.ts",
-      "lines": 97,
+      "lines": 101,
       "commands": [
         "colorPicker.open",
         "colorPicker.setFormat",
@@ -4648,7 +4648,7 @@
     },
     {
       "path": "src/editor/shell/color.tsx",
-      "lines": 413,
+      "lines": 435,
       "commands": [],
       "features": []
     },

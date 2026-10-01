@@ -957,6 +957,7 @@ Not affected (the picker is outside the canvas).
   the field draws the colour as a **sample chip** (`.field__sample`): those values are typed in their own field and the
   picker, whose parts write a whole property, does not open there yet (the open finding in PROGRESS.md names the work:
   the picker's parts would have to carry a write target).
+5. **The picker was a 304 px panel whose channels stacked their names over their fields, and a format that made it taller pushed Apply out of the window** (jornada02 GENERALISATION, colour picker). Required: the picker is the canonical popover — 240 px wide, 8 px inset, radius lg, the floating shadow; each channel field holds its key inside (H S B A, R G B A, # and A, L C H A, L a b A), its name its accessible name and tooltip; Cancel and Apply are the small buttons; and it is placed again whenever it changes size, so it stays inside the window. (The area's colours follow its width: a press 4 px into the 224 px area of `#ff0000` writes `#f9f4f4`.)
 
 ## color-swatches-eyedropper
 
