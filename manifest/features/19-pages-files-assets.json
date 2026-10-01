@@ -2445,6 +2445,26 @@
               "type": null
             },
             {
+              "door": "linkPicker.close#link-picker-close",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "linkPicker.open#field-href-choose",
+              "args": {
+                "target": "/Page/Link"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
               "door": "linkPicker.setKind#link-picker-anchor",
               "args": {
                 "kind": "anchor"
@@ -2463,15 +2483,6 @@
               "target": null,
               "drop": null,
               "action": true,
-              "hold": false,
-              "type": null
-            },
-            {
-              "door": "linkPicker.close#link-picker-close",
-              "args": {},
-              "target": null,
-              "drop": null,
-              "action": false,
               "hold": false,
               "type": null
             },
@@ -2651,15 +2662,6 @@
               "target": null,
               "drop": null,
               "action": true,
-              "hold": false,
-              "type": null
-            },
-            {
-              "door": "linkPicker.close#link-picker-close",
-              "args": {},
-              "target": null,
-              "drop": null,
-              "action": false,
               "hold": false,
               "type": null
             },
@@ -2917,15 +2919,6 @@
               "args": {
                 "page": "company/about-us.html"
               },
-              "target": null,
-              "drop": null,
-              "action": false,
-              "hold": false,
-              "type": null
-            },
-            {
-              "door": "linkPicker.close#link-picker-close",
-              "args": {},
               "target": null,
               "drop": null,
               "action": false,

@@ -80,8 +80,8 @@ test('the link picker chooses a section, a page or an address, and closes with E
   await runDoor(page, KIND('anchor'));
   await runDoor(page, ANCHOR_ITEM, { args: { anchor: heading.id } });
   await expect.poll(async () => find(await tree(page), 'link')?.attributes.href).toBe(`#${heading.id}`);
-  // the picker covers the editor: it is closed before the export is asked for
-  await runDoor(page, CLOSE);
+  // choosing an element ends the choice: the picker closes (the journey "site")
+  await expect(picker).toHaveCount(0);
   expect(await exportedHtml(page)).toContain('<a href="#inicio">A link</a>');
   // Escape closes the picker; the close button too
   await runDoor(page, OPEN_PICKER, { args: { target: link.id } });
@@ -154,3 +154,33 @@ test('a project file whose semantics are broken is refused with the reason', run
     // nothing was opened: the document is still the empty project
     expect(await page.evaluate(() => (window as unknown as { __builderTestPort: { document: () => { pages: { tree: { children: unknown[] } }[] } } }).__builderTestPort.document().pages[0]?.tree.children.length)).toBe(0);
   }});
+
+// the journey "site": the picker stayed open after a page was chosen, the click on the next link of the menu only
+// closed it, and the next choice rewrote the first link
+const ADD_PAGE = 'pages.add#explorer-add-page';
+const EXPLORER = 'workspace.setPanelOpen#toolbar-activity-bar-explorer';
+const SWITCH = 'pages.switch#file-tab';
+const named = (n: Node | undefined, name: string): Node | undefined => (n === undefined ? undefined : n.name === name ? n : n.children.map((c) => named(c, name)).find(Boolean));
+
+test('a page chosen in the picker closes it, and the next link clicked gets its own page', runs(INSERT, TILE, EXPLORER, ADD_PAGE, SWITCH, ROW, SETTINGS, OPEN_PICKER, KIND('page'), PAGE_ITEM), async ({ page }) => {
+  await runDoor(page, TILE, { args: { entry: 'template-navbar' } });
+  await runDoor(page, EXPLORER);
+  await runDoor(page, ADD_PAGE);
+  await page.keyboard.press('Enter');
+  await runDoor(page, SWITCH, { args: { page: (await tree(page)).id } });
+  const first = named(await tree(page), 'Link 3');
+  const second = named(await tree(page), 'Link 4');
+  if (first === undefined || second === undefined) throw new Error('the navbar has no Link 3 and Link 4');
+  await control(page, ROW, { args: { target: first.id } }).click();
+  await runDoor(page, SETTINGS);
+  await runDoor(page, OPEN_PICKER);
+  await runDoor(page, KIND('page'));
+  await runDoor(page, PAGE_ITEM, { args: { page: 'page.html' } });
+  await expect(page.locator('[data-region="link-picker"]')).toHaveCount(0);
+  // the next click selects the next link (no picker is left to take it), and its choice is its own
+  await control(page, ROW, { args: { target: second.id } }).click();
+  await runDoor(page, OPEN_PICKER);
+  await runDoor(page, KIND('page'));
+  await runDoor(page, PAGE_ITEM, { args: { page: 'index.html' } });
+  await expect.poll(async () => [named(await tree(page), 'Link 3')?.attributes.href, named(await tree(page), 'Link 4')?.attributes.href]).toEqual(['page.html', 'index.html']);
+});

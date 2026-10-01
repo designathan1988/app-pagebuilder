@@ -1865,6 +1865,10 @@ A focused tile inserts with Enter or Space (palette-click-insert). The href fiel
   for one page's file), the elements of the page that carry an ID as items
   (`element.setLink#link-picker-anchor-item`). Its close button, a click on the shield and Escape (its own key context
   in the keymap) leave it.
+- **Choosing a page or an element ends the choice** (the journey "site", 2026-10-01: after "Sobre" was chosen the
+  picker stayed open, the click on the next link of the menu only closed it, and the next choice rewrote the first
+  link): once an item sets the link, the picker closes; a typed address keeps it open until Enter, the close button,
+  the shield or Escape.
 - **A link to a page** stores the page's file path (what the export writes, `about.html`); **a link to an element**
   stores a reference: the fragment with the target's *node id*, and the page writes the target's `id` attribute as it
   stands (`#inicio`), so renaming the ID later leaves the link working (A3.4). An element the picker lists that has no
