@@ -391,6 +391,13 @@
       "note": "A resize handle is drawn only where the element is at least this long on the screen across it (top and bottom handles: its height; sides: its width; a corner: both), so the handles never cover a small element and a press on it drags it (the user's real use, 2026-09-27)."
     },
     {
+      "id": "resize.edgeGrip",
+      "value": 6,
+      "unit": "screen-px",
+      "source": "spec/BEHAVIOUR.md#resize-handles",
+      "note": "How deep inside the selected element its edge takes a resize: each whole side, not only the handle at its middle, is a grip this many screen pixels wide along the border, over the padding band that lies there (the dogfooding pass: a header narrowed by its edge wrote its padding)."
+    },
+    {
       "id": "drop.flashDuration",
       "value": 900,
       "unit": "ms",

@@ -34,7 +34,7 @@ import { lineage, locate, type DocNode, type DocumentJson, type NodeId } from '.
 import { lineExtent, linesOf, sameLine } from '../../core/geometry/lines.ts';
 import { heldHand, type HandState } from '../../core/structure/hand.ts';
 import type { MessageId } from '../../generated/ids.ts';
-import { elementIcon, manifest } from '../../manifest/runtime.ts';
+import { elementIcon, manifest, numberConstant } from '../../manifest/runtime.ts';
 import { Icon, isDoorBuilt } from '../doors/door.tsx';
 import { GLYPHS } from '../doors/placement.ts';
 import type { DropProposal } from '../drag/drop.ts';
@@ -65,7 +65,22 @@ export type { Box, Placement } from './placement.ts';
 // element that can be resized (not the page, not locked, shown), each pressed outside the element
 // (the resize gesture: the one whose Shift keeps the aspect ratio, interactions.json)
 const RESIZE_GESTURE = manifest.interactions.gestures.find((g) => g.modifiers.some((m) => m.meaning === 'toggle-aspect-ratio'))?.id;
-const RESIZE_HANDLES = manifest.doors.filter((d) => d.door.kind === 'canvas-handle' && d.door.gesture === RESIZE_GESTURE);
+const RESIZE_DOORS = manifest.doors.filter((d) => d.door.kind === 'canvas-handle' && d.door.gesture === RESIZE_GESTURE);
+// the handle of an edge's whole length (resize-edge-n, -e, -s, -w): each side of the selected element is a grip
+// (interactions.json resize.edgeGrip screen px inside its border, over the padding band there), so a person who takes
+// the edge itself resizes, as in a design tool, and the handle at the side's middle is not the only place that does
+const isEdgeGrip = (entry: (typeof RESIZE_DOORS)[number]): boolean => entry.door.kind === 'canvas-handle' && entry.door.handle.includes('-edge-');
+const RESIZE_HANDLES = RESIZE_DOORS.filter((entry) => !isEdgeGrip(entry));
+const EDGE_GRIPS = RESIZE_DOORS.filter(isEdgeGrip);
+const EDGE_GRIP = numberConstant('resize.edgeGrip');
+// an edge grip's box on the chrome: the whole side, EDGE_GRIP deep inside the element, touching its border line
+const edgeGripBox = (side: string, b: { readonly x: number; readonly y: number; readonly width: number; readonly height: number }): CSSProperties => {
+  const deep = Math.min(EDGE_GRIP, b.width / 4, b.height / 4);
+  if (side === 'n') return { left: b.x, top: b.y, width: b.width, height: deep };
+  if (side === 's') return { left: b.x, top: b.y + b.height - deep, width: b.width, height: deep };
+  if (side === 'w') return { left: b.x, top: b.y, width: deep, height: b.height };
+  return { left: b.x + b.width - deep, top: b.y, width: deep, height: b.height };
+};
 // the rotation handle (spec rotation-handle): outside the selection's top-right corner, dragged by the pointer owner
 const ROTATE_GESTURE = manifest.interactions.gestures.find((g) => g.modifiers.some((m) => m.meaning === 'snap-to-15-degree-steps'))?.id;
 const ROTATE_HANDLE = manifest.doors.find((d) => d.door.kind === 'canvas-handle' && d.door.gesture === ROTATE_GESTURE) ?? null;
@@ -864,6 +879,14 @@ export function CanvasChrome() {
                 style={where}
               />
             );
+          })
+        : null}
+      {/* each side's whole length takes a resize too (resize.edgeGrip), over the padding band that lies along the
+          border; a start edge the parent places has none (its handle is drawn disabled above) */}
+      {resizable && shown.selected[0] && !dropping && !editing && !editingOnCanvas && shown.rotation === 0
+        ? EDGE_GRIPS.filter(isDoorBuilt).filter((entry) => roomFor(entry.door.kind === 'canvas-handle' ? entry.door.handle : '', shown.selected[0] as Box)).filter((entry) => !startHeld(entry.door.kind === 'canvas-handle' ? entry.door.handle : '', shown.starts)).map((entry) => {
+            const handle = entry.door.kind === 'canvas-handle' ? entry.door.handle : '';
+            return <div key={entry.ref} className="chrome__edge" data-door={entry.ref} data-resize-handle={handle} data-chrome="edge" title={t(entry.door.labelKey as MessageId)} style={edgeGripBox(handleSide(handle), shown.selected[0] as Box)} />;
           })
         : null}
       {/* the rotation zones, one outside each corner (item 4.4): the same door, drawn four times, each turned with the

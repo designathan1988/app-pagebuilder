@@ -342,6 +342,94 @@
             "fields": []
           },
           "args": {}
+        },
+        {
+          "id": "handle-resize-edge-n",
+          "kind": "canvas-handle",
+          "feature": "resize-handles",
+          "handle": "resize-edge-n",
+          "gesture": "resize",
+          "labelKey": "command.resize",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [
+              "height",
+              "top",
+              "margin-top"
+            ],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "handle-resize-edge-e",
+          "kind": "canvas-handle",
+          "feature": "resize-handles",
+          "handle": "resize-edge-e",
+          "gesture": "resize",
+          "labelKey": "command.resize",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [
+              "width"
+            ],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "handle-resize-edge-s",
+          "kind": "canvas-handle",
+          "feature": "resize-handles",
+          "handle": "resize-edge-s",
+          "gesture": "resize",
+          "labelKey": "command.resize",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [
+              "height"
+            ],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "handle-resize-edge-w",
+          "kind": "canvas-handle",
+          "feature": "resize-handles",
+          "handle": "resize-edge-w",
+          "gesture": "resize",
+          "labelKey": "command.resize",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [
+              "width",
+              "left",
+              "margin-left"
+            ],
+            "fields": []
+          },
+          "args": {}
         }
       ]
     },

@@ -1501,6 +1501,7 @@
         "style.setSpacing#inspector-margin-top-box-model",
         "style.setSpacing#handle-margin-top-band",
         "geometry.resize#handle-resize-n",
+        "geometry.resize#handle-resize-edge-n",
         "geometry.resize#handle-resize-ne",
         "geometry.resize#handle-resize-nw"
       ],
@@ -1562,6 +1563,7 @@
         "style.setSpacing#handle-margin-left-band",
         "geometry.resize#handle-resize-sw",
         "geometry.resize#handle-resize-w",
+        "geometry.resize#handle-resize-edge-w",
         "geometry.resize#handle-resize-nw"
       ],
       "subsets": []
@@ -1580,9 +1582,11 @@
       "doors": [
         "geometry.resize#handle-resize-ne",
         "geometry.resize#handle-resize-e",
+        "geometry.resize#handle-resize-edge-e",
         "geometry.resize#handle-resize-se",
         "geometry.resize#handle-resize-sw",
         "geometry.resize#handle-resize-w",
+        "geometry.resize#handle-resize-edge-w",
         "geometry.resize#handle-resize-nw",
         "position.setAnchors#key-alt-shift-arrow-left-in-canvas-positioned",
         "position.setAnchors#key-alt-shift-arrow-right-in-canvas-positioned",
@@ -1607,9 +1611,11 @@
       "essential": true,
       "doors": [
         "geometry.resize#handle-resize-n",
+        "geometry.resize#handle-resize-edge-n",
         "geometry.resize#handle-resize-ne",
         "geometry.resize#handle-resize-se",
         "geometry.resize#handle-resize-s",
+        "geometry.resize#handle-resize-edge-s",
         "geometry.resize#handle-resize-sw",
         "geometry.resize#handle-resize-nw",
         "position.setAnchors#key-alt-shift-arrow-up-in-canvas-positioned",
@@ -1862,6 +1868,7 @@
         "position.setAnchors#inspector-anchor-control",
         "style.set#inspector-top",
         "geometry.resize#handle-resize-n",
+        "geometry.resize#handle-resize-edge-n",
         "geometry.resize#handle-resize-ne",
         "geometry.resize#handle-resize-nw"
       ],
@@ -1928,6 +1935,7 @@
         "position.setAnchors#inspector-anchor-control",
         "style.set#inspector-left",
         "geometry.resize#handle-resize-w",
+        "geometry.resize#handle-resize-edge-w",
         "geometry.resize#handle-resize-nw"
       ],
       "subsets": []

@@ -3,10 +3,10 @@
     "features": 187,
     "built": 185,
     "commands": 261,
-    "doors": 1006,
+    "doors": 1010,
     "scenarios": 1343,
     "modules": 260,
-    "lines": 50066
+    "lines": 50094
   },
   "features": [
     {
@@ -1069,7 +1069,7 @@
       "commands": [
         "geometry.resize"
       ],
-      "doors": 8,
+      "doors": 12,
       "scenarios": 11,
       "modules": [
         "src/core/geometry/resize.ts"
@@ -1431,7 +1431,7 @@
         "element.setSvgMarkup",
         "parts.add"
       ],
-      "doors": 190,
+      "doors": 194,
       "scenarios": 14,
       "modules": [
         "src/core/elements/parts.ts",
@@ -1857,7 +1857,7 @@
         "guides.create",
         "snap.setEnabled"
       ],
-      "doors": 19,
+      "doors": 23,
       "scenarios": 6,
       "modules": [
         "src/core/geometry/position.ts",
@@ -4012,7 +4012,7 @@
     },
     {
       "path": "src/editor/canvas/chrome.tsx",
-      "lines": 937,
+      "lines": 960,
       "commands": [],
       "features": []
     },
@@ -5117,7 +5117,7 @@
     },
     {
       "path": "src/generated/ids.ts",
-      "lines": 4568,
+      "lines": 4573,
       "commands": [],
       "features": []
     },

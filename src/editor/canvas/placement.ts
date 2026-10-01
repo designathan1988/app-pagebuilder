@@ -91,7 +91,7 @@ export function visibleCanvas(origin: { readonly left: number; readonly top: num
 // rotation zones), in the chrome layer's pixels: what a label must never cover either, or the press a person aims at
 // the control lands on the label, which stands for the element and starts a move (the label rule; A3.16).
 export function controlBoxes(layer: HTMLElement, origin: { readonly x: number; readonly y: number }): Box[] {
-  return [...layer.querySelectorAll('[data-edit-handle], [data-resize-handle], [data-rotate-handle]')].map((element) => {
+  return [...layer.querySelectorAll('[data-edit-handle], [data-resize-handle]:not([data-chrome="edge"]), [data-rotate-handle]')].map((element) => {
     const box = element.getBoundingClientRect();
     return { x: box.x - origin.x, y: box.y - origin.y, width: box.width, height: box.height };
   });

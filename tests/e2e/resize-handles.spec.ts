@@ -18,6 +18,7 @@ const LOCK = 'element.toggleLock#layers-row-lock';
 const SE = 'geometry.resize#handle-resize-se';
 const E = 'geometry.resize#handle-resize-e';
 const W = 'geometry.resize#handle-resize-w';
+const EDGE_E = 'geometry.resize#handle-resize-edge-e';
 const MOVE = 'element.moveTo#canvas-drag-canvas-element-before-after';
 
 interface Node {
@@ -55,6 +56,28 @@ test.beforeEach(async ({ page }) => {
   await runDoor(page, OPEN);
   await (await chooser).setFiles({ name: 'aurora.json', mimeType: 'application/json', buffer: fs.readFileSync(FIXTURE) });
   await expect(page.frameLocator('.frame__page').locator('[data-node="n-card-a-title"]')).toHaveCount(1);
+});
+
+test('the whole edge resizes: a press on the right edge of the Hero far from its middle handle writes the width, not the padding', runs(OPEN, ROW, EDGE_E), async ({ page }) => {
+  // the dogfooding pass: a person narrowing a section took its edge a quarter of the way down, where the right padding
+  // band lies, and wrote padding-right; each side's whole length is a grip (resize.edgeGrip) over that band
+  await control(page, ROW, { args: { target: 'n-hero' } }).click();
+  const before = await declared(page, 'n-hero');
+  const drawn = await drawnBox(page, 'n-hero');
+  const zoom = await zoomOf(page);
+  const frame = await page.locator('.frame__page').boundingBox();
+  const hero = await page.frameLocator('.frame__page').locator('[data-node="n-hero"]').evaluate((el) => { const r = el.getBoundingClientRect(); return { left: r.left, top: r.top }; });
+  if (frame === null) throw new Error('no frame');
+  const x = frame.x + (hero.left + drawn.width) * zoom - 2;
+  const y = frame.y + (hero.top + drawn.height * 0.25) * zoom;
+  await expect(handle(page, EDGE_E)).toBeVisible();
+  await page.mouse.move(x, y);
+  await page.mouse.down();
+  await page.mouse.move(x - 150, y, { steps: 10 });
+  await page.mouse.up();
+  const written = await declared(page, 'n-hero');
+  expect(written['padding-right'], 'the padding is untouched').toBe(before['padding-right']);
+  expect(Math.abs(parseFloat(written.width ?? '0') - Math.round(drawn.width - 150 / zoom)), 'the width follows the edge').toBeLessThanOrEqual(1);
 });
 
 test('Shift keeps the ratio of a corner drag, in whole px', runs(OPEN, ROW, SE), async ({ page }) => {

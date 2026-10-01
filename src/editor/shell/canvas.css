@@ -642,6 +642,29 @@
   cursor: nesw-resize;
 }
 
+/* the grip along each whole side of the selection (spec resize-handles, resize.edgeGrip): invisible until the pointer
+   is on it, then the side reads as taken in the selection colour; over the spacing bands, under every other control
+   (a handle, a grid's span grip, an anchor tab keeps its own press where it overlaps the side) */
+.chrome__edge {
+  position: absolute;
+  z-index: 1;
+  pointer-events: auto;
+}
+
+.chrome__edge:hover {
+  background: color-mix(in srgb, var(--color-canvas-selection) 40%, transparent);
+}
+
+.chrome__edge[data-resize-handle$='-n'],
+.chrome__edge[data-resize-handle$='-s'] {
+  cursor: ns-resize;
+}
+
+.chrome__edge[data-resize-handle$='-e'],
+.chrome__edge[data-resize-handle$='-w'] {
+  cursor: ew-resize;
+}
+
 /* the layout grids (spec layout-grid-overlay): translucent bands and dots over the page, never hiding it */
 .chrome__grids {
   position: absolute;

@@ -394,6 +394,8 @@
 /* a direct handle of Edit on canvas (radius, border): a round handle, labelled with its value beside it */
 .chrome__direct {
   position: absolute;
+  /* over the sides' resize grips (.chrome__edge) a corner's radius dot may sit on */
+  z-index: 2;
   border-radius: var(--radius-pill);
   background: var(--color-canvas-handle);
   outline: 1.5px solid var(--color-canvas-selection);

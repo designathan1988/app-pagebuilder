@@ -54,7 +54,8 @@
             }
           ],
           "doors": [
-            "geometry.resize#handle-resize-e"
+            "geometry.resize#handle-resize-e",
+            "geometry.resize#handle-resize-edge-e"
           ],
           "expect": {
             "document": [
@@ -139,7 +140,8 @@
             }
           ],
           "doors": [
-            "geometry.resize#handle-resize-s"
+            "geometry.resize#handle-resize-s",
+            "geometry.resize#handle-resize-edge-s"
           ],
           "expect": {
             "document": [
@@ -508,7 +510,8 @@
             }
           ],
           "doors": [
-            "geometry.resize#handle-resize-w"
+            "geometry.resize#handle-resize-w",
+            "geometry.resize#handle-resize-edge-w"
           ],
           "expect": {
             "document": [
@@ -623,7 +626,8 @@
             }
           ],
           "doors": [
-            "geometry.resize#handle-resize-n"
+            "geometry.resize#handle-resize-n",
+            "geometry.resize#handle-resize-edge-n"
           ],
           "expect": {
             "document": [
@@ -1321,7 +1325,8 @@
             }
           ],
           "doors": [
-            "geometry.resize#handle-resize-e"
+            "geometry.resize#handle-resize-e",
+            "geometry.resize#handle-resize-edge-e"
           ],
           "refusals": [],
           "expect": {
@@ -1489,7 +1494,8 @@
             }
           ],
           "doors": [
-            "geometry.resize#handle-resize-s"
+            "geometry.resize#handle-resize-s",
+            "geometry.resize#handle-resize-edge-s"
           ],
           "refusals": [],
           "expect": {
