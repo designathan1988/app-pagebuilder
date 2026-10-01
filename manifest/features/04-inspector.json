@@ -34846,33 +34846,32 @@
                       }
                     },
                     "text": null,
-                    "children": [
-                      {
-                        "type": "section",
-                        "name": "Section 2",
-                        "tag": "section",
-                        "attributes": {},
-                        "classes": [],
-                        "styles": {
-                          "desktop": {
-                            "base": {
-                              "padding-top": "56px",
-                              "padding-right": "40px",
-                              "padding-bottom": "56px",
-                              "padding-left": "40px"
-                            }
-                          }
-                        },
-                        "text": null,
-                        "children": []
+                    "children": []
+                  },
+                  {
+                    "type": "section",
+                    "name": "Section 2",
+                    "tag": "section",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "padding-top": "56px",
+                          "padding-right": "40px",
+                          "padding-bottom": "56px",
+                          "padding-left": "40px"
+                        }
                       }
-                    ]
+                    },
+                    "text": null,
+                    "children": []
                   }
                 ]
               }
             ],
             "selection": [
-              "/Page/Section/Section 2"
+              "/Page/Section 2"
             ],
             "history": {
               "undoSteps": 3,

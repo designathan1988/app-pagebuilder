@@ -97,6 +97,10 @@
       "reader": "src/editor/shell/inspector.tsx"
     },
     {
+      "field": "elements:elements[].pageBlock",
+      "reader": "src/core/structure/insert.ts"
+    },
+    {
       "field": "commands:commands[].entryPoints[].adapter.fileReading",
       "reader": "src/editor/doors/door.tsx"
     },

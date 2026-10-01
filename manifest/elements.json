@@ -60,6 +60,7 @@
       "labelKey": "element.header.label",
       "icon": "panel-top",
       "palette": true,
+      "pageBlock": true,
       "content": "children",
       "naturalChild": null,
       "defaultStyles": {
@@ -141,6 +142,7 @@
       "labelKey": "element.section.label",
       "icon": "rows-2",
       "palette": true,
+      "pageBlock": true,
       "content": "children",
       "naturalChild": null,
       "defaultStyles": {
@@ -222,6 +224,7 @@
       "labelKey": "element.footer.label",
       "icon": "panel-bottom",
       "palette": true,
+      "pageBlock": true,
       "content": "children",
       "naturalChild": null,
       "defaultStyles": {

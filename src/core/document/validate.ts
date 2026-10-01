@@ -31,6 +31,8 @@ export interface ElementRules {
   readonly naturalChildren: readonly string[];
   // the attribute whose field picks a file of the project (an image's Source), or null (spec explorer-assets-use)
   readonly filePicker: string | null;
+  // a block a page is built of (a section, a header, a footer): a click-insert lands after the one holding the selection
+  readonly pageBlock: boolean;
 }
 
 // What an attribute's value is (elements.json): its value type, the keywords a keyword attribute takes one of, its
@@ -118,7 +120,7 @@ export function rulesFromManifest(elements: ElementsFile, properties: Properties
     elements: new Map(
       elements.elements.map((e) => [
         e.id,
-        { tags: [e.tag, ...e.alternativeTags], content: e.content, namespace: e.namespace, labelKey: e.labelKey as MessageId, defaultStyles: e.defaultStyles, defaultTextKey: e.defaultTextKey as MessageId | null, naturalChildren: [e.naturalChild ?? []].flat(), filePicker: e.filePicker ?? null },
+        { tags: [e.tag, ...e.alternativeTags], content: e.content, namespace: e.namespace, labelKey: e.labelKey as MessageId, defaultStyles: e.defaultStyles, defaultTextKey: e.defaultTextKey as MessageId | null, naturalChildren: [e.naturalChild ?? []].flat(), filePicker: e.filePicker ?? null, pageBlock: e.pageBlock ?? false },
       ]),
     ),
     attributes: new Map(elements.attributes.map((a) => [a.id, a.elements])),

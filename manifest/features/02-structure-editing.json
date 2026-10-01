@@ -26,7 +26,8 @@
           "With nothing selected, the Section is appended as the last child of Page in the document JSON and becomes the selection.",
           "With a container selected, the Heading is appended as its last child; with a non-container selected, the Paragraph is inserted right after it in the same parent.",
           "Every inserted element becomes the selection; the iframe shows <section>, <h2> 'New heading' [element.heading.defaultText], <p> with default text and an empty <div> with a visible minimum height.",
-          "The status bar reads 'Placed <name> in <parent>, position N of M.' [status.placed] after each insert."
+          "The status bar reads 'Placed <name> in <parent>, position N of M.' [status.placed] after each insert.",
+          "A page block (Section, Header, Footer, or a template whose root is one) clicked with a selection lands right after the page block holding the selection, never inside it."
         ]
       },
       "scenarios": [
@@ -230,6 +231,323 @@
                     "parent": "Actions",
                     "position": 1,
                     "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-page-block-lands-after-the-page-block-holding-the-selection",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Actions"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "section"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile",
+            "element.insert#key-enter-in-palette",
+            "element.insert#key-space-in-palette"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "section",
+                    "name": "Hero",
+                    "tag": "section",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "padding-top": "56px",
+                          "padding-right": "40px",
+                          "padding-bottom": "56px",
+                          "padding-left": "40px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "Title",
+                        "tag": "h1",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Welcome to Aurora",
+                        "children": []
+                      },
+                      {
+                        "type": "paragraph",
+                        "name": "Intro",
+                        "tag": "p",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Fresh coffee, roasted every week.",
+                        "children": []
+                      },
+                      {
+                        "type": "div",
+                        "name": "Actions",
+                        "tag": "div",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "section",
+                    "name": "Section",
+                    "tag": "section",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "padding-top": "56px",
+                          "padding-right": "40px",
+                          "padding-bottom": "56px",
+                          "padding-left": "40px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": []
+                  },
+                  {
+                    "type": "section",
+                    "name": "Plans",
+                    "tag": "section",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "div",
+                        "name": "Grid",
+                        "tag": "div",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "article",
+                            "name": "CardA",
+                            "tag": "article",
+                            "attributes": {},
+                            "classes": [
+                              "card"
+                            ],
+                            "styles": {},
+                            "text": null,
+                            "children": [
+                              {
+                                "type": "heading",
+                                "name": "CardATitle",
+                                "tag": "h3",
+                                "attributes": {},
+                                "classes": [],
+                                "styles": {},
+                                "text": "Monthly",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "type": "article",
+                            "name": "CardB",
+                            "tag": "article",
+                            "attributes": {},
+                            "classes": [
+                              "card"
+                            ],
+                            "styles": {},
+                            "text": null,
+                            "children": [
+                              {
+                                "type": "heading",
+                                "name": "CardBTitle",
+                                "tag": "h3",
+                                "attributes": {},
+                                "classes": [],
+                                "styles": {},
+                                "text": "Weekly",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "type": "article",
+                            "name": "CardC",
+                            "tag": "article",
+                            "attributes": {},
+                            "classes": [
+                              "card"
+                            ],
+                            "styles": {},
+                            "text": null,
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "type": "list",
+                        "name": "Perks",
+                        "tag": "ul",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "listItem",
+                            "name": "PerkOne",
+                            "tag": "li",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": null,
+                            "children": [
+                              {
+                                "type": "paragraph",
+                                "name": "PerkOneText",
+                                "tag": "p",
+                                "attributes": {},
+                                "classes": [],
+                                "styles": {},
+                                "text": "Free delivery",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "type": "listItem",
+                            "name": "PerkTwo",
+                            "tag": "li",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": null,
+                            "children": [
+                              {
+                                "type": "paragraph",
+                                "name": "PerkTwoText",
+                                "tag": "p",
+                                "attributes": {},
+                                "classes": [],
+                                "styles": {},
+                                "text": "Pause anytime",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "footer",
+                    "name": "Footer",
+                    "tag": "footer",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "paragraph",
+                        "name": "Note",
+                        "tag": "p",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Aurora Coffee",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Section"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Section",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Hero/Actions"
+                },
+                {
+                  "node": "/Page/Section",
+                  "measure": "y",
+                  "relation": "less-than",
+                  "value": 0,
+                  "reference": "/Page/Plans"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Section",
+                    "parent": "Page",
+                    "position": 2,
+                    "count": 4
                   }
                 }
               ]
@@ -549,7 +867,7 @@
             {
               "door": "element.insert#elements-tile",
               "args": {
-                "entry": "section"
+                "entry": "paragraph"
               },
               "target": null,
               "drop": null,

@@ -165,8 +165,10 @@ createNaturalChildCommand.labelParams = (state, rules) => {
 
 // Where the new element goes: the parent and the index among its children; null when the parent given is no node.
 // With nothing selected the element goes at the end of the root of the page the editor shows (openedPage, its one
-// owner), never of the project's first page: an insert with another page open lands on that page.
-export function placement(state: { readonly document: DocumentJson; readonly ui?: unknown }, selection: Selection, rules: ModelRules, parent: NodeId | undefined, index: number | undefined): { readonly parent: Location; readonly index: number } | null {
+// owner), never of the project's first page: an insert with another page open lands on that page. A page block coming
+// in (`incoming`: a section, a header, a footer; elements.json pageBlock) lands right after the page block that is or
+// holds the selection, so a page is built by clicking its blocks in order (spec palette-click-insert, Problems 4).
+export function placement(state: { readonly document: DocumentJson; readonly ui?: unknown }, selection: Selection, rules: ModelRules, parent: NodeId | undefined, index: number | undefined, incoming?: DocNode): { readonly parent: Location; readonly index: number } | null {
   const document = state.document;
   const root = pageShown(state)?.tree ?? null;
   if (parent !== undefined) {
@@ -176,6 +178,13 @@ export function placement(state: { readonly document: DocumentJson; readonly ui?
     return { parent: at, index: index === undefined ? count : Math.max(0, Math.min(index, count)) };
   }
   const primary = selection[0] === undefined ? null : locate(document, selection[0]);
+  const isBlock = (node: DocNode): boolean => rules.elements.get(node.type)?.pageBlock === true;
+  if (primary && incoming !== undefined && isBlock(incoming)) {
+    let at: Location | null = primary;
+    while (at !== null && !isBlock(at.node)) at = at.parent === null ? null : locate(document, at.parent.id);
+    const up = at?.parent ? locate(document, at.parent.id) : null;
+    if (at && up) return { parent: up, index: at.index + 1 };
+  }
   if (primary && rules.elements.get(primary.node.type)?.content === 'children') return { parent: primary, index: primary.node.children.length };
   if (primary?.parent) {
     const up = locate(document, primary.parent.id);
@@ -196,13 +205,13 @@ export function paletteNode(make: NodeMaker, entry: string): DocNode {
 }
 
 export const insertCommand = registerHandler('element.insert', ({ state, ids, rules, words }, { entry, parent, index }): Outcome<never> => {
-  const at = placement(state, state.selection, rules, parent, index);
+  const node = paletteNode(nodeMaker(state.document, rules, ids, words), entry);
+  const at = placement(state, state.selection, rules, parent, index, node);
   if (at === null) throw new Error(`element.insert: the document has no node ${String(parent)}`);
   const receiver = at.parent.node;
   // a locked parent, or one inside a locked element, takes no new child (spec lock-element)
   const locked = lockRefusal(state.document, receiver.id, 'status.locked.insert');
   if (locked !== null) return { kind: 'refused', message: locked };
-  const node = paletteNode(nodeMaker(state.document, rules, ids, words), entry);
   // the one rule of where elements may go (content-model.ts placementRefusal): the same for every door that inserts
   const refused = placementRefusal(state.document, rules, receiver.id, [node]);
   if (refused !== null) return { kind: 'refused', message: refused };

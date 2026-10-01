@@ -4403,6 +4403,7 @@ The whole tile row (icon, label, tag) is the target. Where the new element lands
 | Selection | Placement |
 |---|---|
 | Nothing selected | Last child of the Page root |
+| A page block (Section, Header, Footer, a template whose root is one) with a selection inside a page block | Right after that page block, in its parent (Problems 4) |
 | A container (not locked) | Last child of that container |
 | A leaf, or a locked container | Right after the selection, in the same parent (`takeTypeIntoHand` aims at index + 1, `input/index.js:150-164`) |
 | The placement is refused by the nesting rules | Nothing is inserted; status `Refused. <reason>` (`input/index.js:193-198`) |
@@ -4449,6 +4450,7 @@ Tab to the Elements panel, arrow keys between tiles (Home/End jump; `palette/ind
 1. **Types that need a parent are wrapped instead of refused.** With the Page root selected, clicking List item created a `<ul>` wrapper holding the `<li>` (`Placed. List item in Page, position 2 of 2.`); clicking Badge with a List selected created an `<li>` wrapper. The new app follows manifest feature `nesting-grammar`: the insert is refused with a message such as `Refused. <li> only exists inside <ul>, <ol>` and the document JSON is unchanged.
 2. **After a wrapped insert the selection is the wrapper,** not the element that was clicked (observed: `new-list` selected after clicking List item). Required: the inserted element itself is selected.
 3. **The elements a page is built with first were out of sight** (the dogfooding pass: in the sidebar's Insert view only Structure fit; the Image came after the 23 form controls, the Button among them). Required: the groups come in the order a page is built — Structure, Text, Media, Forms, Lists, Tables, Interactive, Templates — and the Button stands in Text beside the Heading, the Paragraph and the Link.
+4. **A page's blocks clicked in order nested into one another** (the journey "site", 2026-10-01: Navbar, then Hero, then Footer clicked on an empty page put the Hero inside the Navbar's header and refused the Footer: `<footer> cannot sit inside <header>`). A template selects its new root, a container, so the next tile went inside it. Required: a **page block** — an element marked `pageBlock` in `elements.json` (Section, Header, Footer) and every template whose root is one (Hero, Navbar, Gallery) — clicked with a selection lands right after the page block that is or holds the selection, in that block's parent; a selection inside no page block (a Main, a Container at the page's root) keeps the rules of the table above. So Navbar, Hero, Grid, Card, Footer clicked in turn on an empty page give `Page = [Navbar, Hero, Footer]` with the Grid in the Hero and the Card in the Grid; with the Hero's Actions selected, Section lands after the Hero.
 
 ## palette-drag-insert
 

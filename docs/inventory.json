@@ -4,9 +4,9 @@
     "built": 187,
     "commands": 263,
     "doors": 1027,
-    "scenarios": 1353,
+    "scenarios": 1354,
     "modules": 261,
-    "lines": 50475
+    "lines": 50490
   },
   "features": [
     {
@@ -37,7 +37,7 @@
         "workspace.setPanelOpen"
       ],
       "doors": 25,
-      "scenarios": 5,
+      "scenarios": 6,
       "modules": [
         "src/core/structure/insert.ts",
         "src/editor/workspace/panels.ts"
@@ -2970,7 +2970,7 @@
     },
     {
       "path": "src/core/document/validate.ts",
-      "lines": 568,
+      "lines": 570,
       "commands": [],
       "features": []
     },
@@ -3629,7 +3629,7 @@
     },
     {
       "path": "src/core/structure/insert.ts",
-      "lines": 216,
+      "lines": 225,
       "commands": [
         "element.createNaturalChild",
         "element.insert"
@@ -5199,7 +5199,7 @@
     },
     {
       "path": "src/manifest/schema.ts",
-      "lines": 1294,
+      "lines": 1298,
       "commands": [],
       "features": []
     },

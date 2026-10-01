@@ -78,6 +78,10 @@ export const elementSchema = z.strictObject({
   // field offers the project's images, the ones the Explorer's Files list holds. Null or absent: no field of the
   // element picks a file.
   filePicker: camelId.nullable().optional(),
+  // A block a page is built of, one after another (a section, a header, a footer; spec palette-click-insert, Problems
+  // 4): one clicked from the palette with a selection lands right after the page block holding the selection, never
+  // inside it. Absent: false.
+  pageBlock: z.boolean().optional(),
 });
 
 export const attributeSchema = z.strictObject({
