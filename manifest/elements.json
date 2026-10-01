@@ -2922,9 +2922,17 @@
           "feature": "templates-content",
           "template": {
             "element": "form",
+            "wrapper": "column",
+            "styles": {
+              "max-width": "480px"
+            },
             "children": [
               {
                 "element": "label",
+                "wrapper": "column",
+                "styles": {
+                  "row-gap": "4px"
+                },
                 "children": [
                   {
                     "element": "paragraph",
@@ -2942,6 +2950,10 @@
               },
               {
                 "element": "label",
+                "wrapper": "column",
+                "styles": {
+                  "row-gap": "4px"
+                },
                 "children": [
                   {
                     "element": "paragraph",
@@ -2959,6 +2971,9 @@
               },
               {
                 "element": "button",
+                "styles": {
+                  "align-self": "flex-start"
+                },
                 "textKey": "template.form.send",
                 "attributes": {
                   "buttonType": "submit"

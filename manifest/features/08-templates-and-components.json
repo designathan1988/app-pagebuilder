@@ -628,7 +628,8 @@
         ],
         "expected": [
           "Each inserts a valid subtree: ul with 3 li; ol with 3 li; dl with dt and dd; table with thead (2 th) and tbody (2 rows of 2 td); form with two labelled inputs and a submit button; select with 3 options; figure with image and caption.",
-          "Every subtree passes the nesting rules and exports with the same markup."
+          "Every subtree passes the nesting rules and exports with the same markup.",
+          "The form template lays its fields out one under the other: the form is a column (at most 480 px wide), each label a column with its text above its field, the button at the start of its line."
         ]
       },
       "scenarios": [
@@ -1379,7 +1380,16 @@
                     "tag": "form",
                     "attributes": {},
                     "classes": [],
-                    "styles": {},
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "display": "flex",
+                          "flex-direction": "column",
+                          "row-gap": "16px",
+                          "max-width": "480px"
+                        }
+                      }
+                    },
                     "text": null,
                     "children": [
                       {
@@ -1388,7 +1398,15 @@
                         "tag": "label",
                         "attributes": {},
                         "classes": [],
-                        "styles": {},
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "display": "flex",
+                              "flex-direction": "column",
+                              "row-gap": "4px"
+                            }
+                          }
+                        },
                         "text": null,
                         "children": [
                           {
@@ -1422,7 +1440,15 @@
                         "tag": "label",
                         "attributes": {},
                         "classes": [],
-                        "styles": {},
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "display": "flex",
+                              "flex-direction": "column",
+                              "row-gap": "4px"
+                            }
+                          }
+                        },
                         "text": null,
                         "children": [
                           {
@@ -1458,7 +1484,13 @@
                           "buttonType": "submit"
                         },
                         "classes": [],
-                        "styles": {},
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "align-self": "flex-start"
+                            }
+                          }
+                        },
                         "text": "Send",
                         "children": []
                       }
@@ -1477,7 +1509,22 @@
             },
             "render": {
               "computed": [],
-              "geometry": [],
+              "geometry": [
+                {
+                  "node": "/Page/Form with fields/Label/Input",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Form with fields/Label/Paragraph"
+                },
+                {
+                  "node": "/Page/Form with fields/Label 2",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Form with fields/Label/Input"
+                }
+              ],
               "feedback": [
                 {
                   "key": "status.placed",
