@@ -98,14 +98,52 @@ code { font: 13px var(--mono); background: var(--accent-soft); padding: 1px 5px;
   <h1>Jornada 03 · o Builder nas mãos de quem vai usá-lo</h1>
   <p class="lede">Três profissionais com um trabalho de cliente a entregar, 15 tarefas e 4 sondagens, gestos reais no Chrome, uma foto por passo. Durante o estudo nada foi corrigido: só se observou e mediu.</p>
   <div class="meta">
-    <span class="tag">Marina · designer</span><span class="tag">Diego · dev front-end</span><span class="tag">Carla · produção de agência</span><span class="tag">peso igual</span><span class="tag">17 hipóteses</span><span class="tag">28 problemas consolidados</span>
+    <span class="tag">Marina · designer</span><span class="tag">Diego · dev front-end</span><span class="tag">Carla · produção de agência</span><span class="tag">peso igual</span><span class="tag">17 hipóteses (H1–H17)</span><span class="tag">28 problemas (J1–J28)</span>
   </div>
-  <p class="note"><b>Limite honesto.</b> Quem avaliou foi uma IA interpretando as personas. Resultados, becos sem saída, falhas silenciosas, fidelidade, código e latência são dados. SEQ e SUS são aproximações. Uma persona simulada não "passeia" com o mouse, então a dificuldade aparece como erro e beco, não como gesto a mais. O próximo passo é o mesmo roteiro com 3 a 5 pessoas reais.</p>
+  <p class="note"><b>Limite honesto.</b> Quem avaliou foi uma IA interpretando as personas. Resultados, becos sem saída, falhas silenciosas, fidelidade, código e tempo de resposta são dados medidos. As notas de facilidade (SEQ e SUS, explicadas logo abaixo) são estimativas minhas. Uma persona simulada não "passeia" com o mouse, então a dificuldade aparece como erro e beco, não como gesto a mais. O próximo passo é o mesmo roteiro com 3 a 5 pessoas reais.</p>
 </header>
+
+<section id="glossario">
+  <h2>Como ler este relatório</h2>
+  <p class="muted">Todas as siglas, notas e códigos usados nesta página, em palavras simples.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Termo</th><th>O que significa</th></tr></thead>
+    <tbody>
+      <tr><td><b>Persona</b></td><td>Um perfil de usuário fictício, mas realista, que eu interpretei: Marina (designer), Diego (programador de sites) e Carla (equipe de produção de agência).</td></tr>
+      <tr><td><b>M1–M5, D1–D5, C1–C5</b></td><td>Códigos das tarefas: M = tarefas da Marina, D = do Diego, C = da Carla. O número é a ordem. Ex.: C4 = quarta tarefa da Carla (o catálogo).</td></tr>
+      <tr><td><b>P1–P4</b></td><td>As 4 sondagens: testes curtos de um aspecto só (página grande, uso só com teclado, tela pequena, desfazer muitas vezes).</td></tr>
+      <tr><td><b>H1–H17</b></td><td>As 17 hipóteses: afirmações escritas antes do teste (ex.: "trocar a cor da marca leva no máximo 3 ações"), depois confirmadas ou derrubadas pelos números.</td></tr>
+      <tr><td><b>J1–J28</b></td><td>Códigos dos problemas encontrados ("J" de Jornada 03), do mais grave ao menos grave.</td></tr>
+      <tr><td><b>Gravidade 0–4</b></td><td>Escala de gravidade de problemas de uso criada por Jakob Nielsen: 4 = catástrofe (perde trabalho ou impede a tarefa), 3 = problema sério, 2 = problema menor, 1 = só cosmético, 0 = não é problema.</td></tr>
+      <tr><td><b>Beco sem saída</b></td><td>Momento em que a pessoa tentou algo e não havia caminho: o recurso não existia ou não funcionou, e foi preciso contornar ou desistir.</td></tr>
+      <tr><td><b>Falha silenciosa</b></td><td>O app recusou a própria mudança por dentro e não mostrou nada à pessoa. Só o registro interno de erros ("incidentes") sabia.</td></tr>
+      <tr><td><b>SEQ</b></td><td><i>Single Ease Question</i> ("pergunta única de facilidade"): depois de cada tarefa, uma nota de 1 (muito difícil) a 7 (muito fácil). Aqui dada por mim no papel da persona, então é uma estimativa.</td></tr>
+      <tr><td><b>SUS</b></td><td><i>System Usability Scale</i> ("escala de usabilidade do sistema"): questionário padrão de 10 perguntas que dá uma nota de 0 a 100 para a facilidade de uso do produto inteiro. A média do mercado é 68; abaixo de 50 é considerado fraco. Também estimada por mim, não por pessoas reais.</td></tr>
+      <tr><td><b>QA</b></td><td><i>Quality Assurance</i> (garantia de qualidade): os testes feitos para achar defeitos. O "QA-LOG" do projeto é o diário de cada defeito encontrado e corrigido.</td></tr>
+      <tr><td><b>Fidelidade</b></td><td>Quanto a página feita no Builder ficou igual ao layout original da cliente: a porcentagem de pixels iguais, comparando as duas imagens.</td></tr>
+      <tr><td><b>Latência, ms, p50, p95</b></td><td>Latência é o tempo entre a pessoa clicar ou digitar e a tela responder, em milissegundos (ms; 1000 ms = 1 segundo). p50 = o tempo típico (metade das ações foi mais rápida). p95 = o tempo das ações mais lentas (95% foram mais rápidas). Abaixo de 100 ms parece instantâneo.</td></tr>
+      <tr><td><b>Mudanças confirmadas</b></td><td>Quantas alterações a pessoa confirmou e ficaram no documento (as que ela desfez não contam).</td></tr>
+      <tr><td><b>Linha de base de especialista</b></td><td>As tarefas refeitas por quem já conhece o melhor caminho, sem errar. Serve de "piso" para comparar o esforço das personas.</td></tr>
+      <tr><td><b>KLM</b></td><td><i>Keystroke-Level Model</i> (modelo por toque de tecla): método clássico que estima o tempo de uma tarefa somando o custo de cada gesto (cerca de 1,3 s por clique, 0,28 s por tecla). Usado porque o meu relógio inclui o tempo que eu levo para pensar.</td></tr>
+      <tr><td><b>Export, ZIP</b></td><td>O site gerado pelo Builder para publicar: um arquivo compactado (ZIP) com as páginas e o estilo.</td></tr>
+      <tr><td><b>HTML, CSS</b></td><td>HTML é o conteúdo e a estrutura da página; CSS é o arquivo de aparência (cores, tamanhos, espaços).</td></tr>
+      <tr><td><b>BEM</b></td><td>Um padrão de nomes para as classes do CSS que deixa o código organizado e legível (ex.: <code>card__title</code>).</td></tr>
+      <tr><td><b>Classe, variável, componente</b></td><td>Classe = um estilo com nome, reaproveitado em vários elementos. Variável = um valor com nome (ex.: a cor "marca") usado em vários lugares. Componente = um bloco reutilizável: mudar o original muda todas as cópias.</td></tr>
+      <tr><td><b>CSV, XLSX, JSON</b></td><td>Formatos de arquivo de dados. CSV e XLSX são planilhas (CSV é texto simples; XLSX é do Excel); JSON é um formato de dados usado por programas.</td></tr>
+      <tr><td><b>Manifest</b></td><td>O "contrato" interno do Builder: a lista de todos os comandos e botões que o app tem. Por isso um assistente de IA poderia usá-los com segurança.</td></tr>
+      <tr><td><b>MCP</b></td><td><i>Model Context Protocol</i>: um padrão para conectar assistentes de IA a programas, para que a IA possa executar ações neles.</td></tr>
+      <tr><td><b>IA</b></td><td>Inteligência artificial. "Estimativa da IA" quer dizer que a nota foi dada por mim, não por pessoas reais.</td></tr>
+      <tr><td><b>CMS</b></td><td><i>Content Management System</i> (sistema de gerenciamento de conteúdo): recurso de outros construtores de site para guardar listas (produtos, posts) e gerar páginas a partir delas.</td></tr>
+      <tr><td><b>Breakpoint</b></td><td>Cada tamanho de tela para o qual a página é ajustada: Desktop 1440 px, Notebook 1180, Tablet 834, Celular 390.</td></tr>
+      <tr><td><b>F6, Tab, Ctrl+K, Ctrl+Z</b></td><td>Teclas: F6 pula entre as áreas da tela; Tab vai de botão em botão; Ctrl+K abre a busca de comandos; Ctrl+Z desfaz.</td></tr>
+      <tr><td><b>Commit</b></td><td>Um registro salvo das mudanças no histórico do projeto (git). Ex.: <code>b39cc31</code> é o código desse registro.</td></tr>
+    </tbody>
+  </table></div>
+</section>
 
 <section>
   <span class="eyebrow">Veredito</span>
-  <p class="verdict">Tudo foi construído: uma landing page próxima do layout, um sistema de variáveis, classe e componente, uma página feita só no teclado, um rebrand, duas páginas de unidade e um catálogo de 12 itens. Mas <strong>todas as personas precisaram de atalhos e contornos</strong>, e <strong>duas funções falharam em silêncio</strong>: a pessoa não viu nada, só o registro interno do editor sabia. O produto entrega o resultado; o caminho até ele ainda não passa confiança (SUS ≈ 45, faixa "fraco").</p>
+  <p class="verdict">Tudo foi construído: uma landing page próxima do layout, um sistema de variáveis, classe e componente, uma página feita só no teclado, um rebrand, duas páginas de unidade e um catálogo de 12 itens. Mas <strong>todas as personas precisaram de atalhos e contornos</strong>, e <strong>duas funções falharam em silêncio</strong>: a pessoa não viu nada, só o registro interno do editor sabia. O produto entrega o resultado; o caminho até ele ainda não passa confiança: a nota geral de usabilidade estimada ficou em torno de 45 de 100 (escala SUS; a média do mercado é 68).</p>
 </section>
 
 <section>
@@ -114,17 +152,17 @@ code { font: 13px var(--mono); background: var(--accent-soft); padding: 1px 5px;
     <article class="persona">
       <div><h3>Marina</h3><div class="role">Designer freelancer, vem do Figma</div></div>
       <div class="bar" role="img" aria-label="Conclusão 100%"><span style="width:100%"></span></div>
-      <dl class="kv"><dt>Conclusão</dt><dd>100 %</dd><dt>Feitas / parciais</dt><dd>5 / 0</dd><dt>Becos sem saída</dt><dd>10</dd><dt>Falhas silenciosas</dt><dd>0</dd><dt>SEQ médio (IA)</dt><dd>4,0 / 7</dd><dt>SUS (aprox. IA)</dt><dd>45</dd></dl>
+      <dl class="kv"><dt>Conclusão</dt><dd>100 %</dd><dt>Feitas / parciais</dt><dd>5 / 0</dd><dt>Becos sem saída</dt><dd>10</dd><dt>Falhas silenciosas</dt><dd>0</dd><dt>Facilidade média por tarefa, 1–7 (SEQ)</dt><dd>4,0 / 7</dd><dt>Nota de usabilidade, 0–100 (SUS)</dt><dd>45</dd></dl>
     </article>
     <article class="persona">
       <div><h3>Diego</h3><div class="role">Dev front-end de agência</div></div>
       <div class="bar" role="img" aria-label="Conclusão 90%"><span style="width:90%"></span></div>
-      <dl class="kv"><dt>Conclusão</dt><dd>90 %</dd><dt>Feitas / parciais</dt><dd>4 / 1</dd><dt>Becos sem saída</dt><dd>6</dd><dt>Falhas silenciosas</dt><dd>4</dd><dt>SEQ médio (IA)</dt><dd>3,4 / 7</dd><dt>SUS (aprox. IA)</dt><dd>47,5</dd></dl>
+      <dl class="kv"><dt>Conclusão</dt><dd>90 %</dd><dt>Feitas / parciais</dt><dd>4 / 1</dd><dt>Becos sem saída</dt><dd>6</dd><dt>Falhas silenciosas</dt><dd>4</dd><dt>Facilidade média por tarefa, 1–7 (SEQ)</dt><dd>3,4 / 7</dd><dt>Nota de usabilidade, 0–100 (SUS)</dt><dd>47,5</dd></dl>
     </article>
     <article class="persona">
       <div><h3>Carla</h3><div class="role">Produção: mantém 10 sites parecidos</div></div>
       <div class="bar" role="img" aria-label="Conclusão 90%"><span style="width:90%"></span></div>
-      <dl class="kv"><dt>Conclusão</dt><dd>90 %</dd><dt>Feitas / parciais</dt><dd>4 / 1</dd><dt>Becos sem saída</dt><dd>4</dd><dt>Falhas silenciosas</dt><dd>4</dd><dt>SEQ médio (IA)</dt><dd>3,0 / 7</dd><dt>SUS (aprox. IA)</dt><dd>37,5</dd></dl>
+      <dl class="kv"><dt>Conclusão</dt><dd>90 %</dd><dt>Feitas / parciais</dt><dd>4 / 1</dd><dt>Becos sem saída</dt><dd>4</dd><dt>Falhas silenciosas</dt><dd>4</dd><dt>Facilidade média por tarefa, 1–7 (SEQ)</dt><dd>3,0 / 7</dd><dt>Nota de usabilidade, 0–100 (SUS)</dt><dd>37,5</dd></dl>
     </article>
   </div>
   <p class="muted">Fidelidade da página da Marina ao layout dela: <b>86 % dos pixels iguais</b> na área comum a 1440 px (80,6 % contando a diferença de altura); 77 % no tablet e 72 % no celular. Código exportado: semântico e sem estilo inline, mas o CSS tem <b>4,9× o tamanho</b> do equivalente escrito à mão.</p>
@@ -133,7 +171,7 @@ code { font: 13px var(--mono); background: var(--accent-soft); padding: 1px 5px;
 <section>
   <h2>As 15 tarefas</h2>
   <div class="scroll"><table>
-    <thead><tr><th>Tarefa</th><th>Resultado</th><th>Becos</th><th>Falhas silenciosas</th><th>Mudanças</th><th>SEQ</th><th>O que pesou</th></tr></thead>
+    <thead><tr><th>Tarefa</th><th>Resultado</th><th>Becos sem saída</th><th>Falhas silenciosas</th><th>Mudanças confirmadas</th><th>Facilidade 1–7</th><th>O que pesou</th></tr></thead>
     <tbody>
       <tr><td>M1 primeiro contato</td><td><span class="pill ok">feita</span></td><td class="n">2</td><td class="n">0</td><td class="n">4</td><td class="n">5</td><td>Busca exige acento; "texto" inseriu um campo de formulário</td></tr>
       <tr><td>M2 página no desktop</td><td><span class="pill ok">feita</span></td><td class="n">4</td><td class="n">0</td><td class="n">150</td><td class="n">3</td><td>21 min, campo a campo; espaços somem no botão; campos espremidos</td></tr>
@@ -169,13 +207,13 @@ code { font: 13px var(--mono); background: var(--accent-soft); padding: 1px 5px;
       <tr><td>H7</td><td>Componente ×6 muda tudo de um lugar</td><td><span class="pill ok">ok</span></td><td>2 min</td></tr>
       <tr><td>H8</td><td>HTML existente importado e editável</td><td><span class="pill part">parcial</span></td><td>35 elementos; troca o projeto</td></tr>
       <tr><td>H9</td><td>Página só no teclado</td><td><span class="pill ok">ok, por pouco</span></td><td>0 gestos de mouse, via Ctrl+A</td></tr>
-      <tr><td>H10</td><td>Export aceito por dev (CSS ≤2×)</td><td><span class="pill bad">caiu</span></td><td>4,9×</td></tr>
+      <tr><td>H10</td><td>Código exportado aceito por um programador (CSS no máximo 2× o feito à mão)</td><td><span class="pill bad">caiu</span></td><td>4,9×</td></tr>
       <tr><td>H11</td><td>Cor da marca no site em ≤3 ações</td><td><span class="pill bad">caiu</span></td><td>7 edições</td></tr>
       <tr><td>H12</td><td>Páginas a partir de outra ≤1 min cada</td><td><span class="pill ok">ok</span></td><td>2 em 71 s</td></tr>
       <tr><td>H13</td><td>Menu muda uma vez para todas</td><td><span class="pill bad">caiu</span></td><td>3 + 3 edições</td></tr>
       <tr><td>H14</td><td>Catálogo de 12 da planilha ≤5 min</td><td><span class="pill bad">caiu</span></td><td>parcial, falha silenciosa</td></tr>
       <tr><td>H15</td><td>Nada se perde ao recarregar</td><td><span class="pill part">parcial</span></td><td>só o texto em digitação</td></tr>
-      <tr><td>H16</td><td>p95 ≤100 ms com 300+ elementos</td><td><span class="pill bad">caiu</span></td><td>p50 90 ms, p95 287 ms (641 nós)</td></tr>
+      <tr><td>H16</td><td>Com 300+ elementos, até as ações mais lentas respondem em ≤100 ms</td><td><span class="pill bad">caiu</span></td><td>resposta típica 90 ms; as mais lentas 287 ms (página com 641 elementos)</td></tr>
       <tr><td>H17</td><td>Canvas ≥50 % em 1280×720</td><td><span class="pill bad">caiu</span></td><td>45 %</td></tr>
     </tbody>
   </table></div>
@@ -183,7 +221,7 @@ code { font: 13px var(--mono); background: var(--accent-soft); padding: 1px 5px;
 
 <section>
   <h2>Problemas, do mais grave</h2>
-  <p class="muted">28 consolidados de 66 registros brutos. A faixa de cor é a gravidade (Nielsen 0–4).</p>
+  <p class="muted">28 problemas, agrupados a partir de 66 anotações. A faixa de cor e o número "grav." são a gravidade, de 4 (catástrofe) a 1 (cosmético). Os códigos embaixo de cada um dizem em quais tarefas apareceu.</p>
   <div class="issues">
     <div class="issue"><span class="stripe s4"></span><div><span class="id">J1</span><span class="sev">grav. 4</span></div><div><p><b>Falhas silenciosas.</b> O comando gera um estado que o validador recusa: nada é aplicado e a pessoa não vê nada, só "N incidentes" no rodapé. Aconteceu com <code>var(--line)</code> na cor da borda de uma classe e com o Preencher com dados (o nome do produto foi parar no <code>src</code> da foto).</p><div class="seen">D1, C4</div></div></div>
     <div class="issue"><span class="stripe s4"></span><div><span class="id">J2</span><span class="sev">grav. 4</span></div><div><p><b>Letras digitadas fora de um campo viram atalhos de estrutura.</b> "Grãos de café" pôs uma imagem dentro de uma Grade e de uma Linha; "Cardápio" trocou a vista para Código. Sempre depois de um clique engolido (J8).</p><div class="seen">M4, C4</div></div></div>
@@ -241,7 +279,7 @@ code { font: 13px var(--mono); background: var(--accent-soft); padding: 1px 5px;
 
 <section>
   <h2>Inovação: o que os atritos pediram</h2>
-  <p class="muted">32 momentos de "queria que existisse", agrupados e pontuados por frequência × dor × viabilidade nesta arquitetura (1–5 cada, máximo 125).</p>
+  <p class="muted">32 momentos em que a persona pensou "queria que existisse…", agrupados. Cada ideia recebeu nota de 1 a 5 em três quesitos: quantas vezes apareceu, quanto doía a falta dela e quão viável é construir no Builder. A pontuação é a multiplicação das três (máximo 125).</p>
   <div class="chart">
     <svg viewBox="0 0 640 230" role="img" aria-label="Pontuação das oportunidades">
       <g>
@@ -256,7 +294,7 @@ code { font: 13px var(--mono); background: var(--accent-soft); padding: 1px 5px;
   </div>
   <div class="bets">
     <article class="bet"><span class="score">Aposta A · 125</span><h3>Um sistema de design que se monta sozinho</h3><p>Detectar repetição e oferecer "virar estilo" (todas as seções com o mesmo padding viram uma classe), trocar uma cor no site todo, variáveis em todo seletor, extrair para classe, digitar "14 28" num campo, export que funde duplicatas.</p><ul><li>C1: de 7 edições para 1</li><li>M3: de 24 edições para ≤6</li><li>D5: CSS de 4,9× para ≤2×</li></ul></article>
-    <article class="bet"><span class="score">Aposta B · 100</span><h3>Um agente que opera o editor pelo manifest</h3><p>"Deixa o destaque em duas colunas", "aplica a marca", "preenche estes cartões com esta planilha". Cada passo é um comando validado e desfazível, então falha silenciosa deixa de existir por construção. Nenhum concorrente oferece isso local e com o modelo que a pessoa escolher.</p><ul><li>M2: de 21 min para ≤8 min</li><li>0 falhas silenciosas</li><li>C4 feita sem reformatar a planilha</li></ul></article>
+    <article class="bet"><span class="score">Aposta B · 100</span><h3>Um agente que opera o editor pelo manifest</h3><p>Um assistente de IA dentro do editor que usa os mesmos comandos do app (o manifest): "deixa o destaque em duas colunas", "aplica a marca", "preenche estes cartões com esta planilha". Cada passo é um comando validado e desfazível, então falha silenciosa deixa de existir por construção. Nenhum concorrente oferece isso local e com o modelo que a pessoa escolher.</p><ul><li>M2: de 21 min para ≤8 min</li><li>0 falhas silenciosas</li><li>C4 feita sem reformatar a planilha</li></ul></article>
     <article class="bet"><span class="score">Aposta C · 60</span><h3>Dados para páginas</h3><p>Enviar CSV/XLSX pelo botão, mapear coluna→campo visualmente, gerar N páginas de um modelo (unidades, cardápios, catálogos), fotos achadas pelo nome.</p><ul><li>C4: de parcial para feita em ≤3 min com o CSV original</li><li>Páginas de unidade geradas das linhas</li></ul></article>
   </div>
 </section>
@@ -295,9 +333,9 @@ code { font: 13px var(--mono); background: var(--accent-soft); padding: 1px 5px;
 <section>
   <h2>Como foi medido</h2>
   <ul class="list">
-    <li>Um driver mantém um Chrome por persona e recebe um gesto por vez; uma sonda na página mede latência entrada→quadro, mensagens, erros e incidentes. Tudo em <code>jornada03/</code> no repositório.</li>
-    <li>Linha de base de especialista calibrada só nas execuções verificadas: 2,5 gestos de ponteiro e 12,1 teclas por mudança confirmada. A execução especialista de C2 foi inválida e ficou de fora.</li>
-    <li>O relógio inclui o tempo de pensar do avaliador; a eficiência usa o modelo de teclas (KLM). Ela fica perto de 1 na maioria das tarefas e sobe só onde a função falhou (C4 3,1, D3 2,7).</li>
+    <li>Um programa de teste (o "driver") mantém um Chrome por persona e executa um gesto por vez; um medidor dentro da página registra o tempo de resposta, as mensagens, os erros e os incidentes. Tudo está na pasta <code>jornada03/</code> do projeto.</li>
+    <li>Linha de base de especialista (as tarefas refeitas sem erros) calibrada só nas execuções que conferi: 2,5 cliques e 12,1 teclas por mudança confirmada. A execução de especialista da tarefa C2 saiu errada e ficou de fora.</li>
+    <li>O relógio inclui o tempo que eu levo para pensar, então o esforço foi comparado pelo método KLM (soma do custo de cada clique e tecla). O esforço das personas ficou perto do especialista na maioria das tarefas e só subiu onde a função falhou: 3,1 vezes na C4 e 2,7 vezes na D3.</li>
     <li>Falhas do instrumento, anotadas e fora do julgamento das personas: acento na linha de comando (M1), mira errada dos ajudantes (M2, M3) e um recarregamento sem causa achada que esvaziou o registro da D1.</li>
   </ul>
 </section>

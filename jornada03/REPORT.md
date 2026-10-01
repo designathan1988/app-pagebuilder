@@ -15,6 +15,37 @@ Where things are: `00-frame/` (personas, hypotheses, task script, competitor mat
 their pictures), `scripts/` (driver, probe, helpers, expert runs, fidelity, analysis), `data/` (one JSON per task,
 `scoreboard.json`, `fidelity/`, downloads), `shots/` (a photo per step per task).
 
+## 0. How to read this report (every acronym and code)
+
+| Term | Meaning |
+|---|---|
+| Persona | A realistic, fictional user played in the study: Marina (designer), Diego (front-end developer), Carla (agency production). |
+| M1–M5, D1–D5, C1–C5 | Task codes: M = Marina, D = Diego, C = Carla; the number is the order (C4 = Carla's fourth task, the catalogue). |
+| P1–P4 | Probes: short tests of one aspect (large page, keyboard, small screen, long undo history). |
+| H1–H17 | Hypotheses written before the sessions, confirmed or refuted by a number. |
+| J1–J28 | Problem codes ("J" for Jornada 03), most severe first. |
+| Severity 0–4 | Jakob Nielsen's usability severity scale: 4 catastrophe (work lost or task blocked), 3 major, 2 minor, 1 cosmetic, 0 not a problem. |
+| Dead end | The person tried something and there was no way through: the feature was missing or failed; they worked around it or gave up. |
+| Silent failure | The editor refused its own change internally and showed the person nothing; only the internal incident feed knew. |
+| SEQ | Single Ease Question: a 1 (very hard) to 7 (very easy) rating after each task. Given here by the evaluator playing the persona, so an estimate. |
+| SUS | System Usability Scale: a standard 10-question questionnaire scoring a product 0–100; 68 is the industry average, below 50 is poor. Estimated here, not answered by real people. |
+| QA | Quality assurance: testing to find defects; `docs/QA-LOG.md` is the project's log of each defect found and fixed. |
+| Fidelity | How close the page built in the Builder is to the client's original layout: the share of identical pixels between the two pictures. |
+| Latency, ms, p50, p95 | Time from a click or key to the screen's answer, in milliseconds (1000 ms = 1 s). p50 = the typical time (half the actions were faster); p95 = the slowest actions (95 % were faster). Under 100 ms feels instant. |
+| Committed changes | Changes the person confirmed that stayed in the document (undone ones do not count). |
+| Expert baseline | Tasks redone along the best known path, without errors: the floor the personas are compared to. |
+| KLM | Keystroke-Level Model: estimates task time by adding a fixed cost per gesture (about 1.3 s per pointer click, 0.28 s per key). |
+| Export, ZIP | The site the Builder writes for publishing: a compressed archive (ZIP) of the pages and the stylesheet. |
+| HTML, CSS | HTML is the page's content and structure; CSS is its look (colours, sizes, spacing). |
+| BEM | A naming convention for CSS classes that keeps code readable (e.g. `card__title`). |
+| Class, variable, component | Class = a named style reused on many elements; variable = a named value (e.g. the brand colour) reused in many places; component = a reusable block whose copies follow the original. |
+| CSV, XLSX, JSON | Data file formats: CSV and XLSX are spreadsheets (plain text / Excel); JSON is a data format used by programs. |
+| Manifest | The Builder's internal contract: the list of every command and control the app has. |
+| MCP | Model Context Protocol: a standard for connecting AI assistants to programs so they can act in them. |
+| CMS | Content Management System: other builders' way of keeping lists (products, posts) and generating pages from them. |
+| Breakpoint | A screen size the page is tuned for: Desktop 1440 px, Laptop 1180, Tablet 834, Phone 390. |
+| Commit | A saved record of changes in the project's history (git), named by a code such as `b39cc31`. |
+
 ## 1. Scoreboard
 
 | Persona | Tasks | Done | Partial | Abandoned | Completion | Dead ends | Silent failures (incidents) | SEQ mean (AI) | SUS (AI proxy) |
