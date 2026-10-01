@@ -942,6 +942,16 @@
   height: var(--size-control);
 }
 
+/* a card's values in the size of the inspector's other values (the dogfooding pass: click and show stood larger than
+   the rows around them), an empty scope saying what it means */
+.interaction-card .panel-field__text {
+  font: var(--fw-input) var(--fs-caption) / var(--lh-caption) var(--font-ui);
+}
+
+.interaction-card .panel-field__text::placeholder {
+  color: var(--color-text-muted);
+}
+
 .interaction-card .interaction-card__target > .door {
   overflow: hidden;
   justify-content: flex-start;

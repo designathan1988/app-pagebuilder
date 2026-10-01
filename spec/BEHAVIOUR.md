@@ -1983,6 +1983,7 @@ None in Pager.
 3. **Storage.** Required:
    - Interactions are stored per element in the document JSON; each add, edit and remove is one undo step.
    - The editing canvas never runs them; preview and the exported page run them once they are exported as JavaScript (manifest feature `export-events-js`).
+- **An interaction's card read as unfinished** (the dogfooding pass, 2026-09-30): its Applies to field stood empty when the interaction is the element's own, and Trigger and Action showed their values larger than every other value of the inspector. Required: an empty Applies to says what it means inside the field (`interactions.scope.element`, "This element"), and the card's values take the inspector's value size.
 
 ## explorer-assets-use
 
@@ -6143,6 +6144,8 @@ built by duplicating one and then styling every copy again.
 ### Undo and redo
 
 One undo step per run; undo gives back the selection from before.
+
+In the Arrange menu, Repeat stands alone after a separator (layout.json breaks), apart from the grid editor's item.
 
 ## rotation-handle
 

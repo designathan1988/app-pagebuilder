@@ -71,7 +71,7 @@ function Card({ node, interaction, index }: { readonly node: DocNode; readonly i
       </header>
       {expanded ? <div className="interaction-card__fields">
         {SCOPE_FIELD !== null ? (
-          <PanelField entry={SCOPE_FIELD} args={{ interaction: index }} value={interaction.scope ?? ''} label={t('inspector.interactionScope')} offered={['', ...classes]} />
+          <PanelField entry={SCOPE_FIELD} args={{ interaction: index }} value={interaction.scope ?? ''} label={t('inspector.interactionScope')} offered={['', ...classes]} placeholder={t('interactions.scope.element')} />
         ) : null}
         {TRIGGER_FIELD !== null ? (
           <PanelField entry={TRIGGER_FIELD} args={{ interaction: index }} value={interaction.trigger} label={t('interactions.field.trigger')} offered={applicableTriggers(node)} />

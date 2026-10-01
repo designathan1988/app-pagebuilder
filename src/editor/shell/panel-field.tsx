@@ -37,6 +37,7 @@ export function PanelField({
   label,
   disabled = false,
   autoFocus = false,
+  placeholder,
   onDone,
 }: {
   readonly entry: DoorEntry;
@@ -47,6 +48,8 @@ export function PanelField({
   readonly disabled?: boolean;
   // a field a control just opened takes the focus (New animation's name field)
   readonly autoFocus?: boolean;
+  // what an empty value means, said inside the field (an interaction's scope: this element)
+  readonly placeholder?: string;
   readonly onDone?: () => void;
 }) {
   const door = useDoor(entry, args, label);
@@ -80,6 +83,7 @@ export function PanelField({
           className="panel-field__text"
           type="text"
           value={edited ? draft : value}
+          placeholder={placeholder}
           disabled={!ready}
           list={list.length > 0 ? `${id}-list` : undefined}
           onChange={(event) => {
