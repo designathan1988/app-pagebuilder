@@ -28,7 +28,8 @@
           "Each page has its own document tree, guides and settings in the project JSON; page names are unique; each page is an .html file whose path follows its name: the home page is index.html and the others take their file name from their name (about-us.html).",
           "The home page cannot be deleted; delete asks for confirmation; every page operation is an undo step.",
           "File > New blank page now empties only the active page; File > Open project replaces all pages.",
-          "The active page is restored after reload."
+          "The active page is restored after reload.",
+          "The + with no name given takes the next free name (Page, Page 2…), and the new page's name field takes the focus with its name selected."
         ]
       },
       "scenarios": [
@@ -127,6 +128,123 @@
               "preferences": null,
               "selection": null
             },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "adding-pages-one-after-another-names-each-with-the-next-free-name",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "pages.add#explorer-add-page",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "pages.add#explorer-add-page",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "pages.add#explorer-add-page"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@pages",
+                "value": [
+                  {
+                    "name": "Home",
+                    "file": "index.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page",
+                      "tag": "body",
+                      "attributes": {},
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": []
+                    }
+                  },
+                  {
+                    "name": "Page",
+                    "file": "page.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page 2",
+                      "tag": "body",
+                      "attributes": {},
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": []
+                    }
+                  },
+                  {
+                    "name": "Page 2",
+                    "file": "page-2.html",
+                    "tree": {
+                      "type": "page",
+                      "name": "Page 3",
+                      "tag": "body",
+                      "attributes": {},
+                      "classes": [],
+                      "styles": {},
+                      "text": null,
+                      "children": []
+                    }
+                  }
+                ]
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page 3",
+                  "property": "display",
+                  "value": "block"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.pages.added",
+                  "params": {
+                    "name": "Page 2",
+                    "file": "page-2.html"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
             "export": null
           },
           "refusals": []

@@ -161,6 +161,15 @@ function PageNameField({ page }: { readonly page: Page }) {
   useEffect(() => {
     if (input.current !== null && document.activeElement !== input.current) input.current.value = page.name;
   }, [page.name, said]);
+  // the page pages.add just made takes the focus with its name selected, so what is typed next names it (spec
+  // explorer-pages, Problems 3: the journey "site" typed "Sobre" after the + and the name stayed "Page")
+  const added = said?.key === 'status.pages.added' && said.params.file === page.file && shown;
+  useEffect(() => {
+    if (added && input.current !== null) {
+      input.current.focus();
+      input.current.select();
+    }
+  }, [added, said]);
   const keep = (name: string) => {
     if (!field.built || name.trim() === page.name) return;
     (store.dispatch as (id: CommandId, args: unknown) => DispatchResult)(PAGE_NAME.command.id as CommandId, { ...PAGE_NAME.door.args, page: page.tree.id, name });

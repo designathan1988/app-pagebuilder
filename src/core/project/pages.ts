@@ -2,8 +2,8 @@
 // its name and its file straight, and loses one. The document holds them in their order (`document.pages`), the
 // Explorer lists them, and every command that acts on "the page" reads the first one until pages.switch arrives.
 //
-// pages.add (the Explorer's Pages section header): a page named after the text its door hands, or the next free
-// default name; its file is the name's slug ("About us" -> about-us.html), numbered when taken, and its root is the
+// pages.add (the Explorer's Pages section header): a page named after the text its door hands (refused when another
+// page holds it), or the next free default name ("Page", "Page 2"…; spec explorer-pages, Problems 3); its file is the name's slug ("About us" -> about-us.html), numbered when taken, and its root is the
 // root element the manifest gives every page (validate.ts ModelRules.root). The new page opens (spec
 // explorer-pages, "listing a page and opening it"): the editor shows what was just added, so the canvas, the Layers,
 // the top bar's switcher and an insert all follow it. One undo step.
@@ -63,10 +63,13 @@ export const pageShown = (state: { readonly document: { readonly pages: readonly
 
 // A page name no other page's root holds: a node path names a page by its root's name (src/manifest/scenario.ts), so
 // two pages never share one.
+// A base already numbered ("Page 2") counts on from its stem ("Page 3"), never "Page 2 2".
 function rootName(pages: readonly Page[], base: string): string {
   const taken = pages.map((p) => p.tree.name);
+  if (!taken.includes(base)) return base;
+  const stem = base.replace(/ \d+$/, '');
   for (let n = 1; ; n += 1) {
-    const name = n === 1 ? base : `${base} ${n}`;
+    const name = n === 1 ? stem : `${stem} ${n}`;
     if (!taken.includes(name)) return name;
   }
 }
@@ -74,8 +77,10 @@ function rootName(pages: readonly Page[], base: string): string {
 export function addPageCommand<Ui extends WithPage>() {
   return registerHandler<'pages.add', Ui>('pages.add', ({ state, ids, rules, words }, { name }) => {
   const document = state.document;
-  const typed = typeof name === 'string' && name.trim() !== '' ? name.trim() : words('pages.defaultName');
-  if (document.pages.some((p) => p.name === typed)) return { kind: 'refused' as const, message: message('status.pages.nameTaken', { name: typed }) };
+  const given = typeof name === 'string' && name.trim() !== '';
+  const typed = given ? name.trim() : words('pages.defaultName');
+  // a name the person gave is theirs, refused when taken; the default name takes the next free one ("Page 2")
+  if (given && document.pages.some((p) => p.name === typed)) return { kind: 'refused' as const, message: message('status.pages.nameTaken', { name: typed }) };
   const { name: chosen, file } = fresh(document.pages.map((p) => p.name), document.pages.map((p) => p.file), typed);
   const root: DocNode = { id: ids.next(), type: rules.root.type, name: rootName(document.pages, chosen), tag: rules.root.tag, attributes: {}, classes: [], styles: {}, text: null, children: [] };
   const made: Page = { id: ids.next(), name: chosen, file, tree: root };

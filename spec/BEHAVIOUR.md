@@ -2190,6 +2190,7 @@ The manifest's feature `explorer-pages` holds the scenarios; this section holds 
 
 1. **The top bar's page switcher drew a chevron that opened nothing** (the audit's U-011). Required: the switcher shows the page on the canvas, and a press opens the list of the project's pages (its name and its file), the page shown checked; choosing one runs `pages.switch` for it and closes the list; Escape and a press outside close it as every menu's do.
 2. **A click on another page's name put it in edit and left the canvas where it was** (the dogfooding pass: only the small page icon switched pages). Required: in the Pages list only the page on the canvas has its name as an editable field; another page's name reads as text, and a click on it opens that page (`pages.switch`), its name then editable in place.
+3. **The + made one page and refused the next, and what was typed after it went nowhere** (the journey "site", 2026-10-01: + then "Sobre" and Enter left a page named "Page", and Enter ran the + again: "A page named Page already exists"). Required: with no name given, `pages.add` takes the next free default name ("Page", "Page 2", "Page 3"…); only a name the person gave is refused when another page holds it. The new page's name field takes the focus with its name selected, so typing names it and Enter keeps it (`pages.rename`, its file following: "Sobre" → `sobre.html`).
 
 ## export-bem-css
 

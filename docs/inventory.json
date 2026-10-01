@@ -4,9 +4,9 @@
     "built": 187,
     "commands": 263,
     "doors": 1027,
-    "scenarios": 1354,
+    "scenarios": 1355,
     "modules": 261,
-    "lines": 50490
+    "lines": 50504
   },
   "features": [
     {
@@ -2574,7 +2574,7 @@
         "workspace.setPanelOpen"
       ],
       "doors": 27,
-      "scenarios": 10,
+      "scenarios": 11,
       "modules": [
         "src/core/project/pages.ts",
         "src/editor/workspace/panels.ts"
@@ -3482,7 +3482,7 @@
     },
     {
       "path": "src/core/project/pages.ts",
-      "lines": 168,
+      "lines": 173,
       "commands": [
         "pages.add",
         "pages.rename",
@@ -4850,7 +4850,7 @@
     },
     {
       "path": "src/editor/shell/sidebar.tsx",
-      "lines": 1064,
+      "lines": 1073,
       "commands": [],
       "features": []
     },
