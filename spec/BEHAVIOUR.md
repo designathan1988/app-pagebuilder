@@ -2478,6 +2478,7 @@ Arrows / Shift+arrows move the active guide, Delete removes it, L locks it; the 
 1. **Dropping a guide on its ruler does not delete it** (it is clamped to 0). Required: a guide released over its own ruler is deleted (manifest feature `guides-manual`); the ruler shows a delete hint while the guide is over it.
 2. **A guide appears on press, before any movement,** so a click on a ruler creates nothing but flickers a guide. Required: the guide is created after 4 px of movement out of the ruler (the shared drag threshold).
 3. **The guide keyboard handler captures arrows, Delete, Backspace, L and Escape globally while a guide is active,** even when the person has moved on to the canvas selection (it deactivates only on a press outside rulers and guides). Required: guide keys act only while the guide has focus; the canvas keys work as usual otherwise.
+- **A guide thrown past its ruler stuck at 0** (the dogfooding pass, 2026-09-30): carried out of the canvas beyond its ruler (onto the toolbar above the top ruler), a guide was clamped to the page edge and stayed. Required: a guide released over its own ruler **or past it** (above the top ruler's bottom edge, left of the left ruler's right edge) is deleted, and the ruler shows the delete hint while it is there; a new guide is made only once the pointer has left the ruler onto the page.
 
 ## hand-keyboard-move
 

@@ -1535,7 +1535,11 @@ export function installPointer(store: EditorStore, target: Window = window): () 
         open = guiding.gesture;
         capture(event.pointerId);
       }
-      const onOwnRuler = document.elementFromPoint(event.clientX, event.clientY)?.closest(`[data-ruler="${guiding.axis}"]`) != null;
+      // over its own ruler, or past it (the pointer carried out of the canvas beyond the ruler: the person throws the
+      // guide away; it stuck at 0 before — the dogfooding pass)
+      const ownRuler = document.querySelector(`[data-ruler="${guiding.axis}"]`)?.getBoundingClientRect() ?? null;
+      const pastRuler = ownRuler !== null && (guiding.axis === 'horizontal' ? event.clientY <= ownRuler.bottom : event.clientX <= ownRuler.right);
+      const onOwnRuler = pastRuler || document.elementFromPoint(event.clientX, event.clientY)?.closest(`[data-ruler="${guiding.axis}"]`) != null;
       setGuideOnRuler(onOwnRuler ? guiding.axis : null);
       if (onOwnRuler) return;
       const point = screenToPage({ x: event.clientX, y: event.clientY }, g);

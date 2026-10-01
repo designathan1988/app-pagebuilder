@@ -41,3 +41,25 @@ test('a click on a ruler makes no guide; a guide held over its ruler shows the d
   await expect(ruler.locator('.ruler__hint')).toHaveCount(0);
   await expect.poll(() => guideCount(page)).toBe(0);
 });
+
+test('a guide carried past its ruler, out of the canvas, is deleted too', runs(FROM_TOP, DROP), async ({ page }) => {
+  // the dogfooding pass: a guide thrown off the canvas beyond its ruler stuck at 0 instead of going away
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await openEditor(page);
+  const box = await page.locator('[data-ruler="horizontal"]').boundingBox();
+  if (box === null) throw new Error('no top ruler');
+  const x = box.x + box.width / 2;
+  await page.mouse.move(x, box.y + box.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(x, box.y + 220, { steps: 10 });
+  await page.mouse.up();
+  await expect.poll(() => guideCount(page)).toBe(1);
+  const line = await page.locator('[data-guide="horizontal-1"]').boundingBox();
+  if (line === null) throw new Error('the guide is not drawn');
+  await page.mouse.move(x, line.y + line.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(x, line.y - 40, { steps: 4 });
+  await page.mouse.move(x, box.y - 30, { steps: 12 });
+  await page.mouse.up();
+  await expect.poll(() => guideCount(page)).toBe(0);
+});
