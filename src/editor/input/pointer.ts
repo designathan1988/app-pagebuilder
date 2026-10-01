@@ -97,6 +97,7 @@ import {
   setPressPoint,
   setPressing,
   setResizing,
+  setBanding,
   type Inserting,
   type Redirect,
   type SideView,
@@ -107,7 +108,7 @@ export { DRAG_THRESHOLD, IDLE, step } from './pointer/machine.ts';
 export type { Effect, Machine, MachineEvent, Press } from './pointer/machine.ts';
 export { clickDoor, editEndDoor, modifierOf } from './pointer/press.ts';
 export type { Button, PressFacts } from './pointer/press.ts';
-export { band, canvasPointer, drag, ghostReturn, guideOverRuler, holdAlt, hover, lastDrop, measuring, panState, pointerPressing, pressPoint, resizingNow } from './pointer/views.ts';
+export { band, bandingNow, canvasPointer, drag, ghostReturn, guideOverRuler, holdAlt, hover, lastDrop, measuring, panState, pointerPressing, pressPoint, resizingNow } from './pointer/views.ts';
 export type { Band, DragView, Dropped, GhostReturn, Inserting, PanView, Redirect, SideView } from './pointer/views.ts';
 
 
@@ -1314,6 +1315,7 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     const opened = [spacing?.gesture, guiding?.gesture, rotating?.gesture, resizing?.gesture].filter((g): g is Gesture => g != null);
     const panned = panning !== null;
     spacing = null;
+    setBanding(null);
     guiding = null;
     rotating = null;
     setResizing(null);
@@ -1484,6 +1486,7 @@ export function installPointer(store: EditorStore, target: Window = window): () 
         spacing.gesture = store.gesture();
         spacing.cancels = store.getState().ui.drag.cancels;
         open = spacing.gesture;
+        setBanding(spacing.element.getAttribute('data-door'));
         capture(event.pointerId);
       }
       // a shadow handle: the first layer's X and Y follow the pointer, or its blur its horizontal travel
@@ -1647,6 +1650,7 @@ export function installPointer(store: EditorStore, target: Window = window): () 
       if (event.pointerId !== spacing.pointer) return;
       const { gesture, entry, opposite, element } = spacing;
       spacing = null;
+      setBanding(null);
       if (gesture !== null) {
         open = null;
         gesture.commit();
@@ -1822,6 +1826,7 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     if (spacing?.gesture != null && store.getState().ui.drag.cancels !== spacing.cancels) {
       const cancelled = spacing.gesture;
       spacing = null;
+      setBanding(null);
       open = null;
       queueMicrotask(() => cancelled.cancel());
       return;

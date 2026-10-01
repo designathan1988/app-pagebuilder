@@ -285,8 +285,14 @@
   cursor: ns-resize;
 }
 
-.chrome__band:hover {
+.chrome__band:hover,
+.chrome__band.is-dragging {
   opacity: 0.55;
+}
+
+/* the band a drag pulls keeps its number readable whatever its tint (the pointer has left it) */
+.chrome__band.is-dragging .chrome__handle-value {
+  outline: 1px solid var(--color-canvas-selection);
 }
 
 .chrome__band--padding {
@@ -339,7 +345,7 @@
 }
 
 /* a band too thin for its number keeps it for the pointer and the keyboard's focus (constant spacing.valueMinBand) */
-.chrome__band--thin:not(:hover):not(:focus-visible) .chrome__handle-value {
+.chrome__band--thin:not(:hover):not(:focus-visible):not(.is-dragging) .chrome__handle-value {
   visibility: hidden;
 }
 

@@ -7039,6 +7039,7 @@ Focus a band (it is focusable) and press Enter to type a value; the Inspector's 
 4. **The drag writes longhands next to an existing shorthand** (`padding: 56px 40px` plus `paddingTop: 76px`), so the Inspector and export must resolve two sources. Required: the written result is one coherent value per side: the document stores only the four longhands, never the `padding` or `margin` shorthand, and the band writes its side's longhand.
 5. **A click on a band does not reliably open the typed field** (observed: no field after a click in the middle of the top band). Required: a click without drag opens the typed field; Enter commits, Escape cancels.
 6. **A thin band's number spilled out of it** (the audit's U-036: numbers drawn in 4 to 6 px bands). Required: a band thinner than `spacing.valueMinBand` (12 screen px) shows its number only while the pointer is over it or the keyboard's focus is on it; a wider band shows it always.
+- **The band a drag pulled went faint under the drag** (the dogfooding pass, 2026-09-30): a band no mode pins shows itself only under the pointer, and the pointer leaves it as soon as it moves, so the side being changed and its number vanished while the value changed. Required: the edit handle a drag pulls (a spacing band, a gap, a radius, a shadow handle) stays drawn as taken, with its live value readable, until the drag ends or is cancelled; then it waits again.
 
 ## state-styles
 

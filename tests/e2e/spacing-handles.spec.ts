@@ -119,3 +119,29 @@ test('a mode lets go of a selection it cannot edit, and the toolbar names the mo
   await expect(page.locator('[data-canvas-overlay] .chrome__band--gap'), 'and its bands with it').toHaveCount(0);
   await expect(page.locator('[data-canvas-overlay] [data-door="geometry.resize#handle-resize-e"]'), 'the resize handles are back').toHaveCount(1);
 });
+
+test('the band a drag pulls stays drawn with its live value while the pointer has left it', runs(OPEN, ROW, TOP), async ({ page }) => {
+  // the dogfooding pass: an unpinned band went faint the moment the pointer moved off it, so the value changing under
+  // the drag could not be read
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await openEditor(page);
+  const chooser = page.waitForEvent('filechooser');
+  await runDoor(page, OPEN);
+  await (await chooser).setFiles({ name: 'aurora.json', mimeType: 'application/json', buffer: fs.readFileSync(FIXTURE) });
+  await control(page, ROW, { args: { target: 'n-hero' } }).click();
+  const top = page.locator(`[data-canvas-overlay] [data-door="${TOP}"]`);
+  const box = await top.boundingBox();
+  if (box === null) throw new Error('the top padding band is not drawn');
+  const x = box.x + box.width / 2;
+  const y = box.y + box.height / 2;
+  await page.mouse.move(x, y);
+  await page.mouse.down();
+  await page.mouse.move(x, y + 30, { steps: 8 });
+  // the pointer now stands below the band's old edge, on the content: the band is still drawn as taken
+  await expect(top, 'the dragged band is marked').toHaveClass(/is-dragging/);
+  await expect(top, 'and is not the faint waiting band').not.toHaveClass(/chrome__band--auto/);
+  expect(Number(await top.evaluate((el) => getComputedStyle(el).opacity))).toBeGreaterThan(0.5);
+  await expect(top, 'its number is the live value').not.toHaveText('56');
+  await page.mouse.up();
+  await expect(top, 'released, it waits again').toHaveClass(/chrome__band--auto/);
+});

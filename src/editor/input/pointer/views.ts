@@ -90,6 +90,24 @@ export function setResizing(next: { readonly node: string; readonly handle: stri
   for (const listener of [...resizeListeners]) listener();
 }
 
+// The edit handle (a spacing band, a gap, a radius, a shadow handle) a drag is pulling now, by its door: the chrome
+// keeps it drawn, with its value, while the pointer has left it (the dogfooding pass: an unpinned band went faint the
+// moment the pointer moved off it, and the value changing under the drag could not be read). Pointer state.
+let bandNow: string | null = null;
+const bandNowListeners = new Set<() => void>();
+export const bandingNow = {
+  get: (): string | null => bandNow,
+  subscribe(listener: () => void): () => void {
+    bandNowListeners.add(listener);
+    return () => bandNowListeners.delete(listener);
+  },
+};
+export function setBanding(next: string | null) {
+  if (next === bandNow) return;
+  bandNow = next;
+  for (const listener of [...bandNowListeners]) listener();
+}
+
 // Where the pointer is while it is over the canvas's stage, for the rulers' marker (spec rulers); null elsewhere.
 let pointerOnStage: Point | null = null;
 const pointerListeners = new Set<() => void>();
