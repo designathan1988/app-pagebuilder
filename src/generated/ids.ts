@@ -40,6 +40,7 @@ export const COMMAND_IDS = [
   "components.insertInstance",
   "components.detach",
   "components.repeat",
+  "components.fillFromData",
   "element.setTag",
   "element.setAttribute",
   "assetPicker.open",
@@ -336,6 +337,7 @@ export const DOOR_IDS = [
   "components.repeat#context-menu",
   "components.repeat#menu-arrange",
   "components.repeat#command-bar",
+  "components.fillFromData#explorer-fill-from-data",
   "element.setTag#inspector-tag",
   "element.setTag#quick-panel-tag",
   "element.setAttribute#inspector-title",
@@ -4582,5 +4584,8 @@ export const MESSAGE_IDS = [
   "command.components.repeat",
   "status.components.repeated",
   "feature.repeatElement",
+  "command.components.fillFromData",
+  "status.data.unreadable",
+  "status.data.filled",
 ] as const;
 export type MessageId = (typeof MESSAGE_IDS)[number];

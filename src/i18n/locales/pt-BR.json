@@ -2091,5 +2091,8 @@
   "keyContext.componentPrompt": "Nome do componente",
   "command.components.repeat": "Repetir (cópia ligada)",
   "status.components.repeated": "{name} repetido: {count} itens compartilham o estilo.",
-  "feature.repeatElement": "Repetir um elemento"
+  "feature.repeatElement": "Repetir um elemento",
+  "command.components.fillFromData": "Preencher os itens repetidos selecionados com estes dados",
+  "status.data.unreadable": "{path} não tem linhas para preencher itens: uma lista JSON ou um CSV com linha de cabeçalho.",
+  "status.data.filled": "{count} itens de {name} preenchidos com {path}."
 }

@@ -15,11 +15,16 @@
 //    one, named after it) and its first instance. The new item becomes the selection, so the command run again adds
 //    the next. Styles are the component's, so a style written on any repeated item reaches them all; a text or an
 //    attribute stays on its item.
+//  - components.fillFromData (spec repeat-element, Fill from data): the repeated items of the selected one (the
+//    instances of its component in its parent, in order) take the rows of a project data file (core/design/data.ts),
+//    one row each: a field of an item (an element that holds text, an image's source) takes the value named like its
+//    definition element, else the value at its place; rows beyond the items add new items after the last one.
 //  - componentHolders: where a style write on an element of an instance goes (core/style/set.ts styleHolders): the
 //    definition's element and the same element of every instance of the component, in every page.
 import type { NodeId } from '../../generated/commands.ts';
 import { message, registerHandler, registerPredicate, type Message, type Outcome } from '../commands/registry.ts';
 import { lineage, locate, type ComponentDefinition, type DocNode, type DocumentJson } from '../document/model.ts';
+import type { ModelRules } from '../document/validate.ts';
 import { refreshCopiedIdentities } from '../document/clone.ts';
 import { placementRefusal } from '../elements/content-model.ts';
 import type { Patch } from '../history/transaction.ts';
@@ -27,6 +32,8 @@ import { deepEqual } from '../history/transaction.ts';
 import { lockRefusal } from '../nodes/flags.ts';
 import { nodeMaker, placement, type NodeMaker } from '../structure/insert.ts';
 import { copyName } from '../structure/duplicate.ts';
+import { fileAt } from '../files/files.ts';
+import { dataRows, type DataRow } from './data.ts';
 
 const NONE: readonly ComponentDefinition[] = [];
 export const componentsOf = (document: DocumentJson): readonly ComponentDefinition[] => document.components ?? NONE;
@@ -169,6 +176,76 @@ export const repeatCommand = registerHandler('components.repeat', ({ state, ids,
   // the items the parent holds now: the instances of the component among its children, the new one with them
   const count = receiver.children.filter((child) => child.id === found.node.id || child.component === definition.name).length + 1;
   return { kind: 'change', patches, selection: [node.id], message: message('status.components.repeated', { name: definition.name, count }) };
+});
+
+// An item filled with a row: each of its fields, in document order (an element holding text, an image's source), takes
+// the row's value named like the definition element the field comes from (any case), else the value at the field's
+// place; a field the row has no value for keeps its own.
+function filled(item: DocNode, row: DataRow, definition: ComponentDefinition, rules: ModelRules): DocNode {
+  const names = row.names.map((name) => name.trim().toLowerCase());
+  let place = 0;
+  const nameOf = (part: readonly number[] | undefined): string => {
+    let at: DocNode | undefined = definition.tree;
+    for (const index of part ?? []) at = at?.children[index];
+    return at?.name.toLowerCase() ?? '';
+  };
+  const take = (node: DocNode): string | undefined => {
+    const named = names.indexOf(nameOf(node.componentPart));
+    const value = named >= 0 ? row.values[named] : row.values[place];
+    place += 1;
+    return value;
+  };
+  const visit = (node: DocNode): DocNode => {
+    const content = rules.elements.get(node.type)?.content;
+    let next: DocNode = node;
+    if (node.type === IMAGE) {
+      const value = take(node);
+      if (value !== undefined) next = { ...node, attributes: { ...node.attributes, src: value } };
+    } else if (content === 'text' && node.children.length === 0) {
+      const value = take(node);
+      if (value !== undefined) next = { ...node, text: value };
+    }
+    return { ...next, children: next.children.map(visit) };
+  };
+  return visit(item);
+}
+const IMAGE = 'image';
+
+export const fillFromDataCommand = registerHandler('components.fillFromData', ({ state, ids, rules, words }, { path }): Outcome<never> => {
+  const primary = state.selection[0];
+  const found = primary === undefined ? null : locate(state.document, primary);
+  if (found === null || found.parent === null || found.node.component === undefined) return { kind: 'refused', message: message('status.components.notInstance') };
+  const definition = componentsOf(state.document).find((c) => c.name === found.node.component);
+  if (definition === undefined) return { kind: 'refused', message: message('status.components.notInstance') };
+  const file = fileAt(state.document, path);
+  const rows = file === null ? null : dataRows(file);
+  if (rows === null) return { kind: 'refused', message: message('status.data.unreadable', { path }) };
+  const parent = found.parent;
+  const lockedParent = lockRefusal(state.document, parent.id, 'status.locked.edit');
+  if (lockedParent !== null) return { kind: 'refused', message: lockedParent };
+  const parentPath = found.path.slice(0, -1);
+  const items = parent.children.map((child, index) => ({ child, index })).filter(({ child }) => child.component === definition.name);
+  const patches: Patch[] = [];
+  items.forEach(({ child, index }, i) => {
+    const row = rows[i];
+    if (row === undefined) return;
+    const next = filled(child, row, definition, rules);
+    if (!deepEqual(next, child)) patches.push({ op: 'replace', path: [...parentPath, index], value: next });
+  });
+  // rows beyond the items: new items after the last one, each a fresh instance filled with its row
+  const last = items.at(-1)?.index ?? found.index;
+  const make = nodeMaker(state.document, rules, ids, words);
+  let before = found.node.name;
+  rows.slice(items.length).forEach((row, i) => {
+    const name = copyName(before, make.taken);
+    make.taken.add(name);
+    before = name;
+    const plainCopy = copied(definition.tree, () => ids.next() as NodeId, make, true);
+    const tree = refreshCopiedIdentities(state.document, [{ source: definition.tree, copy: plainCopy }])[0];
+    if (tree === undefined) throw new Error('components.fillFromData: the instance copy is missing');
+    patches.push({ op: 'add', path: [...parentPath, last + 1 + i], value: filled(marked({ ...tree, name }, [], definition.name), row, definition, rules) });
+  });
+  return { kind: 'change', patches, message: message('status.data.filled', { name: definition.name, count: rows.length, path }) };
 });
 
 // the one selected element is an instance's root

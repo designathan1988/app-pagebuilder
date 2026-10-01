@@ -6153,6 +6153,22 @@ One undo step per run; undo gives back the selection from before.
 
 In the Arrange menu, Repeat stands alone after a separator (layout.json breaks), apart from the grid editor's item.
 
+### Fill from data
+
+- **Fill the selected repeated items with this data** (`components.fillFromData`): the action on the row of a project
+  data file in the Explorer (a JSON list, of objects or of lists, or the one list an object holds; or a CSV whose first
+  line names the columns), drawn on JSON and CSV rows only, available while a repeated item (an instance) is selected.
+- The items are the instances of the selected item's component in its parent, in order; item *n* takes row *n*. Each
+  field of an item, in document order — an element that holds text, an image's source — takes the row's value named
+  like the definition element it comes from (any case: a `PlanTitle` column fills every item's title), else the value
+  at the field's place. A field the row has no value for keeps its own.
+- Rows beyond the items add new items after the last one (instances named on from the selected item's name, filled
+  with their rows); items beyond the rows keep their content. Texts and sources set this way are each item's own
+  (spec reusable-components), so the shared styles stay shared.
+- One undo step; the selection stays; the status bar says `Filled {count} items of {name} from {path}.` A file that
+  holds no rows is refused (`status.data.unreadable`), and so is a locked parent.
+- The scenario's project is the `catalog` fixture: two Plan items and `data/plans.json` with three rows.
+
 ## rotation-handle
 
 How Pager behaves, read from its source and observed by running it from `.cache/pager-run` (Chrome, window 1600×900). Source references are `path:line` inside Pager.

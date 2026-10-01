@@ -1,6 +1,7 @@
 // The activity bar and the sidebar (DESIGN.md "Regions"): Explorer (Pages, Files, Layers), Insert (the element grid
 // of elements.json's palette) and Styles (classes and variables). Rows and tiles are the doors of their regions, one
 // per page, node or palette entry; a section's actions are the region's controls before its first item.
+import { isDataFile } from '../../core/design/data.ts';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties, type FormEvent, type MouseEvent, type ReactNode } from 'react';
 import { isFeatureBuilt } from '../../app/features.ts';
 import { walk, type DocNode, type Location, type Page } from '../../core/document/model.ts';
@@ -550,11 +551,11 @@ function FileRows() {
 }
 
 // the explorer-files region's controls, by what they are
-interface TreeDoors { readonly newFile: DoorEntry | undefined; readonly newFolder: DoorEntry | undefined; readonly open: DoorEntry | undefined; readonly rename: DoorEntry | undefined; readonly remove: DoorEntry | undefined; readonly move: DoorEntry | undefined; readonly target: DoorEntry | undefined }
+interface TreeDoors { readonly newFile: DoorEntry | undefined; readonly newFolder: DoorEntry | undefined; readonly open: DoorEntry | undefined; readonly rename: DoorEntry | undefined; readonly remove: DoorEntry | undefined; readonly move: DoorEntry | undefined; readonly target: DoorEntry | undefined; readonly fill: DoorEntry | undefined }
 function paletteDoors(region: RegionId): TreeDoors {
   const held = doorSlots(region);
   const of = (control: string): DoorEntry | undefined => held.find((slot) => slot.door.kind === 'panel-control' && slot.door.control === control);
-  return { newFile: of('new-file'), newFolder: of('new-folder'), open: of('file-row'), rename: of('file-name-field'), remove: of('delete'), move: of('move-to'), target: of('move-target') };
+  return { newFile: of('new-file'), newFolder: of('new-folder'), open: of('file-row'), rename: of('file-name-field'), remove: of('delete'), move: of('move-to'), target: of('move-target'), fill: of('fill-from-data') };
 }
 
 // one of the two create doors, drawn as the field a path is typed into: Enter makes it, Escape drops what was typed
@@ -663,6 +664,8 @@ function TreeRow({ row, doors }: { readonly row: TreeRow; readonly doors: TreeDo
         {/* a page's file is generated and still moves: it is the page's address in the site's tree (files.move moves
             it with the page), while the stylesheet and the interactions' script stand at their fixed paths */}
         {(row.generated && row.page === null) || doors.move === undefined || folders.length === 0 ? null : <span onClick={() => setMoving((one) => !one)}><DoorControl entry={doors.move} args={{ path: row.path, to: folderOf(row.path) }} label={t('explorer.moveTo', { name })} /></span>}
+        {/* a data file (JSON, CSV) fills the selected repeated items with its rows (spec repeat-element) */}
+        {doors.fill === undefined || file === null || !isDataFile(file) ? null : <DoorControl entry={doors.fill} args={{ path: row.path }} />}
         {row.generated ? null : <DoorControl entry={RENAME_START} args={{ path: row.path }} />}
         {doors.remove === undefined || row.generated ? null : <DoorControl entry={doors.remove} args={{ path: row.path }} label={t('explorer.deleteRow', { name })} />}
       </span>

@@ -172,6 +172,11 @@
     },
     {
       "kind": "handler",
+      "id": "components.fillFromData",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
       "id": "element.setTag",
       "status": "registered"
     },

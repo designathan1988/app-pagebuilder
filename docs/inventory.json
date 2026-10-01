@@ -2,11 +2,11 @@
   "totals": {
     "features": 188,
     "built": 186,
-    "commands": 262,
-    "doors": 1016,
-    "scenarios": 1351,
-    "modules": 260,
-    "lines": 50296
+    "commands": 263,
+    "doors": 1017,
+    "scenarios": 1352,
+    "modules": 261,
+    "lines": 50462
   },
   "features": [
     {
@@ -1578,10 +1578,11 @@
       "id": "repeat-element",
       "built": true,
       "commands": [
-        "components.repeat"
+        "components.repeat",
+        "components.fillFromData"
       ],
-      "doors": 4,
-      "scenarios": 5,
+      "doors": 5,
+      "scenarios": 6,
       "modules": [
         "src/core/design/components.ts"
       ]
@@ -2806,7 +2807,7 @@
   "modules": [
     {
       "path": "src/app/commands.ts",
-      "lines": 396,
+      "lines": 397,
       "commands": [],
       "features": []
     },
@@ -2910,11 +2911,12 @@
     },
     {
       "path": "src/core/design/components.ts",
-      "lines": 218,
+      "lines": 295,
       "commands": [
         "components.create",
         "components.insertInstance",
         "components.repeat",
+        "components.fillFromData",
         "components.detach"
       ],
       "features": [
@@ -2922,6 +2924,12 @@
         "repeat-element",
         "reusable-components"
       ]
+    },
+    {
+      "path": "src/core/design/data.ts",
+      "lines": 78,
+      "commands": [],
+      "features": []
     },
     {
       "path": "src/core/design/tokens.ts",
@@ -3160,7 +3168,7 @@
     },
     {
       "path": "src/core/files/files.ts",
-      "lines": 533,
+      "lines": 534,
       "commands": [
         "files.upload",
         "files.createFolder",
@@ -4842,7 +4850,7 @@
     },
     {
       "path": "src/editor/shell/sidebar.tsx",
-      "lines": 1061,
+      "lines": 1064,
       "commands": [],
       "features": []
     },
@@ -5125,13 +5133,13 @@
     },
     {
       "path": "src/generated/commands.ts",
-      "lines": 498,
+      "lines": 499,
       "commands": [],
       "features": []
     },
     {
       "path": "src/generated/ids.ts",
-      "lines": 4587,
+      "lines": 4592,
       "commands": [],
       "features": []
     },

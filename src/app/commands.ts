@@ -13,7 +13,7 @@ import { setSvgMarkupCommand } from '../core/elements/svg.ts';
 import { removeSwatchCommand, saveSwatchCommand } from '../core/design/colors.ts';
 import { createToken, deleteToken, renameToken, updateToken } from '../core/design/tokens.ts';
 import { applyClassCommand, createClassCommand, deleteClassCommand, detachClassCommand, renameClassCommand } from '../core/design/classes.ts';
-import { createComponentCommand, detachInstanceCommand, repeatCommand, insertInstanceCommand, instanceSelected } from '../core/design/components.ts';
+import { createComponentCommand, detachInstanceCommand, fillFromDataCommand, repeatCommand, insertInstanceCommand, instanceSelected } from '../core/design/components.ts';
 import { closeComponentPrompt, openComponentPrompt } from '../editor/shell/component-prompt.ts';
 import { addGridTrack, enterGridEdit, exitGridEdit, mergeGridCells, removeGridTrack, spanGridItem, splitGridCells } from '../editor/canvas/grid-edit.ts';
 import { setStyleTarget } from '../editor/inspector/style-target.ts';
@@ -164,6 +164,7 @@ export const COMMANDS = {
   'components.insertInstance': insertInstanceCommand,
   'components.detach': detachInstanceCommand,
   'components.repeat': repeatCommand,
+  'components.fillFromData': fillFromDataCommand,
   'element.setTag': setTagCommand,
   'element.setAttribute': setAttributeCommand,
   'element.setId': setIdCommand,

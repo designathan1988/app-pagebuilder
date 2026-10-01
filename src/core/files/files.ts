@@ -184,6 +184,7 @@ const FILE_TYPES: readonly { readonly type: string; readonly extensions: readonl
   { type: 'text/css', extensions: ['css'] },
   { type: 'text/html', extensions: ['html', 'htm'] },
   { type: 'application/json', extensions: ['json'] },
+  { type: 'text/csv', extensions: ['csv'] },
 ];
 export function typeOfFile(name: string, fallback = 'application/octet-stream'): string {
   const extension = name.slice(name.lastIndexOf('.') + 1).toLowerCase();

@@ -1182,6 +1182,64 @@
           "args": {}
         }
       ]
+    },
+    {
+      "id": "components.fillFromData",
+      "labelKey": "command.components.fillFromData",
+      "owner": "src/core/design/components.ts",
+      "introducedBy": "repeat-element",
+      "args": {
+        "path": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "instanceSelected",
+        "refusalKey": "status.components.notInstance"
+      },
+      "refusals": [
+        "status.data.unreadable",
+        "status.locked.edit",
+        "status.locked.byAncestor"
+      ],
+      "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
+      "entryPoints": [
+        {
+          "id": "explorer-fill-from-data",
+          "kind": "panel-control",
+          "drawnAs": "icon-button",
+          "pressed": false,
+          "feature": "repeat-element",
+          "panel": "explorer",
+          "control": "fill-from-data",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.components.fillFromData",
+          "faceLabelKey": null,
+          "icon": "table",
+          "disabledReasonKey": "status.components.notInstance",
+          "placement": {
+            "region": "explorer-files",
+            "order": 10
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
     }
   ]
 }
