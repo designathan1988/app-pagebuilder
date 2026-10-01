@@ -172,24 +172,21 @@ npm run inventory         # regenerate docs/INVENTORY.md and docs/inventory.json
 ## The state of the application (2026-10-01)
 
 - Every command of the manifest is built; the two features left unregistered (`hover-measure`, `shortcuts-e2e-sweep`)
-  bring no command and no door. The inventory counts 187 features (185 built), 258 commands, 1,002 doors, 1,341
-  scenarios, 259 modules, 49,885 lines.
-- Green at this commit: `gen:check`, `manifest:check`, `inventory:check`, both typechecks, lint, 1,653 unit tests
-  (the headless scenario runner among them) and the complete browser suite: **1,988 passed** in 11.0 minutes, no failure and no flake (at `4e1d116`).
-- The design-system chapter (the audit of jornada01/02 and its resolution plan: waves T, B/E/M, 0 to 6) is done except:
-  - **The bottom dock stays as the audit A3.18 decided** (collapsed, it draws no strip; its panels stand as icons in
-    the status bar). The plan's 5.5 would keep a strip; that trades 28 px of canvas and reverses a decision of the
-    owner's, so it waits for the owner.
-  - **Left/Right between the app menus** (4.4): a door of the menu context needs a scenario that opens an app menu
-    without choosing an item, which no step can yet.
-  - **The colour picker** keeps its own panel beside the inspector (5.3's 240 px popover with keys inside its channel
-    fields is a restyle, open); **the timeline** keeps its layout (5.6).
-  - **Fifteen manifest fields no module reads** keep a planned reader in `consumers.json` (the environment's browser,
-    channel, zoom levels and reduced motion, the subsets' units, `toolbar`, `numeric`, `cssWideKeywords`…): wire them or
-    drop them, the owner's call.
-  - **S-028** (a whole border the parser cannot read is refused naming the part it guessed) stays: the scenario
-    `a-side-colour-that-is-no-colour-is-refused` pins that message.
-  - T.2 (door-reach batched in Chrome) and T.5 (visual baselines) are not built; T7 stays deferred with its reason.
+  bring no command and no door. The inventory counts 187 features (185 built), 261 commands, 1,006 doors, 1,343
+  scenarios, 259 modules, 49,995 lines; every field of every manifest schema names a module that reads it.
+- Green at this commit: `gen:check`, `manifest:check`, `inventory:check`, both typechecks, lint, 1,655 unit tests
+  (the headless scenario runner among them) and the complete browser suite: **2,006 passed** in 11.9 minutes, no failure and no flake.
+- The design-system chapter (the audit of jornada01/02 and its resolution plan: waves T, B/E/M, 0 to 6) is done. Its
+  decisions, each recorded in its spec section:
+  - **The bottom dock stays as the owner's A3.18 decided** (closed, no strip; its 28 px go to the canvas); the status
+    bar's panel icons carry what the plan's 5.5 wanted seen — the Checks icon with the number of issues
+    (spec dock-toggles).
+  - **S-028 stays**: a whole border the parser cannot read is refused naming the part it guessed, which the scenario
+    `a-side-colour-that-is-no-colour-is-refused` pins.
+  - **T.2 (door reach batched in one page) is not built**: its aim was speed, met otherwise — the headless runner and
+    `e2e:affected` for every commit, the complete suite in about 11 minutes on a quarter of the cores, stable — and a
+    rewrite of the runner would risk that for a margin.
+  - T7 stays deferred with its reason (the pointer's singletons matter only when two editors share a page).
 
 ## Rules that are never broken
 

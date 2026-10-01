@@ -31,8 +31,8 @@ concept that has an owner is a defect.
 
 ## What is delivered
 
-Counted by `npm run inventory` from the contract and the source: **187 features (185 built), 258 commands, 1,002
-doors, 1,341 scenarios, 259 modules, 49,885 lines.**
+Counted by `npm run inventory` from the contract and the source: **187 features (185 built), 261 commands, 1,006
+doors, 1,343 scenarios, 259 modules, 49,995 lines.**
 
 - **The canvas**: selection (click, Shift, marquee, the tree walk), drag and drop with proposals, resize and rotate
   handles, spacing handles, guides (drag from the ruler, snap, Alt measures), rulers, column/row/dot grids, outlines
@@ -59,11 +59,12 @@ and `shortcuts-e2e-sweep`. Neither brings a command or a door.
 ## How it is proven
 
 - **The gate, at every commit**: `gen:check`, `manifest:check`, `inventory:check`, both typechecks, lint, and
-  **1,653 unit tests** — among them the headless scenario runner (every scenario's logic without a browser), the
+  **1,655 unit tests** — among them the headless scenario runner (every scenario's logic without a browser), the
   planted manifest fixtures, the catalogue's duplicate and unused-key checks, and coverage floors.
-- **The complete browser suite**: **1,988 tests** — every scenario through every door it names, on the installed
+- **The complete browser suite**: **2,006 tests** — every scenario through every door it names, on the installed
   Chrome (`channel: 'chrome'`), plus the end-to-end specs. Its last complete run, on the tree this board summarises:
-  **1,988 passed** in 11.0 minutes (workers capped at a quarter of the cores), no failures and no flakes.
+  **2,006 passed** in 11.9 minutes (workers capped at a quarter of the cores), no failures and no flakes.
+- **Visual baselines**: fourteen pictures of the editor (seven states, light and dark), at most 50 pixels of difference.
 - **Between commits**: `npm run e2e:affected` runs the browser tests of the features a change reaches; `npm run
   e2e:tooth` proves a feature's scenarios fail with it switched off.
 - **The flows**: the seven `npm run ui` flows, each a real gesture at a time with a screenshot per step.
@@ -80,18 +81,20 @@ tokens' type roles, z scale and sizes, the lean field, concept rows (All propert
 element kind), the frame's breakpoint tabs, menus, the palette, the quick panel, the Explorer's rows. The contract was
 tightened along the way: the rules `style-door-section`, `concept-row` and `quick-panel-group`, the readers of
 `consumers.json` named for real (121 named modules never written), and the 43 catalogue keys nothing read removed.
-Two mid-chapter complete runs caught what the per-block tests missed (a backdrop sized by a button rule, a runner that
+The chapter closed with the menu bar walkable from the keyboard (F10, the arrows, submenus), the colour picker and the
+Timeline on their canonical anatomy, every manifest field read by a module or taken out, and visual baselines. Two
+mid-chapter complete runs caught what the per-block tests missed (a backdrop sized by a button rule, a runner that
 read a tab while it reloaded); both are fixed and covered.
 
 ## Open, honestly
 
-- **The bottom dock stays as the owner's A3.18 decided** (collapsed, no strip): the plan's 5.5 would give back a strip
-  at the cost of 28 px of canvas — the owner's call.
-- **Left/Right between the app menus** (a door of the menu context needs a scenario able to open an app menu without
-  choosing an item), **the colour picker's 240 px popover restyle** and **the timeline's canonical layout** are open.
-- **Fifteen manifest fields no module reads** keep a planned reader in `consumers.json`: wire them or drop them.
-- **S-028** stays: a scenario pins that a whole border's refusal names the part the parser guessed.
-- T.2 (door reach batched in one page) and T.5 (visual baselines) are not built.
+Nothing of the chapter's plan is left undone; three items were decided rather than built, each with its reason in
+`docs/PROJECT.md` and its spec section:
+
+- **The bottom dock stays closed without a strip** (the owner's A3.18); the status bar's Checks icon carries the issues.
+- **S-028 stays**: the scenario `a-side-colour-that-is-no-colour-is-refused` pins naming the part the parser guessed.
+- **T.2 is not built**: the per-commit loop is already fast (headless runner, `e2e:affected`) and the complete suite
+  stable in about 11 minutes; a runner rewrite would risk that for a margin.
 - `hover-measure` and `shortcuts-e2e-sweep`: unregistered by decision (no command, no door behind them).
 - **T7 deferred with its reason**: the pointer's module-level singletons only matter when two editors share a page,
   and no flow opens two; it waits for the first feature that does.
