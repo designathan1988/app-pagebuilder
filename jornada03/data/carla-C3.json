@@ -1,0 +1,149 @@
+{
+  "id": "carla-C3",
+  "persona": "carla",
+  "result": "done",
+  "seconds": 109,
+  "limitSeconds": 360,
+  "gestures": {
+    "click": 57,
+    "wheel": 10,
+    "keys": 68,
+    "dblclick": 3,
+    "move": 1,
+    "rightclick": 5
+  },
+  "gestureTotal": 143,
+  "mouseTravelPx": 35653,
+  "undos": 3,
+  "refusals": [],
+  "messages": [
+    "Página Home aberta.",
+    "Link 2 selecionado.",
+    "Navegação selecionado.",
+    "Painel Elementos aberto.",
+    "Bloco de link colocado em Navegação, posição 4 de 4.",
+    "Painel Explorador aberto.",
+    "Página Unidade Centro aberta.",
+    "Link 2 selecionado.",
+    "Navegação selecionado.",
+    "Painel Elementos aberto.",
+    "Bloco de link 2 colocado em Navegação, posição 4 de 4.",
+    "Painel Explorador aberto.",
+    "Página Unidade Praia aberta.",
+    "Link 2 selecionado.",
+    "Navegação selecionado.",
+    "Painel Elementos aberto.",
+    "Bloco de link 3 colocado em Navegação, posição 4 de 4.",
+    "Painel Explorador aberto.",
+    "Destaque selecionado.",
+    "Desfeito: Bloco de link 3 colocado em Navegação, posição 4 de 4.",
+    "Desfeito: Bloco de link 2 colocado em Navegação, posição 4 de 4.",
+    "Desfeito: Bloco de link colocado em Navegação, posição 4 de 4.",
+    "Painel Elementos aberto.",
+    "Painel Explorador aberto.",
+    "Página Home aberta.",
+    "Link 2 selecionado.",
+    "Navegação selecionado.",
+    "Painel Elementos aberto.",
+    "Link 5 colocado em Navegação, posição 4 de 4.",
+    "Link 5 selecionado.",
+    "Editando o texto — Enter, Esc ou um clique fora o mantém; Ctrl+Z o desfaz.",
+    "Texto de Link 5 salvo.",
+    "Painel Explorador aberto.",
+    "Página Unidade Centro aberta.",
+    "Link 2 selecionado.",
+    "Navegação selecionado.",
+    "Painel Elementos aberto.",
+    "Link 6 colocado em Navegação, posição 4 de 4.",
+    "Link 6 selecionado.",
+    "Editando o texto — Enter, Esc ou um clique fora o mantém; Ctrl+Z o desfaz.",
+    "Texto de Link 6 salvo.",
+    "Painel Explorador aberto.",
+    "Página Unidade Praia aberta.",
+    "Link 2 selecionado.",
+    "Navegação selecionado.",
+    "Painel Elementos aberto.",
+    "Link 7 colocado em Navegação, posição 4 de 4.",
+    "Link 7 selecionado.",
+    "Editando o texto — Enter, Esc ou um clique fora o mantém; Ctrl+Z o desfaz.",
+    "Texto de Link 7 salvo.",
+    "Link 4 selecionado.",
+    "Estilo de Link 4 copiado.",
+    "Painel Explorador aberto.",
+    "Página Unidade Praia aberta.",
+    "Link 7 selecionado.",
+    "Estilo colado em Link 7.",
+    "Painel Explorador fechado.",
+    "Estilo colado em Link 7.",
+    "Painel Explorador aberto.",
+    "Página Home aberta.",
+    "Link 5 selecionado.",
+    "Estilo colado em Link 5.",
+    "Página Unidade Centro aberta.",
+    "Link 6 selecionado.",
+    "Estilo colado em Link 6."
+  ],
+  "consoleErrors": [],
+  "incidents": 0,
+  "reloadsDuringTask": 0,
+  "incidentsSeen": [],
+  "latencyMs": {
+    "n": 116,
+    "p50": 70.7,
+    "p95": 435.1,
+    "max": 557.7
+  },
+  "historyAtStart": {
+    "undoSteps": 10,
+    "redoSteps": 0
+  },
+  "historyAtEnd": {
+    "undoSteps": 19,
+    "redoSteps": 0
+  },
+  "downloads": [],
+  "uploads": [],
+  "seq": 2,
+  "feel": [
+    "Cada pagina tem a sua propria barra; nao existe menu compartilhado. Fiz o mesmo trabalho tres vezes.",
+    "Buscar 'link' mostra primeiro 'Bloco de link' (uma caixa vazia); escolhi errado nas tres paginas.",
+    "O link novo nasce azul e sublinhado, diferente dos vizinhos; precisei copiar e colar o estilo em cada pagina.",
+    "O icone do Explorador fecha o painel quando ele ja esta aberto; perdi um clique por isso."
+  ],
+  "wish": [
+    "Cabecalho e rodape compartilhados por todas as paginas (editar uma vez).",
+    "Elemento novo herda o estilo dos irmaos (um link novo no menu fica igual aos outros)."
+  ],
+  "deadEnds": [
+    {
+      "what": "mudar o menu de todas as paginas de uma vez",
+      "tried": "procurar menu global",
+      "outcome": "nao existe; 3 edicoes"
+    }
+  ],
+  "issues": [
+    {
+      "kind": "missing",
+      "sev": 3,
+      "heuristic": "H7 flexibility",
+      "what": "No shared header/footer across pages: duplicated pages carry independent copies; a menu change is repeated per page (unless the person knows to make it a component first)",
+      "evidence": "C3"
+    },
+    {
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H6 recognition",
+      "what": "Insert search 'link' lists 'Bloco de link' (an empty container) before 'Link'",
+      "evidence": "shot after search"
+    },
+    {
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H4 consistency",
+      "what": "A new element inserted among styled siblings takes none of their look (blue underlined link among muted ones)",
+      "evidence": "shot 046"
+    }
+  ],
+  "notes": "3 pages x (open, select menu, insert Link, type) + style copy to each. First pass inserted 'Bloco de link' (first search result) on all 3 pages; undone.",
+  "shots": "jornada03\\shots\\carla-C3"
+}

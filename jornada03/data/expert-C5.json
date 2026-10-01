@@ -1,0 +1,42 @@
+{
+  "id": "expert-C5",
+  "persona": "expert-carla",
+  "result": "done",
+  "seconds": 1,
+  "limitSeconds": 180,
+  "gestures": {
+    "reload": 1
+  },
+  "gestureTotal": 1,
+  "mouseTravelPx": 0,
+  "undos": 0,
+  "refusals": [],
+  "messages": [],
+  "consoleErrors": [],
+  "incidents": 0,
+  "reloadsDuringTask": 1,
+  "incidentsSeen": [],
+  "latencyMs": {
+    "n": 0,
+    "p50": null,
+    "p95": null,
+    "max": null
+  },
+  "historyAtStart": {
+    "undoSteps": 0,
+    "redoSteps": 0
+  },
+  "historyAtEnd": {
+    "undoSteps": 0,
+    "redoSteps": 0
+  },
+  "downloads": [],
+  "uploads": [],
+  "seq": null,
+  "feel": [],
+  "wish": [],
+  "deadEnds": [],
+  "issues": [],
+  "notes": "expert baseline",
+  "shots": "jornada03\\shots\\expert-C5"
+}

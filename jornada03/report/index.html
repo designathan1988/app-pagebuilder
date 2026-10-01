@@ -1,0 +1,305 @@
+<title>Jornada 03 · Builder em uso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column (max 1080px), summary first, then evidence; tables scroll inside their own boxes. */
+:root {
+  --bg: #f6f7f6; --surface: #ffffff; --line: #dfe4e2; --fg: #16201e; --muted: #5b6764;
+  --accent: #0f8f80; --accent-soft: #e2f4f1;
+  --sev4: #c2362f; --sev3: #d9771f; --sev2: #b9950f; --sev1: #7d8a87;
+  --ok: #1f8a4c; --ok-soft: #e4f4ea; --part: #a8740a; --part-soft: #fbf1db; --bad: #b8332c; --bad-soft: #fbe6e4;
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121816; --surface: #1a2220; --line: #2c3633; --fg: #e6eeec; --muted: #9aa8a4;
+  --accent: #4fd1bf; --accent-soft: #173a35;
+  --sev4: #f0716a; --sev3: #f3a35e; --sev2: #e2c54f; --sev1: #8e9b98;
+  --ok: #5fcf8c; --ok-soft: #173326; --part: #e6b04d; --part-soft: #3a2f16; --bad: #f0716a; --bad-soft: #3d1d1b;
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #121816; --surface: #1a2220; --line: #2c3633; --fg: #e6eeec; --muted: #9aa8a4;
+  --accent: #4fd1bf; --accent-soft: #173a35;
+  --sev4: #f0716a; --sev3: #f3a35e; --sev2: #e2c54f; --sev1: #8e9b98;
+  --ok: #5fcf8c; --ok-soft: #173326; --part: #e6b04d; --part-soft: #3a2f16; --bad: #f0716a; --bad-soft: #3d1d1b;
+  color-scheme: dark; }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font: 15px/1.6 var(--body); margin: 0; padding-inline: 16px; padding-block: 32px 64px; }
+.wrap { max-width: 1080px; margin: 0 auto; display: grid; gap: 48px; }
+h1, h2, h3 { font-family: var(--display); line-height: 1.15; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(30px, 5vw, 44px); font-weight: 800; letter-spacing: -0.01em; }
+h2 { font-size: 24px; font-weight: 700; }
+h3 { font-size: 16px; font-weight: 700; }
+p { margin: 0; max-width: 68ch; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.lede { font-size: 17px; color: var(--fg); }
+.muted { color: var(--muted); }
+section { display: grid; gap: 18px; }
+.head { display: grid; gap: 14px; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag { font: 500 12px/1 var(--mono); padding: 6px 9px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: var(--surface); }
+.note { border-left: 3px solid var(--accent); background: var(--accent-soft); padding: 12px 14px; border-radius: 0 8px 8px 0; font-size: 14px; }
+.verdict { font-size: 18px; line-height: 1.55; max-width: 72ch; }
+.verdict strong { font-weight: 600; }
+.personas { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.persona { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 12px; min-width: 0; }
+.persona .role { font-size: 13px; color: var(--muted); }
+.bar { height: 8px; background: var(--line); border-radius: 99px; overflow: hidden; }
+.bar > span { display: block; height: 100%; background: var(--accent); border-radius: 99px; }
+.kv { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; font-size: 14px; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; font: 500 14px var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+.scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 600 12px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td.n { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+.pill { display: inline-block; font: 600 12px/1 var(--body); padding: 5px 9px; border-radius: 999px; white-space: nowrap; }
+.pill.ok { background: var(--ok-soft); color: var(--ok); }
+.pill.part { background: var(--part-soft); color: var(--part); }
+.pill.bad { background: var(--bad-soft); color: var(--bad); }
+.issues { display: grid; gap: 8px; }
+.issue { display: grid; grid-template-columns: 6px 54px 1fr; gap: 12px; align-items: start; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px 12px 0; overflow: hidden; }
+.issue .stripe { align-self: stretch; margin: -12px 0; }
+.issue .id { font: 600 13px var(--mono); }
+.issue .sev { display: block; font: 500 11px var(--mono); color: var(--muted); margin-top: 2px; }
+.issue p { max-width: none; font-size: 14px; }
+.issue .seen { font: 400 12px var(--mono); color: var(--muted); margin-top: 4px; }
+.s4 { background: var(--sev4); } .s3 { background: var(--sev3); } .s2 { background: var(--sev2); } .s1 { background: var(--sev1); }
+.gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+figure { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: grid; }
+figure img { display: block; width: 100%; height: auto; border-bottom: 1px solid var(--line); }
+figcaption { padding: 10px 12px; font-size: 13px; color: var(--muted); }
+figcaption b { color: var(--fg); font-weight: 600; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.pair img { max-height: 520px; object-fit: cover; object-position: top; }
+.chart { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+.chart svg { width: 100%; height: auto; display: block; }
+.chart text { fill: var(--fg); font: 12px var(--body); }
+.chart .lbl { fill: var(--muted); font: 12px var(--mono); }
+.bets { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.bet { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.bet .score { font: 600 12px var(--mono); color: var(--accent); }
+.bet ul, .list { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14px; }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+ol.list { padding-left: 22px; }
+a { color: var(--accent); }
+code { font: 13px var(--mono); background: var(--accent-soft); padding: 1px 5px; border-radius: 4px; }
+@media (max-width: 560px) { .pair { grid-template-columns: 1fr; } .issue { grid-template-columns: 6px 44px 1fr; } }
+@media (prefers-reduced-motion: no-preference) { .bar > span { transition: width .6s ease; } }
+</style>
+
+<div class="wrap">
+
+<header class="head">
+  <span class="eyebrow">Estudo de uso · 2026-10-01 · commit 9e118aa</span>
+  <h1>Jornada 03 · o Builder nas mãos de quem vai usá-lo</h1>
+  <p class="lede">Três profissionais com um trabalho de cliente a entregar, 15 tarefas e 4 sondagens, gestos reais no Chrome, uma foto por passo. Durante o estudo nada foi corrigido: só se observou e mediu.</p>
+  <div class="meta">
+    <span class="tag">Marina · designer</span><span class="tag">Diego · dev front-end</span><span class="tag">Carla · produção de agência</span><span class="tag">peso igual</span><span class="tag">17 hipóteses</span><span class="tag">28 problemas consolidados</span>
+  </div>
+  <p class="note"><b>Limite honesto.</b> Quem avaliou foi uma IA interpretando as personas. Resultados, becos sem saída, falhas silenciosas, fidelidade, código e latência são dados. SEQ e SUS são aproximações. Uma persona simulada não "passeia" com o mouse, então a dificuldade aparece como erro e beco, não como gesto a mais. O próximo passo é o mesmo roteiro com 3 a 5 pessoas reais.</p>
+</header>
+
+<section>
+  <span class="eyebrow">Veredito</span>
+  <p class="verdict">Tudo foi construído: uma landing page próxima do layout, um sistema de variáveis, classe e componente, uma página feita só no teclado, um rebrand, duas páginas de unidade e um catálogo de 12 itens. Mas <strong>todas as personas precisaram de atalhos e contornos</strong>, e <strong>duas funções falharam em silêncio</strong>: a pessoa não viu nada, só o registro interno do editor sabia. O produto entrega o resultado; o caminho até ele ainda não passa confiança (SUS ≈ 45, faixa "fraco").</p>
+</section>
+
+<section>
+  <h2>Placar por persona</h2>
+  <div class="personas">
+    <article class="persona">
+      <div><h3>Marina</h3><div class="role">Designer freelancer, vem do Figma</div></div>
+      <div class="bar" role="img" aria-label="Conclusão 100%"><span style="width:100%"></span></div>
+      <dl class="kv"><dt>Conclusão</dt><dd>100 %</dd><dt>Feitas / parciais</dt><dd>5 / 0</dd><dt>Becos sem saída</dt><dd>10</dd><dt>Falhas silenciosas</dt><dd>0</dd><dt>SEQ médio (IA)</dt><dd>4,0 / 7</dd><dt>SUS (aprox. IA)</dt><dd>45</dd></dl>
+    </article>
+    <article class="persona">
+      <div><h3>Diego</h3><div class="role">Dev front-end de agência</div></div>
+      <div class="bar" role="img" aria-label="Conclusão 90%"><span style="width:90%"></span></div>
+      <dl class="kv"><dt>Conclusão</dt><dd>90 %</dd><dt>Feitas / parciais</dt><dd>4 / 1</dd><dt>Becos sem saída</dt><dd>6</dd><dt>Falhas silenciosas</dt><dd>4</dd><dt>SEQ médio (IA)</dt><dd>3,4 / 7</dd><dt>SUS (aprox. IA)</dt><dd>47,5</dd></dl>
+    </article>
+    <article class="persona">
+      <div><h3>Carla</h3><div class="role">Produção: mantém 10 sites parecidos</div></div>
+      <div class="bar" role="img" aria-label="Conclusão 90%"><span style="width:90%"></span></div>
+      <dl class="kv"><dt>Conclusão</dt><dd>90 %</dd><dt>Feitas / parciais</dt><dd>4 / 1</dd><dt>Becos sem saída</dt><dd>4</dd><dt>Falhas silenciosas</dt><dd>4</dd><dt>SEQ médio (IA)</dt><dd>3,0 / 7</dd><dt>SUS (aprox. IA)</dt><dd>37,5</dd></dl>
+    </article>
+  </div>
+  <p class="muted">Fidelidade da página da Marina ao layout dela: <b>86 % dos pixels iguais</b> na área comum a 1440 px (80,6 % contando a diferença de altura); 77 % no tablet e 72 % no celular. Código exportado: semântico e sem estilo inline, mas o CSS tem <b>4,9× o tamanho</b> do equivalente escrito à mão.</p>
+</section>
+
+<section>
+  <h2>As 15 tarefas</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>Tarefa</th><th>Resultado</th><th>Becos</th><th>Falhas silenciosas</th><th>Mudanças</th><th>SEQ</th><th>O que pesou</th></tr></thead>
+    <tbody>
+      <tr><td>M1 primeiro contato</td><td><span class="pill ok">feita</span></td><td class="n">2</td><td class="n">0</td><td class="n">4</td><td class="n">5</td><td>Busca exige acento; "texto" inseriu um campo de formulário</td></tr>
+      <tr><td>M2 página no desktop</td><td><span class="pill ok">feita</span></td><td class="n">4</td><td class="n">0</td><td class="n">150</td><td class="n">3</td><td>21 min, campo a campo; espaços somem no botão; campos espremidos</td></tr>
+      <tr><td>M3 tablet e celular</td><td><span class="pill ok">feita</span></td><td class="n">2</td><td class="n">0</td><td class="n">36</td><td class="n">4</td><td>24 edições repetidas de padding; grade mostra "0 trilhas"</td></tr>
+      <tr><td>M4 fonte e imagens</td><td><span class="pill ok">feita</span></td><td class="n">2</td><td class="n">0</td><td class="n">15</td><td class="n">3</td><td>Fonte enviada não aparece; letras viraram atalhos de estrutura</td></tr>
+      <tr><td>M5 prévia e entrega</td><td><span class="pill ok">feita</span></td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">5</td><td>Rápido, mas sem como mostrar ao cliente</td></tr>
+      <tr><td>D1 variáveis e classes</td><td><span class="pill ok">feita</span></td><td class="n">3</td><td class="n">4</td><td class="n">—</td><td class="n">2</td><td>Só digitando var(--…); var() na borda falhou em silêncio; Camadas presas flutuando</td></tr>
+      <tr><td>D2 componente ×6</td><td><span class="pill ok">feita</span></td><td class="n">0</td><td class="n">0</td><td class="n">13</td><td class="n">6</td><td>Melhor momento do estudo</td></tr>
+      <tr><td>D3 importar HTML</td><td><span class="pill part">parcial</span></td><td class="n">1</td><td class="n">0</td><td class="n">2</td><td class="n">3</td><td>Importar substitui o projeto inteiro</td></tr>
+      <tr><td>D4 só teclado</td><td><span class="pill ok">feita</span></td><td class="n">2</td><td class="n">0</td><td class="n">6</td><td class="n">3</td><td>Canvas e Camadas inalcançáveis; só com Ctrl+A</td></tr>
+      <tr><td>D5 code review</td><td><span class="pill ok">feita</span></td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">3</td><td>CSS 5× maior, 39 regras duplicadas, nomes numerados</td></tr>
+      <tr><td>C1 rebrand</td><td><span class="pill ok">feita</span></td><td class="n">1</td><td class="n">0</td><td class="n">4</td><td class="n">2</td><td>7 edições, nenhuma troca global</td></tr>
+      <tr><td>C2 páginas a partir de outra</td><td><span class="pill ok">feita</span></td><td class="n">0</td><td class="n">0</td><td class="n">6</td><td class="n">4</td><td>Duplicar não abre a cópia</td></tr>
+      <tr><td>C3 menu em todas</td><td><span class="pill ok">feita</span></td><td class="n">1</td><td class="n">0</td><td class="n">9</td><td class="n">2</td><td>Sem cabeçalho compartilhado: 3 vezes o mesmo trabalho</td></tr>
+      <tr><td>C4 catálogo da planilha</td><td><span class="pill part">parcial</span></td><td class="n">2</td><td class="n">4</td><td class="n">15</td><td class="n">2</td><td>CSV recusado; preenchimento falhou em silêncio</td></tr>
+      <tr><td>C5 recarregar no meio</td><td><span class="pill ok">feita</span></td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">5</td><td>Tudo confirmado voltou; só o texto em digitação sumiu</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>Hipóteses</h2>
+  <p class="muted">Limites fixados antes das sessões. 5 se confirmaram (2 com ressalva), 4 parcialmente, 8 caíram.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>#</th><th>Hipótese</th><th>Veredito</th><th>O número</th></tr></thead>
+    <tbody>
+      <tr><td>H1</td><td>Iniciante chega a título+texto+botão em ≤5 min, ≤1 beco</td><td><span class="pill bad">caiu</span></td><td>1,5 min, mas 2 becos</td></tr>
+      <tr><td>H2</td><td>Página no desktop ≥85 % fiel, ≤45 min</td><td><span class="pill part">parcial</span></td><td>21 min; 86,2 % / 80,6 %</td></tr>
+      <tr><td>H3</td><td>Tablet e celular ≤15 min, ≥80 %</td><td><span class="pill bad">caiu</span></td><td>5 min; 77 % e 72 %</td></tr>
+      <tr><td>H4</td><td>Fonte e imagens sem sair do app, ≤8 min</td><td><span class="pill ok">ok, com acidente</span></td><td>3,4 min; fonte não listada</td></tr>
+      <tr><td>H5</td><td>Prévia e export para o cliente em 1 min</td><td><span class="pill part">parcial</span></td><td>11 s; sem compartilhar</td></tr>
+      <tr><td>H6</td><td>Cores e espaços nomeados uma vez</td><td><span class="pill ok">ok</span></td><td>11 variáveis, .card no CSS</td></tr>
+      <tr><td>H7</td><td>Componente ×6 muda tudo de um lugar</td><td><span class="pill ok">ok</span></td><td>2 min</td></tr>
+      <tr><td>H8</td><td>HTML existente importado e editável</td><td><span class="pill part">parcial</span></td><td>35 elementos; troca o projeto</td></tr>
+      <tr><td>H9</td><td>Página só no teclado</td><td><span class="pill ok">ok, por pouco</span></td><td>0 gestos de mouse, via Ctrl+A</td></tr>
+      <tr><td>H10</td><td>Export aceito por dev (CSS ≤2×)</td><td><span class="pill bad">caiu</span></td><td>4,9×</td></tr>
+      <tr><td>H11</td><td>Cor da marca no site em ≤3 ações</td><td><span class="pill bad">caiu</span></td><td>7 edições</td></tr>
+      <tr><td>H12</td><td>Páginas a partir de outra ≤1 min cada</td><td><span class="pill ok">ok</span></td><td>2 em 71 s</td></tr>
+      <tr><td>H13</td><td>Menu muda uma vez para todas</td><td><span class="pill bad">caiu</span></td><td>3 + 3 edições</td></tr>
+      <tr><td>H14</td><td>Catálogo de 12 da planilha ≤5 min</td><td><span class="pill bad">caiu</span></td><td>parcial, falha silenciosa</td></tr>
+      <tr><td>H15</td><td>Nada se perde ao recarregar</td><td><span class="pill part">parcial</span></td><td>só o texto em digitação</td></tr>
+      <tr><td>H16</td><td>p95 ≤100 ms com 300+ elementos</td><td><span class="pill bad">caiu</span></td><td>p50 90 ms, p95 287 ms (641 nós)</td></tr>
+      <tr><td>H17</td><td>Canvas ≥50 % em 1280×720</td><td><span class="pill bad">caiu</span></td><td>45 %</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>Problemas, do mais grave</h2>
+  <p class="muted">28 consolidados de 66 registros brutos. A faixa de cor é a gravidade (Nielsen 0–4).</p>
+  <div class="issues">
+    <div class="issue"><span class="stripe s4"></span><div><span class="id">J1</span><span class="sev">grav. 4</span></div><div><p><b>Falhas silenciosas.</b> O comando gera um estado que o validador recusa: nada é aplicado e a pessoa não vê nada, só "N incidentes" no rodapé. Aconteceu com <code>var(--line)</code> na cor da borda de uma classe e com o Preencher com dados (o nome do produto foi parar no <code>src</code> da foto).</p><div class="seen">D1, C4</div></div></div>
+    <div class="issue"><span class="stripe s4"></span><div><span class="id">J2</span><span class="sev">grav. 4</span></div><div><p><b>Letras digitadas fora de um campo viram atalhos de estrutura.</b> "Grãos de café" pôs uma imagem dentro de uma Grade e de uma Linha; "Cardápio" trocou a vista para Código. Sempre depois de um clique engolido (J8).</p><div class="seen">M4, C4</div></div></div>
+    <div class="issue"><span class="stripe s4"></span><div><span class="id">J3</span><span class="sev">grav. 4</span></div><div><p><b>Importar HTML substitui o projeto inteiro</b>, todas as páginas, enquanto o aviso diz "substituir a página".</p><div class="seen">D3</div></div></div>
+    <div class="issue"><span class="stripe s4"></span><div><span class="id">J4</span><span class="sev">grav. 4</span></div><div><p><b>Espaços somem ao editar o texto de um botão no canvas</b> ("Conhecerosplanos"). Só o campo Texto das Configurações guarda.</p><div class="seen">M2</div></div></div>
+    <div class="issue"><span class="stripe s4"></span><div><span class="id">J5</span><span class="sev">grav. 4</span></div><div><p><b>A vista Estilos não rola</b>: a lista de variáveis passa por baixo das Camadas; os cliques soltam as Camadas como janela flutuante que não move, não fecha e volta após recarregar.</p><div class="seen">D1, D2</div></div></div>
+    <div class="issue"><span class="stripe s3"></span><div><span class="id">J6</span><span class="sev">grav. 3</span></div><div><p><b>Campos numéricos espremidos</b> (0 a 19 px) quando têm valor, unidade e redefinir: o clique abre o menu de unidade e o Enter confirma o valor antigo sem avisar.</p><div class="seen">M2, M3, M4, D1, C1</div></div></div>
+    <div class="issue"><span class="stripe s3"></span><div><span class="id">J7</span><span class="sev">grav. 3</span></div><div><p><b>Ctrl+Z não faz nada</b> depois de confirmar um campo (o foco fica nele), e nada diz isso.</p><div class="seen">M2</div></div></div>
+    <div class="issue"><span class="stripe s3"></span><div><span class="id">J8</span><span class="sev">grav. 3</span></div><div><p><b>Cliques engolidos</b>: o seletor de arquivo fica aberto depois da escolha; o ícone do painel aberto fecha o painel.</p><div class="seen">M4, C2, C3, C4</div></div></div>
+    <div class="issue"><span class="stripe s3"></span><div><span class="id">J9</span><span class="sev">grav. 3</span></div><div><p><b>"Recolher todos os ramos" esvazia as Camadas</b>, a raiz da página inclusive.</p><div class="seen">M3</div></div></div>
+    <div class="issue"><span class="stripe s3"></span><div><span class="id">J10</span><span class="sev">grav. 3</span></div><div><p><b>Editor de grade mostra "0 trilhas"</b> num breakpoint que herda 2; colunas e linhas sem rótulo.</p><div class="seen">M2, M3</div></div></div>
+    <div class="issue"><span class="stripe s3"></span><div><span class="id">J11</span><span class="sev">grav. 3</span></div><div><p><b>Busca do Inserir</b> exige acento, não tem sinônimos e ordena mal ("link" mostra Bloco de link primeiro).</p><div class="seen">M1, C3</div></div></div>
+    <div class="issue"><span class="stripe s3"></span><div><span class="id">J12</span><span class="sev">grav. 3</span></div><div><p><b>O teclado não alcança o canvas nem as Camadas</b>: F6 passa por 7 regiões sem eles; 74 paradas de Tab na paleta.</p><div class="seen">D4, P2</div></div></div>
+    <div class="issue"><span class="stripe s3"></span><div><span class="id">J13</span><span class="sev">grav. 3</span></div><div><p><b>Enviar arquivos recusa .csv/.json</b>; o Preencher mapeia por posição, sem escolher coluna→campo.</p><div class="seen">C4</div></div></div>
+    <div class="issue"><span class="stripe s3"></span><div><span class="id">J14</span><span class="sev">grav. 3</span></div><div><p><b>CSS exportado 5× maior que o escrito à mão</b>: regras duplicadas com nomes numerados e propriedades longas.</p><div class="seen">D5</div></div></div>
+    <div class="issue"><span class="stripe s2"></span><div><span class="id">J15–J27</span><span class="sev">grav. 2</span></div><div><p>Lista de fontes grava texto pela metade e não mostra a fonte enviada; rótulos da seleção cobrem conteúdo; Shift+clique nas Camadas não seleciona intervalo; Raio recusa número puro; inspetor lê valores do canvas com zoom (1,69014 px); duplicar página não abre a cópia; instâncias sem nome de componente; placeholder de imagem com largura enganosa; texto em digitação perdido ao recarregar; 90 ms por gesto em página grande; canvas com 45 % em 1280×720; app abre em inglês com ícones sem rótulo; vínculo do padding mantém estado entre elementos.</p><div class="seen">M1–M4, D2, C2, C3, C5, P1, P3</div></div></div>
+    <div class="issue"><span class="stripe s1"></span><div><span class="id">J28</span><span class="sev">grav. 1</span></div><div><p>Textos e resumos: "Seção colocado", "1 elementos", mensagem que nomeia um elemento numa seleção múltipla, "Sombra: nenhum" com sombra, setas duplas, caminho por cima do botão, nomes de página sobrepostos.</p><div class="seen">vários</div></div></div>
+  </div>
+</section>
+
+<section>
+  <h2>Provas</h2>
+  <div class="gallery">
+    <figure><img src="img/botao-sem-espacos.png" alt="Botão com o texto Conhecerosplanos e aviso de envoltório com jargão" loading="lazy"><figcaption><b>J4 e jargão.</b> O botão diz "Conhecerosplanos"; o aviso fala em "envoltório" e "elemento posicionado".</figcaption></figure>
+    <figure><img src="img/campo-espremido.png" alt="Campo de tamanho da fonte espremido com o menu de unidades aberto" loading="lazy"><figcaption><b>J6.</b> Clicar no número abre o menu de unidades.</figcaption></figure>
+    <figure><img src="img/camadas-flutuando.png" alt="Painel de Camadas flutuando sobre o canvas" loading="lazy"><figcaption><b>J5.</b> As Camadas soltas sobre o canvas, sem fechar nem mover.</figcaption></figure>
+    <figure><img src="img/importar-substitui.png" alt="Projeto com uma página só depois de importar HTML" loading="lazy"><figcaption><b>J3.</b> Depois de importar, sobrou uma página; a Home sumiu.</figcaption></figure>
+    <figure><img src="img/preencher-falha.png" alt="Cartões não preenchidos e rodapé com 4 incidentes" loading="lazy"><figcaption><b>J1.</b> Nada preenchido; só o rodapé avisa "4 incidentes".</figcaption></figure>
+  </div>
+  <figure>
+    <div class="pair"><img src="img/alvo-1440.png" alt="Layout-alvo da Marina a 1440 px" loading="lazy"><img src="img/export-1440.png" alt="Página exportada pela Marina a 1440 px" loading="lazy"></div>
+    <figcaption><b>Fidelidade.</b> À esquerda o layout da cliente (HTML escrito à mão); à direita o export da Marina. 86 % dos pixels iguais na área comum.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>O workspace de hoje dá conta de cada trabalho?</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>Trabalho</th><th>Hoje</th><th>Por quê</th><th>Concorrentes</th></tr></thead>
+    <tbody>
+      <tr><td>Reproduzir o layout do cliente</td><td><span class="pill part">parcial</span></td><td>80–86 % em 21 min, mas campo a campo</td><td>Figma import, layout por IA, bibliotecas de seções</td></tr>
+      <tr><td>Responsivo</td><td><span class="pill part">parcial</span></td><td>abas e selos claros; grade própria engana</td><td>ajuste responsivo por IA, variantes por breakpoint</td></tr>
+      <tr><td>Mostrar ao cliente</td><td><span class="pill bad">não</span></td><td>só um ZIP</td><td>link de prévia e hospedagem</td></tr>
+      <tr><td>Sistema de design</td><td><span class="pill part">parcial</span></td><td>existe e exporta limpo; só digitando var(--…)</td><td>variáveis nos seletores, extrair para classe</td></tr>
+      <tr><td>Trazer páginas existentes</td><td><span class="pill bad">não</span></td><td>importar troca o projeto</td><td>Pinegrow: ida e volta real</td></tr>
+      <tr><td>Código para code review</td><td><span class="pill part">parcial</span></td><td>semântico, sem inline; CSS 5×</td><td>à frente de Webflow, Framer e Figma Sites em limpeza</td></tr>
+      <tr><td>Trocar a marca no site</td><td><span class="pill bad">não</span></td><td>7 edições manuais</td><td>variáveis globais</td></tr>
+      <tr><td>Um menu para todas as páginas</td><td><span class="pill bad">não</span></td><td>sem cabeçalho compartilhado</td><td>símbolos globais, layouts mestre</td></tr>
+      <tr><td>Conteúdo de planilha</td><td><span class="pill part">parcial</span></td><td>só depois de reformatar; falha silenciosa</td><td>CMS, datasets, tags dinâmicas</td></tr>
+      <tr><td>Páginas a partir de outra</td><td><span class="pill ok">sim</span></td><td>71 s para duas</td><td>—</td></tr>
+      <tr><td>Nunca perder trabalho</td><td><span class="pill ok">sim</span></td><td>tudo confirmado volta, até a seleção</td><td>—</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>Inovação: o que os atritos pediram</h2>
+  <p class="muted">32 momentos de "queria que existisse", agrupados e pontuados por frequência × dor × viabilidade nesta arquitetura (1–5 cada, máximo 125).</p>
+  <div class="chart">
+    <svg viewBox="0 0 640 230" role="img" aria-label="Pontuação das oportunidades">
+      <g>
+        <text x="0" y="22">A. Sistema de design que se monta sozinho</text><rect x="300" y="10" width="300" height="16" rx="3" fill="var(--accent)"/><text class="lbl" x="606" y="23">125</text>
+        <text x="0" y="58">B. Agente que opera o editor pelo manifest</text><rect x="300" y="46" width="240" height="16" rx="3" fill="var(--accent)"/><text class="lbl" x="546" y="59">100</text>
+        <text x="0" y="94">C. Dados para páginas (planilha → N páginas)</text><rect x="300" y="82" width="144" height="16" rx="3" fill="var(--accent)"/><text class="lbl" x="450" y="95">60</text>
+        <text x="0" y="130">D. Cabeçalho e rodapé compartilhados</text><rect x="300" y="118" width="77" height="16" rx="3" fill="var(--muted)"/><text class="lbl" x="383" y="131">32</text>
+        <text x="0" y="166">E. Link de prévia para o cliente</text><rect x="300" y="154" width="58" height="16" rx="3" fill="var(--muted)"/><text class="lbl" x="364" y="167">24</text>
+        <text x="0" y="202">F. Layout a partir de imagem ou Figma</text><rect x="300" y="190" width="38" height="16" rx="3" fill="var(--muted)"/><text class="lbl" x="344" y="203">16</text>
+      </g>
+    </svg>
+  </div>
+  <div class="bets">
+    <article class="bet"><span class="score">Aposta A · 125</span><h3>Um sistema de design que se monta sozinho</h3><p>Detectar repetição e oferecer "virar estilo" (todas as seções com o mesmo padding viram uma classe), trocar uma cor no site todo, variáveis em todo seletor, extrair para classe, digitar "14 28" num campo, export que funde duplicatas.</p><ul><li>C1: de 7 edições para 1</li><li>M3: de 24 edições para ≤6</li><li>D5: CSS de 4,9× para ≤2×</li></ul></article>
+    <article class="bet"><span class="score">Aposta B · 100</span><h3>Um agente que opera o editor pelo manifest</h3><p>"Deixa o destaque em duas colunas", "aplica a marca", "preenche estes cartões com esta planilha". Cada passo é um comando validado e desfazível, então falha silenciosa deixa de existir por construção. Nenhum concorrente oferece isso local e com o modelo que a pessoa escolher.</p><ul><li>M2: de 21 min para ≤8 min</li><li>0 falhas silenciosas</li><li>C4 feita sem reformatar a planilha</li></ul></article>
+    <article class="bet"><span class="score">Aposta C · 60</span><h3>Dados para páginas</h3><p>Enviar CSV/XLSX pelo botão, mapear coluna→campo visualmente, gerar N páginas de um modelo (unidades, cardápios, catálogos), fotos achadas pelo nome.</p><ul><li>C4: de parcial para feita em ≤3 min com o CSV original</li><li>Páginas de unidade geradas das linhas</li></ul></article>
+  </div>
+</section>
+
+<section>
+  <h2>Backlog priorizado</h2>
+  <div class="cols">
+    <div><h3>10 correções de maior impacto</h3>
+      <ol class="list">
+        <li>Nunca falhar em silêncio (J1)</li>
+        <li>Letra após clique engolido não roda atalho (J2)</li>
+        <li>Importar HTML como nova página (J3)</li>
+        <li>Espaços no texto do botão (J4)</li>
+        <li>Vista Estilos rola; painel flutuante move, fecha e encaixa (J5)</li>
+        <li>Campos numéricos com largura mínima (J6)</li>
+        <li>Ctrl+Z depois de confirmar um campo (J7)</li>
+        <li>Seletores fecham após a escolha; ícone não fecha o painel (J8)</li>
+        <li>Grade mostra trilhas herdadas; "recolher" mantém a raiz (J9, J10)</li>
+        <li>Busca sem acento e com sinônimos (J11)</li>
+      </ol>
+    </div>
+    <div><h3>5 lacunas de recurso</h3>
+      <ul class="list">
+        <li>Boas-vindas e modelos de seção com miniatura</li>
+        <li>Troca global de cor/estilo e variáveis nos seletores</li>
+        <li>Cabeçalho e rodapé compartilhados</li>
+        <li>Envio de CSV/JSON com mapeamento de colunas</li>
+        <li>Compartilhar a prévia com o cliente</li>
+      </ul>
+      <h3 style="margin-top:18px">Depois</h3>
+      <p>O mesmo roteiro com 3 a 5 profissionais (pelo menos um de cada persona), 60 minutos cada, pensando em voz alta. O placar acima é a régua.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Como foi medido</h2>
+  <ul class="list">
+    <li>Um driver mantém um Chrome por persona e recebe um gesto por vez; uma sonda na página mede latência entrada→quadro, mensagens, erros e incidentes. Tudo em <code>jornada03/</code> no repositório.</li>
+    <li>Linha de base de especialista calibrada só nas execuções verificadas: 2,5 gestos de ponteiro e 12,1 teclas por mudança confirmada. A execução especialista de C2 foi inválida e ficou de fora.</li>
+    <li>O relógio inclui o tempo de pensar do avaliador; a eficiência usa o modelo de teclas (KLM). Ela fica perto de 1 na maioria das tarefas e sobe só onde a função falhou (C4 3,1, D3 2,7).</li>
+    <li>Falhas do instrumento, anotadas e fora do julgamento das personas: acento na linha de comando (M1), mira errada dos ajudantes (M2, M3) e um recarregamento sem causa achada que esvaziou o registro da D1.</li>
+  </ul>
+</section>
+
+</div>

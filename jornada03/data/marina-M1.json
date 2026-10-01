@@ -1,0 +1,121 @@
+{
+  "id": "marina-M1",
+  "persona": "marina",
+  "result": "done",
+  "seconds": 147,
+  "limitSeconds": 360,
+  "gestures": {
+    "click": 12,
+    "move": 2,
+    "keys": 57
+  },
+  "gestureTotal": 69,
+  "mouseTravelPx": 3489,
+  "undos": 1,
+  "refusals": [],
+  "messages": [
+    "Idioma: Português (Brasil).",
+    "Painel Elementos aberto.",
+    "Seção colocado em Page, posição 1 de 1.",
+    "Título colocado em Seção, posição 1 de 1.",
+    "Campo colocado em Seção, posição 2 de 2.",
+    "Desfeito: Campo colocado em Seção, posição 2 de 2.",
+    "Parágrafo colocado em Seção, posição 2 de 2.",
+    "Botão colocado em Seção, posição 3 de 3."
+  ],
+  "consoleErrors": [],
+  "incidents": 0,
+  "latencyMs": {
+    "n": 71,
+    "p50": 26.5,
+    "p95": 174.3,
+    "max": 294.7
+  },
+  "historyAtStart": {
+    "undoSteps": 0,
+    "redoSteps": 0
+  },
+  "historyAtEnd": {
+    "undoSteps": 4,
+    "redoSteps": 0
+  },
+  "downloads": [],
+  "uploads": [],
+  "seq": 5,
+  "feel": [
+    "Abriu em inglês e com um explorador de arquivos (css, js, index.html gerado): parece ferramenta de dev, não de design.",
+    "Não há boas-vindas nem um ponto de partida (modelo, página em branco com sugestões).",
+    "Os 3 ícones da barra lateral não têm rótulo nem dica imediata; achei o + por intuição.",
+    "A busca não perdoa: \"titulo\" sem acento não acha nada; \"texto\" me deu um campo de formulário em vez de um parágrafo.",
+    "Depois de achar as peças, clicar insere na ordem certa e rápido; gostei do status dizendo onde colocou."
+  ],
+  "wish": [
+    "Começar de um modelo de página (landing, portfólio) ou de uma seção pronta já estilizada.",
+    "Busca que entende sinônimos e ignora acento (texto → parágrafo, titulo → título)."
+  ],
+  "deadEnds": [
+    {
+      "what": "buscar \"titulo\" sem acento",
+      "tried": "busca do painel Inserir",
+      "outcome": "nenhum resultado"
+    },
+    {
+      "what": "buscar \"texto\" para um parágrafo",
+      "tried": "cliquei em Texto",
+      "outcome": "inseriu um campo de formulário; desfiz"
+    }
+  ],
+  "issues": [
+    {
+      "kind": "usability",
+      "sev": 3,
+      "heuristic": "H2 match with the real world",
+      "what": "Insert search is accent-sensitive and has no synonyms: titulo finds nothing; texto finds only form fields",
+      "evidence": "shots 006, 011"
+    },
+    {
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H6 recognition",
+      "what": "App opens in English for a pt-BR browser; language only from the status bar",
+      "evidence": "shot 001"
+    },
+    {
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H6 recognition",
+      "what": "Left rail icons unlabelled; first view is a file Explorer, not the elements",
+      "evidence": "shot 001"
+    },
+    {
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H4 consistency",
+      "what": "Panel named INSERIR but status/hint call it Elementos",
+      "evidence": "shot 005"
+    },
+    {
+      "kind": "visual",
+      "sev": 1,
+      "heuristic": "H8 aesthetic",
+      "what": "pt-BR copy: Seção colocado (gender); root still Page and page Home untranslated",
+      "evidence": "shot 006"
+    },
+    {
+      "kind": "visual",
+      "sev": 1,
+      "heuristic": "H8 aesthetic",
+      "what": "Two size chips overlap under the selected button (element chip over parent size)",
+      "evidence": "shot 016"
+    },
+    {
+      "kind": "missing",
+      "sev": 3,
+      "heuristic": "H10 help",
+      "what": "No onboarding: no start screen, templates gallery or first-steps guide",
+      "evidence": "shot 001"
+    }
+  ],
+  "notes": "~55 s of the clock were instrument debugging (accent encoding of the driver client); subtract when comparing.",
+  "shots": "jornada03\\shots\\marina-M1"
+}

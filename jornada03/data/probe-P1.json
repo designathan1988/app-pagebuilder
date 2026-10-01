@@ -1,0 +1,85 @@
+{
+  "id": "probe-P1",
+  "persona": "probe",
+  "result": "done",
+  "seconds": 37,
+  "limitSeconds": 600,
+  "gestures": {
+    "click": 15,
+    "dblclick": 1,
+    "keys": 37,
+    "wheel": 2,
+    "drag": 1
+  },
+  "gestureTotal": 56,
+  "mouseTravelPx": 3780,
+  "undos": 5,
+  "refusals": [],
+  "messages": [
+    "Opened the project.",
+    "Section 0 selected.",
+    "P 0-0 selected.",
+    "Card 0-0 selected.",
+    "Section 1 selected.",
+    "Card 1-1 selected.",
+    "P 1-1 selected.",
+    "Section 1 selected.",
+    "H 2 selected.",
+    "T 2-1 selected.",
+    "Card 2-1 selected.",
+    "H 0 selected.",
+    "Editing text — Enter, Escape or a click away keeps it; Ctrl+Z takes it back.",
+    "Saved the text of H 0.",
+    "T 0-0 selected.",
+    "Font size of T 0-0: 28px.",
+    "Intro 0 selected.",
+    "Between H 0 and Grid 0 · Page › Section 0",
+    "Between Card 0-0 and Card 0-1 · Page › Section 0 › Grid 0",
+    "Before T 0-1 · … › Section 0 › Grid 0 › Card 0-1",
+    "Between H 0 and Grid 0 · Page › Section 0",
+    "Before T 0-2 · … › Section 0 › Grid 0 › Card 0-2",
+    "Moved Intro 0 into Card 0-2, position 1 of 4.",
+    "Section 0 selected.",
+    "Undone: Moved Intro 0 into Card 0-2, position 1 of 4.",
+    "Undone: Font size of T 0-0: 28px.",
+    "Undone: Saved the text of H 0.",
+    "Nothing to undo."
+  ],
+  "consoleErrors": [],
+  "incidents": 0,
+  "reloadsDuringTask": 0,
+  "incidentsSeen": [],
+  "latencyMs": {
+    "n": 33,
+    "p50": 90.1,
+    "p95": 286.6,
+    "max": 311.6
+  },
+  "historyAtStart": {
+    "undoSteps": 0,
+    "redoSteps": 0
+  },
+  "historyAtEnd": {
+    "undoSteps": 0,
+    "redoSteps": 3
+  },
+  "downloads": [],
+  "uploads": [
+    "C:/Codex-Shared/deepseek/builder-6/jornada03/00-frame/targets/probe-large.json"
+  ],
+  "seq": null,
+  "feel": [],
+  "wish": [],
+  "deadEnds": [],
+  "issues": [
+    {
+      "kind": "performance",
+      "sev": 2,
+      "heuristic": "H1 visibility",
+      "what": "On a 641-node page the input-to-frame latency p50 is 90 ms (3x the small page) and p95 287 ms",
+      "evidence": "probe-P1 latency"
+    }
+  ],
+  "notes": "641-node page (40 sections x grid of 3 cards). Open 964 ms. 10 selections, 1 text edit, 1 style change, 1 drag, 5 undos.",
+  "shots": "jornada03\\shots\\probe-P1"
+}

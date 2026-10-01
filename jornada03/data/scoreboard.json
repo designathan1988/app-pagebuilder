@@ -1,0 +1,1131 @@
+{
+  "method": {
+    "klm": "1.3 s per pointer gesture, 0.28 s per keystroke",
+    "expertRate": {
+      "pointer": 2.5098039215686274,
+      "keys": 12.117647058823529,
+      "runs": [
+        "expert-C1",
+        "expert-D2",
+        "expert-D4",
+        "expert-M1",
+        "expert-M2"
+      ],
+      "commits": 51
+    },
+    "refusalPattern": "/refused|recusad|cannot|não pode|not a value|não é um valor|nothing matches|nenhum elemento corresponde|não é um arquivo|needs a single|select an element first|selecione um elemento/i"
+  },
+  "rows": [
+    {
+      "id": "carla-C1",
+      "persona": "carla",
+      "result": "done",
+      "wallSeconds": 58,
+      "pointer": 18,
+      "keys": 41,
+      "committed": 4,
+      "undos": 0,
+      "refusals": 0,
+      "deadEnds": 1,
+      "incidents": 0,
+      "latencyP50": 31.3,
+      "latencyP95": 239.9,
+      "seq": 2,
+      "issues": 2,
+      "wishes": 2,
+      "klmSeconds": 34.9,
+      "expertKlmSeconds": 26.4,
+      "efficiency": 1.3,
+      "pointerRatio": 1.8
+    },
+    {
+      "id": "carla-C2",
+      "persona": "carla",
+      "result": "done",
+      "wallSeconds": 71,
+      "pointer": 13,
+      "keys": 167,
+      "committed": 6,
+      "undos": 0,
+      "refusals": 0,
+      "deadEnds": 0,
+      "incidents": 0,
+      "latencyP50": 26.4,
+      "latencyP95": 394.8,
+      "seq": 4,
+      "issues": 2,
+      "wishes": 2,
+      "klmSeconds": 63.7,
+      "expertKlmSeconds": 39.9,
+      "efficiency": 1.6,
+      "pointerRatio": 0.9
+    },
+    {
+      "id": "carla-C3",
+      "persona": "carla",
+      "result": "done",
+      "wallSeconds": 109,
+      "pointer": 75,
+      "keys": 68,
+      "committed": 9,
+      "undos": 3,
+      "refusals": 0,
+      "deadEnds": 1,
+      "incidents": 0,
+      "latencyP50": 70.7,
+      "latencyP95": 435.1,
+      "seq": 2,
+      "issues": 3,
+      "wishes": 2,
+      "klmSeconds": 116.5,
+      "expertKlmSeconds": 60.4,
+      "efficiency": 1.9,
+      "pointerRatio": 3.3
+    },
+    {
+      "id": "carla-C4",
+      "persona": "carla",
+      "result": "partial",
+      "wallSeconds": 245,
+      "pointer": 40,
+      "keys": 940,
+      "committed": 15,
+      "undos": 0,
+      "refusals": 1,
+      "deadEnds": 2,
+      "incidents": 4,
+      "latencyP50": 25.4,
+      "latencyP95": 34.1,
+      "seq": 2,
+      "issues": 4,
+      "wishes": 2,
+      "klmSeconds": 315.2,
+      "expertKlmSeconds": 100.4,
+      "efficiency": 3.1,
+      "pointerRatio": 1.1
+    },
+    {
+      "id": "carla-C5",
+      "persona": "carla",
+      "result": "done",
+      "wallSeconds": 20,
+      "pointer": 1,
+      "keys": 10,
+      "committed": 0,
+      "undos": 0,
+      "refusals": 0,
+      "deadEnds": 0,
+      "incidents": 0,
+      "latencyP50": 1106.3,
+      "latencyP95": 1106.3,
+      "seq": 5,
+      "issues": 1,
+      "wishes": 1,
+      "klmSeconds": 4.1,
+      "expertKlmSeconds": null,
+      "efficiency": null,
+      "pointerRatio": null
+    },
+    {
+      "id": "diego-D1",
+      "persona": "diego",
+      "result": "done",
+      "wallSeconds": 381,
+      "pointer": 128,
+      "keys": 355,
+      "committed": null,
+      "undos": 0,
+      "refusals": 0,
+      "deadEnds": 3,
+      "incidents": 4,
+      "latencyP50": null,
+      "latencyP95": null,
+      "seq": 2,
+      "issues": 7,
+      "wishes": 3,
+      "klmSeconds": 265.8,
+      "expertKlmSeconds": null,
+      "efficiency": null,
+      "pointerRatio": null
+    },
+    {
+      "id": "diego-D2",
+      "persona": "diego",
+      "result": "done",
+      "wallSeconds": 108,
+      "pointer": 34,
+      "keys": 195,
+      "committed": 13,
+      "undos": 2,
+      "refusals": 0,
+      "deadEnds": 0,
+      "incidents": 0,
+      "latencyP50": 31.2,
+      "latencyP95": 263.5,
+      "seq": 6,
+      "issues": 2,
+      "wishes": 2,
+      "klmSeconds": 98.8,
+      "expertKlmSeconds": 87.1,
+      "efficiency": 1.1,
+      "pointerRatio": 1
+    },
+    {
+      "id": "diego-D3",
+      "persona": "diego",
+      "result": "partial",
+      "wallSeconds": 77,
+      "pointer": 16,
+      "keys": 53,
+      "committed": 2,
+      "undos": 4,
+      "refusals": 0,
+      "deadEnds": 1,
+      "incidents": 0,
+      "latencyP50": 49.1,
+      "latencyP95": 259.6,
+      "seq": 3,
+      "issues": 3,
+      "wishes": 2,
+      "klmSeconds": 35.6,
+      "expertKlmSeconds": 13.2,
+      "efficiency": 2.7,
+      "pointerRatio": 3.2
+    },
+    {
+      "id": "diego-D4",
+      "persona": "diego",
+      "result": "done",
+      "wallSeconds": 134,
+      "pointer": 0,
+      "keys": 185,
+      "committed": 6,
+      "undos": 6,
+      "refusals": 2,
+      "deadEnds": 2,
+      "incidents": 0,
+      "latencyP50": 54,
+      "latencyP95": 219.2,
+      "seq": 3,
+      "issues": 2,
+      "wishes": 2,
+      "klmSeconds": 51.8,
+      "expertKlmSeconds": 39.9,
+      "efficiency": 1.3,
+      "pointerRatio": 0
+    },
+    {
+      "id": "diego-D5",
+      "persona": "diego",
+      "result": "done",
+      "wallSeconds": 28,
+      "pointer": 1,
+      "keys": 0,
+      "committed": 0,
+      "undos": 0,
+      "refusals": 0,
+      "deadEnds": 0,
+      "incidents": 0,
+      "latencyP50": 73.4,
+      "latencyP95": 73.4,
+      "seq": 3,
+      "issues": 3,
+      "wishes": 2,
+      "klmSeconds": 1.3,
+      "expertKlmSeconds": null,
+      "efficiency": null,
+      "pointerRatio": null
+    },
+    {
+      "id": "marina-M1",
+      "persona": "marina",
+      "result": "done",
+      "wallSeconds": 147,
+      "pointer": 12,
+      "keys": 57,
+      "committed": 4,
+      "undos": 1,
+      "refusals": 0,
+      "deadEnds": 2,
+      "incidents": 0,
+      "latencyP50": 26.5,
+      "latencyP95": 174.3,
+      "seq": 5,
+      "issues": 7,
+      "wishes": 2,
+      "klmSeconds": 31.6,
+      "expertKlmSeconds": 26.4,
+      "efficiency": 1.2,
+      "pointerRatio": 1.2
+    },
+    {
+      "id": "marina-M2",
+      "persona": "marina",
+      "result": "done",
+      "wallSeconds": 1245,
+      "pointer": 353,
+      "keys": 1545,
+      "committed": 150,
+      "undos": 6,
+      "refusals": 2,
+      "deadEnds": 4,
+      "incidents": 0,
+      "latencyP50": 30.5,
+      "latencyP95": 242.4,
+      "seq": 3,
+      "issues": 15,
+      "wishes": 4,
+      "klmSeconds": 891.5,
+      "expertKlmSeconds": 997.8,
+      "efficiency": 0.9,
+      "pointerRatio": 0.9
+    },
+    {
+      "id": "marina-M3",
+      "persona": "marina",
+      "result": "done",
+      "wallSeconds": 315,
+      "pointer": 221,
+      "keys": 170,
+      "committed": 36,
+      "undos": 6,
+      "refusals": 0,
+      "deadEnds": 2,
+      "incidents": 0,
+      "latencyP50": 31.2,
+      "latencyP95": 223.3,
+      "seq": 4,
+      "issues": 3,
+      "wishes": 2,
+      "klmSeconds": 334.9,
+      "expertKlmSeconds": 239.1,
+      "efficiency": 1.4,
+      "pointerRatio": 2.5
+    },
+    {
+      "id": "marina-M4",
+      "persona": "marina",
+      "result": "done",
+      "wallSeconds": 205,
+      "pointer": 72,
+      "keys": 200,
+      "committed": 15,
+      "undos": 5,
+      "refusals": 0,
+      "deadEnds": 2,
+      "incidents": 0,
+      "latencyP50": 29.2,
+      "latencyP95": 162.9,
+      "seq": 3,
+      "issues": 8,
+      "wishes": 3,
+      "klmSeconds": 149.6,
+      "expertKlmSeconds": 100.4,
+      "efficiency": 1.5,
+      "pointerRatio": 1.9
+    },
+    {
+      "id": "marina-M5",
+      "persona": "marina",
+      "result": "done",
+      "wallSeconds": 11,
+      "pointer": 2,
+      "keys": 1,
+      "committed": 0,
+      "undos": 0,
+      "refusals": 0,
+      "deadEnds": 0,
+      "incidents": 0,
+      "latencyP50": 204.7,
+      "latencyP95": 240.6,
+      "seq": 5,
+      "issues": 1,
+      "wishes": 1,
+      "klmSeconds": 2.9,
+      "expertKlmSeconds": null,
+      "efficiency": null,
+      "pointerRatio": null
+    }
+  ],
+  "byPersona": {
+    "marina": {
+      "tasks": 5,
+      "done": 5,
+      "partial": 0,
+      "abandoned": 0,
+      "completion": 100,
+      "meanSeq": 4,
+      "deadEnds": 10,
+      "incidents": 0,
+      "medianEfficiency": 1.4
+    },
+    "diego": {
+      "tasks": 5,
+      "done": 4,
+      "partial": 1,
+      "abandoned": 0,
+      "completion": 90,
+      "meanSeq": 3.4,
+      "deadEnds": 6,
+      "incidents": 4,
+      "medianEfficiency": 1.3
+    },
+    "carla": {
+      "tasks": 5,
+      "done": 4,
+      "partial": 1,
+      "abandoned": 0,
+      "completion": 90,
+      "meanSeq": 3,
+      "deadEnds": 4,
+      "incidents": 4,
+      "medianEfficiency": 1.9
+    }
+  },
+  "probes": [
+    {
+      "id": "probe-P1",
+      "result": "done",
+      "latency": {
+        "n": 33,
+        "p50": 90.1,
+        "p95": 286.6,
+        "max": 311.6
+      },
+      "notes": "641-node page (40 sections x grid of 3 cards). Open 964 ms. 10 selections, 1 text edit, 1 style change, 1 drag, 5 undos."
+    },
+    {
+      "id": "probe-P2",
+      "result": "done",
+      "latency": {
+        "n": 4,
+        "p50": 32,
+        "p95": 169.8,
+        "max": 169.8
+      },
+      "notes": "Focus ring visible (2px solid #5fe0cf outline). F6 cycles 7 regions: top-bar, activity-bar, panel-header, canvas-breakpoints, tab-strip, inspector-header, status-bar; never the canvas nor the Layers tree. The Insert palette puts each of its 74 tiles in the Tab order. Opening Layers from the command bar drops the focus to the body. Arrows need an existing selection."
+    },
+    {
+      "id": "probe-P3",
+      "result": "done",
+      "latency": {
+        "n": 0,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "notes": "Window 1280x720: canvas region 692x600 = 45% of the window; zoom fits at 48%; no panel clipped."
+    },
+    {
+      "id": "probe-P4",
+      "result": "done",
+      "latency": {
+        "n": 705,
+        "p50": 32.1,
+        "p95": 154.2,
+        "max": 240
+      },
+      "notes": "50 committed font-size changes on a 641-node page; 50 undos restored the original exactly, 50 redos the final state; ~107 ms per step including the driver."
+    }
+  ],
+  "fidelity": {
+    "results": [
+      {
+        "width": 1440,
+        "pixelMatchCommon": 86.2,
+        "pixelMatchAdjusted": 80.6,
+        "exportHeight": 2248,
+        "targetHeight": 2403
+      },
+      {
+        "width": 1180,
+        "pixelMatchCommon": 84.9,
+        "pixelMatchAdjusted": 79.4,
+        "exportHeight": 2272,
+        "targetHeight": 2428
+      },
+      {
+        "width": 834,
+        "pixelMatchCommon": 81,
+        "pixelMatchAdjusted": 77.1,
+        "exportHeight": 3085,
+        "targetHeight": 3240
+      },
+      {
+        "width": 390,
+        "pixelMatchCommon": 75,
+        "pixelMatchAdjusted": 72.2,
+        "exportHeight": 3583,
+        "targetHeight": 3723
+      }
+    ],
+    "htmlErrors": 6,
+    "css": {
+      "bytes": 16733,
+      "lines": 690,
+      "rules": 132,
+      "classes": 53
+    },
+    "inlineStyles": 0
+  },
+  "issuesRaw": [
+    {
+      "task": "carla-C1",
+      "kind": "missing",
+      "sev": 3,
+      "heuristic": "H7 flexibility",
+      "what": "No site-wide colour replace or usage list; a site built with hex values must be recoloured element by element",
+      "evidence": "C1"
+    },
+    {
+      "task": "carla-C1",
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H2 real world",
+      "what": "Command bar property entries are raw English CSS names in the pt-BR UI",
+      "evidence": "shot 002"
+    },
+    {
+      "task": "carla-C2",
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H4 consistency",
+      "what": "Duplicating a page neither opens the copy nor focuses its name (unlike +)",
+      "evidence": "shot 005"
+    },
+    {
+      "task": "carla-C2",
+      "kind": "usability",
+      "sev": 1,
+      "heuristic": "H1 visibility",
+      "what": "The activity bar icon of the open panel closes the side panel; a person reads it as 'open'",
+      "evidence": "shot 003"
+    },
+    {
+      "task": "carla-C3",
+      "kind": "missing",
+      "sev": 3,
+      "heuristic": "H7 flexibility",
+      "what": "No shared header/footer across pages: duplicated pages carry independent copies; a menu change is repeated per page (unless the person knows to make it a component first)",
+      "evidence": "C3"
+    },
+    {
+      "task": "carla-C3",
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H6 recognition",
+      "what": "Insert search 'link' lists 'Bloco de link' (an empty container) before 'Link'",
+      "evidence": "shot after search"
+    },
+    {
+      "task": "carla-C3",
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H4 consistency",
+      "what": "A new element inserted among styled siblings takes none of their look (blue underlined link among muted ones)",
+      "evidence": "shot 046"
+    },
+    {
+      "task": "carla-C4",
+      "kind": "bug",
+      "sev": 4,
+      "heuristic": "H9 error recovery",
+      "what": "Fill from data maps columns by position into slots starting with the image src; a text in src is refused by the validator and the whole fill fails silently (incidents only)",
+      "evidence": "incidents feed: components.fillFromData /attributes/src"
+    },
+    {
+      "task": "carla-C4",
+      "kind": "bug",
+      "sev": 3,
+      "heuristic": "H4 consistency",
+      "what": "'Enviar arquivos' refuses .csv/.json (only images and fonts), though Fill from data needs a project data file",
+      "evidence": "status 'cardapio.csv nao e um arquivo de imagem ou de fonte'"
+    },
+    {
+      "task": "carla-C4",
+      "kind": "missing",
+      "sev": 3,
+      "heuristic": "H6 recognition",
+      "what": "No column-to-field mapping; image values must be project paths (img/x.png)",
+      "evidence": "C4"
+    },
+    {
+      "task": "carla-C4",
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H6 recognition",
+      "what": "The Fill action is an unlabelled icon that appears only on hover of the file row",
+      "evidence": "look titles"
+    },
+    {
+      "task": "carla-C5",
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H5 error prevention",
+      "what": "Text typed in an in-place edit that is not yet confirmed is lost on reload, with no leave-page warning (the guard covers only store changes)",
+      "evidence": "C5: 'Blend da Casa' kept, ' Especial' lost"
+    },
+    {
+      "task": "diego-D1",
+      "kind": "bug",
+      "sev": 4,
+      "heuristic": "H9 error recovery",
+      "what": "Border colour with var(--…) on a class writes the shorthand border-color; the validator refuses the commit (InvalidStateError, incident) and the person sees nothing",
+      "evidence": "incidents feed: style.setBorder /classes/0/styles/desktop/base/border-color"
+    },
+    {
+      "task": "diego-D1",
+      "kind": "bug",
+      "sev": 4,
+      "heuristic": "H3 user control",
+      "what": "The Styles sidebar view does not scroll its own content: the variables list runs under the Layers panel; clicks there close/reopen/float Layers, and the floating Layers window cannot be moved, closed or docked",
+      "evidence": "shots 029, 108, 109"
+    },
+    {
+      "task": "diego-D1",
+      "kind": "missing",
+      "sev": 3,
+      "heuristic": "H6 recognition",
+      "what": "Variables are not offered anywhere (colour picker, fields): only typing var(--name) works",
+      "evidence": "shot 040; 'brand' refused"
+    },
+    {
+      "task": "diego-D1",
+      "kind": "missing",
+      "sev": 3,
+      "heuristic": "H7 flexibility",
+      "what": "No 'extract to class' / 'move styles to class': a class starts empty and the element keeps its styles",
+      "evidence": "shot 051"
+    },
+    {
+      "task": "diego-D1",
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H6 recognition",
+      "what": "Command bar finds nothing for 'class'; its backdrop hides the whole editor",
+      "evidence": "shot 053"
+    },
+    {
+      "task": "diego-D1",
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H2 real world",
+      "what": "Layer names (and so export class names) are fixed in the language of whoever inserted the element",
+      "evidence": "Layers: Barra de navegação, Título"
+    },
+    {
+      "task": "diego-D1",
+      "kind": "visual",
+      "sev": 1,
+      "heuristic": "H1 visibility",
+      "what": "In class mode, sections with only inherited values are collapsed to a summary",
+      "evidence": "shot 082"
+    },
+    {
+      "task": "diego-D2",
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H6 recognition",
+      "what": "Component instances keep generic names (Seção 5…9) with no component badge in Layers/breadcrumb",
+      "evidence": "shot 037"
+    },
+    {
+      "task": "diego-D2",
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H3 user control",
+      "what": "A floating panel state is persisted with the workspace; the only exit is View › Reset workspace (nothing points to it)",
+      "evidence": "shots diego-free open, 002"
+    },
+    {
+      "task": "diego-D3",
+      "kind": "bug",
+      "sev": 4,
+      "heuristic": "H5 error prevention",
+      "what": "File › Import HTML replaces the whole project (every page) while its confirmation says 'Replace the page with the imported HTML?'; the client's other pages vanish",
+      "evidence": "shots 008, 009; pages list"
+    },
+    {
+      "task": "diego-D3",
+      "kind": "missing",
+      "sev": 3,
+      "heuristic": "H7 flexibility",
+      "what": "No way to import an HTML page as a new page of an existing project",
+      "evidence": "D3"
+    },
+    {
+      "task": "diego-D3",
+      "kind": "usability",
+      "sev": 1,
+      "heuristic": "H5 error prevention",
+      "what": "Import asks to replace even an empty page, and renames the page and its file after the imported title",
+      "evidence": "shots 008, 009"
+    },
+    {
+      "task": "diego-D4",
+      "kind": "usability",
+      "sev": 3,
+      "heuristic": "H7 flexibility",
+      "what": "Keyboard users cannot reach the canvas or the Layers tree: F6 cycles 7 regions without them, arrows need a selection, Tab walks every palette tile (no roving focus), opening Layers drops the focus",
+      "evidence": "D4 focus log"
+    },
+    {
+      "task": "diego-D4",
+      "kind": "missing",
+      "sev": 2,
+      "heuristic": "H7 flexibility",
+      "what": "The command bar cannot switch pages or select a layer by name",
+      "evidence": "shot 002"
+    },
+    {
+      "task": "diego-D5",
+      "kind": "poor-feature",
+      "sev": 3,
+      "heuristic": "H8 aesthetic (code)",
+      "what": "Exported CSS is ~5x the hand-written equivalent: 39 of 109 rules duplicate another's body; 310 longhand declarations; numbered generated names",
+      "evidence": "diego-site/css/styles.css vs target"
+    },
+    {
+      "task": "diego-D5",
+      "kind": "poor-feature",
+      "sev": 2,
+      "heuristic": "H2 real world",
+      "what": "Class names come from layer names in the author's language and numbering (secao__titulo-3)",
+      "evidence": "index.html"
+    },
+    {
+      "task": "diego-D5",
+      "kind": "missing",
+      "sev": 2,
+      "heuristic": "H5 error prevention",
+      "what": "No lang, no button type and links without href reach the export; Checks covers href but not lang or type",
+      "evidence": "html-validate 8 errors"
+    },
+    {
+      "task": "marina-M1",
+      "kind": "usability",
+      "sev": 3,
+      "heuristic": "H2 match with the real world",
+      "what": "Insert search is accent-sensitive and has no synonyms: titulo finds nothing; texto finds only form fields",
+      "evidence": "shots 006, 011"
+    },
+    {
+      "task": "marina-M1",
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H6 recognition",
+      "what": "App opens in English for a pt-BR browser; language only from the status bar",
+      "evidence": "shot 001"
+    },
+    {
+      "task": "marina-M1",
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H6 recognition",
+      "what": "Left rail icons unlabelled; first view is a file Explorer, not the elements",
+      "evidence": "shot 001"
+    },
+    {
+      "task": "marina-M1",
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H4 consistency",
+      "what": "Panel named INSERIR but status/hint call it Elementos",
+      "evidence": "shot 005"
+    },
+    {
+      "task": "marina-M1",
+      "kind": "visual",
+      "sev": 1,
+      "heuristic": "H8 aesthetic",
+      "what": "pt-BR copy: Seção colocado (gender); root still Page and page Home untranslated",
+      "evidence": "shot 006"
+    },
+    {
+      "task": "marina-M1",
+      "kind": "visual",
+      "sev": 1,
+      "heuristic": "H8 aesthetic",
+      "what": "Two size chips overlap under the selected button (element chip over parent size)",
+      "evidence": "shot 016"
+    },
+    {
+      "task": "marina-M1",
+      "kind": "missing",
+      "sev": 3,
+      "heuristic": "H10 help",
+      "what": "No onboarding: no start screen, templates gallery or first-steps guide",
+      "evidence": "shot 001"
+    },
+    {
+      "task": "marina-M2",
+      "kind": "bug",
+      "sev": 4,
+      "heuristic": "H5 error prevention",
+      "what": "Typing spaces while editing a button's text in place drops them silently (Conhecer os planos -> Conhecerosplanos)",
+      "evidence": "shots 014; document text"
+    },
+    {
+      "task": "marina-M2",
+      "kind": "bug",
+      "sev": 3,
+      "heuristic": "H3 user control",
+      "what": "Numeric value inputs with a value, a unit and a reset are squeezed (19 px or invisible): clicks land on the unit button and Enter re-commits the old value with no feedback (font size, column gap, radius, height)",
+      "evidence": "shots 037, 063, 183; look boxes w=19"
+    },
+    {
+      "task": "marina-M2",
+      "kind": "bug",
+      "sev": 3,
+      "heuristic": "H3 user control",
+      "what": "After Enter in an inspector field the focus stays there and Ctrl+Z is a silent no-op",
+      "evidence": "messages: no Desfeito until a canvas click"
+    },
+    {
+      "task": "marina-M2",
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H4 consistency",
+      "what": "Radius refuses bare numbers (24, 999) that every other length field accepts",
+      "evidence": "refusal messages"
+    },
+    {
+      "task": "marina-M2",
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H4 consistency",
+      "what": "Shift+click in Layers adds one row instead of selecting the range",
+      "evidence": "shot 014 '2 elementos'"
+    },
+    {
+      "task": "marina-M2",
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H6 recognition",
+      "what": "Grid tracks editor shows two '0 trilhas' lists without saying columns/rows; the + moves after the first track",
+      "evidence": "shots 023-025"
+    },
+    {
+      "task": "marina-M2",
+      "kind": "bug",
+      "sev": 2,
+      "heuristic": "H1 visibility",
+      "what": "Inspector shows the inherited border as 1.69014px (zoomed canvas) and Borda 'Nenhum' while a base border is visible",
+      "evidence": "shots 046, 049"
+    },
+    {
+      "task": "marina-M2",
+      "kind": "visual",
+      "sev": 2,
+      "heuristic": "H8 aesthetic",
+      "what": "The selection label sits over neighbouring content (the card price), causing mis-clicks; the hover size chip covers text",
+      "evidence": "shots 170, 183, 264"
+    },
+    {
+      "task": "marina-M2",
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H3 user control",
+      "what": "Layers list scrolls/jumps when the selection changes; row positions move under the pointer",
+      "evidence": "mis-clicks on Título 8 / Detalhes 2"
+    },
+    {
+      "task": "marina-M2",
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H4 consistency",
+      "what": "The padding link toggle keeps its state across elements",
+      "evidence": "footer padding"
+    },
+    {
+      "task": "marina-M2",
+      "kind": "missing",
+      "sev": 2,
+      "heuristic": "H7 flexibility",
+      "what": "No shorthand entry for spacing (four fields for 14/28)",
+      "evidence": "button and section paddings"
+    },
+    {
+      "task": "marina-M2",
+      "kind": "missing",
+      "sev": 2,
+      "heuristic": "H6 recognition",
+      "what": "Templates have no visual preview; no pricing/testimonial/FAQ/footer section templates; Card fits poorly for pricing",
+      "evidence": "shot 003"
+    },
+    {
+      "task": "marina-M2",
+      "kind": "usability",
+      "sev": 1,
+      "heuristic": "H2 real world",
+      "what": "Wrap confirmation speaks jargon (envoltório, elemento posicionado)",
+      "evidence": "shot 014"
+    },
+    {
+      "task": "marina-M2",
+      "kind": "visual",
+      "sev": 1,
+      "heuristic": "H1 visibility",
+      "what": "Messages name one element for a multi-selection (Padding de Cartão: 0px for 3); Sombra summary says nenhum with a shadow; '1 elementos selecionados'",
+      "evidence": "messages"
+    },
+    {
+      "task": "marina-M2",
+      "kind": "visual",
+      "sev": 1,
+      "heuristic": "H8 aesthetic",
+      "what": "Text combobox fields show two arrows (native datalist + chevron)",
+      "evidence": "shot 021"
+    },
+    {
+      "task": "marina-M3",
+      "kind": "usability",
+      "sev": 3,
+      "heuristic": "H1 visibility",
+      "what": "Grid tracks editor shows 0 tracks at a breakpoint that inherits 2 from desktop (other fields show the inherited value with its breakpoint badge)",
+      "evidence": "shot 005"
+    },
+    {
+      "task": "marina-M3",
+      "kind": "bug",
+      "sev": 3,
+      "heuristic": "H3 user control",
+      "what": "Layers 'Recolher todos os ramos' collapses the page root too: the list goes empty",
+      "evidence": "shot 010"
+    },
+    {
+      "task": "marina-M3",
+      "kind": "missing",
+      "sev": 3,
+      "heuristic": "H7 flexibility",
+      "what": "No way to change a property on all blocks of one kind at once without knowing classes: 24 field edits for side paddings at two breakpoints",
+      "evidence": "M3 gesture count"
+    },
+    {
+      "task": "marina-M4",
+      "kind": "bug",
+      "sev": 4,
+      "heuristic": "H5 error prevention",
+      "what": "Letters typed when focus is not in a field run structure shortcuts until a letter that binds nothing: 'Grãos de café' wrapped an image in a Grade and a Linha and flipped its direction, silently",
+      "evidence": "messages after 'Origem de Imagem 2'; document Linha"
+    },
+    {
+      "task": "marina-M4",
+      "kind": "bug",
+      "sev": 3,
+      "heuristic": "H3 user control",
+      "what": "The file chooser (image source) stays open after a file is chosen; the next click only closes it",
+      "evidence": "shot 041"
+    },
+    {
+      "task": "marina-M4",
+      "kind": "missing",
+      "sev": 3,
+      "heuristic": "H6 recognition",
+      "what": "Uploaded project fonts are not offered in the Font field's list; the family name must be guessed from the file name",
+      "evidence": "shot 010"
+    },
+    {
+      "task": "marina-M4",
+      "kind": "bug",
+      "sev": 2,
+      "heuristic": "H3 user control",
+      "what": "Opening the Font list commits the partially typed text ('Grao') as the font",
+      "evidence": "status 'Fonte de Título: Grao'"
+    },
+    {
+      "task": "marina-M4",
+      "kind": "visual",
+      "sev": 2,
+      "heuristic": "H8 aesthetic",
+      "what": "The Font list menu is clipped on its left edge",
+      "evidence": "shot 010"
+    },
+    {
+      "task": "marina-M4",
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H1 visibility",
+      "what": "An image's placeholder spans the width its real picture will not: the layout changes when the source arrives",
+      "evidence": "shot 041 vs 049"
+    },
+    {
+      "task": "marina-M4",
+      "kind": "visual",
+      "sev": 1,
+      "heuristic": "H8 aesthetic",
+      "what": "Image Source field draws the path over the 'Escolher um arquivo' button text; the button is clipped at the panel's edge",
+      "evidence": "shots 026, 041"
+    },
+    {
+      "task": "marina-M4",
+      "kind": "missing",
+      "sev": 2,
+      "heuristic": "H6 recognition",
+      "what": "The image chooser lists file names only, no thumbnails",
+      "evidence": "shot 027"
+    },
+    {
+      "task": "marina-M5",
+      "kind": "missing",
+      "sev": 3,
+      "heuristic": "H7 flexibility",
+      "what": "No way to show the client the site: no shareable preview link or hosting; only a ZIP",
+      "evidence": "shot 002"
+    },
+    {
+      "task": "probe-P1",
+      "kind": "performance",
+      "sev": 2,
+      "heuristic": "H1 visibility",
+      "what": "On a 641-node page the input-to-frame latency p50 is 90 ms (3x the small page) and p95 287 ms",
+      "evidence": "probe-P1 latency"
+    },
+    {
+      "task": "probe-P2",
+      "kind": "accessibility",
+      "sev": 3,
+      "heuristic": "WCAG 2.1.1 keyboard",
+      "what": "Canvas and Layers tree are unreachable by F6; arrows need a selection; palette has no roving focus (74 tab stops); focus lost after opening a panel from the command bar",
+      "evidence": "diego-D4, probe-P2"
+    },
+    {
+      "task": "probe-P3",
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H8 aesthetic",
+      "what": "At 1280x720 the canvas gets 45% of the window; side panels cannot be narrowed below their defaults without collapsing",
+      "evidence": "probe-P3 shot 002"
+    }
+  ],
+  "wishes": [
+    {
+      "task": "carla-C1",
+      "wish": "Substituir uma cor em todo o site (localizar e substituir cor), ou uma paleta do site que vire variavel automaticamente."
+    },
+    {
+      "task": "carla-C1",
+      "wish": "Ver todos os lugares onde uma cor e usada."
+    },
+    {
+      "task": "carla-C2",
+      "wish": "Duplicar ja abrir a copia com o nome selecionado."
+    },
+    {
+      "task": "carla-C2",
+      "wish": "Criar varias paginas de uma vez a partir de um modelo (Centro, Praia, Shopping...)."
+    },
+    {
+      "task": "carla-C3",
+      "wish": "Cabecalho e rodape compartilhados por todas as paginas (editar uma vez)."
+    },
+    {
+      "task": "carla-C3",
+      "wish": "Elemento novo herda o estilo dos irmaos (um link novo no menu fica igual aos outros)."
+    },
+    {
+      "task": "carla-C4",
+      "wish": "Importar a planilha (CSV/XLSX) pelo botao de enviar, e escolher qual coluna vai em qual campo do cartao (mapeamento visual)."
+    },
+    {
+      "task": "carla-C4",
+      "wish": "Fotos achadas pelo nome do arquivo sem precisar do caminho."
+    },
+    {
+      "task": "carla-C5",
+      "wish": "Guardar tambem o texto em edicao (ou avisar antes de sair)."
+    },
+    {
+      "task": "diego-D1",
+      "wish": "Autocomplete variables in every field (type '--' or pick from a swatch list)."
+    },
+    {
+      "task": "diego-D1",
+      "wish": "'Extract to class' from an element, and 'rename all similar'."
+    },
+    {
+      "task": "diego-D1",
+      "wish": "Name layers in the project's language, or let me rename in bulk."
+    },
+    {
+      "task": "diego-D2",
+      "wish": "Instances named after their component (testimonial 2…) with a component badge in the Layers."
+    },
+    {
+      "task": "diego-D2",
+      "wish": "A component editing mode (edit the master in isolation)."
+    },
+    {
+      "task": "diego-D3",
+      "wish": "Import HTML as a new page (or into the selected element), keeping the other pages."
+    },
+    {
+      "task": "diego-D3",
+      "wish": "Import a whole folder of pages with their CSS/images."
+    },
+    {
+      "task": "diego-D4",
+      "wish": "F6 reaching the canvas and the Layers tree; arrows starting from the page when nothing is selected."
+    },
+    {
+      "task": "diego-D4",
+      "wish": "Ctrl+K: 'select <layer name>' and 'go to page <name>'."
+    },
+    {
+      "task": "diego-D5",
+      "wish": "Readable names: from the role and the project language, and merge identical rules into one class."
+    },
+    {
+      "task": "diego-D5",
+      "wish": "Shorthand CSS output (padding: 80px 64px)."
+    },
+    {
+      "task": "marina-M1",
+      "wish": "Começar de um modelo de página (landing, portfólio) ou de uma seção pronta já estilizada."
+    },
+    {
+      "task": "marina-M1",
+      "wish": "Busca que entende sinônimos e ignora acento (texto → parágrafo, titulo → título)."
+    },
+    {
+      "task": "marina-M2",
+      "wish": "Digitar o padding como no CSS/Figma: '14 28' num campo só."
+    },
+    {
+      "task": "marina-M2",
+      "wish": "Modelos de seção prontos com miniatura: preços, depoimento, FAQ, rodapé."
+    },
+    {
+      "task": "marina-M2",
+      "wish": "Estilos reutilizáveis aplicados a todos os elementos parecidos de uma vez (todas as seções, todos os títulos de seção)."
+    },
+    {
+      "task": "marina-M2",
+      "wish": "Ctrl+Z sempre desfaz a última mudança, mesmo com o foco num campo."
+    },
+    {
+      "task": "marina-M3",
+      "wish": "Mudar o espaçamento de todas as seções de uma vez (um estilo de seção compartilhado que a designer cria sem saber o que é classe)."
+    },
+    {
+      "task": "marina-M3",
+      "wish": "Uma visão lado a lado dos breakpoints para comparar enquanto ajusta."
+    },
+    {
+      "task": "marina-M4",
+      "wish": "As fontes do projeto no topo da lista de fontes, com prévia."
+    },
+    {
+      "task": "marina-M4",
+      "wish": "Arrastar a imagem do Explorador direto para o elemento no canvas."
+    },
+    {
+      "task": "marina-M4",
+      "wish": "Miniaturas no seletor de imagens."
+    },
+    {
+      "task": "marina-M5",
+      "wish": "Um link de pré-visualização para mandar ao cliente (ou um arquivo único que abre no navegador do cliente)."
+    }
+  ]
+}

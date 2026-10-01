@@ -1,0 +1,50 @@
+{
+  "id": "pilot-P0",
+  "persona": "pilot",
+  "result": "done",
+  "seconds": 29,
+  "limitSeconds": 240,
+  "gestures": {
+    "click": 6,
+    "wheel": 2
+  },
+  "gestureTotal": 8,
+  "mouseTravelPx": 2129,
+  "undos": 0,
+  "refusals": [],
+  "messages": [
+    "Elements panel opened.",
+    "Placed Section in Page, position 1 of 1.",
+    "Placed Heading in Section, position 1 of 1.",
+    "Placed Button in Section, position 2 of 2.",
+    "Section selected.",
+    "Text align of Section: center."
+  ],
+  "consoleErrors": [],
+  "incidents": 0,
+  "latencyMs": {
+    "n": 6,
+    "p50": 56.9,
+    "p95": 143.3,
+    "max": 143.3
+  },
+  "historyAtStart": {
+    "undoSteps": 0,
+    "redoSteps": 0
+  },
+  "historyAtEnd": {
+    "undoSteps": 4,
+    "redoSteps": 0
+  },
+  "downloads": [],
+  "uploads": [],
+  "seq": 6,
+  "feel": [
+    "pilot: instrument check"
+  ],
+  "wish": [],
+  "deadEnds": [],
+  "issues": [],
+  "notes": "pilot of the instrument",
+  "shots": "jornada03\\shots\\pilot-P0"
+}

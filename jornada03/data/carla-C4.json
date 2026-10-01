@@ -1,0 +1,137 @@
+{
+  "id": "carla-C4",
+  "persona": "carla",
+  "result": "partial",
+  "seconds": 245,
+  "limitSeconds": 600,
+  "gestures": {
+    "click": 35,
+    "keys": 940,
+    "move": 8,
+    "wheel": 5
+  },
+  "gestureTotal": 980,
+  "mouseTravelPx": 18373,
+  "undos": 0,
+  "refusals": [],
+  "messages": [
+    "Painel Explorador fechado.",
+    "Vista: Código.",
+    "Vista: Tela.",
+    "Painel Explorador aberto.",
+    "Página Página (pagina.html) adicionada.",
+    "A página agora se chama Cardápio.",
+    "cardapio.csv não é um arquivo de imagem ou de fonte.",
+    "Arquivo cardapio.csv criado.",
+    "Arquivo cardapio.csv aberto.",
+    "cardapio.csv salvo.",
+    "Vista: Tela.",
+    "Painel Elementos aberto.",
+    "Seção 5 colocado em Cardápio, posição 1 de 1.",
+    "Cartão 7 colocado em Seção 5, posição 1 de 1.",
+    "Cartão 7 repetido: 2 itens compartilham o estilo.",
+    "Painel Explorador aberto.",
+    "Arquivo cardapio.csv aberto.",
+    "cardapio.csv salvo.",
+    "Vista: Tela.",
+    "Página Cardápio aberta.",
+    "Título 12 selecionado.",
+    "Cartão 8 selecionado.",
+    "12 itens de Cartão 7 preenchidos com cardapio.csv.",
+    "Seção 5 selecionado.",
+    "Exibição de Seção 5: grid.",
+    "Colunas de Seção 5: minmax(0, 1fr).",
+    "Colunas de Seção 5: repeat(2, minmax(0, 1fr)).",
+    "Colunas de Seção 5: repeat(3, minmax(0, 1fr)).",
+    "Gap entre colunas de Seção 5: 24px.",
+    "Gap entre linhas de Seção 5: 24px."
+  ],
+  "consoleErrors": [
+    "Uncaught InvalidStateError: components.fillFromData produced an invalid state: /pages/3/tree/children/0/children/0/children/0/attributes/src: \"Espresso Grão Norte\" is not an address this page can use; /pages/3/tree/children/0/children/1/children/0/attributes/src: \"Filtrado Sul de Minas\" is not an ad",
+    "pageerror InvalidStateError: components.fillFromData produced an invalid state: /pages/3/tree/children/0/children/0/children/0/attributes/src: \"Espresso Grão Norte\" is not an address this page can use; /pages/3/tree/children/0/children/1/children/0/attributes/src: \"Filtrado Sul de Minas\" is not an address this page can use; /pages/3/tree/children/0/children/2/children/0/attributes/src: \"Descafeinado\" is not an address this page can use; /pages/3/tree/children/0/children/3/children/0/attributes/src: \"Microlote Natural\" is not an address this page can use; /pages/3/tree/children/0/children/4/children/0/attributes/src: \"Microlote Cereja\" is not an address this page can use; /pages/3/tree/children/0/children/5/children/0/attributes/src: \"Blend da Casa\" is not an address this page can use; /pages/3/tree/children/0/children/6/children/0/attributes/src: \"Cold Brew 1 L\" is not an address this page can use; /pages/3/tree/children/0/children/7/children/0/attributes/src: \"Cápsulas (10)\" is not an address this page can use; /pages/3/tree/children/0/children/8/children/0/attributes/src: \"Moído para coado\" is not an address this page can use; /pages/3/tree/children/0/children/9/children/0/attributes/src: \"Kit Degustação\" is not an address this page can use; /pages/3/tree/children/0/children/10/children/0/attributes/src: \"Caneca Grão Norte\" is not an address this page can use; /pages/3/tree/children/0/children/11/children/0/attributes/src: \"Assinatura presente\" is not an address this page can use",
+    "Uncaught InvalidStateError: components.fillFromData produced an invalid state: /pages/3/tree/children/0/children/0/children/0/attributes/src: \"Espresso Grão Norte\" is not an address this page can use; /pages/3/tree/children/0/children/1/children/0/attributes/src: \"Filtrado Sul de Minas\" is not an ad",
+    "pageerror InvalidStateError: components.fillFromData produced an invalid state: /pages/3/tree/children/0/children/0/children/0/attributes/src: \"Espresso Grão Norte\" is not an address this page can use; /pages/3/tree/children/0/children/1/children/0/attributes/src: \"Filtrado Sul de Minas\" is not an address this page can use; /pages/3/tree/children/0/children/2/children/0/attributes/src: \"Descafeinado\" is not an address this page can use; /pages/3/tree/children/0/children/3/children/0/attributes/src: \"Microlote Natural\" is not an address this page can use; /pages/3/tree/children/0/children/4/children/0/attributes/src: \"Microlote Cereja\" is not an address this page can use; /pages/3/tree/children/0/children/5/children/0/attributes/src: \"Blend da Casa\" is not an address this page can use; /pages/3/tree/children/0/children/6/children/0/attributes/src: \"Cold Brew 1 L\" is not an address this page can use; /pages/3/tree/children/0/children/7/children/0/attributes/src: \"Cápsulas (10)\" is not an address this page can use; /pages/3/tree/children/0/children/8/children/0/attributes/src: \"Moído para coado\" is not an address this page can use; /pages/3/tree/children/0/children/9/children/0/attributes/src: \"Kit Degustação\" is not an address this page can use; /pages/3/tree/children/0/children/10/children/0/attributes/src: \"Caneca Grão Norte\" is not an address this page can use; /pages/3/tree/children/0/children/11/children/0/attributes/src: \"Assinatura presente\" is not an address this page can use"
+  ],
+  "incidents": 4,
+  "reloadsDuringTask": 0,
+  "incidentsSeen": [
+    "invariant: commit \"components.fillFromData\" left a document the model refuses",
+    "error: the page threw (http://localhost:5320/src/core/store/store.ts:46)",
+    "invariant: commit \"components.fillFromData\" left a document the model refuses",
+    "error: the page threw (http://localhost:5320/src/core/store/store.ts:46)"
+  ],
+  "latencyMs": {
+    "n": 966,
+    "p50": 25.4,
+    "p95": 34.1,
+    "max": 642.8
+  },
+  "historyAtStart": {
+    "undoSteps": 19,
+    "redoSteps": 0
+  },
+  "historyAtEnd": {
+    "undoSteps": 34,
+    "redoSteps": 0
+  },
+  "downloads": [],
+  "uploads": [
+    "C:/Codex-Shared/deepseek/builder-6/jornada03/00-frame/targets/carla/cardapio.csv"
+  ],
+  "seq": 2,
+  "feel": [
+    "Enviar arquivos recusou a planilha: 'nao e um arquivo de imagem ou de fonte'. Tive que criar um arquivo novo e colar o texto.",
+    "A acao de preencher so aparece passando o mouse na linha do arquivo, num icone sem texto.",
+    "Na primeira vez nada aconteceu e nada foi dito; so o rodape mostrou '4 incidentes'. O app colocou o nome do produto no lugar da foto.",
+    "Funcionou depois que eu reordenei as colunas na ordem do cartao e escrevi img/ antes de cada foto: isso eu nunca adivinharia sozinha.",
+    "Depois de preenchido, os 12 cartoes em grade ficaram bonitos."
+  ],
+  "wish": [
+    "Importar a planilha (CSV/XLSX) pelo botao de enviar, e escolher qual coluna vai em qual campo do cartao (mapeamento visual).",
+    "Fotos achadas pelo nome do arquivo sem precisar do caminho."
+  ],
+  "deadEnds": [
+    {
+      "what": "enviar cardapio.csv",
+      "tried": "Enviar arquivos",
+      "outcome": "recusado; criou arquivo novo e colou"
+    },
+    {
+      "what": "preencher com as colunas nome, preco, foto",
+      "tried": "acao Preencher",
+      "outcome": "falha silenciosa (incidentes); reordenou colunas e caminhos"
+    }
+  ],
+  "issues": [
+    {
+      "kind": "bug",
+      "sev": 4,
+      "heuristic": "H9 error recovery",
+      "what": "Fill from data maps columns by position into slots starting with the image src; a text in src is refused by the validator and the whole fill fails silently (incidents only)",
+      "evidence": "incidents feed: components.fillFromData /attributes/src"
+    },
+    {
+      "kind": "bug",
+      "sev": 3,
+      "heuristic": "H4 consistency",
+      "what": "'Enviar arquivos' refuses .csv/.json (only images and fonts), though Fill from data needs a project data file",
+      "evidence": "status 'cardapio.csv nao e um arquivo de imagem ou de fonte'"
+    },
+    {
+      "kind": "missing",
+      "sev": 3,
+      "heuristic": "H6 recognition",
+      "what": "No column-to-field mapping; image values must be project paths (img/x.png)",
+      "evidence": "C4"
+    },
+    {
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H6 recognition",
+      "what": "The Fill action is an unlabelled icon that appears only on hover of the file row",
+      "evidence": "look titles"
+    }
+  ],
+  "notes": "Done only after (1) creating the CSV as a new file and pasting its text (upload refuses .csv), (2) reordering the columns to the card's slot order (photo, name, price) and prefixing img/ to photos. A first fill silently failed (4 incidents: fillFromData put the name into the image src).",
+  "shots": "jornada03\\shots\\carla-C4"
+}

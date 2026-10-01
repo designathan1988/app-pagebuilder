@@ -1,0 +1,60 @@
+{
+  "id": "carla-C5",
+  "persona": "carla",
+  "result": "done",
+  "seconds": 20,
+  "limitSeconds": 180,
+  "gestures": {
+    "dblclick": 1,
+    "keys": 10,
+    "reload": 1
+  },
+  "gestureTotal": 12,
+  "mouseTravelPx": 0,
+  "undos": 0,
+  "refusals": [],
+  "messages": [
+    "Título 16 selecionado.",
+    "Editando o texto — Enter, Esc ou um clique fora o mantém; Ctrl+Z o desfaz."
+  ],
+  "consoleErrors": [],
+  "incidents": -4,
+  "reloadsDuringTask": 1,
+  "incidentsSeen": [],
+  "latencyMs": {
+    "n": 2,
+    "p50": 1106.3,
+    "p95": 1106.3,
+    "max": 1106.3
+  },
+  "historyAtStart": {
+    "undoSteps": 34,
+    "redoSteps": 0
+  },
+  "historyAtEnd": {
+    "undoSteps": 0,
+    "redoSteps": 0
+  },
+  "downloads": [],
+  "uploads": [],
+  "seq": 5,
+  "feel": [
+    "Recarreguei no meio da digitacao e o site voltou inteiro, na mesma pagina e com o mesmo elemento selecionado: alivio.",
+    "So o que eu estava digitando naquele titulo sumiu, e nada me avisou antes de recarregar."
+  ],
+  "wish": [
+    "Guardar tambem o texto em edicao (ou avisar antes de sair)."
+  ],
+  "deadEnds": [],
+  "issues": [
+    {
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H5 error prevention",
+      "what": "Text typed in an in-place edit that is not yet confirmed is lost on reload, with no leave-page warning (the guard covers only store changes)",
+      "evidence": "C5: 'Blend da Casa' kept, ' Especial' lost"
+    }
+  ],
+  "notes": "All committed work survived the reload (4 pages, 12 filled items, open page and selection). The in-progress in-place edit (' Especial' typed, not confirmed) was lost without a leave-page warning.",
+  "shots": "jornada03\\shots\\carla-C5"
+}

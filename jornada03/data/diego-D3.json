@@ -1,0 +1,102 @@
+{
+  "id": "diego-D3",
+  "persona": "diego",
+  "result": "partial",
+  "seconds": 77,
+  "limitSeconds": 480,
+  "gestures": {
+    "click": 15,
+    "keys": 53,
+    "dblclick": 1
+  },
+  "gestureTotal": 69,
+  "mouseTravelPx": 6310,
+  "undos": 4,
+  "refusals": [],
+  "messages": [
+    "Cancelled: nothing changed.",
+    "Added the page Page (page.html).",
+    "The page is named Wholesale.",
+    "Imported 35 elements from legacy.html. Elements repaired to fit the content model (lines 18, 32). legacy.html: declarations the editor does not store (lines 4).",
+    "Intro selected.",
+    "Undone: Imported 35 elements from legacy.html. Elements repaired to fit the content model (lines 18, 32). legacy.html: declarations the editor does not store (lines 4).",
+    "Redone: Imported 35 elements from legacy.html. Elements repaired to fit the content model (lines 18, 32). legacy.html: declarations the editor does not store (lines 4).",
+    "Heading selected.",
+    "Editing text — Enter, Escape or a click away keeps it; Ctrl+Z takes it back.",
+    "Saved the text of Heading.",
+    "Heading 6 selected.",
+    "Contact selected.",
+    "Elements panel opened.",
+    "Placed Section in Page, position 5 of 5.",
+    "Intro selected.",
+    "Undone: Placed Section in Page, position 5 of 5.",
+    "Undone: Saved the text of Heading.",
+    "Undone: Imported 35 elements from legacy.html. Elements repaired to fit the content model (lines 18, 32). legacy.html: declarations the editor does not store (lines 4)."
+  ],
+  "consoleErrors": [],
+  "incidents": 0,
+  "reloadsDuringTask": 0,
+  "incidentsSeen": [],
+  "latencyMs": {
+    "n": 37,
+    "p50": 49.1,
+    "p95": 259.6,
+    "max": 306.5
+  },
+  "historyAtStart": {
+    "undoSteps": 13,
+    "redoSteps": 0
+  },
+  "historyAtEnd": {
+    "undoSteps": 15,
+    "redoSteps": 3
+  },
+  "downloads": [],
+  "uploads": [
+    "C:/Codex-Shared/deepseek/builder-6/jornada03/00-frame/targets/diego/legacy.html",
+    "C:/Codex-Shared/deepseek/builder-6/jornada03/00-frame/targets/diego/legacy.html"
+  ],
+  "seq": 3,
+  "feel": [
+    "The import itself is good: 35 elements, class names became layer names (Top, Intro, List, Item), styles kept, and the report says what it repaired and what CSS it dropped.",
+    "But it replaced the whole project: Marina's Home page vanished, although the dialog said 'Replace the page'. Undo saved me.",
+    "There is no 'import as a new page', so I cannot bring the client's existing page into this project.",
+    "It even asked to confirm replacing an empty page, and renamed my 'Wholesale' page and its file."
+  ],
+  "wish": [
+    "Import HTML as a new page (or into the selected element), keeping the other pages.",
+    "Import a whole folder of pages with their CSS/images."
+  ],
+  "deadEnds": [
+    {
+      "what": "bring legacy.html into the existing project",
+      "tried": "new empty page + Import HTML",
+      "outcome": "the whole project was replaced; undone"
+    }
+  ],
+  "issues": [
+    {
+      "kind": "bug",
+      "sev": 4,
+      "heuristic": "H5 error prevention",
+      "what": "File › Import HTML replaces the whole project (every page) while its confirmation says 'Replace the page with the imported HTML?'; the client's other pages vanish",
+      "evidence": "shots 008, 009; pages list"
+    },
+    {
+      "kind": "missing",
+      "sev": 3,
+      "heuristic": "H7 flexibility",
+      "what": "No way to import an HTML page as a new page of an existing project",
+      "evidence": "D3"
+    },
+    {
+      "kind": "usability",
+      "sev": 1,
+      "heuristic": "H5 error prevention",
+      "what": "Import asks to replace even an empty page, and renames the page and its file after the imported title",
+      "evidence": "shots 008, 009"
+    }
+  ],
+  "notes": "Import works as a project replacement only; edited the imported page and then undid back to keep the client site.",
+  "shots": "jornada03\\shots\\diego-D3"
+}

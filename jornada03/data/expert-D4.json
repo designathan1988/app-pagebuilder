@@ -1,0 +1,50 @@
+{
+  "id": "expert-D4",
+  "persona": "expert-diego",
+  "result": "done",
+  "seconds": 6,
+  "limitSeconds": 600,
+  "gestures": {
+    "click": 1,
+    "keys": 53
+  },
+  "gestureTotal": 54,
+  "mouseTravelPx": 0,
+  "undos": 0,
+  "refusals": [],
+  "messages": [
+    "Added the page Page (page.html).",
+    "The page is named section.",
+    "The page is named sectionheading.",
+    "The page is named sectionheadingparagraph.",
+    "The page is named sectionheadingparagraphrparagraph.",
+    "The page is named buttonsectionheadingparagraphrparagraph."
+  ],
+  "consoleErrors": [],
+  "incidents": 0,
+  "reloadsDuringTask": 0,
+  "incidentsSeen": [],
+  "latencyMs": {
+    "n": 59,
+    "p50": 25.1,
+    "p95": 32.5,
+    "max": 40
+  },
+  "historyAtStart": {
+    "undoSteps": 0,
+    "redoSteps": 0
+  },
+  "historyAtEnd": {
+    "undoSteps": 6,
+    "redoSteps": 0
+  },
+  "downloads": [],
+  "uploads": [],
+  "seq": null,
+  "feel": [],
+  "wish": [],
+  "deadEnds": [],
+  "issues": [],
+  "notes": "expert baseline: starting from a selected section (the + adds the page and keeps the keyboard); the persona needed Ctrl+A to reach it",
+  "shots": "jornada03\\shots\\expert-D4"
+}

@@ -1,0 +1,105 @@
+{
+  "id": "diego-D2",
+  "persona": "diego",
+  "result": "done",
+  "seconds": 108,
+  "limitSeconds": 720,
+  "gestures": {
+    "click": 14,
+    "rightclick": 1,
+    "keys": 195,
+    "move": 1,
+    "wheel": 14,
+    "dblclick": 5
+  },
+  "gestureTotal": 229,
+  "mouseTravelPx": 8721,
+  "undos": 2,
+  "refusals": [],
+  "messages": [
+    "Workspace reset: the default docks, sizes and panels.",
+    "Parágrafo 5 selected.",
+    "Seção 2 selected.",
+    "testimonial is now a component.",
+    "testimonial repeated: 2 items share its style.",
+    "testimonial repeated: 3 items share its style.",
+    "testimonial repeated: 4 items share its style.",
+    "testimonial repeated: 5 items share its style.",
+    "testimonial repeated: 6 items share its style.",
+    "Parágrafo 21 selected.",
+    "Editing text — Enter, Escape or a click away keeps it; Ctrl+Z takes it back.",
+    "Saved the text of Parágrafo 21.",
+    "Parágrafo 23 selected.",
+    "Editing text — Enter, Escape or a click away keeps it; Ctrl+Z takes it back.",
+    "Saved the text of Parágrafo 23.",
+    "Parágrafo 25 selected.",
+    "Editing text — Enter, Escape or a click away keeps it; Ctrl+Z takes it back.",
+    "Saved the text of Parágrafo 25.",
+    "Parágrafo 27 selected.",
+    "Editing text — Enter, Escape or a click away keeps it; Ctrl+Z takes it back.",
+    "Saved the text of Parágrafo 27.",
+    "Parágrafo 29 selected.",
+    "Editing text — Enter, Escape or a click away keeps it; Ctrl+Z takes it back.",
+    "Saved the text of Parágrafo 29.",
+    "Parágrafo 29 selected.",
+    "Border of Parágrafo 29: 4px solid — it reaches testimonial and its 6 copies.",
+    "Border colour of Parágrafo 29: #f7efe4 — it reaches testimonial and its 6 copies.",
+    "Seção 7 selected.",
+    "Undone: Border colour of Parágrafo 29: #f7efe4 — it reaches testimonial and its 6 copies.",
+    "Undone: Border of Parágrafo 29: 4px solid — it reaches testimonial and its 6 copies.",
+    "Parágrafo 29 selected.",
+    "Seção 9 selected.",
+    "Border of Seção 9: 4px solid — it reaches testimonial and its 6 copies.",
+    "Border colour of Seção 9: #f7efe4 — it reaches testimonial and its 6 copies."
+  ],
+  "consoleErrors": [],
+  "incidents": 0,
+  "reloadsDuringTask": 0,
+  "incidentsSeen": [],
+  "latencyMs": {
+    "n": 102,
+    "p50": 31.2,
+    "p95": 263.5,
+    "max": 294.9
+  },
+  "historyAtStart": {
+    "undoSteps": 0,
+    "redoSteps": 0
+  },
+  "historyAtEnd": {
+    "undoSteps": 13,
+    "redoSteps": 0
+  },
+  "downloads": [],
+  "uploads": [],
+  "seq": 6,
+  "feel": [
+    "Create a component + Repeat (Ctrl+Shift+D) gave me 6 linked items in seconds; texts stay per item, style is shared.",
+    "The status line is excellent: Border of Seção 9 — it reaches testimonial and its 6 copies.",
+    "But the copies are named Seção 5…9: nothing in the Layers or the breadcrumb says they are the testimonial component.",
+    "The floating Layers survived the reload (workspace saved); only View › Reset workspace freed the canvas."
+  ],
+  "wish": [
+    "Instances named after their component (testimonial 2…) with a component badge in the Layers.",
+    "A component editing mode (edit the master in isolation)."
+  ],
+  "deadEnds": [],
+  "issues": [
+    {
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H6 recognition",
+      "what": "Component instances keep generic names (Seção 5…9) with no component badge in Layers/breadcrumb",
+      "evidence": "shot 037"
+    },
+    {
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H3 user control",
+      "what": "A floating panel state is persisted with the workspace; the only exit is View › Reset workspace (nothing points to it)",
+      "evidence": "shots diego-free open, 002"
+    }
+  ],
+  "notes": "Includes Reset workspace (to recover from the stuck floating Layers of D1) and one misplaced border undone.",
+  "shots": "jornada03\\shots\\diego-D2"
+}

@@ -1,0 +1,73 @@
+{
+  "id": "expert-D2",
+  "persona": "expert-diego",
+  "result": "done",
+  "seconds": 26,
+  "limitSeconds": 720,
+  "gestures": {
+    "click": 7,
+    "rightclick": 1,
+    "keys": 164,
+    "wheel": 19,
+    "dblclick": 5
+  },
+  "gestureTotal": 196,
+  "mouseTravelPx": 4979,
+  "undos": 0,
+  "refusals": [],
+  "messages": [
+    "Parágrafo 5 selected.",
+    "Seção 2 selected.",
+    "testimonial is now a component.",
+    "testimonial repeated: 2 items share its style.",
+    "testimonial repeated: 3 items share its style.",
+    "testimonial repeated: 4 items share its style.",
+    "testimonial repeated: 5 items share its style.",
+    "testimonial repeated: 6 items share its style.",
+    "Parágrafo 21 selected.",
+    "Editing text — Enter, Escape or a click away keeps it; Ctrl+Z takes it back.",
+    "Saved the text of Parágrafo 21.",
+    "Parágrafo 23 selected.",
+    "Editing text — Enter, Escape or a click away keeps it; Ctrl+Z takes it back.",
+    "Saved the text of Parágrafo 23.",
+    "Parágrafo 25 selected.",
+    "Editing text — Enter, Escape or a click away keeps it; Ctrl+Z takes it back.",
+    "Saved the text of Parágrafo 25.",
+    "Parágrafo 27 selected.",
+    "Editing text — Enter, Escape or a click away keeps it; Ctrl+Z takes it back.",
+    "Saved the text of Parágrafo 27.",
+    "Parágrafo 29 selected.",
+    "Editing text — Enter, Escape or a click away keeps it; Ctrl+Z takes it back.",
+    "Saved the text of Parágrafo 29.",
+    "Parágrafo 29 selected.",
+    "Seção 9 selected.",
+    "Border of Seção 9: 4px solid — it reaches testimonial and its 6 copies."
+  ],
+  "consoleErrors": [],
+  "incidents": 0,
+  "reloadsDuringTask": 0,
+  "incidentsSeen": [],
+  "latencyMs": {
+    "n": 59,
+    "p50": 58.9,
+    "p95": 215.8,
+    "max": 263.4
+  },
+  "historyAtStart": {
+    "undoSteps": 0,
+    "redoSteps": 0
+  },
+  "historyAtEnd": {
+    "undoSteps": 12,
+    "redoSteps": 0
+  },
+  "downloads": [],
+  "uploads": [],
+  "seq": null,
+  "feel": [],
+  "wish": [],
+  "deadEnds": [],
+  "issues": [],
+  "notes": "expert baseline",
+  "shots": "jornada03\\shots\\expert-D2"
+}

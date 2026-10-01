@@ -1,0 +1,117 @@
+{
+  "id": "diego-D1",
+  "persona": "diego",
+  "result": "done",
+  "seconds": 381,
+  "limitSeconds": 960,
+  "gestures": {
+    "click": 84,
+    "keys": 355,
+    "drag": 4,
+    "wheel": 40
+  },
+  "gestureTotal": 483,
+  "mouseTravelPx": 24459,
+  "undos": 0,
+  "refusals": [],
+  "messages": [],
+  "consoleErrors": [],
+  "incidents": 4,
+  "latencyMs": {
+    "n": 0,
+    "p50": null,
+    "p95": null,
+    "max": null
+  },
+  "historyAtStart": {
+    "undoSteps": 0,
+    "redoSteps": 0
+  },
+  "downloads": [],
+  "uploads": [],
+  "seq": 2,
+  "feel": [
+    "Variables and classes exist, which is more than many builders give you. But using a variable means typing var(--brand) by hand: the colour picker and the fields never offer them.",
+    "Border colour silently ignored var(--line); the status bar later said '4 incidents' — the editor itself refused its own change.",
+    "Turning an element's look into a class is manual: apply an empty class, re-enter every value on it, then reset the element. I expected 'extract to class'.",
+    "The variables list grew under the Layers panel; my clicks hit the Layers header and the panel came loose as a floating window I can neither move, close nor dock. It covers the canvas.",
+    "Ctrl+K knows nothing about classes.",
+    "Every layer name is in Portuguese (Marina built it), so my export will have Portuguese class names."
+  ],
+  "wish": [
+    "Autocomplete variables in every field (type '--' or pick from a swatch list).",
+    "'Extract to class' from an element, and 'rename all similar'.",
+    "Name layers in the project's language, or let me rename in bulk."
+  ],
+  "deadEnds": [
+    {
+      "what": "border colour = var(--line)",
+      "tried": "type in field, Enter, Tab",
+      "outcome": "silent; incidents logged; used hex"
+    },
+    {
+      "what": "move styles into a class",
+      "tried": "inspector menu, Ctrl+K 'class'",
+      "outcome": "none; manual re-entry + Reset every value"
+    },
+    {
+      "what": "dock or move the floating Layers",
+      "tried": "drag title, drag button, header icons",
+      "outcome": "impossible; selected through the floating list instead"
+    }
+  ],
+  "issues": [
+    {
+      "kind": "bug",
+      "sev": 4,
+      "heuristic": "H9 error recovery",
+      "what": "Border colour with var(--…) on a class writes the shorthand border-color; the validator refuses the commit (InvalidStateError, incident) and the person sees nothing",
+      "evidence": "incidents feed: style.setBorder /classes/0/styles/desktop/base/border-color"
+    },
+    {
+      "kind": "bug",
+      "sev": 4,
+      "heuristic": "H3 user control",
+      "what": "The Styles sidebar view does not scroll its own content: the variables list runs under the Layers panel; clicks there close/reopen/float Layers, and the floating Layers window cannot be moved, closed or docked",
+      "evidence": "shots 029, 108, 109"
+    },
+    {
+      "kind": "missing",
+      "sev": 3,
+      "heuristic": "H6 recognition",
+      "what": "Variables are not offered anywhere (colour picker, fields): only typing var(--name) works",
+      "evidence": "shot 040; 'brand' refused"
+    },
+    {
+      "kind": "missing",
+      "sev": 3,
+      "heuristic": "H7 flexibility",
+      "what": "No 'extract to class' / 'move styles to class': a class starts empty and the element keeps its styles",
+      "evidence": "shot 051"
+    },
+    {
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H6 recognition",
+      "what": "Command bar finds nothing for 'class'; its backdrop hides the whole editor",
+      "evidence": "shot 053"
+    },
+    {
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H2 real world",
+      "what": "Layer names (and so export class names) are fixed in the language of whoever inserted the element",
+      "evidence": "Layers: Barra de navegação, Título"
+    },
+    {
+      "kind": "visual",
+      "sev": 1,
+      "heuristic": "H1 visibility",
+      "what": "In class mode, sections with only inherited values are collapsed to a summary",
+      "evidence": "shot 082"
+    }
+  ],
+  "notes": "10 variables (5 colours, 6 sizes... space-8..64) and class .card on 3 cards; featured card keeps own styles (modifier). The Layers panel ended floating and stuck over the canvas for the rest of the session.",
+  "shots": "jornada03\\shots\\diego-D1",
+  "instrumentGap": "The page reloaded (cause not found) just before end: the probe log (messages, latency, console errors) and the test-port history were lost. The 4 incidents were read from the test port during the task (style.setBorder InvalidStateError, twice: invariant + error each)."
+}

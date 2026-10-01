@@ -1,0 +1,47 @@
+{
+  "name": "marina",
+  "zip": "jornada03/data/downloads/marina-M5-site.zip",
+  "target": "jornada03/00-frame/targets/marina/index.html",
+  "tolerance": 24,
+  "results": [
+    {
+      "width": 1440,
+      "pixelMatchCommon": 86.2,
+      "pixelMatchAdjusted": 80.6,
+      "exportHeight": 2248,
+      "targetHeight": 2403
+    },
+    {
+      "width": 1180,
+      "pixelMatchCommon": 84.9,
+      "pixelMatchAdjusted": 79.4,
+      "exportHeight": 2272,
+      "targetHeight": 2428
+    },
+    {
+      "width": 834,
+      "pixelMatchCommon": 81,
+      "pixelMatchAdjusted": 77.1,
+      "exportHeight": 3085,
+      "targetHeight": 3240
+    },
+    {
+      "width": 390,
+      "pixelMatchCommon": 75,
+      "pixelMatchAdjusted": 72.2,
+      "exportHeight": 3583,
+      "targetHeight": 3723
+    }
+  ],
+  "htmlValidate": {
+    "errors": 6,
+    "output": "\nC:\\Codex-Shared\\deepseek\\builder-6\\jornada03\\data\\fidelity\\marina-site\\index.html\n   2:2   error  <html> is missing required \"lang\" attribute       element-required-attributes\n  13:6   error  <button> is missing recommended \"type\" attribute  no-implicit-button-type\n  20:10  error  <button> is missing recommended \"type\" attribute  no-implicit-button-type\n  63:12  error  <button> is missing recommended \"type\" attribute  no-implicit-button-type\n  71:12  error  <button> is missing recommended \"type\" attribute  no-implicit-button-type\n  79:12  error  <button> is missing recommended \"type\" attribute  no-implicit-button-type\n\n✖ 6 problems (6 errors, 0 warnings)\n\nMore information:\n  https://html-validate.org/rules/element-required-attributes.html\n  https://html-validate.org/rules/no-implicit-button-type.html\n\n"
+  },
+  "css": {
+    "bytes": 16733,
+    "lines": 690,
+    "rules": 132,
+    "classes": 53
+  },
+  "inlineStyles": 0
+}

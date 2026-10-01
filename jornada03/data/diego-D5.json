@@ -1,0 +1,76 @@
+{
+  "id": "diego-D5",
+  "persona": "diego",
+  "result": "done",
+  "seconds": 28,
+  "limitSeconds": 600,
+  "gestures": {
+    "click": 1
+  },
+  "gestureTotal": 1,
+  "mouseTravelPx": 0,
+  "undos": 0,
+  "refusals": [],
+  "messages": [
+    "Exported the site as site.zip."
+  ],
+  "consoleErrors": [],
+  "incidents": 0,
+  "reloadsDuringTask": 0,
+  "incidentsSeen": [],
+  "latencyMs": {
+    "n": 1,
+    "p50": 73.4,
+    "p95": 73.4,
+    "max": 73.4
+  },
+  "historyAtStart": {
+    "undoSteps": 21,
+    "redoSteps": 0
+  },
+  "historyAtEnd": {
+    "undoSteps": 21,
+    "redoSteps": 0
+  },
+  "downloads": [
+    "jornada03\\data\\downloads\\diego-D5-site.zip"
+  ],
+  "uploads": [],
+  "seq": 3,
+  "feel": [
+    "What I like: semantic tags kept (header, nav, section, article, h1-h3, img with alt), no inline style, no div soup, one stylesheet, images and fonts at their paths.",
+    "What I would reject in review: class names are Portuguese and numbered (secao__titulo-3, secao-3__botao-4, barra-de-navegacao__link-2); identical rules repeated under different names (39 of 109); padding written as four longhands everywhere; no shorthand.",
+    "The 6 testimonials share one class (good: the component works in the code too); the price cards share .card.",
+    "Nav links have no href, buttons no type, <html> no lang: Checks flags some of it, not all."
+  ],
+  "wish": [
+    "Readable names: from the role and the project language, and merge identical rules into one class.",
+    "Shorthand CSS output (padding: 80px 64px)."
+  ],
+  "deadEnds": [],
+  "issues": [
+    {
+      "kind": "poor-feature",
+      "sev": 3,
+      "heuristic": "H8 aesthetic (code)",
+      "what": "Exported CSS is ~5x the hand-written equivalent: 39 of 109 rules duplicate another's body; 310 longhand declarations; numbered generated names",
+      "evidence": "diego-site/css/styles.css vs target"
+    },
+    {
+      "kind": "poor-feature",
+      "sev": 2,
+      "heuristic": "H2 real world",
+      "what": "Class names come from layer names in the author's language and numbering (secao__titulo-3)",
+      "evidence": "index.html"
+    },
+    {
+      "kind": "missing",
+      "sev": 2,
+      "heuristic": "H5 error prevention",
+      "what": "No lang, no button type and links without href reach the export; Checks covers href but not lang or type",
+      "evidence": "html-validate 8 errors"
+    }
+  ],
+  "notes": "Export of Home + Wholesale. CSS 16,985 bytes / 109 rules (39 redundant: identical bodies under other names), 310 longhand declarations; the hand-written target is 3,445 bytes / 48 rules. html-validate: 8 errors (lang x2, button type x6), 0 inline styles.",
+  "shots": "jornada03\\shots\\diego-D5"
+}

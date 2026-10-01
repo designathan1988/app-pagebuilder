@@ -1,0 +1,106 @@
+{
+  "id": "diego-D4",
+  "persona": "diego",
+  "result": "done",
+  "seconds": 134,
+  "limitSeconds": 600,
+  "gestures": {
+    "keys": 185
+  },
+  "gestureTotal": 185,
+  "mouseTravelPx": 0,
+  "undos": 6,
+  "refusals": [],
+  "messages": [
+    "Placed Section in Wholesale, position 1 of 1.",
+    "Nothing selected.",
+    "Placed Heading in Wholesale, position 2 of 2.",
+    "Nothing selected.",
+    "Placed Paragraph in Wholesale, position 3 of 3.",
+    "Nothing selected.",
+    "Placed Paragraph 2 in Wholesale, position 4 of 4.",
+    "Undone: Placed Paragraph 2 in Wholesale, position 4 of 4.",
+    "Undone: Placed Paragraph in Wholesale, position 3 of 3.",
+    "Undone: Placed Heading in Wholesale, position 2 of 2.",
+    "Placed Heading in Wholesale, position 2 of 2.",
+    "Placed Paragraph in Wholesale, position 3 of 3.",
+    "Placed Paragraph 2 in Wholesale, position 4 of 4.",
+    "Undone: Placed Paragraph 2 in Wholesale, position 4 of 4.",
+    "Undone: Placed Paragraph in Wholesale, position 3 of 3.",
+    "Undone: Placed Heading in Wholesale, position 2 of 2.",
+    "Keyboard shortcuts panel opened.",
+    "Select an element first.",
+    "",
+    "Layers panel opened.",
+    "Select an element first.",
+    "1 elements selected.",
+    "Placed Heading in Section, position 1 of 1.",
+    "Placed Paragraph in Section, position 2 of 2.",
+    "Wrapped Paragraph in Row (display: flex; flex-direction: row; column-gap: 16px).",
+    "Placed Paragraph 2 in Row, position 2 of 2.",
+    "Row selected.",
+    "Section selected.",
+    "Placed Button in Section, position 3 of 3."
+  ],
+  "consoleErrors": [],
+  "incidents": 0,
+  "reloadsDuringTask": 0,
+  "incidentsSeen": [],
+  "latencyMs": {
+    "n": 205,
+    "p50": 54,
+    "p95": 219.2,
+    "max": 289.3
+  },
+  "historyAtStart": {
+    "undoSteps": 15,
+    "redoSteps": 3
+  },
+  "historyAtEnd": {
+    "undoSteps": 21,
+    "redoSteps": 0
+  },
+  "downloads": [],
+  "uploads": [],
+  "seq": 3,
+  "feel": [
+    "Ctrl+K inserting by name is fast, and R to wrap a row worked.",
+    "But I could not select anything from the keyboard: arrows say 'Select an element first'; F6 cycles 7 regions and never reaches the canvas or the Layers tree; Tab walks all 74 palette tiles one by one; opening Layers from Ctrl+K leaves the focus nowhere.",
+    "Ctrl+A happened to select the section (the only child). On a real page that trick selects everything.",
+    "The shortcuts panel is complete and readable."
+  ],
+  "wish": [
+    "F6 reaching the canvas and the Layers tree; arrows starting from the page when nothing is selected.",
+    "Ctrl+K: 'select <layer name>' and 'go to page <name>'."
+  ],
+  "deadEnds": [
+    {
+      "what": "select an element from the keyboard",
+      "tried": "ArrowDown, F6 x10, Tab x24, Ctrl+K 'layers'",
+      "outcome": "none; Ctrl+A selected the only top-level element"
+    },
+    {
+      "what": "switch page from the keyboard",
+      "tried": "Ctrl+K 'wholesale'",
+      "outcome": "no match"
+    }
+  ],
+  "issues": [
+    {
+      "kind": "usability",
+      "sev": 3,
+      "heuristic": "H7 flexibility",
+      "what": "Keyboard users cannot reach the canvas or the Layers tree: F6 cycles 7 regions without them, arrows need a selection, Tab walks every palette tile (no roving focus), opening Layers drops the focus",
+      "evidence": "D4 focus log"
+    },
+    {
+      "kind": "missing",
+      "sev": 2,
+      "heuristic": "H7 flexibility",
+      "what": "The command bar cannot switch pages or select a layer by name",
+      "evidence": "shot 002"
+    }
+  ],
+  "notes": "0 mouse gestures. Escape before Ctrl+K cleared the selection in the first try (undone). The only way found to select an element from the keyboard with nothing selected was Ctrl+A ('select all siblings').",
+  "shots": "jornada03\\shots\\diego-D4"
+}

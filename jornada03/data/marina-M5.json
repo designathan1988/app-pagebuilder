@@ -1,0 +1,62 @@
+{
+  "id": "marina-M5",
+  "persona": "marina",
+  "result": "done",
+  "seconds": 11,
+  "limitSeconds": 180,
+  "gestures": {
+    "click": 2,
+    "keys": 1
+  },
+  "gestureTotal": 3,
+  "mouseTravelPx": 625,
+  "undos": 0,
+  "refusals": [],
+  "messages": [
+    "Pré-visualização: use a página como um visitante. Pressione Esc para voltar à edição.",
+    "Site exportado como site.zip.",
+    "De volta à edição."
+  ],
+  "consoleErrors": [
+    "pageerror SecurityError: Failed to read a named property '__study' from 'Window': Blocked a frame with origin \"null\" from accessing a cross-origin frame."
+  ],
+  "incidents": 0,
+  "latencyMs": {
+    "n": 3,
+    "p50": 204.7,
+    "p95": 240.6,
+    "max": 240.6
+  },
+  "historyAtStart": {
+    "undoSteps": 201,
+    "redoSteps": 0
+  },
+  "historyAtEnd": {
+    "undoSteps": 201,
+    "redoSteps": 0
+  },
+  "downloads": [
+    "jornada03\\data\\downloads\\marina-M5-site.zip"
+  ],
+  "uploads": [],
+  "seq": 5,
+  "feel": [
+    "A pré-visualização mostra exatamente o que eu montei, com as abas de tamanho em cima.",
+    "Exportar deu um ZIP; para o cliente ver eu ainda preciso hospedar em algum lugar ou mandar o ZIP."
+  ],
+  "wish": [
+    "Um link de pré-visualização para mandar ao cliente (ou um arquivo único que abre no navegador do cliente)."
+  ],
+  "deadEnds": [],
+  "issues": [
+    {
+      "kind": "missing",
+      "sev": 3,
+      "heuristic": "H7 flexibility",
+      "what": "No way to show the client the site: no shareable preview link or hosting; only a ZIP",
+      "evidence": "shot 002"
+    }
+  ],
+  "notes": "",
+  "shots": "jornada03\\shots\\marina-M5"
+}

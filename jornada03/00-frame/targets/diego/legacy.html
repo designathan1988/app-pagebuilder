@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Grão Norte — Wholesale</title>
+  <style>
+    body { margin: 0; font-family: system-ui, sans-serif; color: #241710; }
+    .top { display: flex; justify-content: space-between; padding: 16px 40px; border-bottom: 1px solid #e6d8c6; }
+    .intro { padding: 64px 40px; background: #f7efe4; }
+    .intro h1 { font-size: 44px; margin: 0 0 12px; }
+    .list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; padding: 40px; }
+    .item { padding: 20px; border: 1px solid #e6d8c6; border-radius: 12px; }
+    .contact { padding: 40px; }
+    .contact form { display: flex; flex-direction: column; gap: 12px; max-width: 420px; }
+  </style>
+</head>
+<body>
+  <header class="top"><strong>Grão Norte</strong><a href="mailto:b2b@graonorte.com.br">b2b@graonorte.com.br</a></header>
+  <section class="intro">
+    <h1>Coffee for cafés and offices</h1>
+    <p>Roasted to order, delivered every two weeks, with a barista training visit included.</p>
+  </section>
+  <section class="list">
+    <div class="item"><h3>Espresso blend</h3><p>Chocolate, caramel, low acidity. 1 kg bags.</p></div>
+    <div class="item"><h3>Filter single origin</h3><p>Rotates monthly. 1 kg bags.</p></div>
+    <div class="item"><h3>Decaf</h3><p>Swiss water process. 500 g bags.</p></div>
+    <div class="item"><h3>Cold brew kit</h3><p>Coarse grind, 5 L batches.</p></div>
+  </section>
+  <section class="contact">
+    <h2>Ask for a quote</h2>
+    <form>
+      <label>Company <input type="text" name="company"></label>
+      <label>Email <input type="email" name="email"></label>
+      <label>Monthly volume <select name="volume"><option>Up to 10 kg</option><option>10 to 50 kg</option><option>Over 50 kg</option></select></label>
+      <button type="submit">Send</button>
+    </form>
+  </section>
+</body>
+</html>

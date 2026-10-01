@@ -1,0 +1,49 @@
+{
+  "id": "expert-M1",
+  "persona": "expert-marina",
+  "result": "done",
+  "seconds": 4,
+  "limitSeconds": 360,
+  "gestures": {
+    "click": 2,
+    "keys": 33
+  },
+  "gestureTotal": 35,
+  "mouseTravelPx": 150,
+  "undos": 0,
+  "refusals": [],
+  "messages": [
+    "Idioma: Português (Brasil).",
+    "Seção colocado em Page, posição 1 de 1.",
+    "Título colocado em Seção, posição 1 de 1.",
+    "Parágrafo colocado em Seção, posição 2 de 2.",
+    "Botão colocado em Seção, posição 3 de 3."
+  ],
+  "consoleErrors": [],
+  "incidents": 0,
+  "reloadsDuringTask": 0,
+  "incidentsSeen": [],
+  "latencyMs": {
+    "n": 34,
+    "p50": 27.5,
+    "p95": 72.8,
+    "max": 113.2
+  },
+  "historyAtStart": {
+    "undoSteps": 0,
+    "redoSteps": 0
+  },
+  "historyAtEnd": {
+    "undoSteps": 4,
+    "redoSteps": 0
+  },
+  "downloads": [],
+  "uploads": [],
+  "seq": null,
+  "feel": [],
+  "wish": [],
+  "deadEnds": [],
+  "issues": [],
+  "notes": "expert baseline",
+  "shots": "jornada03\\shots\\expert-M1"
+}

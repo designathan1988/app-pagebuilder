@@ -1,0 +1,51 @@
+{
+  "id": "expert-M5",
+  "persona": "expert-marina",
+  "result": "done",
+  "seconds": 1,
+  "limitSeconds": 180,
+  "gestures": {
+    "keys": 2,
+    "click": 1
+  },
+  "gestureTotal": 3,
+  "mouseTravelPx": 0,
+  "undos": 0,
+  "refusals": [],
+  "messages": [
+    "Pré-visualização: use a página como um visitante. Pressione Esc para voltar à edição.",
+    "Site exportado como site.zip.",
+    "De volta à edição."
+  ],
+  "consoleErrors": [
+    "pageerror SecurityError: Failed to read a named property '__study' from 'Window': Blocked a frame with origin \"null\" from accessing a cross-origin frame."
+  ],
+  "incidents": 0,
+  "reloadsDuringTask": 0,
+  "incidentsSeen": [],
+  "latencyMs": {
+    "n": 4,
+    "p50": 44.5,
+    "p95": 87.1,
+    "max": 87.1
+  },
+  "historyAtStart": {
+    "undoSteps": 0,
+    "redoSteps": 0
+  },
+  "historyAtEnd": {
+    "undoSteps": 0,
+    "redoSteps": 0
+  },
+  "downloads": [
+    "jornada03\\data\\downloads\\expert-M5-site.zip"
+  ],
+  "uploads": [],
+  "seq": null,
+  "feel": [],
+  "wish": [],
+  "deadEnds": [],
+  "issues": [],
+  "notes": "expert baseline",
+  "shots": "jornada03\\shots\\expert-M5"
+}

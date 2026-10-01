@@ -1,0 +1,53 @@
+{
+  "id": "probe-P2",
+  "persona": "probe",
+  "result": "done",
+  "seconds": 25,
+  "limitSeconds": 300,
+  "gestures": {
+    "click": 1,
+    "keys": 3
+  },
+  "gestureTotal": 4,
+  "mouseTravelPx": 0,
+  "undos": 0,
+  "refusals": [],
+  "messages": [
+    "Section 0 selected."
+  ],
+  "consoleErrors": [],
+  "incidents": 0,
+  "reloadsDuringTask": 0,
+  "incidentsSeen": [],
+  "latencyMs": {
+    "n": 4,
+    "p50": 32,
+    "p95": 169.8,
+    "max": 169.8
+  },
+  "historyAtStart": {
+    "undoSteps": 50,
+    "redoSteps": 0
+  },
+  "historyAtEnd": {
+    "undoSteps": 50,
+    "redoSteps": 0
+  },
+  "downloads": [],
+  "uploads": [],
+  "seq": null,
+  "feel": [],
+  "wish": [],
+  "deadEnds": [],
+  "issues": [
+    {
+      "kind": "accessibility",
+      "sev": 3,
+      "heuristic": "WCAG 2.1.1 keyboard",
+      "what": "Canvas and Layers tree are unreachable by F6; arrows need a selection; palette has no roving focus (74 tab stops); focus lost after opening a panel from the command bar",
+      "evidence": "diego-D4, probe-P2"
+    }
+  ],
+  "notes": "Focus ring visible (2px solid #5fe0cf outline). F6 cycles 7 regions: top-bar, activity-bar, panel-header, canvas-breakpoints, tab-strip, inspector-header, status-bar; never the canvas nor the Layers tree. The Insert palette puts each of its 74 tiles in the Tab order. Opening Layers from the command bar drops the focus to the body. Arrows need an existing selection.",
+  "shots": "jornada03\\shots\\probe-P2"
+}

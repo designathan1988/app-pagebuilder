@@ -1,0 +1,83 @@
+{
+  "id": "carla-C2",
+  "persona": "carla",
+  "result": "done",
+  "seconds": 71,
+  "limitSeconds": 360,
+  "gestures": {
+    "click": 9,
+    "move": 3,
+    "keys": 167,
+    "wheel": 2,
+    "dblclick": 2
+  },
+  "gestureTotal": 180,
+  "mouseTravelPx": 3579,
+  "undos": 0,
+  "refusals": [],
+  "messages": [
+    "Painel Explorador fechado.",
+    "Painel Explorador aberto.",
+    "Home duplicada como Home 2.",
+    "Página Home 2 aberta.",
+    "A página agora se chama Unidade Centro.",
+    "Título selecionado.",
+    "Editando o texto — Enter, Esc ou um clique fora o mantém; Ctrl+Z o desfaz.",
+    "Texto de Título salvo.",
+    "Unidade Centro duplicada como Unidade Centro 2.",
+    "Página Unidade Centro 2 aberta.",
+    "A página agora se chama Unidade Praia.",
+    "Título selecionado.",
+    "Editando o texto — Enter, Esc ou um clique fora o mantém; Ctrl+Z o desfaz.",
+    "Texto de Título salvo."
+  ],
+  "consoleErrors": [],
+  "incidents": 0,
+  "reloadsDuringTask": 0,
+  "incidentsSeen": [],
+  "latencyMs": {
+    "n": 63,
+    "p50": 26.4,
+    "p95": 394.8,
+    "max": 708.1
+  },
+  "historyAtStart": {
+    "undoSteps": 4,
+    "redoSteps": 0
+  },
+  "historyAtEnd": {
+    "undoSteps": 10,
+    "redoSteps": 0
+  },
+  "downloads": [],
+  "uploads": [],
+  "seq": 4,
+  "feel": [
+    "Duplicar a pagina esta no proprio item da lista (aparece ao passar o mouse); funcionou.",
+    "Mas a copia nao abre sozinha nem deixa o nome pronto para digitar, como o + faz; cliquei na aba errada uma vez.",
+    "Clicar no icone do Explorador fechou o painel (ele ja estava aberto) e eu achei que tinha sumido."
+  ],
+  "wish": [
+    "Duplicar ja abrir a copia com o nome selecionado.",
+    "Criar varias paginas de uma vez a partir de um modelo (Centro, Praia, Shopping...)."
+  ],
+  "deadEnds": [],
+  "issues": [
+    {
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H4 consistency",
+      "what": "Duplicating a page neither opens the copy nor focuses its name (unlike +)",
+      "evidence": "shot 005"
+    },
+    {
+      "kind": "usability",
+      "sev": 1,
+      "heuristic": "H1 visibility",
+      "what": "The activity bar icon of the open panel closes the side panel; a person reads it as 'open'",
+      "evidence": "shot 003"
+    }
+  ],
+  "notes": "Duplicate page + rename + title, twice. Files follow the names (unidade-centro.html).",
+  "shots": "jornada03\\shots\\carla-C2"
+}

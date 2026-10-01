@@ -1,0 +1,187 @@
+{
+  "id": "marina-M4",
+  "persona": "marina",
+  "result": "done",
+  "seconds": 205,
+  "limitSeconds": 600,
+  "gestures": {
+    "click": 60,
+    "wheel": 12,
+    "keys": 200,
+    "move": 1
+  },
+  "gestureTotal": 272,
+  "mouseTravelPx": 29936,
+  "undos": 5,
+  "refusals": [],
+  "messages": [
+    "Painel Explorador aberto.",
+    "Enviado: fonts/GraoDisplay.ttf, img/hero.png, img/graos.png, img/xicara.png, img/loja.png.",
+    "Editando o breakpoint Desktop.",
+    "Título selecionado.",
+    "Fonte de Título: Grao.",
+    "Fonte de Título: GraoDisplay.",
+    "Link selecionado.",
+    "2 elementos selecionados.",
+    "3 elementos selecionados.",
+    "4 elementos selecionados.",
+    "5 elementos selecionados.",
+    "Fonte de 5 elementos: GraoDisplay.",
+    "Parágrafo 5 selecionado.",
+    "2 elementos selecionados.",
+    "3 elementos selecionados.",
+    "4 elementos selecionados.",
+    "5 elementos selecionados.",
+    "6 elementos selecionados.",
+    "7 elementos selecionados.",
+    "8 elementos selecionados.",
+    "Fonte de 8 elementos: GraoDisplay.",
+    "Título 10 selecionado.",
+    "Fonte de Título 10: GraoDisplay.",
+    "Imagem selecionado.",
+    "Origem de Imagem: img/hero.png.",
+    "Imagem não tem texto para editar.",
+    "Texto alternativo de Imagem: Xícara de café vista de cima.",
+    "Imagem 2 selecionado.",
+    "Origem de Imagem 2: img/graos.png.",
+    "Imagem 2 envolvido em Grade 3 (display: grid; column-gap: 16px; row-gap: 16px; grid-template-columns: minmax(0, 1fr)).",
+    "Grade 3 envolvido em Linha (display: flex; flex-direction: row; column-gap: 16px).",
+    "Selecione um contêiner com pelo menos dois filhos.",
+    "Troquei a direção de Linha: flex-direction column.",
+    "Linha não tem texto para editar.",
+    "Imagem 3 selecionado.",
+    "Origem de Imagem 3: img/xicara.png.",
+    "Imagem 3 não tem texto para editar.",
+    "Imagem 4 selecionado.",
+    "Origem de Imagem 4: img/loja.png.",
+    "Imagem 4 não tem texto para editar.",
+    "Nada selecionado.",
+    "Desfeito: Origem de Imagem 4: img/loja.png.",
+    "Desfeito: Origem de Imagem 3: img/xicara.png.",
+    "Desfeito: Troquei a direção de Linha: flex-direction column.",
+    "Desfeito: Grade 3 envolvido em Linha (display: flex; flex-direction: row; column-gap: 16px).",
+    "Desfeito: Imagem 2 envolvido em Grade 3 (display: grid; column-gap: 16px; row-gap: 16px; grid-template-columns: minmax(0, 1fr)).",
+    "Imagem 3 selecionado.",
+    "Origem de Imagem 3: img/xicara.png.",
+    "Texto alternativo de Imagem 3: Xícara de café.",
+    "Imagem 4 selecionado.",
+    "Origem de Imagem 4: img/loja.png.",
+    "Texto alternativo de Imagem 4: A loja.",
+    "Imagem 2 selecionado.",
+    "Texto alternativo de Imagem 2: Grãos de café.",
+    "Imagem 2 selecionado.",
+    "2 elementos selecionados.",
+    "3 elementos selecionados.",
+    "Largura de 3 elementos: 100%."
+  ],
+  "consoleErrors": [],
+  "incidents": 0,
+  "latencyMs": {
+    "n": 272,
+    "p50": 29.2,
+    "p95": 162.9,
+    "max": 251.1
+  },
+  "historyAtStart": {
+    "undoSteps": 186,
+    "redoSteps": 0
+  },
+  "historyAtEnd": {
+    "undoSteps": 201,
+    "redoSteps": 0
+  },
+  "downloads": [],
+  "uploads": [
+    "C:/Codex-Shared/deepseek/builder-6/jornada03/00-frame/targets/marina/assets/GraoDisplay.ttf",
+    "C:/Codex-Shared/deepseek/builder-6/jornada03/00-frame/targets/marina/assets/hero.png",
+    "C:/Codex-Shared/deepseek/builder-6/jornada03/00-frame/targets/marina/assets/graos.png",
+    "C:/Codex-Shared/deepseek/builder-6/jornada03/00-frame/targets/marina/assets/xicara.png",
+    "C:/Codex-Shared/deepseek/builder-6/jornada03/00-frame/targets/marina/assets/loja.png"
+  ],
+  "seq": 3,
+  "feel": [
+    "Enviar a fonte e as imagens foi fácil: o app separou fonts/ e img/ sozinho.",
+    "Mas a fonte que eu enviei não aparece na lista de fontes; tive que adivinhar o nome (o do arquivo).",
+    "Abrir a lista de fontes gravou o que eu tinha digitado pela metade ('Grao') e o título virou Times.",
+    "A lista de fontes aparece cortada à esquerda.",
+    "Depois de escolher a imagem, o seletor continuou aberto; meu clique no texto alternativo só fechou o seletor e o que digitei virou atalhos: a imagem foi parar dentro de uma Grade e de uma Linha. Só percebi pelo cartão quebrado.",
+    "Com a imagem de verdade, as fotos dos benefícios encolheram: o placeholder ocupava a largura toda, a imagem não."
+  ],
+  "wish": [
+    "As fontes do projeto no topo da lista de fontes, com prévia.",
+    "Arrastar a imagem do Explorador direto para o elemento no canvas.",
+    "Miniaturas no seletor de imagens."
+  ],
+  "deadEnds": [
+    {
+      "what": "usar a fonte enviada",
+      "tried": "lista de fontes",
+      "outcome": "não está lá; digitou GraoDisplay"
+    },
+    {
+      "what": "texto alternativo logo após escolher a imagem",
+      "tried": "clicar no campo e digitar",
+      "outcome": "o seletor engoliu o clique; as letras G e R rodaram atalhos de estrutura; desfez 5 passos"
+    }
+  ],
+  "issues": [
+    {
+      "kind": "bug",
+      "sev": 4,
+      "heuristic": "H5 error prevention",
+      "what": "Letters typed when focus is not in a field run structure shortcuts until a letter that binds nothing: 'Grãos de café' wrapped an image in a Grade and a Linha and flipped its direction, silently",
+      "evidence": "messages after 'Origem de Imagem 2'; document Linha"
+    },
+    {
+      "kind": "bug",
+      "sev": 3,
+      "heuristic": "H3 user control",
+      "what": "The file chooser (image source) stays open after a file is chosen; the next click only closes it",
+      "evidence": "shot 041"
+    },
+    {
+      "kind": "missing",
+      "sev": 3,
+      "heuristic": "H6 recognition",
+      "what": "Uploaded project fonts are not offered in the Font field's list; the family name must be guessed from the file name",
+      "evidence": "shot 010"
+    },
+    {
+      "kind": "bug",
+      "sev": 2,
+      "heuristic": "H3 user control",
+      "what": "Opening the Font list commits the partially typed text ('Grao') as the font",
+      "evidence": "status 'Fonte de Título: Grao'"
+    },
+    {
+      "kind": "visual",
+      "sev": 2,
+      "heuristic": "H8 aesthetic",
+      "what": "The Font list menu is clipped on its left edge",
+      "evidence": "shot 010"
+    },
+    {
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H1 visibility",
+      "what": "An image's placeholder spans the width its real picture will not: the layout changes when the source arrives",
+      "evidence": "shot 041 vs 049"
+    },
+    {
+      "kind": "visual",
+      "sev": 1,
+      "heuristic": "H8 aesthetic",
+      "what": "Image Source field draws the path over the 'Escolher um arquivo' button text; the button is clipped at the panel's edge",
+      "evidence": "shots 026, 041"
+    },
+    {
+      "kind": "missing",
+      "sev": 2,
+      "heuristic": "H6 recognition",
+      "what": "The image chooser lists file names only, no thumbnails",
+      "evidence": "shot 027"
+    }
+  ],
+  "notes": "Includes the persona's recovery from the shortcut damage (5 undos, 2 redone choices).",
+  "shots": "jornada03\\shots\\marina-M4"
+}

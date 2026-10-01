@@ -1,0 +1,48 @@
+{
+  "id": "probe-P3",
+  "persona": "probe",
+  "result": "done",
+  "seconds": 15,
+  "limitSeconds": 180,
+  "gestures": {},
+  "gestureTotal": 0,
+  "mouseTravelPx": 0,
+  "undos": 0,
+  "refusals": [],
+  "messages": [],
+  "consoleErrors": [],
+  "incidents": 0,
+  "reloadsDuringTask": 0,
+  "incidentsSeen": [],
+  "latencyMs": {
+    "n": 0,
+    "p50": null,
+    "p95": null,
+    "max": null
+  },
+  "historyAtStart": {
+    "undoSteps": 0,
+    "redoSteps": 3
+  },
+  "historyAtEnd": {
+    "undoSteps": 0,
+    "redoSteps": 3
+  },
+  "downloads": [],
+  "uploads": [],
+  "seq": null,
+  "feel": [],
+  "wish": [],
+  "deadEnds": [],
+  "issues": [
+    {
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H8 aesthetic",
+      "what": "At 1280x720 the canvas gets 45% of the window; side panels cannot be narrowed below their defaults without collapsing",
+      "evidence": "probe-P3 shot 002"
+    }
+  ],
+  "notes": "Window 1280x720: canvas region 692x600 = 45% of the window; zoom fits at 48%; no panel clipped.",
+  "shots": "jornada03\\shots\\probe-P3"
+}

@@ -1,0 +1,59 @@
+{
+  "id": "expert-C1",
+  "persona": "expert-carla",
+  "result": "done",
+  "seconds": 13,
+  "limitSeconds": 360,
+  "gestures": {
+    "click": 12,
+    "wheel": 6,
+    "keys": 27
+  },
+  "gestureTotal": 45,
+  "mouseTravelPx": 7397,
+  "undos": 0,
+  "refusals": [],
+  "messages": [
+    "Botão selecionado.",
+    "2 elementos selecionados.",
+    "3 elementos selecionados.",
+    "4 elementos selecionados.",
+    "5 elementos selecionados.",
+    "Fundo de 5 elementos: #2f6f4e.",
+    "Parágrafo 5 selecionado.",
+    "Seção 2 selecionado.",
+    "Fundo de Seção 2: #2f6f4e.",
+    "Título 8 selecionado.",
+    "Cartão 5 selecionado.",
+    "Cor da borda de Cartão 5 redefinido.",
+    "1 elementos selecionados.",
+    "Cartão 5 não tem texto para editar."
+  ],
+  "consoleErrors": [],
+  "incidents": 0,
+  "reloadsDuringTask": 0,
+  "incidentsSeen": [],
+  "latencyMs": {
+    "n": 46,
+    "p50": 30.2,
+    "p95": 241.7,
+    "max": 304.8
+  },
+  "historyAtStart": {
+    "undoSteps": 0,
+    "redoSteps": 0
+  },
+  "historyAtEnd": {
+    "undoSteps": 3,
+    "redoSteps": 0
+  },
+  "downloads": [],
+  "uploads": [],
+  "seq": null,
+  "feel": [],
+  "wish": [],
+  "deadEnds": [],
+  "issues": [],
+  "notes": "expert baseline",
+  "shots": "jornada03\\shots\\expert-C1"
+}

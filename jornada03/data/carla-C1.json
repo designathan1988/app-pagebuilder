@@ -1,0 +1,88 @@
+{
+  "id": "carla-C1",
+  "persona": "carla",
+  "result": "done",
+  "seconds": 58,
+  "limitSeconds": 360,
+  "gestures": {
+    "keys": 41,
+    "click": 13,
+    "wheel": 5
+  },
+  "gestureTotal": 59,
+  "mouseTravelPx": 7331,
+  "undos": 0,
+  "refusals": [],
+  "messages": [
+    "Botão selecionado.",
+    "2 elementos selecionados.",
+    "3 elementos selecionados.",
+    "4 elementos selecionados.",
+    "5 elementos selecionados.",
+    "Fundo de 5 elementos: #2f6f4e.",
+    "Parágrafo 5 selecionado.",
+    "Seção 2 selecionado.",
+    "Fundo de Seção 2: #2f6f4e.",
+    "Título 8 selecionado.",
+    "Cartão 5 selecionado.",
+    "Cor da borda de Cartão 5 redefinido.",
+    "1 elementos selecionados.",
+    "Cartão 5 não tem texto para editar.",
+    "Cor da borda de Cartão 5: #2f6f4e."
+  ],
+  "consoleErrors": [],
+  "incidents": 0,
+  "reloadsDuringTask": 0,
+  "incidentsSeen": [],
+  "latencyMs": {
+    "n": 63,
+    "p50": 31.3,
+    "p95": 239.9,
+    "max": 307.2
+  },
+  "historyAtStart": {
+    "undoSteps": 0,
+    "redoSteps": 0
+  },
+  "historyAtEnd": {
+    "undoSteps": 4,
+    "redoSteps": 0
+  },
+  "downloads": [],
+  "uploads": [],
+  "seq": 2,
+  "feel": [
+    "Procurei trocar a cor da marca de uma vez: Ctrl+K so oferece propriedades CSS em ingles (text-decoration-line) e o painel de Variaveis estava vazio.",
+    "Tive que achar cada elemento marrom no olho e mudar um por um; agrupar com Shift ajudou nos botoes.",
+    "Nao sei se esqueci algum: nada me mostra onde a cor aparece."
+  ],
+  "wish": [
+    "Substituir uma cor em todo o site (localizar e substituir cor), ou uma paleta do site que vire variavel automaticamente.",
+    "Ver todos os lugares onde uma cor e usada."
+  ],
+  "deadEnds": [
+    {
+      "what": "trocar a cor no site inteiro",
+      "tried": "Ctrl+K cor, painel Estilos",
+      "outcome": "nada global; 7 edicoes"
+    }
+  ],
+  "issues": [
+    {
+      "kind": "missing",
+      "sev": 3,
+      "heuristic": "H7 flexibility",
+      "what": "No site-wide colour replace or usage list; a site built with hex values must be recoloured element by element",
+      "evidence": "C1"
+    },
+    {
+      "kind": "usability",
+      "sev": 2,
+      "heuristic": "H2 real world",
+      "what": "Command bar property entries are raw English CSS names in the pt-BR UI",
+      "evidence": "shot 002"
+    }
+  ],
+  "notes": "7 elements changed one by one or in Shift groups (5 buttons, quote band, featured card border); one border colour lost through a squeezed field reset and re-entered. Marina used no variables, so there was nothing global to change.",
+  "shots": "jornada03\\shots\\carla-C1"
+}

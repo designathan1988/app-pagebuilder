@@ -1,0 +1,58 @@
+{
+  "id": "expert-C2",
+  "persona": "expert-carla",
+  "result": "invalid",
+  "seconds": 8,
+  "limitSeconds": 360,
+  "gestures": {
+    "move": 2,
+    "click": 6,
+    "keys": 68,
+    "dblclick": 2
+  },
+  "gestureTotal": 76,
+  "mouseTravelPx": 1084,
+  "undos": 0,
+  "refusals": [],
+  "messages": [
+    "Editando o breakpoint Notebook.",
+    "Destaque selecionado.",
+    "Padding esquerdo: \"Unidade Centro\" não é um valor aceito por este campo.",
+    "Título selecionado.",
+    "Editando o texto — Enter, Esc ou um clique fora o mantém; Ctrl+Z o desfaz.",
+    "Texto de Título salvo.",
+    "Título selecionado.",
+    "Destaque selecionado.",
+    "Padding esquerdo: \"Unidade Praia\" não é um valor aceito por este campo.",
+    "Título selecionado.",
+    "Editando o texto — Enter, Esc ou um clique fora o mantém; Ctrl+Z o desfaz.",
+    "Texto de Título salvo."
+  ],
+  "consoleErrors": [],
+  "incidents": 0,
+  "reloadsDuringTask": 0,
+  "incidentsSeen": [],
+  "latencyMs": {
+    "n": 43,
+    "p50": 27.3,
+    "p95": 88.2,
+    "max": 149.3
+  },
+  "historyAtStart": {
+    "undoSteps": 0,
+    "redoSteps": 0
+  },
+  "historyAtEnd": {
+    "undoSteps": 2,
+    "redoSteps": 0
+  },
+  "downloads": [],
+  "uploads": [],
+  "seq": null,
+  "feel": [],
+  "wish": [],
+  "deadEnds": [],
+  "issues": [],
+  "notes": "INVALID expert run: the Explorer icon toggled the panel closed and the scripted clicks missed the page rows; it edited Home instead of creating pages. Excluded from calibration.",
+  "shots": "jornada03\\shots\\expert-C2"
+}
