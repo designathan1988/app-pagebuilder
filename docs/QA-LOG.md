@@ -7,4 +7,5 @@ and what changed.
 
 | # | Commit | Area | What the user met | What changed |
 |---|---|---|---|---|
-| 1 | (this commit) | Pages list | A click on "Home" put its name in edit and left the canvas on the other page; only the small page icon switched pages. | Another page's name reads as text and a click on it opens the page; only the page on the canvas is renamed in place. |
+| 1 | 6c9e0a1 | Pages list | A click on "Home" put its name in edit and left the canvas on the other page; only the small page icon switched pages. | Another page's name reads as text and a click on it opens the page; only the page on the canvas is renamed in place. |
+| 2 | (this commit) | Insert panel | The Heading, Paragraph, Button and Image were not visible: only Structure fit, the Image came after 23 form controls, the Button among them. | Groups ordered as a page is built (Structure, Text, Media, Forms, Lists, Tables, Interactive, Templates); the Button moved to Text. The scenario `a-collapsed-group-hides-its-tiles…` now compares with 230 px (Text holds a fourth row). |

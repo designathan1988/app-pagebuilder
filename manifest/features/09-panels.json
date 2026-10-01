@@ -78,7 +78,7 @@
                   "region": "palette-tiles",
                   "measure": "height",
                   "relation": "less-than",
-                  "value": 200,
+                  "value": 230,
                   "reference": null
                 }
               ],

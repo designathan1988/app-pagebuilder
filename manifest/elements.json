@@ -2385,6 +2385,14 @@
           "feature": "elements-text"
         },
         {
+          "id": "button",
+          "labelKey": "palette.entry.button",
+          "element": "button",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-form-structure"
+        },
+        {
           "id": "blockquote",
           "labelKey": "palette.entry.blockquote",
           "element": "blockquote",
@@ -2411,46 +2419,80 @@
       ]
     },
     {
-      "id": "lists",
-      "labelKey": "palette.group.lists",
+      "id": "media",
+      "labelKey": "palette.group.media",
       "entries": [
         {
-          "id": "unordered-list",
-          "labelKey": "palette.entry.unorderedList",
-          "element": "list",
+          "id": "image",
+          "labelKey": "palette.entry.image",
+          "element": "image",
           "kind": "element",
           "inputType": null,
-          "feature": "elements-lists"
+          "feature": "elements-media-images"
         },
         {
-          "id": "ordered-list",
-          "labelKey": "palette.entry.orderedList",
-          "element": "orderedList",
+          "id": "picture",
+          "labelKey": "palette.entry.picture",
+          "element": "picture",
           "kind": "element",
           "inputType": null,
-          "feature": "elements-lists"
+          "feature": "elements-media-images"
         },
         {
-          "id": "definition-list",
-          "labelKey": "palette.entry.definitionList",
-          "element": "definitionList",
+          "id": "figure",
+          "labelKey": "palette.entry.figure",
+          "element": "figure",
           "kind": "element",
           "inputType": null,
-          "feature": "elements-lists"
-        }
-      ]
-    },
-    {
-      "id": "tables",
-      "labelKey": "palette.group.tables",
-      "entries": [
+          "feature": "elements-media-images"
+        },
         {
-          "id": "table",
-          "labelKey": "palette.entry.table",
-          "element": "table",
+          "id": "video",
+          "labelKey": "palette.entry.video",
+          "element": "video",
           "kind": "element",
           "inputType": null,
-          "feature": "elements-tables"
+          "feature": "elements-media-embeds"
+        },
+        {
+          "id": "audio",
+          "labelKey": "palette.entry.audio",
+          "element": "audio",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-media-embeds"
+        },
+        {
+          "id": "embedded-frame",
+          "labelKey": "palette.entry.embeddedFrame",
+          "element": "iframe",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-media-embeds"
+        },
+        {
+          "id": "canvas",
+          "labelKey": "palette.entry.canvas",
+          "element": "canvas",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-media-embeds"
+        },
+        {
+          "id": "svg",
+          "labelKey": "palette.entry.svg",
+          "element": "svg",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-svg-shapes"
+        },
+        {
+          "id": "embed-html",
+          "labelKey": "palette.entry.embedHtml",
+          "element": "embed",
+          "kind": "element",
+          "inputType": null,
+          "feature": "embed-html"
         }
       ]
     },
@@ -2611,14 +2653,6 @@
           "feature": "elements-form-controls"
         },
         {
-          "id": "button",
-          "labelKey": "palette.entry.button",
-          "element": "button",
-          "kind": "element",
-          "inputType": null,
-          "feature": "elements-form-structure"
-        },
-        {
           "id": "progress",
           "labelKey": "palette.entry.progress",
           "element": "progress",
@@ -2645,80 +2679,46 @@
       ]
     },
     {
-      "id": "media",
-      "labelKey": "palette.group.media",
+      "id": "lists",
+      "labelKey": "palette.group.lists",
       "entries": [
         {
-          "id": "image",
-          "labelKey": "palette.entry.image",
-          "element": "image",
+          "id": "unordered-list",
+          "labelKey": "palette.entry.unorderedList",
+          "element": "list",
           "kind": "element",
           "inputType": null,
-          "feature": "elements-media-images"
+          "feature": "elements-lists"
         },
         {
-          "id": "picture",
-          "labelKey": "palette.entry.picture",
-          "element": "picture",
+          "id": "ordered-list",
+          "labelKey": "palette.entry.orderedList",
+          "element": "orderedList",
           "kind": "element",
           "inputType": null,
-          "feature": "elements-media-images"
+          "feature": "elements-lists"
         },
         {
-          "id": "figure",
-          "labelKey": "palette.entry.figure",
-          "element": "figure",
+          "id": "definition-list",
+          "labelKey": "palette.entry.definitionList",
+          "element": "definitionList",
           "kind": "element",
           "inputType": null,
-          "feature": "elements-media-images"
-        },
+          "feature": "elements-lists"
+        }
+      ]
+    },
+    {
+      "id": "tables",
+      "labelKey": "palette.group.tables",
+      "entries": [
         {
-          "id": "video",
-          "labelKey": "palette.entry.video",
-          "element": "video",
+          "id": "table",
+          "labelKey": "palette.entry.table",
+          "element": "table",
           "kind": "element",
           "inputType": null,
-          "feature": "elements-media-embeds"
-        },
-        {
-          "id": "audio",
-          "labelKey": "palette.entry.audio",
-          "element": "audio",
-          "kind": "element",
-          "inputType": null,
-          "feature": "elements-media-embeds"
-        },
-        {
-          "id": "embedded-frame",
-          "labelKey": "palette.entry.embeddedFrame",
-          "element": "iframe",
-          "kind": "element",
-          "inputType": null,
-          "feature": "elements-media-embeds"
-        },
-        {
-          "id": "canvas",
-          "labelKey": "palette.entry.canvas",
-          "element": "canvas",
-          "kind": "element",
-          "inputType": null,
-          "feature": "elements-media-embeds"
-        },
-        {
-          "id": "svg",
-          "labelKey": "palette.entry.svg",
-          "element": "svg",
-          "kind": "element",
-          "inputType": null,
-          "feature": "elements-svg-shapes"
-        },
-        {
-          "id": "embed-html",
-          "labelKey": "palette.entry.embedHtml",
-          "element": "embed",
-          "kind": "element",
-          "inputType": null,
-          "feature": "embed-html"
+          "feature": "elements-tables"
         }
       ]
     },
