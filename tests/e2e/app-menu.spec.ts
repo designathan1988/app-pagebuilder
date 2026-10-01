@@ -64,3 +64,25 @@ test('F10 opens the menu bar, the arrows walk its menus, and open and close a su
   await expect(theme).toHaveAttribute('aria-expanded', 'false');
   await expect(theme).toBeFocused();
 });
+
+test('with a menu open, the pointer onto another menu button opens that one; with none open, hovering opens nothing', runs(), async ({ page }) => {
+  // the dogfooding pass: each application menu wanted its own click
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await openEditor(page);
+  const centre = async (menu: string) => {
+    const box = await page.locator(`[data-menu="${menu}"]`).boundingBox();
+    if (box === null) throw new Error(`no ${menu} menu`);
+    return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+  };
+  const file = await centre('file');
+  await page.mouse.click(file.x, file.y);
+  await expect(page.locator('[data-menu="file"]')).toHaveAttribute('aria-expanded', 'true');
+  const edit = await centre('edit');
+  await page.mouse.move(edit.x, edit.y, { steps: 6 });
+  await expect(page.locator('[data-menu="edit"]')).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.locator('[data-menu="file"]')).toHaveAttribute('aria-expanded', 'false');
+  await page.keyboard.press('Escape');
+  const view = await centre('view');
+  await page.mouse.move(view.x, view.y, { steps: 6 });
+  await expect(page.locator('[data-menu][aria-expanded="true"]')).toHaveCount(0);
+});

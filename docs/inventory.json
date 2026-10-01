@@ -6,7 +6,7 @@
     "doors": 1016,
     "scenarios": 1351,
     "modules": 260,
-    "lines": 50232
+    "lines": 50267
   },
   "features": [
     {
@@ -4228,7 +4228,7 @@
     },
     {
       "path": "src/editor/doors/menu.tsx",
-      "lines": 269,
+      "lines": 278,
       "commands": [],
       "features": []
     },
@@ -4334,7 +4334,7 @@
     },
     {
       "path": "src/editor/input/pointer.ts",
-      "lines": 1936,
+      "lines": 1944,
       "commands": [],
       "features": []
     },
@@ -4352,7 +4352,7 @@
     },
     {
       "path": "src/editor/input/pointer/views.ts",
-      "lines": 270,
+      "lines": 288,
       "commands": [],
       "features": []
     },

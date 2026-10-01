@@ -98,6 +98,7 @@ import {
   setPressing,
   setResizing,
   setBanding,
+  setMenuOver,
   type Inserting,
   type Redirect,
   type SideView,
@@ -108,7 +109,7 @@ export { DRAG_THRESHOLD, IDLE, step } from './pointer/machine.ts';
 export type { Effect, Machine, MachineEvent, Press } from './pointer/machine.ts';
 export { clickDoor, editEndDoor, modifierOf } from './pointer/press.ts';
 export type { Button, PressFacts } from './pointer/press.ts';
-export { band, bandingNow, canvasPointer, drag, ghostReturn, guideOverRuler, holdAlt, hover, lastDrop, measuring, panState, pointerPressing, pressPoint, resizingNow } from './pointer/views.ts';
+export { band, bandingNow, canvasPointer, menuOver, drag, ghostReturn, guideOverRuler, holdAlt, hover, lastDrop, measuring, panState, pointerPressing, pressPoint, resizingNow } from './pointer/views.ts';
 export type { Band, DragView, Dropped, GhostReturn, Inserting, PanView, Redirect, SideView } from './pointer/views.ts';
 
 
@@ -1475,6 +1476,13 @@ export function installPointer(store: EditorStore, target: Window = window): () 
       return;
     }
     const under = underPointer(event);
+    // an application menu's button under the pointer (the open menu's backdrop covers the window: the buttons are
+    // looked for by their boxes), for the menu bar's hover switch
+    const menuButton = [...document.querySelectorAll<HTMLElement>('[data-region="top-bar"] [data-menu]')].find((b) => {
+      const r = b.getBoundingClientRect();
+      return event.clientX >= r.left && event.clientX <= r.right && event.clientY >= r.top && event.clientY <= r.bottom;
+    });
+    setMenuOver(menuButton?.getAttribute('data-menu') ?? null);
     overStage = onStage(under);
     setCanvasPointer(overStage ? { x: event.clientX, y: event.clientY } : null);
     if (spacing !== null) {

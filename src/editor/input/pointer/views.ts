@@ -52,6 +52,24 @@ export function setHovered(node: string | null) {
   for (const listener of [...hoverListeners]) listener();
 }
 
+// The application menu button the pointer stands on (its data-menu), or null: while one application menu is open, the
+// pointer moving onto another menu's button opens that one instead, as a desktop menu bar does (the dogfooding pass:
+// each menu wanted its own click). Pointer state.
+let menuUnder: string | null = null;
+const menuListeners = new Set<() => void>();
+export const menuOver = {
+  get: (): string | null => menuUnder,
+  subscribe(listener: () => void): () => void {
+    menuListeners.add(listener);
+    return () => menuListeners.delete(listener);
+  },
+};
+export function setMenuOver(menu: string | null) {
+  if (menu === menuUnder) return;
+  menuUnder = menu;
+  for (const listener of [...menuListeners]) listener();
+}
+
 // Whether Alt is held (spec hover-measure): while it is, the canvas draws the distances from the selection to the element
 // under the pointer. The keymap, the owner of keys, says when it goes down and up (holdAlt); nothing changes in the
 // document or the selection. Pointer state, for the canvas chrome.
