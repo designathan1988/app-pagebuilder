@@ -523,7 +523,7 @@
               "geometry": [],
               "feedback": [
                 {
-                  "key": "status.breakpointActive",
+                  "key": "status.breakpointPreviewed",
                   "params": {
                     "breakpoint": "Laptop"
                   }
@@ -613,7 +613,7 @@
               "geometry": [],
               "feedback": [
                 {
-                  "key": "status.breakpointActive",
+                  "key": "status.breakpointPreviewed",
                   "params": {
                     "breakpoint": "Tablet"
                   }
@@ -703,7 +703,7 @@
               "geometry": [],
               "feedback": [
                 {
-                  "key": "status.breakpointActive",
+                  "key": "status.breakpointPreviewed",
                   "params": {
                     "breakpoint": "Phone"
                   }
@@ -804,7 +804,7 @@
               "geometry": [],
               "feedback": [
                 {
-                  "key": "status.breakpointActive",
+                  "key": "status.breakpointPreviewed",
                   "params": {
                     "breakpoint": "Desktop"
                   }

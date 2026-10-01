@@ -25,6 +25,7 @@ import { panelName } from '../workspace/panels.ts';
 import { messageText, useLocale, useT } from '../text.ts';
 import { ZoomValue } from './canvas.tsx';
 import { Slots } from './slots.tsx';
+import { previewing } from '../view/preview.ts';
 
 
 export function StatusBar() {
@@ -51,55 +52,60 @@ export function StatusBar() {
   const shown = dragging === null ? [message] : next.pinned !== null ? [next.pinned] : words.length > 0 ? words : [message];
   // the whole message, also its tooltip: a long one is cut on the bar (DESIGN.md "Dock and status bar")
   const dockClosed = useEditorState((s) => s.ui.layout.dock === 'collapsed');
+  // while the page is previewed, the bar says only its message: the editing controls (the breadcrumb, the size, the
+  // zoom…) act on a canvas that is not shown (the audit's U-039, met again in the dogfooding pass)
+  const preview = useEditorState((s) => previewing(s.ui));
   const text = shown.every((m) => m === null) ? null : shown.flatMap((m) => (m === null ? [] : [messageText(locale, m)])).join(' · ');
   return (
     <footer className="status-bar" data-region="status-bar">
       <span className="status-bar__message" role="status" aria-live="polite" title={text ?? undefined}>
         {text}
       </span>
-      <Slots
-        region="status-bar"
-        render={(slot) => {
-          // the region's item is the breadcrumb of the selection (DESIGN.md "Regions": 1 the breadcrumb)
-          if (slot.kind === 'door' && drawnAsOf(slot.entry) === 'item') {
-            // the breadcrumb of the selection, then its size, the breakpoint and the state, and the element count
-            return [
-              <Breadcrumb key="breadcrumb" entry={slot.entry} />,
-              <SelectionSize key="size" />,
-              <span key="context" className="status-bar__item status-bar__context">
-                {t('statusBar.context', { breakpoint: t(breakpoint.labelKey as MessageId), state: t(state.labelKey as MessageId) })}
-              </span>,
-              <span key="count" className="status-bar__item">
-                {t(`status.elementCount.${pluralForm(locale, count)}`, { count })}
-              </span>,
-              <IncidentCount key="incidents" />,
-            ];
-          }
-          // the dock's panels as icons while the dock is closed (the audit's A3.18: the strip's 28 px go back to the
-          // canvas; pressing one opens the dock on that panel)
-          if (slot.kind === 'door' && dockClosed) {
-            // the Checks icon carries the number of issues the document has (the plan's 5.5: the issues seen without
-            // opening the dock), in its name too
-            if (slot.entry.door.args.panel === CHECKS_PANEL) return <ChecksIcon key={slot.entry.ref} entry={slot.entry} />;
-            return <DoorControl key={slot.entry.ref} entry={slot.entry} />;
-          }
-          if (slot.kind === 'menu' && slot.menu === 'zoom') {
-            return (
-              <MenuButton key={slot.menu} menu={slot.menu} anchor={slot.anchor}>
-                <ZoomValue />
-              </MenuButton>
-            );
-          }
-          if (slot.kind === 'menu' && slot.menu === 'language') {
-            return (
-              <MenuButton key={slot.menu} menu={slot.menu} anchor={slot.anchor}>
-                <span className="status-bar__language">{locale.toUpperCase()}</span>
-              </MenuButton>
-            );
-          }
-          return undefined;
-        }}
-      />
+      {preview ? null : (
+        <Slots
+          region="status-bar"
+          render={(slot) => {
+            // the region's item is the breadcrumb of the selection (DESIGN.md "Regions": 1 the breadcrumb)
+            if (slot.kind === 'door' && drawnAsOf(slot.entry) === 'item') {
+              // the breadcrumb of the selection, then its size, the breakpoint and the state, and the element count
+              return [
+                <Breadcrumb key="breadcrumb" entry={slot.entry} />,
+                <SelectionSize key="size" />,
+                <span key="context" className="status-bar__item status-bar__context">
+                  {t('statusBar.context', { breakpoint: t(breakpoint.labelKey as MessageId), state: t(state.labelKey as MessageId) })}
+                </span>,
+                <span key="count" className="status-bar__item">
+                  {t(`status.elementCount.${pluralForm(locale, count)}`, { count })}
+                </span>,
+                <IncidentCount key="incidents" />,
+              ];
+            }
+            // the dock's panels as icons while the dock is closed (the audit's A3.18: the strip's 28 px go back to the
+            // canvas; pressing one opens the dock on that panel)
+            if (slot.kind === 'door' && dockClosed) {
+              // the Checks icon carries the number of issues the document has (the plan's 5.5: the issues seen without
+              // opening the dock), in its name too
+              if (slot.entry.door.args.panel === CHECKS_PANEL) return <ChecksIcon key={slot.entry.ref} entry={slot.entry} />;
+              return <DoorControl key={slot.entry.ref} entry={slot.entry} />;
+            }
+            if (slot.kind === 'menu' && slot.menu === 'zoom') {
+              return (
+                <MenuButton key={slot.menu} menu={slot.menu} anchor={slot.anchor}>
+                  <ZoomValue />
+                </MenuButton>
+              );
+            }
+            if (slot.kind === 'menu' && slot.menu === 'language') {
+              return (
+                <MenuButton key={slot.menu} menu={slot.menu} anchor={slot.anchor}>
+                  <span className="status-bar__language">{locale.toUpperCase()}</span>
+                </MenuButton>
+              );
+            }
+            return undefined;
+          }}
+        />
+      )}
       <SaveStateLabel />
     </footer>
   );

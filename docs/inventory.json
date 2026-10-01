@@ -6,7 +6,7 @@
     "doors": 1016,
     "scenarios": 1351,
     "modules": 260,
-    "lines": 50267
+    "lines": 50276
   },
   "features": [
     {
@@ -4860,7 +4860,7 @@
     },
     {
       "path": "src/editor/shell/status-bar.tsx",
-      "lines": 194,
+      "lines": 200,
       "commands": [],
       "features": []
     },
@@ -4945,7 +4945,7 @@
     },
     {
       "path": "src/editor/view/breakpoints.ts",
-      "lines": 37,
+      "lines": 39,
       "commands": [
         "view.setBreakpoint"
       ],
@@ -5131,7 +5131,7 @@
     },
     {
       "path": "src/generated/ids.ts",
-      "lines": 4585,
+      "lines": 4586,
       "commands": [],
       "features": []
     },

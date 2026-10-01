@@ -4082,6 +4082,7 @@ export const MESSAGE_IDS = [
   "status.attribute.reserved",
   "status.attribute.set",
   "status.breakpointActive",
+  "status.breakpointPreviewed",
   "status.classes.applied",
   "status.classes.badName",
   "status.classes.created",

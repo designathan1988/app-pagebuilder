@@ -1592,6 +1592,7 @@
   "status.attribute.reserved": "\"{name}\" is managed by {owner}; use that field.",
   "status.attribute.set": "{attribute} of {name}: {value}.",
   "status.breakpointActive": "Editing the {breakpoint} breakpoint.",
+  "status.breakpointPreviewed": "Previewing the page on the {breakpoint} screen.",
   "status.classes.applied": "Applied .{name}.",
   "status.classes.badName": "\"{name}\" is not a class name: it starts with a letter, _ or -, then letters, digits, _ and -.",
   "status.classes.created": "The styles of {element} are now the class .{name}.",

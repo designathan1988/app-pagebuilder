@@ -364,6 +364,14 @@
   background: var(--color-surface);
 }
 
+/* the breakpoint the preview shows reads as chosen, as the canvas's frame tabs do (the dogfooding pass: no tab was) */
+.preview-bar .door--tab.is-current {
+  background: var(--color-surface-raised);
+  border-color: var(--color-border-strong);
+  color: var(--color-text);
+  font-weight: var(--weight-semibold);
+}
+
 .preview-stage {
   flex: 1;
   min-height: 0;

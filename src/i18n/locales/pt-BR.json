@@ -1592,6 +1592,7 @@
   "status.attribute.reserved": "\"{name}\" pertence a {owner}; use esse campo.",
   "status.attribute.set": "{attribute} de {name}: {value}.",
   "status.breakpointActive": "Editando o breakpoint {breakpoint}.",
+  "status.breakpointPreviewed": "Pré-visualizando a página na tela {breakpoint}.",
   "status.classes.applied": ".{name} aplicada.",
   "status.classes.badName": "\"{name}\" não é um nome de classe: começa com uma letra, _ ou -, depois letras, dígitos, _ e -.",
   "status.classes.created": "Os estilos de {element} agora são a classe .{name}.",

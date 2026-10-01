@@ -29,7 +29,9 @@ export const setBreakpoint = registerHandler<'view.setBreakpoint', EditorUi>(
     const { breakpoint: _was, ...rest } = state.ui.preferences;
     void _was;
     const preferences = chosen.base ? rest : { ...rest, breakpoint: chosen.id };
-    return { kind: 'change', ui: { ...state.ui, preferences }, message: message('status.breakpointActive', { breakpoint: { key: chosen.labelKey as MessageId } }) };
+    // in the preview nothing is edited: the bar says which screen the page is shown on (the dogfooding pass)
+    const said = state.ui.preview !== undefined ? 'status.breakpointPreviewed' : 'status.breakpointActive';
+    return { kind: 'change', ui: { ...state.ui, preferences }, message: message(said, { breakpoint: { key: chosen.labelKey as MessageId } }) };
   },
   // a tab stands for its breakpoint being the one shown
   (state, args) => activeBreakpoint(state.ui).id === args.breakpoint,
