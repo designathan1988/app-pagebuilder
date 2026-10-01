@@ -251,7 +251,7 @@ test('Enter on a locked text starts no edit and says what to unlock; unlocked, E
   await clickNode(page, 'n-intro');
   await expect(status(page)).toHaveText('Intro selected.');
   await runDoor(page, EDIT_ENTER);
-  await expect(status(page)).toHaveText('Editing text — Enter or click away to keep it, Escape to cancel.');
+  await expect(status(page)).toHaveText('Editing text — Enter, Escape or a click away keeps it; Ctrl+Z takes it back.');
   await expect(drawn(page, 'n-intro')).toHaveAttribute('contenteditable', 'plaintext-only');
 });
 

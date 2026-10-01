@@ -1884,7 +1884,7 @@
   "status.tag.setLost": "{name} agora é {tag}: {attributes} saiu.",
   "status.textEdit.cancelled": "O texto de {name} ficou como estava.",
   "status.textEdit.committed": "Texto de {name} salvo.",
-  "status.textEdit.editing": "Editando texto — Enter ou clique fora para manter, Esc para cancelar.",
+  "status.textEdit.editing": "Editando o texto — Enter, Esc ou um clique fora o mantém; Ctrl+Z o desfaz.",
   "status.textEdit.notText": "{name} não tem texto para editar.",
   "status.timeline.loopOff": "Repetição desligada.",
   "status.timeline.loopOn": "Repetição ligada.",

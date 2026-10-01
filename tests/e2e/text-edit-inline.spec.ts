@@ -16,7 +16,7 @@ const ADD = 'selection.add#canvas-click-element-shift';
 const DOUBLE_CLICK = 'text.startEdit#canvas-double-click-text-element';
 const ENTER_EDIT = 'text.startEdit#key-enter-in-canvas';
 const ENTER_KEEP = 'text.set#key-enter-in-text-editing';
-const ESCAPE = 'text.cancelEdit#key-escape-in-text-editing';
+const ESCAPE = 'text.set#key-escape-in-text-editing';
 const SHIFT_ENTER = 'text.insertLineBreak#key-shift-enter-in-text-editing';
 const INTRO = 'Fresh coffee, roasted every week.';
 
@@ -72,7 +72,7 @@ test.beforeEach(async ({ page }) => {
 test('a double-click edits the text on the page itself, and Enter keeps it and gives the page its marks back', runs('project.open#menu-file', SELECT, DOUBLE_CLICK, ENTER_KEEP), async ({ page }) => {
   const at = await centre(page, 'n-intro');
   await page.mouse.dblclick(at.x, at.y);
-  await expect(status(page)).toHaveText('Editing text — Enter or click away to keep it, Escape to cancel.');
+  await expect(status(page)).toHaveText('Editing text — Enter, Escape or a click away keeps it; Ctrl+Z takes it back.');
   // the page's own element is edited: marked, focused, in the edit's key context
   await expect(drawn(page, 'n-intro')).toHaveAttribute('contenteditable', 'plaintext-only');
   await expect(drawn(page, 'n-intro')).toHaveAttribute('data-key-context', 'text-editing');
@@ -98,13 +98,13 @@ test('after an edit the focus is back on the canvas: Enter starts the next edit'
   await expect.poll(() => read(page)).toEqual({ hero: hero(`${INTRO}!`), selection: ['n-intro'], undoSteps: 1 });
   expect(await page.evaluate(() => document.activeElement === document.body), 'the focus rests on the canvas').toBe(true);
   await page.keyboard.press('Enter');
-  await expect(status(page)).toHaveText('Editing text — Enter or click away to keep it, Escape to cancel.');
+  await expect(status(page)).toHaveText('Editing text — Enter, Escape or a click away keeps it; Ctrl+Z takes it back.');
   await page.keyboard.type('?');
   await page.keyboard.press('Escape');
-  await expect(status(page)).toHaveText('Kept the text of Intro unchanged.');
+  await expect.poll(() => read(page)).toEqual({ hero: hero(`${INTRO}!?`), selection: ['n-intro'], undoSteps: 2 });
   expect(await page.evaluate(() => document.activeElement === document.body), 'the focus rests on the canvas').toBe(true);
   await page.keyboard.press('Enter');
-  await expect(status(page)).toHaveText('Editing text — Enter or click away to keep it, Escape to cancel.');
+  await expect(status(page)).toHaveText('Editing text — Enter, Escape or a click away keeps it; Ctrl+Z takes it back.');
 });
 
 test('a click on the text being edited keeps the focus in it', runs('project.open#menu-file', SELECT, ENTER_EDIT, ENTER_KEEP), async ({ page }) => {
@@ -136,7 +136,7 @@ test('while editing, Delete, the arrows and the letter shortcuts act on the text
   await expect.poll(() => read(page)).toEqual({ hero: hero('Fresh coffee, roasted every weekr'), selection: ['n-intro'], undoSteps: 1 });
 });
 
-test('a kept line break is drawn as a <br>, and Escape draws the text the document holds again', runs('project.open#menu-file', SELECT, ENTER_EDIT, SHIFT_ENTER, ENTER_KEEP, ESCAPE), async ({ page }) => {
+test('a kept line break is drawn as a <br>, and Escape keeps an edit as Enter does (Ctrl+Z takes it back)', runs('project.open#menu-file', SELECT, ENTER_EDIT, SHIFT_ENTER, ENTER_KEEP, ESCAPE), async ({ page }) => {
   const at = await centre(page, 'n-intro');
   await page.mouse.click(at.x, at.y);
   await page.keyboard.press('Enter');
@@ -146,14 +146,17 @@ test('a kept line break is drawn as a <br>, and Escape draws the text the docume
   await expect.poll(() => read(page)).toEqual({ hero: hero(`${INTRO}\nSecond line`), selection: ['n-intro'], undoSteps: 1 });
   const lines = () => drawn(page, 'n-intro').evaluate((el) => [...el.childNodes].map((n) => (n.nodeName === 'BR' ? '<br>' : (n.nodeValue ?? ''))));
   expect(await lines()).toEqual([INTRO, '<br>', 'Second line']);
-  // an edit cancelled: what was typed leaves the page
+  // Escape leaves the edit keeping what was typed (the dogfooding pass: a title typed and left with Escape was lost),
+  // one undo step that Ctrl+Z takes back
   await page.keyboard.press('Enter');
   await page.keyboard.press('Shift+Enter');
   await page.keyboard.type('Third');
   await page.keyboard.press('Escape');
   await expect(drawn(page, 'n-intro')).not.toHaveAttribute('contenteditable');
-  expect(await lines()).toEqual([INTRO, '<br>', 'Second line']);
-  expect(await read(page)).toEqual({ hero: hero(`${INTRO}\nSecond line`), selection: ['n-intro'], undoSteps: 1 });
+  await expect.poll(() => read(page)).toEqual({ hero: hero(`${INTRO}\nSecond line\nThird`), selection: ['n-intro'], undoSteps: 2 });
+  expect(await lines()).toEqual([INTRO, '<br>', 'Second line', '<br>', 'Third']);
+  await page.keyboard.press('Control+z');
+  await expect.poll(() => read(page)).toEqual({ hero: hero(`${INTRO}\nSecond line`), selection: ['n-intro'], undoSteps: 1 });
 });
 
 test('the canvas frame is hidden from assistive technology except while it holds the edited text', runs('project.open#menu-file', SELECT, ENTER_EDIT, ESCAPE), async ({ page }) => {

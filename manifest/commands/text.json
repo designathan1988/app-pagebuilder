@@ -142,6 +142,26 @@
           "args": {}
         },
         {
+          "id": "key-escape-in-text-editing",
+          "kind": "shortcut",
+          "feature": "text-edit-inline",
+          "chord": "Escape",
+          "context": "text-editing",
+          "gesture": null,
+          "labelKey": "command.textEdit.commit",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
           "id": "canvas-click-outside-edited-element",
           "kind": "canvas-click",
           "feature": "text-edit-inline",
@@ -250,26 +270,6 @@
         "undoable": false
       },
       "entryPoints": [
-        {
-          "id": "key-escape-in-text-editing",
-          "kind": "shortcut",
-          "feature": "text-edit-inline",
-          "chord": "Escape",
-          "context": "text-editing",
-          "gesture": null,
-          "labelKey": "command.textEdit.cancel",
-          "faceLabelKey": null,
-          "icon": null,
-          "disabledReasonKey": "common.notAvailableYet",
-          "placement": "none",
-          "adapter": {
-            "selection": "none",
-            "offers": null,
-            "writes": [],
-            "fields": []
-          },
-          "args": {}
-        },
         {
           "id": "key-escape-in-element-text-field",
           "kind": "shortcut",

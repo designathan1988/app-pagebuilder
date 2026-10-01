@@ -42,7 +42,7 @@ describe('text.set', () => {
   });
 
   it('changes nothing for the text the element already has', () => {
-    expect(setTextCommand.run(context, { target: 'Intro', content: 'Old' })).toEqual({ kind: 'change', message: { key: 'status.textEdit.committed', params: { name: 'Intro' } } });
+    expect(setTextCommand.run(context, { target: 'Intro', content: 'Old' })).toEqual({ kind: 'change', message: { key: 'status.textEdit.cancelled', params: { name: 'Intro' } } });
   });
 
   it('keeps a tree of runs (spec text-inline-formatting): the plain text in text, the canonical tree in inline', () => {
@@ -52,8 +52,8 @@ describe('text.set', () => {
     const after = applyPatches(DOC, outcome.patches ?? []).document;
     const marked = { ...context, state: { ...context.state, document: after } };
     // the same tree records nothing; a plain text over it keeps the marks of what it keeps; a tree with no mark removes them
-    expect(setTextCommand.run(marked, { target: 'Intro', content: [{ tag: 'strong', children: ['O'] }, 'ld'] })).toEqual({ kind: 'change', message: { key: 'status.textEdit.committed', params: { name: 'Intro' } } });
-    expect(setTextCommand.run(marked, { target: 'Intro', content: 'Old' })).toEqual({ kind: 'change', message: { key: 'status.textEdit.committed', params: { name: 'Intro' } } });
+    expect(setTextCommand.run(marked, { target: 'Intro', content: [{ tag: 'strong', children: ['O'] }, 'ld'] })).toEqual({ kind: 'change', message: { key: 'status.textEdit.cancelled', params: { name: 'Intro' } } });
+    expect(setTextCommand.run(marked, { target: 'Intro', content: 'Old' })).toEqual({ kind: 'change', message: { key: 'status.textEdit.cancelled', params: { name: 'Intro' } } });
     const typed = setTextCommand.run(marked, { target: 'Intro', content: 'Older' });
     if (typed.kind !== 'change') throw new Error(typed.kind);
     expect(applyPatches(after, typed.patches ?? []).document.pages[0]?.tree.children[0]?.children[0]).toMatchObject({ text: 'Older', inline: [{ tag: 'strong', children: ['O'] }, 'lder'] });

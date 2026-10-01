@@ -9035,8 +9035,11 @@
               "type": null
             },
             {
-              "door": "text.cancelEdit#key-escape-in-text-editing",
-              "args": {},
+              "door": "text.set#key-escape-in-text-editing",
+              "args": {
+                "target": "/Page/Hero/Intro",
+                "content": "Fresh coffee, roasted every week."
+              },
               "target": null,
               "drop": null,
               "action": false,

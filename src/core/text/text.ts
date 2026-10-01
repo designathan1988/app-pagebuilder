@@ -33,6 +33,7 @@ export const setTextCommand = registerHandler('text.set', ({ state, rules }, { t
   const stored = found.node.inline ?? null;
   if (inline === null && stored !== null) patches.push({ op: 'remove', path: [...found.path, 'inline'] });
   else if (inline !== null && !deepEqual(stored, inline)) patches.push({ op: stored === null ? 'add' : 'replace', path: [...found.path, 'inline'], value: inline });
-  const kept = message('status.textEdit.committed', { name: found.node.name });
-  return patches.length === 0 ? { kind: 'change', message: kept } : { kind: 'change', patches, message: kept };
+  // a text kept as it was says so (Escape and Enter both keep an edit: "Saved" for nothing saved misled)
+  if (patches.length === 0) return { kind: 'change', message: message('status.textEdit.cancelled', { name: found.node.name }) };
+  return { kind: 'change', patches, message: message('status.textEdit.committed', { name: found.node.name }) };
 });

@@ -6,7 +6,7 @@
     "doors": 1006,
     "scenarios": 1343,
     "modules": 260,
-    "lines": 50040
+    "lines": 50041
   },
   "features": [
     {
@@ -3983,7 +3983,7 @@
     },
     {
       "path": "src/core/text/text.ts",
-      "lines": 39,
+      "lines": 40,
       "commands": [
         "text.set"
       ],

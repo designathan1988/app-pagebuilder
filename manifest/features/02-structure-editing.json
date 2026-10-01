@@ -12283,8 +12283,11 @@
               "type": null
             },
             {
-              "door": "text.cancelEdit#key-escape-in-text-editing",
-              "args": {},
+              "door": "text.set#key-escape-in-text-editing",
+              "args": {
+                "target": "/Page/Hero/Intro",
+                "content": "Fresh coffee, roasted every week."
+              },
               "target": null,
               "drop": null,
               "action": false,
@@ -12473,7 +12476,7 @@
           "refusals": []
         },
         {
-          "id": "escape-cancels-the-edit",
+          "id": "escape-ends-the-edit-keeping-the-text",
           "setup": {
             "fixture": "aurora",
             "selection": [
@@ -12494,11 +12497,14 @@
               "drop": null,
               "action": false,
               "hold": false,
-              "type": " discarded"
+              "type": " kept"
             },
             {
-              "door": "text.cancelEdit#key-escape-in-text-editing",
-              "args": {},
+              "door": "text.set#key-escape-in-text-editing",
+              "args": {
+                "target": "/Page/Hero/Intro",
+                "content": "Fresh coffee, roasted every week. kept"
+              },
               "target": null,
               "drop": null,
               "action": true,
@@ -12516,15 +12522,21 @@
             }
           ],
           "doors": [
-            "text.cancelEdit#key-escape-in-text-editing"
+            "text.set#key-escape-in-text-editing"
           ],
           "expect": {
-            "document": [],
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Intro/@text",
+                "value": "Fresh coffee, roasted every week. kept"
+              }
+            ],
             "selection": [
               "/Page/Hero/Intro"
             ],
             "history": {
-              "undoSteps": 0,
+              "undoSteps": 1,
               "undoRestores": true,
               "redoRestores": true
             },

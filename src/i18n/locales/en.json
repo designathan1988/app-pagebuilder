@@ -1884,7 +1884,7 @@
   "status.tag.setLost": "{name} is {tag} now: {attributes} left out.",
   "status.textEdit.cancelled": "Kept the text of {name} unchanged.",
   "status.textEdit.committed": "Saved the text of {name}.",
-  "status.textEdit.editing": "Editing text — Enter or click away to keep it, Escape to cancel.",
+  "status.textEdit.editing": "Editing text — Enter, Escape or a click away keeps it; Ctrl+Z takes it back.",
   "status.textEdit.notText": "{name} has no text to edit.",
   "status.timeline.loopOff": "Loop off.",
   "status.timeline.loopOn": "Loop on.",
