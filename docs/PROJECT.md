@@ -134,6 +134,10 @@ npm run inventory         # regenerate docs/INVENTORY.md and docs/inventory.json
   and branch by branch (`.cache/coverage/index.html`), and fails under the floors of `vitest.config.ts`, which are
   raised as tests are added and never lowered. What only the browser runner reaches (a gesture, the layout) counts
   there as unreached.
+- **Visual baselines** (`tests/e2e/visual.spec.ts`): the editor, the Style and Settings tabs, the quick panel, the
+  palette, a menu and the sidebar, in the light and the dark theme, compared with the pictures kept beside the spec. A
+  change of the design system fails there until it is looked at and taken again on purpose
+  (`npx playwright test visual --update-snapshots`).
 - `npm run e2e:affected [--since <ref>] [--list]` follows the imports of `src/` from each changed module to the
   modules the inventory names for each feature; a change to what every test stands on (tests/support, the runners,
   the Playwright configuration, the manifest's commands or layout) runs the whole suite, and a changed component that
