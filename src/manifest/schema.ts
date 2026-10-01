@@ -287,7 +287,7 @@ export const compositeSchema = z.strictObject({
   group: kebabId,
   control: z.enum(CONTROL_TYPES),
   codec: codecId,
-  appliesTo: predicateId,
+  // (where it applies is its longhands' to say: the inspector shows a composite where every longhand applies)
   // the Essentials tab draws its rows (spec inspector-advanced-mode: "border", the composite, not its longhands)
   essential: z.boolean(),
   longhands: z.array(cssName).min(2),
@@ -347,7 +347,7 @@ export const recipeSchema = z.strictObject({
   // clearing it restores them; a door that writes one of them while the recipe is set clears the recipe
   // in the same command and undo step; their fields show the recipe while it is set.
   shared: z
-    .strictObject({ clear: z.literal('restores-previous'), otherWrite: z.literal('clears-recipe'), fields: z.literal('show-recipe') })
+    .strictObject({ clear: z.literal('restores-previous'), otherWrite: z.literal('clears-recipe') })
     .nullable(),
   // the spec section that defines the legacy behaviour, and the BCD entry that records the browsers' support
   // of the declaration that carries the door's value
@@ -645,7 +645,7 @@ export const doorSchema = z.discriminatedUnion('kind', [
   z.strictObject({ ...doorCommon, kind: z.literal('shortcut'), chord: z.string().min(1), context: kebabId, gesture: kebabId.nullable() }),
   z.strictObject({ ...doorCommon, kind: z.literal('menu'), menu: menuIdSchema, checked: menuCheckedSchema }),
   z.strictObject({ ...doorCommon, kind: z.literal('context-menu') }),
-  z.strictObject({ ...doorCommon, kind: z.literal('toolbar'), drawnAs: z.enum(DRAWN_AS), pressed: pressedSchema, toolbar: kebabId }),
+  z.strictObject({ ...doorCommon, kind: z.literal('toolbar'), drawnAs: z.enum(DRAWN_AS), pressed: pressedSchema }),
   // a quick panel field, drawn by its control: an attribute field names the attribute it edits (the Settings fields'
   // vocabulary), a value field names the property through its command's arguments
   // its group: one of layout.json's quickPanelGroups, under whose name the panel draws it (the audit's U-044: the
@@ -1106,7 +1106,6 @@ const generatedHeader = z.strictObject({
 
 export const generatedCssSchema = z.strictObject({
   $generated: generatedHeader,
-  cssWideKeywords: z.array(z.string()),
   units: z.record(z.string(), z.array(z.string())),
   properties: z.record(
     cssName,
@@ -1121,7 +1120,6 @@ export const generatedCssSchema = z.strictObject({
       keywords: z.array(z.string()),
       // units the official syntax accepts on a number on its own
       units: z.array(z.string()),
-      numeric: z.enum(['number', 'integer']).nullable(),
     }),
   ),
   types: z.record(z.string(), z.string()),

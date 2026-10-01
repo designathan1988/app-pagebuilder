@@ -10,6 +10,7 @@
 // It never uses the editor's own preview pane: Playwright on the installed Chrome, as the user's order says. The port
 // is the same one the dev server and the browser checks use (PORT).
 import { chromium, type Browser, type ConsoleMessage, type Page } from '@playwright/test';
+import { CHANNEL } from '../runner/environment.ts';
 import fs from 'node:fs';
 import path from 'node:path';
 import { FLOWS, type Flow, type Step } from './flows.ts';
@@ -232,7 +233,7 @@ async function runDoor(browser: Browser, door: string): Promise<void> {
   await context.close();
 }
 
-const browser = await chromium.launch({ channel: 'chrome' });
+const browser = await chromium.launch({ channel: CHANNEL });
 if (args.includes('--door')) {
   await runDoor(browser, args[args.indexOf('--door') + 1] ?? '');
 } else {

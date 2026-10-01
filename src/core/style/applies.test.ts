@@ -3,7 +3,7 @@ import type { NodeId } from '../../generated/commands.ts';
 import { manifest } from '../../manifest/runtime.ts';
 import type { DocNode } from '../document/model.ts';
 import { rulesFromManifest } from '../document/validate.ts';
-import { contextPredicate, elementPredicate, kindsOf, shownForContext, shownForKinds, type ElementContext } from './applies.ts';
+import { appliesToOf, contextPredicate, elementPredicate, kindsOf, shownForContext, shownForKinds, type ElementContext } from './applies.ts';
 import { codecOf } from './codecs.ts';
 import { factsOf } from './set.ts';
 
@@ -167,5 +167,14 @@ describe('the codecs of the element-specific properties', () => {
       expect(contextPredicate('table', context({}))).toBeNull();
       expect(contextPredicate('text', context({}))).toBeNull();
     });
+  });
+});
+
+describe('a recipe applies where properties.json says', () => {
+  const rules = rulesFromManifest(manifest.elements, manifest.properties, manifest.html);
+  it('reads the line clamp as a text field and the text selection as any element field', () => {
+    expect(appliesToOf('line-clamp', rules)).toBe('text');
+    expect(appliesToOf('user-select', rules)).toBe('always');
+    expect(appliesToOf('padding', rules)).toBeNull();
   });
 });

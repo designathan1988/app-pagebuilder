@@ -5651,6 +5651,7 @@ The fields and menus are keyboard-operable like every inspector field.
   `style.set` refuses it before anything is written, naming the recipe and the property in the way (status
   `recipe.conflict`, "Line clamp needs Display of its own: reset it first."). The other direction is unchanged: a later
   write of the display or the overflow takes the clamp away (the recipe's `otherWrite: clears-recipe`).
+4. **The line clamp ignored where it applies** (properties.json declared its recipe for text, and nothing read it). Required: a recipe applies where its `appliesTo` says, as a property does — the line clamp is a text field, offered where the text fields are (the quick panel and Essentials narrow it by what the element holds).
 
 ## props-typography
 

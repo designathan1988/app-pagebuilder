@@ -6,7 +6,7 @@
     "doors": 1002,
     "scenarios": 1341,
     "modules": 259,
-    "lines": 49885
+    "lines": 49887
   },
   "features": [
     {
@@ -3710,7 +3710,7 @@
     },
     {
       "path": "src/core/style/applies.ts",
-      "lines": 165,
+      "lines": 166,
       "commands": [],
       "features": []
     },
@@ -4688,7 +4688,7 @@
     },
     {
       "path": "src/editor/shell/dock.tsx",
-      "lines": 135,
+      "lines": 139,
       "commands": [],
       "features": []
     },
@@ -5127,7 +5127,7 @@
     },
     {
       "path": "src/manifest/check.ts",
-      "lines": 2324,
+      "lines": 2323,
       "commands": [],
       "features": []
     },
@@ -5163,7 +5163,7 @@
     },
     {
       "path": "src/manifest/schema.ts",
-      "lines": 1296,
+      "lines": 1294,
       "commands": [],
       "features": []
     },

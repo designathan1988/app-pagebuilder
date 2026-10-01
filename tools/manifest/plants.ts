@@ -885,7 +885,6 @@ PLANTS.push(
         id: 'menu-style-state-hover',
         kind: 'toolbar',
         feature: 'state-styles',
-        toolbar: 'canvas-toolbar',
         drawnAs: 'button',
         pressed: false,
         labelKey: 'styleState.hover',

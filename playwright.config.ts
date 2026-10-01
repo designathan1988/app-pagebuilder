@@ -2,6 +2,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from '@playwright/test';
+import { CHANNEL, REDUCED_MOTION } from './tools/runner/environment.ts';
 
 // The e2e run builds the app once and serves the build on this port (a static `vite preview`, much faster per
 // test than the dev server); it never talks to a stale or foreign server.
@@ -38,7 +39,9 @@ export default defineConfig({
   expect: { timeout: 5_000 },
   use: {
     baseURL,
-    channel: 'chrome',
+    // the browser and the motion the contract names (manifest/environment.json, tools/runner/environment.ts)
+    channel: CHANNEL,
+    reducedMotion: REDUCED_MOTION,
     // no trace while testing: 'retain-on-failure' records every test and costs 38% of the suite's CPU; a failure is
     // diagnosed by running the failed tests again with their trace: npm run e2e:diagnose
     trace: 'off',

@@ -4040,7 +4040,6 @@
       "group": "flex",
       "control": "length-field",
       "codec": "axis-pair",
-      "appliesTo": "flexOrGridContainer",
       "longhands": [
         "row-gap",
         "column-gap"
@@ -4070,7 +4069,6 @@
       "group": "overflow",
       "control": "keyword-menu",
       "codec": "axis-pair",
-      "appliesTo": "hasBox",
       "longhands": [
         "overflow-x",
         "overflow-y"
@@ -4090,7 +4088,6 @@
       "group": "columns",
       "control": "text-field",
       "codec": "columns",
-      "appliesTo": "container",
       "longhands": [
         "column-width",
         "column-count"
@@ -4115,7 +4112,6 @@
       "group": "in-parent",
       "control": "text-field",
       "codec": "grid-line-pair",
-      "appliesTo": "gridItem",
       "longhands": [
         "grid-column-start",
         "grid-column-end"
@@ -4135,7 +4131,6 @@
       "group": "in-parent",
       "control": "text-field",
       "codec": "grid-line-pair",
-      "appliesTo": "gridItem",
       "longhands": [
         "grid-row-start",
         "grid-row-end"
@@ -4155,7 +4150,6 @@
       "group": "in-parent",
       "control": "text-field",
       "codec": "grid-area",
-      "appliesTo": "gridItem",
       "longhands": [
         "grid-row-start",
         "grid-column-start",
@@ -4177,7 +4171,6 @@
       "group": "box",
       "control": "box-model",
       "codec": "box-sides",
-      "appliesTo": "always",
       "longhands": [
         "padding-top",
         "padding-right",
@@ -4199,7 +4192,6 @@
       "group": "box",
       "control": "box-model",
       "codec": "box-sides",
-      "appliesTo": "always",
       "longhands": [
         "margin-top",
         "margin-right",
@@ -4221,7 +4213,6 @@
       "group": "position",
       "control": "length-field",
       "codec": "box-sides",
-      "appliesTo": "positioned",
       "longhands": [
         "top",
         "right",
@@ -4241,7 +4232,6 @@
       "group": "border",
       "control": "border-editor",
       "codec": "border",
-      "appliesTo": "always",
       "longhands": [
         "border-top-width",
         "border-right-width",
@@ -4272,7 +4262,6 @@
       "group": "border",
       "control": "border-editor",
       "codec": "box-sides",
-      "appliesTo": "always",
       "longhands": [
         "border-top-width",
         "border-right-width",
@@ -4294,7 +4283,6 @@
       "group": "border",
       "control": "border-editor",
       "codec": "box-sides",
-      "appliesTo": "always",
       "longhands": [
         "border-top-style",
         "border-right-style",
@@ -4316,7 +4304,6 @@
       "group": "border",
       "control": "border-editor",
       "codec": "box-sides",
-      "appliesTo": "always",
       "longhands": [
         "border-top-color",
         "border-right-color",
@@ -4338,7 +4325,6 @@
       "group": "border",
       "control": "border-editor",
       "codec": "border-side",
-      "appliesTo": "always",
       "longhands": [
         "border-top-width",
         "border-top-style",
@@ -4359,7 +4345,6 @@
       "group": "border",
       "control": "border-editor",
       "codec": "border-side",
-      "appliesTo": "always",
       "longhands": [
         "border-right-width",
         "border-right-style",
@@ -4380,7 +4365,6 @@
       "group": "border",
       "control": "border-editor",
       "codec": "border-side",
-      "appliesTo": "always",
       "longhands": [
         "border-bottom-width",
         "border-bottom-style",
@@ -4401,7 +4385,6 @@
       "group": "border",
       "control": "border-editor",
       "codec": "border-side",
-      "appliesTo": "always",
       "longhands": [
         "border-left-width",
         "border-left-style",
@@ -4422,7 +4405,6 @@
       "group": "radius",
       "control": "radius-editor",
       "codec": "box-corners",
-      "appliesTo": "always",
       "longhands": [
         "border-top-left-radius",
         "border-top-right-radius",
@@ -4445,7 +4427,6 @@
       "group": "outline",
       "control": "text-field",
       "codec": "border-side",
-      "appliesTo": "always",
       "longhands": [
         "outline-width",
         "outline-style",
@@ -4466,7 +4447,6 @@
       "group": "typography",
       "control": "keyword-menu",
       "codec": "text-decoration",
-      "appliesTo": "text",
       "longhands": [
         "text-decoration-line",
         "text-decoration-thickness",
@@ -4501,7 +4481,6 @@
       "group": "typography",
       "control": "keyword-menu",
       "codec": "white-space",
-      "appliesTo": "text",
       "longhands": [
         "white-space-collapse",
         "text-wrap-mode"
@@ -4521,7 +4500,6 @@
       "group": "advanced",
       "control": "keyword-menu",
       "codec": "font-variant",
-      "appliesTo": "text",
       "longhands": [
         "font-variant-ligatures",
         "font-variant-caps",
@@ -4563,7 +4541,6 @@
       "group": "background",
       "control": "keyword-menu",
       "codec": "position",
-      "appliesTo": "imagePainting",
       "longhands": [
         "background-position-x",
         "background-position-y"
@@ -4600,7 +4577,6 @@
       "group": "background",
       "control": "gradient-editor",
       "codec": "background-layers",
-      "appliesTo": "always",
       "longhands": [
         "background-image",
         "background-position-x",
@@ -4632,7 +4608,6 @@
       "group": "motion",
       "control": "text-field",
       "codec": "transition-list",
-      "appliesTo": "always",
       "longhands": [
         "transition-property",
         "transition-duration",
@@ -4668,7 +4643,6 @@
       "group": "flex",
       "control": "alignment-matrix",
       "codec": "alignment-matrix",
-      "appliesTo": "flexOrGridContainer",
       "longhands": [
         "justify-content",
         "align-items"
@@ -4714,8 +4688,7 @@
       ],
       "shared": {
         "clear": "restores-previous",
-        "otherWrite": "clears-recipe",
-        "fields": "show-recipe"
+        "otherWrite": "clears-recipe"
       },
       "source": {
         "spec": "https://drafts.csswg.org/css-overflow-4/#webkit-line-clamp",

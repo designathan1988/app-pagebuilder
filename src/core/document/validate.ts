@@ -69,7 +69,7 @@ export interface ModelRules {
   // null stands for the value typed; user-select: -webkit-user-select and user-select)
   readonly recipeFacts: ReadonlyMap<
     string,
-    { readonly codec: string; readonly labelKey: MessageId; readonly declarations: readonly { readonly property: string; readonly value: string | null }[]; readonly shared: { readonly otherWrite: string } | null }
+    { readonly codec: string; readonly labelKey: MessageId; readonly appliesTo: string; readonly declarations: readonly { readonly property: string; readonly value: string | null }[]; readonly shared: { readonly otherWrite: string } | null }
   >;
   // each property whose value is structured (properties.json structures, by the property's valueType): its fields in
   // order, each with its type and how it reaches CSS
@@ -133,7 +133,7 @@ export function rulesFromManifest(elements: ElementsFile, properties: Properties
         return [c.id, { codec: c.codec, labelKey: c.labelKey as MessageId, longhands: c.longhands, axes: axes.some((a) => a.length > 0) ? axes : null }] as const;
       }),
     ),
-    recipeFacts: new Map(properties.recipes.map((r) => [r.id, { codec: r.codec, labelKey: r.labelKey as MessageId, declarations: r.declarations, shared: r.shared === null ? null : { otherWrite: r.shared.otherWrite } }] as const)),
+    recipeFacts: new Map(properties.recipes.map((r) => [r.id, { codec: r.codec, labelKey: r.labelKey as MessageId, appliesTo: r.appliesTo, declarations: r.declarations, shared: r.shared === null ? null : { otherWrite: r.shared.otherWrite } }] as const)),
     structures: new Map(
       properties.properties.flatMap((p) => {
         const structure = properties.structures.find((s) => s.id === p.valueType);

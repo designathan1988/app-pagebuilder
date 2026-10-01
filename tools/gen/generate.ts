@@ -210,12 +210,10 @@ export function generateCss(): GeneratedCssData & Record<string, unknown> {
       legacyAliasOf: p.legacyAliasOf ?? null,
       keywords,
       units: allUnits.filter((u) => accepts(`1${u}`)),
-      numeric: accepts('1.5') ? 'number' : accepts('2') ? 'integer' : null,
     };
   }
   return {
     $generated: { notice: NOTICE, by: 'tools/gen/generate.ts', from: { '@webref/css': version('@webref/css'), 'css-tree': version('css-tree') } },
-    cssWideKeywords: [...cssWide],
     units,
     properties,
     types: Object.fromEntries(Object.entries(syntaxes.types).sort(([a], [b]) => a.localeCompare(b))),

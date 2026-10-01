@@ -3,7 +3,8 @@
 import { useMemo } from 'react';
 import { checksOf } from '../../core/a11y/checks.ts';
 import { manifest } from '../../manifest/runtime.ts';
-import type { MessageId } from '../../generated/ids.ts';
+import type { FeatureId, MessageId } from '../../generated/ids.ts';
+import { isFeatureBuilt } from '../../app/features.ts';
 import { locate } from '../../core/document/model.ts';
 import { TimelinePanel } from '../timeline/panel.tsx';
 import { DoorControl, Icon } from '../doors/door.tsx';
@@ -52,10 +53,13 @@ function DocumentJson() {
 // owner of the list), each the region's own door (selection.select) with the node it is about, so pressing a row
 // selects that element on the canvas and in the Layers. The list is read from the store, so it follows every command;
 // it never blocks editing or the export — a page with issues is a page like any other.
+// whether each category of the checks arrives with a built feature (checks.json)
+const CATEGORY_BUILT = new Map(manifest.checks.categories.map((one) => [one.id, isFeatureBuilt(one.feature as FeatureId)] as const));
 function Checks() {
   const t = useT();
   const document = useEditorState((s) => s.document);
-  const issues = useMemo(() => checksOf(document, manifest.interactions.checks), [document]);
+  // an issue of a category whose feature is not built yet is not listed (checks.json: each category's feature)
+  const issues = useMemo(() => checksOf(document, manifest.interactions.checks).filter((issue) => CATEGORY_BUILT.get(issue.category) !== false), [document]);
   // the issue's own words: the rule, the category the manifest names and the element it is about
   const words = (issue: { rule: MessageId; category: string; node: string }) => {
     const category = manifest.checks.categories.find((one) => one.id === issue.category);

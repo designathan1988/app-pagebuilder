@@ -316,7 +316,6 @@
           "drawnAs": "item",
           "pressed": false,
           "feature": "explorer-pages",
-          "toolbar": "top-bar",
           "labelKey": "topbar.pageSwitcher",
           "faceLabelKey": null,
           "icon": "file",

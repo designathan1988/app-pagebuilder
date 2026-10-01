@@ -124,8 +124,9 @@ export function contextPredicate(predicate: string, context: ElementContext | nu
   }
 }
 
-// the predicate of the elements a property applies to (properties.json), or null for one that is not a property
-export const appliesToOf = (property: string, rules: ModelRules): string | null => rules.propertyFacts.get(property)?.appliesTo ?? null;
+// the predicate of the elements a property or a recipe applies to (properties.json: the line clamp, a text's), or null
+// for anything else
+export const appliesToOf = (property: string, rules: ModelRules): string | null => rules.propertyFacts.get(property)?.appliesTo ?? rules.recipeFacts.get(property)?.appliesTo ?? null;
 
 // Whether a field of these properties shows for a selection in this context (the inspector and the quick panel): each
 // kind property is of a kind of the selection (shownForKinds) and each context property's context holds.

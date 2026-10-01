@@ -1632,7 +1632,6 @@ export function checkManifest(input: ManifestInput): CheckResult {
   });
   p.properties.composites.forEach((c, i) => {
     need('codec', c.codec, `properties.json composites[${i}].codec`);
-    need('predicate', c.appliesTo, `properties.json composites[${i}].appliesTo`);
   });
   p.properties.recipes.forEach((r, i) => {
     need('codec', r.codec, `properties.json recipes[${i}].codec`);

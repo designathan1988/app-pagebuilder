@@ -46,7 +46,7 @@
     },
     {
       "field": "environment:zoomLevels",
-      "reader": "tools/runner/environment.ts"
+      "reader": "src/manifest/check.ts"
     },
     {
       "field": "environment:reducedMotion",
@@ -362,7 +362,7 @@
     },
     {
       "field": "properties:properties[].subsets[].units",
-      "reader": "src/editor/inspector/value-lists.ts"
+      "reader": "src/manifest/check.ts"
     },
     {
       "field": "properties:properties[].subsets[].reason",
@@ -401,10 +401,6 @@
       "reader": "src/core/style/codecs.ts"
     },
     {
-      "field": "properties:composites[].appliesTo",
-      "reader": "src/core/style/applies-to.ts"
-    },
-    {
       "field": "properties:composites[].longhands",
       "reader": "src/core/document/validate.ts"
     },
@@ -438,7 +434,7 @@
     },
     {
       "field": "properties:composites[].subsets[].units",
-      "reader": "src/editor/inspector/value-lists.ts"
+      "reader": "src/manifest/check.ts"
     },
     {
       "field": "properties:composites[].subsets[].reason",
@@ -458,7 +454,7 @@
     },
     {
       "field": "properties:structures[].list",
-      "reader": "src/core/style/structures.ts"
+      "reader": "src/manifest/check.ts"
     },
     {
       "field": "properties:structures[].fields",
@@ -482,7 +478,7 @@
     },
     {
       "field": "properties:structures[].fields[].units",
-      "reader": "src/editor/inspector/value-lists.ts"
+      "reader": "src/manifest/check.ts"
     },
     {
       "field": "properties:structures[].fields[].sample",
@@ -518,7 +514,7 @@
     },
     {
       "field": "properties:recipes[].appliesTo",
-      "reader": "src/core/style/applies-to.ts"
+      "reader": "src/core/style/applies.ts"
     },
     {
       "field": "properties:recipes[].declarations",
@@ -543,10 +539,6 @@
     {
       "field": "properties:recipes[].shared.otherWrite",
       "reader": "src/core/style/recipes.ts"
-    },
-    {
-      "field": "properties:recipes[].shared.fields",
-      "reader": "src/editor/inspector/fields.ts"
     },
     {
       "field": "properties:recipes[].doors",
@@ -961,10 +953,6 @@
       "reader": "src/manifest/check.ts"
     },
     {
-      "field": "commands:commands[].entryPoints[].toolbar",
-      "reader": "src/editor/doors/registry.ts"
-    },
-    {
       "field": "commands:commands[].entryPoints[].control",
       "reader": "src/editor/shell/field.tsx"
     },
@@ -1082,7 +1070,7 @@
     },
     {
       "field": "checks:categories[].feature",
-      "reader": "src/editor/checks/checks.ts"
+      "reader": "src/editor/shell/dock.tsx"
     },
     {
       "field": "features:group",
@@ -1493,10 +1481,6 @@
       "reader": "tools/gen/check.ts"
     },
     {
-      "field": "generated/css-properties:cssWideKeywords",
-      "reader": "src/editor/inspector/value-lists.ts"
-    },
-    {
       "field": "generated/css-properties:units",
       "reader": "src/manifest/check.ts"
     },
@@ -1531,10 +1515,6 @@
     {
       "field": "generated/css-properties:properties{}.units",
       "reader": "tools/gen/types.ts"
-    },
-    {
-      "field": "generated/css-properties:properties{}.numeric",
-      "reader": "src/editor/inspector/value-lists.ts"
     },
     {
       "field": "generated/css-properties:types",
