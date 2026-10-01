@@ -1529,6 +1529,7 @@
   "quickPanel.key.letterSpacing": "↔",
   "quickPanel.key.textAlign": "Align",
   "quickPanel.key.alignItems": "Items",
+  "quickPanel.key.justifyContent": "Justify",
   "recovery.hint": "The saved project could not be read. It is kept as it was; restore one of its earlier versions.",
   "recovery.none": "There is no earlier version to restore.",
   "recovery.savedAt": "Saved {time}",

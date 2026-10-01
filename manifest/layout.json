@@ -493,6 +493,10 @@
       "labelKey": "inspector.section.size"
     },
     {
+      "id": "layout",
+      "labelKey": "inspector.section.layout"
+    },
+    {
       "id": "position",
       "labelKey": "inspector.section.position"
     },
@@ -511,10 +515,6 @@
     {
       "id": "transform",
       "labelKey": "inspector.group.transform"
-    },
-    {
-      "id": "layout",
-      "labelKey": "inspector.section.layout"
     },
     {
       "id": "settings",

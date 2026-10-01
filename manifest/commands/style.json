@@ -5176,6 +5176,38 @@
           "args": {}
         },
         {
+          "id": "quick-panel-display",
+          "kind": "quick-panel",
+          "feature": "quick-panel",
+          "control": "display",
+          "labelKey": "property.display",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "quick-panel",
+            "order": 30
+          },
+          "adapter": {
+            "selection": "all",
+            "offers": {
+              "property": "display",
+              "list": "generated",
+              "presets": null,
+              "essentials": null
+            },
+            "writes": [
+              "display"
+            ],
+            "fields": []
+          },
+          "args": {
+            "property": "display"
+          },
+          "attribute": null,
+          "group": "layout"
+        },
+        {
           "id": "quick-panel-direction",
           "kind": "quick-panel",
           "feature": "quick-panel",
@@ -5186,7 +5218,7 @@
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "quick-panel",
-            "order": 32
+            "order": 31
           },
           "adapter": {
             "selection": "all",
@@ -5198,6 +5230,33 @@
           },
           "args": {
             "property": "flex-direction"
+          },
+          "attribute": null,
+          "group": "layout"
+        },
+        {
+          "id": "quick-panel-justify-content",
+          "kind": "quick-panel",
+          "feature": "quick-panel",
+          "control": "justify-content",
+          "labelKey": "property.justifyContent",
+          "faceLabelKey": "quickPanel.key.justifyContent",
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "quick-panel",
+            "order": 32
+          },
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": [
+              "justify-content"
+            ],
+            "fields": []
+          },
+          "args": {
+            "property": "justify-content"
           },
           "attribute": null,
           "group": "layout"
@@ -9036,7 +9095,7 @@
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "quick-panel",
-            "order": 30
+            "order": 45
           },
           "adapter": {
             "selection": "all",
@@ -9099,7 +9158,7 @@
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "quick-panel",
-            "order": 31
+            "order": 46
           },
           "adapter": {
             "selection": "all",

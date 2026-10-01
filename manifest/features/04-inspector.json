@@ -39765,6 +39765,169 @@
           "refusals": []
         },
         {
+          "id": "the-display-field-turns-a-block-into-a-row-and-offers-its-layout",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Actions"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "style.set#quick-panel-display",
+              "args": {
+                "property": "display",
+                "value": "flex"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "flex\n"
+            }
+          ],
+          "doors": [
+            "style.set#quick-panel-display"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Actions/@styles/desktop/base/display",
+                "value": "flex"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Actions"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Actions",
+                  "property": "display",
+                  "value": "flex"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.style.set",
+                  "params": {
+                    "property": "Display",
+                    "name": "Actions",
+                    "value": "flex"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-justify-field-spreads-a-rows-items",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Actions"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "style.set#quick-panel-display",
+              "args": {
+                "property": "display",
+                "value": "flex"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "flex\n"
+            },
+            {
+              "door": "style.set#quick-panel-justify-content",
+              "args": {
+                "property": "justify-content",
+                "value": "space-between"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "space-between\n"
+            }
+          ],
+          "doors": [
+            "style.set#quick-panel-justify-content"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Actions/@styles/desktop/base/display",
+                "value": "flex"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/Actions/@styles/desktop/base/justify-content",
+                "value": "space-between"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Actions"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Actions",
+                  "property": "justify-content",
+                  "value": "space-between"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.style.set",
+                  "params": {
+                    "property": "Justify content",
+                    "name": "Actions",
+                    "value": "space-between"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
           "id": "the-image-styles-write-object-fit-and-radius",
           "setup": {
             "fixture": "aurora",

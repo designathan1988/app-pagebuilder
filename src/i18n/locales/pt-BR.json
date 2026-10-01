@@ -1529,6 +1529,7 @@
   "quickPanel.key.letterSpacing": "↔",
   "quickPanel.key.textAlign": "Alinhar",
   "quickPanel.key.alignItems": "Itens",
+  "quickPanel.key.justifyContent": "Distribuir",
   "recovery.hint": "O projeto salvo não pôde ser lido. Ele fica como estava; restaure uma das versões anteriores.",
   "recovery.none": "Não há versão anterior para restaurar.",
   "recovery.savedAt": "Salvo {time}",

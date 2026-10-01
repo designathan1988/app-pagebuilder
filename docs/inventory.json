@@ -3,10 +3,10 @@
     "features": 187,
     "built": 185,
     "commands": 261,
-    "doors": 1010,
-    "scenarios": 1344,
+    "doors": 1012,
+    "scenarios": 1346,
     "modules": 260,
-    "lines": 50123
+    "lines": 50126
   },
   "features": [
     {
@@ -652,7 +652,7 @@
         "field.setUnit",
         "field.cancel"
       ],
-      "doors": 179,
+      "doors": 181,
       "scenarios": 19,
       "modules": [
         "src/core/style/set.ts",
@@ -665,7 +665,7 @@
       "commands": [
         "style.set"
       ],
-      "doors": 168,
+      "doors": 170,
       "scenarios": 11,
       "modules": [
         "src/core/style/set.ts"
@@ -678,7 +678,7 @@
         "style.set",
         "style.setAlignment"
       ],
-      "doors": 169,
+      "doors": 171,
       "scenarios": 20,
       "modules": [
         "src/core/style/alignment.ts",
@@ -693,7 +693,7 @@
         "style.setGridTracks",
         "style.setGridItem"
       ],
-      "doors": 179,
+      "doors": 181,
       "scenarios": 21,
       "modules": [
         "src/core/style/grid-item.ts",
@@ -707,7 +707,7 @@
       "commands": [
         "style.set"
       ],
-      "doors": 168,
+      "doors": 170,
       "scenarios": 10,
       "modules": [
         "src/core/style/set.ts"
@@ -736,7 +736,7 @@
       "commands": [
         "style.set"
       ],
-      "doors": 168,
+      "doors": 170,
       "scenarios": 13,
       "modules": [
         "src/core/style/set.ts"
@@ -749,7 +749,7 @@
         "style.set",
         "position.setMode"
       ],
-      "doors": 170,
+      "doors": 172,
       "scenarios": 15,
       "modules": [
         "src/core/geometry/position.ts",
@@ -768,7 +768,7 @@
         "colorPicker.cancel",
         "drag.cancel"
       ],
-      "doors": 179,
+      "doors": 181,
       "scenarios": 21,
       "modules": [
         "src/core/style/set.ts",
@@ -797,7 +797,7 @@
         "colors.removeSwatch",
         "style.set"
       ],
-      "doors": 170,
+      "doors": 172,
       "scenarios": 5,
       "modules": [
         "src/core/design/colors.ts",
@@ -810,7 +810,7 @@
       "commands": [
         "style.set"
       ],
-      "doors": 168,
+      "doors": 170,
       "scenarios": 23,
       "modules": [
         "src/core/style/set.ts"
@@ -822,7 +822,7 @@
       "commands": [
         "style.set"
       ],
-      "doors": 168,
+      "doors": 170,
       "scenarios": 15,
       "modules": [
         "src/core/style/set.ts"
@@ -835,7 +835,7 @@
         "style.set",
         "style.setBackgroundImage"
       ],
-      "doors": 187,
+      "doors": 189,
       "scenarios": 16,
       "modules": [
         "src/core/style/background-image.ts",
@@ -863,7 +863,7 @@
         "style.setRadius",
         "field.cancel"
       ],
-      "doors": 196,
+      "doors": 198,
       "scenarios": 25,
       "modules": [
         "src/core/style/border.ts",
@@ -877,7 +877,7 @@
       "commands": [
         "style.set"
       ],
-      "doors": 168,
+      "doors": 170,
       "scenarios": 9,
       "modules": [
         "src/core/style/set.ts"
@@ -902,7 +902,7 @@
         "style.set",
         "style.setFilter"
       ],
-      "doors": 179,
+      "doors": 181,
       "scenarios": 16,
       "modules": [
         "src/core/style/filter.ts",
@@ -916,7 +916,7 @@
         "style.set",
         "style.setTransform"
       ],
-      "doors": 173,
+      "doors": 175,
       "scenarios": 15,
       "modules": [
         "src/core/style/set.ts",
@@ -929,7 +929,7 @@
       "commands": [
         "style.set"
       ],
-      "doors": 168,
+      "doors": 170,
       "scenarios": 6,
       "modules": [
         "src/core/style/set.ts"
@@ -941,7 +941,7 @@
       "commands": [
         "style.set"
       ],
-      "doors": 168,
+      "doors": 170,
       "scenarios": 20,
       "modules": [
         "src/core/style/set.ts"
@@ -1038,8 +1038,8 @@
         "style.setTransform",
         "quickPanel.setOpen"
       ],
-      "doors": 231,
-      "scenarios": 34,
+      "doors": 233,
+      "scenarios": 36,
       "modules": [
         "src/core/elements/tag.ts",
         "src/core/style/background-image.ts",
@@ -1057,7 +1057,7 @@
       "commands": [
         "style.set"
       ],
-      "doors": 168,
+      "doors": 170,
       "scenarios": 3,
       "modules": [
         "src/core/style/set.ts"
@@ -1098,7 +1098,7 @@
         "style.setRadius",
         "handle.step"
       ],
-      "doors": 197,
+      "doors": 199,
       "scenarios": 11,
       "modules": [
         "src/core/style/border.ts",
@@ -1431,7 +1431,7 @@
         "element.setSvgMarkup",
         "parts.add"
       ],
-      "doors": 194,
+      "doors": 196,
       "scenarios": 14,
       "modules": [
         "src/core/elements/parts.ts",
@@ -1473,7 +1473,7 @@
       "commands": [
         "style.set"
       ],
-      "doors": 168,
+      "doors": 170,
       "scenarios": 10,
       "modules": [
         "src/core/style/set.ts"
@@ -1685,7 +1685,7 @@
       "commands": [
         "style.set"
       ],
-      "doors": 168,
+      "doors": 170,
       "scenarios": 3,
       "modules": [
         "src/core/style/set.ts"
@@ -1913,7 +1913,7 @@
         "style.reset",
         "view.setBreakpoint"
       ],
-      "doors": 177,
+      "doors": 179,
       "scenarios": 5,
       "modules": [
         "src/core/style/reset.ts",
@@ -1929,7 +1929,7 @@
         "view.setBreakpoint",
         "view.setStyleState"
       ],
-      "doors": 189,
+      "doors": 191,
       "scenarios": 14,
       "modules": [
         "src/core/style/set.ts",
@@ -2094,7 +2094,7 @@
         "position.setMode",
         "inspector.reveal"
       ],
-      "doors": 282,
+      "doors": 284,
       "scenarios": 10,
       "modules": [
         "src/core/geometry/position.ts",
@@ -2701,7 +2701,7 @@
         "project.export",
         "files.upload"
       ],
-      "doors": 174,
+      "doors": 176,
       "scenarios": 1,
       "modules": [
         "src/core/export/export.ts",
@@ -5117,7 +5117,7 @@
     },
     {
       "path": "src/generated/ids.ts",
-      "lines": 4573,
+      "lines": 4576,
       "commands": [],
       "features": []
     },

@@ -504,6 +504,7 @@
       "essential": true,
       "doors": [
         "style.set#inspector-display",
+        "style.set#quick-panel-display",
         "style.set#inspector-line-clamp",
         "element.organize#context-menu",
         "element.organize#menu-arrange",
@@ -592,6 +593,7 @@
       "essential": true,
       "doors": [
         "style.set#inspector-justify-content",
+        "style.set#quick-panel-justify-content",
         "style.set#inspector-justify-content-spread-button",
         "style.setAlignment#inspector-alignment-matrix"
       ],
