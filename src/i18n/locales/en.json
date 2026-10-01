@@ -186,6 +186,8 @@
   "checks.iframeTitle.fix": "Write its Title in Settings",
   "checks.imageAlt": "{category} · Image without alt text in {name}",
   "checks.imageAlt.fix": "Write its Alt text in Settings",
+  "checks.imageSource": "{category} · Image without a source in {name}: the exported page shows nothing in its place",
+  "checks.imageSource.fix": "Choose its Source in Settings",
   "checks.linkHref": "{category} · Link without an address in {name}",
   "checks.linkHref.fix": "Choose its address in the Link address field",
   "checks.linkText": "{category} · Link without text in {name}",

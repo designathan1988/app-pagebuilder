@@ -186,6 +186,8 @@
   "checks.iframeTitle.fix": "Escreva o Título nas Configurações",
   "checks.imageAlt": "{category} · Imagem sem texto alternativo em {name}",
   "checks.imageAlt.fix": "Escreva o texto Alt nas Configurações",
+  "checks.imageSource": "{category} · Imagem sem origem em {name}: a página exportada não mostra nada no lugar dela",
+  "checks.imageSource.fix": "Escolha a Origem nas Configurações",
   "checks.linkHref": "{category} · Link sem destino em {name}",
   "checks.linkHref.fix": "Escolha o destino no campo Endereço do link",
   "checks.linkText": "{category} · Link sem texto em {name}",

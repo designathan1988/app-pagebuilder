@@ -211,6 +211,7 @@ None in Pager.
    - The list updates after every command.
    - Checks never block editing or export.
 2. **An issue's row was a button centred in a 28 px box** (the audit's U-037). Required: an issue's row (the door that selects its element) is laid out from its start, as tall as what it says, its words wrapping.
+3. **An image with no source vanished from the exported site without a word** (the journey "site", 2026-10-01: the Card template's image showed its 800 × 300 placeholder on the canvas and nothing in the export, the card 130 px shorter). The placeholder stays an editor-only aid (spec export-zip, Problems 8). Required: an image with no source is an issue of the Export category, "Image without a source in {name}: the exported page shows nothing in its place", its fix "Choose its Source in Settings". An element's issues share its row, one under the other, so each row is the one door that selects its element (an image with no alt and no source is one row).
 
 ## align-distribute
 

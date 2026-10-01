@@ -2689,6 +2689,8 @@ export const MESSAGE_IDS = [
   "checks.iframeTitle.fix",
   "checks.imageAlt",
   "checks.imageAlt.fix",
+  "checks.imageSource",
+  "checks.imageSource.fix",
   "checks.linkHref",
   "checks.linkHref.fix",
   "checks.linkText",

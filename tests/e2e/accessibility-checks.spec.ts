@@ -34,6 +34,9 @@ test('the panel lists every issue with its category and fix, and a row selects i
   // an image with no alt is the accessibility rule; a link with neither an address nor text is the links rules
   expect(listed.some((row) => row.includes('Accessibility') && row.includes('Image without alt text in Image')), `the image issue is listed (${listed.join(' | ')})`).toBe(true);
   expect(listed.some((row) => row.includes('Links') && row.includes('Link without an address in Link')), 'the address issue is listed').toBe(true);
+  // an image with no source is an export issue: the canvas draws a placeholder, the exported page nothing (the journey
+  // "site")
+  expect(listed.some((row) => row.includes('Export') && row.includes('Image without a source in Image')), 'the source issue is listed').toBe(true);
   expect(listed.every((row) => row.includes('Fix:')), 'every row suggests its fix').toBe(true);
   // pressing a row selects the element it is about (the canvas and the Layers agree through the selection)
   const before = await selection(page);
@@ -48,15 +51,18 @@ test('the list follows the document and never blocks the export', async ({ page 
   await runDoor(page, INSERT_PANEL, {});
   await expect.poll(() => none(page), { message: 'a page with no issue says so' }).toBe('No issues');
   await runDoor(page, TILE, { args: { entry: 'image' } });
+  // its two issues, no alt text and no source (the journey "site": the exported page shows nothing in its place), in
+  // its one row
   await expect.poll(() => rows(page), { message: 'the image it just inserted is reported at once' }).toHaveLength(1);
-  // the fix: alt text written in the Settings removes the issue, with no other command
+  expect(await page.locator('.dock-checks__row .dock-checks__issue').count(), 'the row holds both issues').toBe(2);
+  // the fix: alt text written in the Settings removes that issue, with no other command
   await runDoor(page, 'workspace.setActiveTab#inspector-tab-settings', {});
   await control(page, 'element.setAttribute#inspector-alt').locator('input, textarea').first().fill('A photo');
   await control(page, 'element.setAttribute#inspector-alt').locator('input, textarea').first().press('Enter');
-  await expect.poll(() => rows(page), { message: 'the issue is gone once its alt text is written' }).toHaveLength(0);
-  // and with an issue standing, the export still writes the site
+  await expect.poll(() => page.locator('.dock-checks__row .dock-checks__issue').count(), { message: 'the alt issue is gone once its alt text is written' }).toBe(1);
+  // and with issues standing, the export still writes the site
   await runDoor(page, TILE, { args: { entry: 'link' } });
-  await expect.poll(() => rows(page)).toHaveLength(1);
+  await expect.poll(() => rows(page)).toHaveLength(2);
   const download = page.waitForEvent('download');
   await runDoor(page, EXPORT, {});
   const file = await download;

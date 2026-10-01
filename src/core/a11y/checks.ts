@@ -7,7 +7,8 @@
 //    draws one row per issue, and its door (selection.select, the region's `checks-issue` entry) selects the node.
 //  - The rules: an image with no alt; a link with no text; a link with no address; a heading that skips a level
 //    (h2 after h1 is fine, h4 after h2 is not); text whose colour and the first background colour above it are both
-//    set and do not reach the 4.5:1 contrast WCAG asks for body text; an embedded frame with no title.
+//    set and do not reach the 4.5:1 contrast WCAG asks for body text; an embedded frame with no title; an image with no
+//    source (export: the canvas draws a placeholder in its place, the exported page nothing — the journey "site").
 //  - A value the reader cannot understand (a colour that is a variable, a gradient background) is left alone: a check
 //    never guesses, and a page that says nothing about colour is never reported.
 import type { MessageId } from '../../generated/ids.ts';
@@ -93,6 +94,7 @@ export function checksOf(document: DocumentJson, properties: CheckProperties): r
       heading = depth;
     }
     if (node.tag === 'img' && !('alt' in node.attributes)) issues.push({ node: node.id, category: 'accessibility', rule: 'checks.imageAlt', fix: 'checks.imageAlt.fix' });
+    if (node.tag === 'img' && String(node.attributes.src ?? '') === '') issues.push({ node: node.id, category: 'export', rule: 'checks.imageSource', fix: 'checks.imageSource.fix' });
     if (node.tag === 'iframe' && !('title' in node.attributes)) issues.push({ node: node.id, category: 'accessibility', rule: 'checks.iframeTitle', fix: 'checks.iframeTitle.fix' });
     if (node.tag === 'a') {
       if (node.attributes.href === undefined || String(node.attributes.href) === '') issues.push({ node: node.id, category: 'links', rule: 'checks.linkHref', fix: 'checks.linkHref.fix' });

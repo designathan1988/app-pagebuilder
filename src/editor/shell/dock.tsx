@@ -1,7 +1,7 @@
 // The bottom dock (DESIGN.md "Dock and status bar"): its strip with a tab for each open dock panel (the tab-strip
 // component, the panel's icon from layout.json panels), show or hide, maximize, close the tab; its body when open.
 import { useMemo } from 'react';
-import { checksOf } from '../../core/a11y/checks.ts';
+import { checksOf, type CheckIssue } from '../../core/a11y/checks.ts';
 import { manifest } from '../../manifest/runtime.ts';
 import type { FeatureId, MessageId } from '../../generated/ids.ts';
 import { isFeatureBuilt } from '../../app/features.ts';
@@ -49,12 +49,19 @@ function DocumentJson() {
   );
 }
 
-// The Checks panel (spec accessibility-checks): one row per issue the document has (core/a11y/checks.ts, the one
-// owner of the list), each the region's own door (selection.select) with the node it is about, so pressing a row
-// selects that element on the canvas and in the Layers. The list is read from the store, so it follows every command;
+// The Checks panel (spec accessibility-checks): one row per element with issues (core/a11y/checks.ts, the one owner of
+// the list), its issues inside it in the list's order, each row the region's own door (selection.select) with the node
+// it is about, so pressing a row selects that element on the canvas and in the Layers (Problems 3: an image with no alt
+// and no source is one row, never two doors for one element). The list is read from the store, so it follows every command;
 // it never blocks editing or the export — a page with issues is a page like any other.
 // whether each category of the checks arrives with a built feature (checks.json)
 const CATEGORY_BUILT = new Map(manifest.checks.categories.map((one) => [one.id, isFeatureBuilt(one.feature as FeatureId)] as const));
+// the issues of each element together, in the order the list first names the element
+function byNode(issues: readonly CheckIssue[]): CheckIssue[][] {
+  const held = new Map<string, CheckIssue[]>();
+  for (const issue of issues) held.set(issue.node, [...(held.get(issue.node) ?? []), issue]);
+  return [...held.values()];
+}
 function Checks() {
   const t = useT();
   const document = useEditorState((s) => s.document);
@@ -71,13 +78,18 @@ function Checks() {
         <p className="dock-checks__none">{t('checks.none')}</p>
       ) : (
         <ul className="dock-checks__list">
-          {issues.map((issue) => (
-            <li key={`${issue.node}:${issue.rule}`}>
-              <DoorControl entry={ISSUE} args={{ target: issue.node }} className="dock-checks__row">
+          {byNode(issues).map((held) => (
+            <li key={held[0]?.node}>
+              <DoorControl entry={ISSUE} args={{ target: held[0]?.node }} className="dock-checks__row">
                 <Icon name={PANELS.checks.icon} size="sm" />
-                <span className="dock-checks__rule">{t(issue.rule, words(issue))}</span>
-                
-                <span className="dock-checks__fix">{t('checks.fix', { fix: t(issue.fix) })}</span>
+                <span className="dock-checks__issues">
+                  {held.map((issue) => (
+                    <span key={issue.rule} className="dock-checks__issue">
+                      <span className="dock-checks__rule">{t(issue.rule, words(issue))}</span>
+                      <span className="dock-checks__fix">{t('checks.fix', { fix: t(issue.fix) })}</span>
+                    </span>
+                  ))}
+                </span>
               </DoorControl>
             </li>
           ))}
