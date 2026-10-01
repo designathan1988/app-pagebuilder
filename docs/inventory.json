@@ -2,11 +2,11 @@
   "totals": {
     "features": 187,
     "built": 185,
-    "commands": 258,
-    "doors": 1002,
-    "scenarios": 1341,
+    "commands": 261,
+    "doors": 1005,
+    "scenarios": 1342,
     "modules": 259,
-    "lines": 49887
+    "lines": 49943
   },
   "features": [
     {
@@ -502,10 +502,13 @@
         "clipboard.copy",
         "clipboard.paste",
         "layers.startRename",
-        "workspace.setPanelOpen"
+        "workspace.setPanelOpen",
+        "focus.menuBar",
+        "focus.nextMenu",
+        "focus.previousMenu"
       ],
-      "doors": 95,
-      "scenarios": 20,
+      "doors": 98,
+      "scenarios": 21,
       "modules": [
         "src/core/clipboard/clipboard.ts",
         "src/core/history/history.ts",
@@ -515,6 +518,7 @@
         "src/core/structure/move.ts",
         "src/core/structure/remove.ts",
         "src/core/structure/wrap.ts",
+        "src/editor/focus/focus.ts",
         "src/editor/layers/rename.ts",
         "src/editor/workspace/panels.ts"
       ]
@@ -2790,7 +2794,7 @@
   "modules": [
     {
       "path": "src/app/commands.ts",
-      "lines": 392,
+      "lines": 395,
       "commands": [],
       "features": []
     },
@@ -4274,7 +4278,7 @@
     },
     {
       "path": "src/editor/focus/focus.ts",
-      "lines": 163,
+      "lines": 204,
       "commands": [
         "focus.next",
         "focus.previous",
@@ -4283,9 +4287,13 @@
         "focus.activate",
         "focus.nextRegion",
         "focus.previousRegion",
-        "focus.canvas"
+        "focus.canvas",
+        "focus.menuBar",
+        "focus.nextMenu",
+        "focus.previousMenu"
       ],
       "features": [
+        "app-menu",
         "command-bar",
         "context-menu",
         "keyboard-panel-navigation",
@@ -5097,13 +5105,13 @@
     },
     {
       "path": "src/generated/commands.ts",
-      "lines": 493,
+      "lines": 496,
       "commands": [],
       "features": []
     },
     {
       "path": "src/generated/ids.ts",
-      "lines": 4555,
+      "lines": 4564,
       "commands": [],
       "features": []
     },

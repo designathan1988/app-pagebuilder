@@ -8,7 +8,7 @@ import { registerHandler } from '../../core/commands/registry.ts';
 import type { EditorUi } from '../state.ts';
 import type { EditorStore } from '../store.ts';
 
-export type FocusMove = 'next' | 'previous' | 'first' | 'last' | 'activate' | 'parent' | 'nextRegion' | 'previousRegion' | 'canvas';
+export type FocusMove = 'next' | 'previous' | 'first' | 'last' | 'activate' | 'parent' | 'nextRegion' | 'previousRegion' | 'canvas' | 'menuBar' | 'nextMenu' | 'previousMenu';
 
 export interface FocusState {
   // the last request; its number tells a new request from one already carried out
@@ -60,6 +60,43 @@ export function focusTheCanvas(): void {
 export const focusNextRegion = registerHandler<'focus.nextRegion', EditorUi>('focus.nextRegion', ({ state }) => ({ kind: 'change', ui: asking(state.ui, 'nextRegion') }));
 export const focusPreviousRegion = registerHandler<'focus.previousRegion', EditorUi>('focus.previousRegion', ({ state }) => ({ kind: 'change', ui: asking(state.ui, 'previousRegion') }));
 export const focusCanvas = registerHandler<'focus.canvas', EditorUi>('focus.canvas', ({ state }) => ({ kind: 'change', ui: asking(state.ui, 'canvas') }));
+// The menu bar from the keyboard (WAI-ARIA menubar; the audit's U-033): F10 opens the first app menu, and in a menu
+// ArrowRight and ArrowLeft go to the next and the previous one — or open the submenu the focused item leads to, and
+// close the submenu the focus is in, back on its item.
+export const focusMenuBar = registerHandler<'focus.menuBar', EditorUi>('focus.menuBar', ({ state }) => ({ kind: 'change', ui: asking(state.ui, 'menuBar') }));
+export const focusNextMenu = registerHandler<'focus.nextMenu', EditorUi>('focus.nextMenu', ({ state }) => ({ kind: 'change', ui: asking(state.ui, 'nextMenu') }));
+export const focusPreviousMenu = registerHandler<'focus.previousMenu', EditorUi>('focus.previousMenu', ({ state }) => ({ kind: 'change', ui: asking(state.ui, 'previousMenu') }));
+
+// the app menus' buttons, in the bar's order
+const MENU_BAR = '.top-bar__menus [data-menu]';
+function menuBarMove(move: 'menuBar' | 'nextMenu' | 'previousMenu', focused: Element | null): void {
+  const buttons = [...document.querySelectorAll<HTMLElement>(MENU_BAR)];
+  if (move === 'menuBar') {
+    buttons[0]?.click();
+    return;
+  }
+  const item = focused instanceof HTMLElement ? focused : null;
+  // a submenu: the item that leads to one opens it and its first item takes the focus; inside one, the left arrow
+  // closes it and gives the focus back to its item
+  const sub = item?.closest('.menu__sub');
+  if (move === 'nextMenu' && item?.getAttribute('aria-haspopup') === 'menu' && sub !== null && sub !== undefined) {
+    if (item.getAttribute('aria-expanded') !== 'true') item.click();
+    requestAnimationFrame(() => sub.querySelector<HTMLElement>(':scope > .menu [role^="menuitem"]')?.focus());
+    return;
+  }
+  const inside = item?.closest('.menu')?.parentElement?.closest('.menu__sub') ?? null;
+  if (move === 'previousMenu' && inside !== null) {
+    const trigger = inside.querySelector<HTMLElement>(':scope > [aria-haspopup="menu"]');
+    if (trigger?.getAttribute('aria-expanded') === 'true') trigger.click();
+    trigger?.focus();
+    return;
+  }
+  // the app menu open now: the next or the previous one in the bar opens in its place, and takes the focus
+  const at = buttons.findIndex((button) => button.getAttribute('aria-expanded') === 'true');
+  if (at < 0) return;
+  const step = move === 'nextMenu' ? 1 : -1;
+  buttons[(at + step + buttons.length) % buttons.length]?.click();
+}
 
 // the controls that take the focus (an icon's <use href> is none)
 const FOCUSABLE = 'button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"]), [role^="menuitem"], [role="treeitem"], [role="tab"]';
@@ -112,6 +149,10 @@ function comboboxMove(move: FocusMove, field: Element): boolean {
 export function carryOut(move: FocusMove, focused: Element | null): void {
   if (move === 'canvas') {
     focusTheCanvas();
+    return;
+  }
+  if (move === 'menuBar' || move === 'nextMenu' || move === 'previousMenu') {
+    menuBarMove(move, focused);
     return;
   }
   if (!focused) return;

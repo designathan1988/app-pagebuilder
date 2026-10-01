@@ -317,6 +317,7 @@ As described in Trigger.
 2. **Menu rows dispatch fake keyboard events** for Duplicate, Copy and Paste. Required: every row calls its command directly (the same command its shortcut calls).
 3. **Help is a list of runnable shortcuts** rather than a door to the shortcuts panel. Required: Help → Keyboard shortcuts opens the shortcuts panel (see `shortcuts-panel.md`).
 4. **Disabled rows give no reason other than a generic title.** Required: a disabled row's tooltip says why (`Select an element first`, `Needs a single selection`, `not available yet`).
+6. **The menu bar could not be walked from the keyboard** (the audit's U-033: no Left/Right between menus, no keys into a submenu). Required: F10 opens the first menu (File), its first item focused; in a menu ArrowRight opens the next menu and ArrowLeft the previous one, in a ring (`focus.menuBar`, `focus.nextMenu`, `focus.previousMenu`); on an item that leads to a submenu ArrowRight opens it with its first item focused, and inside a submenu ArrowLeft closes it, the focus back on its item.
 
 ## autosave-corruption-recovery
 

@@ -38,3 +38,29 @@ test('with nothing selected, a menu item that needs a selection is disabled, say
   await moveUp.click({ force: true });
   expect(await documentNow(page)).toBe(before);
 });
+
+// The menu bar from the keyboard (spec app-menu; the audit's U-033): F10 opens File, the arrows go to the next and the
+// previous menu, and on an item that leads to a submenu ArrowRight opens it and ArrowLeft closes it, back on its item.
+test('F10 opens the menu bar, the arrows walk its menus, and open and close a submenu', runs('focus.menuBar#key-f10-in-global', 'focus.nextMenu#key-arrow-right-in-menu', 'focus.previousMenu#key-arrow-left-in-menu'), async ({ page }) => {
+  await openEditor(page);
+  const open = () => page.locator('.top-bar__menus [data-menu][aria-expanded="true"]').getAttribute('data-menu');
+  await page.keyboard.press('F10');
+  await expect.poll(open).toBe('file');
+  await page.keyboard.press('ArrowRight');
+  await expect.poll(open).toBe('edit');
+  await page.keyboard.press('ArrowLeft');
+  await expect.poll(open).toBe('file');
+  await page.keyboard.press('ArrowLeft');
+  await expect.poll(open).toBe('help');
+  await page.keyboard.press('ArrowLeft');
+  await expect.poll(open).toBe('view');
+  // the View menu's Theme leads to a submenu
+  const theme = page.locator('.menu__sub > [aria-haspopup="menu"]').first();
+  await theme.focus();
+  await page.keyboard.press('ArrowRight');
+  await expect(theme).toHaveAttribute('aria-expanded', 'true');
+  await expect.poll(() => page.evaluate(() => document.activeElement?.closest('.menu__sub .menu') !== null)).toBe(true);
+  await page.keyboard.press('ArrowLeft');
+  await expect(theme).toHaveAttribute('aria-expanded', 'false');
+  await expect(theme).toBeFocused();
+});

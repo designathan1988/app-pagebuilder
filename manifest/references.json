@@ -372,6 +372,21 @@
     },
     {
       "kind": "handler",
+      "id": "focus.menuBar",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "focus.nextMenu",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "focus.previousMenu",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
       "id": "focus.previous",
       "status": "registered"
     },

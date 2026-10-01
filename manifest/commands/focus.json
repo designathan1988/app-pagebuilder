@@ -200,6 +200,120 @@
       ]
     },
     {
+      "id": "focus.menuBar",
+      "labelKey": "command.focusMenuBar",
+      "owner": "src/editor/focus/focus.ts",
+      "introducedBy": "app-menu",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "key-f10-in-global",
+          "kind": "shortcut",
+          "feature": "app-menu",
+          "chord": "F10",
+          "context": "global",
+          "gesture": null,
+          "labelKey": "command.focusMenuBar",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "focus.nextMenu",
+      "labelKey": "command.focusNextMenu",
+      "owner": "src/editor/focus/focus.ts",
+      "introducedBy": "app-menu",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "key-arrow-right-in-menu",
+          "kind": "shortcut",
+          "feature": "app-menu",
+          "chord": "ArrowRight",
+          "context": "menu",
+          "gesture": null,
+          "labelKey": "command.focusNextMenu",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "focus.previousMenu",
+      "labelKey": "command.focusPreviousMenu",
+      "owner": "src/editor/focus/focus.ts",
+      "introducedBy": "app-menu",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "key-arrow-left-in-menu",
+          "kind": "shortcut",
+          "feature": "app-menu",
+          "chord": "ArrowLeft",
+          "context": "menu",
+          "gesture": null,
+          "labelKey": "command.focusPreviousMenu",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
       "id": "focus.previous",
       "labelKey": "command.focusPrevious",
       "owner": "src/editor/focus/focus.ts",

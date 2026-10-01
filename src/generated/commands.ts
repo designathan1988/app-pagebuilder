@@ -119,6 +119,9 @@ export interface CommandArgs {
   "files.saveContent": { readonly path: string; readonly content: string };
   "assets.insertImageFile": { readonly file: string; readonly parent?: NodeId; readonly index?: number; readonly replace?: NodeId };
   "focus.next": Record<string, never>;
+  "focus.menuBar": Record<string, never>;
+  "focus.nextMenu": Record<string, never>;
+  "focus.previousMenu": Record<string, never>;
   "focus.previous": Record<string, never>;
   "focus.first": Record<string, never>;
   "focus.last": Record<string, never>;
@@ -336,7 +339,7 @@ export const FEATURE_COMMANDS: Readonly<Record<FeatureId, readonly CommandId[]>>
   "lock-element": ["element.toggleLock"],
   "hide-element": ["element.toggleHidden"],
   "drag-autoscroll": [],
-  "app-menu": ["history.undo","history.redo","selection.clear","selection.selectAllInContainer","element.moveUp","element.moveDown","element.wrapRow","element.wrapColumn","element.nestIntoPrevious","element.promote","element.duplicate","element.delete","element.unwrap","hand.take","clipboard.copy","clipboard.paste","layers.startRename","workspace.setPanelOpen"],
+  "app-menu": ["history.undo","history.redo","selection.clear","selection.selectAllInContainer","element.moveUp","element.moveDown","element.wrapRow","element.wrapColumn","element.nestIntoPrevious","element.promote","element.duplicate","element.delete","element.unwrap","hand.take","clipboard.copy","clipboard.paste","layers.startRename","workspace.setPanelOpen","focus.menuBar","focus.nextMenu","focus.previousMenu"],
   "ui-language": ["preferences.setLanguage"],
   "autosave-restore": [],
   "unsaved-work-guard": [],
