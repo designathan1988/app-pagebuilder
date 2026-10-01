@@ -3374,6 +3374,7 @@ This is the keyboard feature.
 1. **Moving focus changes the selection on every arrow key,** so walking through the tree repaints the canvas and the Inspector for each row and loses a multi-selection. Required: arrows move focus as in the WAI-ARIA tree pattern (roving tabindex); Enter selects the focused element (manifest feature `layers-keyboard-navigation`).
 2. **F2 does nothing on a row.** Required: F2 renames the focused row's node (inline), Delete deletes it and Alt+ArrowUp moves it, with the same commands as the canvas.
 3. **The tree is not reachable with Tab.** Required: the tree is one Tab stop; focus lands on its current row.
+- **The structure keys did nothing once a row was clicked** (the dogfooding pass, 2026-09-30): a person who selects in the Layers and presses R to wrap it in a row met silence, as the tree's key context inherits the global one, not the canvas's. Required: the single-letter structure keys of the canvas (R, C, D, G, P, M, S, Shift+S, O) and Alt+ArrowRight (nest into the previous) work the same in the Layers tree (doors `key-*-in-layers-tree`); the tree keeps its own arrows, Enter, F2 and Delete.
 
 ## layers-tree
 

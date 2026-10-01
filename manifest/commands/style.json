@@ -10880,6 +10880,32 @@
           }
         },
         {
+          "id": "key-s-in-layers-tree",
+          "kind": "shortcut",
+          "feature": "layout-actions",
+          "chord": "S",
+          "context": "layers-tree",
+          "gesture": null,
+          "labelKey": "command.swapDirection",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "status.swap.unavailable",
+          "placement": "none",
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": [
+              "flex-direction"
+            ],
+            "fields": []
+          },
+          "args": {
+            "flow": "grid-auto-flow",
+            "view": "display",
+            "axis": "flex-direction"
+          }
+        },
+        {
           "id": "context-menu",
           "kind": "context-menu",
           "feature": "layout-actions",
@@ -11013,6 +11039,32 @@
           "feature": "layout-actions",
           "chord": "Shift+S",
           "context": "canvas",
+          "gesture": null,
+          "labelKey": "command.stackOnPhone",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "status.stack.unavailable",
+          "placement": "none",
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": [
+              "flex-direction"
+            ],
+            "fields": []
+          },
+          "args": {
+            "tracks": "grid-template-columns",
+            "view": "display",
+            "axis": "flex-direction"
+          }
+        },
+        {
+          "id": "key-shift-s-in-layers-tree",
+          "kind": "shortcut",
+          "feature": "layout-actions",
+          "chord": "Shift+S",
+          "context": "layers-tree",
           "gesture": null,
           "labelKey": "command.stackOnPhone",
           "faceLabelKey": null,
@@ -11176,6 +11228,36 @@
           "feature": "layout-actions",
           "chord": "O",
           "context": "canvas",
+          "gesture": null,
+          "labelKey": "command.organize",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "status.organize.unavailable",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [
+              "display",
+              "flex-direction",
+              "row-gap",
+              "column-gap"
+            ],
+            "fields": []
+          },
+          "args": {
+            "gaps": "gap",
+            "margins": "margin",
+            "view": "display",
+            "axis": "flex-direction"
+          }
+        },
+        {
+          "id": "key-o-in-layers-tree",
+          "kind": "shortcut",
+          "feature": "layout-actions",
+          "chord": "O",
+          "context": "layers-tree",
           "gesture": null,
           "labelKey": "command.organize",
           "faceLabelKey": null,

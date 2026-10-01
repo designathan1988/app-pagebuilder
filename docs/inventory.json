@@ -3,10 +3,10 @@
     "features": 188,
     "built": 186,
     "commands": 263,
-    "doors": 1017,
+    "doors": 1027,
     "scenarios": 1352,
     "modules": 261,
-    "lines": 50462
+    "lines": 50472
   },
   "features": [
     {
@@ -183,7 +183,7 @@
         "element.wrapRow",
         "element.wrapColumn"
       ],
-      "doors": 8,
+      "doors": 10,
       "scenarios": 4,
       "modules": [
         "src/core/structure/wrap.ts"
@@ -218,7 +218,7 @@
         "element.wrapColumn",
         "element.delete"
       ],
-      "doors": 67,
+      "doors": 69,
       "scenarios": 7,
       "modules": [
         "src/core/structure/move.ts",
@@ -235,7 +235,7 @@
       "commands": [
         "element.nestIntoPrevious"
       ],
-      "doors": 4,
+      "doors": 5,
       "scenarios": 4,
       "modules": [
         "src/core/structure/move.ts"
@@ -247,7 +247,7 @@
       "commands": [
         "element.promote"
       ],
-      "doors": 4,
+      "doors": 5,
       "scenarios": 3,
       "modules": [
         "src/core/structure/move.ts"
@@ -319,7 +319,7 @@
         "hand.descend",
         "hand.drop"
       ],
-      "doors": 15,
+      "doors": 16,
       "scenarios": 8,
       "modules": [
         "src/core/structure/hand.ts",
@@ -423,7 +423,7 @@
         "layers.startRename",
         "text.startEdit"
       ],
-      "doors": 42,
+      "doors": 46,
       "scenarios": 8,
       "modules": [
         "src/core/structure/duplicate.ts",
@@ -507,7 +507,7 @@
         "focus.nextMenu",
         "focus.previousMenu"
       ],
-      "doors": 99,
+      "doors": 104,
       "scenarios": 21,
       "modules": [
         "src/core/clipboard/clipboard.ts",
@@ -1257,7 +1257,7 @@
         "hand.take",
         "element.setTag"
       ],
-      "doors": 25,
+      "doors": 29,
       "scenarios": 4,
       "modules": [
         "src/core/elements/tag.ts",
@@ -2060,7 +2060,7 @@
         "commandBar.open",
         "components.startCreate"
       ],
-      "doors": 218,
+      "doors": 223,
       "scenarios": 56,
       "modules": [
         "src/core/clipboard/clipboard.ts",
@@ -2774,7 +2774,7 @@
         "element.organize",
         "element.setDivider"
       ],
-      "doors": 21,
+      "doors": 26,
       "scenarios": 14,
       "modules": [
         "src/core/structure/wrap.ts",
@@ -5139,7 +5139,7 @@
     },
     {
       "path": "src/generated/ids.ts",
-      "lines": 4592,
+      "lines": 4602,
       "commands": [],
       "features": []
     },

@@ -260,7 +260,8 @@
           "doors": [
             "element.wrapGrid#menu-arrange",
             "element.wrapGrid#command-bar",
-            "element.wrapGrid#key-g-in-canvas"
+            "element.wrapGrid#key-g-in-canvas",
+            "element.wrapGrid#key-g-in-layers-tree"
           ],
           "expect": {
             "document": [
@@ -581,7 +582,8 @@
           "doors": [
             "element.wrapContainer#key-d-in-canvas",
             "element.wrapContainer#menu-arrange",
-            "element.wrapContainer#command-bar"
+            "element.wrapContainer#command-bar",
+            "element.wrapContainer#key-d-in-layers-tree"
           ],
           "expect": {
             "document": [
@@ -821,7 +823,8 @@
             }
           ],
           "doors": [
-            "element.wrapContainer#key-d-in-canvas"
+            "element.wrapContainer#key-d-in-canvas",
+            "element.wrapContainer#key-d-in-layers-tree"
           ],
           "expect": {
             "document": [],
@@ -887,7 +890,8 @@
           "doors": [
             "element.swapDirection#key-s-in-canvas",
             "element.swapDirection#menu-arrange",
-            "element.swapDirection#command-bar"
+            "element.swapDirection#command-bar",
+            "element.swapDirection#key-s-in-layers-tree"
           ],
           "expect": {
             "document": [
@@ -1200,7 +1204,8 @@
           "doors": [
             "element.stackOnPhone#key-shift-s-in-canvas",
             "element.stackOnPhone#menu-arrange",
-            "element.stackOnPhone#command-bar"
+            "element.stackOnPhone#command-bar",
+            "element.stackOnPhone#key-shift-s-in-layers-tree"
           ],
           "expect": {
             "document": [
@@ -1513,7 +1518,8 @@
           "doors": [
             "element.organize#key-o-in-canvas",
             "element.organize#menu-arrange",
-            "element.organize#command-bar"
+            "element.organize#command-bar",
+            "element.organize#key-o-in-layers-tree"
           ],
           "expect": {
             "document": [

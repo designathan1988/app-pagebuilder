@@ -509,7 +509,8 @@
         "element.organize#context-menu",
         "element.organize#menu-arrange",
         "element.organize#command-bar",
-        "element.organize#key-o-in-canvas"
+        "element.organize#key-o-in-canvas",
+        "element.organize#key-o-in-layers-tree"
       ],
       "subsets": [
         {
@@ -559,8 +560,11 @@
         "element.organize#menu-arrange",
         "element.organize#command-bar",
         "element.swapDirection#key-s-in-canvas",
+        "element.swapDirection#key-s-in-layers-tree",
         "element.stackOnPhone#key-shift-s-in-canvas",
-        "element.organize#key-o-in-canvas"
+        "element.stackOnPhone#key-shift-s-in-layers-tree",
+        "element.organize#key-o-in-canvas",
+        "element.organize#key-o-in-layers-tree"
       ],
       "subsets": []
     },
@@ -654,7 +658,8 @@
         "element.organize#context-menu",
         "element.organize#menu-arrange",
         "element.organize#command-bar",
-        "element.organize#key-o-in-canvas"
+        "element.organize#key-o-in-canvas",
+        "element.organize#key-o-in-layers-tree"
       ],
       "subsets": [
         {
@@ -687,7 +692,8 @@
         "element.organize#context-menu",
         "element.organize#menu-arrange",
         "element.organize#command-bar",
-        "element.organize#key-o-in-canvas"
+        "element.organize#key-o-in-canvas",
+        "element.organize#key-o-in-layers-tree"
       ],
       "subsets": [
         {

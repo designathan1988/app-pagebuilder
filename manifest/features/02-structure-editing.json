@@ -6404,7 +6404,8 @@
             }
           ],
           "doors": [
-            "element.wrapRow#key-r-in-canvas"
+            "element.wrapRow#key-r-in-canvas",
+            "element.wrapRow#key-r-in-layers-tree"
           ],
           "expect": {
             "document": [
@@ -6536,7 +6537,8 @@
             }
           ],
           "doors": [
-            "element.wrapColumn#key-c-in-canvas"
+            "element.wrapColumn#key-c-in-canvas",
+            "element.wrapColumn#key-c-in-layers-tree"
           ],
           "expect": {
             "document": [
@@ -6689,7 +6691,8 @@
             }
           ],
           "doors": [
-            "element.wrapColumn#key-c-in-canvas"
+            "element.wrapColumn#key-c-in-canvas",
+            "element.wrapColumn#key-c-in-layers-tree"
           ],
           "expect": {
             "document": [],
@@ -6748,7 +6751,8 @@
             }
           ],
           "doors": [
-            "element.wrapRow#key-r-in-canvas"
+            "element.wrapRow#key-r-in-canvas",
+            "element.wrapRow#key-r-in-layers-tree"
           ],
           "expect": {
             "document": [],
@@ -8135,7 +8139,8 @@
             }
           ],
           "doors": [
-            "element.nestIntoPrevious#key-alt-arrow-right-in-canvas"
+            "element.nestIntoPrevious#key-alt-arrow-right-in-canvas",
+            "element.nestIntoPrevious#key-alt-arrow-right-in-layers-tree"
           ],
           "expect": {
             "document": [
@@ -8546,7 +8551,8 @@
             }
           ],
           "doors": [
-            "element.nestIntoPrevious#key-alt-arrow-right-in-canvas"
+            "element.nestIntoPrevious#key-alt-arrow-right-in-canvas",
+            "element.nestIntoPrevious#key-alt-arrow-right-in-layers-tree"
           ],
           "expect": {
             "document": [],
@@ -8852,7 +8858,8 @@
             }
           ],
           "doors": [
-            "element.promote#key-p-in-canvas"
+            "element.promote#key-p-in-canvas",
+            "element.promote#key-p-in-layers-tree"
           ],
           "expect": {
             "document": [
@@ -9270,7 +9277,8 @@
             }
           ],
           "doors": [
-            "element.promote#key-p-in-canvas"
+            "element.promote#key-p-in-canvas",
+            "element.promote#key-p-in-layers-tree"
           ],
           "expect": {
             "document": [],
@@ -11883,7 +11891,8 @@
             }
           ],
           "doors": [
-            "hand.take#key-m-in-canvas"
+            "hand.take#key-m-in-canvas",
+            "hand.take#key-m-in-layers-tree"
           ],
           "expect": {
             "document": [
@@ -12196,7 +12205,8 @@
             }
           ],
           "doors": [
-            "hand.take#key-m-in-canvas"
+            "hand.take#key-m-in-canvas",
+            "hand.take#key-m-in-layers-tree"
           ],
           "expect": {
             "document": [],
@@ -15172,7 +15182,8 @@
             }
           ],
           "doors": [
-            "element.wrapRow#key-r-in-canvas"
+            "element.wrapRow#key-r-in-canvas",
+            "element.wrapRow#key-r-in-layers-tree"
           ],
           "expect": {
             "document": [
@@ -15307,7 +15318,8 @@
             }
           ],
           "doors": [
-            "element.wrapRow#key-r-in-canvas"
+            "element.wrapRow#key-r-in-canvas",
+            "element.wrapRow#key-r-in-layers-tree"
           ],
           "expect": {
             "document": [],
@@ -15368,7 +15380,8 @@
             }
           ],
           "doors": [
-            "hand.take#key-m-in-canvas"
+            "hand.take#key-m-in-canvas",
+            "hand.take#key-m-in-layers-tree"
           ],
           "expect": {
             "document": [],
@@ -15429,7 +15442,8 @@
             }
           ],
           "doors": [
-            "element.promote#key-p-in-canvas"
+            "element.promote#key-p-in-canvas",
+            "element.promote#key-p-in-layers-tree"
           ],
           "expect": {
             "document": [],

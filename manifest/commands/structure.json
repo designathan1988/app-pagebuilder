@@ -737,6 +737,26 @@
           "args": {}
         },
         {
+          "id": "key-r-in-layers-tree",
+          "kind": "shortcut",
+          "feature": "wrap-row-column",
+          "chord": "R",
+          "context": "layers-tree",
+          "gesture": null,
+          "labelKey": "command.wrapRow",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "none",
+          "adapter": {
+            "selection": "roots-same-parent",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
           "id": "context-menu",
           "kind": "context-menu",
           "feature": "context-menu",
@@ -843,6 +863,26 @@
           "feature": "wrap-row-column",
           "chord": "C",
           "context": "canvas",
+          "gesture": null,
+          "labelKey": "command.wrapColumn",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "none",
+          "adapter": {
+            "selection": "roots-same-parent",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-c-in-layers-tree",
+          "kind": "shortcut",
+          "feature": "wrap-row-column",
+          "chord": "C",
+          "context": "layers-tree",
           "gesture": null,
           "labelKey": "command.wrapColumn",
           "faceLabelKey": null,
@@ -1097,6 +1137,26 @@
           "args": {}
         },
         {
+          "id": "key-alt-arrow-right-in-layers-tree",
+          "kind": "shortcut",
+          "feature": "nest-into-previous",
+          "chord": "Alt+ArrowRight",
+          "context": "layers-tree",
+          "gesture": null,
+          "labelKey": "command.nestIntoPrevious",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "status.nest.noPrevious",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
           "id": "menu-arrange",
           "kind": "menu",
           "feature": "app-menu",
@@ -1178,6 +1238,26 @@
           "feature": "promote-out",
           "chord": "P",
           "context": "canvas",
+          "gesture": null,
+          "labelKey": "command.promote",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-p-in-layers-tree",
+          "kind": "shortcut",
+          "feature": "promote-out",
+          "chord": "P",
+          "context": "layers-tree",
           "gesture": null,
           "labelKey": "command.promote",
           "faceLabelKey": null,
@@ -1759,6 +1839,26 @@
           "args": {}
         },
         {
+          "id": "key-m-in-layers-tree",
+          "kind": "shortcut",
+          "feature": "hand-keyboard-move",
+          "chord": "M",
+          "context": "layers-tree",
+          "gesture": null,
+          "labelKey": "command.takeIntoHand",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
           "id": "context-menu",
           "kind": "context-menu",
           "feature": "hand-keyboard-move",
@@ -2114,6 +2214,26 @@
           "args": {}
         },
         {
+          "id": "key-d-in-layers-tree",
+          "kind": "shortcut",
+          "feature": "layout-actions",
+          "chord": "D",
+          "context": "layers-tree",
+          "gesture": null,
+          "labelKey": "command.wrapContainer",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "none",
+          "adapter": {
+            "selection": "roots-same-parent",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
           "id": "context-menu",
           "kind": "context-menu",
           "feature": "layout-actions",
@@ -2220,6 +2340,26 @@
           "feature": "layout-actions",
           "chord": "G",
           "context": "canvas",
+          "gesture": null,
+          "labelKey": "command.wrapGrid",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "none",
+          "adapter": {
+            "selection": "roots-same-parent",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-g-in-layers-tree",
+          "kind": "shortcut",
+          "feature": "layout-actions",
+          "chord": "G",
+          "context": "layers-tree",
           "gesture": null,
           "labelKey": "command.wrapGrid",
           "faceLabelKey": null,
